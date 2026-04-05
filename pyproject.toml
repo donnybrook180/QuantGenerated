@@ -1,0 +1,16 @@
+[project]
+name = "quant-generated"
+version = "0.1.0"
+description = "Personal multi-agent quant research and trading system"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["duckdb>=1.1.0", "MetaTrader5>=5.0.5735", "optuna>=4.0.0", "polygon-api-client>=1.16.3"]
+
+[project.optional-dependencies]
+research = ["duckdb>=1.1.0", "polars>=1.0.0", "pyarrow>=17.0.0"]
+optimization = ["optuna>=4.0.0", "vectorbt>=0.27.0"]
+live = ["MetaTrader5>=5.0.5735", "pydantic>=2.8.0"]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

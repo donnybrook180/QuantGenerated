@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from collections import deque
+from datetime import date
 import math
 
+from quant_system.integrations.polygon_events import DailyEventFlags
 from quant_system.models import FeatureVector, MarketBar
 
 
-def build_feature_library(bars: list[MarketBar]) -> list[FeatureVector]:
+def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, DailyEventFlags] | None = None) -> list[FeatureVector]:
     closes = [bar.close for bar in bars]
     volumes = [bar.volume for bar in bars]
     features: list[FeatureVector] = []
@@ -59,6 +61,7 @@ def build_feature_library(bars: list[MarketBar]) -> list[FeatureVector]:
         vwap_distance = ((bar.close / session_vwap) - 1.0) if session_vwap else 0.0
         session_range = max(session_high - session_low, bar.close * 0.0005)
         session_position = ((bar.close - session_low) / session_range) if session_range else 0.5
+        event_flags = (daily_event_flags or {}).get(bar.timestamp.date(), DailyEventFlags())
         features.append(
             FeatureVector(
                 timestamp=bar.timestamp,
@@ -86,6 +89,12 @@ def build_feature_library(bars: list[MarketBar]) -> list[FeatureVector]:
                     "session_high": session_high,
                     "session_low": session_low,
                     "session_position": session_position,
+                    "news_count_1d": float(event_flags.news_count),
+                    "high_impact_news_count_1d": float(event_flags.high_impact_count),
+                    "earnings_news_count_1d": float(event_flags.earnings_like_count),
+                    "high_impact_event_day": 1.0 if event_flags.high_impact_count > 0 else 0.0,
+                    "earnings_event_day": 1.0 if event_flags.earnings_like_count > 0 else 0.0,
+                    "event_blackout": 1.0 if event_flags.event_blackout else 0.0,
                 },
             )
         )

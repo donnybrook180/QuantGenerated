@@ -27,6 +27,15 @@ from quant_system.agents.forex import (
     ForexTrendContinuationAgent,
 )
 from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
+from quant_system.agents.stocks import (
+    EventAwareRiskSentinelAgent,
+    StockGapFadeAgent,
+    StockGapAndGoAgent,
+    StockNewsMomentumAgent,
+    StockPostEarningsDriftAgent,
+    StockPowerHourContinuationAgent,
+    StockTrendBreakoutAgent,
+)
 from quant_system.agents.strategies import (
     OpeningRangeBreakoutAgent,
     OpeningRangeShortBreakdownAgent,
@@ -48,13 +57,20 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
 from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
+from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
 from quant_system.research.features import build_feature_library
 from quant_system.risk.limits import RiskManager
-from quant_system.symbols import resolve_symbol_request
+from quant_system.symbols import (
+    is_crypto_symbol as symbol_is_crypto,
+    is_forex_symbol as symbol_is_forex,
+    is_metal_symbol as symbol_is_metal,
+    is_stock_symbol as symbol_is_stock,
+    resolve_symbol_request,
+)
 
 
 ARTIFACTS_DIR = Path("artifacts")
@@ -129,17 +145,19 @@ def _symbol_slug(symbol: str) -> str:
 
 
 def _is_crypto_symbol(symbol: str) -> bool:
-    upper = symbol.upper()
-    return "BTC" in upper or "ETH" in upper
+    return symbol_is_crypto(symbol)
 
 
 def _is_metal_symbol(symbol: str) -> bool:
-    return "XAU" in symbol.upper()
+    return symbol_is_metal(symbol)
 
 
 def _is_forex_symbol(symbol: str) -> bool:
-    upper = symbol.upper()
-    return upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD")
+    return symbol_is_forex(symbol)
+
+
+def _is_stock_symbol(symbol: str) -> bool:
+    return symbol_is_stock(symbol)
 
 
 def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
@@ -147,6 +165,8 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     if _is_crypto_symbol(symbol):
         return max(base_history, 365)
     if symbol.upper() == "US500":
+        return max(base_history, 365)
+    if _is_stock_symbol(symbol):
         return max(base_history, 365)
     if _is_metal_symbol(symbol) or _is_forex_symbol(symbol):
         return max(base_history, 180)
@@ -177,6 +197,18 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
             "sparse_min_payoff_ratio": 1.75,
             "sparse_combined_closed_trades": 2,
             "sparse_walk_forward_min_pass_rate_pct": 25.0,
+        }
+    if _is_stock_symbol(symbol):
+        return {
+            "validation_closed_trades": 1,
+            "test_closed_trades": 1,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 20.0,
+            "sparse_max_closed_trades": 24,
+            "sparse_min_payoff_ratio": 1.75,
+            "sparse_combined_closed_trades": 2,
+            "sparse_walk_forward_min_pass_rate_pct": 15.0,
         }
     return {
         "validation_closed_trades": 3,
@@ -353,6 +385,16 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str) -> None:
         config.execution.stale_breakout_bars = 6
         config.execution.stale_breakout_atr_fraction = 0.12
         config.execution.structure_exit_bars = 4
+    elif _is_stock_symbol(symbol):
+        config.execution.min_bars_between_trades = 10
+        config.execution.max_holding_bars = 18
+        config.execution.stop_loss_atr_multiple = 1.25
+        config.execution.take_profit_atr_multiple = 2.5
+        config.execution.break_even_atr_multiple = 0.8
+        config.execution.trailing_stop_atr_multiple = 0.95
+        config.execution.stale_breakout_bars = 5
+        config.execution.stale_breakout_atr_fraction = 0.12
+        config.execution.structure_exit_bars = 3
     else:
         config.execution.min_bars_between_trades = 12
         config.execution.max_holding_bars = 24
@@ -371,6 +413,10 @@ def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[
 
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
+    if profile_symbol.upper() == "TSLA":
+        return [("15m", 15, "minute")], ("midday",), True
+    if profile_symbol.upper() == "GBPUSD":
+        return [("15m", 15, "minute")], ("europe",), True
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute")], ("all", "europe"), True
@@ -383,6 +429,10 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
         if mode == "seed":
             return [("15m", 15, "minute")], ("europe", "overlap"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "us", "overlap"), True
+    if _is_stock_symbol(profile_symbol):
+        if mode == "seed":
+            return [("5m", 5, "minute")], ("us", "open"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
     return [("5m", 5, "minute")], ("all",), False
 
 
@@ -394,7 +444,7 @@ def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol
     requested_mode = config.symbol_research.mode
     if requested_mode in {"seed", "full"}:
         return requested_mode
-    symbol_specific = _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol)
+    symbol_specific = _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol)
     if not symbol_specific:
         return "full"
 
@@ -422,7 +472,7 @@ def _load_symbol_features_variant(
     if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
         cached = store.load_bars(data_symbol, scoped_timeframe, 50_000)
         if cached:
-            return build_feature_library(cached), "duckdb_cache"
+            return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
         if config.polygon.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
 
@@ -438,12 +488,32 @@ def _load_symbol_features_variant(
         persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
         if not persisted:
             raise RuntimeError(f"No Polygon bars were loaded into DuckDB for {data_symbol}.")
-        return build_feature_library(persisted), "polygon"
+        return _build_features_with_events(config, data_symbol, persisted), "polygon"
     except PolygonError:
         cached = store.load_bars(data_symbol, scoped_timeframe, 50_000)
         if cached:
-            return build_feature_library(cached), "duckdb_cache"
+            return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
         raise
+
+
+def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: list[MarketBar]) -> list[FeatureVector]:
+    if not bars:
+        return []
+    if not _is_stock_symbol(data_symbol):
+        return build_feature_library(bars)
+    try:
+        event_flags = fetch_stock_event_flags(
+            config.polygon.api_key,
+            data_symbol,
+            start_day=bars[0].timestamp.date(),
+            end_day=bars[-1].timestamp.date(),
+            max_retries=config.polygon.max_retries,
+            backoff_seconds=config.polygon.retry_backoff_seconds,
+        )
+    except RuntimeError as exc:
+        LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
+        return build_feature_library(bars)
+    return build_feature_library(bars, event_flags)
 
 
 def _filter_weekday_bars(bars: list[MarketBar]) -> list[MarketBar]:
@@ -464,6 +534,15 @@ def _filter_features_by_session(features: list[FeatureVector], session_name: str
         allowed_hours = set(range(13, 21))
     elif session_name == "overlap":
         allowed_hours = set(range(12, 17))
+    elif session_name == "open":
+        return [
+            feature for feature in features
+            if feature.values.get("in_regular_session", 0.0) >= 1.0 and 0 <= feature.values.get("minutes_from_open", -1.0) < 90
+        ]
+    elif session_name == "power":
+        return [feature for feature in features if int(feature.values.get("hour_of_day", feature.timestamp.hour)) in {18, 19}]
+    elif session_name == "midday":
+        return [feature for feature in features if int(feature.values.get("hour_of_day", feature.timestamp.hour)) in {15, 16, 17}]
     else:
         return features
 
@@ -493,9 +572,29 @@ def _build_symbol_feature_variants(
     data_symbol: str,
 ) -> tuple[dict[str, list[FeatureVector]], str, str]:
     mode = _detect_research_mode(config, profile_symbol, data_symbol)
-    if not (_is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol)):
+    if not (_is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol)):
         features, data_source = _load_symbol_features(config, data_symbol)
         return {"default": features}, data_source, mode
+    if _is_stock_symbol(profile_symbol):
+        variants: dict[str, list[FeatureVector]] = {}
+        data_sources: list[str] = []
+        timeframe_specs, session_names, weekday_only = _research_variant_plan(profile_symbol, mode)
+        for timeframe_label, multiplier, timespan in timeframe_specs:
+            timeframe_features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
+            if weekday_only:
+                timeframe_features = _filter_weekday_features(timeframe_features)
+            data_sources.append(data_source)
+            for session_name in session_names:
+                filtered = [
+                    feature
+                    for feature in _filter_features_by_session(timeframe_features, session_name)
+                    if feature.values.get("event_blackout", 0.0) < 1.0
+                ]
+                if len(filtered) < 50:
+                    continue
+                variants[f"{timeframe_label}_{session_name}"] = filtered
+        resolved_source = "polygon" if "polygon" in data_sources else (data_sources[0] if data_sources else "unknown")
+        return variants or {"default": []}, resolved_source, mode
 
     variants: dict[str, list[FeatureVector]] = {}
     data_sources: list[str] = []
@@ -536,9 +635,11 @@ def load_execution_features_for_variant(
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
-    if _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol):
+    if _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol):
         features = _filter_weekday_features(features)
     features = _filter_features_by_session(features, session_label or "all")
+    if _is_stock_symbol(profile_symbol):
+        features = [feature for feature in features if feature.values.get("event_blackout", 0.0) < 1.0]
     return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
@@ -724,6 +825,23 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         )
         return specs
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
+        if upper == "GBPUSD":
+            return [
+                CandidateSpec(
+                    name="forex_breakout_momentum",
+                    description="GBPUSD-focused Europe-session breakout momentum",
+                    agents=[
+                        ForexBreakoutMomentumAgent(
+                            lookback=16,
+                            min_atr_proxy=0.00028,
+                            min_momentum_5=0.00018,
+                            min_momentum_20=0.00022,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+                ),
+            ]
         return [
             CandidateSpec(
                 name="forex_trend_continuation",
@@ -754,6 +872,73 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="Forex short breakdown momentum",
                 agents=[ForexShortBreakdownMomentumAgent(), risk],
                 code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+            ),
+        ]
+    if _is_stock_symbol(data_symbol):
+        stock_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=False)
+        if upper == "TSLA":
+            return [
+                CandidateSpec(
+                    name="mean_reversion",
+                    description="TSLA-focused midday mean reversion",
+                    agents=[MeanReversionAgent(max(config.agents.mean_reversion_window - 2, 4), config.agents.mean_reversion_threshold * 0.85), stock_risk, risk],
+                    code_path="quant_system.agents.trend.MeanReversionAgent",
+                ),
+            ]
+        return [
+            CandidateSpec(
+                name="stock_trend_breakout",
+                description="Stock trend breakout outside event blackout windows",
+                agents=[StockTrendBreakoutAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockTrendBreakoutAgent",
+            ),
+            CandidateSpec(
+                name="stock_news_momentum",
+                description="Stock post-news momentum on high-impact event days",
+                agents=[StockNewsMomentumAgent(), EventAwareRiskSentinelAgent(allow_high_impact_day=True), risk],
+                code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
+            ),
+            CandidateSpec(
+                name="stock_post_earnings_drift",
+                description="Stock post-earnings drift continuation after the open",
+                agents=[StockPostEarningsDriftAgent(), EventAwareRiskSentinelAgent(allow_high_impact_day=True), risk],
+                code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
+            ),
+            CandidateSpec(
+                name="stock_gap_fade",
+                description="Stock gap fade after overextended opening move",
+                agents=[StockGapFadeAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockGapFadeAgent",
+            ),
+            CandidateSpec(
+                name="stock_gap_and_go",
+                description="Stock gap-and-go continuation after the open",
+                agents=[StockGapAndGoAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockGapAndGoAgent",
+            ),
+            CandidateSpec(
+                name="stock_power_hour_continuation",
+                description="Stock power-hour continuation into the close",
+                agents=[StockPowerHourContinuationAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockPowerHourContinuationAgent",
+            ),
+            CandidateSpec(
+                name="momentum",
+                description="Momentum confirmation",
+                agents=[MomentumConfirmationAgent(config.agents.mean_reversion_threshold * 0.85), stock_risk, risk],
+                code_path="quant_system.agents.trend.MomentumConfirmationAgent",
+            ),
+            CandidateSpec(
+                name="mean_reversion",
+                description="Intraday mean reversion away from event windows",
+                agents=[MeanReversionAgent(config.agents.mean_reversion_window, config.agents.mean_reversion_threshold), stock_risk, risk],
+                code_path="quant_system.agents.trend.MeanReversionAgent",
+            ),
+            CandidateSpec(
+                name="volatility_breakout",
+                description="Generic volatility breakout outside event blackout windows",
+                agents=[VolatilityBreakoutAgent(lookback=max(8, config.agents.mean_reversion_window)), stock_risk, risk],
+                code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
             ),
         ]
     specs.extend(
@@ -842,8 +1027,15 @@ def _split_features(features: list[FeatureVector], symbol: str) -> tuple[list[Fe
     total = len(features)
     if total < 30:
         return features, [], []
-    train_ratio = 0.5 if _is_crypto_symbol(symbol) else 0.6
-    validation_ratio = 0.25 if _is_crypto_symbol(symbol) else 0.2
+    if _is_crypto_symbol(symbol):
+        train_ratio = 0.5
+        validation_ratio = 0.25
+    elif _is_stock_symbol(symbol):
+        train_ratio = 0.5
+        validation_ratio = 0.25
+    else:
+        train_ratio = 0.6
+        validation_ratio = 0.2
     train_end = max(int(total * train_ratio), 1)
     validation_end = max(int(total * (train_ratio + validation_ratio)), train_end + 1)
     train = features[:train_end]
@@ -863,6 +1055,11 @@ def _walk_forward_slices(features: list[FeatureVector], symbol: str) -> list[tup
         validation_size = max(int(total * 0.25), 10)
         test_size = max(int(total * 0.2), 10)
         step_size = max(int(total * 0.08), 10)
+    elif _is_stock_symbol(symbol):
+        train_size = max(int(total * 0.42), 30)
+        validation_size = max(int(total * 0.22), 12)
+        test_size = max(int(total * 0.22), 12)
+        step_size = max(int(total * 0.06), 10)
     elif symbol.upper() == "US500":
         train_size = max(int(total * 0.45), 30)
         validation_size = max(int(total * 0.15), 10)
@@ -1176,6 +1373,46 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                 code_path="quant_system.agents.crypto.CryptoVolatilityExpansionAgent",
                 execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 10, "max_holding_bars": 36},
             )
+        )
+    elif _is_stock_symbol(symbol):
+        specs.extend(
+            [
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_news_momentum_patient",
+                    description=f"{upper} news momentum with slower exits and wider event follow-through",
+                    agents=[StockNewsMomentumAgent(min_relative_volume=1.25, min_atr_proxy=0.0036), EventAwareRiskSentinelAgent(True), risk],
+                    code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_gap_fade_selective",
+                    description=f"{upper} selective gap fade with stricter extension filter",
+                    agents=[StockGapFadeAgent(min_gap_proxy=0.005, min_relative_volume=1.1), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockGapFadeAgent",
+                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 4, "max_holding_bars": 16},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_gap_and_go_selective",
+                    description=f"{upper} selective gap-and-go continuation with stricter opening filter",
+                    agents=[StockGapAndGoAgent(min_relative_volume=1.3, min_atr_proxy=0.004), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockGapAndGoAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 5, "max_holding_bars": 18},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_post_earnings_drift_patient",
+                    description=f"{upper} post-earnings drift with patient exits",
+                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.05, max_minutes_from_open=180.0), EventAwareRiskSentinelAgent(True), risk],
+                    code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 28},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_power_hour_continuation_selective",
+                    description=f"{upper} power-hour continuation with stronger momentum requirement",
+                    agents=[StockPowerHourContinuationAgent(min_relative_volume=0.95, min_momentum_20=0.0035), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockPowerHourContinuationAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 4, "max_holding_bars": 14},
+                ),
+            ]
         )
     elif "XAU" in upper:
         specs.extend(
@@ -1790,6 +2027,27 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                     },
                 )
             )
+    elif _is_stock_symbol(symbol):
+        if weakest_exit in {"stale_breakout", "structure_exit"}:
+            specs.append(
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_news_momentum_exit_relaxed",
+                    description=f"{upper} stock news momentum with relaxed structure exit after autopsy",
+                    agents=[StockNewsMomentumAgent(min_relative_volume=1.2, min_atr_proxy=0.0035), EventAwareRiskSentinelAgent(True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
+                    code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 26},
+                )
+            )
+        if closed_trades <= 4:
+            specs.append(
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_post_earnings_drift_dense",
+                    description=f"{upper} denser post-earnings drift variant",
+                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.0, max_minutes_from_open=210.0), EventAwareRiskSentinelAgent(True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
+                    code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 30},
+                )
+            )
     elif upper in {"US500", "US100"}:
         if closed_trades <= 4:
             specs.append(
@@ -2059,10 +2317,15 @@ def _regime_candidates_from_row(row: CandidateResult) -> list[str]:
     return deduped
 
 
-def _autopsy_improvement_specs(symbol: str, specs: list[CandidateSpec], results: list[CandidateResult]) -> list[CandidateSpec]:
-    if not _is_crypto_symbol(symbol):
-        return []
+def _autopsy_improvement_specs(
+    config: SystemConfig,
+    symbol: str,
+    specs: list[CandidateSpec],
+    results: list[CandidateResult],
+) -> list[CandidateSpec]:
     lookup = {spec.name: spec for spec in specs}
+    if not (_is_crypto_symbol(symbol) or _is_stock_symbol(symbol)):
+        return []
     near_misses = [
         row
         for row in sorted(results, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
@@ -2087,6 +2350,49 @@ def _autopsy_improvement_specs(symbol: str, specs: list[CandidateSpec], results:
                     "max_holding_bars": max(int(overrides.get("max_holding_bars", 24)), 24),
                 },
             )
+        if _is_stock_symbol(symbol):
+            if row.name.startswith("mean_reversion__15m_midday"):
+                generated.append(
+                    CandidateSpec(
+                        name=f"{base_spec.name}__autopsy_midday_dense",
+                        description=f"{base_spec.description} autopsy-tuned for denser midday continuation mean reversion",
+                        agents=[
+                            MeanReversionAgent(max(config.agents.mean_reversion_window - 2, 4), config.agents.mean_reversion_threshold * 0.8),
+                            EventAwareRiskSentinelAgent(allow_high_impact_day=False),
+                            RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=max(config.agents.min_relative_volume * 0.9, 0.7)),
+                        ],
+                        code_path="quant_system.agents.trend.MeanReversionAgent",
+                        execution_overrides=_merge_execution_overrides(
+                            overrides,
+                            {"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 20},
+                        ),
+                        variant_label=base_spec.variant_label,
+                        timeframe_label=base_spec.timeframe_label,
+                        session_label=base_spec.session_label,
+                        regime_filter_label=row.best_regime or "trend_up",
+                    )
+                )
+            if row.name.startswith("momentum__15m_power"):
+                generated.append(
+                    CandidateSpec(
+                        name=f"{base_spec.name}__autopsy_power_dense",
+                        description=f"{base_spec.description} autopsy-tuned for denser power-hour continuation",
+                        agents=[
+                            MomentumConfirmationAgent(config.agents.mean_reversion_threshold * 0.65),
+                            EventAwareRiskSentinelAgent(allow_high_impact_day=False),
+                            RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=max(config.agents.min_relative_volume * 0.9, 0.7)),
+                        ],
+                        code_path="quant_system.agents.trend.MomentumConfirmationAgent",
+                        execution_overrides=_merge_execution_overrides(
+                            overrides,
+                            {"structure_exit_bars": 0, "stale_breakout_bars": 5, "max_holding_bars": 18},
+                        ),
+                        variant_label=base_spec.variant_label,
+                        timeframe_label=base_spec.timeframe_label,
+                        session_label=base_spec.session_label,
+                        regime_filter_label=row.best_regime or "trend_up",
+                    )
+                )
         for regime_filter in _regime_candidates_from_row(row)[:3]:
             key = (base_spec.name, regime_filter)
             if key in seen:
@@ -2705,6 +3011,18 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         resolved.profile_symbol,
         resolved.data_symbol,
     )
+    if _is_stock_symbol(resolved.profile_symbol) and config.symbol_research.mode == "auto" and effective_mode == "seed":
+        full_config = copy.deepcopy(config)
+        full_config.symbol_research.mode = "full"
+        full_mode_variants, full_mode_source, full_mode = _build_symbol_feature_variants(
+            full_config,
+            resolved.profile_symbol,
+            resolved.data_symbol,
+        )
+        if full_mode == "full" and any(features for features in full_mode_variants.values()):
+            feature_variants = full_mode_variants
+            data_source = full_mode_source
+            effective_mode = full_mode
     default_features = _default_variant_features(feature_variants)
     if not default_features:
         raise RuntimeError(f"No usable feature variants were generated for {resolved.profile_symbol}.")
@@ -2786,6 +3104,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             for spec in regime_specs
         )
     autopsy_specs = _autopsy_improvement_specs(
+        config,
         resolved.profile_symbol,
         explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs,
         results,
@@ -3064,6 +3383,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 15% / 15%")
     elif _is_crypto_symbol(resolved.profile_symbol):
         lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 25% / 20%")
+    elif _is_stock_symbol(resolved.profile_symbol):
+        lines.append("Split ratio: train 50% / validation 25% / test 25% ; walk-forward windows use 42% / 22% / 22%")
     else:
         lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 50% / 20% / 20%")
     return lines

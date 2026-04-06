@@ -13,8 +13,7 @@ from quant_system.execution.engine import AgentCoordinator
 from quant_system.integrations.mt5 import MT5AccountModeInfo, MT5Client, MT5Error, MT5PositionInfo
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.models import OrderRequest, Side
-from quant_system.research.features import build_feature_library
-from quant_system.symbol_research import _configure_symbol_execution
+from quant_system.symbol_research import _build_features_with_events, _configure_symbol_execution
 
 
 LOGGER = logging.getLogger(__name__)
@@ -82,6 +81,12 @@ def _matches_session(feature, session_name: str) -> bool:
         return hour in set(range(13, 21))
     if session_name == "overlap":
         return hour in set(range(12, 17))
+    if session_name == "open":
+        return feature.values.get("in_regular_session", 0.0) >= 1.0 and 0 <= feature.values.get("minutes_from_open", -1.0) < 90
+    if session_name == "power":
+        return hour in {18, 19}
+    if session_name == "midday":
+        return hour in {15, 16, 17}
     return True
 
 
@@ -128,7 +133,7 @@ class MT5LiveExecutor:
     def _evaluate_strategy(self, client: MT5Client, strategy: DeploymentStrategy) -> tuple[Side, float, datetime | None]:
         strategy_config = self._build_strategy_config(strategy)
         bars = client.fetch_bars(bar_count=strategy_config.mt5.history_bars)
-        features = build_feature_library(bars)
+        features = _build_features_with_events(strategy_config, self.deployment.symbol, bars)
         session_name = _session_name_from_variant(strategy.variant_label)
         agents = build_agents_from_catalog_paths([strategy.code_path], strategy_config)
         coordinator = AgentCoordinator(agents, consensus_min_confidence=strategy_config.agents.consensus_min_confidence)

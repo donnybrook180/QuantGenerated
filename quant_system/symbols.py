@@ -40,14 +40,44 @@ _SYMBOL_ALIASES: dict[str, tuple[str, str, str]] = {
 }
 
 
+def is_crypto_symbol(symbol: str) -> bool:
+    upper = symbol.upper()
+    return "BTC" in upper or "ETH" in upper
+
+
+def is_metal_symbol(symbol: str) -> bool:
+    return "XAU" in symbol.upper()
+
+
+def is_forex_symbol(symbol: str) -> bool:
+    upper = symbol.upper()
+    return upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD")
+
+
+def is_index_symbol(symbol: str) -> bool:
+    upper = symbol.upper()
+    return upper in {"US500", "SPY", "SPX", "I:SPX", "US100", "QQQ", "NDX", "I:NDX", "GER40", "DAX", "DE40"}
+
+
+def is_stock_symbol(symbol: str) -> bool:
+    requested = symbol.strip()
+    upper = requested.upper()
+    if not upper:
+        return False
+    if is_crypto_symbol(upper) or is_metal_symbol(upper) or is_forex_symbol(upper) or is_index_symbol(upper):
+        return False
+    return ":" not in upper and upper.replace(".", "").replace("-", "").isalnum()
+
+
 def resolve_symbol_request(symbol: str, broker_symbol: str | None = None) -> ResolvedSymbol:
     requested = symbol.strip()
     upper = requested.upper()
     alias = _SYMBOL_ALIASES.get(upper)
     if alias is None:
-        data_symbol = requested
-        resolved_broker = broker_symbol.strip() if broker_symbol and broker_symbol.strip() else requested
-        profile_symbol = requested
+        normalized = upper if is_stock_symbol(requested) else requested
+        data_symbol = normalized
+        resolved_broker = broker_symbol.strip() if broker_symbol and broker_symbol.strip() else normalized
+        profile_symbol = normalized
     else:
         profile_symbol, data_symbol, default_broker = alias
         resolved_broker = broker_symbol.strip() if broker_symbol and broker_symbol.strip() else default_broker

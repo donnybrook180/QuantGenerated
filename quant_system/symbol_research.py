@@ -25,6 +25,7 @@ from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, E
 from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
+from quant_system.plotting import plot_symbol_research
 from quant_system.research.features import build_feature_library
 from quant_system.risk.limits import RiskManager
 from quant_system.symbols import resolve_symbol_request
@@ -1787,6 +1788,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     )
     _annotate_combo_results(results)
     csv_path, txt_path = _export_results(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
+    plot_paths = plot_symbol_research(resolved.profile_symbol, results)
     ranked = sorted(
         results,
         key=lambda item: (
@@ -1944,6 +1946,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         f"Research CSV: {csv_path}",
         f"Research report: {txt_path}",
     ]
+    if plot_paths:
+        lines.append("Plots: " + ", ".join(str(path) for path in plot_paths))
     if best is not None:
         lines.extend(
             [

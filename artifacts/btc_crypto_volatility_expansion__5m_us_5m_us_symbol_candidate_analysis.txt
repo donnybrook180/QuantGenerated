@@ -1,0 +1,21 @@
+Artifact: btc_crypto_volatility_expansion__5m_us_5m_us_symbol_candidate
+Closed trades: 16
+Realized pnl: -921.89
+
+By entry hour
+20: trades=1 pnl=-253.92 avg=-253.92 win_rate=0.00%
+13: trades=5 pnl=-227.66 avg=-45.53 win_rate=0.00%
+17: trades=4 pnl=-179.37 avg=-44.84 win_rate=0.00%
+18: trades=2 pnl=-127.85 avg=-63.92 win_rate=0.00%
+15: trades=2 pnl=-123.17 avg=-61.59 win_rate=0.00%
+19: trades=1 pnl=-35.58 avg=-35.58 win_rate=0.00%
+14: trades=1 pnl=25.66 avg=25.66 win_rate=100.00%
+
+By entry setup
+crypto_volatility_expansion: trades=16 pnl=-921.89 avg=-57.62 win_rate=6.25%
+
+By exit reason
+structure_exit: trades=7 pnl=-619.55 avg=-88.51 win_rate=0.00%
+signal_exit: trades=5 pnl=-212.19 avg=-42.44 win_rate=20.00%
+trailing_stop: trades=3 pnl=-67.25 avg=-22.42 win_rate=0.00%
+stale_breakout: trades=1 pnl=-22.90 avg=-22.90 win_rate=0.00%

@@ -192,6 +192,7 @@ class ExperimentStore:
                     variant_label VARCHAR,
                     timeframe_label VARCHAR,
                     session_label VARCHAR,
+                    regime_filter_label VARCHAR,
                     execution_overrides_json TEXT,
                     recommended BOOLEAN
                 )
@@ -210,6 +211,7 @@ class ExperimentStore:
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS session_label VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_filter_label VARCHAR")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS execution_overrides_json TEXT")
             connection.execute(
                 """
@@ -229,11 +231,13 @@ class ExperimentStore:
                     profile_name VARCHAR,
                     candidate_name VARCHAR,
                     code_path TEXT,
+                    regime_filter_label VARCHAR,
                     execution_overrides_json TEXT,
                     selection_rank INTEGER
                 )
                 """
             )
+            connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS regime_filter_label VARCHAR")
             connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS execution_overrides_json TEXT")
 
     def _serialize(self, value) -> str:
@@ -784,6 +788,7 @@ class ExperimentStore:
                     variant_label,
                     timeframe_label,
                     session_label,
+                    regime_filter_label,
                     execution_overrides_json,
                     recommended
                 FROM symbol_research_candidates
@@ -814,8 +819,9 @@ class ExperimentStore:
                 "variant_label": row[17] or "",
                 "timeframe_label": row[18] or "",
                 "session_label": row[19] or "",
-                "execution_overrides": json.loads(row[20] or "{}"),
-                "recommended": bool(row[21]),
+                "regime_filter_label": row[20] or "",
+                "execution_overrides": json.loads(row[21] or "{}"),
+                "recommended": bool(row[22]),
             }
             for row in rows
         ]
@@ -852,16 +858,18 @@ class ExperimentStore:
                         profile_name,
                         candidate_name,
                         code_path,
+                        regime_filter_label,
                         execution_overrides_json,
                         selection_rank
                     )
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         execution_set_id,
                         profile_name,
                         str(row["candidate_name"]),
                         str(row["code_path"]),
+                        str(row.get("regime_filter_label", "")),
                         json.dumps(row.get("execution_overrides", {})),
                         index,
                     ],
@@ -884,7 +892,7 @@ class ExperimentStore:
                 return None
             rows = connection.execute(
                 """
-                SELECT candidate_name, code_path, execution_overrides_json, selection_rank
+                SELECT candidate_name, code_path, regime_filter_label, execution_overrides_json, selection_rank
                 FROM symbol_execution_set_items
                 WHERE execution_set_id = ?
                 ORDER BY selection_rank ASC
@@ -901,8 +909,9 @@ class ExperimentStore:
                 {
                     "candidate_name": row[0],
                     "code_path": row[1],
-                    "execution_overrides": json.loads(row[2] or "{}"),
-                    "selection_rank": int(row[3] or 0),
+                    "regime_filter_label": row[2] or "",
+                    "execution_overrides": json.loads(row[3] or "{}"),
+                    "selection_rank": int(row[4] or 0),
                 }
                 for row in rows
             ],
@@ -971,10 +980,11 @@ class ExperimentStore:
                         variant_label,
                         timeframe_label,
                         session_label,
+                        regime_filter_label,
                         execution_overrides_json,
                         recommended
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         run_id,
@@ -999,6 +1009,7 @@ class ExperimentStore:
                         candidate.variant_label,
                         candidate.timeframe_label,
                         candidate.session_label,
+                        candidate.regime_filter_label,
                         json.dumps(candidate.execution_overrides or {}),
                         candidate.name in recommended_names,
                     ],

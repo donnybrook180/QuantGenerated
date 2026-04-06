@@ -1,0 +1,20 @@
+Artifact: btc_crypto_trend_pullback_density_symbol_candidate
+Closed trades: 8
+Realized pnl: -26.22
+
+By entry hour
+15: trades=1 pnl=-31.54 avg=-31.54 win_rate=0.00%
+19: trades=1 pnl=-19.95 avg=-19.95 win_rate=0.00%
+17: trades=1 pnl=-18.94 avg=-18.94 win_rate=0.00%
+21: trades=2 pnl=-16.22 avg=-8.11 win_rate=0.00%
+18: trades=1 pnl=1.03 avg=1.03 win_rate=100.00%
+20: trades=2 pnl=59.40 avg=29.70 win_rate=100.00%
+
+By entry setup
+crypto_trend_pullback: trades=8 pnl=-26.22 avg=-3.28 win_rate=37.50%
+
+By exit reason
+signal_exit: trades=4 pnl=-48.53 avg=-12.13 win_rate=25.00%
+stop_loss: trades=1 pnl=-31.54 avg=-31.54 win_rate=0.00%
+trailing_stop: trades=2 pnl=5.39 avg=2.70 win_rate=50.00%
+take_profit: trades=1 pnl=48.46 avg=48.46 win_rate=100.00%

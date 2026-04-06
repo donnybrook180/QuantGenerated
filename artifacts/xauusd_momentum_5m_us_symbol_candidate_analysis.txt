@@ -1,0 +1,20 @@
+Artifact: xauusd_momentum_5m_us_symbol_candidate
+Closed trades: 14
+Realized pnl: -2.92
+
+By entry hour
+17: trades=2 pnl=-1.81 avg=-0.91 win_rate=50.00%
+15: trades=1 pnl=-1.67 avg=-1.67 win_rate=0.00%
+19: trades=1 pnl=-1.02 avg=-1.02 win_rate=0.00%
+14: trades=7 pnl=-0.33 avg=-0.05 win_rate=42.86%
+13: trades=2 pnl=0.66 avg=0.33 win_rate=50.00%
+18: trades=1 pnl=1.27 avg=1.27 win_rate=100.00%
+
+By entry setup
+momentum_confirmation: trades=14 pnl=-2.92 avg=-0.21 win_rate=42.86%
+
+By exit reason
+stop_loss: trades=4 pnl=-8.44 avg=-2.11 win_rate=0.00%
+structure_exit: trades=2 pnl=-7.62 avg=-3.81 win_rate=0.00%
+trailing_stop: trades=6 pnl=2.61 avg=0.43 win_rate=66.67%
+take_profit: trades=2 pnl=10.53 avg=5.27 win_rate=100.00%

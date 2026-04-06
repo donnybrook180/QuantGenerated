@@ -103,6 +103,9 @@ class ExperimentStore:
                     class_name VARCHAR,
                     code_path TEXT,
                     description TEXT,
+                    variant_label VARCHAR,
+                    timeframe_label VARCHAR,
+                    session_label VARCHAR,
                     status VARCHAR,
                     is_active BOOLEAN,
                     first_seen_at TIMESTAMP,
@@ -179,10 +182,33 @@ class ExperimentStore:
                     profit_factor DOUBLE,
                     max_drawdown_pct DOUBLE,
                     total_costs DOUBLE,
+                    train_pnl DOUBLE,
+                    validation_pnl DOUBLE,
+                    validation_profit_factor DOUBLE,
+                    validation_closed_trades INTEGER,
+                    test_pnl DOUBLE,
+                    test_profit_factor DOUBLE,
+                    test_closed_trades INTEGER,
+                    variant_label VARCHAR,
+                    timeframe_label VARCHAR,
+                    session_label VARCHAR,
                     recommended BOOLEAN
                 )
                 """
             )
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS train_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS validation_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS validation_profit_factor DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS validation_closed_trades INTEGER")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_profit_factor DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_closed_trades INTEGER")
+            connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
+            connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
+            connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS session_label VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS session_label VARCHAR")
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS symbol_execution_sets (
@@ -539,6 +565,9 @@ class ExperimentStore:
                         class_name,
                         code_path,
                         description,
+                        variant_label,
+                        timeframe_label,
+                        session_label,
                         status,
                         is_active,
                         first_seen_at,
@@ -546,7 +575,7 @@ class ExperimentStore:
                         last_version_id,
                         last_evaluation_id
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         descriptor.profile_name,
@@ -555,6 +584,9 @@ class ExperimentStore:
                         descriptor.class_name,
                         descriptor.code_path,
                         descriptor.description,
+                        descriptor.variant_label,
+                        descriptor.timeframe_label,
+                        descriptor.session_label,
                         self._catalog_status(descriptor, record),
                         descriptor.is_active,
                         first_seen_at,
@@ -612,6 +644,9 @@ class ExperimentStore:
                     class_name,
                     code_path,
                     description,
+                    variant_label,
+                    timeframe_label,
+                    session_label,
                     status,
                     is_active,
                     first_seen_at,
@@ -632,12 +667,15 @@ class ExperimentStore:
                 "class_name": row[3],
                 "code_path": row[4],
                 "description": row[5],
-                "status": row[6],
-                "is_active": bool(row[7]),
-                "first_seen_at": row[8],
-                "last_seen_at": row[9],
-                "last_version_id": row[10],
-                "last_evaluation_id": row[11],
+                "variant_label": row[6] or "",
+                "timeframe_label": row[7] or "",
+                "session_label": row[8] or "",
+                "status": row[9],
+                "is_active": bool(row[10]),
+                "first_seen_at": row[11],
+                "last_seen_at": row[12],
+                "last_version_id": row[13],
+                "last_evaluation_id": row[14],
             }
             for row in rows
         ]
@@ -732,6 +770,16 @@ class ExperimentStore:
                     profit_factor,
                     max_drawdown_pct,
                     total_costs,
+                    train_pnl,
+                    validation_pnl,
+                    validation_profit_factor,
+                    validation_closed_trades,
+                    test_pnl,
+                    test_profit_factor,
+                    test_closed_trades,
+                    variant_label,
+                    timeframe_label,
+                    session_label,
                     recommended
                 FROM symbol_research_candidates
                 WHERE symbol_research_run_id = ?
@@ -751,7 +799,17 @@ class ExperimentStore:
                 "profit_factor": float(row[7] or 0.0),
                 "max_drawdown_pct": float(row[8] or 0.0),
                 "total_costs": float(row[9] or 0.0),
-                "recommended": bool(row[10]),
+                "train_pnl": float(row[10] or 0.0),
+                "validation_pnl": float(row[11] or 0.0),
+                "validation_profit_factor": float(row[12] or 0.0),
+                "validation_closed_trades": int(row[13] or 0),
+                "test_pnl": float(row[14] or 0.0),
+                "test_profit_factor": float(row[15] or 0.0),
+                "test_closed_trades": int(row[16] or 0),
+                "variant_label": row[17] or "",
+                "timeframe_label": row[18] or "",
+                "session_label": row[19] or "",
+                "recommended": bool(row[20]),
             }
             for row in rows
         ]
@@ -894,9 +952,19 @@ class ExperimentStore:
                         profit_factor,
                         max_drawdown_pct,
                         total_costs,
+                        train_pnl,
+                        validation_pnl,
+                        validation_profit_factor,
+                        validation_closed_trades,
+                        test_pnl,
+                        test_profit_factor,
+                        test_closed_trades,
+                        variant_label,
+                        timeframe_label,
+                        session_label,
                         recommended
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         run_id,
@@ -911,6 +979,16 @@ class ExperimentStore:
                         candidate.profit_factor,
                         candidate.max_drawdown_pct,
                         candidate.total_costs,
+                        candidate.train_pnl,
+                        candidate.validation_pnl,
+                        candidate.validation_profit_factor,
+                        candidate.validation_closed_trades,
+                        candidate.test_pnl,
+                        candidate.test_profit_factor,
+                        candidate.test_closed_trades,
+                        candidate.variant_label,
+                        candidate.timeframe_label,
+                        candidate.session_label,
                         candidate.name in recommended_names,
                     ],
                 )
@@ -1028,6 +1106,9 @@ class ExperimentStore:
                         class_name,
                         code_path,
                         description,
+                        variant_label,
+                        timeframe_label,
+                        session_label,
                         status,
                         is_active,
                         first_seen_at,
@@ -1035,7 +1116,7 @@ class ExperimentStore:
                         last_version_id,
                         last_evaluation_id
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         profile_name,
@@ -1044,6 +1125,9 @@ class ExperimentStore:
                         descriptor.class_name,
                         descriptor.code_path,
                         descriptor.description,
+                        descriptor.variant_label,
+                        descriptor.timeframe_label,
+                        descriptor.session_label,
                         status,
                         descriptor.agent_name in recommended_names,
                         first_seen_at,

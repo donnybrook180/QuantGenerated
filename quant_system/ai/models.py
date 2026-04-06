@@ -67,3 +67,6 @@ class AgentDescriptor:
     code_path: str
     description: str
     is_active: bool
+    variant_label: str = ""
+    timeframe_label: str = ""
+    session_label: str = ""

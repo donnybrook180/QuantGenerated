@@ -7,27 +7,45 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.execution.engine import AgentCoordinator
-from quant_system.symbol_research import _build_engine, _configure_symbol_execution, _load_symbol_features, _symbol_slug, select_execution_candidates
+from quant_system.symbol_research import (
+    _build_engine,
+    _configure_symbol_execution,
+    _symbol_slug,
+    load_execution_features_for_variant,
+    select_execution_candidates,
+)
+from quant_system.symbols import resolve_symbol_request
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
-        print("Usage: .\\.venv\\Scripts\\python.exe main_symbol_execute.py <data_symbol>")
-        return 1
-
-    data_symbol = sys.argv[1].strip()
-    profile_name = f"symbol::{_symbol_slug(data_symbol)}"
     config = SystemConfig()
+    if len(sys.argv) >= 2:
+        requested_symbol = sys.argv[1].strip()
+    else:
+        requested_symbol = config.symbol_research.symbol.strip()
+        if not requested_symbol:
+            print(
+                "Usage: .\\.venv\\Scripts\\python.exe main_symbol_execute.py <data_symbol>\n"
+                "Or set SYMBOL_RESEARCH_SYMBOL in .env."
+            )
+            return 1
+
+    resolved = resolve_symbol_request(requested_symbol)
+    profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
     store = ExperimentStore(config.ai.experiment_database_path)
     research_run = store.get_latest_symbol_research_run(profile_name)
     if research_run is None:
-        print(f"No symbol research run found for {data_symbol}. Run main_symbol_research.py first.")
+        print(f"No symbol research run found for {resolved.profile_symbol}. Run main_symbol_research.py first.")
         return 1
 
     execution_set = store.get_latest_symbol_execution_set(profile_name)
     selected_candidates: list[dict[str, object]]
     execution_set_label: str
-    if execution_set is not None and execution_set["items"]:
+    if (
+        execution_set is not None
+        and execution_set["items"]
+        and int(execution_set["symbol_research_run_id"]) == int(research_run["id"])
+    ):
         selected_candidates = list(execution_set["items"])
         execution_set_label = f"saved::{execution_set['id']}"
     else:
@@ -37,25 +55,55 @@ def main() -> int:
             return 1
         selected_candidates = select_execution_candidates(candidate_rows, max_candidates=2)
         if not selected_candidates:
-            print(f"No executable candidates selected for {profile_name}.")
+            print(
+                f"No executable candidates selected for {profile_name}. "
+                "Run main_symbol_research.py again after the strategy improves."
+            )
             return 1
         execution_set_label = "fallback_heuristic"
 
-    _configure_symbol_execution(config, data_symbol)
-    config.polygon.symbol = data_symbol
+    candidate_rows = {
+        str(row["candidate_name"]): row
+        for row in store.list_latest_symbol_research_candidates(profile_name)
+    }
+    enriched_candidates: list[dict[str, object]] = []
+    for row in selected_candidates:
+        merged = dict(row)
+        merged.update(candidate_rows.get(str(row["candidate_name"]), {}))
+        enriched_candidates.append(merged)
+    if not enriched_candidates:
+        print(f"No executable candidates selected for {profile_name}.")
+        return 1
+
+    target_variant = str(enriched_candidates[0].get("variant_label", "") or "")
+    aligned_candidates = [row for row in enriched_candidates if str(row.get("variant_label", "") or "") == target_variant]
+    if not aligned_candidates:
+        print(f"No execution candidates matched a consistent variant for {profile_name}.")
+        return 1
+
+    _configure_symbol_execution(config, resolved.profile_symbol)
+    config.polygon.symbol = str(research_run["data_symbol"])
     config.mt5.symbol = str(research_run["broker_symbol"])
-    features, data_source = _load_symbol_features(config, data_symbol)
-    agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in selected_candidates], config)
+    features, data_source = load_execution_features_for_variant(
+        config,
+        resolved.profile_symbol,
+        str(research_run["data_symbol"]),
+        target_variant,
+    )
+    agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in aligned_candidates], config)
     engine = _build_engine(config, agents)
     result = asyncio.run(engine.run(features, sleep_seconds=0.0))
     coordinator = AgentCoordinator(agents, consensus_min_confidence=config.agents.consensus_min_confidence)
 
-    print(f"Symbol: {data_symbol}")
+    print(f"Requested symbol: {resolved.requested_symbol}")
+    print(f"Symbol: {resolved.profile_symbol}")
+    print(f"Data symbol: {research_run['data_symbol']}")
     print(f"Catalog profile: {profile_name}")
     print(f"Broker symbol: {research_run['broker_symbol']}")
     print(f"Data source: {data_source}")
     print(f"Execution set source: {execution_set_label}")
-    print("Selected candidates: " + ", ".join(str(row["candidate_name"]) for row in selected_candidates))
+    print(f"Execution variant: {target_variant or 'default'}")
+    print("Selected candidates: " + ", ".join(str(row["candidate_name"]) for row in aligned_candidates))
     print(f"Ending equity: {result.ending_equity:.2f}")
     print(f"Realized PnL: {result.realized_pnl:.2f}")
     print(f"Closed trades: {len(result.closed_trades)}")

@@ -111,9 +111,19 @@ class InstrumentConfig:
     timeframe_label: str = field(default_factory=lambda: f"{os.getenv('POLYGON_MULTIPLIER', '5')}_{os.getenv('POLYGON_TIMESPAN', 'minute')}")
     active_profiles: tuple[str, ...] = field(
         default_factory=lambda: tuple(
-            part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "xauusd").split(",") if part.strip()
+            part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "eurusd").split(",") if part.strip()
         )
+        )
+
+
+@dataclass(slots=True)
+class SymbolResearchConfig:
+    symbol: str = field(
+        default_factory=lambda: os.getenv("SYMBOL_RESEARCH_SYMBOL") or os.getenv("POLYGON_DATA_SYMBOL", "SPY")
     )
+    broker_symbol: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_BROKER_SYMBOL", ""))
+    history_days: int = field(default_factory=lambda: int(os.getenv("SYMBOL_RESEARCH_HISTORY_DAYS", "180")))
+    mode: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_MODE", "auto").lower())
 
 
 @dataclass(slots=True)
@@ -223,5 +233,6 @@ class SystemConfig:
     mt5: MT5Config = field(default_factory=MT5Config)
     polygon: PolygonConfig = field(default_factory=PolygonConfig)
     instrument: InstrumentConfig = field(default_factory=InstrumentConfig)
+    symbol_research: SymbolResearchConfig = field(default_factory=SymbolResearchConfig)
     ftmo: FTMOEvaluationConfig = field(default_factory=FTMOEvaluationConfig)
     ai: AIConfig = field(default_factory=AIConfig)

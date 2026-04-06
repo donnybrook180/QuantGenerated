@@ -134,6 +134,10 @@ def render_agent_catalog(profile_name: str, rows: list[dict[str, object]]) -> st
             f"{row['agent_name']} [{row['lifecycle_scope']}]: status={row['status']} "
             f"active={row['is_active']} class={row['class_name']}"
         )
+        if row.get("variant_label"):
+            lines.append(
+                f"variant: {row['variant_label']} timeframe={row.get('timeframe_label', '')} session={row.get('session_label', '')}"
+            )
         lines.append(f"path: {row['code_path']}")
         lines.append(f"description: {row['description']}")
         lines.append(

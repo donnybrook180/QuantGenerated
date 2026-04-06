@@ -72,12 +72,12 @@ class OpeningRangeBreakoutAgent(Agent):
 class VolatilityBreakoutAgent(Agent):
     name = "volatility_breakout"
 
-    def __init__(self, lookback: int = 12) -> None:
+    def __init__(self, lookback: int = 12, allowed_hours: set[int] | None = None) -> None:
         self.highs: deque[float] = deque(maxlen=lookback)
         self.lows: deque[float] = deque(maxlen=lookback)
         self.breakout_side: Side = Side.FLAT
         self.entry_anchor: float | None = None
-        self.allowed_hours = {13, 14, 16}
+        self.allowed_hours = allowed_hours
 
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         high = feature.values.get("high", feature.values["close"])
@@ -97,7 +97,7 @@ class VolatilityBreakoutAgent(Agent):
         breakout_high = max(list(self.highs)[:-1])
         breakout_low = min(list(self.lows)[:-1])
 
-        if hour not in self.allowed_hours:
+        if self.allowed_hours is not None and hour not in self.allowed_hours:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
 
         if (

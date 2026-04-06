@@ -1,0 +1,29 @@
+Artifact: btc_crypto_volatility_expansion_sweep_balanced_15m_all_symbol_candidate
+Closed trades: 23
+Realized pnl: -962.70
+
+By entry hour
+21: trades=1 pnl=-256.28 avg=-256.28 win_rate=0.00%
+5: trades=4 pnl=-148.61 avg=-37.15 win_rate=25.00%
+22: trades=3 pnl=-123.60 avg=-41.20 win_rate=0.00%
+19: trades=1 pnl=-55.86 avg=-55.86 win_rate=0.00%
+14: trades=1 pnl=-55.67 avg=-55.67 win_rate=0.00%
+13: trades=1 pnl=-52.10 avg=-52.10 win_rate=0.00%
+16: trades=1 pnl=-51.60 avg=-51.60 win_rate=0.00%
+17: trades=1 pnl=-47.77 avg=-47.77 win_rate=0.00%
+11: trades=1 pnl=-47.09 avg=-47.09 win_rate=0.00%
+7: trades=1 pnl=-46.60 avg=-46.60 win_rate=0.00%
+3: trades=1 pnl=-46.26 avg=-46.26 win_rate=0.00%
+8: trades=1 pnl=-46.25 avg=-46.25 win_rate=0.00%
+9: trades=1 pnl=-35.95 avg=-35.95 win_rate=0.00%
+0: trades=3 pnl=-7.10 avg=-2.37 win_rate=66.67%
+2: trades=2 pnl=58.03 avg=29.02 win_rate=100.00%
+
+By entry setup
+crypto_volatility_expansion: trades=23 pnl=-962.70 avg=-41.86 win_rate=21.74%
+
+By exit reason
+signal_exit: trades=14 pnl=-552.06 avg=-39.43 win_rate=7.14%
+stale_breakout: trades=4 pnl=-328.43 avg=-82.11 win_rate=25.00%
+stop_loss: trades=2 pnl=-142.41 avg=-71.21 win_rate=0.00%
+trailing_stop: trades=3 pnl=60.21 avg=20.07 win_rate=100.00%

@@ -1,0 +1,16 @@
+Artifact: btc_crypto_breakout_reclaim_sweep_balanced_5m_europe_symbol_candidate
+Closed trades: 5
+Realized pnl: -39.11
+
+By entry hour
+8: trades=1 pnl=-23.73 avg=-23.73 win_rate=0.00%
+12: trades=1 pnl=-18.84 avg=-18.84 win_rate=0.00%
+7: trades=1 pnl=1.33 avg=1.33 win_rate=100.00%
+10: trades=2 pnl=2.13 avg=1.07 win_rate=100.00%
+
+By entry setup
+crypto_breakout_reclaim: trades=5 pnl=-39.11 avg=-7.82 win_rate=60.00%
+
+By exit reason
+signal_exit: trades=4 pnl=-41.24 avg=-10.31 win_rate=50.00%
+stale_breakout: trades=1 pnl=2.13 avg=2.13 win_rate=100.00%

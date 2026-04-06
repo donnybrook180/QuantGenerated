@@ -4,6 +4,8 @@ import importlib
 from typing import cast
 
 from quant_system.agents.base import Agent
+from quant_system.agents.crypto import CryptoBreakoutReclaimAgent, CryptoTrendPullbackAgent, CryptoVolatilityExpansionAgent
+from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReversionAgent, ForexTrendContinuationAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.config import SystemConfig
 
@@ -32,6 +34,18 @@ def _instantiate_single(code_path: str, config: SystemConfig) -> Agent:
             max_volatility=config.risk.max_volatility,
             min_relative_volume=config.agents.min_relative_volume,
         )
+    if cls is CryptoTrendPullbackAgent:
+        return CryptoTrendPullbackAgent()
+    if cls is CryptoBreakoutReclaimAgent:
+        return CryptoBreakoutReclaimAgent()
+    if cls is CryptoVolatilityExpansionAgent:
+        return CryptoVolatilityExpansionAgent()
+    if cls is ForexTrendContinuationAgent:
+        return ForexTrendContinuationAgent()
+    if cls is ForexRangeReversionAgent:
+        return ForexRangeReversionAgent()
+    if cls is ForexBreakoutMomentumAgent:
+        return ForexBreakoutMomentumAgent()
 
     try:
         return cast(Agent, cls())

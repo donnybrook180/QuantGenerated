@@ -1,0 +1,165 @@
+Symbol research: XAUUSD
+Broker symbol: XAUUSD
+Data source: duckdb_cache
+
+Ranked candidates
+trend__15m_overlap [single]: pnl=25.75 closed=4 pf=12.05 win_rate=75.00% dd=0.00%
+  splits: train_pnl=-2.33 val_pnl=5.14 val_pf=999.00 val_closed=1 test_pnl=11.71 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_15m_overlap_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__5m_overlap [single]: pnl=6.45 closed=8 pf=3.00 win_rate=50.00% dd=0.00%
+  splits: train_pnl=0.81 val_pnl=6.29 val_pf=999.00 val_closed=1 test_pnl=-0.66 test_pf=0.46 test_closed=3
+  trades: artifacts\xauusd_xauusd_volatility_breakout_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_5m_overlap_symbol_candidate_analysis.txt
+volatility_breakout__5m_us [single]: pnl=6.14 closed=17 pf=1.53 win_rate=35.29% dd=0.01%
+  splits: train_pnl=-5.60 val_pnl=7.22 val_pf=3.65 val_closed=3 test_pnl=4.52 test_pf=9.63 test_closed=4
+  trades: artifacts\xauusd_volatility_breakout_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_5m_us_symbol_candidate_analysis.txt
+opening_range_breakout__5m_us [single]: pnl=5.87 closed=5 pf=2.59 win_rate=60.00% dd=0.01%
+  splits: train_pnl=-3.68 val_pnl=6.29 val_pf=999.00 val_closed=1 test_pnl=3.26 test_pf=999.00 test_closed=2
+  trades: artifacts\xauusd_opening_range_breakout_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_5m_us_symbol_candidate_analysis.txt
+opening_range_breakout__5m_overlap [single]: pnl=5.87 closed=5 pf=2.59 win_rate=60.00% dd=0.01%
+  splits: train_pnl=-3.11 val_pnl=5.72 val_pf=10.95 val_closed=2 test_pnl=3.26 test_pf=999.00 test_closed=2
+  trades: artifacts\xauusd_opening_range_breakout_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_5m_overlap_symbol_candidate_analysis.txt
+volatility_breakout__15m_us [single]: pnl=4.89 closed=7 pf=2.19 win_rate=42.86% dd=0.00%
+  splits: train_pnl=4.30 val_pnl=-0.72 val_pf=0.00 val_closed=2 test_pnl=1.31 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_volatility_breakout_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_15m_us_symbol_candidate_analysis.txt
+trend__15m_us [single]: pnl=3.30 closed=5 pf=1.98 win_rate=40.00% dd=0.00%
+  splits: train_pnl=1.56 val_pnl=-0.40 val_pf=0.00 val_closed=1 test_pnl=4.97 test_pf=35.06 test_closed=2
+  trades: artifacts\xauusd_trend_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_15m_us_symbol_candidate_analysis.txt
+volatility_breakout__5m_overlap [single]: pnl=1.51 closed=10 pf=1.26 win_rate=30.00% dd=0.01%
+  splits: train_pnl=-3.22 val_pnl=5.40 val_pf=7.03 val_closed=2 test_pnl=-0.66 test_pf=0.46 test_closed=3
+  trades: artifacts\xauusd_volatility_breakout_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_5m_overlap_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__15m_overlap [single]: pnl=0.89 closed=2 pf=36.27 win_rate=50.00% dd=0.00%
+  splits: train_pnl=-0.03 val_pnl=5.14 val_pf=999.00 val_closed=1 test_pnl=13.02 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_xauusd_volatility_breakout_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_15m_overlap_symbol_candidate_analysis.txt
+opening_range_breakout__15m_us [single]: pnl=0.75 closed=3 pf=1.18 win_rate=33.33% dd=0.00%
+  splits: train_pnl=-3.00 val_pnl=4.95 val_pf=999.00 val_closed=1 test_pnl=-1.20 test_pf=0.00 test_closed=1
+  trades: artifacts\xauusd_opening_range_breakout_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_15m_us_symbol_candidate_analysis.txt
+opening_range_breakout__15m_overlap [single]: pnl=0.75 closed=3 pf=1.18 win_rate=33.33% dd=0.00%
+  splits: train_pnl=-3.00 val_pnl=4.95 val_pf=999.00 val_closed=1 test_pnl=-1.20 test_pf=0.00 test_closed=1
+  trades: artifacts\xauusd_opening_range_breakout_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_15m_overlap_symbol_candidate_analysis.txt
+trend__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_5m_europe_symbol_candidate_analysis.txt
+momentum__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_momentum_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_5m_europe_symbol_candidate_analysis.txt
+mean_reversion__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_mean_reversion_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_5m_europe_symbol_candidate_analysis.txt
+opening_range_breakout__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_opening_range_breakout_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_5m_europe_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_xauusd_volatility_breakout_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_5m_europe_symbol_candidate_analysis.txt
+trend__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_15m_europe_symbol_candidate_analysis.txt
+momentum__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_momentum_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_15m_europe_symbol_candidate_analysis.txt
+mean_reversion__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_mean_reversion_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_15m_europe_symbol_candidate_analysis.txt
+opening_range_breakout__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_opening_range_breakout_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_opening_range_breakout_15m_europe_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_xauusd_volatility_breakout_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_15m_europe_symbol_candidate_analysis.txt
+xauusd_volatility_breakout_looser [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_xauusd_volatility_breakout_looser_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_looser_symbol_candidate_analysis.txt
+xauusd_generic_breakout_selective [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_xauusd_generic_breakout_selective_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_generic_breakout_selective_symbol_candidate_analysis.txt
+xauusd_volatility_breakout_exit_relaxed [auto_second_pass]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_xauusd_volatility_breakout_exit_relaxed_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_exit_relaxed_symbol_candidate_analysis.txt
+momentum__5m_overlap [single]: pnl=-1.35 closed=10 pf=0.90 win_rate=40.00% dd=0.01%
+  splits: train_pnl=-3.24 val_pnl=0.03 val_pf=1.00 val_closed=4 test_pnl=1.87 test_pf=1.71 test_closed=4
+  trades: artifacts\xauusd_momentum_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_5m_overlap_symbol_candidate_analysis.txt
+momentum__15m_overlap [single]: pnl=-2.52 closed=5 pf=0.84 win_rate=20.00% dd=0.02%
+  splits: train_pnl=-10.72 val_pnl=-2.54 val_pf=0.00 val_closed=1 test_pnl=10.74 test_pf=5.71 test_closed=2
+  trades: artifacts\xauusd_momentum_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_15m_overlap_symbol_candidate_analysis.txt
+volatility_breakout__15m_overlap [single]: pnl=-2.82 closed=3 pf=0.24 win_rate=33.33% dd=0.00%
+  splits: train_pnl=-0.03 val_pnl=1.44 val_pf=1.39 val_closed=2 test_pnl=13.02 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_volatility_breakout_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_15m_overlap_symbol_candidate_analysis.txt
+momentum__5m_us [single]: pnl=-2.92 closed=14 pf=0.83 win_rate=42.86% dd=0.02%
+  splits: train_pnl=-5.16 val_pnl=-0.53 val_pf=0.92 val_closed=4 test_pnl=2.77 test_pf=2.06 test_closed=5
+  trades: artifacts\xauusd_momentum_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_5m_us_symbol_candidate_analysis.txt
+volatility_breakout__15m_europe [single]: pnl=-3.65 closed=4 pf=0.42 win_rate=25.00% dd=0.01%
+  splits: train_pnl=-6.54 val_pnl=-0.51 val_pf=0.00 val_closed=1 test_pnl=0.47 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_volatility_breakout_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_15m_europe_symbol_candidate_analysis.txt
+mean_reversion__15m_overlap [single]: pnl=-4.49 closed=4 pf=0.57 win_rate=25.00% dd=0.01%
+  splits: train_pnl=-10.47 val_pnl=5.99 val_pf=999.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_mean_reversion_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_15m_overlap_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__15m_us [single]: pnl=-5.12 closed=6 pf=0.20 win_rate=16.67% dd=0.01%
+  splits: train_pnl=-4.93 val_pnl=-1.51 val_pf=0.00 val_closed=2 test_pnl=1.31 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_xauusd_volatility_breakout_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_15m_us_symbol_candidate_analysis.txt
+xauusd_volatility_breakout__5m_us [single]: pnl=-5.17 closed=10 pf=0.40 win_rate=30.00% dd=0.01%
+  splits: train_pnl=-2.15 val_pnl=-1.98 val_pf=0.00 val_closed=1 test_pnl=-1.03 test_pf=0.36 test_closed=3
+  trades: artifacts\xauusd_xauusd_volatility_breakout_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_xauusd_volatility_breakout_5m_us_symbol_candidate_analysis.txt
+momentum__15m_us [single]: pnl=-5.42 closed=7 pf=0.71 win_rate=42.86% dd=0.01%
+  splits: train_pnl=-0.60 val_pnl=-7.94 val_pf=0.00 val_closed=2 test_pnl=3.13 test_pf=2.31 test_closed=2
+  trades: artifacts\xauusd_momentum_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_momentum_15m_us_symbol_candidate_analysis.txt
+trend__5m_us [single]: pnl=-7.67 closed=22 pf=0.69 win_rate=27.27% dd=0.02%
+  splits: train_pnl=-7.87 val_pnl=0.89 val_pf=1.29 val_closed=3 test_pnl=-0.22 test_pf=0.93 test_closed=5
+  trades: artifacts\xauusd_trend_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_5m_us_symbol_candidate_analysis.txt
+mean_reversion__15m_us [single]: pnl=-9.84 closed=6 pf=0.44 win_rate=16.67% dd=0.02%
+  splits: train_pnl=-16.71 val_pnl=-0.91 val_pf=0.00 val_closed=1 test_pnl=7.78 test_pf=999.00 test_closed=1
+  trades: artifacts\xauusd_mean_reversion_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_15m_us_symbol_candidate_analysis.txt
+mean_reversion__5m_overlap [single]: pnl=-11.79 closed=4 pf=0.02 win_rate=25.00% dd=0.01%
+  splits: train_pnl=-9.44 val_pnl=-2.35 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_mean_reversion_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_5m_overlap_symbol_candidate_analysis.txt
+mean_reversion__5m_us [single]: pnl=-24.22 closed=9 pf=0.01 win_rate=11.11% dd=0.03%
+  splits: train_pnl=-20.10 val_pnl=-4.13 val_pf=0.00 val_closed=3 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\xauusd_mean_reversion_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_mean_reversion_5m_us_symbol_candidate_analysis.txt
+volatility_breakout__5m_europe [single]: pnl=-25.69 closed=14 pf=0.00 win_rate=0.00% dd=0.03%
+  splits: train_pnl=-16.42 val_pnl=-6.01 val_pf=0.00 val_closed=3 test_pnl=-3.26 test_pf=0.00 test_closed=3
+  trades: artifacts\xauusd_volatility_breakout_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_volatility_breakout_5m_europe_symbol_candidate_analysis.txt
+trend__5m_overlap [single]: pnl=-59.48 closed=15 pf=0.10 win_rate=26.67% dd=0.07%
+  splits: train_pnl=-59.42 val_pnl=0.59 val_pf=1.18 val_closed=3 test_pnl=-2.10 test_pf=0.28 test_closed=4
+  trades: artifacts\xauusd_trend_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\xauusd_trend_5m_overlap_symbol_candidate_analysis.txt
+
+Recommended active agents
+- volatility_breakout__5m_us (Generic volatility breakout [5m_us])
+- momentum__5m_overlap (Momentum confirmation [5m_overlap])

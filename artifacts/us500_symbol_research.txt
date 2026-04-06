@@ -1,0 +1,13 @@
+Symbol research: US500
+Broker symbol: US500.cash
+Data source: polygon
+
+Ranked candidates
+opening_range_breakout [single]: pnl=-0.55 closed=1 pf=0.00 win_rate=0.00% dd=0.00%
+mean_reversion [single]: pnl=-0.74 closed=3 pf=0.00 win_rate=0.00% dd=0.00%
+momentum [single]: pnl=-1.71 closed=9 pf=0.38 win_rate=22.22% dd=0.00%
+volatility_breakout [single]: pnl=-1.78 closed=8 pf=0.24 win_rate=12.50% dd=0.00%
+trend [single]: pnl=-4.15 closed=17 pf=0.18 win_rate=17.65% dd=0.01%
+
+Recommended active agents
+No candidate met the positive-PnL and PF>=1.0 threshold.

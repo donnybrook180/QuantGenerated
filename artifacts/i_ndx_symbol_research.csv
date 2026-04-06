@@ -1,0 +1,7 @@
+name,description,archetype,realized_pnl,closed_trades,win_rate_pct,profit_factor,max_drawdown_pct,total_costs
+trend,EMA trend continuation,single,-9.36353,19,31.57895,0.86917,0.05635,18.74862
+momentum,Momentum confirmation,single,28.46751,13,46.15385,1.80701,0.02999,12.77338
+mean_reversion,Intraday mean reversion,single,-2.89475,4,25.00000,0.44107,0.01154,3.95672
+volatility_breakout,Generic volatility breakout,single,14.67004,6,16.66667,1.43557,0.03615,5.91803
+opening_range_breakout,Opening range breakout,single,-5.23393,1,0.00000,0.00000,0.00573,0.98801
+momentum__plus__volatility_breakout,Combined momentum + volatility_breakout,combined,15.91038,15,46.66667,1.32850,0.04354,14.76769

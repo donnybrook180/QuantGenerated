@@ -71,10 +71,74 @@ Als je niet eerst zelf een vast profiel wilt kiezen, kun je ook direct research 
 .\.venv\Scripts\python.exe main_symbol_research.py C:XAUUSD XAUUSD
 ```
 
+Of zet het symbool eenmalig in `.env` en run zonder argumenten:
+
+```powershell
+SYMBOL_RESEARCH_SYMBOL=XAUUSD
+SYMBOL_RESEARCH_MODE=auto
+```
+
+`SYMBOL_RESEARCH_BROKER_SYMBOL` is alleen nodig als je bewust de automatische broker-mapping wilt overriden.
+
+Daarna:
+
+```powershell
+.\.venv\Scripts\python.exe main_symbol_research.py
+```
+
+Voor symbol research kun je nu ook generieke aliassen gebruiken. De app mappt die automatisch naar een bruikbare Polygon-proxy en broker-symbol:
+
+- `US500` -> data `SPY`, broker `US500.cash`
+- `US100` -> data `QQQ`, broker `US100.cash`
+- `GER40` -> data `DAX`, broker `GER40.cash`
+- `XAUUSD` -> data `C:XAUUSD`, broker `XAUUSD`
+
 Deze runner test meerdere archetypes op hetzelfde symbool, zoals trend, mean reversion, opening range breakout en volatility breakout. Daarna test hij ook combinaties van de best scorende losse archetypes. De resultaten komen in:
 
 - `artifacts/<symbol>_symbol_research.csv`
 - `artifacts/<symbol>_symbol_research.txt`
+
+Symbol research bepaalt nu zelf het symbooltype en kiest automatisch de horizon:
+
+- crypto: minimaal `365` dagen
+- metals / forex / indices: minimaal `180` dagen
+
+Je kunt dit nog steeds overriden met `SYMBOL_RESEARCH_HISTORY_DAYS`, maar dat hoeft meestal niet.
+
+Daarna splitst de app de data in:
+
+- train: 60%
+- validation: 20%
+- test: 20%
+
+Promotie en execution selection gebeuren nu op validation/test, niet meer alleen op de totale periode.
+
+`SYMBOL_RESEARCH_MODE=auto` is de aanbevolen stand. Dan controleert de app zelf:
+
+- ontbreken de benodigde timeframe-caches nog: `seed`
+- zijn de benodigde caches al aanwezig: `full`
+
+In `seed` mode haalt de app minder timeframe/session-varianten op. Zodra voldoende cache aanwezig is, schakelt hij in `auto` vanzelf door naar `full`.
+
+Alleen als je bewust wilt forceren, gebruik je:
+
+```powershell
+SYMBOL_RESEARCH_MODE=seed
+```
+
+of:
+
+```powershell
+SYMBOL_RESEARCH_MODE=full
+```
+
+Voor zware research blijft dit nuttig:
+
+```powershell
+POLYGON_FETCH_POLICY=cache_first
+```
+
+zodat de volledige research zo veel mogelijk uit DuckDB-cache draait in plaats van Polygon opnieuw zwaar te belasten.
 
 Na zo'n research-run kun je de gepromote winnaars direct uitvoeren als symbol-level active set:
 

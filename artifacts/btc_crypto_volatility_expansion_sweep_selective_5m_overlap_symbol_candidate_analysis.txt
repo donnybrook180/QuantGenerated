@@ -1,0 +1,17 @@
+Artifact: btc_crypto_volatility_expansion_sweep_selective_5m_overlap_symbol_candidate
+Closed trades: 9
+Realized pnl: -137.22
+
+By entry hour
+15: trades=2 pnl=-123.17 avg=-61.59 win_rate=0.00%
+13: trades=3 pnl=-58.19 avg=-19.40 win_rate=0.00%
+12: trades=3 pnl=18.49 avg=6.16 win_rate=33.33%
+14: trades=1 pnl=25.66 avg=25.66 win_rate=100.00%
+
+By entry setup
+crypto_volatility_expansion: trades=9 pnl=-137.22 avg=-15.25 win_rate=22.22%
+
+By exit reason
+signal_exit: trades=5 pnl=-119.99 avg=-24.00 win_rate=20.00%
+stale_breakout: trades=1 pnl=-24.63 avg=-24.63 win_rate=0.00%
+trailing_stop: trades=3 pnl=7.40 avg=2.47 win_rate=33.33%

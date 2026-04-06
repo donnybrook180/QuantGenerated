@@ -1,0 +1,20 @@
+Artifact: xauusd_forex_breakout_momentum_5m_europe_symbol_candidate
+Closed trades: 20
+Realized pnl: -8.67
+
+By entry hour
+11: trades=5 pnl=-9.59 avg=-1.92 win_rate=40.00%
+9: trades=5 pnl=-5.12 avg=-1.02 win_rate=20.00%
+10: trades=3 pnl=0.18 avg=0.06 win_rate=33.33%
+7: trades=2 pnl=1.38 avg=0.69 win_rate=50.00%
+12: trades=5 pnl=4.47 avg=0.89 win_rate=20.00%
+
+By entry setup
+forex_breakout_momentum: trades=20 pnl=-8.67 avg=-0.43 win_rate=30.00%
+
+By exit reason
+stop_loss: trades=2 pnl=-11.49 avg=-5.74 win_rate=0.00%
+signal_exit: trades=3 pnl=-4.09 avg=-1.36 win_rate=0.00%
+trailing_stop: trades=9 pnl=-3.75 avg=-0.42 win_rate=22.22%
+structure_exit: trades=2 pnl=-2.51 avg=-1.25 win_rate=0.00%
+take_profit: trades=4 pnl=13.17 avg=3.29 win_rate=100.00%

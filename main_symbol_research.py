@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 
 from quant_system.config import SystemConfig
-from quant_system.symbol_research import run_symbol_research
+from quant_system.research.app import run_symbol_research_app
 
 
 def main() -> int:
@@ -21,7 +21,7 @@ def main() -> int:
                 "You can use aliases like US500, US100, GER40, or XAUUSD."
             )
             return 1
-    print("\n".join(run_symbol_research(data_symbol, broker_symbol)))
+    print("\n".join(run_symbol_research_app(data_symbol, broker_symbol)))
     return 0
 
 

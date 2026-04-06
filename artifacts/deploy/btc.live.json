@@ -1,0 +1,27 @@
+{
+  "profile_name": "symbol::btc",
+  "symbol": "BTC",
+  "data_symbol": "X:BTCUSD",
+  "broker_symbol": "BTCUSD",
+  "research_run_id": 85,
+  "execution_set_id": 48,
+  "execution_validation_summary": "variant=crypto_short_breakdown__5m_europe__exit_trend__near_miss_patient__trend_down@5m_europe|trend_down data_source=duckdb_cache pnl=388.77 pf=2.40 closed=11 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "crypto_short_breakdown__5m_europe__exit_trend__near_miss_patient__trend_down",
+      "code_path": "quant_system.agents.crypto.CryptoShortBreakdownAgent",
+      "variant_label": "5m_europe",
+      "regime_filter_label": "trend_down",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.4000000000000004,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 10,
+        "structure_exit_bars": 0,
+        "break_even_atr_multiple": 0.4,
+        "stale_breakout_atr_fraction": 0.1
+      },
+      "allocation_weight": 1.0
+    }
+  ]
+}

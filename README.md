@@ -8,6 +8,28 @@ Personal multi-agent quant research trading system scaffold built around three i
 
 ## Architecture
 
+### Monorepo Layers
+
+De repo is nu functioneel opgesplitst in drie lagen binnen dezelfde codebase:
+
+- `quant_system/core`
+  - gedeelde models
+  - risk/cost primitives
+  - symbol resolution
+  - execution primitives
+- `quant_system/research`
+  - symbol research
+  - candidate selectie
+  - walk-forward en plots
+  - execution set export
+- `quant_system/live`
+  - deployment artifacts
+  - MT5 live runtime
+  - live journaling / incidents
+  - polling loop
+
+De bestaande `main_*.py` entrypoints blijven werken, maar lopen nu via deze research/live lagen.
+
 ### The Three-Body System
 
 1. Research environment (`quant_system/research`)
@@ -34,6 +56,18 @@ The runtime uses multiple cooperating agents:
 Agents emit `SignalEvent`s. The coordinator aggregates them into a single action and forwards approved orders to the broker adapter.
 
 ## Run
+
+### Primary entrypoints
+
+Bovenaan in de repo staan nu alleen de scripts die je normaal zelf direct aanroept:
+
+- `main.py`
+- `main_symbol_research.py`
+- `main_symbol_execute.py`
+- `main_live_mt5.py`
+- `main_live_loop.py`
+
+Minder vaak gebruikte utility scripts staan nu in `tools/`.
 
 ```powershell
 .\.venv\Scripts\python.exe main.py
@@ -149,25 +183,25 @@ Na zo'n research-run kun je de gepromote winnaars direct uitvoeren als symbol-le
 Om te zien welke execution subset symbol research heeft vastgezet:
 
 ```powershell
-.\.venv\Scripts\python.exe main_symbol_execution_set.py
+.\.venv\Scripts\python.exe tools\main_symbol_execution_set.py
 ```
 
 Of voor een specifiek symbool:
 
 ```powershell
-.\.venv\Scripts\python.exe main_symbol_execution_set.py C:XAUUSD
+.\.venv\Scripts\python.exe tools\main_symbol_execution_set.py C:XAUUSD
 ```
 
 Voor een advisory risk allocation over de nieuwste symbol research winnaars:
 
 ```powershell
-.\.venv\Scripts\python.exe main_portfolio_allocator.py
+.\.venv\Scripts\python.exe tools\main_portfolio_allocator.py
 ```
 
 Of alleen voor specifieke symbolen/profielen:
 
 ```powershell
-.\.venv\Scripts\python.exe main_portfolio_allocator.py XAUUSD BTC
+.\.venv\Scripts\python.exe tools\main_portfolio_allocator.py XAUUSD BTC
 ```
 
 Dit gebruikt alleen de nieuwste, geldige symbol execution sets en weegt ze op research-robuustheid:
@@ -182,12 +216,97 @@ De output komt ook in:
 
 - `artifacts/portfolio_allocator.txt`
 
+Als een symbol research-run een `accepted` execution set vindt, exporteert hij nu ook automatisch een live deployment artifact:
+
+- `artifacts/deploy/<symbol>.live.json`
+
+Bijvoorbeeld:
+
+- `artifacts/deploy/us500.live.json`
+- `artifacts/deploy/xauusd.live.json`
+- `artifacts/deploy/btc.live.json`
+
+Die deployment artifacts zijn de brug tussen research en live. De live runner doet zelf geen research; hij leest alleen deze bestanden.
+
+## Live Trading
+
+Voor een eenmalige live/dry-run evaluatie:
+
+```powershell
+.\.venv\Scripts\python.exe main_live_mt5.py
+```
+
+Of voor één symbool:
+
+```powershell
+.\.venv\Scripts\python.exe main_live_mt5.py US500
+```
+
+Voor een doorlopende poll-loop:
+
+```powershell
+.\.venv\Scripts\python.exe main_live_loop.py
+```
+
+Of per symbool:
+
+```powershell
+.\.venv\Scripts\python.exe main_live_loop.py US500
+```
+
+Aanbevolen eerste stap:
+
+```powershell
+LIVE_TRADING_ENABLED=false
+MT5_POLL_SECONDS=60
+```
+
+Dus eerst dry-run laten meelopen.
+
+De live laag schrijft nu ook naar:
+
+- `artifacts/live/*_journal.json`
+- `artifacts/live/*_incident.txt`
+- `artifacts/live/loop_state.json`
+
+### Hedging vs Netting
+
+De live runner detecteert nu expliciet of je MT5-account:
+
+- `hedging`
+- of `netting`
+
+is.
+
+Belangrijk:
+
+- op `hedging` ondersteunt broker-side positie-isolatie per strategie goed
+- op `netting` is echte multi-strategy isolatie per symbool broker-side niet volledig mogelijk
+
+Daarom geldt nu standaard:
+
+- als je account `netting` is
+- en een deployment heeft meerdere strategieën op hetzelfde symbool
+- dan blokkeert de live runner echte execution voor dat symbool
+
+Dat geeft dan acties zoals:
+
+- `netting_blocked_multi_strategy`
+
+Alleen als je bewust wilt overriden:
+
+```powershell
+MT5_ALLOW_NETTING_MULTI_STRATEGY=true
+```
+
+Maar dat is niet de veilige default.
+
 ## MT5 Test
 
 Use this to test `XAUUSD`, `US500`, and `GER40` directly against your MetaTrader terminal without forcing live order placement:
 
 ```powershell
-.\.venv\Scripts\python.exe main_mt5_test.py
+.\.venv\Scripts\python.exe tools\main_mt5_test.py
 ```
 
 The MT5 test runner:
@@ -209,7 +328,7 @@ MT5_TEST_PROFILES=xauusd_volatility,us500_trend,ger40_orb
 Gebruik de lokale AI/query-laag om vragen te stellen over je experiment history:
 
 ```powershell
-.\.venv\Scripts\python.exe main_ai_chat.py "vergelijk XAUUSD en US500"
+.\.venv\Scripts\python.exe tools\main_ai_chat.py "vergelijk XAUUSD en US500"
 ```
 
 De chatlaag werkt eerst lokaal op basis van DuckDB experiment memory. Als `AI_API_KEY` is gezet, probeert hij het antwoord compacter te herformuleren via het model, zonder nieuwe metrics te verzinnen.
@@ -252,7 +371,7 @@ AI_API_KEY=your_openai_key_here
 Controleer je provider/key snel met:
 
 ```powershell
-.\.venv\Scripts\python.exe main_ai_doctor.py
+.\.venv\Scripts\python.exe tools\main_ai_doctor.py
 ```
 
 Dat commando print de actieve AI-config en doet daarna een kleine testcall.
@@ -260,13 +379,13 @@ Dat commando print de actieve AI-config en doet daarna een kleine testcall.
 Voor een overzicht van alle agents die de applicatie kent:
 
 ```powershell
-.\.venv\Scripts\python.exe main_agent_registry.py
+.\.venv\Scripts\python.exe tools\main_agent_registry.py
 ```
 
 Of voor een specifiek profiel:
 
 ```powershell
-.\.venv\Scripts\python.exe main_agent_registry.py ger40_orb
+.\.venv\Scripts\python.exe tools\main_agent_registry.py ger40_orb
 ```
 
 ## Secrets

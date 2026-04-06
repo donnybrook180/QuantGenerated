@@ -1,0 +1,39 @@
+{
+  "profile_name": "symbol::us500",
+  "symbol": "US500",
+  "data_symbol": "SPY",
+  "broker_symbol": "US500.cash",
+  "research_run_id": 83,
+  "execution_set_id": 46,
+  "execution_validation_summary": "variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_momentum_selective__regime_trend_up_vol_high@default|trend_up_vol_high data_source=duckdb_cache pnl=1.05 pf=3.72 closed=8 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
+      "code_path": "quant_system.agents.us500.US500ShortVWAPRejectAgent",
+      "variant_label": "",
+      "regime_filter_label": "trend_flat",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 7,
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 2.4000000000000004,
+        "trailing_stop_atr_multiple": 0.72,
+        "break_even_atr_multiple": 0.4
+      },
+      "allocation_weight": 0.5
+    },
+    {
+      "candidate_name": "us500_momentum_selective__regime_trend_up_vol_high",
+      "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+      "variant_label": "",
+      "regime_filter_label": "trend_up_vol_high",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 5,
+        "take_profit_atr_multiple": 2.6,
+        "trailing_stop_atr_multiple": 0.85
+      },
+      "allocation_weight": 0.5
+    }
+  ]
+}

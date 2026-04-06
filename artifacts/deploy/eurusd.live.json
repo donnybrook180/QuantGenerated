@@ -1,0 +1,19 @@
+{
+  "profile_name": "symbol::eurusd",
+  "symbol": "EURUSD",
+  "data_symbol": "C:EURUSD",
+  "broker_symbol": "EURUSD",
+  "research_run_id": 89,
+  "execution_set_id": 51,
+  "execution_validation_summary": "variant=forex_short_trend_continuation__15m_overlap@15m_overlap data_source=duckdb_cache pnl=63.08 pf=25.35 closed=5 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "forex_short_trend_continuation__15m_overlap",
+      "code_path": "quant_system.agents.forex.ForexShortTrendContinuationAgent",
+      "variant_label": "15m_overlap",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 1.0
+    }
+  ]
+}

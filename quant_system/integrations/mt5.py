@@ -29,6 +29,24 @@ class MT5Error(RuntimeError):
 
 
 @dataclass(slots=True)
+class MT5AccountModeInfo:
+    margin_mode_code: int
+    margin_mode_label: str
+    strategy_isolation_supported: bool
+
+
+@dataclass(slots=True)
+class MT5PositionInfo:
+    ticket: int
+    symbol: str
+    side: Side
+    quantity: float
+    price_open: float
+    magic_number: int
+    comment: str
+
+
+@dataclass(slots=True)
 class MT5Client:
     config: MT5Config
     resolved_symbol: str | None = field(default=None, init=False)
@@ -109,22 +127,65 @@ class MT5Client:
             drawdown=0.0,
         )
 
+    def account_mode_info(self) -> MT5AccountModeInfo:
+        info = mt5.account_info()
+        if info is None:
+            raise MT5Error(f"MT5 account_info failed: {mt5.last_error()}")
+        margin_mode = int(getattr(info, "margin_mode", -1))
+        hedging_code = int(getattr(mt5, "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING", -999999))
+        netting_codes = {
+            int(getattr(mt5, "ACCOUNT_MARGIN_MODE_RETAIL_NETTING", -999998)),
+            int(getattr(mt5, "ACCOUNT_MARGIN_MODE_EXCHANGE", -999997)),
+        }
+        if margin_mode == hedging_code:
+            label = "hedging"
+            supported = True
+        elif margin_mode in netting_codes:
+            label = "netting"
+            supported = False
+        else:
+            label = f"unknown({margin_mode})"
+            supported = False
+        return MT5AccountModeInfo(
+            margin_mode_code=margin_mode,
+            margin_mode_label=label,
+            strategy_isolation_supported=supported,
+        )
+
     def get_position(self) -> Position:
+        positions = self.list_positions()
+        quantity = 0.0
+        weighted_price = 0.0
+        for position in positions:
+            signed_quantity = position.quantity if position.side == Side.BUY else -position.quantity
+            quantity += signed_quantity
+            weighted_price += position.price_open * position.quantity
+        average_price = weighted_price / abs(quantity) if quantity else 0.0
+        return Position(symbol=self.resolved_symbol or self.config.symbol, quantity=quantity, average_price=average_price)
+
+    def list_positions(self, magic_number: int | None = None) -> list[MT5PositionInfo]:
         symbol = self.resolved_symbol or self.config.symbol
         positions = mt5.positions_get(symbol=symbol)
         if positions is None:
             raise MT5Error(f"MT5 positions_get failed: {mt5.last_error()}")
-        quantity = 0.0
-        weighted_price = 0.0
+        mapped: list[MT5PositionInfo] = []
         for position in positions:
-            if position.type == mt5.POSITION_TYPE_BUY:
-                quantity += float(position.volume)
-                weighted_price += float(position.price_open) * float(position.volume)
-            elif position.type == mt5.POSITION_TYPE_SELL:
-                quantity -= float(position.volume)
-                weighted_price += float(position.price_open) * float(position.volume)
-        average_price = weighted_price / abs(quantity) if quantity else 0.0
-        return Position(symbol=symbol, quantity=quantity, average_price=average_price)
+            pos_magic = int(getattr(position, "magic", 0) or 0)
+            if magic_number is not None and pos_magic != magic_number:
+                continue
+            side = Side.BUY if position.type == mt5.POSITION_TYPE_BUY else Side.SELL
+            mapped.append(
+                MT5PositionInfo(
+                    ticket=int(position.ticket),
+                    symbol=str(position.symbol),
+                    side=side,
+                    quantity=float(position.volume),
+                    price_open=float(position.price_open),
+                    magic_number=pos_magic,
+                    comment=str(getattr(position, "comment", "") or ""),
+                )
+            )
+        return mapped
 
     def current_price(self, side: Side) -> float:
         symbol = self.resolved_symbol or self.config.symbol
@@ -135,7 +196,14 @@ class MT5Client:
             return float(tick.ask)
         return float(tick.bid)
 
-    def send_market_order(self, order: OrderRequest) -> FillEvent:
+    def send_market_order(
+        self,
+        order: OrderRequest,
+        *,
+        magic_number: int | None = None,
+        comment: str | None = None,
+        position_ticket: int | None = None,
+    ) -> FillEvent:
         side_map = {
             Side.BUY: mt5.ORDER_TYPE_BUY,
             Side.SELL: mt5.ORDER_TYPE_SELL,
@@ -154,11 +222,13 @@ class MT5Client:
             "type": side_map[order.side],
             "price": price,
             "deviation": self.config.deviation,
-            "magic": self.config.magic_number,
-            "comment": order.reason[:31],
+            "magic": magic_number if magic_number is not None else self.config.magic_number,
+            "comment": (comment or order.reason)[:31],
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
         }
+        if position_ticket is not None:
+            request["position"] = int(position_ticket)
         result = mt5.order_send(request)
         if result is None or result.retcode != mt5.TRADE_RETCODE_DONE:
             raise MT5Error(f"MT5 order_send failed: {result.retcode if result else None} {mt5.last_error()}")

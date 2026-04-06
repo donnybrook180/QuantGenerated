@@ -100,6 +100,10 @@ class MT5Config:
     symbol: str = field(default_factory=lambda: os.getenv("MT5_BROKER_SYMBOL", "SPY"))
     timeframe: str = field(default_factory=lambda: os.getenv("MT5_TIMEFRAME", "M5"))
     history_bars: int = field(default_factory=lambda: int(os.getenv("MT5_HISTORY_BARS", "500")))
+    poll_seconds: int = field(default_factory=lambda: int(os.getenv("MT5_POLL_SECONDS", "60")))
+    allow_netting_multi_strategy: bool = field(
+        default_factory=lambda: os.getenv("MT5_ALLOW_NETTING_MULTI_STRATEGY", "false").lower() == "true"
+    )
     terminal_path: str | None = field(default_factory=lambda: os.getenv("MT5_TERMINAL_PATH"))
     login: int | None = field(default_factory=lambda: int(value) if (value := os.getenv("MT5_LOGIN")) else None)
     password: str | None = field(default_factory=lambda: os.getenv("MT5_PASSWORD"))

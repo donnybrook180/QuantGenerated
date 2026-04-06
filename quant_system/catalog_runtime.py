@@ -15,7 +15,12 @@ from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReve
 from quant_system.agents.forex import ForexShortBreakdownMomentumAgent, ForexShortTrendContinuationAgent
 from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
 from quant_system.agents.strategies import OpeningRangeShortBreakdownAgent, VolatilityShortBreakdownAgent
-from quant_system.agents.us500 import US500OpeningDriveShortReclaimAgent, US500ShortTrendRejectionAgent
+from quant_system.agents.us500 import (
+    US500MomentumImpulseAgent,
+    US500OpeningDriveShortReclaimAgent,
+    US500ShortTrendRejectionAgent,
+    US500ShortVWAPRejectAgent,
+)
 from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.config import SystemConfig
@@ -69,6 +74,10 @@ def _instantiate_single(code_path: str, config: SystemConfig) -> Agent:
         return US500ShortTrendRejectionAgent(config.agents.min_trend_strength)
     if cls is US500OpeningDriveShortReclaimAgent:
         return US500OpeningDriveShortReclaimAgent(config.agents.min_trend_strength)
+    if cls is US500MomentumImpulseAgent:
+        return US500MomentumImpulseAgent(config.agents.min_trend_strength)
+    if cls is US500ShortVWAPRejectAgent:
+        return US500ShortVWAPRejectAgent(config.agents.min_trend_strength)
     if cls is GER40RangeRejectShortAgent:
         return GER40RangeRejectShortAgent()
     if cls is GER40FailedBreakoutShortAgent:

@@ -48,6 +48,7 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
 from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
+from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
@@ -2990,6 +2991,19 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         recommended_names=recommended,
         symbol_research_run_id=run_id,
     )
+    deployment_path = None
+    if selected_execution_candidates:
+        deployment = build_symbol_deployment(
+            profile_name=profile_name,
+            symbol=resolved.profile_symbol,
+            data_symbol=resolved.data_symbol,
+            broker_symbol=resolved.broker_symbol,
+            research_run_id=run_id,
+            execution_set_id=execution_set_id,
+            execution_validation_summary=execution_validation_summary,
+            selected_candidates=selected_execution_candidates,
+        )
+        deployment_path = export_symbol_deployment(deployment)
 
     lines = [
         f"Requested symbol: {resolved.requested_symbol}",
@@ -3033,6 +3047,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     )
     lines.append(f"Execution set id: {execution_set_id if execution_set_id is not None else 'none'}")
     lines.append(f"Execution validation: {execution_validation_summary}")
+    if deployment_path is not None:
+        lines.append(f"Live deployment: {deployment_path}")
     lines.append(f"Research history days: {config.polygon.history_days}")
     lines.append(f"Research mode: {effective_mode}")
     if config.symbol_research.mode == "auto":

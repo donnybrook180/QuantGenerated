@@ -1,0 +1,46 @@
+{
+  "profile_name": "symbol::xauusd",
+  "symbol": "XAUUSD",
+  "data_symbol": "C:XAUUSD",
+  "broker_symbol": "XAUUSD",
+  "research_run_id": 84,
+  "execution_set_id": 47,
+  "execution_validation_summary": "variant=volatility_breakout__5m_us__exit_trend@5m_us, trend__15m_overlap__exit_fastfail@15m_overlap, opening_range_breakout__5m_us@5m_us data_source=duckdb_cache pnl=4355.94 pf=4.29 closed=24 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "volatility_breakout__5m_us__exit_trend",
+      "code_path": "quant_system.agents.strategies.VolatilityBreakoutAgent",
+      "variant_label": "5m_us",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "trend__15m_overlap__exit_fastfail",
+      "code_path": "quant_system.agents.trend.TrendAgent",
+      "variant_label": "15m_overlap",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 14,
+        "take_profit_atr_multiple": 1.8,
+        "stale_breakout_bars": 4,
+        "structure_exit_bars": 2
+      },
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "opening_range_breakout__5m_us",
+      "code_path": "quant_system.agents.strategies.OpeningRangeBreakoutAgent",
+      "variant_label": "5m_us",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 0.3333333333333333
+    }
+  ]
+}

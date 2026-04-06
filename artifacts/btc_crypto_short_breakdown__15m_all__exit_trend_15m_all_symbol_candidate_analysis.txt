@@ -1,23 +1,29 @@
 Artifact: btc_crypto_short_breakdown__15m_all__exit_trend_15m_all_symbol_candidate
-Closed trades: 18
-Realized pnl: 95.79
+Closed trades: 27
+Realized pnl: -252.01
 
 By entry hour
-8: trades=2 pnl=-124.34 avg=-62.17 win_rate=0.00%
-5: trades=1 pnl=-60.09 avg=-60.09 win_rate=0.00%
-17: trades=2 pnl=-58.42 avg=-29.21 win_rate=0.00%
-11: trades=2 pnl=-23.30 avg=-11.65 win_rate=50.00%
-4: trades=1 pnl=-13.81 avg=-13.81 win_rate=0.00%
-7: trades=1 pnl=4.08 avg=4.08 win_rate=100.00%
-1: trades=2 pnl=7.56 avg=3.78 win_rate=50.00%
-2: trades=2 pnl=19.56 avg=9.78 win_rate=50.00%
-0: trades=1 pnl=66.35 avg=66.35 win_rate=100.00%
-13: trades=4 pnl=278.18 avg=69.55 win_rate=75.00%
+13: trades=5 pnl=-352.44 avg=-70.49 win_rate=20.00%
+2: trades=2 pnl=-69.25 avg=-34.62 win_rate=0.00%
+0: trades=2 pnl=-65.50 avg=-32.75 win_rate=0.00%
+3: trades=1 pnl=-55.12 avg=-55.12 win_rate=0.00%
+10: trades=1 pnl=-51.06 avg=-51.06 win_rate=0.00%
+4: trades=3 pnl=-47.90 avg=-15.97 win_rate=33.33%
+1: trades=2 pnl=-45.68 avg=-22.84 win_rate=0.00%
+17: trades=2 pnl=-30.26 avg=-15.13 win_rate=0.00%
+19: trades=1 pnl=-15.90 avg=-15.90 win_rate=0.00%
+7: trades=1 pnl=-7.95 avg=-7.95 win_rate=0.00%
+20: trades=2 pnl=31.22 avg=15.61 win_rate=50.00%
+5: trades=1 pnl=115.10 avg=115.10 win_rate=100.00%
+8: trades=2 pnl=120.51 avg=60.25 win_rate=50.00%
+11: trades=2 pnl=222.20 avg=111.10 win_rate=50.00%
 
 By entry setup
-crypto_short_breakdown: trades=18 pnl=95.79 avg=5.32 win_rate=44.44%
+crypto_short_breakdown: trades=27 pnl=-252.01 avg=-9.33 win_rate=22.22%
 
 By exit reason
-stale_breakout: trades=10 pnl=-364.29 avg=-36.43 win_rate=10.00%
-stop_loss: trades=1 pnl=-59.56 avg=-59.56 win_rate=0.00%
-signal_exit: trades=7 pnl=519.64 avg=74.23 win_rate=100.00%
+stop_loss: trades=4 pnl=-326.78 avg=-81.69 win_rate=0.00%
+signal_exit: trades=3 pnl=-288.97 avg=-96.32 win_rate=0.00%
+stale_breakout: trades=10 pnl=-270.65 avg=-27.06 win_rate=0.00%
+trailing_stop: trades=7 pnl=92.07 avg=13.15 win_rate=42.86%
+take_profit: trades=3 pnl=542.31 avg=180.77 win_rate=100.00%

@@ -8,11 +8,9 @@ from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.execution.engine import AgentCoordinator
 from quant_system.symbol_research import (
-    _build_engine,
     _configure_symbol_execution,
-    _with_execution_overrides,
     _symbol_slug,
-    load_execution_features_for_variant,
+    _run_candidate_bundle,
     select_execution_candidates,
 )
 from quant_system.symbols import resolve_symbol_request
@@ -76,33 +74,15 @@ def main() -> int:
         print(f"No executable candidates selected for {profile_name}.")
         return 1
 
-    target_variant = str(enriched_candidates[0].get("variant_label", "") or "")
-    target_regime = str(enriched_candidates[0].get("regime_filter_label", "") or "")
-    aligned_candidates = [
-        row
-        for row in enriched_candidates
-        if str(row.get("variant_label", "") or "") == target_variant
-        and str(row.get("regime_filter_label", "") or "") == target_regime
-    ]
-    if not aligned_candidates:
-        print(f"No execution candidates matched a consistent variant for {profile_name}.")
-        return 1
-
     _configure_symbol_execution(config, resolved.profile_symbol)
     config.polygon.symbol = str(research_run["data_symbol"])
     config.mt5.symbol = str(research_run["broker_symbol"])
-    config = _with_execution_overrides(config, aligned_candidates[0].get("execution_overrides"))
-    features, data_source = load_execution_features_for_variant(
+    result, data_source, execution_variant_label = _run_candidate_bundle(
         config,
         resolved.profile_symbol,
         str(research_run["data_symbol"]),
-        target_variant,
-        target_regime,
+        enriched_candidates,
     )
-    agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in aligned_candidates], config)
-    engine = _build_engine(config, agents)
-    result = asyncio.run(engine.run(features, sleep_seconds=0.0))
-    coordinator = AgentCoordinator(agents, consensus_min_confidence=config.agents.consensus_min_confidence)
 
     print(f"Requested symbol: {resolved.requested_symbol}")
     print(f"Symbol: {resolved.profile_symbol}")
@@ -111,18 +91,13 @@ def main() -> int:
     print(f"Broker symbol: {research_run['broker_symbol']}")
     print(f"Data source: {data_source}")
     print(f"Execution set source: {execution_set_label}")
-    execution_variant_label = target_variant or 'default'
-    if target_regime:
-        execution_variant_label = f"{execution_variant_label}|{target_regime}"
     print(f"Execution variant: {execution_variant_label}")
-    print("Selected candidates: " + ", ".join(str(row["candidate_name"]) for row in aligned_candidates))
+    print("Selected candidates: " + ", ".join(str(row["candidate_name"]) for row in enriched_candidates))
     print(f"Ending equity: {result.ending_equity:.2f}")
     print(f"Realized PnL: {result.realized_pnl:.2f}")
     print(f"Closed trades: {len(result.closed_trades)}")
     print(f"Win rate: {result.win_rate_pct:.2f}%")
     print(f"Profit factor: {result.profit_factor:.2f}")
-    latest_side = coordinator.decide(features[-1])
-    print(f"Latest consensus signal: {latest_side.value if latest_side is not None else 'none'}")
     return 0
 
 

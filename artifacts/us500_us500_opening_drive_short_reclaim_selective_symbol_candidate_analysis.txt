@@ -1,0 +1,14 @@
+Artifact: us500_us500_opening_drive_short_reclaim_selective_symbol_candidate
+Closed trades: 5
+Realized pnl: -0.58
+
+By entry hour
+15: trades=5 pnl=-0.58 avg=-0.12 win_rate=20.00%
+
+By entry setup
+us500_opening_drive_short_reclaim: trades=5 pnl=-0.58 avg=-0.12 win_rate=20.00%
+
+By exit reason
+stale_breakout: trades=3 pnl=-0.34 avg=-0.11 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.27 avg=-0.27 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.03 avg=0.03 win_rate=100.00%

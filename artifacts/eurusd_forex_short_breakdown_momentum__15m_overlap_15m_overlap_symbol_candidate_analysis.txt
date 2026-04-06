@@ -1,0 +1,21 @@
+Artifact: eurusd_forex_short_breakdown_momentum__15m_overlap_15m_overlap_symbol_candidate
+Closed trades: 70
+Realized pnl: -180.90
+
+By entry hour
+15: trades=19 pnl=-230.42 avg=-12.13 win_rate=10.53%
+13: trades=10 pnl=-99.71 avg=-9.97 win_rate=10.00%
+16: trades=6 pnl=34.89 avg=5.81 win_rate=33.33%
+14: trades=10 pnl=55.78 avg=5.58 win_rate=40.00%
+12: trades=25 pnl=58.56 avg=2.34 win_rate=36.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=70 pnl=-180.90 avg=-2.58 win_rate=25.71%
+
+By exit reason
+stop_loss: trades=18 pnl=-293.09 avg=-16.28 win_rate=0.00%
+structure_exit: trades=16 pnl=-273.02 avg=-17.06 win_rate=0.00%
+stale_breakout: trades=6 pnl=-62.00 avg=-10.33 win_rate=0.00%
+signal_exit: trades=4 pnl=-35.95 avg=-8.99 win_rate=25.00%
+trailing_stop: trades=12 pnl=5.42 avg=0.45 win_rate=25.00%
+take_profit: trades=14 pnl=477.75 avg=34.13 win_rate=100.00%

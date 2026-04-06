@@ -296,9 +296,15 @@ class CryptoShortBreakdownAgent(Agent):
                 feature.timestamp,
                 self.name,
                 feature.symbol,
-                Side.BUY,
+                Side.SELL,
                 confidence,
-                {"short_breakdown_low": breakdown_low, "short_rebound_high": rebound_high},
+                {
+                    "position_intent": "short_entry",
+                    "breakout_low": breakdown_low,
+                    "rebound_high": rebound_high,
+                    "short_breakdown_low": breakdown_low,
+                    "short_rebound_high": rebound_high,
+                },
             )
 
         if self.armed and self.breakdown_level is not None and (
@@ -308,7 +314,14 @@ class CryptoShortBreakdownAgent(Agent):
         ):
             self.armed = False
             self.breakdown_level = None
-            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.7, {"short_exit": 1.0})
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                0.7,
+                {"position_intent": "short_exit", "short_exit": 1.0},
+            )
 
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
 
@@ -369,9 +382,13 @@ class CryptoShortReversionAgent(Agent):
                 feature.timestamp,
                 self.name,
                 feature.symbol,
-                Side.BUY,
+                Side.SELL,
                 confidence,
-                {"short_reversion_anchor": local_ceiling},
+                {
+                    "position_intent": "short_entry",
+                    "rebound_high": local_ceiling,
+                    "short_reversion_anchor": local_ceiling,
+                },
             )
 
         if self.armed and (
@@ -381,6 +398,13 @@ class CryptoShortReversionAgent(Agent):
         ):
             self.armed = False
             self.reversion_anchor = None
-            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.68, {"short_reversion_exit": 1.0})
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                0.68,
+                {"position_intent": "short_exit", "short_reversion_exit": 1.0},
+            )
 
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})

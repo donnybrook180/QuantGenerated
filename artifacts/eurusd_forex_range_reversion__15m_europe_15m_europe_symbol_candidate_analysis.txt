@@ -1,0 +1,15 @@
+Artifact: eurusd_forex_range_reversion__15m_europe_15m_europe_symbol_candidate
+Closed trades: 9
+Realized pnl: -36.68
+
+By entry hour
+8: trades=4 pnl=-21.45 avg=-5.36 win_rate=0.00%
+12: trades=1 pnl=-8.59 avg=-8.59 win_rate=0.00%
+7: trades=3 pnl=-4.75 avg=-1.58 win_rate=33.33%
+11: trades=1 pnl=-1.88 avg=-1.88 win_rate=0.00%
+
+By entry setup
+forex_range_reversion: trades=9 pnl=-36.68 avg=-4.08 win_rate=11.11%
+
+By exit reason
+signal_exit: trades=9 pnl=-36.68 avg=-4.08 win_rate=11.11%

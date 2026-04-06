@@ -3,118 +3,38 @@ Broker symbol: BTCUSD
 Data source: duckdb_cache
 
 Ranked candidates
-crypto_short_breakdown__5m_overlap [single]: pnl=353.69 closed=16 pf=2.53 win_rate=37.50% dd=0.00%
-  trade_metrics: expectancy=22.11 avg_win=97.39 avg_loss=-23.06 payoff=4.22 avg_hold=6.5
-  exits: dominant=structure_exit share=56.25%
-  regimes: best=trend_down_vol_high pnl=321.47 worst=trend_flat_vol_high pnl=-27.76 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=142.88 avg_test_pnl=15.26 avg_val_pf=2.65 avg_test_pf=2.14
-  splits: train_pnl=34.15 val_pnl=156.58 val_pf=3.05 val_closed=5 test_pnl=22.21 test_pf=2.94 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap_5m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap_5m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__exit_trend [entry_exit_family]: pnl=312.66 closed=16 pf=2.15 win_rate=37.50% dd=0.00%
-  trade_metrics: expectancy=19.54 avg_win=97.39 avg_loss=-27.17 payoff=3.58 avg_hold=8.4
-  exits: dominant=stale_breakout share=56.25%
-  regimes: best=trend_down_vol_high pnl=269.44 worst=trend_flat_vol_high pnl=-17.50 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=130.81 avg_test_pnl=24.97 avg_val_pf=2.28 avg_test_pf=4.11
-  splits: train_pnl=-30.36 val_pnl=133.78 val_pf=2.35 val_closed=5 test_pnl=22.94 test_pf=3.15 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend_5m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend_5m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__exit_fastfail [entry_exit_family]: pnl=275.89 closed=16 pf=2.51 win_rate=25.00% dd=0.00%
-  trade_metrics: expectancy=17.24 avg_win=114.64 avg_loss=-15.22 payoff=7.53 avg_hold=3.8
-  exits: dominant=structure_exit share=75.00%
-  regimes: best=trend_down_vol_high pnl=277.98 worst=trend_flat_vol_high pnl=-20.22 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=140.74 avg_test_pnl=-21.39 avg_val_pf=2.53 avg_test_pf=0.00
-  splits: train_pnl=-11.00 val_pnl=137.23 val_pf=2.43 val_closed=5 test_pnl=-16.72 test_pf=0.00 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__autopsy_vol_high [autopsy_improved]: pnl=248.69 closed=6 pf=2.43 win_rate=50.00% dd=0.00%
-  trade_metrics: expectancy=41.45 avg_win=140.73 avg_loss=-57.84 payoff=2.43 avg_hold=7.5
-  exits: dominant=take_profit share=33.33%
-  regimes: best=trend_down_vol_high pnl=248.69 worst=trend_down_vol_high pnl=248.69 dominant_share=100.00%
-  regime_filter: vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-58.51 avg_test_pnl=97.50 avg_val_pf=0.00 avg_test_pf=999.00
-  splits: train_pnl=190.47 val_pnl=-85.77 val_pf=0.00 val_closed=2 test_pnl=143.99 test_pf=999.00 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__exit_trend__autopsy_vol_high [autopsy_improved]: pnl=248.69 closed=6 pf=2.43 win_rate=50.00% dd=0.00%
-  trade_metrics: expectancy=41.45 avg_win=140.73 avg_loss=-57.84 payoff=2.43 avg_hold=7.5
-  exits: dominant=take_profit share=33.33%
-  regimes: best=trend_down_vol_high pnl=248.69 worst=trend_down_vol_high pnl=248.69 dominant_share=100.00%
-  regime_filter: vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-58.51 avg_test_pnl=97.50 avg_val_pf=0.00 avg_test_pf=999.00
-  splits: train_pnl=190.47 val_pnl=-85.77 val_pf=0.00 val_closed=2 test_pnl=143.99 test_pf=999.00 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__regime_trend_down_vol_high [regime_improved]: pnl=225.61 closed=5 pf=8.19 win_rate=60.00% dd=0.05%
-  trade_metrics: expectancy=45.12 avg_win=85.67 avg_loss=-15.70 payoff=5.46 avg_hold=9.8
-  exits: dominant=structure_exit share=40.00%
-  regimes: best=trend_down_vol_high pnl=225.61 worst=trend_down_vol_high pnl=225.61 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=79.75 avg_test_pnl=-11.75 avg_val_pf=7.11 avg_test_pf=0.00
-  splits: train_pnl=-18.35 val_pnl=17.42 val_pf=2.34 val_closed=2 test_pnl=-23.51 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__regime_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__regime_trend_down_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__autopsy_trend_down [autopsy_improved]: pnl=212.99 closed=5 pf=5.84 win_rate=60.00% dd=0.06%
-  trade_metrics: expectancy=42.60 avg_win=85.67 avg_loss=-22.01 payoff=3.89 avg_hold=9.8
-  exits: dominant=stale_breakout share=60.00%
-  regimes: best=trend_down_vol_high pnl=212.99 worst=trend_down_vol_high pnl=212.99 dominant_share=100.00%
-  regime_filter: trend_down
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=65.22 avg_test_pnl=15.58 avg_val_pf=5.48 avg_test_pf=499.50
-  splits: train_pnl=-20.10 val_pnl=-10.11 val_pf=0.31 val_closed=2 test_pnl=31.17 test_pf=999.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_trend_down_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_trend_down_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down [autopsy_improved]: pnl=212.99 closed=5 pf=5.84 win_rate=60.00% dd=0.06%
-  trade_metrics: expectancy=42.60 avg_win=85.67 avg_loss=-22.01 payoff=3.89 avg_hold=9.8
-  exits: dominant=stale_breakout share=60.00%
-  regimes: best=trend_down_vol_high pnl=212.99 worst=trend_down_vol_high pnl=212.99 dominant_share=100.00%
-  regime_filter: trend_down
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=65.22 avg_test_pnl=15.58 avg_val_pf=5.48 avg_test_pf=499.50
-  splits: train_pnl=-20.10 val_pnl=-10.11 val_pf=0.31 val_closed=2 test_pnl=31.17 test_pf=999.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us [single]: pnl=212.27 closed=7 pf=2.22 win_rate=42.86% dd=0.00%
-  trade_metrics: expectancy=30.32 avg_win=128.86 avg_loss=-43.58 payoff=2.96 avg_hold=7.3
-  exits: dominant=structure_exit share=57.14%
-  regimes: best=trend_down_vol_high pnl=269.26 worst=trend_flat_vol_high pnl=-57.00 dominant_share=85.71%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-47.13 avg_test_pnl=42.59 avg_val_pf=0.18 avg_test_pf=499.50
-  splits: train_pnl=196.97 val_pnl=-19.92 val_pf=0.35 val_closed=4 test_pnl=97.42 test_pf=999.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us_15m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us_15m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__exit_trend [entry_exit_family]: pnl=188.16 closed=7 pf=1.95 win_rate=42.86% dd=0.00%
-  trade_metrics: expectancy=26.88 avg_win=128.86 avg_loss=-49.61 payoff=2.60 avg_hold=8.6
-  exits: dominant=stale_breakout share=57.14%
-  regimes: best=trend_down_vol_high pnl=226.13 worst=trend_flat_vol_high pnl=-37.98 dominant_share=85.71%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-34.85 avg_test_pnl=19.64 avg_val_pf=0.19 avg_test_pf=499.50
-  splits: train_pnl=196.97 val_pnl=-17.15 val_pf=0.39 val_closed=4 test_pnl=97.42 test_pf=999.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend_15m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend_15m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__autopsy_trend_down_vol_high [autopsy_improved]: pnl=179.68 closed=4 pf=3.47 win_rate=50.00% dd=0.05%
-  trade_metrics: expectancy=44.92 avg_win=126.28 avg_loss=-36.44 payoff=3.47 avg_hold=10.0
-  exits: dominant=stale_breakout share=50.00%
-  regimes: best=trend_down_vol_high pnl=179.68 worst=trend_down_vol_high pnl=179.68 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=23.04 avg_test_pnl=-11.75 avg_val_pf=1.42 avg_test_pf=0.00
-  splits: train_pnl=-18.35 val_pnl=-54.53 val_pf=0.00 val_closed=1 test_pnl=-23.51 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__autopsy_trend_down_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down_vol_high [autopsy_improved]: pnl=179.68 closed=4 pf=3.47 win_rate=50.00% dd=0.05%
-  trade_metrics: expectancy=44.92 avg_win=126.28 avg_loss=-36.44 payoff=3.47 avg_hold=10.0
-  exits: dominant=stale_breakout share=50.00%
-  regimes: best=trend_down_vol_high pnl=179.68 worst=trend_down_vol_high pnl=179.68 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=23.04 avg_test_pnl=-11.75 avg_val_pf=1.42 avg_test_pf=0.00
-  splits: train_pnl=-18.35 val_pnl=-54.53 val_pf=0.00 val_closed=1 test_pnl=-23.51 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend__autopsy_trend_down_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat_vol_high [autopsy_improved]: pnl=161.78 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
-  trade_metrics: expectancy=161.78 avg_win=161.78 avg_loss=0.00 payoff=999.00 avg_hold=1.0
-  exits: dominant=take_profit share=100.00%
-  regimes: best=trend_flat_vol_high pnl=161.78 worst=trend_flat_vol_high pnl=161.78 dominant_share=100.00%
-  regime_filter: trend_flat_vol_high
-  walk_forward: windows=1 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe [single]: pnl=518.14 closed=8 pf=4.80 win_rate=62.50% dd=0.08%
+  trade_metrics: expectancy=64.77 avg_win=130.92 avg_loss=-45.49 payoff=2.88 avg_hold=9.1
+  exits: dominant=take_profit share=37.50%
+  regimes: best=trend_flat_vol_high pnl=302.81 worst=trend_up_vol_high pnl=38.58 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=128.70 avg_test_pnl=-55.50 avg_val_pf=499.50 avg_test_pf=0.03
+  splits: train_pnl=334.58 val_pnl=258.42 val_pf=999.00 val_closed=2 test_pnl=-57.07 test_pf=0.00 test_closed=1
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe_15m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__exit_trend [entry_exit_family]: pnl=511.10 closed=8 pf=4.64 win_rate=50.00% dd=0.08%
+  trade_metrics: expectancy=63.89 avg_win=162.87 avg_loss=-35.09 payoff=4.64 avg_hold=9.5
+  exits: dominant=take_profit share=37.50%
+  regimes: best=trend_flat_vol_high pnl=302.81 worst=trend_up_vol_high pnl=38.58 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=128.70 avg_test_pnl=-59.02 avg_val_pf=499.50 avg_test_pf=0.00
+  splits: train_pnl=334.58 val_pnl=258.42 val_pf=999.00 val_closed=2 test_pnl=-57.07 test_pf=0.00 test_closed=1
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__exit_fastfail [entry_exit_family]: pnl=341.04 closed=9 pf=3.45 win_rate=55.56% dd=0.08%
+  trade_metrics: expectancy=37.89 avg_win=96.01 avg_loss=-34.75 payoff=2.76 avg_hold=7.6
+  exits: dominant=trailing_stop share=33.33%
+  regimes: best=trend_flat_vol_high pnl=302.81 worst=trend_down_vol_mid pnl=-7.95 dominant_share=44.44%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=62.27 avg_test_pnl=-55.50 avg_val_pf=499.50 avg_test_pf=0.03
+  splits: train_pnl=290.35 val_pnl=125.54 val_pf=999.00 val_closed=2 test_pnl=-57.07 test_pf=0.00 test_closed=1
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe__exit_trend [entry_exit_family]: pnl=237.61 closed=20 pf=1.66 win_rate=40.00% dd=0.11%
+  trade_metrics: expectancy=11.88 avg_win=74.45 avg_loss=-29.83 payoff=2.50 avg_hold=13.6
+  exits: dominant=stale_breakout share=40.00%
+  regimes: best=trend_down_vol_high pnl=206.81 worst=trend_flat_vol_mid pnl=-26.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=56.01 avg_test_pnl=-24.94 avg_val_pf=4.51 avg_test_pf=0.72
+  splits: train_pnl=190.43 val_pnl=134.50 val_pf=9.03 val_closed=4 test_pnl=-64.88 test_pf=0.23 test_closed=5
+  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_selective__5m_europe [parameter_sweep]: pnl=150.52 closed=7 pf=1.85 win_rate=28.57% dd=0.07%
   trade_metrics: expectancy=21.50 avg_win=164.16 avg_loss=-35.56 payoff=4.62 avg_hold=17.4
   exits: dominant=stale_breakout share=42.86%
@@ -123,14 +43,6 @@ crypto_volatility_expansion_sweep_selective__5m_europe [parameter_sweep]: pnl=15
   splits: train_pnl=99.08 val_pnl=-51.55 val_pf=0.00 val_closed=1 test_pnl=-10.05 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_expansion_sweep_selective_5m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion_sweep_selective_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all [single]: pnl=133.23 closed=18 pf=1.34 win_rate=38.89% dd=0.08%
-  trade_metrics: expectancy=7.40 avg_win=74.23 avg_loss=-35.13 payoff=2.11 avg_hold=6.6
-  exits: dominant=structure_exit share=55.56%
-  regimes: best=trend_down_vol_high pnl=284.94 worst=trend_flat_vol_high pnl=-151.71 dominant_share=83.33%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-129.78 avg_test_pnl=109.65 avg_val_pf=0.11 avg_test_pf=2.17
-  splits: train_pnl=29.72 val_pnl=-159.56 val_pf=0.09 val_closed=4 test_pnl=256.47 test_pf=3.57 test_closed=7
-  trades: artifacts\btc_crypto_short_breakdown__15m_all_15m_all_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all_15m_all_symbol_candidate_analysis.txt
 crypto_volatility_expansion__5m_europe [single]: pnl=121.43 closed=8 pf=1.59 win_rate=25.00% dd=0.07%
   trade_metrics: expectancy=15.18 avg_win=164.16 avg_loss=-34.48 payoff=4.76 avg_hold=16.4
   exits: dominant=stale_breakout share=37.50%
@@ -155,22 +67,6 @@ crypto_breakout_reclaim_sweep_selective__5m_europe [parameter_sweep]: pnl=119.28
   splits: train_pnl=-42.18 val_pnl=-58.40 val_pf=0.02 val_closed=4 test_pnl=-44.94 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe__exit_trend [entry_exit_family]: pnl=96.37 closed=11 pf=1.63 win_rate=45.45% dd=0.00%
-  trade_metrics: expectancy=8.76 avg_win=49.88 avg_loss=-25.50 payoff=1.96 avg_hold=14.2
-  exits: dominant=stale_breakout share=54.55%
-  regimes: best=trend_flat_vol_high pnl=75.04 worst=trend_flat_vol_mid pnl=-7.41 dominant_share=63.64%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-10.11 avg_test_pnl=6.54 avg_val_pf=0.12 avg_test_pf=500.10
-  splits: train_pnl=72.92 val_pnl=-8.77 val_pf=0.23 val_closed=2 test_pnl=1.50 test_pf=1.20 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__exit_trend [entry_exit_family]: pnl=95.79 closed=18 pf=1.22 win_rate=44.44% dd=0.10%
-  trade_metrics: expectancy=5.32 avg_win=65.47 avg_loss=-42.79 payoff=1.53 avg_hold=8.5
-  exits: dominant=stale_breakout share=55.56%
-  regimes: best=trend_down_vol_high pnl=227.86 worst=trend_flat_vol_high pnl=-132.07 dominant_share=83.33%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-112.89 avg_test_pnl=88.74 avg_val_pf=0.12 avg_test_pf=1.91
-  splits: train_pnl=33.06 val_pnl=-142.67 val_pf=0.09 val_closed=4 test_pnl=244.71 test_pf=3.20 test_closed=7
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend_15m_all_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend_15m_all_symbol_candidate_analysis.txt
 crypto_volatility_breakout__5m_europe [single]: pnl=86.01 closed=17 pf=1.28 win_rate=11.76% dd=0.15%
   trade_metrics: expectancy=5.06 avg_win=194.09 avg_loss=-20.14 payoff=9.63 avg_hold=9.7
   exits: dominant=signal_exit share=58.82%
@@ -187,6 +83,30 @@ crypto_volatility_breakout__5m_europe__exit_trend [entry_exit_family]: pnl=86.01
   splits: train_pnl=21.59 val_pnl=-62.12 val_pf=0.00 val_closed=3 test_pnl=201.25 test_pf=15.47 test_closed=2
   trades: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_us [single]: pnl=83.67 closed=11 pf=1.34 win_rate=27.27% dd=0.08%
+  trade_metrics: expectancy=7.61 avg_win=110.99 avg_loss=-31.16 payoff=3.56 avg_hold=11.5
+  exits: dominant=stale_breakout share=27.27%
+  regimes: best=trend_flat_vol_high pnl=216.62 worst=trend_down_vol_high pnl=-88.51 dominant_share=72.73%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=118.23 avg_test_pnl=-62.08 avg_val_pf=4.31 avg_test_pf=0.00
+  splits: train_pnl=48.37 val_pnl=50.20 val_pf=1.48 val_closed=5 test_pnl=-66.85 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_us_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_us_15m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_us__exit_trend [entry_exit_family]: pnl=83.67 closed=11 pf=1.34 win_rate=27.27% dd=0.08%
+  trade_metrics: expectancy=7.61 avg_win=110.99 avg_loss=-31.16 payoff=3.56 avg_hold=11.5
+  exits: dominant=stale_breakout share=36.36%
+  regimes: best=trend_flat_vol_high pnl=216.62 worst=trend_down_vol_high pnl=-88.51 dominant_share=72.73%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=118.23 avg_test_pnl=-62.08 avg_val_pf=4.31 avg_test_pf=0.00
+  splits: train_pnl=48.37 val_pnl=50.20 val_pf=1.48 val_closed=5 test_pnl=-66.85 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_trend_15m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_us__exit_fastfail [entry_exit_family]: pnl=83.46 closed=12 pf=1.34 win_rate=25.00% dd=0.07%
+  trade_metrics: expectancy=6.96 avg_win=108.66 avg_loss=-26.95 payoff=4.03 avg_hold=8.1
+  exits: dominant=take_profit share=25.00%
+  regimes: best=trend_flat_vol_high pnl=255.93 worst=trend_down_vol_high pnl=-128.02 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=137.31 avg_test_pnl=-64.57 avg_val_pf=4.95 avg_test_pf=0.00
+  splits: train_pnl=14.98 val_pnl=49.06 val_pf=1.47 val_closed=6 test_pnl=-71.83 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_fastfail_15m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_fastfail_15m_us_symbol_candidate_analysis.txt
 crypto_breakout_reclaim_sweep_dense__5m_europe [parameter_sweep]: pnl=79.14 closed=7 pf=2.80 win_rate=42.86% dd=0.03%
   trade_metrics: expectancy=11.31 avg_win=41.04 avg_loss=-11.00 payoff=3.73 avg_hold=6.0
   exits: dominant=signal_exit share=71.43%
@@ -195,49 +115,6 @@ crypto_breakout_reclaim_sweep_dense__5m_europe [parameter_sweep]: pnl=79.14 clos
   splits: train_pnl=97.33 val_pnl=-81.70 val_pf=0.00 val_closed=4 test_pnl=-74.07 test_pf=0.00 test_closed=2
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_dense_5m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_dense_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat [autopsy_improved]: pnl=73.34 closed=2 pf=3.62 win_rate=50.00% dd=0.00%
-  trade_metrics: expectancy=36.67 avg_win=101.38 avg_loss=-28.04 payoff=3.62 avg_hold=6.0
-  exits: dominant=take_profit share=50.00%
-  regimes: best=trend_flat_vol_high pnl=73.34 worst=trend_flat_vol_high pnl=73.34 dominant_share=100.00%
-  regime_filter: trend_flat
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-14.02 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=101.38 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_trend_flat_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__autopsy_vol_high [autopsy_improved]: pnl=71.02 closed=17 pf=1.17 win_rate=41.18% dd=0.10%
-  trade_metrics: expectancy=4.18 avg_win=68.65 avg_loss=-40.95 payoff=1.68 avg_hold=6.8
-  exits: dominant=stale_breakout share=41.18%
-  regimes: best=trend_down_vol_high pnl=71.02 worst=trend_down_vol_high pnl=71.02 dominant_share=100.00%
-  regime_filter: vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-114.86 avg_test_pnl=-68.48 avg_val_pf=0.12 avg_test_pf=0.56
-  splits: train_pnl=185.03 val_pnl=-144.64 val_pf=0.09 val_closed=4 test_pnl=-42.96 test_pf=0.73 test_closed=5
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__exit_fastfail [entry_exit_family]: pnl=58.61 closed=19 pf=1.18 win_rate=36.84% dd=0.13%
-  trade_metrics: expectancy=3.08 avg_win=55.26 avg_loss=-27.35 payoff=2.02 avg_hold=4.3
-  exits: dominant=structure_exit share=63.16%
-  regimes: best=trend_down_vol_high pnl=174.90 worst=trend_flat_vol_high pnl=-116.29 dominant_share=84.21%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-109.36 avg_test_pnl=92.58 avg_val_pf=0.02 avg_test_pf=2.24
-  splits: train_pnl=85.20 val_pnl=-129.40 val_pf=0.01 val_closed=4 test_pnl=146.07 test_pf=2.92 test_closed=7
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_fastfail_15m_all_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_fastfail_15m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe [single]: pnl=57.18 closed=11 pf=1.37 win_rate=36.36% dd=0.01%
-  trade_metrics: expectancy=5.20 avg_win=53.24 avg_loss=-22.25 payoff=2.39 avg_hold=12.5
-  exits: dominant=structure_exit share=54.55%
-  regimes: best=trend_flat_vol_high pnl=62.28 worst=trend_down_vol_mid pnl=-25.83 dominant_share=63.64%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-6.10 avg_test_pnl=-10.05 avg_val_pf=0.18 avg_test_pf=0.17
-  splits: train_pnl=46.30 val_pnl=-4.75 val_pf=0.36 val_closed=2 test_pnl=-15.10 test_pf=0.00 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__exit_trend__autopsy_vol_high [autopsy_improved]: pnl=37.17 closed=17 pf=1.09 win_rate=41.18% dd=0.10%
-  trade_metrics: expectancy=2.19 avg_win=63.82 avg_loss=-40.95 payoff=1.56 avg_hold=6.9
-  exits: dominant=stale_breakout share=41.18%
-  regimes: best=trend_down_vol_high pnl=37.17 worst=trend_down_vol_high pnl=37.17 dominant_share=100.00%
-  regime_filter: vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-114.86 avg_test_pnl=-68.48 avg_val_pf=0.12 avg_test_pf=0.56
-  splits: train_pnl=185.03 val_pnl=-144.64 val_pf=0.09 val_closed=4 test_pnl=-42.96 test_pf=0.73 test_closed=5
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_vol_high_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_dense__15m_europe [parameter_sweep]: pnl=22.34 closed=9 pf=1.13 win_rate=33.33% dd=0.05%
   trade_metrics: expectancy=2.48 avg_win=66.09 avg_loss=-29.32 payoff=2.25 avg_hold=8.4
   exits: dominant=trailing_stop share=33.33%
@@ -286,6 +163,14 @@ crypto_breakout_reclaim_sweep_balanced__15m_europe [parameter_sweep]: pnl=15.25 
   splits: train_pnl=124.52 val_pnl=-44.66 val_pf=0.00 val_closed=2 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_balanced_15m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_balanced_15m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe [single]: pnl=12.13 closed=20 pf=1.04 win_rate=40.00% dd=0.11%
+  trade_metrics: expectancy=0.61 avg_win=44.33 avg_loss=-28.54 payoff=1.55 avg_hold=12.6
+  exits: dominant=stale_breakout share=25.00%
+  regimes: best=trend_down_vol_mid pnl=65.14 worst=trend_flat_vol_mid pnl=-37.29 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=33.03 avg_test_pnl=-3.94 avg_val_pf=3.14 avg_test_pf=1.10
+  splits: train_pnl=-4.61 val_pnl=88.53 val_pf=6.28 val_closed=4 test_pnl=-49.35 test_pf=0.28 test_closed=5
+  trades: artifacts\btc_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__5m_overlap__exit_fastfail [entry_exit_family]: pnl=7.41 closed=4 pf=1.27 win_rate=25.00% dd=0.04%
   trade_metrics: expectancy=1.85 avg_win=34.82 avg_loss=-9.14 payoff=3.81 avg_hold=8.2
   exits: dominant=trailing_stop share=50.00%
@@ -806,6 +691,15 @@ crypto_trend_pullback_sweep_selective__15m_overlap [parameter_sweep]: pnl=0.00 c
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\btc_crypto_trend_pullback_sweep_selective_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_trend_pullback_sweep_selective_15m_overlap_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__exit_fastfail__regime_trend_flat_vol_high [regime_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=1 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail__regime_trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail__regime_trend_flat_vol_high_symbol_candidate_analysis.txt
 crypto_breakout_reclaim_sweep_dense__15m_europe [parameter_sweep]: pnl=-9.77 closed=5 pf=0.69 win_rate=40.00% dd=0.03%
   trade_metrics: expectancy=-1.95 avg_win=10.70 avg_loss=-10.39 payoff=1.03 avg_hold=7.0
   exits: dominant=trailing_stop share=60.00%
@@ -822,15 +716,6 @@ crypto_volatility_breakout__5m_overlap__exit_fastfail [entry_exit_family]: pnl=-
   splits: train_pnl=77.78 val_pnl=-45.81 val_pf=0.00 val_closed=2 test_pnl=31.69 test_pf=999.00 test_closed=2
   trades: artifacts\btc_crypto_volatility_breakout__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_breakout__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__autopsy_trend_down [autopsy_improved]: pnl=-13.81 closed=10 pf=0.96 win_rate=50.00% dd=0.14%
-  trade_metrics: expectancy=-1.38 avg_win=64.76 avg_loss=-67.53 payoff=0.96 avg_hold=7.3
-  exits: dominant=signal_exit share=40.00%
-  regimes: best=trend_down_vol_high pnl=75.34 worst=trend_down_vol_mid pnl=-89.15 dominant_share=90.00%
-  regime_filter: trend_down
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=21.98 avg_test_pnl=52.41 avg_val_pf=1.22 avg_test_pf=1.88
-  splits: train_pnl=-120.11 val_pnl=35.48 val_pf=1.30 val_closed=3 test_pnl=93.99 test_pf=2.45 test_closed=3
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_trend_down_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_trend_down_symbol_candidate_analysis.txt
 crypto_trend_pullback__5m_all__exit_fastfail [entry_exit_family]: pnl=-17.21 closed=1 pf=0.00 win_rate=0.00% dd=0.02%
   trade_metrics: expectancy=-17.21 avg_win=0.00 avg_loss=-17.21 payoff=0.00 avg_hold=2.0
   exits: dominant=structure_exit share=100.00%
@@ -935,14 +820,6 @@ crypto_volatility_expansion__15m_overlap__exit_fastfail [entry_exit_family]: pnl
   splits: train_pnl=10.61 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-40.62 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_expansion__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_overlap__exit_fastfail [entry_exit_family]: pnl=-32.30 closed=5 pf=0.67 win_rate=20.00% dd=0.03%
-  trade_metrics: expectancy=-6.46 avg_win=65.10 avg_loss=-24.35 payoff=2.67 avg_hold=2.6
-  exits: dominant=structure_exit share=80.00%
-  regimes: best=trend_down_vol_high pnl=-12.02 worst=trend_down_vol_mid pnl=-20.28 dominant_share=80.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.75 avg_test_pnl=-10.14 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-45.00 val_pnl=-11.38 val_pf=0.00 val_closed=1 test_pnl=-20.28 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
 crypto_trend_pullback__5m_all__exit_trend [entry_exit_family]: pnl=-33.76 closed=1 pf=0.00 win_rate=0.00% dd=0.03%
   trade_metrics: expectancy=-33.76 avg_win=0.00 avg_loss=-33.76 payoff=0.00 avg_hold=8.0
   exits: dominant=stale_breakout share=100.00%
@@ -991,6 +868,42 @@ crypto_breakout_reclaim_sweep_selective__15m_overlap [parameter_sweep]: pnl=-39.
   splits: train_pnl=10.61 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-34.03 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_selective_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_selective_15m_overlap_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__regime_trend_up_vol_high [regime_improved]: pnl=-42.91 closed=2 pf=0.09 win_rate=50.00% dd=0.06%
+  trade_metrics: expectancy=-21.45 avg_win=4.39 avg_loss=-47.30 payoff=0.09 avg_hold=4.0
+  exits: dominant=signal_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=-42.91 worst=trend_up_vol_high pnl=-42.91 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.39 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=15.89 val_pnl=-8.77 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__regime_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__regime_trend_up_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_trend__regime_trend_up_vol_high [regime_improved]: pnl=-42.91 closed=2 pf=0.09 win_rate=50.00% dd=0.06%
+  trade_metrics: expectancy=-21.45 avg_win=4.39 avg_loss=-47.30 payoff=0.09 avg_hold=4.0
+  exits: dominant=signal_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=-42.91 worst=trend_up_vol_high pnl=-42.91 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.39 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=84.42 val_pnl=-8.77 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__regime_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__regime_trend_up_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__autopsy_trend_up_vol_high [autopsy_improved]: pnl=-42.91 closed=2 pf=0.09 win_rate=50.00% dd=0.06%
+  trade_metrics: expectancy=-21.45 avg_win=4.39 avg_loss=-47.30 payoff=0.09 avg_hold=4.0
+  exits: dominant=signal_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=-42.91 worst=trend_up_vol_high pnl=-42.91 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.39 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=15.89 val_pnl=-8.77 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_trend_up_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up_vol_high [autopsy_improved]: pnl=-42.91 closed=2 pf=0.09 win_rate=50.00% dd=0.06%
+  trade_metrics: expectancy=-21.45 avg_win=4.39 avg_loss=-47.30 payoff=0.09 avg_hold=4.0
+  exits: dominant=signal_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=-42.91 worst=trend_up_vol_high pnl=-42.91 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.39 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=84.42 val_pnl=-8.77 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up_vol_high_symbol_candidate_analysis.txt
 crypto_trend_pullback_sweep_dense__15m_all [parameter_sweep]: pnl=-46.56 closed=2 pf=0.00 win_rate=0.00% dd=0.05%
   trade_metrics: expectancy=-23.28 avg_win=0.00 avg_loss=-23.28 payoff=0.00 avg_hold=1.0
   exits: dominant=signal_exit share=100.00%
@@ -1031,14 +944,6 @@ crypto_volatility_expansion_sweep_selective__15m_overlap [parameter_sweep]: pnl=
   splits: train_pnl=4.16 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\btc_crypto_volatility_expansion_sweep_selective_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion_sweep_selective_15m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_overlap [single]: pnl=-56.87 closed=5 pf=0.53 win_rate=20.00% dd=0.07%
-  trade_metrics: expectancy=-11.37 avg_win=65.10 avg_loss=-30.49 payoff=2.13 avg_hold=6.2
-  exits: dominant=structure_exit share=80.00%
-  regimes: best=trend_down_vol_mid pnl=-9.82 worst=trend_down_vol_high pnl=-47.05 dominant_share=80.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-63.51 avg_test_pnl=-4.91 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-36.39 val_pnl=-51.27 val_pf=0.00 val_closed=1 test_pnl=-9.82 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_overlap_15m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__5m_us__exit_fastfail [entry_exit_family]: pnl=-59.06 closed=7 pf=0.52 win_rate=28.57% dd=0.12%
   trade_metrics: expectancy=-8.44 avg_win=31.92 avg_loss=-24.58 payoff=1.30 avg_hold=7.9
   exits: dominant=trailing_stop share=42.86%
@@ -1135,14 +1040,6 @@ crypto_trend_pullback_sweep_dense__5m_us [parameter_sweep]: pnl=-87.13 closed=8 
   splits: train_pnl=-27.72 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-59.40 test_pf=0.00 test_closed=3
   trades: artifacts\btc_crypto_trend_pullback_sweep_dense_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_trend_pullback_sweep_dense_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_europe__exit_fastfail [entry_exit_family]: pnl=-87.50 closed=4 pf=0.00 win_rate=0.00% dd=0.09%
-  trade_metrics: expectancy=-21.87 avg_win=0.00 avg_loss=-21.87 payoff=0.00 avg_hold=3.0
-  exits: dominant=structure_exit share=100.00%
-  regimes: best=trend_flat_vol_high pnl=-43.47 worst=trend_down_vol_high pnl=-44.03 dominant_share=75.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.67 avg_test_pnl=-11.39 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-2.19 val_pnl=-7.67 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
 crypto_volatility_expansion__15m_europe__exit_fastfail [entry_exit_family]: pnl=-89.35 closed=8 pf=0.69 win_rate=25.00% dd=0.11%
   trade_metrics: expectancy=-11.17 avg_win=97.61 avg_loss=-47.43 payoff=2.06 avg_hold=8.9
   exits: dominant=signal_exit share=25.00%
@@ -1175,15 +1072,6 @@ crypto_volatility_expansion__5m_europe__exit_fastfail [entry_exit_family]: pnl=-
   splits: train_pnl=69.28 val_pnl=-51.55 val_pf=0.00 val_closed=1 test_pnl=-9.62 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_expansion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down [autopsy_improved]: pnl=-95.91 closed=10 pf=0.73 win_rate=40.00% dd=0.23%
-  trade_metrics: expectancy=-9.59 avg_win=63.81 avg_loss=-58.53 payoff=1.09 avg_hold=7.4
-  exits: dominant=signal_exit share=40.00%
-  regimes: best=trend_down_vol_high pnl=-6.76 worst=trend_down_vol_mid pnl=-89.15 dominant_share=90.00%
-  regime_filter: trend_down
-  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=-19.07 avg_test_pnl=52.41 avg_val_pf=0.65 avg_test_pf=1.88
-  splits: train_pnl=-120.11 val_pnl=35.48 val_pf=1.30 val_closed=3 test_pnl=93.99 test_pf=2.45 test_closed=3
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__15m_europe [single]: pnl=-99.55 closed=5 pf=0.15 win_rate=20.00% dd=0.10%
   trade_metrics: expectancy=-19.91 avg_win=17.25 avg_loss=-29.20 payoff=0.59 avg_hold=5.8
   exits: dominant=signal_exit share=40.00%
@@ -1232,22 +1120,6 @@ crypto_breakout_reclaim__5m_us [single]: pnl=-102.18 closed=7 pf=0.17 win_rate=2
   splits: train_pnl=-102.18 val_pnl=170.39 val_pf=999.00 val_closed=1 test_pnl=-53.99 test_pf=0.00 test_closed=3
   trades: artifacts\btc_crypto_breakout_reclaim__5m_us_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim__5m_us_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe__exit_fastfail [entry_exit_family]: pnl=-110.92 closed=11 pf=0.41 win_rate=9.09% dd=0.11%
-  trade_metrics: expectancy=-10.08 avg_win=76.23 avg_loss=-18.71 payoff=4.07 avg_hold=5.4
-  exits: dominant=structure_exit share=63.64%
-  regimes: best=trend_flat_vol_mid pnl=-4.88 worst=trend_down_vol_high pnl=-43.59 dominant_share=63.64%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-10.83 avg_test_pnl=-30.02 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-60.90 val_pnl=-13.23 val_pf=0.00 val_closed=2 test_pnl=-30.07 test_pf=0.00 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_us__exit_fastfail [entry_exit_family]: pnl=-118.17 closed=7 pf=0.04 win_rate=14.29% dd=0.12%
-  trade_metrics: expectancy=-16.88 avg_win=4.45 avg_loss=-20.44 payoff=0.22 avg_hold=3.9
-  exits: dominant=structure_exit share=85.71%
-  regimes: best=trend_flat_vol_high pnl=-58.01 worst=trend_down_vol_high pnl=-60.15 dominant_share=85.71%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-35.10 avg_test_pnl=-15.56 avg_val_pf=0.33 avg_test_pf=0.00
-  splits: train_pnl=-26.84 val_pnl=-5.55 val_pf=0.66 val_closed=4 test_pnl=-23.51 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_us__exit_fastfail_15m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_us__exit_fastfail_15m_us_symbol_candidate_analysis.txt
 crypto_trend_pullback_sweep_dense__5m_all [parameter_sweep]: pnl=-118.61 closed=9 pf=0.29 win_rate=22.22% dd=0.12%
   trade_metrics: expectancy=-13.18 avg_win=24.79 avg_loss=-24.03 payoff=1.03 avg_hold=6.1
   exits: dominant=signal_exit share=44.44%
@@ -1264,14 +1136,6 @@ crypto_breakout_reclaim__5m_us__exit_trend [entry_exit_family]: pnl=-119.57 clos
   splits: train_pnl=-119.57 val_pnl=170.39 val_pf=999.00 val_closed=1 test_pnl=-53.99 test_pf=0.00 test_closed=3
   trades: artifacts\btc_crypto_breakout_reclaim__5m_us__exit_trend_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim__5m_us__exit_trend_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_overlap__exit_trend [entry_exit_family]: pnl=-128.68 closed=5 pf=0.34 win_rate=20.00% dd=0.13%
-  trade_metrics: expectancy=-25.74 avg_win=65.10 avg_loss=-48.45 payoff=1.34 avg_hold=7.4
-  exits: dominant=stop_loss share=40.00%
-  regimes: best=trend_down_vol_mid pnl=-39.52 worst=trend_down_vol_high pnl=-89.16 dominant_share=80.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-66.89 avg_test_pnl=-19.76 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-71.75 val_pnl=-51.27 val_pf=0.00 val_closed=1 test_pnl=-39.52 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
 crypto_volatility_breakout__15m_us [single]: pnl=-129.03 closed=6 pf=0.40 win_rate=16.67% dd=0.13%
   trade_metrics: expectancy=-21.50 avg_win=85.61 avg_loss=-42.93 payoff=1.99 avg_hold=3.3
   exits: dominant=signal_exit share=66.67%
@@ -1288,6 +1152,14 @@ crypto_volatility_breakout__15m_us__exit_trend [entry_exit_family]: pnl=-129.03 
   splits: train_pnl=-39.14 val_pnl=-29.44 val_pf=0.00 val_closed=1 test_pnl=-60.45 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_breakout__15m_us__exit_trend_15m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_breakout__15m_us__exit_trend_15m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe__exit_fastfail [entry_exit_family]: pnl=-133.02 closed=22 pf=0.66 win_rate=27.27% dd=0.17%
+  trade_metrics: expectancy=-6.05 avg_win=43.06 avg_loss=-24.46 payoff=1.76 avg_hold=7.8
+  exits: dominant=stale_breakout share=31.82%
+  regimes: best=trend_down_vol_mid pnl=55.41 worst=trend_down_vol_high pnl=-154.95 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-36.82 avg_test_pnl=0.27 avg_val_pf=0.00 avg_test_pf=1.01
+  splits: train_pnl=-56.70 val_pnl=-54.67 val_pf=0.00 val_closed=4 test_pnl=2.98 test_pf=1.05 test_closed=6
+  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
 crypto_volatility_expansion__15m_us__exit_fastfail [entry_exit_family]: pnl=-135.49 closed=5 pf=0.27 win_rate=20.00% dd=0.14%
   trade_metrics: expectancy=-27.10 avg_win=49.71 avg_loss=-46.30 payoff=1.07 avg_hold=3.2
   exits: dominant=signal_exit share=60.00%
@@ -1296,15 +1168,6 @@ crypto_volatility_expansion__15m_us__exit_fastfail [entry_exit_family]: pnl=-135
   splits: train_pnl=-75.04 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-60.45 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_expansion__15m_us__exit_fastfail_15m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion__15m_us__exit_fastfail_15m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__exit_fastfail__regime_trend_down_vol_high [regime_improved]: pnl=-142.49 closed=5 pf=0.00 win_rate=0.00% dd=0.14%
-  trade_metrics: expectancy=-28.50 avg_win=0.00 avg_loss=-28.50 payoff=0.00 avg_hold=2.8
-  exits: dominant=structure_exit share=100.00%
-  regimes: best=trend_down_vol_high pnl=-142.49 worst=trend_down_vol_high pnl=-142.49 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-32.14 avg_test_pnl=-3.94 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-71.28 val_pnl=-32.14 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__15m_us [single]: pnl=-144.92 closed=2 pf=0.00 win_rate=0.00% dd=0.14%
   trade_metrics: expectancy=-72.46 avg_win=0.00 avg_loss=-72.46 payoff=0.00 avg_hold=2.0
   exits: dominant=signal_exit share=100.00%
@@ -1353,6 +1216,24 @@ crypto_breakout_reclaim_sweep_selective__5m_us [parameter_sweep]: pnl=-148.53 cl
   splits: train_pnl=-52.19 val_pnl=170.39 val_pf=999.00 val_closed=1 test_pnl=-49.17 test_pf=0.00 test_closed=3
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_us_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__autopsy_vol_high [autopsy_improved]: pnl=-149.95 closed=6 pf=0.16 win_rate=16.67% dd=0.15%
+  trade_metrics: expectancy=-24.99 avg_win=28.04 avg_loss=-35.60 payoff=0.79 avg_hold=4.2
+  exits: dominant=signal_exit share=100.00%
+  regimes: best=trend_up_vol_high pnl=-149.95 worst=trend_up_vol_high pnl=-149.95 dominant_share=100.00%
+  regime_filter: vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-39.17 avg_test_pnl=-17.91 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-64.85 val_pnl=-28.63 val_pf=0.00 val_closed=1 test_pnl=-35.83 test_pf=0.00 test_closed=1
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_trend__autopsy_vol_high [autopsy_improved]: pnl=-149.95 closed=6 pf=0.16 win_rate=16.67% dd=0.15%
+  trade_metrics: expectancy=-24.99 avg_win=28.04 avg_loss=-35.60 payoff=0.79 avg_hold=4.2
+  exits: dominant=signal_exit share=100.00%
+  regimes: best=trend_up_vol_high pnl=-149.95 worst=trend_up_vol_high pnl=-149.95 dominant_share=100.00%
+  regime_filter: vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-39.17 avg_test_pnl=-17.91 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-64.85 val_pnl=-28.63 val_pf=0.00 val_closed=1 test_pnl=-35.83 test_pf=0.00 test_closed=1
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_vol_high_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_selective__15m_europe [parameter_sweep]: pnl=-151.20 closed=8 pf=0.56 win_rate=25.00% dd=0.16%
   trade_metrics: expectancy=-18.90 avg_win=97.61 avg_loss=-57.74 payoff=1.69 avg_hold=11.1
   exits: dominant=trailing_stop share=25.00%
@@ -1401,14 +1282,6 @@ crypto_volatility_breakout__15m_us__exit_fastfail [entry_exit_family]: pnl=-164.
   splits: train_pnl=-75.04 val_pnl=-29.44 val_pf=0.00 val_closed=1 test_pnl=-60.45 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_breakout__15m_us__exit_fastfail_15m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_breakout__15m_us__exit_fastfail_15m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_europe [single]: pnl=-167.14 closed=4 pf=0.02 win_rate=25.00% dd=0.17%
-  trade_metrics: expectancy=-41.79 avg_win=3.71 avg_loss=-56.95 payoff=0.07 avg_hold=4.8
-  exits: dominant=structure_exit share=75.00%
-  regimes: best=trend_flat_vol_high pnl=-82.57 worst=trend_down_vol_high pnl=-84.57 dominant_share=75.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.67 avg_test_pnl=-40.31 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-41.29 val_pnl=-7.67 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__15m_europe_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_europe_15m_europe_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_selective__5m_overlap [parameter_sweep]: pnl=-181.53 closed=9 pf=0.17 win_rate=22.22% dd=0.20%
   trade_metrics: expectancy=-20.17 avg_win=18.35 avg_loss=-31.18 payoff=0.59 avg_hold=10.2
   exits: dominant=signal_exit share=55.56%
@@ -1433,24 +1306,14 @@ crypto_volatility_expansion_sweep_balanced__15m_overlap [parameter_sweep]: pnl=-
   splits: train_pnl=24.13 val_pnl=-91.23 val_pf=0.00 val_closed=2 test_pnl=-40.62 test_pf=0.00 test_closed=1
   trades: artifacts\btc_crypto_volatility_expansion_sweep_balanced_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion_sweep_balanced_15m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__autopsy_trend_down_vol_high [autopsy_improved]: pnl=-197.93 closed=9 pf=0.47 win_rate=33.33% dd=0.21%
-  trade_metrics: expectancy=-21.99 avg_win=57.74 avg_loss=-61.86 payoff=0.93 avg_hold=7.2
-  exits: dominant=signal_exit share=33.33%
-  regimes: best=trend_down_vol_high pnl=-197.93 worst=trend_down_vol_high pnl=-197.93 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-74.73 avg_test_pnl=46.61 avg_val_pf=0.38 avg_test_pf=500.09
-  splits: train_pnl=-37.48 val_pnl=-49.43 val_pf=0.76 val_closed=3 test_pnl=11.96 test_pf=1.18 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__autopsy_trend_down_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down_vol_high [autopsy_improved]: pnl=-197.93 closed=9 pf=0.47 win_rate=33.33% dd=0.21%
-  trade_metrics: expectancy=-21.99 avg_win=57.74 avg_loss=-61.86 payoff=0.93 avg_hold=7.2
-  exits: dominant=signal_exit share=33.33%
-  regimes: best=trend_down_vol_high pnl=-197.93 worst=trend_down_vol_high pnl=-197.93 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-74.73 avg_test_pnl=46.61 avg_val_pf=0.38 avg_test_pf=500.09
-  splits: train_pnl=-37.48 val_pnl=-49.43 val_pf=0.76 val_closed=3 test_pnl=11.96 test_pf=1.18 test_closed=2
-  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend__autopsy_trend_down_vol_high_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_all [single]: pnl=-210.73 closed=27 pf=0.77 win_rate=25.93% dd=0.47%
+  trade_metrics: expectancy=-7.80 avg_win=102.92 avg_loss=-46.56 payoff=2.21 avg_hold=13.1
+  exits: dominant=stale_breakout share=29.63%
+  regimes: best=trend_flat_vol_high pnl=397.78 worst=trend_down_vol_high pnl=-589.99 dominant_share=70.37%
+  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=167.65 avg_test_pnl=-148.90 avg_val_pf=2.61 avg_test_pf=0.63
+  splits: train_pnl=-4.47 val_pnl=224.21 val_pf=3.07 val_closed=8 test_pnl=-308.18 test_pf=0.22 test_closed=9
+  trades: artifacts\btc_crypto_short_breakdown__15m_all_15m_all_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_all_15m_all_symbol_candidate_analysis.txt
 crypto_volatility_breakout__5m_europe__exit_fastfail [entry_exit_family]: pnl=-211.17 closed=17 pf=0.45 win_rate=5.88% dd=0.21%
   trade_metrics: expectancy=-12.42 avg_win=173.03 avg_loss=-24.01 payoff=7.21 avg_hold=9.0
   exits: dominant=signal_exit share=52.94%
@@ -1475,6 +1338,32 @@ crypto_breakout_reclaim_sweep_dense__5m_all [parameter_sweep]: pnl=-216.67 close
   splits: train_pnl=-79.26 val_pnl=-67.29 val_pf=0.00 val_closed=4 test_pnl=-283.12 test_pf=0.07 test_closed=11
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_dense_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_dense_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__autopsy_trend_up [autopsy_improved]: pnl=-221.35 closed=8 pf=0.01 win_rate=12.50% dd=0.25%
+  trade_metrics: expectancy=-27.67 avg_win=2.85 avg_loss=-32.03 payoff=0.09 avg_hold=14.4
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_up_vol_mid pnl=-42.09 worst=trend_up_vol_high pnl=-179.26 dominant_share=75.00%
+  regime_filter: trend_up
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-81.11 avg_test_pnl=-44.97 avg_val_pf=0.00 avg_test_pf=0.03
+  splits: train_pnl=-98.24 val_pnl=-52.63 val_pf=0.00 val_closed=2 test_pnl=-42.09 test_pf=0.06 test_closed=2
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__autopsy_trend_up_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up [autopsy_improved]: pnl=-228.77 closed=8 pf=0.01 win_rate=12.50% dd=0.26%
+  trade_metrics: expectancy=-28.60 avg_win=2.85 avg_loss=-33.09 payoff=0.09 avg_hold=14.6
+  exits: dominant=stale_breakout share=37.50%
+  regimes: best=trend_up_vol_mid pnl=-42.09 worst=trend_up_vol_high pnl=-186.68 dominant_share=75.00%
+  regime_filter: trend_up
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-81.11 avg_test_pnl=-44.97 avg_val_pf=0.00 avg_test_pf=0.03
+  splits: train_pnl=-105.67 val_pnl=-52.63 val_pf=0.00 val_closed=2 test_pnl=-42.09 test_pf=0.06 test_closed=2
+  trades: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_volatility_breakout__5m_europe__exit_trend__autopsy_trend_up_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_overlap [single]: pnl=-232.91 closed=8 pf=0.30 win_rate=12.50% dd=0.25%
+  trade_metrics: expectancy=-29.11 avg_win=102.20 avg_loss=-47.87 payoff=2.13 avg_hold=7.8
+  exits: dominant=structure_exit share=37.50%
+  regimes: best=trend_down_vol_mid pnl=-6.74 worst=trend_down_vol_high pnl=-203.95 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-121.40 avg_test_pnl=-9.08 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=87.56 val_pnl=-45.01 val_pf=0.00 val_closed=2 test_pnl=-18.16 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
 crypto_breakout_reclaim_sweep_selective__15m_all [parameter_sweep]: pnl=-234.01 closed=14 pf=0.45 win_rate=21.43% dd=0.26%
   trade_metrics: expectancy=-16.71 avg_win=64.13 avg_loss=-38.76 payoff=1.65 avg_hold=10.9
   exits: dominant=trailing_stop share=42.86%
@@ -1507,6 +1396,14 @@ crypto_breakout_reclaim__5m_all__exit_fastfail [entry_exit_family]: pnl=-251.63 
   splits: train_pnl=-206.94 val_pnl=-82.97 val_pf=0.00 val_closed=4 test_pnl=-306.57 test_pf=0.18 test_closed=10
   trades: artifacts\btc_crypto_breakout_reclaim__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_all__exit_trend [entry_exit_family]: pnl=-252.01 closed=27 pf=0.74 win_rate=22.22% dd=0.47%
+  trade_metrics: expectancy=-9.33 avg_win=116.75 avg_loss=-45.36 payoff=2.57 avg_hold=14.8
+  exits: dominant=stale_breakout share=37.04%
+  regimes: best=trend_flat_vol_high pnl=380.99 worst=trend_down_vol_high pnl=-614.47 dominant_share=70.37%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=185.45 avg_test_pnl=-207.98 avg_val_pf=2.55 avg_test_pf=0.42
+  splits: train_pnl=-4.47 val_pnl=239.70 val_pf=2.91 val_closed=8 test_pnl=-364.95 test_pf=0.08 test_closed=9
+  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend_15m_all_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_trend_15m_all_symbol_candidate_analysis.txt
 crypto_breakout_reclaim_sweep_balanced__5m_all [parameter_sweep]: pnl=-253.73 closed=20 pf=0.33 win_rate=30.00% dd=0.28%
   trade_metrics: expectancy=-12.69 avg_win=21.19 avg_loss=-27.20 payoff=0.78 avg_hold=6.8
   exits: dominant=signal_exit share=65.00%
@@ -1515,6 +1412,23 @@ crypto_breakout_reclaim_sweep_balanced__5m_all [parameter_sweep]: pnl=-253.73 cl
   splits: train_pnl=-139.29 val_pnl=-129.46 val_pf=0.00 val_closed=5 test_pnl=-193.51 test_pf=0.35 test_closed=13
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_balanced_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_balanced_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_overlap__exit_fastfail [entry_exit_family]: pnl=-283.56 closed=8 pf=0.22 win_rate=12.50% dd=0.28%
+  trade_metrics: expectancy=-35.44 avg_win=80.26 avg_loss=-51.97 payoff=1.54 avg_hold=6.2
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_down_vol_mid pnl=-6.74 worst=trend_down_vol_high pnl=-254.60 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-121.40 avg_test_pnl=-15.41 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=49.58 val_pnl=-45.01 val_pf=0.00 val_closed=2 test_pnl=-30.83 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe__exit_trend__regime_trend_down_vol_high [regime_improved]: pnl=-310.42 closed=4 pf=0.14 win_rate=50.00% dd=0.31%
+  trade_metrics: expectancy=-77.61 avg_win=24.26 avg_loss=-179.47 payoff=0.14 avg_hold=4.0
+  exits: dominant=signal_exit share=50.00%
+  regimes: best=trend_down_vol_high pnl=-310.42 worst=trend_down_vol_high pnl=-310.42 dominant_share=100.00%
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.44 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-287.36 val_pnl=-4.88 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__regime_trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__regime_trend_down_vol_high_symbol_candidate_analysis.txt
 crypto_breakout_reclaim_sweep_selective__5m_all [parameter_sweep]: pnl=-313.00 closed=21 pf=0.40 win_rate=23.81% dd=0.32%
   trade_metrics: expectancy=-14.90 avg_win=42.13 avg_loss=-32.73 payoff=1.29 avg_hold=10.0
   exits: dominant=trailing_stop share=38.10%
@@ -1523,24 +1437,14 @@ crypto_breakout_reclaim_sweep_selective__5m_all [parameter_sweep]: pnl=-313.00 c
   splits: train_pnl=-338.00 val_pnl=-76.11 val_pf=0.00 val_closed=4 test_pnl=-186.98 test_pf=0.35 test_closed=11
   trades: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim_sweep_selective_5m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_europe__exit_trend__autopsy_vol_high [autopsy_improved]: pnl=-317.96 closed=4 pf=0.19 win_rate=25.00% dd=0.32%
-  trade_metrics: expectancy=-79.49 avg_win=75.04 avg_loss=-131.00 payoff=0.57 avg_hold=3.5
-  exits: dominant=stop_loss share=75.00%
-  regimes: best=trend_flat_vol_high pnl=75.04 worst=trend_down_vol_high pnl=-393.01 dominant_share=75.00%
-  regime_filter: vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-30.19 avg_test_pnl=-85.88 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-207.65 val_pnl=-60.38 val_pf=0.00 val_closed=1 test_pnl=-49.93 test_pf=0.00 test_closed=1
-  trades: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_europe__exit_trend__autopsy_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__regime_trend_down_vol_high [regime_improved]: pnl=-319.68 closed=4 pf=0.00 win_rate=0.00% dd=0.32%
-  trade_metrics: expectancy=-79.92 avg_win=0.00 avg_loss=-79.92 payoff=0.00 avg_hold=4.5
-  exits: dominant=structure_exit share=75.00%
-  regimes: best=trend_down_vol_high pnl=-319.68 worst=trend_down_vol_high pnl=-319.68 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-26.67 avg_test_pnl=-117.26 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-15.45 val_pnl=-26.67 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__regime_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__regime_trend_down_vol_high_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_all__exit_fastfail [entry_exit_family]: pnl=-314.25 closed=30 pf=0.64 win_rate=23.33% dd=0.44%
+  trade_metrics: expectancy=-10.47 avg_win=81.39 avg_loss=-38.43 payoff=2.12 avg_hold=8.2
+  exits: dominant=stale_breakout share=30.00%
+  regimes: best=trend_flat_vol_high pnl=323.39 worst=trend_down_vol_high pnl=-580.58 dominant_share=73.33%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=197.69 avg_test_pnl=-161.89 avg_val_pf=2.84 avg_test_pf=0.55
+  splits: train_pnl=-128.44 val_pnl=254.38 val_pf=3.28 val_closed=9 test_pnl=-317.89 test_pf=0.14 test_closed=9
+  trades: artifacts\btc_crypto_short_breakdown__15m_all__exit_fastfail_15m_all_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_all__exit_fastfail_15m_all_symbol_candidate_analysis.txt
 crypto_volatility_expansion__5m_overlap [single]: pnl=-322.18 closed=11 pf=0.06 win_rate=9.09% dd=0.34%
   trade_metrics: expectancy=-29.29 avg_win=20.92 avg_loss=-34.31 payoff=0.61 avg_hold=9.3
   exits: dominant=signal_exit share=45.45%
@@ -1549,6 +1453,14 @@ crypto_volatility_expansion__5m_overlap [single]: pnl=-322.18 closed=11 pf=0.06 
   splits: train_pnl=-193.42 val_pnl=-55.31 val_pf=0.00 val_closed=2 test_pnl=3.57 test_pf=1.21 test_closed=2
   trades: artifacts\btc_crypto_volatility_expansion__5m_overlap_5m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion__5m_overlap_5m_overlap_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_overlap__exit_trend [entry_exit_family]: pnl=-323.00 closed=8 pf=0.27 win_rate=12.50% dd=0.34%
+  trade_metrics: expectancy=-40.37 avg_win=118.75 avg_loss=-63.11 payoff=1.88 avg_hold=8.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_down_vol_mid pnl=-6.74 worst=trend_down_vol_high pnl=-253.84 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-141.49 avg_test_pnl=-9.08 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=37.67 val_pnl=-85.20 val_pf=0.00 val_closed=2 test_pnl=-18.16 test_pf=0.00 test_closed=2
+  trades: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
 crypto_volatility_expansion__5m_overlap__exit_trend [entry_exit_family]: pnl=-328.21 closed=11 pf=0.06 win_rate=9.09% dd=0.35%
   trade_metrics: expectancy=-29.84 avg_win=20.92 avg_loss=-34.91 payoff=0.60 avg_hold=9.8
   exits: dominant=signal_exit share=45.45%
@@ -1565,33 +1477,6 @@ crypto_breakout_reclaim__5m_all [single]: pnl=-331.98 closed=15 pf=0.13 win_rate
   splits: train_pnl=-233.87 val_pnl=-76.11 val_pf=0.00 val_closed=4 test_pnl=-342.17 test_pf=0.07 test_closed=10
   trades: artifacts\btc_crypto_breakout_reclaim__5m_all_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim__5m_all_5m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_trend [combined]: pnl=-334.83 closed=56 pf=0.60 win_rate=26.79% dd=0.49%
-  trade_metrics: expectancy=-5.98 avg_win=32.98 avg_loss=-20.23 payoff=1.63 avg_hold=8.9
-  exits: dominant=structure_exit share=58.93%
-  regimes: best=trend_flat_vol_mid pnl=-25.91 worst=trend_down_vol_high pnl=-156.46 dominant_share=64.29%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-213.32 avg_test_pnl=74.17 avg_val_pf=0.16 avg_test_pf=2.11
-  combo_validation: components=2 outperformance=-414.78 trade_overlap=100.00%
-  splits: train_pnl=-189.25 val_pnl=-258.21 val_pf=0.01 val_closed=15 test_pnl=133.86 test_pf=3.03 test_closed=11
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_trend_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_trend_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_fastfail [combined]: pnl=-334.83 closed=56 pf=0.60 win_rate=26.79% dd=0.49%
-  trade_metrics: expectancy=-5.98 avg_win=32.98 avg_loss=-20.23 payoff=1.63 avg_hold=8.9
-  exits: dominant=structure_exit share=58.93%
-  regimes: best=trend_flat_vol_mid pnl=-25.91 worst=trend_down_vol_high pnl=-156.46 dominant_share=64.29%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-213.32 avg_test_pnl=74.17 avg_val_pf=0.16 avg_test_pf=2.11
-  combo_validation: components=2 outperformance=-414.78 trade_overlap=100.00%
-  splits: train_pnl=-189.25 val_pnl=-258.21 val_pf=0.01 val_closed=15 test_pnl=133.86 test_pf=3.03 test_closed=11
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_fastfail_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__plus__crypto_short_breakdown__5m_overlap__exit_fastfail_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__exit_trend__plus__crypto_short_breakdown__5m_overlap__exit_fastfail [combined]: pnl=-334.83 closed=56 pf=0.60 win_rate=26.79% dd=0.49%
-  trade_metrics: expectancy=-5.98 avg_win=32.98 avg_loss=-20.23 payoff=1.63 avg_hold=8.9
-  exits: dominant=structure_exit share=58.93%
-  regimes: best=trend_flat_vol_mid pnl=-25.91 worst=trend_down_vol_high pnl=-156.46 dominant_share=64.29%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-213.32 avg_test_pnl=74.17 avg_val_pf=0.16 avg_test_pf=2.11
-  combo_validation: components=2 outperformance=-395.43 trade_overlap=100.00%
-  splits: train_pnl=-189.25 val_pnl=-258.21 val_pf=0.01 val_closed=15 test_pnl=133.86 test_pf=3.03 test_closed=11
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend__plus__crypto_short_breakdown__5m_overlap__exit_fastfail_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend__plus__crypto_short_breakdown__5m_overlap__exit_fastfail_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__5m_all__exit_trend [entry_exit_family]: pnl=-336.30 closed=15 pf=0.12 win_rate=26.67% dd=0.34%
   trade_metrics: expectancy=-22.42 avg_win=11.42 avg_loss=-34.72 payoff=0.33 avg_hold=11.0
   exits: dominant=trailing_stop share=46.67%
@@ -1624,14 +1509,6 @@ crypto_volatility_expansion_sweep_balanced__5m_us [parameter_sweep]: pnl=-352.29
   splits: train_pnl=53.26 val_pnl=-258.74 val_pf=0.00 val_closed=1 test_pnl=-83.77 test_pf=0.20 test_closed=4
   trades: artifacts\btc_crypto_volatility_expansion_sweep_balanced_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion_sweep_balanced_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_all [single]: pnl=-354.92 closed=48 pf=0.54 win_rate=25.00% dd=0.48%
-  trade_metrics: expectancy=-7.39 avg_win=34.88 avg_loss=-21.49 payoff=1.62 avg_hold=9.0
-  exits: dominant=structure_exit share=62.50%
-  regimes: best=trend_flat_vol_mid pnl=-25.91 worst=trend_down_vol_high pnl=-206.24 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-160.65 avg_test_pnl=53.35 avg_val_pf=0.18 avg_test_pf=2.01
-  splits: train_pnl=-221.97 val_pnl=-182.54 val_pf=0.01 val_closed=13 test_pnl=106.23 test_pf=3.01 test_closed=8
-  trades: artifacts\btc_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__15m_all [single]: pnl=-373.59 closed=13 pf=0.11 win_rate=23.08% dd=0.40%
   trade_metrics: expectancy=-28.74 avg_win=15.27 avg_loss=-41.94 payoff=0.36 avg_hold=9.3
   exits: dominant=trailing_stop share=69.23%
@@ -1640,39 +1517,6 @@ crypto_breakout_reclaim__15m_all [single]: pnl=-373.59 closed=13 pf=0.11 win_rat
   splits: train_pnl=-113.47 val_pnl=26.58 val_pf=2.22 val_closed=2 test_pnl=-26.25 test_pf=0.57 test_closed=3
   trades: artifacts\btc_crypto_breakout_reclaim__15m_all_15m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_breakout_reclaim__15m_all_15m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_all__exit_trend [entry_exit_family]: pnl=-388.81 closed=48 pf=0.54 win_rate=27.08% dd=0.52%
-  trade_metrics: expectancy=-8.10 avg_win=34.74 avg_loss=-24.01 payoff=1.45 avg_hold=10.6
-  exits: dominant=stale_breakout share=64.58%
-  regimes: best=trend_down_vol_mid pnl=18.30 worst=trend_down_vol_high pnl=-295.28 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-182.65 avg_test_pnl=69.20 avg_val_pf=0.15 avg_test_pf=2.66
-  splits: train_pnl=-301.01 val_pnl=-191.24 val_pf=0.01 val_closed=13 test_pnl=117.11 test_pf=3.79 test_closed=8
-  trades: artifacts\btc_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_overlap__exit_trend__regime_trend_down_vol_high [regime_improved]: pnl=-393.10 closed=4 pf=0.00 win_rate=0.00% dd=0.39%
-  trade_metrics: expectancy=-98.27 avg_win=0.00 avg_loss=-98.27 payoff=0.00 avg_hold=6.0
-  exits: dominant=stale_breakout share=50.00%
-  regimes: best=trend_down_vol_high pnl=-393.10 worst=trend_down_vol_high pnl=-393.10 dominant_share=100.00%
-  regime_filter: trend_down_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-44.70 avg_test_pnl=-117.26 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-61.32 val_pnl=-54.23 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend__regime_trend_down_vol_high_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend__regime_trend_down_vol_high_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_us__exit_fastfail [entry_exit_family]: pnl=-397.89 closed=22 pf=0.07 win_rate=4.55% dd=0.40%
-  trade_metrics: expectancy=-18.09 avg_win=28.93 avg_loss=-20.32 payoff=1.42 avg_hold=3.8
-  exits: dominant=structure_exit share=90.91%
-  regimes: best=trend_down_vol_mid pnl=-6.78 worst=trend_down_vol_high pnl=-335.08 dominant_share=59.09%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-146.03 avg_test_pnl=28.06 avg_val_pf=0.00 avg_test_pf=2.68
-  splits: train_pnl=-193.39 val_pnl=-141.90 val_pf=0.00 val_closed=8 test_pnl=27.57 test_pf=3.08 test_closed=3
-  trades: artifacts\btc_crypto_short_breakdown__5m_us__exit_fastfail_5m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_us__exit_fastfail_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__15m_europe__exit_trend [entry_exit_family]: pnl=-401.15 closed=4 pf=0.01 win_rate=25.00% dd=0.41%
-  trade_metrics: expectancy=-100.29 avg_win=3.71 avg_loss=-134.95 payoff=0.03 avg_hold=6.5
-  exits: dominant=stale_breakout share=50.00%
-  regimes: best=trend_down_vol_high pnl=-80.74 worst=trend_flat_vol_high pnl=-320.41 dominant_share=75.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-19.68 avg_test_pnl=-32.39 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-279.13 val_pnl=-19.68 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
 crypto_breakout_reclaim__15m_all__exit_trend [entry_exit_family]: pnl=-406.92 closed=13 pf=0.07 win_rate=7.69% dd=0.41%
   trade_metrics: expectancy=-31.30 avg_win=29.79 avg_loss=-36.39 payoff=0.82 avg_hold=9.5
   exits: dominant=trailing_stop share=61.54%
@@ -1689,30 +1533,30 @@ crypto_volatility_expansion_sweep_dense__5m_overlap [parameter_sweep]: pnl=-414.
   splits: train_pnl=0.35 val_pnl=-45.81 val_pf=0.00 val_closed=2 test_pnl=-266.94 test_pf=0.07 test_closed=3
   trades: artifacts\btc_crypto_volatility_expansion_sweep_dense_5m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion_sweep_dense_5m_overlap_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_us [single]: pnl=-453.33 closed=22 pf=0.15 win_rate=13.64% dd=0.45%
-  trade_metrics: expectancy=-20.61 avg_win=27.04 avg_loss=-28.13 payoff=0.96 avg_hold=6.8
-  exits: dominant=structure_exit share=77.27%
-  regimes: best=trend_down_vol_mid pnl=-16.69 worst=trend_down_vol_high pnl=-320.56 dominant_share=59.09%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-139.72 avg_test_pnl=45.08 avg_val_pf=0.02 avg_test_pf=2.98
-  splits: train_pnl=-202.81 val_pnl=-129.23 val_pf=0.02 val_closed=8 test_pnl=45.46 test_pf=3.22 test_closed=3
-  trades: artifacts\btc_crypto_short_breakdown__5m_us_5m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_us_5m_us_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_all__exit_fastfail [entry_exit_family]: pnl=-468.47 closed=48 pf=0.32 win_rate=10.42% dd=0.50%
-  trade_metrics: expectancy=-9.76 avg_win=45.01 avg_loss=-16.13 payoff=2.79 avg_hold=5.8
-  exits: dominant=structure_exit share=77.08%
-  regimes: best=trend_flat_vol_mid pnl=-20.66 worst=trend_down_vol_high pnl=-289.30 dominant_share=62.50%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-179.46 avg_test_pnl=-21.57 avg_val_pf=0.11 avg_test_pf=0.77
-  splits: train_pnl=-209.40 val_pnl=-209.88 val_pf=0.00 val_closed=13 test_pnl=11.61 test_pf=1.21 test_closed=8
+crypto_short_breakdown__5m_us__exit_fastfail [entry_exit_family]: pnl=-443.35 closed=33 pf=0.27 win_rate=18.18% dd=0.45%
+  trade_metrics: expectancy=-13.43 avg_win=27.27 avg_loss=-22.48 payoff=1.21 avg_hold=12.6
+  exits: dominant=trailing_stop share=30.30%
+  regimes: best=trend_flat_vol_mid pnl=-6.60 worst=trend_flat_vol_high pnl=-204.96 dominant_share=54.55%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-143.89 avg_test_pnl=-79.53 avg_val_pf=0.30 avg_test_pf=0.01
+  splits: train_pnl=-288.02 val_pnl=-163.10 val_pf=0.28 val_closed=12 test_pnl=-46.12 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_us__exit_fastfail_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_us__exit_fastfail_5m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_overlap__exit_fastfail [entry_exit_family]: pnl=-482.63 closed=24 pf=0.39 win_rate=25.00% dd=0.49%
+  trade_metrics: expectancy=-20.11 avg_win=51.80 avg_loss=-44.08 payoff=1.18 avg_hold=9.6
+  exits: dominant=structure_exit share=29.17%
+  regimes: best=trend_up_vol_high pnl=55.47 worst=trend_down_vol_high pnl=-433.32 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-313.24 avg_test_pnl=-60.90 avg_val_pf=0.09 avg_test_pf=0.05
+  splits: train_pnl=-30.62 val_pnl=-300.60 val_pf=0.18 val_closed=6 test_pnl=-48.02 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all__exit_fastfail [entry_exit_family]: pnl=-491.41 closed=80 pf=0.62 win_rate=23.75% dd=0.49%
+  trade_metrics: expectancy=-6.14 avg_win=41.85 avg_loss=-21.09 payoff=1.98 avg_hold=10.7
+  exits: dominant=structure_exit share=25.00%
+  regimes: best=trend_down_vol_low pnl=15.78 worst=trend_down_vol_high pnl=-237.56 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-238.39 avg_test_pnl=-148.58 avg_val_pf=0.30 avg_test_pf=0.35
+  splits: train_pnl=-50.56 val_pnl=-261.67 val_pf=0.24 val_closed=22 test_pnl=-145.87 test_pf=0.37 test_closed=15
   trades: artifacts\btc_crypto_short_breakdown__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_short_breakdown__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
-crypto_short_breakdown__5m_us__exit_trend [entry_exit_family]: pnl=-550.77 closed=22 pf=0.13 win_rate=13.64% dd=0.55%
-  trade_metrics: expectancy=-25.04 avg_win=27.04 avg_loss=-33.26 payoff=0.81 avg_hold=8.5
-  exits: dominant=stale_breakout share=72.73%
-  regimes: best=trend_down_vol_mid pnl=-16.69 worst=trend_down_vol_high pnl=-418.70 dominant_share=59.09%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-192.22 avg_test_pnl=60.92 avg_val_pf=0.02 avg_test_pf=3.76
-  splits: train_pnl=-243.75 val_pnl=-173.59 val_pf=0.02 val_closed=8 test_pnl=76.83 test_pf=4.75 test_closed=3
-  trades: artifacts\btc_crypto_short_breakdown__5m_us__exit_trend_5m_us_symbol_candidate_trades.csv
-  analysis: artifacts\btc_crypto_short_breakdown__5m_us__exit_trend_5m_us_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_balanced__5m_overlap [parameter_sweep]: pnl=-562.43 closed=12 pf=0.04 win_rate=8.33% dd=0.58%
   trade_metrics: expectancy=-46.87 avg_win=20.92 avg_loss=-53.03 payoff=0.39 avg_hold=10.1
   exits: dominant=signal_exit share=50.00%
@@ -1761,6 +1605,54 @@ crypto_volatility_breakout__5m_us__exit_trend [entry_exit_family]: pnl=-702.30 c
   splits: train_pnl=-287.10 val_pnl=-273.16 val_pf=0.00 val_closed=2 test_pnl=-73.50 test_pf=0.30 test_closed=4
   trades: artifacts\btc_crypto_volatility_breakout__5m_us__exit_trend_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_breakout__5m_us__exit_trend_5m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_us [single]: pnl=-717.30 closed=32 pf=0.22 win_rate=18.75% dd=0.73%
+  trade_metrics: expectancy=-22.42 avg_win=32.79 avg_loss=-35.16 payoff=0.93 avg_hold=14.2
+  exits: dominant=trailing_stop share=34.38%
+  regimes: best=trend_flat_vol_mid pnl=-6.60 worst=trend_down_vol_high pnl=-429.18 dominant_share=53.12%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-223.32 avg_test_pnl=-117.74 avg_val_pf=0.30 avg_test_pf=0.01
+  splits: train_pnl=-435.89 val_pnl=-363.54 val_pf=0.12 val_closed=12 test_pnl=-70.74 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_us_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_us_5m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_overlap [single]: pnl=-737.58 closed=23 pf=0.20 win_rate=26.09% dd=0.75%
+  trade_metrics: expectancy=-32.07 avg_win=30.75 avg_loss=-54.24 payoff=0.57 avg_hold=12.2
+  exits: dominant=trailing_stop share=34.78%
+  regimes: best=trend_up_vol_high pnl=18.39 worst=trend_down_vol_high pnl=-541.68 dominant_share=47.83%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-320.75 avg_test_pnl=-73.79 avg_val_pf=0.07 avg_test_pf=0.04
+  splits: train_pnl=-74.77 val_pnl=-319.48 val_pf=0.14 val_closed=6 test_pnl=-56.12 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_overlap_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap_5m_overlap_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_us__exit_trend [entry_exit_family]: pnl=-762.14 closed=32 pf=0.20 win_rate=21.88% dd=0.77%
+  trade_metrics: expectancy=-23.82 avg_win=26.67 avg_loss=-37.95 payoff=0.70 avg_hold=15.1
+  exits: dominant=stale_breakout share=40.62%
+  regimes: best=trend_flat_vol_mid pnl=-6.60 worst=trend_down_vol_high pnl=-474.02 dominant_share=53.12%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-251.05 avg_test_pnl=-117.74 avg_val_pf=0.20 avg_test_pf=0.01
+  splits: train_pnl=-453.00 val_pnl=-391.27 val_pf=0.07 val_closed=12 test_pnl=-70.74 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_us__exit_trend_5m_us_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_us__exit_trend_5m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all [single]: pnl=-780.48 closed=75 pf=0.44 win_rate=28.00% dd=0.79%
+  trade_metrics: expectancy=-10.41 avg_win=29.44 avg_loss=-25.90 payoff=1.14 avg_hold=14.3
+  exits: dominant=trailing_stop share=30.67%
+  regimes: best=trend_down_vol_low pnl=21.86 worst=trend_down_vol_high pnl=-440.41 dominant_share=49.33%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-244.64 avg_test_pnl=-184.06 avg_val_pf=0.31 avg_test_pf=0.26
+  splits: train_pnl=-336.86 val_pnl=-254.83 val_pf=0.30 val_closed=20 test_pnl=-174.97 test_pf=0.28 test_closed=14
+  trades: artifacts\btc_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all__exit_trend [entry_exit_family]: pnl=-787.14 closed=74 pf=0.46 win_rate=29.73% dd=0.79%
+  trade_metrics: expectancy=-10.64 avg_win=30.60 avg_loss=-28.08 payoff=1.09 avg_hold=15.5
+  exits: dominant=stale_breakout share=40.54%
+  regimes: best=trend_down_vol_low pnl=21.86 worst=trend_down_vol_high pnl=-377.19 dominant_share=48.65%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-253.36 avg_test_pnl=-220.45 avg_val_pf=0.31 avg_test_pf=0.18
+  splits: train_pnl=-377.28 val_pnl=-264.43 val_pf=0.31 val_closed=20 test_pnl=-205.00 test_pf=0.21 test_closed=14
+  trades: artifacts\btc_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_overlap__exit_trend [entry_exit_family]: pnl=-808.58 closed=23 pf=0.16 win_rate=26.09% dd=0.82%
+  trade_metrics: expectancy=-35.16 avg_win=24.86 avg_loss=-56.34 payoff=0.44 avg_hold=12.4
+  exits: dominant=trailing_stop share=34.78%
+  regimes: best=trend_up_vol_high pnl=18.39 worst=trend_down_vol_high pnl=-577.34 dominant_share=47.83%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-331.92 avg_test_pnl=-73.79 avg_val_pf=0.04 avg_test_pf=0.04
+  splits: train_pnl=-145.76 val_pnl=-341.83 val_pf=0.08 val_closed=6 test_pnl=-56.12 test_pf=0.00 test_closed=3
+  trades: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend_5m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__5m_overlap__exit_trend_5m_overlap_symbol_candidate_analysis.txt
 crypto_volatility_expansion_sweep_dense__5m_all [parameter_sweep]: pnl=-819.43 closed=44 pf=0.23 win_rate=20.45% dd=0.84%
   trade_metrics: expectancy=-18.62 avg_win=27.00 avg_loss=-30.35 payoff=0.89 avg_hold=13.2
   exits: dominant=stale_breakout share=43.18%
@@ -1801,6 +1693,33 @@ crypto_volatility_expansion__5m_us__exit_fastfail [entry_exit_family]: pnl=-939.
   splits: train_pnl=-451.37 val_pnl=-300.90 val_pf=0.00 val_closed=2 test_pnl=-119.13 test_pf=0.15 test_closed=4
   trades: artifacts\btc_crypto_volatility_expansion__5m_us__exit_fastfail_5m_us_symbol_candidate_trades.csv
   analysis: artifacts\btc_crypto_volatility_expansion__5m_us__exit_fastfail_5m_us_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_trend [combined]: pnl=-942.14 closed=83 pf=0.42 win_rate=26.51% dd=0.95%
+  trade_metrics: expectancy=-11.35 avg_win=31.58 avg_loss=-26.83 payoff=1.18 avg_hold=13.9
+  exits: dominant=stale_breakout share=28.92%
+  regimes: best=trend_down_vol_low pnl=21.86 worst=trend_down_vol_high pnl=-604.90 dominant_share=50.60%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-164.55 avg_test_pnl=-275.93 avg_val_pf=0.53 avg_test_pf=0.19
+  combo_validation: components=2 outperformance=-403.08 trade_overlap=100.00%
+  splits: train_pnl=-429.97 val_pnl=-144.67 val_pf=0.56 val_closed=23 test_pnl=-270.37 test_pf=0.20 test_closed=17
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_trend_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_trend_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_fastfail [combined]: pnl=-942.14 closed=83 pf=0.42 win_rate=26.51% dd=0.95%
+  trade_metrics: expectancy=-11.35 avg_win=31.58 avg_loss=-26.83 payoff=1.18 avg_hold=13.9
+  exits: dominant=stale_breakout share=28.92%
+  regimes: best=trend_down_vol_low pnl=21.86 worst=trend_down_vol_high pnl=-604.90 dominant_share=50.60%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-164.55 avg_test_pnl=-275.93 avg_val_pf=0.53 avg_test_pf=0.19
+  combo_validation: components=2 outperformance=-403.08 trade_overlap=88.89%
+  splits: train_pnl=-429.97 val_pnl=-144.67 val_pf=0.56 val_closed=23 test_pnl=-270.37 test_pf=0.20 test_closed=17
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_fastfail_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__plus__crypto_short_breakdown__15m_europe__exit_fastfail_symbol_candidate_analysis.txt
+crypto_short_breakdown__15m_europe__exit_trend__plus__crypto_short_breakdown__15m_europe__exit_fastfail [combined]: pnl=-942.14 closed=83 pf=0.42 win_rate=26.51% dd=0.95%
+  trade_metrics: expectancy=-11.35 avg_win=31.58 avg_loss=-26.83 payoff=1.18 avg_hold=13.9
+  exits: dominant=stale_breakout share=28.92%
+  regimes: best=trend_down_vol_low pnl=21.86 worst=trend_down_vol_high pnl=-604.90 dominant_share=50.60%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-164.55 avg_test_pnl=-275.93 avg_val_pf=0.53 avg_test_pf=0.19
+  combo_validation: components=2 outperformance=-403.08 trade_overlap=88.89%
+  splits: train_pnl=-429.97 val_pnl=-144.67 val_pf=0.56 val_closed=23 test_pnl=-270.37 test_pf=0.20 test_closed=17
+  trades: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend__plus__crypto_short_breakdown__15m_europe__exit_fastfail_symbol_candidate_trades.csv
+  analysis: artifacts\btc_crypto_short_breakdown__15m_europe__exit_trend__plus__crypto_short_breakdown__15m_europe__exit_fastfail_symbol_candidate_analysis.txt
 crypto_volatility_expansion__5m_all__exit_trend [entry_exit_family]: pnl=-945.01 closed=43 pf=0.26 win_rate=20.93% dd=0.96%
   trade_metrics: expectancy=-21.98 avg_win=36.81 avg_loss=-37.54 payoff=0.98 avg_hold=12.9
   exits: dominant=stale_breakout share=48.84%
@@ -1939,5 +1858,4 @@ crypto_volatility_breakout__15m_all__exit_trend [entry_exit_family]: pnl=-1262.1
   analysis: artifacts\btc_crypto_volatility_breakout__15m_all__exit_trend_15m_all_symbol_candidate_analysis.txt
 
 Recommended active agents
-- crypto_short_breakdown__5m_overlap (Crypto short breakdown continuation [5m_overlap])
-- crypto_short_breakdown__5m_overlap__exit_trend (Crypto short breakdown continuation [5m_overlap] with trend-runner exits)
+No candidate met the positive-PnL and PF>=1.0 threshold.

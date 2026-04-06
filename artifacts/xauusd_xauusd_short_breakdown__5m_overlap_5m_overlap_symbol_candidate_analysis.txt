@@ -1,0 +1,18 @@
+Artifact: xauusd_xauusd_short_breakdown__5m_overlap_5m_overlap_symbol_candidate
+Closed trades: 21
+Realized pnl: -3432.38
+
+By entry hour
+16: trades=4 pnl=-2755.32 avg=-688.83 win_rate=0.00%
+13: trades=11 pnl=-854.02 avg=-77.64 win_rate=9.09%
+14: trades=6 pnl=176.95 avg=29.49 win_rate=50.00%
+
+By entry setup
+xauusd_short_breakdown: trades=21 pnl=-3432.38 avg=-163.45 win_rate=19.05%
+
+By exit reason
+structure_exit: trades=3 pnl=-2865.81 avg=-955.27 win_rate=0.00%
+stop_loss: trades=4 pnl=-839.61 avg=-209.90 win_rate=0.00%
+time_stop: trades=2 pnl=-115.04 avg=-57.52 win_rate=0.00%
+trailing_stop: trades=10 pnl=-64.21 avg=-6.42 win_rate=20.00%
+take_profit: trades=2 pnl=452.29 avg=226.14 win_rate=100.00%

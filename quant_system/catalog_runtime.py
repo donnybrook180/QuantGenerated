@@ -12,6 +12,11 @@ from quant_system.agents.crypto import (
     CryptoVolatilityExpansionAgent,
 )
 from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReversionAgent, ForexTrendContinuationAgent
+from quant_system.agents.forex import ForexShortBreakdownMomentumAgent, ForexShortTrendContinuationAgent
+from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
+from quant_system.agents.strategies import OpeningRangeShortBreakdownAgent, VolatilityShortBreakdownAgent
+from quant_system.agents.us500 import US500OpeningDriveShortReclaimAgent, US500ShortTrendRejectionAgent
+from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.config import SystemConfig
 
@@ -52,10 +57,28 @@ def _instantiate_single(code_path: str, config: SystemConfig) -> Agent:
         return CryptoShortReversionAgent()
     if cls is ForexTrendContinuationAgent:
         return ForexTrendContinuationAgent()
+    if cls is ForexShortTrendContinuationAgent:
+        return ForexShortTrendContinuationAgent()
     if cls is ForexRangeReversionAgent:
         return ForexRangeReversionAgent()
     if cls is ForexBreakoutMomentumAgent:
         return ForexBreakoutMomentumAgent()
+    if cls is ForexShortBreakdownMomentumAgent:
+        return ForexShortBreakdownMomentumAgent()
+    if cls is US500ShortTrendRejectionAgent:
+        return US500ShortTrendRejectionAgent(config.agents.min_trend_strength)
+    if cls is US500OpeningDriveShortReclaimAgent:
+        return US500OpeningDriveShortReclaimAgent(config.agents.min_trend_strength)
+    if cls is GER40RangeRejectShortAgent:
+        return GER40RangeRejectShortAgent()
+    if cls is GER40FailedBreakoutShortAgent:
+        return GER40FailedBreakoutShortAgent()
+    if cls is OpeningRangeShortBreakdownAgent:
+        return OpeningRangeShortBreakdownAgent()
+    if cls is VolatilityShortBreakdownAgent:
+        return VolatilityShortBreakdownAgent()
+    if cls is XAUUSDShortBreakdownAgent:
+        return XAUUSDShortBreakdownAgent()
 
     try:
         return cast(Agent, cls())

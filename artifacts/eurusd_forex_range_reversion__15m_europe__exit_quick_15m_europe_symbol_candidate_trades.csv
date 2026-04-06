@@ -1,0 +1,10 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:EURUSD,2025-10-15T11:45:00+00:00,2025-10-15T12:30:00+00:00,11,12,forex_range_reversion,structure_exit,1.16206,1.16192,0.10000,-1.88099,0.50000,3,0.77457,{'mean_level': 1.1631095}
+C:EURUSD,2025-12-09T07:15:00+00:00,2025-12-09T07:45:00+00:00,7,7,forex_range_reversion,signal_exit,1.16390,1.16391,0.10000,-0.38195,0.50000,2,0.92387,{'mean_level': 1.165001}
+C:EURUSD,2025-12-16T07:00:00+00:00,2025-12-16T07:15:00+00:00,7,7,forex_range_reversion,signal_exit,1.17474,1.17480,0.10000,0.11261,0.50000,1,0.80038,{'mean_level': 1.174432}
+C:EURUSD,2025-12-31T08:15:00+00:00,2025-12-31T08:45:00+00:00,8,8,forex_range_reversion,structure_exit,1.17297,1.17223,0.10000,-7.88630,0.50000,2,0.83746,{'mean_level': 1.175887}
+C:EURUSD,2026-01-08T08:15:00+00:00,2026-01-08T08:30:00+00:00,8,8,forex_range_reversion,signal_exit,1.16755,1.16708,0.10000,-5.18366,0.50000,1,0.80962,{'mean_level': 1.1684350000000001}
+C:EURUSD,2026-01-09T07:15:00+00:00,2026-01-09T07:30:00+00:00,7,7,forex_range_reversion,signal_exit,1.16454,1.16414,0.10000,-4.48217,0.50000,1,0.79126,{'mean_level': 1.1671710000000002}
+C:EURUSD,2026-01-21T08:15:00+00:00,2026-01-21T08:30:00+00:00,8,8,forex_range_reversion,signal_exit,1.17093,1.17086,0.10000,-1.18545,0.50000,1,0.81487,{'mean_level': 1.1724875000000001}
+C:EURUSD,2026-01-29T08:45:00+00:00,2026-01-29T09:15:00+00:00,8,9,forex_range_reversion,structure_exit,1.19690,1.19623,0.10000,-7.19828,0.50000,2,0.76442,{'mean_level': 1.1976255}
+C:EURUSD,2026-02-10T12:30:00+00:00,2026-02-10T12:45:00+00:00,12,12,forex_range_reversion,signal_exit,1.18997,1.18916,0.10000,-8.59478,0.50000,1,0.72062,{'mean_level': 1.1908945}

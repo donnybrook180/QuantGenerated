@@ -1,0 +1,14 @@
+Artifact: us500_mean_reversion_default_symbol_candidate
+Closed trades: 3
+Realized pnl: -0.06
+
+By entry hour
+18: trades=1 pnl=-0.04 avg=-0.04 win_rate=0.00%
+15: trades=2 pnl=-0.02 avg=-0.01 win_rate=50.00%
+
+By entry setup
+mean_reversion: trades=3 pnl=-0.06 avg=-0.02 win_rate=33.33%
+
+By exit reason
+structure_exit: trades=2 pnl=-0.10 avg=-0.05 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.04 avg=0.04 win_rate=100.00%

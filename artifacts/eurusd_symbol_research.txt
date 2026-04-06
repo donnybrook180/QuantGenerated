@@ -1,0 +1,311 @@
+Symbol research: EURUSD
+Broker symbol: EURUSD
+Data source: polygon
+
+Ranked candidates
+forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid [combined]: pnl=97.30 closed=111 pf=1.10 win_rate=39.64% dd=0.10%
+  trade_metrics: expectancy=0.88 avg_win=24.00 avg_loss=-14.31 payoff=1.68 avg_hold=6.3
+  exits: dominant=stop_loss share=26.13%
+  regimes: best=trend_flat_vol_mid pnl=277.39 worst=trend_flat_vol_low pnl=-138.33 dominant_share=73.87%
+  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=31.77 avg_test_pnl=81.45 avg_val_pf=1.21 avg_test_pf=1.39
+  combo_validation: components=2 outperformance=-334.33 trade_overlap=0.00%
+  splits: train_pnl=-122.03 val_pnl=-17.80 val_pf=0.93 val_closed=28 test_pnl=153.70 test_pf=1.75 test_closed=22
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__exit_trend [combined]: pnl=97.30 closed=111 pf=1.10 win_rate=39.64% dd=0.10%
+  trade_metrics: expectancy=0.88 avg_win=24.00 avg_loss=-14.31 payoff=1.68 avg_hold=6.3
+  exits: dominant=stop_loss share=26.13%
+  regimes: best=trend_flat_vol_mid pnl=277.39 worst=trend_flat_vol_low pnl=-138.33 dominant_share=73.87%
+  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=31.77 avg_test_pnl=81.45 avg_val_pf=1.21 avg_test_pf=1.39
+  combo_validation: components=2 outperformance=-334.33 trade_overlap=0.00%
+  splits: train_pnl=-122.03 val_pnl=-17.80 val_pf=0.93 val_closed=28 test_pnl=153.70 test_pf=1.75 test_closed=22
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__exit_trend_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low__plus__forex_short_breakdown_momentum__15m_europe__exit_trend_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low [regime_improved]: pnl=96.22 closed=27 pf=1.23 win_rate=44.44% dd=0.07%
+  trade_metrics: expectancy=3.56 avg_win=42.78 avg_loss=-27.81 payoff=1.54 avg_hold=5.7
+  exits: dominant=take_profit share=29.63%
+  regimes: best=trend_flat_vol_low pnl=96.22 worst=trend_flat_vol_low pnl=96.22 dominant_share=100.00%
+  regime_filter: trend_flat_vol_low
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=287.04 avg_test_pnl=-134.22 avg_val_pf=516.13 avg_test_pf=0.29
+  splits: train_pnl=-14.24 val_pnl=316.54 val_pf=999.00 val_closed=4 test_pnl=-212.41 test_pf=0.05 test_closed=6
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap__regime_trend_flat_vol_low_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid [regime_improved]: pnl=88.20 closed=4 pf=4.74 win_rate=75.00% dd=0.00%
+  trade_metrics: expectancy=22.05 avg_win=37.26 avg_loss=-23.57 payoff=1.58 avg_hold=3.2
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_flat_vol_mid pnl=88.20 worst=trend_flat_vol_mid pnl=88.20 dominant_share=100.00%
+  regime_filter: trend_flat_vol_mid
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=5.08 avg_test_pnl=1.16 avg_val_pf=0.72 avg_test_pf=499.50
+  splits: train_pnl=54.52 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=2.33 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=87.73 closed=81 pf=1.13 win_rate=33.33% dd=0.24%
+  trade_metrics: expectancy=1.08 avg_win=28.54 avg_loss=-12.64 payoff=2.26 avg_hold=7.9
+  exits: dominant=stop_loss share=33.33%
+  regimes: best=trend_flat_vol_mid pnl=240.87 worst=trend_flat_vol_low pnl=-131.94 dominant_share=74.07%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-142.09 avg_test_pnl=212.57 avg_val_pf=0.27 avg_test_pf=2.41
+  splits: train_pnl=-217.14 val_pnl=-106.64 val_pf=0.48 val_closed=21 test_pnl=317.92 test_pf=3.23 test_closed=18
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid [regime_improved]: pnl=72.60 closed=4 pf=4.08 win_rate=75.00% dd=0.00%
+  trade_metrics: expectancy=18.15 avg_win=32.06 avg_loss=-23.57 payoff=1.36 avg_hold=4.0
+  exits: dominant=take_profit share=25.00%
+  regimes: best=trend_flat_vol_mid pnl=72.60 worst=trend_flat_vol_mid pnl=72.60 dominant_share=100.00%
+  regime_filter: trend_flat_vol_mid
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=5.08 avg_test_pnl=1.16 avg_val_pf=0.72 avg_test_pf=499.50
+  splits: train_pnl=54.52 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=2.33 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_overlap [single]: pnl=63.08 closed=5 pf=25.35 win_rate=80.00% dd=0.00%
+  trade_metrics: expectancy=12.62 avg_win=16.42 avg_loss=-2.59 payoff=6.34 avg_hold=7.2
+  exits: dominant=take_profit share=40.00%
+  regimes: best=trend_flat_vol_low pnl=65.67 worst=trend_flat_vol_mid pnl=-2.59 dominant_share=80.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=12.99 avg_test_pnl=19.26 avg_val_pf=6.01 avg_test_pf=499.50
+  splits: train_pnl=23.13 val_pnl=1.42 val_pf=1.55 val_closed=2 test_pnl=38.52 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_overlap__exit_fastfail [entry_exit_family]: pnl=56.08 closed=5 pf=22.65 win_rate=80.00% dd=0.00%
+  trade_metrics: expectancy=11.22 avg_win=14.67 avg_loss=-2.59 payoff=5.66 avg_hold=6.6
+  exits: dominant=take_profit share=40.00%
+  regimes: best=trend_flat_vol_low pnl=58.67 worst=trend_flat_vol_mid pnl=-2.59 dominant_share=80.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=9.49 avg_test_pnl=19.26 avg_val_pf=4.66 avg_test_pf=499.50
+  splits: train_pnl=16.13 val_pnl=1.42 val_pf=1.55 val_closed=2 test_pnl=38.52 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_overlap__regime_trend_flat_vol_low [regime_improved]: pnl=41.88 closed=5 pf=3.23 win_rate=40.00% dd=0.00%
+  trade_metrics: expectancy=8.38 avg_win=30.32 avg_loss=-6.25 payoff=4.85 avg_hold=9.4
+  exits: dominant=take_profit share=40.00%
+  regimes: best=trend_flat_vol_low pnl=41.88 worst=trend_flat_vol_low pnl=41.88 dominant_share=100.00%
+  regime_filter: trend_flat_vol_low
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=5.10 avg_test_pnl=17.52 avg_val_pf=1.31 avg_test_pf=499.50
+  splits: train_pnl=0.00 val_pnl=3.36 val_pf=1.18 val_closed=4 test_pnl=38.52 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__regime_trend_flat_vol_low_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__regime_trend_flat_vol_low_symbol_candidate_analysis.txt
+forex_breakout_momentum_patient [auto_improved]: pnl=28.31 closed=49 pf=1.05 win_rate=40.82% dd=0.10%
+  trade_metrics: expectancy=0.58 avg_win=29.91 avg_loss=-19.65 payoff=1.52 avg_hold=7.6
+  exits: dominant=stop_loss share=34.69%
+  regimes: best=trend_flat_vol_mid pnl=115.50 worst=trend_flat_vol_low pnl=-127.36 dominant_share=69.39%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=42.74 avg_test_pnl=-21.14 avg_val_pf=1.33 avg_test_pf=0.91
+  splits: train_pnl=5.81 val_pnl=-2.94 val_pf=0.98 val_closed=9 test_pnl=55.30 test_pf=1.56 test_closed=9
+  trades: artifacts\eurusd_forex_breakout_momentum_patient_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum_patient_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_overlap__exit_trend [entry_exit_family]: pnl=26.96 closed=4 pf=6.31 win_rate=50.00% dd=0.00%
+  trade_metrics: expectancy=6.74 avg_win=16.02 avg_loss=-2.54 payoff=6.31 avg_hold=10.5
+  exits: dominant=trailing_stop share=50.00%
+  regimes: best=trend_flat_vol_low pnl=29.55 worst=trend_flat_vol_mid pnl=-2.59 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=2.53 avg_test_pnl=8.41 avg_val_pf=1.50 avg_test_pf=499.50
+  splits: train_pnl=15.22 val_pnl=-5.08 val_pf=0.00 val_closed=2 test_pnl=16.82 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe [single]: pnl=1.98 closed=84 pf=1.00 win_rate=35.71% dd=0.15%
+  trade_metrics: expectancy=0.02 avg_win=22.23 avg_loss=-12.31 payoff=1.81 avg_hold=6.1
+  exits: dominant=stop_loss share=27.38%
+  regimes: best=trend_flat_vol_mid pnl=151.26 worst=trend_flat_vol_low pnl=-74.11 dominant_share=73.81%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-82.79 avg_test_pnl=75.94 avg_val_pf=0.44 avg_test_pf=1.40
+  splits: train_pnl=-158.42 val_pnl=-65.03 val_pf=0.64 val_closed=22 test_pnl=127.94 test_pf=1.69 test_closed=19
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_trend_continuation__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_europe__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_trend_continuation__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_europe__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_trend_continuation__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_europe__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_short_trend_continuation__15m_europe__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_short_trend_continuation__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_trend_continuation__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_trend_continuation_looser [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_trend_continuation_looser_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation_looser_symbol_candidate_analysis.txt
+forex_range_reversion__15m_overlap [single]: pnl=-1.65 closed=5 pf=0.92 win_rate=40.00% dd=0.02%
+  trade_metrics: expectancy=-0.33 avg_win=9.81 avg_loss=-7.09 payoff=1.38 avg_hold=1.6
+  exits: dominant=signal_exit share=80.00%
+  regimes: best=trend_flat_vol_low pnl=7.24 worst=trend_flat_vol_mid pnl=-8.89 dominant_share=80.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.37 avg_test_pnl=6.11 avg_val_pf=0.38 avg_test_pf=2.11
+  splits: train_pnl=3.61 val_pnl=-5.26 val_pf=0.75 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_range_reversion__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_range_reversion__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+forex_range_reversion__15m_overlap__exit_quick [entry_exit_family]: pnl=-1.65 closed=5 pf=0.92 win_rate=40.00% dd=0.02%
+  trade_metrics: expectancy=-0.33 avg_win=9.81 avg_loss=-7.09 payoff=1.38 avg_hold=1.6
+  exits: dominant=signal_exit share=60.00%
+  regimes: best=trend_flat_vol_low pnl=7.24 worst=trend_flat_vol_mid pnl=-8.89 dominant_share=80.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.37 avg_test_pnl=6.11 avg_val_pf=0.38 avg_test_pf=2.11
+  splits: train_pnl=3.61 val_pnl=-5.26 val_pf=0.75 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_range_reversion__15m_overlap__exit_quick_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_range_reversion__15m_overlap__exit_quick_15m_overlap_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_overlap__exit_fastfail [entry_exit_family]: pnl=-1.86 closed=2 pf=0.59 win_rate=50.00% dd=0.00%
+  trade_metrics: expectancy=-0.93 avg_win=2.72 avg_loss=-4.58 payoff=0.59 avg_hold=2.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_flat_vol_low pnl=-1.86 worst=trend_flat_vol_low pnl=-1.86 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=2.72 avg_val_pf=0.00 avg_test_pf=999.00
+  splits: train_pnl=-4.58 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=2.72 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_trend_continuation__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_overlap [single]: pnl=-2.06 closed=2 pf=0.57 win_rate=50.00% dd=0.00%
+  trade_metrics: expectancy=-1.03 avg_win=2.72 avg_loss=-4.78 payoff=0.57 avg_hold=3.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_flat_vol_low pnl=-2.06 worst=trend_flat_vol_low pnl=-2.06 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=2.72 avg_val_pf=0.00 avg_test_pf=999.00
+  splits: train_pnl=-4.78 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=2.72 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_trend_continuation__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+forex_trend_continuation__15m_overlap__exit_trend [entry_exit_family]: pnl=-2.06 closed=2 pf=0.57 win_rate=50.00% dd=0.00%
+  trade_metrics: expectancy=-1.03 avg_win=2.72 avg_loss=-4.78 payoff=0.57 avg_hold=3.0
+  exits: dominant=signal_exit share=100.00%
+  regimes: best=trend_flat_vol_low pnl=-2.06 worst=trend_flat_vol_low pnl=-2.06 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=2.72 avg_val_pf=0.00 avg_test_pf=999.00
+  splits: train_pnl=-4.78 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=2.72 test_pf=999.00 test_closed=1
+  trades: artifacts\eurusd_forex_trend_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_trend_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid__plus__forex_short_breakdown_momentum__15m_europe__exit_trend [combined]: pnl=-4.21 closed=108 pf=1.00 win_rate=35.19% dd=0.17%
+  trade_metrics: expectancy=-0.04 avg_win=23.17 avg_loss=-12.64 payoff=1.83 avg_hold=6.7
+  exits: dominant=trailing_stop share=27.78%
+  regimes: best=trend_flat_vol_mid pnl=169.77 worst=trend_flat_vol_low pnl=-77.03 dominant_share=84.26%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-98.58 avg_test_pnl=57.22 avg_val_pf=0.53 avg_test_pf=1.26
+  combo_validation: components=2 outperformance=-191.53 trade_overlap=1.19%
+  splits: train_pnl=-142.38 val_pnl=-95.88 val_pf=0.61 val_closed=28 test_pnl=126.39 test_pf=1.56 test_closed=22
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid__plus__forex_short_breakdown_momentum__15m_europe__exit_trend_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__regime_trend_flat_vol_mid__plus__forex_short_breakdown_momentum__15m_europe__exit_trend_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=-22.53 closed=47 pf=0.96 win_rate=38.30% dd=0.12%
+  trade_metrics: expectancy=-0.48 avg_win=32.08 avg_loss=-20.69 payoff=1.55 avg_hold=8.4
+  exits: dominant=stop_loss share=36.17%
+  regimes: best=trend_flat_vol_mid pnl=121.28 worst=trend_flat_vol_low pnl=-125.68 dominant_share=70.21%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=42.29 avg_test_pnl=-71.80 avg_val_pf=1.33 avg_test_pf=0.53
+  splits: train_pnl=17.99 val_pnl=-2.94 val_pf=0.98 val_closed=9 test_pnl=-7.72 test_pf=0.94 test_closed=8
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe [single]: pnl=-26.03 closed=47 pf=0.96 win_rate=38.30% dd=0.12%
+  trade_metrics: expectancy=-0.55 avg_win=31.39 avg_loss=-20.38 payoff=1.54 avg_hold=7.6
+  exits: dominant=stop_loss share=29.79%
+  regimes: best=trend_flat_vol_mid pnl=121.28 worst=trend_flat_vol_low pnl=-129.18 dominant_share=70.21%
+  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=51.04 avg_test_pnl=-55.35 avg_val_pf=1.42 avg_test_pf=0.65
+  splits: train_pnl=-10.71 val_pnl=5.96 val_pf=1.05 val_closed=9 test_pnl=8.58 test_pf=1.07 test_closed=8
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_range_reversion__15m_europe [single]: pnl=-36.68 closed=9 pf=0.00 win_rate=11.11% dd=0.04%
+  trade_metrics: expectancy=-4.08 avg_win=0.11 avg_loss=-4.60 payoff=0.02 avg_hold=1.6
+  exits: dominant=signal_exit share=100.00%
+  regimes: best=trend_flat_vol_low pnl=-36.68 worst=trend_flat_vol_low pnl=-36.68 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.22 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-19.01 val_pnl=-15.79 val_pf=0.00 val_closed=2 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_range_reversion__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_range_reversion__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_range_reversion__15m_europe__exit_quick [entry_exit_family]: pnl=-36.68 closed=9 pf=0.00 win_rate=11.11% dd=0.04%
+  trade_metrics: expectancy=-4.08 avg_win=0.11 avg_loss=-4.60 payoff=0.02 avg_hold=1.6
+  exits: dominant=signal_exit share=66.67%
+  regimes: best=trend_flat_vol_low pnl=-36.68 worst=trend_flat_vol_low pnl=-36.68 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.22 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-19.01 val_pnl=-15.79 val_pf=0.00 val_closed=2 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eurusd_forex_range_reversion__15m_europe__exit_quick_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_range_reversion__15m_europe__exit_quick_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_overlap [single]: pnl=-45.39 closed=42 pf=0.90 win_rate=35.71% dd=0.14%
+  trade_metrics: expectancy=-1.08 avg_win=28.10 avg_loss=-17.29 payoff=1.62 avg_hold=6.1
+  exits: dominant=stop_loss share=28.57%
+  regimes: best=trend_flat_vol_low pnl=181.81 worst=trend_flat_vol_mid pnl=-121.19 dominant_share=45.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=77.38 avg_test_pnl=-102.18 avg_val_pf=3.26 avg_test_pf=0.31
+  splits: train_pnl=-13.04 val_pnl=-13.13 val_pf=0.77 val_closed=8 test_pnl=-67.61 test_pf=0.50 test_closed=9
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_overlap__exit_fastfail [entry_exit_family]: pnl=-93.99 closed=42 pf=0.80 win_rate=33.33% dd=0.20%
+  trade_metrics: expectancy=-2.24 avg_win=26.60 avg_loss=-16.65 payoff=1.60 avg_hold=5.2
+  exits: dominant=structure_exit share=26.19%
+  regimes: best=trend_flat_vol_low pnl=105.31 worst=trend_flat_vol_mid pnl=-102.59 dominant_share=45.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=79.03 avg_test_pnl=-98.33 avg_val_pf=3.30 avg_test_pf=0.31
+  splits: train_pnl=-64.14 val_pnl=-17.13 val_pf=0.65 val_closed=8 test_pnl=-67.61 test_pf=0.50 test_closed=9
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_overlap__exit_trend [entry_exit_family]: pnl=-104.19 closed=42 pf=0.78 win_rate=30.95% dd=0.17%
+  trade_metrics: expectancy=-2.48 avg_win=28.35 avg_loss=-16.30 payoff=1.74 avg_hold=7.1
+  exits: dominant=signal_exit share=35.71%
+  regimes: best=trend_flat_vol_low pnl=152.71 worst=trend_flat_vol_mid pnl=-148.19 dominant_share=45.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=82.53 avg_test_pnl=-112.63 avg_val_pf=3.35 avg_test_pf=0.23
+  splits: train_pnl=-48.24 val_pnl=-2.83 val_pf=0.95 val_closed=8 test_pnl=-88.50 test_pf=0.34 test_closed=9
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=-128.68 closed=86 pf=0.81 win_rate=31.40% dd=0.15%
+  trade_metrics: expectancy=-1.50 avg_win=20.20 avg_loss=-11.43 payoff=1.77 avg_hold=5.2
+  exits: dominant=structure_exit share=25.58%
+  regimes: best=trend_flat_vol_mid pnl=16.04 worst=trend_flat_vol_low pnl=-61.15 dominant_share=75.58%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-84.24 avg_test_pnl=-10.31 avg_val_pf=0.43 avg_test_pf=0.95
+  splits: train_pnl=-134.09 val_pnl=-70.83 val_pf=0.61 val_closed=22 test_pnl=-17.56 test_pf=0.92 test_closed=19
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_overlap__exit_fastfail [entry_exit_family]: pnl=-136.04 closed=73 pf=0.78 win_rate=23.29% dd=0.30%
+  trade_metrics: expectancy=-1.86 avg_win=27.92 avg_loss=-10.90 payoff=2.56 avg_hold=5.2
+  exits: dominant=structure_exit share=34.25%
+  regimes: best=trend_down_vol_mid pnl=114.65 worst=trend_flat_vol_high pnl=-112.45 dominant_share=57.53%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-97.05 avg_test_pnl=95.50 avg_val_pf=0.44 avg_test_pf=1.99
+  splits: train_pnl=-155.56 val_pnl=-81.48 val_pf=0.50 val_closed=15 test_pnl=152.52 test_pf=2.70 test_closed=14
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=-162.11 closed=48 pf=0.71 win_rate=31.25% dd=0.26%
+  trade_metrics: expectancy=-3.38 avg_win=25.99 avg_loss=-16.72 payoff=1.55 avg_hold=5.8
+  exits: dominant=structure_exit share=37.50%
+  regimes: best=trend_up_vol_low pnl=17.95 worst=trend_flat_vol_low pnl=-125.38 dominant_share=68.75%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-60.40 avg_test_pnl=-21.35 avg_val_pf=0.38 avg_test_pf=0.81
+  splits: train_pnl=-51.21 val_pnl=-89.24 val_pf=0.00 val_closed=9 test_pnl=31.08 test_pf=1.31 test_closed=8
+  trades: artifacts\eurusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_overlap [single]: pnl=-180.90 closed=70 pf=0.74 win_rate=25.71% dd=0.33%
+  trade_metrics: expectancy=-2.58 avg_win=29.06 avg_loss=-13.54 payoff=2.15 avg_hold=6.4
+  exits: dominant=stop_loss share=25.71%
+  regimes: best=trend_down_vol_mid pnl=114.65 worst=trend_flat_vol_high pnl=-121.55 dominant_share=57.14%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-108.20 avg_test_pnl=75.45 avg_val_pf=0.40 avg_test_pf=1.67
+  splits: train_pnl=-143.41 val_pnl=-86.88 val_pf=0.50 val_closed=14 test_pnl=133.02 test_pf=2.22 test_closed=14
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+forex_short_breakdown_momentum__15m_overlap__exit_trend [entry_exit_family]: pnl=-282.78 closed=66 pf=0.62 win_rate=22.73% dd=0.30%
+  trade_metrics: expectancy=-4.28 avg_win=30.21 avg_loss=-14.43 payoff=2.09 avg_hold=7.6
+  exits: dominant=stop_loss share=30.30%
+  regimes: best=trend_down_vol_mid pnl=76.45 worst=trend_flat_vol_mid pnl=-145.91 dominant_share=57.58%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-100.72 avg_test_pnl=-22.41 avg_val_pf=0.44 avg_test_pf=0.87
+  splits: train_pnl=-129.14 val_pnl=-80.18 val_pf=0.53 val_closed=14 test_pnl=2.40 test_pf=1.02 test_closed=13
+  trades: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\eurusd_forex_short_breakdown_momentum__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+
+Recommended active agents
+No candidate met the positive-PnL and PF>=1.0 threshold.

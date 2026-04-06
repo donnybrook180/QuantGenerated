@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from collections import deque
-
 from quant_system.agents.base import Agent
+from quant_system.agents.common import RollingCloseState, scaled_confidence
 from quant_system.models import FeatureVector, Side, SignalEvent
 
 
@@ -14,18 +13,18 @@ class TrendAgent(Agent):
         self.slow_window = slow_window
         self.min_trend_strength = min_trend_strength
         self.min_relative_volume = min_relative_volume
-        self.fast_values: deque[float] = deque(maxlen=fast_window)
-        self.slow_values: deque[float] = deque(maxlen=slow_window)
+        self.fast_values = RollingCloseState(fast_window)
+        self.slow_values = RollingCloseState(slow_window)
 
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         close = feature.values["close"]
         self.fast_values.append(close)
         self.slow_values.append(close)
-        if len(self.fast_values) < self.fast_window or len(self.slow_values) < self.slow_window:
+        if not self.fast_values.ready or not self.slow_values.ready:
             return None
 
-        fast = sum(self.fast_values) / len(self.fast_values)
-        slow = sum(self.slow_values) / len(self.slow_values)
+        fast = self.fast_values.mean()
+        slow = self.slow_values.mean()
         delta = (fast / slow) - 1.0
         trend_strength = feature.values.get("trend_strength", 0.0)
         momentum_20 = feature.values.get("momentum_20", 0.0)
@@ -50,7 +49,7 @@ class TrendAgent(Agent):
             agent_name=self.name,
             symbol=feature.symbol,
             side=side,
-            confidence=min((abs(delta) + abs(momentum_20) + abs(trend_strength)) * 120, 1.0),
+            confidence=scaled_confidence(0.0, (abs(delta), 120), (abs(momentum_20), 120), (abs(trend_strength), 120)),
             metadata={"fast": fast, "slow": slow, "trend_strength": trend_strength},
         )
 
@@ -61,14 +60,14 @@ class MeanReversionAgent(Agent):
     def __init__(self, window: int, threshold: float) -> None:
         self.window = window
         self.threshold = threshold
-        self.values: deque[float] = deque(maxlen=window)
+        self.values = RollingCloseState(window)
 
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         close = feature.values["close"]
         self.values.append(close)
-        if len(self.values) < self.window:
+        if not self.values.ready:
             return None
-        mean = sum(self.values) / len(self.values)
+        mean = self.values.mean()
         delta = (close / mean) - 1.0
         z_score = feature.values.get("z_score_20", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
@@ -120,7 +119,7 @@ class MomentumConfirmationAgent(Agent):
             side = Side.SELL
         else:
             side = Side.FLAT
-        confidence = min((abs(momentum_5) + abs(momentum_20) + abs(trend_strength)) * 150, 1.0)
+        confidence = scaled_confidence(0.0, (abs(momentum_5), 150), (abs(momentum_20), 150), (abs(trend_strength), 150))
         return SignalEvent(
             timestamp=feature.timestamp,
             agent_name=self.name,

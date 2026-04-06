@@ -81,7 +81,43 @@ class SimulatedBroker:
         total_cost = fee + commission + overnight_cost
         self.total_costs += total_cost
 
-        if order.side == Side.BUY:
+        if order.side == Side.BUY and self.position.quantity < 0:
+            closed_quantity = min(order.quantity, abs(self.position.quantity))
+            gross_trade_pnl = (self.position.average_price - fill_price) * closed_quantity * self.contract_size
+            entry_costs = float(self._open_trade.get("entry_costs", 0.0)) if self._open_trade is not None else 0.0
+            trade_pnl = gross_trade_pnl - entry_costs - total_cost
+            self.cash += gross_trade_pnl - total_cost
+            self.realized_pnl += trade_pnl
+            if closed_quantity > 0:
+                self.closed_trade_pnls.append(trade_pnl)
+                if self._open_trade is not None:
+                    entry_bar_index = int(self._open_trade.get("entry_bar_index", -1))
+                    exit_bar_index = getattr(order, "bar_index", -1)
+                    self.closed_trades.append(
+                        ClosedTradeRecord(
+                            symbol=order.symbol,
+                            entry_timestamp=self._open_trade["entry_timestamp"],
+                            exit_timestamp=order.timestamp,
+                            entry_price=float(self._open_trade["entry_price"]),
+                            exit_price=fill_price,
+                            quantity=closed_quantity,
+                            pnl=trade_pnl,
+                            costs=entry_costs + total_cost,
+                            entry_reason=str(self._open_trade.get("entry_reason", "")),
+                            exit_reason=order.reason,
+                            entry_hour=self._open_trade["entry_timestamp"].hour,
+                            exit_hour=order.timestamp.hour,
+                            hold_bars=max(0, exit_bar_index - entry_bar_index) if entry_bar_index >= 0 and exit_bar_index >= 0 else 0,
+                            entry_confidence=float(self._open_trade.get("entry_confidence", 0.0)),
+                            entry_metadata=dict(self._open_trade.get("entry_metadata", {})),
+                        )
+                    )
+                    self._open_trade = None
+            self.position.quantity += order.quantity
+            if self.position.quantity >= 0:
+                self.position.quantity = 0.0
+                self.position.average_price = 0.0
+        elif order.side == Side.BUY:
             self.cash -= total_cost
             new_quantity = self.position.quantity + order.quantity
             if new_quantity:
@@ -99,7 +135,7 @@ class SimulatedBroker:
                 "entry_bar_index": getattr(order, "bar_index", -1),
                 "entry_costs": total_cost,
             }
-        elif order.side == Side.SELL:
+        elif order.side == Side.SELL and self.position.quantity > 0:
             closed_quantity = min(order.quantity, self.position.quantity)
             gross_trade_pnl = (fill_price - self.position.average_price) * closed_quantity * self.contract_size
             entry_costs = float(self._open_trade.get("entry_costs", 0.0)) if self._open_trade is not None else 0.0
@@ -135,6 +171,24 @@ class SimulatedBroker:
             if self.position.quantity <= 0:
                 self.position.quantity = 0.0
                 self.position.average_price = 0.0
+        elif order.side == Side.SELL:
+            self.cash -= total_cost
+            new_quantity = self.position.quantity - order.quantity
+            if abs(new_quantity):
+                self.position.average_price = (
+                    (self.position.average_price * abs(self.position.quantity)) + (fill_price * order.quantity)
+                ) / abs(new_quantity)
+            self.position.quantity = new_quantity
+            self._open_trade = {
+                "entry_timestamp": order.timestamp,
+                "entry_price": fill_price,
+                "quantity": order.quantity,
+                "entry_reason": order.reason,
+                "entry_confidence": getattr(order, "confidence", 0.0),
+                "entry_metadata": getattr(order, "metadata", {}),
+                "entry_bar_index": getattr(order, "bar_index", -1),
+                "entry_costs": total_cost,
+            }
 
         return FillEvent(
             timestamp=order.timestamp,
@@ -148,7 +202,13 @@ class SimulatedBroker:
     def snapshot(self, timestamp, mark_price: float) -> PortfolioSnapshot:
         spread_half = self.spread_points / 2.0
         bid_mark = mark_price - spread_half
-        unrealized = (bid_mark - self.position.average_price) * self.position.quantity * self.contract_size
+        ask_mark = mark_price + spread_half
+        if self.position.quantity > 0:
+            unrealized = (bid_mark - self.position.average_price) * self.position.quantity * self.contract_size
+        elif self.position.quantity < 0:
+            unrealized = (self.position.average_price - ask_mark) * abs(self.position.quantity) * self.contract_size
+        else:
+            unrealized = 0.0
         equity = self.cash + unrealized
         drawdown = max(0.0, (self.initial_cash - equity) / self.initial_cash)
         return PortfolioSnapshot(

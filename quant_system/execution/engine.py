@@ -108,11 +108,33 @@ class EventDrivenEngine:
         self._entry_index: int | None = None
         self._entry_price: float | None = None
         self._entry_atr_proxy: float | None = None
-        self._peak_price: float | None = None
+        self._extreme_price: float | None = None
         self._entry_decision: DecisionContext | None = None
+        self._entry_side: Side | None = None
+
+    def _reset_entry_state(self) -> None:
+        self._entry_index = None
+        self._entry_price = None
+        self._entry_atr_proxy = None
+        self._extreme_price = None
+        self._entry_decision = None
+        self._entry_side = None
+
+    def _set_entry_state(self, index: int, fill_price: float, feature: FeatureVector, decision_context: DecisionContext | None, side: Side) -> None:
+        self._entry_index = index
+        self._entry_price = fill_price
+        self._entry_atr_proxy = max(feature.values.get("atr_proxy", 0.0), 0.0001)
+        self._extreme_price = fill_price
+        self._entry_decision = decision_context
+        self._entry_side = side
+
+    def _infer_entry_mode(self, decision_context: DecisionContext | None) -> str:
+        if decision_context is None:
+            return ""
+        return str(decision_context.metadata.get("position_intent", "") or "")
 
     def _risk_exit_reason(self, feature: FeatureVector, current_quantity: float) -> str | None:
-        if current_quantity <= 0 or self._entry_price is None:
+        if current_quantity == 0 or self._entry_price is None:
             return None
         close = feature.values["close"]
         atr_proxy = self._entry_atr_proxy or feature.values.get("atr_proxy", 0.0)
@@ -126,26 +148,41 @@ class EventDrivenEngine:
         target_distance = self._entry_price * atr_proxy * self.take_profit_atr_multiple * target_scale
         break_even_distance = self._entry_price * atr_proxy * self.break_even_atr_multiple
         trailing_distance = self._entry_price * atr_proxy * self.trailing_stop_atr_multiple
-        stop_price = self._entry_price - stop_distance
-        target_price = self._entry_price + target_distance
-        self._peak_price = close if self._peak_price is None else max(self._peak_price, close)
-
-        if self.stop_loss_atr_multiple > 0 and close <= stop_price:
-            return "stop_loss"
-        if self.take_profit_atr_multiple > 0 and close >= target_price:
-            return "take_profit"
-        if (
-            self.break_even_atr_multiple > 0
-            and self.trailing_stop_atr_multiple > 0
-            and self._peak_price >= self._entry_price + break_even_distance
-            and close <= max(self._entry_price, self._peak_price - trailing_distance)
-        ):
-            return "trailing_stop"
+        if current_quantity > 0:
+            stop_price = self._entry_price - stop_distance
+            target_price = self._entry_price + target_distance
+            self._extreme_price = close if self._extreme_price is None else max(self._extreme_price, close)
+            if self.stop_loss_atr_multiple > 0 and close <= stop_price:
+                return "stop_loss"
+            if self.take_profit_atr_multiple > 0 and close >= target_price:
+                return "take_profit"
+            if (
+                self.break_even_atr_multiple > 0
+                and self.trailing_stop_atr_multiple > 0
+                and self._extreme_price >= self._entry_price + break_even_distance
+                and close <= max(self._entry_price, self._extreme_price - trailing_distance)
+            ):
+                return "trailing_stop"
+        else:
+            stop_price = self._entry_price + stop_distance
+            target_price = self._entry_price - target_distance
+            self._extreme_price = close if self._extreme_price is None else min(self._extreme_price, close)
+            if self.stop_loss_atr_multiple > 0 and close >= stop_price:
+                return "stop_loss"
+            if self.take_profit_atr_multiple > 0 and close <= target_price:
+                return "take_profit"
+            if (
+                self.break_even_atr_multiple > 0
+                and self.trailing_stop_atr_multiple > 0
+                and self._extreme_price <= self._entry_price - break_even_distance
+                and close >= min(self._entry_price, self._extreme_price + trailing_distance)
+            ):
+                return "trailing_stop"
         return None
 
     def _stale_breakout_exit_reason(self, feature: FeatureVector, index: int, current_quantity: float) -> str | None:
         if (
-            current_quantity <= 0
+            current_quantity == 0
             or self._entry_index is None
             or self._entry_price is None
             or self._entry_decision is None
@@ -155,30 +192,47 @@ class EventDrivenEngine:
             return None
         close = feature.values["close"]
         atr_proxy = self._entry_atr_proxy or feature.values.get("atr_proxy", 0.0)
-        breakout_high = self._entry_decision.metadata.get("breakout_high")
-        breakout_level = float(breakout_high) if breakout_high is not None else self._entry_price
-        min_progress = self._entry_price + (self._entry_price * atr_proxy * self.stale_breakout_atr_fraction)
         momentum_20 = feature.values.get("momentum_20", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
         entry_confidence = self._entry_decision.confidence
         holding_bars = index - self._entry_index
-
-        if close < breakout_level and (momentum_20 <= 0 or trend_strength <= 0):
-            return "stale_breakout"
-        if (
-            entry_confidence < 0.8
-            and holding_bars >= self.stale_breakout_bars
-            and close < self._entry_price
-            and (self._peak_price or self._entry_price) < min_progress
-        ):
-            return "stale_breakout"
-        if close < min_progress and holding_bars >= (self.stale_breakout_bars + 2) and (momentum_20 <= 0 or trend_strength <= 0):
-            return "stale_breakout"
+        if current_quantity > 0:
+            breakout_high = self._entry_decision.metadata.get("breakout_high")
+            breakout_level = float(breakout_high) if breakout_high is not None else self._entry_price
+            min_progress = self._entry_price + (self._entry_price * atr_proxy * self.stale_breakout_atr_fraction)
+            if close < breakout_level and (momentum_20 <= 0 or trend_strength <= 0):
+                return "stale_breakout"
+            if (
+                entry_confidence < 0.8
+                and holding_bars >= self.stale_breakout_bars
+                and close < self._entry_price
+                and (self._extreme_price or self._entry_price) < min_progress
+            ):
+                return "stale_breakout"
+            if close < min_progress and holding_bars >= (self.stale_breakout_bars + 2) and (momentum_20 <= 0 or trend_strength <= 0):
+                return "stale_breakout"
+        else:
+            breakout_low = self._entry_decision.metadata.get("breakout_low")
+            rebound_high = self._entry_decision.metadata.get("rebound_high")
+            breakout_level = float(breakout_low) if breakout_low is not None else self._entry_price
+            invalidate_level = float(rebound_high) if rebound_high is not None else self._entry_price
+            min_progress = self._entry_price - (self._entry_price * atr_proxy * self.stale_breakout_atr_fraction)
+            if close > invalidate_level and (momentum_20 >= 0 or trend_strength >= 0):
+                return "stale_breakout"
+            if (
+                entry_confidence < 0.8
+                and holding_bars >= self.stale_breakout_bars
+                and close > self._entry_price
+                and (self._extreme_price or self._entry_price) > min_progress
+            ):
+                return "stale_breakout"
+            if close > min_progress and holding_bars >= (self.stale_breakout_bars + 2) and (momentum_20 >= 0 or trend_strength >= 0):
+                return "stale_breakout"
         return None
 
     def _structure_exit_reason(self, feature: FeatureVector, index: int, current_quantity: float) -> str | None:
         if (
-            current_quantity <= 0
+            current_quantity == 0
             or self._entry_index is None
             or self._entry_price is None
             or self._entry_decision is None
@@ -186,15 +240,26 @@ class EventDrivenEngine:
             or (index - self._entry_index) < self.structure_exit_bars
         ):
             return None
-        breakout_high = self._entry_decision.metadata.get("breakout_high")
-        breakout_level = float(breakout_high) if breakout_high is not None else self._entry_price
         close = feature.values["close"]
         momentum_20 = feature.values.get("momentum_20", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
-        if close < breakout_level and momentum_20 <= 0:
-            return "structure_exit"
-        if close < self._entry_price and trend_strength <= 0:
-            return "structure_exit"
+        if current_quantity > 0:
+            breakout_high = self._entry_decision.metadata.get("breakout_high")
+            breakout_level = float(breakout_high) if breakout_high is not None else self._entry_price
+            if close < breakout_level and momentum_20 <= 0:
+                return "structure_exit"
+            if close < self._entry_price and trend_strength <= 0:
+                return "structure_exit"
+        else:
+            breakout_low = self._entry_decision.metadata.get("breakout_low")
+            invalidate_level = float(breakout_low) if breakout_low is not None else self._entry_price
+            rebound_high = self._entry_decision.metadata.get("rebound_high")
+            if rebound_high is not None:
+                invalidate_level = float(rebound_high)
+            if close > invalidate_level and momentum_20 >= 0:
+                return "structure_exit"
+            if close > self._entry_price and trend_strength >= 0:
+                return "structure_exit"
         return None
 
     async def run(
@@ -222,75 +287,76 @@ class EventDrivenEngine:
                 stale_exit_reason = self._stale_breakout_exit_reason(feature, index, current_quantity)
                 structure_exit_reason = self._structure_exit_reason(feature, index, current_quantity)
                 if (
-                    current_quantity > 0
+                    current_quantity != 0
                     and self.max_holding_bars > 0
                     and self._entry_index is not None
                     and (index - self._entry_index) >= self.max_holding_bars
                     and snapshot.unrealized_pnl <= 0
                 ):
-                    decision = Side.SELL
+                    decision = Side.SELL if current_quantity > 0 else Side.BUY
                     exit_reason = "time_stop"
                 elif structure_exit_reason is not None:
-                    decision = Side.SELL
+                    decision = Side.SELL if current_quantity > 0 else Side.BUY
                     exit_reason = structure_exit_reason
                 elif stale_exit_reason is not None:
-                    decision = Side.SELL
+                    decision = Side.SELL if current_quantity > 0 else Side.BUY
                     exit_reason = stale_exit_reason
                 elif risk_exit_reason is not None:
-                    decision = Side.SELL
+                    decision = Side.SELL if current_quantity > 0 else Side.BUY
                     exit_reason = risk_exit_reason
                 if decision in {Side.BUY, Side.SELL}:
+                    entry_mode = self._infer_entry_mode(decision_context)
                     if (
-                        decision == Side.BUY
+                        current_quantity == 0
+                        and decision == Side.BUY
+                        and entry_mode != "short_exit"
                         and
                         self._last_trade_index is not None
                         and (index - self._last_trade_index) < self.min_bars_between_trades
                     ):
                         continue
+                    if current_quantity == 0 and decision == Side.SELL and entry_mode != "short_entry":
+                        continue
                     if decision == Side.BUY and current_quantity > 0:
                         continue
-                    if decision == Side.SELL and current_quantity <= 0:
+                    if decision == Side.SELL and current_quantity < 0:
                         continue
+                    order_quantity = self.quantity
+                    order_reason = exit_reason
+                    order_confidence = 0.0
+                    order_metadata = {"exit_reason": exit_reason}
+                    if current_quantity > 0 and decision == Side.SELL:
+                        order_quantity = current_quantity
+                    elif current_quantity < 0 and decision == Side.BUY:
+                        order_quantity = abs(current_quantity)
+                    elif current_quantity == 0 and decision_context is not None:
+                        order_quantity = self.quantity * (
+                            self.min_confidence_quantity_scale + (
+                                (self.max_confidence_quantity_scale - self.min_confidence_quantity_scale) * decision_context.confidence
+                            )
+                        )
+                        order_reason = "+".join(decision_context.reasons) if decision_context.reasons else order_reason
+                        order_confidence = decision_context.confidence
+                        order_metadata = dict(decision_context.metadata)
                     order = OrderRequest(
                         timestamp=feature.timestamp,
                         symbol=feature.symbol,
                         side=decision,
-                        quantity=(
-                            current_quantity
-                            if decision == Side.SELL
-                            else self.quantity * (
-                                self.min_confidence_quantity_scale + (
-                                    (self.max_confidence_quantity_scale - self.min_confidence_quantity_scale) * decision_context.confidence
-                                )
-                            )
-                            if decision_context is not None
-                            else self.quantity
-                        ),
-                        reason=(
-                            "+".join(decision_context.reasons) if decision == Side.BUY and decision_context is not None and decision_context.reasons else exit_reason
-                        ),
-                        confidence=decision_context.confidence if decision == Side.BUY and decision_context is not None else 0.0,
-                        metadata=(
-                            dict(decision_context.metadata) if decision == Side.BUY and decision_context is not None else {"exit_reason": exit_reason}
-                        ),
+                        quantity=order_quantity,
+                        reason=order_reason,
+                        confidence=order_confidence,
+                        metadata=order_metadata,
                         bar_index=index,
                     )
                     if self.risk_manager.check_order(order, snapshot):
                         fill = self.broker.submit_order(order, feature.values["close"])
                         trades += 1
                         self._last_trade_index = index
-                        if fill.side == Side.BUY:
-                            self._entry_index = index
-                            self._entry_price = fill.price
-                            self._entry_atr_proxy = max(feature.values.get("atr_proxy", 0.0), 0.0001)
-                            self._peak_price = fill.price
-                            self._entry_decision = decision_context
-                        elif fill.side == Side.SELL:
-                            self._entry_index = None
-                            self._entry_price = None
-                            self._entry_atr_proxy = None
-                            self._peak_price = None
-                            self._entry_decision = None
+                        new_quantity = self.broker.get_position_quantity()
+                        if current_quantity == 0 and new_quantity != 0:
+                            self._set_entry_state(index, fill.price, feature, decision_context, fill.side)
+                        elif current_quantity != 0 and new_quantity == 0:
+                            self._reset_entry_state()
                         LOGGER.info(
                             "fill side=%s qty=%.2f price=%.2f",
                             fill.side.value,
@@ -304,12 +370,12 @@ class EventDrivenEngine:
             await monitor_task
         final_price = features[-1].values["close"]
         final_qty = self.broker.get_position_quantity()
-        if final_qty > 0:
+        if final_qty != 0:
             final_order = OrderRequest(
                 timestamp=features[-1].timestamp,
                 symbol=features[-1].symbol,
-                side=Side.SELL,
-                quantity=final_qty,
+                side=Side.SELL if final_qty > 0 else Side.BUY,
+                quantity=abs(final_qty),
                 reason="end_of_run",
                 metadata={"exit_reason": "end_of_run"},
                 bar_index=len(features) - 1,

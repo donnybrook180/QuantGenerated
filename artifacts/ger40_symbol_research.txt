@@ -1,0 +1,200 @@
+Symbol research: GER40
+Broker symbol: GER40.cash
+Data source: duckdb_cache
+
+Ranked candidates
+opening_range_breakout [single]: pnl=-0.10 closed=1 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-0.10 worst=trend_up_vol_high pnl=-0.10 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-0.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-0.10 test_pf=0.00 test_closed=1
+  trades: artifacts\ger40_opening_range_breakout_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_breakout_default_symbol_candidate_analysis.txt
+opening_range_breakout__exit_trend [entry_exit_family]: pnl=-0.10 closed=1 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-0.10 worst=trend_up_vol_high pnl=-0.10 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-0.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-0.10 test_pf=0.00 test_closed=1
+  trades: artifacts\ger40_opening_range_breakout__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_breakout__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_breakout__exit_fastfail [entry_exit_family]: pnl=-0.10 closed=1 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-0.10 worst=trend_up_vol_high pnl=-0.10 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-0.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-0.10 test_pf=0.00 test_closed=1
+  trades: artifacts\ger40_opening_range_breakout__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
+ger40_orb_patient [auto_improved]: pnl=-0.10 closed=1 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-0.10 worst=trend_up_vol_high pnl=-0.10 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-0.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-0.10 test_pf=0.00 test_closed=1
+  trades: artifacts\ger40_ger40_orb_patient_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_ger40_orb_patient_symbol_candidate_analysis.txt
+opening_range_short_breakdown [single]: pnl=-0.66 closed=6 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_down_vol_low pnl=-0.09 worst=trend_down_vol_mid pnl=-0.32 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.17 avg_test_pnl=-0.43 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=-0.25 val_pf=0.00 val_closed=2 test_pnl=-0.40 test_pf=0.00 test_closed=4
+  trades: artifacts\ger40_opening_range_short_breakdown_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_short_breakdown_default_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_trend [entry_exit_family]: pnl=-0.66 closed=6 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_down_vol_low pnl=-0.09 worst=trend_down_vol_mid pnl=-0.32 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.17 avg_test_pnl=-0.43 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=-0.25 val_pf=0.00 val_closed=2 test_pnl=-0.40 test_pf=0.00 test_closed=4
+  trades: artifacts\ger40_opening_range_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail [entry_exit_family]: pnl=-0.66 closed=6 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_down_vol_low pnl=-0.09 worst=trend_down_vol_mid pnl=-0.32 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.17 avg_test_pnl=-0.43 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=-0.25 val_pf=0.00 val_closed=2 test_pnl=-0.40 test_pf=0.00 test_closed=4
+  trades: artifacts\ger40_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
+ger40_volatility_breakout [auto_improved]: pnl=-1.38 closed=14 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-0.10 worst=trend_up_vol_high pnl=-0.50 dominant_share=35.71%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.28 avg_test_pnl=-0.13 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-0.81 val_pnl=-0.27 val_pf=0.00 val_closed=3 test_pnl=-0.10 test_pf=0.00 test_closed=1
+  trades: artifacts\ger40_ger40_volatility_breakout_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_ger40_volatility_breakout_symbol_candidate_analysis.txt
+mean_reversion [single]: pnl=-2.77 closed=28 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.1
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_down_vol_low pnl=-0.10 worst=trend_flat_vol_high pnl=-0.70 dominant_share=25.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.56 avg_test_pnl=-0.63 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.29 val_pnl=-0.66 val_pf=0.00 val_closed=7 test_pnl=-0.72 test_pf=0.00 test_closed=7
+  trades: artifacts\ger40_mean_reversion_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_mean_reversion_default_symbol_candidate_analysis.txt
+mean_reversion__exit_quick [entry_exit_family]: pnl=-2.77 closed=28 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.1
+  exits: dominant=stop_loss share=92.86%
+  regimes: best=trend_down_vol_low pnl=-0.10 worst=trend_flat_vol_high pnl=-0.70 dominant_share=25.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.56 avg_test_pnl=-0.63 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.29 val_pnl=-0.66 val_pf=0.00 val_closed=7 test_pnl=-0.72 test_pf=0.00 test_closed=7
+  trades: artifacts\ger40_mean_reversion__exit_quick_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_mean_reversion__exit_quick_default_symbol_candidate_analysis.txt
+volatility_breakout [single]: pnl=-4.41 closed=44 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_mid pnl=-1.62 dominant_share=36.36%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.85 avg_test_pnl=-0.84 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.93 val_pnl=-0.99 val_pf=0.00 val_closed=10 test_pnl=-0.80 test_pf=0.00 test_closed=8
+  trades: artifacts\ger40_volatility_breakout_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_breakout_default_symbol_candidate_analysis.txt
+volatility_breakout__exit_trend [entry_exit_family]: pnl=-4.41 closed=44 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_mid pnl=-1.62 dominant_share=36.36%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.85 avg_test_pnl=-0.84 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.93 val_pnl=-0.99 val_pf=0.00 val_closed=10 test_pnl=-0.80 test_pf=0.00 test_closed=8
+  trades: artifacts\ger40_volatility_breakout__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_breakout__exit_trend_default_symbol_candidate_analysis.txt
+volatility_breakout__exit_fastfail [entry_exit_family]: pnl=-4.41 closed=44 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_mid pnl=-1.62 dominant_share=36.36%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.85 avg_test_pnl=-0.84 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.93 val_pnl=-0.99 val_pf=0.00 val_closed=10 test_pnl=-0.80 test_pf=0.00 test_closed=8
+  trades: artifacts\ger40_volatility_breakout__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
+volatility_short_breakdown [single]: pnl=-5.66 closed=53 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.34 worst=trend_down_vol_mid pnl=-2.02 dominant_share=35.85%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.99 avg_test_pnl=-1.21 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.97 val_pnl=-0.93 val_pf=0.00 val_closed=9 test_pnl=-1.27 test_pf=0.00 test_closed=11
+  trades: artifacts\ger40_volatility_short_breakdown_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_short_breakdown_default_symbol_candidate_analysis.txt
+volatility_short_breakdown__exit_trend [entry_exit_family]: pnl=-5.66 closed=53 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.34 worst=trend_down_vol_mid pnl=-2.02 dominant_share=35.85%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.99 avg_test_pnl=-1.21 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.97 val_pnl=-0.93 val_pf=0.00 val_closed=9 test_pnl=-1.27 test_pf=0.00 test_closed=11
+  trades: artifacts\ger40_volatility_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
+volatility_short_breakdown__exit_fastfail [entry_exit_family]: pnl=-5.66 closed=53 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.11 avg_win=0.00 avg_loss=-0.11 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.34 worst=trend_down_vol_mid pnl=-2.02 dominant_share=35.85%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.99 avg_test_pnl=-1.21 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.97 val_pnl=-0.93 val_pf=0.00 val_closed=9 test_pnl=-1.27 test_pf=0.00 test_closed=11
+  trades: artifacts\ger40_volatility_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_volatility_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
+momentum [single]: pnl=-6.31 closed=62 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_low pnl=-1.77 dominant_share=27.42%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.87 avg_test_pnl=-1.73 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.71 val_pnl=-0.97 val_pf=0.00 val_closed=10 test_pnl=-1.92 test_pf=0.00 test_closed=19
+  trades: artifacts\ger40_momentum_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_momentum_default_symbol_candidate_analysis.txt
+momentum__exit_trend [entry_exit_family]: pnl=-6.31 closed=62 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_low pnl=-1.77 dominant_share=27.42%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.87 avg_test_pnl=-1.73 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.71 val_pnl=-0.97 val_pf=0.00 val_closed=10 test_pnl=-1.92 test_pf=0.00 test_closed=19
+  trades: artifacts\ger40_momentum__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_momentum__exit_trend_default_symbol_candidate_analysis.txt
+momentum__exit_fastfail [entry_exit_family]: pnl=-6.31 closed=62 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-0.27 worst=trend_up_vol_low pnl=-1.77 dominant_share=27.42%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.87 avg_test_pnl=-1.73 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.71 val_pnl=-0.97 val_pf=0.00 val_closed=10 test_pnl=-1.92 test_pf=0.00 test_closed=19
+  trades: artifacts\ger40_momentum__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_momentum__exit_fastfail_default_symbol_candidate_analysis.txt
+ger40_failed_breakout_short [auto_improved]: pnl=-6.95 closed=69 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-0.10 worst=trend_up_vol_low pnl=-2.89 dominant_share=42.03%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.24 avg_test_pnl=-2.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-1.52 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-3.25 test_pf=0.00 test_closed=32
+  trades: artifacts\ger40_ger40_failed_breakout_short_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_ger40_failed_breakout_short_symbol_candidate_analysis.txt
+ger40_range_reject_short [auto_improved]: pnl=-10.03 closed=99 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-0.10 worst=trend_up_vol_low pnl=-3.80 dominant_share=38.38%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=-3.28 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-2.04 val_pnl=-0.21 val_pf=0.00 val_closed=2 test_pnl=-4.69 test_pf=0.00 test_closed=46
+  trades: artifacts\ger40_ger40_range_reject_short_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_ger40_range_reject_short_symbol_candidate_analysis.txt
+trend [single]: pnl=-10.37 closed=103 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-1.33 worst=trend_up_vol_low pnl=-6.53 dominant_share=63.11%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.80 avg_test_pnl=-2.28 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-5.29 val_pnl=-2.01 val_pf=0.00 val_closed=20 test_pnl=-2.17 test_pf=0.00 test_closed=22
+  trades: artifacts\ger40_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_trend_default_symbol_candidate_analysis.txt
+trend__exit_trend [entry_exit_family]: pnl=-10.37 closed=103 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-1.33 worst=trend_up_vol_low pnl=-6.53 dominant_share=63.11%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.80 avg_test_pnl=-2.28 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-5.29 val_pnl=-2.01 val_pf=0.00 val_closed=20 test_pnl=-2.17 test_pf=0.00 test_closed=22
+  trades: artifacts\ger40_trend__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_trend__exit_trend_default_symbol_candidate_analysis.txt
+trend__exit_fastfail [entry_exit_family]: pnl=-10.37 closed=103 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.10 avg_win=0.00 avg_loss=-0.10 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_high pnl=-1.33 worst=trend_up_vol_low pnl=-6.53 dominant_share=63.11%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.80 avg_test_pnl=-2.28 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-5.29 val_pnl=-2.01 val_pf=0.00 val_closed=20 test_pnl=-2.17 test_pf=0.00 test_closed=22
+  trades: artifacts\ger40_trend__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\ger40_trend__exit_fastfail_default_symbol_candidate_analysis.txt
+
+Recommended active agents
+No candidate met the positive-PnL and PF>=1.0 threshold.

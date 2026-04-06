@@ -1,16 +1,22 @@
 Artifact: btc_crypto_short_breakdown__15m_us__exit_fastfail_15m_us_symbol_candidate
-Closed trades: 7
-Realized pnl: -118.17
+Closed trades: 12
+Realized pnl: 83.46
 
 By entry hour
-13: trades=3 pnl=-101.48 avg=-33.83 win_rate=0.00%
-17: trades=2 pnl=-14.49 avg=-7.25 win_rate=0.00%
-15: trades=1 pnl=-6.65 avg=-6.65 win_rate=0.00%
-14: trades=1 pnl=4.45 avg=4.45 win_rate=100.00%
+14: trades=2 pnl=-41.03 avg=-20.51 win_rate=0.00%
+15: trades=1 pnl=-30.37 avg=-30.37 win_rate=0.00%
+17: trades=2 pnl=-20.37 avg=-10.18 win_rate=0.00%
+19: trades=1 pnl=-11.00 avg=-11.00 win_rate=0.00%
+13: trades=5 pnl=31.94 avg=6.39 win_rate=40.00%
+20: trades=1 pnl=154.29 avg=154.29 win_rate=100.00%
 
 By entry setup
-crypto_short_breakdown: trades=7 pnl=-118.17 avg=-16.88 win_rate=14.29%
+crypto_short_breakdown: trades=12 pnl=83.46 avg=6.96 win_rate=25.00%
 
 By exit reason
-structure_exit: trades=6 pnl=-122.62 avg=-20.44 win_rate=0.00%
-stale_breakout: trades=1 pnl=4.45 avg=4.45 win_rate=100.00%
+stop_loss: trades=2 pnl=-92.19 avg=-46.09 win_rate=0.00%
+trailing_stop: trades=2 pnl=-57.31 avg=-28.65 win_rate=0.00%
+time_stop: trades=2 pnl=-47.31 avg=-23.65 win_rate=0.00%
+structure_exit: trades=2 pnl=-35.09 avg=-17.54 win_rate=0.00%
+stale_breakout: trades=1 pnl=-10.62 avg=-10.62 win_rate=0.00%
+take_profit: trades=3 pnl=325.98 avg=108.66 win_rate=100.00%

@@ -19,10 +19,23 @@ from quant_system.agents.crypto import (
     CryptoTrendPullbackAgent,
     CryptoVolatilityExpansionAgent,
 )
-from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReversionAgent, ForexTrendContinuationAgent
-from quant_system.agents.strategies import OpeningRangeBreakoutAgent, VolatilityBreakoutAgent
+from quant_system.agents.forex import (
+    ForexBreakoutMomentumAgent,
+    ForexRangeReversionAgent,
+    ForexShortBreakdownMomentumAgent,
+    ForexShortTrendContinuationAgent,
+    ForexTrendContinuationAgent,
+)
+from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
+from quant_system.agents.strategies import (
+    OpeningRangeBreakoutAgent,
+    OpeningRangeShortBreakdownAgent,
+    VolatilityBreakoutAgent,
+    VolatilityShortBreakdownAgent,
+)
+from quant_system.agents.us500 import US500OpeningDriveShortReclaimAgent, US500ShortTrendRejectionAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
-from quant_system.agents.xauusd import XAUUSDVolatilityBreakoutAgent
+from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVolatilityBreakoutAgent
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
@@ -125,12 +138,22 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     base_history = max(config.symbol_research.history_days, config.polygon.history_days)
     if _is_crypto_symbol(symbol):
         return max(base_history, 365)
+    if symbol.upper() == "US500":
+        return max(base_history, 365)
     if _is_metal_symbol(symbol) or _is_forex_symbol(symbol):
         return max(base_history, 180)
     return max(base_history, 180)
 
 
 def _research_thresholds(symbol: str) -> dict[str, float | int]:
+    if symbol.upper() == "US500":
+        return {
+            "validation_closed_trades": 2,
+            "test_closed_trades": 1,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 25.0,
+        }
     if _is_crypto_symbol(symbol):
         return {
             "validation_closed_trades": 2,
@@ -461,22 +484,76 @@ def _evaluate_execution_candidate_set(
     data_symbol: str,
     selected_candidates: list[dict[str, object]],
 ) -> tuple[ExecutionResult, str, str]:
-    target_variant = str(selected_candidates[0].get("variant_label", "") or "")
-    target_regime = str(selected_candidates[0].get("regime_filter_label", "") or "")
-    features, data_source = load_execution_features_for_variant(
-        config,
-        profile_symbol,
-        data_symbol,
-        target_variant,
-        target_regime,
+    return _run_candidate_bundle(config, profile_symbol, data_symbol, selected_candidates)
+
+
+def _aggregate_execution_results(initial_cash: float, results: list[ExecutionResult]) -> ExecutionResult:
+    combined_closed_trade_pnls: list[float] = []
+    combined_closed_trades = []
+    trades = 0
+    realized_pnl = 0.0
+    total_costs = 0.0
+    locked = False
+    max_drawdown = 0.0
+    for result in results:
+        combined_closed_trade_pnls.extend(result.closed_trade_pnls)
+        combined_closed_trades.extend(result.closed_trades)
+        trades += result.trades
+        realized_pnl += result.realized_pnl
+        total_costs += result.total_costs
+        locked = locked or result.locked
+        max_drawdown = max(max_drawdown, result.max_drawdown)
+    wins = [pnl for pnl in combined_closed_trade_pnls if pnl > 0]
+    losses = [pnl for pnl in combined_closed_trade_pnls if pnl < 0]
+    win_rate_pct = (len(wins) / len(combined_closed_trade_pnls) * 100.0) if combined_closed_trade_pnls else 0.0
+    gross_profit = sum(wins)
+    gross_loss = abs(sum(losses))
+    profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (999.0 if gross_profit > 0 else 0.0)
+    return ExecutionResult(
+        ending_equity=initial_cash + realized_pnl,
+        realized_pnl=realized_pnl,
+        trades=trades,
+        locked=locked,
+        max_drawdown=max_drawdown,
+        win_rate_pct=win_rate_pct,
+        profit_factor=profit_factor,
+        total_costs=total_costs,
+        closed_trade_pnls=combined_closed_trade_pnls,
+        closed_trades=combined_closed_trades,
     )
-    agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in selected_candidates], config)
-    engine = _build_engine(config, agents)
-    result = asyncio.run(engine.run(features, sleep_seconds=0.0))
-    variant_name = target_variant or "default"
-    if target_regime:
-        variant_name = f"{variant_name}|{target_regime}"
-    return result, data_source, variant_name
+
+
+def _run_candidate_bundle(
+    config: SystemConfig,
+    profile_symbol: str,
+    data_symbol: str,
+    candidates: list[dict[str, object]],
+) -> tuple[ExecutionResult, str, str]:
+    results: list[ExecutionResult] = []
+    data_sources: list[str] = []
+    variant_labels: list[str] = []
+    for row in candidates:
+        candidate_config = _with_execution_overrides(config, row.get("execution_overrides"))
+        variant_label = str(row.get("variant_label", "") or "")
+        regime_filter_label = str(row.get("regime_filter_label", "") or "")
+        features, data_source = load_execution_features_for_variant(
+            candidate_config,
+            profile_symbol,
+            data_symbol,
+            variant_label,
+            regime_filter_label,
+        )
+        agents = build_agents_from_catalog_paths([str(row["code_path"])], candidate_config)
+        engine = _build_engine(candidate_config, agents)
+        results.append(asyncio.run(engine.run(features, sleep_seconds=0.0)))
+        data_sources.append(data_source)
+        label = variant_label or "default"
+        if regime_filter_label:
+            label = f"{label}|{regime_filter_label}"
+        variant_labels.append(f"{row['candidate_name']}@{label}")
+    data_source_label = ",".join(sorted(set(data_sources))) if data_sources else "unknown"
+    variant_label = ", ".join(variant_labels) if variant_labels else "default"
+    return _aggregate_execution_results(config.execution.initial_cash, results), data_source_label, variant_label
 
 
 def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSpec]:
@@ -573,6 +650,14 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
             )
         )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_short_breakdown",
+                description="XAUUSD short breakdown continuation",
+                agents=[XAUUSDShortBreakdownAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDShortBreakdownAgent",
+            )
+        )
         return specs
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         return [
@@ -594,7 +679,35 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 agents=[ForexBreakoutMomentumAgent(), risk],
                 code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
             ),
+            CandidateSpec(
+                name="forex_short_trend_continuation",
+                description="Forex short trend continuation",
+                agents=[ForexShortTrendContinuationAgent(), risk],
+                code_path="quant_system.agents.forex.ForexShortTrendContinuationAgent",
+            ),
+            CandidateSpec(
+                name="forex_short_breakdown_momentum",
+                description="Forex short breakdown momentum",
+                agents=[ForexShortBreakdownMomentumAgent(), risk],
+                code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+            ),
         ]
+    specs.extend(
+        [
+            CandidateSpec(
+                name="volatility_short_breakdown",
+                description="Generic short volatility breakdown",
+                agents=[VolatilityShortBreakdownAgent(lookback=max(8, config.agents.mean_reversion_window)), risk],
+                code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+            ),
+            CandidateSpec(
+                name="opening_range_short_breakdown",
+                description="Opening range short breakdown",
+                agents=[OpeningRangeShortBreakdownAgent(), risk],
+                code_path="quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+            ),
+        ]
+    )
     return specs
 
 
@@ -686,6 +799,11 @@ def _walk_forward_slices(features: list[FeatureVector], symbol: str) -> list[tup
         validation_size = max(int(total * 0.25), 10)
         test_size = max(int(total * 0.2), 10)
         step_size = max(int(total * 0.08), 10)
+    elif symbol.upper() == "US500":
+        train_size = max(int(total * 0.45), 30)
+        validation_size = max(int(total * 0.15), 10)
+        test_size = max(int(total * 0.15), 10)
+        step_size = max(int(total * 0.07), 10)
     else:
         train_size = max(int(total * 0.5), 30)
         validation_size = max(int(total * 0.2), 10)
@@ -1036,6 +1154,141 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.85,
                     },
                 ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection",
+                    description=f"{upper} short rejection after weak rebound",
+                    agents=[US500ShortTrendRejectionAgent(config.agents.min_trend_strength), risk],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 22,
+                        "take_profit_atr_multiple": 2.3,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_opening_drive_short_reclaim",
+                    description=f"{upper} short reclaim after failed opening drive",
+                    agents=[US500OpeningDriveShortReclaimAgent(config.agents.min_trend_strength), risk],
+                    code_path="quant_system.agents.us500.US500OpeningDriveShortReclaimAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 20,
+                        "take_profit_atr_multiple": 2.0,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection_selective",
+                    description=f"{upper} short rejection with stricter 16:00-only filter",
+                    agents=[
+                        US500ShortTrendRejectionAgent(
+                            config.agents.min_trend_strength * 1.1,
+                            rebound_z_limit=0.45,
+                            allowed_hours={16},
+                            min_relative_volume=0.95,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 2.1,
+                        "trailing_stop_atr_multiple": 0.75,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection_flat_high",
+                    description=f"{upper} short rejection limited to flat/high-volatility regime",
+                    agents=[
+                        US500ShortTrendRejectionAgent(
+                            config.agents.min_trend_strength * 1.08,
+                            rebound_z_limit=0.42,
+                            allowed_hours={16},
+                            min_relative_volume=0.92,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 2.15,
+                        "trailing_stop_atr_multiple": 0.72,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection_flat_high_dense",
+                    description=f"{upper} denser short rejection in flat/high-volatility regime",
+                    agents=[
+                        US500ShortTrendRejectionAgent(
+                            config.agents.min_trend_strength * 0.95,
+                            rebound_z_limit=0.25,
+                            allowed_hours={16},
+                            min_relative_volume=0.88,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 22,
+                        "take_profit_atr_multiple": 2.35,
+                        "trailing_stop_atr_multiple": 0.85,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection_flat_high_exit_optimized",
+                    description=f"{upper} flat/high-volatility short rejection with trend-friendly exits",
+                    agents=[
+                        US500ShortTrendRejectionAgent(
+                            config.agents.min_trend_strength * 1.02,
+                            rebound_z_limit=0.4,
+                            allowed_hours={16},
+                            min_relative_volume=0.9,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "stale_breakout_atr_fraction": 0.04,
+                        "max_holding_bars": 0,
+                        "stop_loss_atr_multiple": 1.0,
+                        "take_profit_atr_multiple": 2.3,
+                        "break_even_atr_multiple": 0.3,
+                        "trailing_stop_atr_multiple": 0.6,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_opening_drive_short_reclaim_selective",
+                    description=f"{upper} short reclaim with tighter session and volume filter",
+                    agents=[
+                        US500OpeningDriveShortReclaimAgent(
+                            config.agents.min_trend_strength * 1.15,
+                            allowed_hours={15},
+                            min_relative_volume=0.95,
+                            max_session_position=0.48,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us500.US500OpeningDriveShortReclaimAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.9,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
             ]
         )
     elif upper == "GER40":
@@ -1062,6 +1315,30 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "structure_exit_bars": 0,
                         "stale_breakout_bars": 5,
                         "max_holding_bars": 18,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_range_reject_short",
+                    description="GER40 short rejection below opening range",
+                    agents=[GER40RangeRejectShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40RangeRejectShortAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 1.9,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_failed_breakout_short",
+                    description="GER40 short after failed upside breakout",
+                    agents=[GER40FailedBreakoutShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40FailedBreakoutShortAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.8,
                     },
                 ),
             ]
@@ -1368,6 +1645,31 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
                 )
             )
+        if best_tradeable.name.startswith(f"{upper.lower()}_short_trend_rejection") or best_tradeable.name.startswith(
+            f"{upper.lower()}_opening_drive_short_reclaim"
+        ):
+            specs.append(
+                CandidateSpec(
+                    name=f"{upper.lower()}_short_trend_rejection_second_pass",
+                    description=f"{upper} second-pass short rejection focused on early weakness",
+                    agents=[
+                        US500ShortTrendRejectionAgent(
+                            config.agents.min_trend_strength * 1.05,
+                            rebound_z_limit=0.5,
+                            allowed_hours={16},
+                            min_relative_volume=0.9,
+                        ),
+                        RiskSentinelAgent(max_volatility=config.risk.max_volatility * 1.3, min_relative_volume=0.9),
+                    ],
+                    code_path="quant_system.agents.us500.US500ShortTrendRejectionAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 2.2,
+                    },
+                )
+            )
     elif upper == "GER40":
         if weakest_exit in {"stale_breakout", "structure_exit"}:
             specs.append(
@@ -1642,10 +1944,9 @@ def _autopsy_improvement_specs(symbol: str, specs: list[CandidateSpec], results:
     return generated
 
 
-def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 1) -> list[dict[str, object]]:
+def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 3) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
-    target_variant: str | None = None
     viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
     ranked = sorted(
         viable_rows,
@@ -1662,15 +1963,10 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         reverse=True,
     )
     for row in ranked:
-        row_variant = str(row.get("variant_label", "") or "")
-        if target_variant is not None and row_variant != target_variant:
-            continue
         components = _component_set(str(row["code_path"]))
         if selected and components & used_components:
             continue
         selected.append(row)
-        if target_variant is None:
-            target_variant = row_variant
         used_components.update(components)
         if len(selected) >= max_candidates:
             break
@@ -1834,9 +2130,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
     return csv_path, txt_path
 
 
-def _candidate_failure_reasons(row: CandidateResult) -> list[str]:
+def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
     reasons: list[str] = []
-    thresholds = _research_thresholds(row.trade_log_path.upper())
+    thresholds = _research_thresholds(symbol)
     validation_min = int(thresholds["validation_closed_trades"])
     test_min = int(thresholds["test_closed_trades"])
     wf_pass_min = float(thresholds["walk_forward_min_pass_rate_pct"])
@@ -1874,7 +2170,7 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
     counts: dict[str, int] = {}
     near_misses: list[tuple[CandidateResult, list[str]]] = []
     for row in ranked:
-        reasons = _candidate_failure_reasons(row)
+        reasons = _candidate_failure_reasons(row, symbol)
         for reason in reasons:
             counts[reason] = counts.get(reason, 0) + 1
         if reasons:
@@ -2084,7 +2380,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             }
             for row in results
         ],
-        max_candidates=1,
+        max_candidates=3,
     )
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"
@@ -2206,7 +2502,10 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 else "seed because one or more full-research timeframe caches were missing."
             )
         )
-    lines.append(
-        "Split ratio: train 60% / validation 20% / test 20%"
-    )
+    if resolved.profile_symbol.upper() == "US500":
+        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 15% / 15%")
+    elif _is_crypto_symbol(resolved.profile_symbol):
+        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 25% / 20%")
+    else:
+        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 50% / 20% / 20%")
     return lines

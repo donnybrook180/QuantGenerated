@@ -4,29 +4,32 @@ from quant_system.ai.service import AIService
 from quant_system.config import SystemConfig
 
 
+def _mask_key(value: str) -> str:
+    if len(value) <= 10:
+        return "*" * len(value)
+    return f"{value[:6]}...{value[-4:]}"
+
+
 def main() -> int:
     config = SystemConfig()
     ai_config = config.ai
     service = AIService(ai_config)
+    endpoints = ai_config.endpoint_pool()
 
     print("AI doctor")
     print(f"enabled: {ai_config.enabled}")
-    print(f"provider: {ai_config.provider}")
-    print(f"model: {ai_config.model}")
-    print(f"base_url: {ai_config.api_base_url}")
-    print(f"api_key_present: {bool(ai_config.api_key)}")
-    if ai_config.provider == "openrouter":
-        print(f"openrouter_site_url: {ai_config.openrouter_site_url or 'not set'}")
-        print(f"openrouter_app_name: {ai_config.openrouter_app_name or 'not set'}")
+    print(f"configured_slots: {len(endpoints)}")
+    for endpoint in endpoints:
+        print(
+            f"- slot={endpoint.slot_name} provider={endpoint.provider} model={endpoint.model} "
+            f"base_url={endpoint.api_base_url} api_key={_mask_key(endpoint.api_key)}"
+        )
 
     if not ai_config.enabled:
         print("status: AI is disabled")
         return 1
-    if not ai_config.api_key:
+    if not endpoints:
         print("status: missing API key")
-        return 1
-    if ai_config.provider not in {"openai", "openrouter"}:
-        print(f"status: unsupported provider '{ai_config.provider}'")
         return 1
 
     prompt = "Reply with exactly: OK"

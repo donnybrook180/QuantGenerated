@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
 import duckdb
-from quant_system.ai.models import ExperimentSnapshot
+from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, ExperimentSnapshot
 
 
 class ExperimentStore:
@@ -57,6 +58,153 @@ class ExperimentStore:
                 )
                 """
             )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS agent_registry_events (
+                    experiment_id BIGINT,
+                    profile_name VARCHAR,
+                    agent_name VARCHAR,
+                    source_type VARCHAR,
+                    realized_pnl DOUBLE,
+                    closed_trades INTEGER,
+                    win_rate_pct DOUBLE,
+                    profit_factor DOUBLE,
+                    max_drawdown_pct DOUBLE,
+                    data_source VARCHAR,
+                    verdict VARCHAR,
+                    recommended_action TEXT
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS agent_registry (
+                    profile_name VARCHAR,
+                    agent_name VARCHAR,
+                    source_type VARCHAR,
+                    best_experiment_id BIGINT,
+                    last_experiment_id BIGINT,
+                    best_realized_pnl DOUBLE,
+                    best_profit_factor DOUBLE,
+                    best_closed_trades INTEGER,
+                    last_verdict VARCHAR,
+                    last_recommended_action TEXT,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (profile_name, agent_name, source_type)
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS agent_catalog (
+                    profile_name VARCHAR,
+                    agent_name VARCHAR,
+                    lifecycle_scope VARCHAR,
+                    class_name VARCHAR,
+                    code_path TEXT,
+                    description TEXT,
+                    status VARCHAR,
+                    is_active BOOLEAN,
+                    first_seen_at TIMESTAMP,
+                    last_seen_at TIMESTAMP,
+                    last_version_id BIGINT,
+                    last_evaluation_id BIGINT,
+                    PRIMARY KEY (profile_name, agent_name, lifecycle_scope)
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS agent_versions (
+                    id BIGINT PRIMARY KEY,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    experiment_id BIGINT,
+                    profile_name VARCHAR,
+                    agent_name VARCHAR,
+                    lifecycle_scope VARCHAR,
+                    class_name VARCHAR,
+                    code_path TEXT,
+                    parameters_json TEXT,
+                    data_symbol VARCHAR,
+                    broker_symbol VARCHAR
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS agent_evaluations (
+                    id BIGINT PRIMARY KEY,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    experiment_id BIGINT,
+                    profile_name VARCHAR,
+                    agent_name VARCHAR,
+                    lifecycle_scope VARCHAR,
+                    evaluation_source VARCHAR,
+                    realized_pnl DOUBLE,
+                    closed_trades INTEGER,
+                    win_rate_pct DOUBLE,
+                    profit_factor DOUBLE,
+                    max_drawdown_pct DOUBLE,
+                    data_source VARCHAR,
+                    verdict VARCHAR,
+                    recommended_action TEXT
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS symbol_research_runs (
+                    id BIGINT PRIMARY KEY,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    profile_name VARCHAR,
+                    data_symbol VARCHAR,
+                    broker_symbol VARCHAR,
+                    data_source VARCHAR,
+                    recommended_names_json TEXT
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS symbol_research_candidates (
+                    symbol_research_run_id BIGINT,
+                    profile_name VARCHAR,
+                    candidate_name VARCHAR,
+                    description TEXT,
+                    archetype VARCHAR,
+                    code_path TEXT,
+                    realized_pnl DOUBLE,
+                    closed_trades INTEGER,
+                    win_rate_pct DOUBLE,
+                    profit_factor DOUBLE,
+                    max_drawdown_pct DOUBLE,
+                    total_costs DOUBLE,
+                    recommended BOOLEAN
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS symbol_execution_sets (
+                    id BIGINT PRIMARY KEY,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    profile_name VARCHAR,
+                    symbol_research_run_id BIGINT,
+                    selection_method VARCHAR
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS symbol_execution_set_items (
+                    execution_set_id BIGINT,
+                    profile_name VARCHAR,
+                    candidate_name VARCHAR,
+                    code_path TEXT,
+                    selection_rank INTEGER
+                )
+                """
+            )
 
     def _serialize(self, value) -> str:
         if is_dataclass(value):
@@ -92,7 +240,7 @@ class ExperimentStore:
         local_summary: str,
         ai_summary: str | None,
         next_experiments: list[str],
-    ) -> None:
+    ) -> int:
         with self._connect() as connection:
             next_id = connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM experiments").fetchone()[0]
             experiment_id = connection.execute(
@@ -167,6 +315,743 @@ class ExperimentStore:
                     str(artifacts.shadow_analysis) if artifacts.shadow_analysis is not None else "",
                 ],
             )
+        return int(experiment_id)
+
+    def record_agent_registry(self, experiment_id: int, records: list[AgentRegistryRecord]) -> None:
+        if not records:
+            return
+        with self._connect() as connection:
+            for record in records:
+                connection.execute(
+                    """
+                    INSERT INTO agent_registry_events (
+                        experiment_id,
+                        profile_name,
+                        agent_name,
+                        source_type,
+                        realized_pnl,
+                        closed_trades,
+                        win_rate_pct,
+                        profit_factor,
+                        max_drawdown_pct,
+                        data_source,
+                        verdict,
+                        recommended_action
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        experiment_id,
+                        record.profile_name,
+                        record.agent_name,
+                        record.source_type,
+                        record.realized_pnl,
+                        record.closed_trades,
+                        record.win_rate_pct,
+                        record.profit_factor,
+                        record.max_drawdown_pct,
+                        record.data_source,
+                        record.verdict,
+                        record.recommended_action,
+                    ],
+                )
+
+                existing = connection.execute(
+                    """
+                    SELECT best_experiment_id, best_realized_pnl, best_profit_factor, best_closed_trades
+                    FROM agent_registry
+                    WHERE profile_name = ? AND agent_name = ? AND source_type = ?
+                    """,
+                    [record.profile_name, record.agent_name, record.source_type],
+                ).fetchone()
+
+                best_experiment_id = experiment_id
+                best_realized_pnl = record.realized_pnl
+                best_profit_factor = record.profit_factor
+                best_closed_trades = record.closed_trades
+                if existing is not None:
+                    previous_best = (
+                        float(existing[1] or 0.0),
+                        float(existing[2] or 0.0),
+                        int(existing[3] or 0),
+                    )
+                    candidate = (record.realized_pnl, record.profit_factor, record.closed_trades)
+                    if previous_best >= candidate:
+                        best_experiment_id = int(existing[0] or experiment_id)
+                        best_realized_pnl = previous_best[0]
+                        best_profit_factor = previous_best[1]
+                        best_closed_trades = previous_best[2]
+
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO agent_registry (
+                        profile_name,
+                        agent_name,
+                        source_type,
+                        best_experiment_id,
+                        last_experiment_id,
+                        best_realized_pnl,
+                        best_profit_factor,
+                        best_closed_trades,
+                        last_verdict,
+                        last_recommended_action,
+                        updated_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                    """,
+                    [
+                        record.profile_name,
+                        record.agent_name,
+                        record.source_type,
+                        best_experiment_id,
+                        experiment_id,
+                        best_realized_pnl,
+                        best_profit_factor,
+                        best_closed_trades,
+                        record.verdict,
+                        record.recommended_action,
+                    ],
+                )
+
+    def _catalog_status(self, descriptor: AgentDescriptor, record: AgentRegistryRecord | None) -> str:
+        if record is None:
+            return "draft" if descriptor.lifecycle_scope == "shadow" else "testing"
+        if record.verdict == "promising":
+            return "active" if descriptor.lifecycle_scope == "active" else "testing"
+        if record.verdict == "needs_retest":
+            return "testing"
+        if record.verdict == "rejected":
+            return "rejected"
+        if record.verdict == "idle":
+            return "draft"
+        return "testing"
+
+    def record_agent_lifecycle(
+        self,
+        *,
+        experiment_id: int,
+        profile,
+        descriptors: list[AgentDescriptor],
+        registry_records: list[AgentRegistryRecord],
+        optimized_agents,
+    ) -> None:
+        record_map: dict[tuple[str, str], AgentRegistryRecord] = {}
+        for record in registry_records:
+            lifecycle_scope = "active" if record.source_type == "realized" else "shadow"
+            record_map[(record.agent_name, lifecycle_scope)] = record
+
+        serialized_params = self._serialize(optimized_agents)
+        now = datetime.utcnow()
+
+        with self._connect() as connection:
+            next_version_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM agent_versions").fetchone()[0])
+            next_evaluation_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM agent_evaluations").fetchone()[0])
+
+            for index, descriptor in enumerate(descriptors):
+                record = record_map.get((descriptor.agent_name, descriptor.lifecycle_scope))
+                version_id = next_version_id + index
+                evaluation_id = next_evaluation_id + index
+
+                connection.execute(
+                    """
+                    INSERT INTO agent_versions (
+                        id,
+                        experiment_id,
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        class_name,
+                        code_path,
+                        parameters_json,
+                        data_symbol,
+                        broker_symbol
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        version_id,
+                        experiment_id,
+                        descriptor.profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        descriptor.class_name,
+                        descriptor.code_path,
+                        serialized_params,
+                        profile.data_symbol,
+                        profile.broker_symbol,
+                    ],
+                )
+
+                connection.execute(
+                    """
+                    INSERT INTO agent_evaluations (
+                        id,
+                        experiment_id,
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        evaluation_source,
+                        realized_pnl,
+                        closed_trades,
+                        win_rate_pct,
+                        profit_factor,
+                        max_drawdown_pct,
+                        data_source,
+                        verdict,
+                        recommended_action
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        evaluation_id,
+                        experiment_id,
+                        descriptor.profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        record.source_type if record is not None else "none",
+                        record.realized_pnl if record is not None else 0.0,
+                        record.closed_trades if record is not None else 0,
+                        record.win_rate_pct if record is not None else 0.0,
+                        record.profit_factor if record is not None else 0.0,
+                        record.max_drawdown_pct if record is not None else 0.0,
+                        record.data_source if record is not None else "unknown",
+                        record.verdict if record is not None else "idle",
+                        record.recommended_action if record is not None else "No evaluation yet; run research first.",
+                    ],
+                )
+
+                catalog_row = connection.execute(
+                    """
+                    SELECT first_seen_at
+                    FROM agent_catalog
+                    WHERE profile_name = ? AND agent_name = ? AND lifecycle_scope = ?
+                    """,
+                    [descriptor.profile_name, descriptor.agent_name, descriptor.lifecycle_scope],
+                ).fetchone()
+                first_seen_at = catalog_row[0] if catalog_row is not None else now
+
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO agent_catalog (
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        class_name,
+                        code_path,
+                        description,
+                        status,
+                        is_active,
+                        first_seen_at,
+                        last_seen_at,
+                        last_version_id,
+                        last_evaluation_id
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        descriptor.profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        descriptor.class_name,
+                        descriptor.code_path,
+                        descriptor.description,
+                        self._catalog_status(descriptor, record),
+                        descriptor.is_active,
+                        first_seen_at,
+                        now,
+                        version_id,
+                        evaluation_id,
+                    ],
+                )
+
+    def list_agent_registry(self, profile_name: str) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT
+                    profile_name,
+                    agent_name,
+                    source_type,
+                    best_experiment_id,
+                    last_experiment_id,
+                    best_realized_pnl,
+                    best_profit_factor,
+                    best_closed_trades,
+                    last_verdict,
+                    last_recommended_action
+                FROM agent_registry
+                WHERE profile_name = ?
+                ORDER BY best_realized_pnl DESC, best_profit_factor DESC, best_closed_trades DESC
+                """,
+                [profile_name],
+            ).fetchall()
+        return [
+            {
+                "profile_name": row[0],
+                "agent_name": row[1],
+                "source_type": row[2],
+                "best_experiment_id": row[3],
+                "last_experiment_id": row[4],
+                "best_realized_pnl": float(row[5] or 0.0),
+                "best_profit_factor": float(row[6] or 0.0),
+                "best_closed_trades": int(row[7] or 0),
+                "last_verdict": row[8],
+                "last_recommended_action": row[9],
+            }
+            for row in rows
+        ]
+
+    def list_agent_catalog(self, profile_name: str) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT
+                    profile_name,
+                    agent_name,
+                    lifecycle_scope,
+                    class_name,
+                    code_path,
+                    description,
+                    status,
+                    is_active,
+                    first_seen_at,
+                    last_seen_at,
+                    last_version_id,
+                    last_evaluation_id
+                FROM agent_catalog
+                WHERE profile_name = ?
+                ORDER BY is_active DESC, status ASC, agent_name ASC
+                """,
+                [profile_name],
+            ).fetchall()
+        return [
+            {
+                "profile_name": row[0],
+                "agent_name": row[1],
+                "lifecycle_scope": row[2],
+                "class_name": row[3],
+                "code_path": row[4],
+                "description": row[5],
+                "status": row[6],
+                "is_active": bool(row[7]),
+                "first_seen_at": row[8],
+                "last_seen_at": row[9],
+                "last_version_id": row[10],
+                "last_evaluation_id": row[11],
+            }
+            for row in rows
+        ]
+
+    def list_agent_catalog_profiles(self) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT DISTINCT profile_name
+                FROM agent_catalog
+                ORDER BY profile_name ASC
+                """
+            ).fetchall()
+        return [str(row[0]) for row in rows]
+
+    def list_active_catalog_agents(self, profile_name: str) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT
+                    profile_name,
+                    agent_name,
+                    lifecycle_scope,
+                    class_name,
+                    code_path,
+                    description,
+                    status,
+                    is_active,
+                    last_version_id,
+                    last_evaluation_id
+                FROM agent_catalog
+                WHERE profile_name = ? AND is_active = TRUE
+                ORDER BY agent_name ASC
+                """,
+                [profile_name],
+            ).fetchall()
+        return [
+            {
+                "profile_name": row[0],
+                "agent_name": row[1],
+                "lifecycle_scope": row[2],
+                "class_name": row[3],
+                "code_path": row[4],
+                "description": row[5],
+                "status": row[6],
+                "is_active": bool(row[7]),
+                "last_version_id": row[8],
+                "last_evaluation_id": row[9],
+            }
+            for row in rows
+        ]
+
+    def get_latest_symbol_research_run(self, profile_name: str) -> dict[str, object] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT id, profile_name, data_symbol, broker_symbol, data_source, recommended_names_json, created_at
+                FROM symbol_research_runs
+                WHERE profile_name = ?
+                ORDER BY id DESC
+                LIMIT 1
+                """,
+                [profile_name],
+            ).fetchone()
+        if row is None:
+            return None
+        return {
+            "id": int(row[0]),
+            "profile_name": row[1],
+            "data_symbol": row[2],
+            "broker_symbol": row[3],
+            "data_source": row[4],
+            "recommended_names": json.loads(row[5] or "[]"),
+            "created_at": row[6],
+        }
+
+    def list_latest_symbol_research_candidates(self, profile_name: str) -> list[dict[str, object]]:
+        latest = self.get_latest_symbol_research_run(profile_name)
+        if latest is None:
+            return []
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT
+                    candidate_name,
+                    description,
+                    archetype,
+                    code_path,
+                    realized_pnl,
+                    closed_trades,
+                    win_rate_pct,
+                    profit_factor,
+                    max_drawdown_pct,
+                    total_costs,
+                    recommended
+                FROM symbol_research_candidates
+                WHERE symbol_research_run_id = ?
+                ORDER BY recommended DESC, realized_pnl DESC, profit_factor DESC, closed_trades DESC
+                """,
+                [latest["id"]],
+            ).fetchall()
+        return [
+            {
+                "candidate_name": row[0],
+                "description": row[1],
+                "archetype": row[2],
+                "code_path": row[3],
+                "realized_pnl": float(row[4] or 0.0),
+                "closed_trades": int(row[5] or 0),
+                "win_rate_pct": float(row[6] or 0.0),
+                "profit_factor": float(row[7] or 0.0),
+                "max_drawdown_pct": float(row[8] or 0.0),
+                "total_costs": float(row[9] or 0.0),
+                "recommended": bool(row[10]),
+            }
+            for row in rows
+        ]
+
+    def record_symbol_execution_set(
+        self,
+        *,
+        profile_name: str,
+        symbol_research_run_id: int,
+        selected_candidates: list[dict[str, object]],
+        selection_method: str = "heuristic_top_non_overlapping",
+    ) -> int:
+        with self._connect() as connection:
+            execution_set_id = int(
+                connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM symbol_execution_sets").fetchone()[0]
+            )
+            connection.execute(
+                """
+                INSERT INTO symbol_execution_sets (
+                    id,
+                    profile_name,
+                    symbol_research_run_id,
+                    selection_method
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                [execution_set_id, profile_name, symbol_research_run_id, selection_method],
+            )
+            for index, row in enumerate(selected_candidates, start=1):
+                connection.execute(
+                    """
+                    INSERT INTO symbol_execution_set_items (
+                        execution_set_id,
+                        profile_name,
+                        candidate_name,
+                        code_path,
+                        selection_rank
+                    )
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    [
+                        execution_set_id,
+                        profile_name,
+                        str(row["candidate_name"]),
+                        str(row["code_path"]),
+                        index,
+                    ],
+                )
+        return execution_set_id
+
+    def get_latest_symbol_execution_set(self, profile_name: str) -> dict[str, object] | None:
+        with self._connect() as connection:
+            header = connection.execute(
+                """
+                SELECT id, profile_name, symbol_research_run_id, selection_method, created_at
+                FROM symbol_execution_sets
+                WHERE profile_name = ?
+                ORDER BY id DESC
+                LIMIT 1
+                """,
+                [profile_name],
+            ).fetchone()
+            if header is None:
+                return None
+            rows = connection.execute(
+                """
+                SELECT candidate_name, code_path, selection_rank
+                FROM symbol_execution_set_items
+                WHERE execution_set_id = ?
+                ORDER BY selection_rank ASC
+                """,
+                [header[0]],
+            ).fetchall()
+        return {
+            "id": int(header[0]),
+            "profile_name": header[1],
+            "symbol_research_run_id": int(header[2]),
+            "selection_method": header[3],
+            "created_at": header[4],
+            "items": [
+                {
+                    "candidate_name": row[0],
+                    "code_path": row[1],
+                    "selection_rank": int(row[2] or 0),
+                }
+                for row in rows
+            ],
+        }
+
+    def list_symbol_execution_set_profiles(self) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT DISTINCT profile_name
+                FROM symbol_execution_sets
+                ORDER BY profile_name ASC
+                """
+            ).fetchall()
+        return [str(row[0]) for row in rows]
+
+    def record_symbol_research_run(
+        self,
+        *,
+        profile_name: str,
+        data_symbol: str,
+        broker_symbol: str,
+        data_source: str,
+        candidates,
+        recommended_names: list[str],
+    ) -> int:
+        with self._connect() as connection:
+            run_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM symbol_research_runs").fetchone()[0])
+            connection.execute(
+                """
+                INSERT INTO symbol_research_runs (
+                    id,
+                    profile_name,
+                    data_symbol,
+                    broker_symbol,
+                    data_source,
+                    recommended_names_json
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                [run_id, profile_name, data_symbol, broker_symbol, data_source, json.dumps(recommended_names)],
+            )
+            for candidate in candidates:
+                connection.execute(
+                    """
+                    INSERT INTO symbol_research_candidates (
+                        symbol_research_run_id,
+                        profile_name,
+                        candidate_name,
+                        description,
+                        archetype,
+                        code_path,
+                        realized_pnl,
+                        closed_trades,
+                        win_rate_pct,
+                        profit_factor,
+                        max_drawdown_pct,
+                        total_costs,
+                        recommended
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        run_id,
+                        profile_name,
+                        candidate.name,
+                        candidate.description,
+                        candidate.archetype,
+                        candidate.code_path,
+                        candidate.realized_pnl,
+                        candidate.closed_trades,
+                        candidate.win_rate_pct,
+                        candidate.profit_factor,
+                        candidate.max_drawdown_pct,
+                        candidate.total_costs,
+                        candidate.name in recommended_names,
+                    ],
+                )
+        return run_id
+
+    def promote_symbol_research_candidates(
+        self,
+        *,
+        profile_name: str,
+        data_symbol: str,
+        broker_symbol: str,
+        descriptors: list[AgentDescriptor],
+        candidates,
+        recommended_names: list[str],
+        symbol_research_run_id: int,
+    ) -> None:
+        candidate_map = {candidate.name: candidate for candidate in candidates}
+        now = datetime.utcnow()
+        with self._connect() as connection:
+            next_version_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM agent_versions").fetchone()[0])
+            next_evaluation_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM agent_evaluations").fetchone()[0])
+
+            for index, descriptor in enumerate(descriptors):
+                candidate = candidate_map[descriptor.agent_name]
+                version_id = next_version_id + index
+                evaluation_id = next_evaluation_id + index
+                status = "active" if descriptor.agent_name in recommended_names else ("testing" if candidate.realized_pnl > 0 else "rejected")
+                recommended_action = (
+                    "Promoted from symbol research into the active candidate set."
+                    if descriptor.agent_name in recommended_names
+                    else "Keep in testing." if candidate.realized_pnl > 0 else "Do not activate; redesign or leave archived."
+                )
+
+                connection.execute(
+                    """
+                    INSERT INTO agent_versions (
+                        id,
+                        experiment_id,
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        class_name,
+                        code_path,
+                        parameters_json,
+                        data_symbol,
+                        broker_symbol
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        version_id,
+                        symbol_research_run_id,
+                        profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        descriptor.class_name,
+                        descriptor.code_path,
+                        json.dumps({"source": "symbol_research"}),
+                        data_symbol,
+                        broker_symbol,
+                    ],
+                )
+                connection.execute(
+                    """
+                    INSERT INTO agent_evaluations (
+                        id,
+                        experiment_id,
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        evaluation_source,
+                        realized_pnl,
+                        closed_trades,
+                        win_rate_pct,
+                        profit_factor,
+                        max_drawdown_pct,
+                        data_source,
+                        verdict,
+                        recommended_action
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        evaluation_id,
+                        symbol_research_run_id,
+                        profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        "symbol_research",
+                        candidate.realized_pnl,
+                        candidate.closed_trades,
+                        candidate.win_rate_pct,
+                        candidate.profit_factor,
+                        candidate.max_drawdown_pct,
+                        "symbol_research",
+                        "promising" if descriptor.agent_name in recommended_names else ("needs_retest" if candidate.realized_pnl > 0 else "rejected"),
+                        recommended_action,
+                    ],
+                )
+                existing = connection.execute(
+                    """
+                    SELECT first_seen_at
+                    FROM agent_catalog
+                    WHERE profile_name = ? AND agent_name = ? AND lifecycle_scope = ?
+                    """,
+                    [profile_name, descriptor.agent_name, descriptor.lifecycle_scope],
+                ).fetchone()
+                first_seen_at = existing[0] if existing is not None else now
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO agent_catalog (
+                        profile_name,
+                        agent_name,
+                        lifecycle_scope,
+                        class_name,
+                        code_path,
+                        description,
+                        status,
+                        is_active,
+                        first_seen_at,
+                        last_seen_at,
+                        last_version_id,
+                        last_evaluation_id
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    [
+                        profile_name,
+                        descriptor.agent_name,
+                        descriptor.lifecycle_scope,
+                        descriptor.class_name,
+                        descriptor.code_path,
+                        descriptor.description,
+                        status,
+                        descriptor.agent_name in recommended_names,
+                        first_seen_at,
+                        now,
+                        version_id,
+                        evaluation_id,
+                    ],
+                )
 
     def list_recent_experiments(self, profile_name: str, limit: int = 5) -> list[ExperimentSnapshot]:
         with self._connect() as connection:

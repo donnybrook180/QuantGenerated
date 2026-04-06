@@ -13,6 +13,7 @@ from quant_system.agents.us100 import (
 )
 from quant_system.agents.xauusd import XAUUSDVolatilityBreakoutAgent
 from quant_system.agents.trend import MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
+from quant_system.ai.models import AgentDescriptor
 from quant_system.config import AgentConfig, RiskConfig
 
 
@@ -105,3 +106,39 @@ def build_shadow_candidate_agents(agent_config: AgentConfig, risk_config: RiskCo
             "combined_orb_retest": [OpeningRangeBreakoutAgent(), RangeRetestContinuationAgent(), risk_agent()],
         }
     return {}
+
+
+def describe_profile_agents(agent_config: AgentConfig, risk_config: RiskConfig, profile_name: str) -> list[AgentDescriptor]:
+    descriptors: list[AgentDescriptor] = []
+
+    for agent in build_alpha_agents(agent_config, risk_config, profile_name):
+        descriptors.append(
+            AgentDescriptor(
+                profile_name=profile_name,
+                agent_name=agent.name,
+                lifecycle_scope="active",
+                class_name=agent.__class__.__name__,
+                code_path=f"{agent.__class__.__module__}.{agent.__class__.__name__}",
+                description=f"Active agent {agent.__class__.__name__}",
+                is_active=True,
+            )
+        )
+
+    for setup_name, agents in build_shadow_candidate_agents(agent_config, risk_config, profile_name).items():
+        non_risk_agents = [agent for agent in agents if agent.name != "risk_sentinel"]
+        primary_agents = non_risk_agents or agents
+        code_path = ";".join(f"{agent.__class__.__module__}.{agent.__class__.__name__}" for agent in primary_agents)
+        class_name = " + ".join(agent.__class__.__name__ for agent in primary_agents)
+        descriptors.append(
+            AgentDescriptor(
+                profile_name=profile_name,
+                agent_name=setup_name,
+                lifecycle_scope="shadow",
+                class_name=class_name,
+                code_path=code_path,
+                description=f"Shadow candidate {class_name}",
+                is_active=False,
+            )
+        )
+
+    return descriptors

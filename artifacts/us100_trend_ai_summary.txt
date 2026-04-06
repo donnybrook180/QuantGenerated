@@ -1,0 +1,23 @@
+Profile: us100_trend
+Description: US100 trend continuation via QQQ proxy data
+Data symbol: QQQ
+Broker symbol: US100.cash
+Ending equity: 99999.06
+Realized PnL: -0.43
+Closed trades: 2
+Win rate: 0.00%
+Profit factor: 0.00
+Max drawdown: 0.00%
+FTMO pass: False
+FTMO reasons: profit target not met (-0.00% < 10.00%), win rate too low (0.00% < 35.00%), profit factor too low (0.00 < 1.20), too few closed trades (2 < 10)
+Strongest realized setup: trend_pullback (-0.43 pnl)
+Weakest realized exit: stop_loss (-0.43 pnl)
+Best signal hour: 16 (0.238% 6-bar forward return)
+Best shadow setup: opening_drive_reclaim (0.00 pnl)
+
+AI summary
+1. Diagnosis: The US100_trend strategy is currently unprofitable – it has executed only two trades, both losses (‑0.43 PNL), giving a 0 % win rate and a profit factor of zero. While the best‑performing signal hour (16:00) shows a modest positive 6‑bar forward return (0.238 %), the realized setups (trend_pullback and stop_loss exits) are both losing, and the strategy fails FTMO criteria due to insufficient profit, low win rate, low profit factor, and too few trades.
+
+2. Highest‑value next experiment: Prioritize and test the shadow candidate **opening_drive_reclaim**, which is the best‑unused setup identified in the analysis.
+
+3. Warning: The analysis is based on only two closed trades, a very small sample size that makes any performance metrics highly unstable and prone to overfitting; conclusions drawn from this data should be treated with caution until a larger trade set is accumulated.

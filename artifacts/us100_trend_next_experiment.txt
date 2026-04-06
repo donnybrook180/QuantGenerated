@@ -1,0 +1,6 @@
+Profile: us100_trend
+Recommended next experiments
+
+- Reduce the 'stop_loss' loss bucket in us100_trend; it is the weakest realized exit.
+- Review or isolate hour 17 for us100_trend; realized PnL there is negative.
+- Prioritize the shadow candidate 'opening_drive_reclaim' for us100_trend; it is currently the best unused setup.

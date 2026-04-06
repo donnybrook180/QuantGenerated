@@ -41,3 +41,29 @@ class ExperimentSnapshot:
 class ComparisonPackage:
     history_summary: str
     comparison_summary: str
+
+
+@dataclass(slots=True)
+class AgentRegistryRecord:
+    profile_name: str
+    agent_name: str
+    source_type: str
+    realized_pnl: float
+    closed_trades: int
+    win_rate_pct: float
+    profit_factor: float
+    max_drawdown_pct: float
+    data_source: str
+    verdict: str
+    recommended_action: str
+
+
+@dataclass(slots=True)
+class AgentDescriptor:
+    profile_name: str
+    agent_name: str
+    lifecycle_scope: str
+    class_name: str
+    code_path: str
+    description: str
+    is_active: bool

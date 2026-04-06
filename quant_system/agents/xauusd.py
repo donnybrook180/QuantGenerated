@@ -25,6 +25,9 @@ class XAUUSDVolatilityBreakoutAgent(Agent):
         trend_strength = feature.values.get("trend_strength", 0.0)
         relative_volume = feature.values.get("relative_volume", 1.0)
         momentum_20 = feature.values.get("momentum_20", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        z_score_20 = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
 
         self.highs.append(high)
         self.lows.append(low)
@@ -60,9 +63,15 @@ class XAUUSDVolatilityBreakoutAgent(Agent):
             self.entry_anchor = None
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.75, {"breakout_low": breakout_low})
         if self.breakout_side == Side.BUY and (
-            trend_strength < -0.00025
-            or momentum_20 < 0
-            or (self.entry_anchor is not None and close < self.entry_anchor)
+            (
+                trend_strength < -0.00035
+                and momentum_20 < -0.00015
+            )
+            or (
+                self.entry_anchor is not None
+                and close < self.entry_anchor * 0.9998
+                and momentum_5 < -0.0005
+            )
         ):
             self.breakout_side = Side.FLAT
             self.entry_anchor = None

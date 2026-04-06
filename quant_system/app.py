@@ -6,19 +6,21 @@ import logging
 from pathlib import Path
 from statistics import mean
 import copy
+import time
 
 from quant_system.ai.analysis import build_profile_analysis
 from quant_system.ai.history import build_experiment_memory_report
 from quant_system.ai.models import ProfileArtifacts
+from quant_system.ai.registry import build_agent_registry_records, render_agent_catalog, render_agent_registry
 from quant_system.ai.storage import ExperimentStore
-from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents
+from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents, describe_profile_agents
 from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.evaluation.report import build_ftmo_report
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine
 from quant_system.integrations.mt5 import MT5Broker, MT5Client
-from quant_system.integrations.polygon_data import PolygonDataClient
+from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
 from quant_system.logging_utils import configure_logging
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.optimization.walk_forward import SimpleParameterOptimizer
@@ -31,6 +33,14 @@ from quant_system.risk.limits import RiskManager
 
 LOGGER = logging.getLogger(__name__)
 ARTIFACTS_DIR = Path("artifacts")
+
+
+def _is_polygon_rate_limit(exc: Exception) -> bool:
+    return isinstance(exc, PolygonError) and "429" in str(exc)
+
+
+def _load_cached_bars(store: DuckDBMarketDataStore, symbol: str, timeframe: str) -> list[MarketBar]:
+    return store.load_bars(symbol, timeframe, 50_000)
 
 
 def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) -> None:
@@ -107,29 +117,53 @@ def configure_profile_optimization(config: SystemConfig, profile: StrategyProfil
         config.optimization.n_trials = 40
 
 
-def load_features(config: SystemConfig, profile: StrategyProfile) -> list[FeatureVector]:
+def load_features(config: SystemConfig, profile: StrategyProfile) -> tuple[list[FeatureVector], str]:
     config.polygon.symbol = profile.data_symbol
     if profile.name == "ger40_orb":
         config.polygon.history_days = max(config.polygon.history_days, 365)
     elif profile.name == "us500_trend":
         config.polygon.history_days = max(config.polygon.history_days, 365)
     config.mt5.symbol = profile.broker_symbol
-    client = PolygonDataClient(config.polygon)
     store = DuckDBMarketDataStore(config.mt5.database_path)
-    bars = client.fetch_bars()
     timeframe = f"{config.polygon.multiplier}_{config.polygon.timespan}"
     scoped_timeframe = f"{profile.name}_{timeframe}"
-    if profile.name == "ger40_orb":
-        bars = scale_proxy_bars(bars, multiplier=500.0)
-    store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
-    persisted_bars = store.load_bars(config.polygon.symbol, scoped_timeframe, len(bars))
+    persisted_bars: list[MarketBar] = []
+    data_source = "polygon"
+    if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
+        persisted_bars = _load_cached_bars(store, config.polygon.symbol, scoped_timeframe)
+        if persisted_bars:
+            config.instrument.profile_name = profile.name
+            config.instrument.data_symbol = config.polygon.symbol
+            config.instrument.broker_symbol = config.mt5.symbol
+            config.execution.symbol = config.polygon.symbol
+            return build_feature_library(persisted_bars), "duckdb_cache"
+        if config.polygon.fetch_policy == "cache_only":
+            raise RuntimeError(f"No cached DuckDB bars available for {config.polygon.symbol}/{scoped_timeframe}.")
+    try:
+        client = PolygonDataClient(config.polygon)
+        bars = client.fetch_bars()
+        if profile.name == "ger40_orb":
+            bars = scale_proxy_bars(bars, multiplier=500.0)
+        store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
+        persisted_bars = store.load_bars(config.polygon.symbol, scoped_timeframe, len(bars))
+    except PolygonError as exc:
+        if not _is_polygon_rate_limit(exc):
+            raise
+        LOGGER.warning(
+            "profile=%s hit Polygon rate limit; falling back to cached DuckDB bars for %s/%s",
+            profile.name,
+            config.polygon.symbol,
+            scoped_timeframe,
+        )
+        persisted_bars = store.load_bars(config.polygon.symbol, scoped_timeframe, 50_000)
+        data_source = "duckdb_cache"
     if not persisted_bars:
         raise RuntimeError("No Polygon bars were loaded into DuckDB.")
     config.instrument.profile_name = profile.name
     config.instrument.data_symbol = config.polygon.symbol
     config.instrument.broker_symbol = config.mt5.symbol
     config.execution.symbol = config.polygon.symbol
-    return build_feature_library(persisted_bars)
+    return build_feature_library(persisted_bars), data_source
 
 
 def scale_proxy_bars(bars: list[MarketBar], multiplier: float) -> list[MarketBar]:
@@ -147,7 +181,7 @@ def scale_proxy_bars(bars: list[MarketBar], multiplier: float) -> list[MarketBar
     ]
 
 
-def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> list[FeatureVector]:
+def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> tuple[list[FeatureVector], str]:
     if profile.name != "us100_trend":
         return load_features(config, profile)
 
@@ -157,16 +191,36 @@ def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> list
     shadow_config.polygon.multiplier = 1
     shadow_config.polygon.history_days = max(config.polygon.history_days, 45)
     shadow_config.mt5.symbol = profile.broker_symbol
-    client = PolygonDataClient(shadow_config.polygon)
     store = DuckDBMarketDataStore(shadow_config.mt5.database_path)
-    bars = client.fetch_bars()
     timeframe = f"{shadow_config.polygon.multiplier}_{shadow_config.polygon.timespan}"
     scoped_timeframe = f"{profile.name}_shadow_{timeframe}"
-    store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
-    persisted_bars = store.load_bars(shadow_config.polygon.symbol, scoped_timeframe, len(bars))
+    persisted_bars: list[MarketBar] = []
+    data_source = "polygon"
+    if shadow_config.polygon.fetch_policy in {"cache_first", "cache_only"}:
+        persisted_bars = _load_cached_bars(store, shadow_config.polygon.symbol, scoped_timeframe)
+        if persisted_bars:
+            return build_feature_library(persisted_bars), "duckdb_cache"
+        if shadow_config.polygon.fetch_policy == "cache_only":
+            raise RuntimeError(f"No cached DuckDB bars available for {shadow_config.polygon.symbol}/{scoped_timeframe}.")
+    try:
+        client = PolygonDataClient(shadow_config.polygon)
+        bars = client.fetch_bars()
+        store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
+        persisted_bars = store.load_bars(shadow_config.polygon.symbol, scoped_timeframe, len(bars))
+    except PolygonError as exc:
+        if not _is_polygon_rate_limit(exc):
+            raise
+        LOGGER.warning(
+            "profile=%s shadow load hit Polygon rate limit; falling back to cached DuckDB bars for %s/%s",
+            profile.name,
+            shadow_config.polygon.symbol,
+            scoped_timeframe,
+        )
+        persisted_bars = store.load_bars(shadow_config.polygon.symbol, scoped_timeframe, 50_000)
+        data_source = "duckdb_cache"
     if not persisted_bars:
         raise RuntimeError("No shadow Polygon bars were loaded into DuckDB.")
-    return build_feature_library(persisted_bars)
+    return build_feature_library(persisted_bars), data_source
 
 
 def build_system(
@@ -244,6 +298,20 @@ def export_memory_artifacts(profile: StrategyProfile, package) -> tuple[Path, Pa
     history_path.write_text(package.history_summary, encoding="utf-8")
     comparison_path.write_text(package.comparison_summary, encoding="utf-8")
     return history_path, comparison_path
+
+
+def export_agent_registry_artifact(profile: StrategyProfile, rendered_registry: str) -> Path:
+    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    registry_path = ARTIFACTS_DIR / f"{profile.name}_agent_registry.txt"
+    registry_path.write_text(rendered_registry, encoding="utf-8")
+    return registry_path
+
+
+def export_agent_catalog_artifact(profile: StrategyProfile, rendered_catalog: str) -> Path:
+    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    catalog_path = ARTIFACTS_DIR / f"{profile.name}_agent_catalog.txt"
+    catalog_path.write_text(rendered_catalog, encoding="utf-8")
+    return catalog_path
 
 
 def export_closed_trade_artifacts(closed_trades, realized_pnl: float, artifact_prefix: str) -> tuple[Path, Path]:
@@ -334,7 +402,7 @@ def export_shadow_execution_artifacts(
     candidates = build_shadow_candidate_agents(optimized_agents, config.risk, profile.name)
     if not candidates:
         return None, None
-    shadow_features = load_shadow_features(config, profile)
+    shadow_features, shadow_data_source = load_shadow_features(config, profile)
 
     ARTIFACTS_DIR.mkdir(exist_ok=True)
     csv_path = ARTIFACTS_DIR / f"{profile.name}_shadow_setups.csv"
@@ -360,6 +428,7 @@ def export_shadow_execution_artifacts(
                 "max_drawdown_pct": result.max_drawdown * 100.0,
                 "total_costs": result.total_costs,
                 "kill_switch_triggered": result.locked,
+                "data_source": shadow_data_source,
             }
         )
 
@@ -376,6 +445,7 @@ def export_shadow_execution_artifacts(
                 "max_drawdown_pct",
                 "total_costs",
                 "kill_switch_triggered",
+                "data_source",
             ]
         )
         for row in rows:
@@ -390,6 +460,7 @@ def export_shadow_execution_artifacts(
                     f"{float(row['max_drawdown_pct']):.5f}",
                     f"{float(row['total_costs']):.5f}",
                     row["kill_switch_triggered"],
+                    row["data_source"],
                 ]
             )
 
@@ -410,7 +481,7 @@ def export_shadow_execution_artifacts(
     ]
     for row in ranked_rows:
         analysis_lines.append(
-            f"{row['setup_name']}: pnl={float(row['realized_pnl']):.2f} closed={row['closed_trades']} pf={float(row['profit_factor']):.2f} win_rate={float(row['win_rate_pct']):.2f}% costs={float(row['total_costs']):.2f}"
+            f"{row['setup_name']}: pnl={float(row['realized_pnl']):.2f} closed={row['closed_trades']} pf={float(row['profit_factor']):.2f} win_rate={float(row['win_rate_pct']):.2f}% costs={float(row['total_costs']):.2f} data_source={row['data_source']}"
         )
     analysis_path.write_text("\n".join(analysis_lines), encoding="utf-8")
     return csv_path, analysis_path
@@ -554,7 +625,7 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
     try:
         configure_profile_execution(config, profile)
         configure_profile_optimization(config, profile)
-        features = load_features(config, profile)
+        features, data_source = load_features(config, profile)
         optimized_agents = SimpleParameterOptimizer(
             config.optimization,
             config.execution,
@@ -586,7 +657,7 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
         )
         ai_summary_path, next_experiment_path = export_ai_artifacts(profile, analysis_package)
         experiment_store = ExperimentStore(config.ai.experiment_database_path)
-        experiment_store.record_experiment(
+        experiment_id = experiment_store.record_experiment(
             profile=profile,
             result=result,
             report=report,
@@ -596,6 +667,20 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             ai_summary=analysis_package.ai_summary,
             next_experiments=analysis_package.next_experiments,
         )
+        descriptors = describe_profile_agents(optimized_agents, config.risk, profile.name)
+        agent_records = build_agent_registry_records(profile.name, artifacts)
+        experiment_store.record_agent_registry(experiment_id, agent_records)
+        experiment_store.record_agent_lifecycle(
+            experiment_id=experiment_id,
+            profile=profile,
+            descriptors=descriptors,
+            registry_records=agent_records,
+            optimized_agents=optimized_agents,
+        )
+        registry_text = render_agent_registry(agent_records, profile.name)
+        registry_path = export_agent_registry_artifact(profile, registry_text)
+        catalog_text = render_agent_catalog(profile.name, experiment_store.list_agent_catalog(profile.name))
+        catalog_path = export_agent_catalog_artifact(profile, catalog_text)
         current_run, previous_run = experiment_store.compare_latest_runs(profile.name)
         recent_runs = experiment_store.list_recent_experiments(profile.name, limit=config.ai.history_lookback)
         best_run = experiment_store.get_best_experiment(profile.name)
@@ -620,6 +705,7 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Description: {profile.description}",
             f"Data symbol: {profile.data_symbol}",
             f"Broker symbol: {profile.broker_symbol}",
+            f"Data source: {data_source}",
             f"Ending equity: {result.ending_equity:.2f}",
             f"Realized PnL: {result.realized_pnl:.2f}",
             f"Trades: {result.trades}",
@@ -636,6 +722,8 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Shadow setup analysis: {shadow_analysis_path}" if shadow_analysis_path is not None else "Shadow setup analysis: none",
             f"AI summary: {ai_summary_path}",
             f"Next experiments: {next_experiment_path}",
+            f"Agent registry: {registry_path}",
+            f"Agent catalog: {catalog_path}",
             f"Experiment history: {history_path}",
             f"Run comparison: {comparison_path}",
             f"FTMO pass: {report.passed}",
@@ -643,6 +731,8 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Kill-switch triggered: {result.locked}",
         ]
     except Exception as exc:
+        if _is_polygon_rate_limit(exc):
+            LOGGER.error("profile=%s failed due to Polygon rate limit", profile.name)
         LOGGER.exception("profile=%s failed", profile.name)
         return [
             f"Profile: {profile.name}",
@@ -659,8 +749,10 @@ def main() -> int:
     config = SystemConfig()
     profiles = resolve_profiles(config.instrument.active_profiles)
     report_lines = ["QuantGenerated run complete"]
-    for profile in profiles:
+    for index, profile in enumerate(profiles):
         report_lines.append("")
         report_lines.extend(run_profile(config, profile))
+        if index < len(profiles) - 1 and config.polygon.profile_pause_seconds > 0:
+            time.sleep(config.polygon.profile_pause_seconds)
     print("\n".join(report_lines))
     return 0

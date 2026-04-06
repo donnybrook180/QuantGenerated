@@ -9,6 +9,22 @@ from quant_system.env import load_dotenv
 load_dotenv()
 
 
+def _env_tuple(name: str, default: str = "") -> tuple[str, ...]:
+    raw = os.getenv(name, default)
+    return tuple(part.strip() for part in raw.split(",") if part.strip())
+
+
+@dataclass(frozen=True, slots=True)
+class AIEndpointConfig:
+    slot_name: str
+    provider: str
+    model: str
+    api_key: str
+    api_base_url: str
+    openrouter_site_url: str | None = None
+    openrouter_app_name: str | None = None
+
+
 @dataclass(slots=True)
 class RiskConfig:
     max_daily_loss_pct: float = field(default_factory=lambda: float(os.getenv("RISK_MAX_DAILY_LOSS_PCT", "0.05")))
@@ -95,7 +111,7 @@ class InstrumentConfig:
     timeframe_label: str = field(default_factory=lambda: f"{os.getenv('POLYGON_MULTIPLIER', '5')}_{os.getenv('POLYGON_TIMESPAN', 'minute')}")
     active_profiles: tuple[str, ...] = field(
         default_factory=lambda: tuple(
-            part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "us100_trend,ger40_orb,xauusd_volatility").split(",") if part.strip()
+            part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "xauusd").split(",") if part.strip()
         )
     )
 
@@ -108,6 +124,10 @@ class PolygonConfig:
     multiplier: int = field(default_factory=lambda: int(os.getenv("POLYGON_MULTIPLIER", "5")))
     history_days: int = field(default_factory=lambda: int(os.getenv("POLYGON_HISTORY_DAYS", "30")))
     adjusted: bool = field(default_factory=lambda: os.getenv("POLYGON_ADJUSTED", "true").lower() == "true")
+    fetch_policy: str = field(default_factory=lambda: os.getenv("POLYGON_FETCH_POLICY", "network_first").lower())
+    max_retries: int = field(default_factory=lambda: int(os.getenv("POLYGON_MAX_RETRIES", "4")))
+    retry_backoff_seconds: float = field(default_factory=lambda: float(os.getenv("POLYGON_RETRY_BACKOFF_SECONDS", "2.0")))
+    profile_pause_seconds: float = field(default_factory=lambda: float(os.getenv("PROFILE_PAUSE_SECONDS", "1.5")))
 
 
 @dataclass(slots=True)
@@ -142,6 +162,55 @@ class AIConfig:
     max_context_chars: int = field(default_factory=lambda: int(os.getenv("AI_MAX_CONTEXT_CHARS", "12000")))
     experiment_database_path: str = field(default_factory=lambda: os.getenv("AI_EXPERIMENT_DB_PATH", "quant_data.duckdb"))
     history_lookback: int = field(default_factory=lambda: int(os.getenv("AI_HISTORY_LOOKBACK", "8")))
+    provider_order: tuple[str, ...] = field(default_factory=lambda: _env_tuple("AI_PROVIDER_ORDER"))
+
+    def endpoint_pool(self) -> list[AIEndpointConfig]:
+        endpoints: list[AIEndpointConfig] = []
+
+        if self.provider_order:
+            for slot_name in self.provider_order:
+                provider_name, _, slot_index = slot_name.rpartition("_")
+                provider = provider_name.lower()
+                index = slot_index or "1"
+                env_prefix = f"AI_{provider.upper()}_{index}"
+                api_key = os.getenv(f"{env_prefix}_API_KEY")
+                if not api_key:
+                    continue
+                model = os.getenv(f"{env_prefix}_MODEL", self.model)
+                base_url = os.getenv(
+                    f"{env_prefix}_API_BASE_URL",
+                    "https://openrouter.ai/api/v1" if provider == "openrouter" else "https://api.openai.com/v1",
+                )
+                site_url = os.getenv(f"{env_prefix}_SITE_URL") or self.openrouter_site_url
+                app_name = os.getenv(f"{env_prefix}_APP_NAME") or self.openrouter_app_name
+                endpoints.append(
+                    AIEndpointConfig(
+                        slot_name=slot_name,
+                        provider=provider,
+                        model=model,
+                        api_key=api_key,
+                        api_base_url=base_url,
+                        openrouter_site_url=site_url,
+                        openrouter_app_name=app_name,
+                    )
+                )
+
+        if endpoints:
+            return endpoints
+
+        if self.api_key and self.provider in {"openai", "openrouter"}:
+            endpoints.append(
+                AIEndpointConfig(
+                    slot_name=f"{self.provider}_primary",
+                    provider=self.provider,
+                    model=self.model,
+                    api_key=self.api_key,
+                    api_base_url=self.api_base_url,
+                    openrouter_site_url=self.openrouter_site_url,
+                    openrouter_app_name=self.openrouter_app_name,
+                )
+            )
+        return endpoints
 
 
 @dataclass(slots=True)

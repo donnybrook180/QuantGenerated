@@ -37,6 +37,13 @@ class ExecutionConfig:
     order_size: float = field(default_factory=lambda: float(os.getenv("EXECUTION_ORDER_SIZE", "0.1")))
     min_bars_between_trades: int = field(default_factory=lambda: int(os.getenv("EXECUTION_MIN_BARS_BETWEEN_TRADES", "8")))
     max_holding_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_MAX_HOLDING_BARS", "24")))
+    stop_loss_atr_multiple: float = field(default_factory=lambda: float(os.getenv("EXECUTION_STOP_LOSS_ATR_MULTIPLE", "1.2")))
+    take_profit_atr_multiple: float = field(default_factory=lambda: float(os.getenv("EXECUTION_TAKE_PROFIT_ATR_MULTIPLE", "2.4")))
+    break_even_atr_multiple: float = field(default_factory=lambda: float(os.getenv("EXECUTION_BREAK_EVEN_ATR_MULTIPLE", "1.0")))
+    trailing_stop_atr_multiple: float = field(default_factory=lambda: float(os.getenv("EXECUTION_TRAILING_STOP_ATR_MULTIPLE", "1.1")))
+    stale_breakout_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_STALE_BREAKOUT_BARS", "6")))
+    stale_breakout_atr_fraction: float = field(default_factory=lambda: float(os.getenv("EXECUTION_STALE_BREAKOUT_ATR_FRACTION", "0.2")))
+    structure_exit_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_STRUCTURE_EXIT_BARS", "4")))
 
 
 @dataclass(slots=True)
@@ -47,7 +54,7 @@ class AgentConfig:
     mean_reversion_threshold: float = 0.004
     min_trend_strength: float = field(default_factory=lambda: float(os.getenv("AGENT_MIN_TREND_STRENGTH", "0.0015")))
     min_relative_volume: float = field(default_factory=lambda: float(os.getenv("AGENT_MIN_RELATIVE_VOLUME", "0.8")))
-    consensus_min_confidence: float = field(default_factory=lambda: float(os.getenv("AGENT_CONSENSUS_MIN_CONFIDENCE", "1.1")))
+    consensus_min_confidence: float = field(default_factory=lambda: float(os.getenv("AGENT_CONSENSUS_MIN_CONFIDENCE", "0.55")))
 
 
 @dataclass(slots=True)
@@ -86,6 +93,11 @@ class InstrumentConfig:
     data_symbol: str = field(default_factory=lambda: os.getenv("POLYGON_DATA_SYMBOL", "SPY"))
     broker_symbol: str = field(default_factory=lambda: os.getenv("MT5_BROKER_SYMBOL", "SPY"))
     timeframe_label: str = field(default_factory=lambda: f"{os.getenv('POLYGON_MULTIPLIER', '5')}_{os.getenv('POLYGON_TIMESPAN', 'minute')}")
+    active_profiles: tuple[str, ...] = field(
+        default_factory=lambda: tuple(
+            part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "us100_trend,ger40_orb,xauusd_volatility").split(",") if part.strip()
+        )
+    )
 
 
 @dataclass(slots=True)

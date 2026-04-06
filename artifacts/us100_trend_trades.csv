@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+QQQ,2026-03-09T17:15:00+00:00,2026-03-09T19:15:00+00:00,17,19,trend_pullback,take_profit,599.41986,602.78442,0.10000,0.08043,0.51202,24,0.55738,"{'trend_strength': 0.0020244220124769896, 'z_score_20': -0.9975034227365264, 'hour_of_day': 17.0}"
+QQQ,2026-03-10T16:05:00+00:00,2026-03-10T17:25:00+00:00,16,17,trend_pullback,take_profit,610.55209,613.04417,0.10000,-0.00692,0.51224,16,0.76592,"{'trend_strength': 0.00217659503502432, 'z_score_20': -1.0487429833828414, 'hour_of_day': 16.0}"

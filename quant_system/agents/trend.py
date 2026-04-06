@@ -141,15 +141,9 @@ class RiskSentinelAgent(Agent):
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         volatility = feature.values.get("volatility_14", 0.0)
         relative_volume = feature.values.get("relative_volume", 1.0)
-        in_regular_session = feature.values.get("in_regular_session", 0.0)
-        opening_window = feature.values.get("opening_window", 0.0)
-        closing_window = feature.values.get("closing_window", 0.0)
         if (
             volatility <= self.max_volatility
             and relative_volume >= self.min_relative_volume
-            and in_regular_session >= 1.0
-            and opening_window <= 0.0
-            and closing_window <= 0.0
         ):
             return None
         return SignalEvent(
@@ -162,6 +156,5 @@ class RiskSentinelAgent(Agent):
                 "veto": "regime",
                 "volatility_14": volatility,
                 "relative_volume": relative_volume,
-                "in_regular_session": in_regular_session,
             },
         )

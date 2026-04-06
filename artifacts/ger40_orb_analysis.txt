@@ -1,0 +1,15 @@
+Artifact: ger40_orb
+Closed trades: 10
+Realized pnl: 154.14
+
+By entry hour
+14: trades=10 pnl=154.14 avg=15.41 win_rate=60.00%
+
+By entry setup
+opening_range_breakout: trades=10 pnl=154.14 avg=15.41 win_rate=60.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-82.73 avg=-82.73 win_rate=0.00%
+trailing_stop: trades=2 pnl=-24.38 avg=-12.19 win_rate=0.00%
+stale_breakout: trades=3 pnl=-18.36 avg=-6.12 win_rate=66.67%
+take_profit: trades=4 pnl=279.61 avg=69.90 win_rate=100.00%

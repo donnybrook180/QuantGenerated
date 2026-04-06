@@ -1,0 +1,11 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DAX,2025-04-14T14:00:00+00:00,2025-04-14T14:30:00+00:00,14,14,opening_range_breakout,take_profit,19255.96275,19324.03375,1.00000,68.07100,0.00000,6,0.57875,"{'range_high': 19235.0, 'breakout_high': 19235.0}"
+DAX,2025-05-05T14:40:00+00:00,2025-05-05T15:05:00+00:00,14,15,opening_range_breakout,trailing_stop,21446.07225,21433.92825,1.00000,-12.14400,0.00000,5,0.55537,"{'range_high': 21425.0, 'breakout_high': 21425.0}"
+DAX,2025-06-04T14:40:00+00:00,2025-06-04T16:15:00+00:00,14,16,opening_range_breakout,trailing_stop,22396.11975,22383.88075,1.00000,-12.23900,0.00000,19,1.00000,"{'range_high': 22325.0, 'breakout_high': 22325.0}"
+DAX,2025-06-12T14:40:00+00:00,2025-06-12T15:15:00+00:00,14,15,opening_range_breakout,structure_exit,22329.11640,22246.38762,1.00000,-82.72878,0.00000,7,0.72506,"{'range_high': 22290.0, 'breakout_high': 22290.0}"
+DAX,2025-08-14T14:40:00+00:00,2025-08-14T14:45:00+00:00,14,14,opening_range_breakout,take_profit,22616.13075,22627.01859,1.00000,10.88784,0.00000,1,0.73981,"{'range_high': 22575.0, 'breakout_high': 22575.0}"
+DAX,2025-08-22T14:00:00+00:00,2025-08-22T19:30:00+00:00,14,19,opening_range_breakout,stale_breakout,22691.13450,22703.86475,1.00000,12.73025,0.00000,36,1.00000,"{'range_high': 22500.0, 'breakout_high': 22500.0}"
+DAX,2025-09-18T14:15:00+00:00,2025-09-18T15:30:00+00:00,14,15,opening_range_breakout,stale_breakout,22159.90794,22161.04189,1.00000,1.13395,0.00000,9,0.91039,"{'range_high': 22102.5, 'breakout_high': 22102.5}"
+DAX,2025-09-29T14:40:00+00:00,2025-09-29T15:40:00+00:00,14,15,opening_range_breakout,stale_breakout,22211.11050,22178.89100,1.00000,-32.21950,0.00000,5,0.77179,"{'range_high': 22167.5, 'breakout_high': 22167.5}"
+DAX,2025-09-30T14:40:00+00:00,2025-09-30T15:10:00+00:00,14,15,opening_range_breakout,take_profit,22256.11275,22338.88300,1.00000,82.77025,0.00000,4,0.59741,"{'range_high': 22230.0, 'breakout_high': 22230.0}"
+DAX,2026-03-23T14:15:00+00:00,2026-03-23T15:00:00+00:00,14,15,opening_range_breakout,take_profit,21146.05725,21263.93675,1.00000,117.87950,0.00000,6,1.00000,"{'range_high': 21080.0, 'breakout_high': 21080.0}"

@@ -1,0 +1,10 @@
+Profile: us100_trend
+Candidate buy signals: 3
+
+By setup (6-bar forward return)
+trend_pullback: signals=3 accepted=2 avg_6bar=0.063% win_rate=66.67%
+
+By hour (6-bar forward return)
+17: signals=1 avg_6bar=-0.175% win_rate=0.00%
+15: signals=1 avg_6bar=0.127% win_rate=100.00%
+16: signals=1 avg_6bar=0.238% win_rate=100.00%

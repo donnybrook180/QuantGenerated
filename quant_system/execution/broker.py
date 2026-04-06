@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Protocol
 
-from quant_system.models import FillEvent, OrderRequest, PortfolioSnapshot, Position, Side
+from quant_system.models import ClosedTradeRecord, FillEvent, OrderRequest, PortfolioSnapshot, Position, Side
 
 
 class Broker(Protocol):
@@ -22,6 +22,9 @@ class Broker(Protocol):
     def get_total_costs(self) -> float:
         raise NotImplementedError
 
+    def get_closed_trades(self) -> list[ClosedTradeRecord]:
+        raise NotImplementedError
+
 
 @dataclass(slots=True)
 class SimulatedBroker:
@@ -34,6 +37,8 @@ class SimulatedBroker:
     total_costs: float = 0.0
     position: Position = field(default_factory=lambda: Position(symbol=""))
     closed_trade_pnls: list[float] = field(default_factory=list)
+    closed_trades: list[ClosedTradeRecord] = field(default_factory=list)
+    _open_trade: dict[str, object] | None = None
 
     def __post_init__(self) -> None:
         self.cash = self.initial_cash
@@ -57,6 +62,16 @@ class SimulatedBroker:
                     (self.position.average_price * self.position.quantity) + gross
                 ) / new_quantity
             self.position.quantity = new_quantity
+            self._open_trade = {
+                "entry_timestamp": order.timestamp,
+                "entry_price": fill_price,
+                "quantity": order.quantity,
+                "entry_reason": order.reason,
+                "entry_confidence": getattr(order, "confidence", 0.0),
+                "entry_metadata": getattr(order, "metadata", {}),
+                "entry_bar_index": getattr(order, "bar_index", -1),
+                "entry_costs": total_cost,
+            }
         elif order.side == Side.SELL:
             self.cash += gross - total_cost
             closed_quantity = min(order.quantity, self.position.quantity)
@@ -64,6 +79,29 @@ class SimulatedBroker:
             self.realized_pnl += trade_pnl
             if closed_quantity > 0:
                 self.closed_trade_pnls.append(trade_pnl)
+                if self._open_trade is not None:
+                    entry_bar_index = int(self._open_trade.get("entry_bar_index", -1))
+                    exit_bar_index = getattr(order, "bar_index", -1)
+                    self.closed_trades.append(
+                        ClosedTradeRecord(
+                            symbol=order.symbol,
+                            entry_timestamp=self._open_trade["entry_timestamp"],
+                            exit_timestamp=order.timestamp,
+                            entry_price=float(self._open_trade["entry_price"]),
+                            exit_price=fill_price,
+                            quantity=closed_quantity,
+                            pnl=trade_pnl,
+                            costs=float(self._open_trade.get("entry_costs", 0.0)) + total_cost,
+                            entry_reason=str(self._open_trade.get("entry_reason", "")),
+                            exit_reason=order.reason,
+                            entry_hour=self._open_trade["entry_timestamp"].hour,
+                            exit_hour=order.timestamp.hour,
+                            hold_bars=max(0, exit_bar_index - entry_bar_index) if entry_bar_index >= 0 and exit_bar_index >= 0 else 0,
+                            entry_confidence=float(self._open_trade.get("entry_confidence", 0.0)),
+                            entry_metadata=dict(self._open_trade.get("entry_metadata", {})),
+                        )
+                    )
+                    self._open_trade = None
             self.position.quantity -= order.quantity
             if self.position.quantity <= 0:
                 self.position.quantity = 0.0
@@ -99,3 +137,6 @@ class SimulatedBroker:
 
     def get_total_costs(self) -> float:
         return self.total_costs
+
+    def get_closed_trades(self) -> list[ClosedTradeRecord]:
+        return list(self.closed_trades)

@@ -1,0 +1,4 @@
+timestamp,hour,agent_name,confidence,consensus_accepted,forward_return_3_pct,forward_return_6_pct,forward_return_12_pct,metadata
+2026-03-09T17:15:00+00:00,17,trend_pullback,0.55738,True,-0.15018,-0.17520,0.06341,"{'trend_strength': 0.0020244220124769896, 'z_score_20': -0.9975034227365264, 'hour_of_day': 17.0}"
+2026-03-10T16:05:00+00:00,16,trend_pullback,0.76592,True,0.12778,0.23754,0.25064,"{'trend_strength': 0.00217659503502432, 'z_score_20': -1.0487429833828414, 'hour_of_day': 16.0}"
+2026-03-31T15:00:00+00:00,15,trend_pullback,0.51425,False,0.30023,0.12717,0.07771,"{'trend_strength': 0.001530743639163168, 'z_score_20': -0.5451534459911467, 'hour_of_day': 15.0}"

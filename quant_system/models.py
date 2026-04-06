@@ -40,12 +40,23 @@ class SignalEvent:
 
 
 @dataclass(slots=True)
+class DecisionContext:
+    side: Side
+    confidence: float
+    reasons: tuple[str, ...] = ()
+    metadata: dict[str, float | str] = field(default_factory=dict)
+
+
+@dataclass(slots=True)
 class OrderRequest:
     timestamp: datetime
     symbol: str
     side: Side
     quantity: float
     reason: str
+    confidence: float = 0.0
+    metadata: dict[str, float | str] = field(default_factory=dict)
+    bar_index: int = -1
 
 
 @dataclass(slots=True)
@@ -56,6 +67,25 @@ class FillEvent:
     quantity: float
     price: float
     costs: float = 0.0
+
+
+@dataclass(slots=True)
+class ClosedTradeRecord:
+    symbol: str
+    entry_timestamp: datetime
+    exit_timestamp: datetime
+    entry_price: float
+    exit_price: float
+    quantity: float
+    pnl: float
+    costs: float
+    entry_reason: str
+    exit_reason: str
+    entry_hour: int
+    exit_hour: int
+    hold_bars: int
+    entry_confidence: float
+    entry_metadata: dict[str, float | str] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

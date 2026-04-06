@@ -41,6 +41,28 @@ Agents emit `SignalEvent`s. The coordinator aggregates them into a single action
 
 This fetches historical bars from Polygon, persists them in DuckDB, runs Optuna walk-forward tuning, and then runs a local paper-trading style execution simulation on the stored dataset.
 
+## MT5 Test
+
+Use this to test `XAUUSD`, `US500`, and `GER40` directly against your MetaTrader terminal without forcing live order placement:
+
+```powershell
+.\.venv\Scripts\python.exe main_mt5_test.py
+```
+
+The MT5 test runner:
+
+- logs into your local MetaTrader terminal
+- resolves the broker symbol for each requested profile
+- fetches recent MT5 bars
+- rebuilds features from MT5 data
+- reports the latest agent decision and confidence per profile
+
+Choose the tested profiles with `MT5_TEST_PROFILES` in `.env`, for example:
+
+```powershell
+MT5_TEST_PROFILES=xauusd_volatility,us500_trend,ger40_orb
+```
+
 ## Secrets
 
 Vul je keys en brokergegevens in in `.env`. De echte `.env` staat in `.gitignore`, dus je secrets blijven lokaal. Gebruik `.env.example` als referentie.
@@ -65,7 +87,7 @@ MT5_TERMINAL_PATH=C:\Program Files\MetaTrader 5\terminal64.exe
 MT5_BROKER_SYMBOL=SPY
 ```
 
-Live order placement is disabled by default. Enable it only after paper validation by setting `live_trading_enabled=True` in [quant_system/config.py](C:\Users\liset\PycharmProjects\QuantGenerated\quant_system\config.py).
+Live order placement is disabled by default. Enable it only after paper validation by setting `LIVE_TRADING_ENABLED=true` in `.env`.
 
 ## Instrument and FTMO config
 
@@ -83,6 +105,21 @@ Na elke run print de app ook een FTMO-evaluatie met:
 - max drawdown
 - total costs
 - pass/fail plus redenen
+
+Er zijn nu drie profielstrategieën ingebouwd:
+
+- `us500_trend`: `SPY` data, `US500.cash` broker, trend continuation
+- `us100_trend`: `QQQ` data, `US100.cash` broker, trend continuation
+- `ger40_orb`: `I:DAX` data, `GER40.cash` broker, opening range breakout
+- `xauusd_volatility`: `C:XAUUSD` data, `XAUUSD` broker, volatility breakout
+
+De actieve set kies je met `ACTIVE_STRATEGY_PROFILES` in `.env`.
+Als Polygon voor een profiel geen data teruggeeft, kun je het dataticker per profiel overriden met:
+
+- `US500_TREND_DATA_SYMBOL`
+- `US100_TREND_DATA_SYMBOL`
+- `GER40_ORB_DATA_SYMBOL`
+- `XAUUSD_VOLATILITY_DATA_SYMBOL`
 
 ## FTMO guardrails
 

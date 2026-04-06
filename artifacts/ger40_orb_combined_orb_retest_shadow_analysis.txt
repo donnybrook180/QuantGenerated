@@ -1,0 +1,17 @@
+Artifact: ger40_orb_combined_orb_retest_shadow
+Closed trades: 11
+Realized pnl: 107.00
+
+By entry hour
+16: trades=1 pnl=-47.14 avg=-47.14 win_rate=0.00%
+14: trades=10 pnl=154.14 avg=15.41 win_rate=60.00%
+
+By entry setup
+range_retest_continuation: trades=1 pnl=-47.14 avg=-47.14 win_rate=0.00%
+opening_range_breakout: trades=10 pnl=154.14 avg=15.41 win_rate=60.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-82.73 avg=-82.73 win_rate=0.00%
+stale_breakout: trades=4 pnl=-65.50 avg=-16.37 win_rate=50.00%
+trailing_stop: trades=2 pnl=-24.38 avg=-12.19 win_rate=0.00%
+take_profit: trades=4 pnl=279.61 avg=69.90 win_rate=100.00%

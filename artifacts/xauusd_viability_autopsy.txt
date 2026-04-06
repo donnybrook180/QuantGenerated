@@ -1,0 +1,30 @@
+Viability autopsy: XAUUSD
+Execution validation summary: variant=5m_us data_source=duckdb_cache pnl=921.62 pf=2.12 closed=16 -> accepted
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 50%): 104
+- validation PF < 1.0 (0.00): 64
+- test PF < 1.0 (0.00): 56
+- test trades too low (0 < 2): 42
+- test pnl <= 0 (0.00): 42
+- validation trades too low (1 < 3): 38
+- walk-forward avg test pnl <= 0 (0.00): 36
+- validation trades too low (0 < 3): 34
+
+Top near-misses
+- trend__15m_overlap: pnl=2727.12 pf=15.08 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
+  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
+- trend__15m_overlap__exit_trend: pnl=2479.41 pf=13.80 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
+  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
+- trend__15m_overlap__exit_fastfail: pnl=1714.81 pf=9.86 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
+  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
+- xauusd_volatility_breakout__5m_overlap__exit_trend: pnl=1074.17 pf=7.02 val=966.06/999.00/1 test=86.39/2.52/3 wf=0.00%
+  reasons: validation trades too low (1 < 3), walk-forward pass rate too low (0.00% < 50%)
+- xauusd_volatility_breakout__5m_overlap__exit_fastfail: pnl=980.68 pf=5.47 val=511.60/999.00/1 test=47.19/1.83/3 wf=0.00%
+  reasons: validation trades too low (1 < 3), walk-forward pass rate too low (0.00% < 50%)
+- volatility_breakout__5m_us__exit_trend__regime_trend_flat_vol_high: pnl=980.55 pf=999.00 val=254.06/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (1 < 3), test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg test pnl <= 0 (0.00)
+- volatility_breakout__5m_us__regime_trend_flat_vol_high: pnl=980.55 pf=999.00 val=254.06/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (1 < 3), test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg test pnl <= 0 (0.00)
+- xauusd_volatility_breakout__5m_overlap: pnl=949.18 pf=6.32 val=666.39/999.00/1 test=47.19/1.83/3 wf=0.00%
+  reasons: validation trades too low (1 < 3), walk-forward pass rate too low (0.00% < 50%)

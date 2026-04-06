@@ -1,0 +1,23 @@
+Portfolio allocator
+
+XAUUSD (symbol::xauusd)
+  weight_pct: 54.98
+  score: 0.9775
+  candidate: volatility_breakout__5m_us__exit_trend
+  variant: 5m_us
+  realized: pnl=2029.18 pf=3.64 closed=16 dd=0.04%
+  validation: pnl=833.99 pf=5.21 closed=3
+  test: pnl=971.77 pf=999.00 closed=3
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=62.50% combo_score=0.00
+
+BTC (symbol::btc)
+  weight_pct: 45.02
+  score: 0.8004
+  candidate: crypto_short_breakdown__5m_overlap__exit_trend
+  variant: 5m_overlap
+  realized: pnl=312.66 pf=2.15 closed=16 dd=0.00%
+  validation: pnl=133.78 pf=2.35 closed=5
+  test: pnl=22.94 pf=3.15 closed=2
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=62.50% combo_score=0.00

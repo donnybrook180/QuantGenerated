@@ -1,13 +1,13 @@
 Artifact: xauusd_xauusd_volatility_breakout__15m_overlap_15m_overlap_symbol_candidate
 Closed trades: 2
-Realized pnl: 0.89
+Realized pnl: 165.39
 
 By entry hour
-13: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
-14: trades=1 pnl=0.91 avg=0.91 win_rate=100.00%
+13: trades=1 pnl=36.95 avg=36.95 win_rate=100.00%
+14: trades=1 pnl=128.44 avg=128.44 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=2 pnl=0.89 avg=0.44 win_rate=50.00%
+volatility_breakout: trades=2 pnl=165.39 avg=82.69 win_rate=100.00%
 
 By exit reason
-trailing_stop: trades=2 pnl=0.89 avg=0.44 win_rate=50.00%
+trailing_stop: trades=2 pnl=165.39 avg=82.69 win_rate=100.00%

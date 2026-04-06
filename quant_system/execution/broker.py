@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import timedelta
 from typing import Protocol
 
 from quant_system.models import ClosedTradeRecord, FillEvent, OrderRequest, PortfolioSnapshot, Position, Side
@@ -32,6 +33,12 @@ class SimulatedBroker:
     fee_bps: float
     commission_per_unit: float
     slippage_bps: float
+    spread_points: float = 0.0
+    contract_size: float = 1.0
+    commission_mode: str = "legacy"
+    commission_per_lot: float = 0.0
+    commission_notional_pct: float = 0.0
+    overnight_cost_per_lot_day: float = 0.0
     cash: float = field(init=False)
     realized_pnl: float = 0.0
     total_costs: float = 0.0
@@ -43,23 +50,43 @@ class SimulatedBroker:
     def __post_init__(self) -> None:
         self.cash = self.initial_cash
 
+    def _commission_cost(self, order: OrderRequest, fill_price: float) -> float:
+        if self.commission_mode == "per_lot":
+            return abs(order.quantity) * self.commission_per_lot
+        if self.commission_mode == "notional_pct":
+            notional = abs(fill_price * order.quantity * self.contract_size)
+            return notional * (self.commission_notional_pct / 100.0)
+        if self.commission_mode == "none":
+            return 0.0
+        return abs(order.quantity) * self.commission_per_unit
+
+    def _overnight_cost(self, order: OrderRequest) -> float:
+        if self._open_trade is None or self.overnight_cost_per_lot_day == 0.0:
+            return 0.0
+        entry_timestamp = self._open_trade["entry_timestamp"]
+        days_held = max(0, (order.timestamp.date() - entry_timestamp.date()).days)
+        return days_held * abs(order.quantity) * self.overnight_cost_per_lot_day
+
     def submit_order(self, order: OrderRequest, market_price: float) -> FillEvent:
         if not self.position.symbol:
             self.position.symbol = order.symbol
-        multiplier = 1 + ((self.slippage_bps / 10_000) if order.side == Side.BUY else -(self.slippage_bps / 10_000))
-        fill_price = market_price * multiplier
-        gross = fill_price * order.quantity
-        fee = abs(gross) * (self.fee_bps / 10_000)
-        commission = abs(order.quantity) * self.commission_per_unit
-        total_cost = fee + commission
+        slippage_multiplier = 1 + ((self.slippage_bps / 10_000) if order.side == Side.BUY else -(self.slippage_bps / 10_000))
+        slipped_price = market_price * slippage_multiplier
+        spread_half = self.spread_points / 2.0
+        fill_price = slipped_price + spread_half if order.side == Side.BUY else slipped_price - spread_half
+        gross_notional = fill_price * order.quantity * self.contract_size
+        fee = abs(gross_notional) * (self.fee_bps / 10_000)
+        commission = self._commission_cost(order, fill_price)
+        overnight_cost = self._overnight_cost(order) if order.side == Side.SELL else 0.0
+        total_cost = fee + commission + overnight_cost
         self.total_costs += total_cost
 
         if order.side == Side.BUY:
-            self.cash -= gross + total_cost
+            self.cash -= total_cost
             new_quantity = self.position.quantity + order.quantity
             if new_quantity:
                 self.position.average_price = (
-                    (self.position.average_price * self.position.quantity) + gross
+                    (self.position.average_price * self.position.quantity) + (fill_price * order.quantity)
                 ) / new_quantity
             self.position.quantity = new_quantity
             self._open_trade = {
@@ -73,9 +100,11 @@ class SimulatedBroker:
                 "entry_costs": total_cost,
             }
         elif order.side == Side.SELL:
-            self.cash += gross - total_cost
             closed_quantity = min(order.quantity, self.position.quantity)
-            trade_pnl = (fill_price - self.position.average_price) * closed_quantity - total_cost
+            gross_trade_pnl = (fill_price - self.position.average_price) * closed_quantity * self.contract_size
+            entry_costs = float(self._open_trade.get("entry_costs", 0.0)) if self._open_trade is not None else 0.0
+            trade_pnl = gross_trade_pnl - entry_costs - total_cost
+            self.cash += gross_trade_pnl - total_cost
             self.realized_pnl += trade_pnl
             if closed_quantity > 0:
                 self.closed_trade_pnls.append(trade_pnl)
@@ -91,7 +120,7 @@ class SimulatedBroker:
                             exit_price=fill_price,
                             quantity=closed_quantity,
                             pnl=trade_pnl,
-                            costs=float(self._open_trade.get("entry_costs", 0.0)) + total_cost,
+                            costs=entry_costs + total_cost,
                             entry_reason=str(self._open_trade.get("entry_reason", "")),
                             exit_reason=order.reason,
                             entry_hour=self._open_trade["entry_timestamp"].hour,
@@ -117,8 +146,10 @@ class SimulatedBroker:
         )
 
     def snapshot(self, timestamp, mark_price: float) -> PortfolioSnapshot:
-        unrealized = (mark_price - self.position.average_price) * self.position.quantity
-        equity = self.cash + (self.position.quantity * mark_price)
+        spread_half = self.spread_points / 2.0
+        bid_mark = mark_price - spread_half
+        unrealized = (bid_mark - self.position.average_price) * self.position.quantity * self.contract_size
+        equity = self.cash + unrealized
         drawdown = max(0.0, (self.initial_cash - equity) / self.initial_cash)
         return PortfolioSnapshot(
             timestamp=timestamp,

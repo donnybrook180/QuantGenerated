@@ -1,6 +1,6 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:XAUUSD,2026-03-23T14:15:00+00:00,2026-03-23T14:50:00+00:00,14,14,opening_range_breakout,signal_exit,4490.08784,4461.95743,0.10000,-3.10766,0.58952,7,1.00000,"{'range_high': 4466.09, 'breakout_high': 4466.09}"
-C:XAUUSD,2026-03-24T14:40:00+00:00,2026-03-24T15:00:00+00:00,14,15,opening_range_breakout,trailing_stop,4412.68236,4409.87785,0.10000,-0.57455,0.58823,4,1.00000,"{'range_high': 4383.05, 'breakout_high': 4383.05}"
-C:XAUUSD,2026-03-27T14:00:00+00:00,2026-03-27T17:15:00+00:00,14,17,opening_range_breakout,trailing_stop,4457.98142,4499.03001,0.10000,3.80987,0.58957,39,1.00000,"{'range_high': 4440.91, 'breakout_high': 4440.91}"
-C:XAUUSD,2026-04-01T14:40:00+00:00,2026-04-01T17:55:00+00:00,14,17,opening_range_breakout,trailing_stop,4754.38069,4773.04520,0.10000,1.56872,0.59527,39,0.55012,"{'range_high': 4749.11, 'breakout_high': 4749.11}"
-C:XAUUSD,2026-04-02T14:15:00+00:00,2026-04-02T15:05:00+00:00,14,15,opening_range_breakout,trailing_stop,4660.98201,4669.66588,0.10000,0.57169,0.59331,10,0.78377,"{'range_high': 4650.88, 'breakout_high': 4650.88}"
+C:XAUUSD,2026-03-23T14:15:00+00:00,2026-03-23T14:50:00+00:00,14,14,opening_range_breakout,signal_exit,4489.67414,4462.36797,0.10000,-273.68827,0.62664,7,1.00000,"{'range_high': 4466.09, 'breakout_high': 4466.09}"
+C:XAUUSD,2026-03-24T14:40:00+00:00,2026-03-24T15:00:00+00:00,14,15,opening_range_breakout,trailing_stop,4412.27794,4410.28214,0.10000,-20.57563,0.61758,4,1.00000,"{'range_high': 4383.05, 'breakout_high': 4383.05}"
+C:XAUUSD,2026-03-27T14:00:00+00:00,2026-03-27T17:15:00+00:00,14,17,opening_range_breakout,trailing_stop,4457.57157,4499.44501,0.10000,418.10739,0.62699,39,1.00000,"{'range_high': 4440.91, 'breakout_high': 4440.91}"
+C:XAUUSD,2026-04-01T14:40:00+00:00,2026-04-01T17:55:00+00:00,14,17,opening_range_breakout,trailing_stop,4753.93527,4773.49308,0.10000,194.91114,0.66692,39,0.55012,"{'range_high': 4749.11, 'breakout_high': 4749.11}"
+C:XAUUSD,2026-04-02T14:15:00+00:00,2026-04-02T15:05:00+00:00,14,15,opening_range_breakout,trailing_stop,4660.54780,4670.10135,0.10000,94.88233,0.65315,10,0.78377,"{'range_high': 4650.88, 'breakout_high': 4650.88}"

@@ -1,15 +1,15 @@
 Artifact: xauusd_xauusd_volatility_breakout__5m_us__exit_trend_5m_us_symbol_candidate
 Closed trades: 10
-Realized pnl: -6.59
+Realized pnl: -278.17
 
 By entry hour
-13: trades=8 pnl=-7.27 avg=-0.91 win_rate=25.00%
-14: trades=2 pnl=0.67 avg=0.34 win_rate=100.00%
+13: trades=8 pnl=-421.36 avg=-52.67 win_rate=25.00%
+14: trades=2 pnl=143.20 avg=71.60 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=10 pnl=-6.59 avg=-0.66 win_rate=40.00%
+volatility_breakout: trades=10 pnl=-278.17 avg=-27.82 win_rate=40.00%
 
 By exit reason
-signal_exit: trades=4 pnl=-5.53 avg=-1.38 win_rate=0.00%
-stop_loss: trades=1 pnl=-1.68 avg=-1.68 win_rate=0.00%
-trailing_stop: trades=5 pnl=0.62 avg=0.12 win_rate=80.00%
+signal_exit: trades=4 pnl=-402.32 avg=-100.58 win_rate=0.00%
+stop_loss: trades=1 pnl=-128.70 avg=-128.70 win_rate=0.00%
+trailing_stop: trades=5 pnl=252.85 avg=50.57 win_rate=80.00%

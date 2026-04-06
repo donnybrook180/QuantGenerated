@@ -1,0 +1,19 @@
+Artifact: btc_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate
+Closed trades: 11
+Realized pnl: -110.92
+
+By entry hour
+11: trades=4 pnl=-125.11 avg=-31.28 win_rate=0.00%
+12: trades=2 pnl=-26.49 avg=-13.24 win_rate=0.00%
+7: trades=1 pnl=-25.19 avg=-25.19 win_rate=0.00%
+9: trades=1 pnl=-4.88 avg=-4.88 win_rate=0.00%
+10: trades=1 pnl=-0.69 avg=-0.69 win_rate=0.00%
+8: trades=2 pnl=71.44 avg=35.72 win_rate=50.00%
+
+By entry setup
+crypto_short_breakdown: trades=11 pnl=-110.92 avg=-10.08 win_rate=9.09%
+
+By exit reason
+structure_exit: trades=7 pnl=-176.78 avg=-25.25 win_rate=0.00%
+stale_breakout: trades=3 pnl=-10.36 avg=-3.45 win_rate=0.00%
+take_profit: trades=1 pnl=76.23 avg=76.23 win_rate=100.00%

@@ -1,17 +1,17 @@
 Artifact: xauusd_mean_reversion__15m_us__exit_quick_15m_us_symbol_candidate
 Closed trades: 7
-Realized pnl: -16.67
+Realized pnl: -1399.13
 
 By entry hour
-15: trades=3 pnl=-12.90 avg=-4.30 win_rate=66.67%
-14: trades=1 pnl=-1.54 avg=-1.54 win_rate=0.00%
-18: trades=2 pnl=-1.32 avg=-0.66 win_rate=0.00%
-19: trades=1 pnl=-0.91 avg=-0.91 win_rate=0.00%
+15: trades=3 pnl=-1173.65 avg=-391.22 win_rate=66.67%
+14: trades=1 pnl=-116.77 avg=-116.77 win_rate=0.00%
+18: trades=2 pnl=-55.26 avg=-27.63 win_rate=50.00%
+19: trades=1 pnl=-53.44 avg=-53.44 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=7 pnl=-16.67 avg=-2.38 win_rate=28.57%
+mean_reversion: trades=7 pnl=-1399.13 avg=-199.88 win_rate=42.86%
 
 By exit reason
-time_stop: trades=1 pnl=-13.11 avg=-13.11 win_rate=0.00%
-structure_exit: trades=3 pnl=-3.75 avg=-1.25 win_rate=0.00%
-stale_breakout: trades=3 pnl=0.19 avg=0.06 win_rate=66.67%
+time_stop: trades=1 pnl=-1272.86 avg=-1272.86 win_rate=0.00%
+structure_exit: trades=3 pnl=-260.94 avg=-86.98 win_rate=0.00%
+stale_breakout: trades=3 pnl=134.68 avg=44.89 win_rate=100.00%

@@ -158,6 +158,30 @@ Of voor een specifiek symbool:
 .\.venv\Scripts\python.exe main_symbol_execution_set.py C:XAUUSD
 ```
 
+Voor een advisory risk allocation over de nieuwste symbol research winnaars:
+
+```powershell
+.\.venv\Scripts\python.exe main_portfolio_allocator.py
+```
+
+Of alleen voor specifieke symbolen/profielen:
+
+```powershell
+.\.venv\Scripts\python.exe main_portfolio_allocator.py XAUUSD BTC
+```
+
+Dit gebruikt alleen de nieuwste, geldige symbol execution sets en weegt ze op research-robuustheid:
+
+- validation/test kwaliteit
+- walk-forward pass rate
+- trade count
+- drawdown
+- regime-concentratie
+
+De output komt ook in:
+
+- `artifacts/portfolio_allocator.txt`
+
 ## MT5 Test
 
 Use this to test `XAUUSD`, `US500`, and `GER40` directly against your MetaTrader terminal without forcing live order placement:

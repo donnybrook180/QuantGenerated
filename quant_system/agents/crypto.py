@@ -239,3 +239,148 @@ class CryptoVolatilityExpansionAgent(Agent):
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.74, {"breakout_low": breakout_low})
 
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class CryptoShortBreakdownAgent(Agent):
+    name = "crypto_short_breakdown"
+
+    def __init__(
+        self,
+        lookback: int = 18,
+        min_atr_proxy: float = 0.0025,
+        min_negative_trend: float = -0.0006,
+        min_negative_momentum_5: float = -0.0008,
+        min_negative_momentum_20: float = -0.0012,
+        min_relative_volume: float = 0.9,
+    ) -> None:
+        self.lows: deque[float] = deque(maxlen=lookback)
+        self.highs: deque[float] = deque(maxlen=lookback)
+        self.armed = False
+        self.breakdown_level: float | None = None
+        self.min_atr_proxy = min_atr_proxy
+        self.min_negative_trend = min_negative_trend
+        self.min_negative_momentum_5 = min_negative_momentum_5
+        self.min_negative_momentum_20 = min_negative_momentum_20
+        self.min_relative_volume = min_relative_volume
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        low = feature.values.get("low", feature.values["close"])
+        high = feature.values.get("high", feature.values["close"])
+        close = feature.values["close"]
+        self.lows.append(low)
+        self.highs.append(high)
+        if len(self.lows) < self.lows.maxlen:
+            return None
+
+        breakdown_low = min(list(self.lows)[:-1])
+        rebound_high = max(list(self.highs)[-4:])
+        atr_proxy = feature.values.get("atr_proxy", 0.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+
+        if (
+            not self.armed
+            and close < breakdown_low
+            and atr_proxy >= self.min_atr_proxy
+            and trend_strength <= self.min_negative_trend
+            and momentum_5 <= self.min_negative_momentum_5
+            and momentum_20 <= self.min_negative_momentum_20
+            and relative_volume >= self.min_relative_volume
+        ):
+            self.armed = True
+            self.breakdown_level = breakdown_low
+            confidence = min(((breakdown_low / close) - 1.0) * 160 + (atr_proxy * 50) + 0.3, 1.0)
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                confidence,
+                {"short_breakdown_low": breakdown_low, "short_rebound_high": rebound_high},
+            )
+
+        if self.armed and self.breakdown_level is not None and (
+            close > rebound_high
+            or trend_strength > 0.0002
+            or momentum_20 > 0.0004
+        ):
+            self.armed = False
+            self.breakdown_level = None
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.7, {"short_exit": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class CryptoShortReversionAgent(Agent):
+    name = "crypto_short_reversion"
+
+    def __init__(
+        self,
+        lookback: int = 14,
+        min_negative_trend: float = -0.0005,
+        z_score_low: float = 0.9,
+        z_score_high: float = 2.8,
+        min_relative_volume: float = 0.8,
+        min_atr_proxy: float = 0.0018,
+    ) -> None:
+        self.closes: deque[float] = deque(maxlen=lookback)
+        self.armed = False
+        self.reversion_anchor: float | None = None
+        self.min_negative_trend = min_negative_trend
+        self.z_score_low = z_score_low
+        self.z_score_high = z_score_high
+        self.min_relative_volume = min_relative_volume
+        self.min_atr_proxy = min_atr_proxy
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        self.closes.append(close)
+        if len(self.closes) < self.closes.maxlen:
+            return None
+
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score_20 = feature.values.get("z_score_20", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        atr_proxy = feature.values.get("atr_proxy", 0.0)
+        session_vwap = feature.values.get("session_vwap", close)
+
+        local_ceiling = max(list(self.closes)[-5:])
+        local_mean = sum(self.closes) / len(self.closes)
+
+        if (
+            not self.armed
+            and close < session_vwap
+            and close < local_mean
+            and trend_strength <= self.min_negative_trend
+            and self.z_score_low <= z_score_20 <= self.z_score_high
+            and momentum_5 < 0.002
+            and momentum_20 <= -0.0008
+            and relative_volume >= self.min_relative_volume
+            and atr_proxy >= self.min_atr_proxy
+        ):
+            self.armed = True
+            self.reversion_anchor = local_ceiling
+            confidence = min((abs(trend_strength) * 220) + (abs(momentum_20) * 120) + 0.25, 1.0)
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                confidence,
+                {"short_reversion_anchor": local_ceiling},
+            )
+
+        if self.armed and (
+            trend_strength > 0.0002
+            or momentum_20 > 0.0005
+            or (self.reversion_anchor is not None and close > self.reversion_anchor)
+        ):
+            self.armed = False
+            self.reversion_anchor = None
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.68, {"short_reversion_exit": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})

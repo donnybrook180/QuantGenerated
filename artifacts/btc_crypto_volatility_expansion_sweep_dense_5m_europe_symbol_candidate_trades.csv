@@ -1,11 +1,11 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-09T08:20:00+00:00,2026-03-09T10:15:00+00:00,8,10,crypto_volatility_expansion,trailing_stop,67717.68083,67829.63136,0.10000,10.26676,1.85547,23,0.60687,{'breakout_high': 67666.0}
-X:BTCUSD,2026-03-09T12:20:00+00:00,2026-03-09T12:45:00+00:00,12,12,crypto_volatility_expansion,trailing_stop,68092.47577,68099.37740,0.10000,-0.24083,1.86192,5,0.55516,{'breakout_high': 68006.0}
-X:BTCUSD,2026-03-12T07:45:00+00:00,2026-03-12T08:25:00+00:00,7,8,crypto_volatility_expansion,trailing_stop,69860.95940,69792.03880,0.10000,-7.83998,1.89653,8,0.58266,{'breakout_high': 69774.0}
-X:BTCUSD,2026-03-13T08:35:00+00:00,2026-03-16T07:00:00+00:00,8,7,crypto_volatility_expansion,take_profit,72067.24057,73857.67551,0.10000,178.05492,1.95925,53,1.00000,{'breakout_high': 71725.69}
-X:BTCUSD,2026-03-16T10:50:00+00:00,2026-03-16T11:25:00+00:00,10,11,crypto_volatility_expansion,trailing_stop,73594.47595,73514.29420,0.10000,-9.00332,1.97109,7,0.57456,{'breakout_high': 73508.19}
-X:BTCUSD,2026-03-20T08:05:00+00:00,2026-03-20T09:15:00+00:00,8,9,crypto_volatility_expansion,stale_breakout,71175.17219,70635.35010,0.10000,-54.93856,1.91811,14,1.00000,{'breakout_high': 70939.0}
-X:BTCUSD,2026-03-23T08:10:00+00:00,2026-03-23T08:50:00+00:00,8,8,crypto_volatility_expansion,stale_breakout,68675.73240,68434.31040,0.10000,-25.07654,1.87110,8,0.62572,{'breakout_high': 68577.0}
-X:BTCUSD,2026-03-23T11:05:00+00:00,2026-03-23T12:45:00+00:00,11,12,crypto_volatility_expansion,stale_breakout,71175.93234,70737.84960,0.10000,-44.76565,1.91914,20,1.00000,{'breakout_high': 68746.0}
-X:BTCUSD,2026-03-30T11:25:00+00:00,2026-03-30T11:35:00+00:00,11,11,crypto_volatility_expansion,signal_exit,67639.70524,67468.27365,0.10000,-18.06784,1.85108,2,0.57857,{'breakout_high': 67624.0}
-X:BTCUSD,2026-04-01T07:00:00+00:00,2026-04-01T07:45:00+00:00,7,7,crypto_volatility_expansion,stop_loss,69110.51934,68719.04344,0.10000,-40.08478,1.87830,9,1.00000,{'breakout_high': 66911.0}
+X:BTCUSD,2026-03-09T08:20:00+00:00,2026-03-09T10:15:00+00:00,8,10,crypto_volatility_expansion,trailing_stop,67724.29562,67823.02352,0.10000,5.46750,4.40529,23,0.60687,{'breakout_high': 67666.0}
+X:BTCUSD,2026-03-09T12:20:00+00:00,2026-03-09T12:45:00+00:00,12,12,crypto_volatility_expansion,trailing_stop,68099.07183,68092.78305,0.10000,-5.05511,4.42624,5,0.55516,{'breakout_high': 68006.0}
+X:BTCUSD,2026-03-12T07:45:00+00:00,2026-03-12T08:25:00+00:00,7,8,crypto_volatility_expansion,trailing_stop,69867.46705,69785.52910,0.10000,-12.73252,4.53872,8,0.58266,{'breakout_high': 69774.0}
+X:BTCUSD,2026-03-13T08:35:00+00:00,2026-03-16T07:00:00+00:00,8,7,crypto_volatility_expansion,take_profit,72073.63792,73851.36913,0.10000,173.03056,4.74256,53,1.00000,{'breakout_high': 71725.69}
+X:BTCUSD,2026-03-16T10:50:00+00:00,2026-03-16T11:25:00+00:00,10,11,crypto_volatility_expansion,trailing_stop,73600.79696,73507.97065,0.10000,-14.06367,4.78103,7,0.57456,{'breakout_high': 73508.19}
+X:BTCUSD,2026-03-20T08:05:00+00:00,2026-03-20T09:15:00+00:00,8,9,crypto_volatility_expansion,stale_breakout,71181.61414,70628.88258,0.10000,-59.88200,4.60884,14,1.00000,{'breakout_high': 70939.0}
+X:BTCUSD,2026-03-23T08:10:00+00:00,2026-03-23T08:50:00+00:00,8,8,crypto_volatility_expansion,stale_breakout,68682.29930,68427.73280,0.10000,-29.91273,4.45608,8,0.62572,{'breakout_high': 68577.0}
+X:BTCUSD,2026-03-23T11:05:00+00:00,2026-03-23T12:45:00+00:00,11,12,crypto_volatility_expansion,stale_breakout,71182.37426,70731.38720,0.10000,-49.71090,4.61220,20,1.00000,{'breakout_high': 68746.0}
+X:BTCUSD,2026-03-30T11:25:00+00:00,2026-03-30T11:35:00+00:00,11,11,crypto_volatility_expansion,signal_exit,67646.32393,67461.64773,0.10000,-22.85863,4.39101,2,0.57857,{'breakout_high': 67624.0}
+X:BTCUSD,2026-04-01T07:00:00+00:00,2026-04-01T07:45:00+00:00,7,7,crypto_volatility_expansion,stop_loss,69117.06451,68712.48008,0.10000,-44.93790,4.47946,9,1.00000,{'breakout_high': 66911.0}

@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:BTCUSD,2026-03-11T11:55:00+00:00,2026-03-12T09:40:00+00:00,11,9,crypto_short_breakdown,take_profit,69200.34700,70259.45800,0.10000,101.37866,4.53244,11,0.64939,"{'short_breakdown_low': 69261.58, 'short_rebound_high': 69555.0}"
+X:BTCUSD,2026-03-31T08:40:00+00:00,2026-03-31T11:20:00+00:00,8,11,crypto_short_breakdown,signal_exit,66800.00700,66562.96256,0.10000,-28.03874,4.33430,1,0.99752,"{'short_breakdown_low': 66977.8, 'short_rebound_high': 67354.0}"

@@ -15,6 +15,7 @@ from quant_system.ai.registry import build_agent_registry_records, render_agent_
 from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents, describe_profile_agents
 from quant_system.config import SystemConfig
+from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.evaluation.report import build_ftmo_report
 from quant_system.execution.broker import SimulatedBroker
@@ -54,9 +55,6 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_bars = 4
         config.execution.stale_breakout_atr_fraction = 0.08
         config.execution.structure_exit_bars = 0
-        config.execution.fee_bps = 0.0
-        config.execution.commission_per_unit = 0.0
-        config.execution.slippage_bps = 0.5
         config.execution.order_size = 1.0
     elif profile.name == "us100_trend":
         config.execution.min_bars_between_trades = 12
@@ -78,9 +76,6 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_bars = 5
         config.execution.stale_breakout_atr_fraction = 0.08
         config.execution.structure_exit_bars = 3
-        config.execution.fee_bps = 0.0
-        config.execution.commission_per_unit = 0.0
-        config.execution.slippage_bps = 0.5
         config.execution.order_size = 1.0
     elif profile.name == "xauusd_volatility":
         config.execution.min_bars_between_trades = 30
@@ -92,6 +87,7 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_bars = 6
         config.execution.stale_breakout_atr_fraction = 0.2
         config.execution.structure_exit_bars = 4
+    apply_ftmo_cost_profile(config, profile.broker_symbol or profile.data_symbol)
 
 
 def configure_profile_optimization(config: SystemConfig, profile: StrategyProfile) -> None:
@@ -241,6 +237,12 @@ def build_system_with_agents(
         fee_bps=config.execution.fee_bps,
         commission_per_unit=config.execution.commission_per_unit,
         slippage_bps=config.execution.slippage_bps,
+        spread_points=config.execution.spread_points,
+        contract_size=config.execution.contract_size,
+        commission_mode=config.execution.commission_mode,
+        commission_per_lot=config.execution.commission_per_lot,
+        commission_notional_pct=config.execution.commission_notional_pct,
+        overnight_cost_per_lot_day=config.execution.overnight_cost_per_lot_day,
     )
     engine = EventDrivenEngine(
         coordinator=AgentCoordinator(agents, consensus_min_confidence=consensus_min_confidence),

@@ -1,15 +1,15 @@
 Artifact: xauusd_trend__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
 Closed trades: 4
-Realized pnl: 15.63
+Realized pnl: 1714.81
 
 By entry hour
-14: trades=2 pnl=-1.42 avg=-0.71 win_rate=50.00%
-16: trades=2 pnl=17.05 avg=8.53 win_rate=100.00%
+14: trades=2 pnl=-65.21 avg=-32.60 win_rate=50.00%
+16: trades=2 pnl=1780.02 avg=890.01 win_rate=100.00%
 
 By entry setup
-trend: trades=4 pnl=15.63 avg=3.91 win_rate=75.00%
+trend: trades=4 pnl=1714.81 avg=428.70 win_rate=75.00%
 
 By exit reason
-structure_exit: trades=1 pnl=-2.33 avg=-2.33 win_rate=0.00%
-trailing_stop: trades=1 pnl=0.91 avg=0.91 win_rate=100.00%
-take_profit: trades=2 pnl=17.05 avg=8.53 win_rate=100.00%
+structure_exit: trades=1 pnl=-193.65 avg=-193.65 win_rate=0.00%
+trailing_stop: trades=1 pnl=128.44 avg=128.44 win_rate=100.00%
+take_profit: trades=2 pnl=1780.02 avg=890.01 win_rate=100.00%

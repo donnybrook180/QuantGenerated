@@ -189,6 +189,27 @@ class ExperimentStore:
                     test_pnl DOUBLE,
                     test_profit_factor DOUBLE,
                     test_closed_trades INTEGER,
+                    expectancy DOUBLE,
+                    avg_win DOUBLE,
+                    avg_loss DOUBLE,
+                    payoff_ratio DOUBLE,
+                    avg_hold_bars DOUBLE,
+                    dominant_exit VARCHAR,
+                    dominant_exit_share_pct DOUBLE,
+                    walk_forward_windows INTEGER,
+                    walk_forward_pass_rate_pct DOUBLE,
+                    walk_forward_avg_validation_pnl DOUBLE,
+                    walk_forward_avg_test_pnl DOUBLE,
+                    walk_forward_avg_validation_pf DOUBLE,
+                    walk_forward_avg_test_pf DOUBLE,
+                    component_count INTEGER,
+                    combo_outperformance_score DOUBLE,
+                    combo_trade_overlap_pct DOUBLE,
+                    best_regime VARCHAR,
+                    best_regime_pnl DOUBLE,
+                    worst_regime VARCHAR,
+                    worst_regime_pnl DOUBLE,
+                    dominant_regime_share_pct DOUBLE,
                     variant_label VARCHAR,
                     timeframe_label VARCHAR,
                     session_label VARCHAR,
@@ -205,6 +226,27 @@ class ExperimentStore:
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_pnl DOUBLE")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_profit_factor DOUBLE")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS test_closed_trades INTEGER")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS expectancy DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS avg_win DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS avg_loss DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS payoff_ratio DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS avg_hold_bars DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS dominant_exit VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS dominant_exit_share_pct DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_windows INTEGER")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_pass_rate_pct DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_avg_validation_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_avg_test_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_avg_validation_pf DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS walk_forward_avg_test_pf DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS component_count INTEGER")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS combo_outperformance_score DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS combo_trade_overlap_pct DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS best_regime VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS best_regime_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS worst_regime VARCHAR")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS worst_regime_pnl DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS dominant_regime_share_pct DOUBLE")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS session_label VARCHAR")
@@ -760,6 +802,17 @@ class ExperimentStore:
             "created_at": row[6],
         }
 
+    def list_symbol_research_profiles(self) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT DISTINCT profile_name
+                FROM symbol_research_runs
+                ORDER BY profile_name ASC
+                """
+            ).fetchall()
+        return [str(row[0]) for row in rows]
+
     def list_latest_symbol_research_candidates(self, profile_name: str) -> list[dict[str, object]]:
         latest = self.get_latest_symbol_research_run(profile_name)
         if latest is None:
@@ -785,6 +838,27 @@ class ExperimentStore:
                     test_pnl,
                     test_profit_factor,
                     test_closed_trades,
+                    expectancy,
+                    avg_win,
+                    avg_loss,
+                    payoff_ratio,
+                    avg_hold_bars,
+                    dominant_exit,
+                    dominant_exit_share_pct,
+                    walk_forward_windows,
+                    walk_forward_pass_rate_pct,
+                    walk_forward_avg_validation_pnl,
+                    walk_forward_avg_test_pnl,
+                    walk_forward_avg_validation_pf,
+                    walk_forward_avg_test_pf,
+                    component_count,
+                    combo_outperformance_score,
+                    combo_trade_overlap_pct,
+                    best_regime,
+                    best_regime_pnl,
+                    worst_regime,
+                    worst_regime_pnl,
+                    dominant_regime_share_pct,
                     variant_label,
                     timeframe_label,
                     session_label,
@@ -816,12 +890,33 @@ class ExperimentStore:
                 "test_pnl": float(row[14] or 0.0),
                 "test_profit_factor": float(row[15] or 0.0),
                 "test_closed_trades": int(row[16] or 0),
-                "variant_label": row[17] or "",
-                "timeframe_label": row[18] or "",
-                "session_label": row[19] or "",
-                "regime_filter_label": row[20] or "",
-                "execution_overrides": json.loads(row[21] or "{}"),
-                "recommended": bool(row[22]),
+                "expectancy": float(row[17] or 0.0),
+                "avg_win": float(row[18] or 0.0),
+                "avg_loss": float(row[19] or 0.0),
+                "payoff_ratio": float(row[20] or 0.0),
+                "avg_hold_bars": float(row[21] or 0.0),
+                "dominant_exit": row[22] or "",
+                "dominant_exit_share_pct": float(row[23] or 0.0),
+                "walk_forward_windows": int(row[24] or 0),
+                "walk_forward_pass_rate_pct": float(row[25] or 0.0),
+                "walk_forward_avg_validation_pnl": float(row[26] or 0.0),
+                "walk_forward_avg_test_pnl": float(row[27] or 0.0),
+                "walk_forward_avg_validation_pf": float(row[28] or 0.0),
+                "walk_forward_avg_test_pf": float(row[29] or 0.0),
+                "component_count": int(row[30] or 1),
+                "combo_outperformance_score": float(row[31] or 0.0),
+                "combo_trade_overlap_pct": float(row[32] or 0.0),
+                "best_regime": row[33] or "",
+                "best_regime_pnl": float(row[34] or 0.0),
+                "worst_regime": row[35] or "",
+                "worst_regime_pnl": float(row[36] or 0.0),
+                "dominant_regime_share_pct": float(row[37] or 0.0),
+                "variant_label": row[38] or "",
+                "timeframe_label": row[39] or "",
+                "session_label": row[40] or "",
+                "regime_filter_label": row[41] or "",
+                "execution_overrides": json.loads(row[42] or "{}"),
+                "recommended": bool(row[43]),
             }
             for row in rows
         ]
@@ -977,6 +1072,27 @@ class ExperimentStore:
                         test_pnl,
                         test_profit_factor,
                         test_closed_trades,
+                        expectancy,
+                        avg_win,
+                        avg_loss,
+                        payoff_ratio,
+                        avg_hold_bars,
+                        dominant_exit,
+                        dominant_exit_share_pct,
+                        walk_forward_windows,
+                        walk_forward_pass_rate_pct,
+                        walk_forward_avg_validation_pnl,
+                        walk_forward_avg_test_pnl,
+                        walk_forward_avg_validation_pf,
+                        walk_forward_avg_test_pf,
+                        component_count,
+                        combo_outperformance_score,
+                        combo_trade_overlap_pct,
+                        best_regime,
+                        best_regime_pnl,
+                        worst_regime,
+                        worst_regime_pnl,
+                        dominant_regime_share_pct,
                         variant_label,
                         timeframe_label,
                         session_label,
@@ -984,7 +1100,7 @@ class ExperimentStore:
                         execution_overrides_json,
                         recommended
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         run_id,
@@ -1006,6 +1122,27 @@ class ExperimentStore:
                         candidate.test_pnl,
                         candidate.test_profit_factor,
                         candidate.test_closed_trades,
+                        candidate.expectancy,
+                        candidate.avg_win,
+                        candidate.avg_loss,
+                        candidate.payoff_ratio,
+                        candidate.avg_hold_bars,
+                        candidate.dominant_exit,
+                        candidate.dominant_exit_share_pct,
+                        candidate.walk_forward_windows,
+                        candidate.walk_forward_pass_rate_pct,
+                        candidate.walk_forward_avg_validation_pnl,
+                        candidate.walk_forward_avg_test_pnl,
+                        candidate.walk_forward_avg_validation_pf,
+                        candidate.walk_forward_avg_test_pf,
+                        candidate.component_count,
+                        candidate.combo_outperformance_score,
+                        candidate.combo_trade_overlap_pct,
+                        candidate.best_regime,
+                        candidate.best_regime_pnl,
+                        candidate.worst_regime,
+                        candidate.worst_regime_pnl,
+                        candidate.dominant_regime_share_pct,
                         candidate.variant_label,
                         candidate.timeframe_label,
                         candidate.session_label,

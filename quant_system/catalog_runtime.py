@@ -4,7 +4,13 @@ import importlib
 from typing import cast
 
 from quant_system.agents.base import Agent
-from quant_system.agents.crypto import CryptoBreakoutReclaimAgent, CryptoTrendPullbackAgent, CryptoVolatilityExpansionAgent
+from quant_system.agents.crypto import (
+    CryptoBreakoutReclaimAgent,
+    CryptoShortBreakdownAgent,
+    CryptoShortReversionAgent,
+    CryptoTrendPullbackAgent,
+    CryptoVolatilityExpansionAgent,
+)
 from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReversionAgent, ForexTrendContinuationAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.config import SystemConfig
@@ -40,6 +46,10 @@ def _instantiate_single(code_path: str, config: SystemConfig) -> Agent:
         return CryptoBreakoutReclaimAgent()
     if cls is CryptoVolatilityExpansionAgent:
         return CryptoVolatilityExpansionAgent()
+    if cls is CryptoShortBreakdownAgent:
+        return CryptoShortBreakdownAgent()
+    if cls is CryptoShortReversionAgent:
+        return CryptoShortReversionAgent()
     if cls is ForexTrendContinuationAgent:
         return ForexTrendContinuationAgent()
     if cls is ForexRangeReversionAgent:

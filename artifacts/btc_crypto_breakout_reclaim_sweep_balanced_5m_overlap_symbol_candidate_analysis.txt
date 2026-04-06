@@ -1,17 +1,17 @@
 Artifact: btc_crypto_breakout_reclaim_sweep_balanced_5m_overlap_symbol_candidate
 Closed trades: 7
-Realized pnl: -200.37
+Realized pnl: -235.21
 
 By entry hour
-13: trades=2 pnl=-73.76 avg=-36.88 win_rate=50.00%
-15: trades=1 pnl=-59.61 avg=-59.61 win_rate=0.00%
-12: trades=3 pnl=-53.88 avg=-17.96 win_rate=0.00%
-14: trades=1 pnl=-13.13 avg=-13.13 win_rate=0.00%
+13: trades=2 pnl=-83.63 avg=-41.81 win_rate=0.00%
+12: trades=3 pnl=-68.88 avg=-22.96 win_rate=0.00%
+15: trades=1 pnl=-64.71 avg=-64.71 win_rate=0.00%
+14: trades=1 pnl=-18.00 avg=-18.00 win_rate=0.00%
 
 By entry setup
-crypto_breakout_reclaim: trades=7 pnl=-200.37 avg=-28.62 win_rate=14.29%
+crypto_breakout_reclaim: trades=7 pnl=-235.21 avg=-33.60 win_rate=0.00%
 
 By exit reason
-signal_exit: trades=5 pnl=-168.56 avg=-33.71 win_rate=0.00%
-stop_loss: trades=1 pnl=-35.38 avg=-35.38 win_rate=0.00%
-trailing_stop: trades=1 pnl=3.57 avg=3.57 win_rate=100.00%
+signal_exit: trades=5 pnl=-193.53 avg=-38.71 win_rate=0.00%
+stop_loss: trades=1 pnl=-40.31 avg=-40.31 win_rate=0.00%
+trailing_stop: trades=1 pnl=-1.38 avg=-1.38 win_rate=0.00%

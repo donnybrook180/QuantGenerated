@@ -12,13 +12,20 @@ from quant_system.app import export_closed_trade_artifacts
 from quant_system.ai.models import AgentDescriptor
 from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.base import Agent
-from quant_system.agents.crypto import CryptoBreakoutReclaimAgent, CryptoTrendPullbackAgent, CryptoVolatilityExpansionAgent
+from quant_system.agents.crypto import (
+    CryptoBreakoutReclaimAgent,
+    CryptoShortBreakdownAgent,
+    CryptoShortReversionAgent,
+    CryptoTrendPullbackAgent,
+    CryptoVolatilityExpansionAgent,
+)
 from quant_system.agents.forex import ForexBreakoutMomentumAgent, ForexRangeReversionAgent, ForexTrendContinuationAgent
 from quant_system.agents.strategies import OpeningRangeBreakoutAgent, VolatilityBreakoutAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.agents.xauusd import XAUUSDVolatilityBreakoutAgent
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
+from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
@@ -123,12 +130,82 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     return max(base_history, 180)
 
 
+def _research_thresholds(symbol: str) -> dict[str, float | int]:
+    if _is_crypto_symbol(symbol):
+        return {
+            "validation_closed_trades": 2,
+            "test_closed_trades": 1,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 40.0,
+        }
+    return {
+        "validation_closed_trades": 3,
+        "test_closed_trades": 2,
+        "min_profit_factor": 1.0,
+        "walk_forward_min_windows": 1,
+        "walk_forward_min_pass_rate_pct": 50.0,
+    }
+
+
+def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> bool:
+    thresholds = _research_thresholds(symbol)
+    realized_pnl = float(row.realized_pnl if isinstance(row, CandidateResult) else row.get("realized_pnl", 0.0))
+    profit_factor = float(row.profit_factor if isinstance(row, CandidateResult) else row.get("profit_factor", 0.0))
+    validation_closed_trades = int(row.validation_closed_trades if isinstance(row, CandidateResult) else row.get("validation_closed_trades", 0))
+    test_closed_trades = int(row.test_closed_trades if isinstance(row, CandidateResult) else row.get("test_closed_trades", 0))
+    validation_pnl = float(row.validation_pnl if isinstance(row, CandidateResult) else row.get("validation_pnl", 0.0))
+    test_pnl = float(row.test_pnl if isinstance(row, CandidateResult) else row.get("test_pnl", 0.0))
+    validation_profit_factor = float(row.validation_profit_factor if isinstance(row, CandidateResult) else row.get("validation_profit_factor", 0.0))
+    test_profit_factor = float(row.test_profit_factor if isinstance(row, CandidateResult) else row.get("test_profit_factor", 0.0))
+    walk_forward_windows = int(row.walk_forward_windows if isinstance(row, CandidateResult) else row.get("walk_forward_windows", 0))
+    walk_forward_pass_rate_pct = float(row.walk_forward_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_pass_rate_pct", 0.0))
+    walk_forward_avg_validation_pnl = float(
+        row.walk_forward_avg_validation_pnl if isinstance(row, CandidateResult) else row.get("walk_forward_avg_validation_pnl", 0.0)
+    )
+    walk_forward_avg_test_pnl = float(
+        row.walk_forward_avg_test_pnl if isinstance(row, CandidateResult) else row.get("walk_forward_avg_test_pnl", 0.0)
+    )
+    component_count = int(row.component_count if isinstance(row, CandidateResult) else row.get("component_count", 1))
+    combo_outperformance_score = float(
+        row.combo_outperformance_score if isinstance(row, CandidateResult) else row.get("combo_outperformance_score", 0.0)
+    )
+    combo_trade_overlap_pct = float(
+        row.combo_trade_overlap_pct if isinstance(row, CandidateResult) else row.get("combo_trade_overlap_pct", 0.0)
+    )
+    return (
+        realized_pnl > 0.0
+        and profit_factor >= float(thresholds["min_profit_factor"])
+        and
+        validation_closed_trades >= int(thresholds["validation_closed_trades"])
+        and test_closed_trades >= int(thresholds["test_closed_trades"])
+        and validation_pnl > 0.0
+        and test_pnl > 0.0
+        and validation_profit_factor >= float(thresholds["min_profit_factor"])
+        and test_profit_factor >= float(thresholds["min_profit_factor"])
+        and walk_forward_windows >= int(thresholds["walk_forward_min_windows"])
+        and walk_forward_pass_rate_pct >= float(thresholds["walk_forward_min_pass_rate_pct"])
+        and walk_forward_avg_validation_pnl > 0.0
+        and walk_forward_avg_test_pnl > 0.0
+        and (
+            component_count <= 1
+            or (combo_outperformance_score >= 0.0 and combo_trade_overlap_pct <= 80.0)
+        )
+    )
+
+
 def _build_engine(config: SystemConfig, agents: list[Agent]) -> EventDrivenEngine:
     broker = SimulatedBroker(
         initial_cash=config.execution.initial_cash,
         fee_bps=config.execution.fee_bps,
         commission_per_unit=config.execution.commission_per_unit,
         slippage_bps=config.execution.slippage_bps,
+        spread_points=config.execution.spread_points,
+        contract_size=config.execution.contract_size,
+        commission_mode=config.execution.commission_mode,
+        commission_per_lot=config.execution.commission_per_lot,
+        commission_notional_pct=config.execution.commission_notional_pct,
+        overnight_cost_per_lot_day=config.execution.overnight_cost_per_lot_day,
     )
     engine = EventDrivenEngine(
         coordinator=AgentCoordinator(agents, consensus_min_confidence=config.agents.consensus_min_confidence),
@@ -199,6 +276,7 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str) -> None:
         config.execution.stale_breakout_bars = 5
         config.execution.stale_breakout_atr_fraction = 0.1
         config.execution.structure_exit_bars = 3
+    apply_ftmo_cost_profile(config, symbol)
 
 
 def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[FeatureVector], str]:
@@ -308,6 +386,17 @@ def _filter_features_by_session(features: list[FeatureVector], session_name: str
 def _filter_features_by_regime(features: list[FeatureVector], regime_label: str) -> list[FeatureVector]:
     if not regime_label:
         return features
+    if regime_label.startswith("exclude:"):
+        excluded = regime_label.removeprefix("exclude:")
+        if excluded.startswith("trend_") and excluded.count("_") == 1:
+            return [feature for feature in features if not _feature_regime_label(feature).startswith(excluded + "_")]
+        if excluded.startswith("vol_") and excluded.count("_") == 1:
+            return [feature for feature in features if not _feature_regime_label(feature).endswith("_" + excluded)]
+        return [feature for feature in features if _feature_regime_label(feature) != excluded]
+    if regime_label.startswith("trend_") and regime_label.count("_") == 1:
+        return [feature for feature in features if _feature_regime_label(feature).startswith(regime_label + "_")]
+    if regime_label.startswith("vol_") and regime_label.count("_") == 1:
+        return [feature for feature in features if _feature_regime_label(feature).endswith("_" + regime_label)]
     return [feature for feature in features if _feature_regime_label(feature) == regime_label]
 
 
@@ -462,6 +551,18 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 agents=[VolatilityBreakoutAgent(lookback=16, allowed_hours=None), risk],
                 code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
             ),
+            CandidateSpec(
+                name="crypto_short_breakdown",
+                description="Crypto short breakdown continuation",
+                agents=[CryptoShortBreakdownAgent(), risk],
+                code_path="quant_system.agents.crypto.CryptoShortBreakdownAgent",
+            ),
+            CandidateSpec(
+                name="crypto_short_reversion",
+                description="Crypto short mean reversion in downtrend",
+                agents=[CryptoShortReversionAgent(), risk],
+                code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
+            ),
         ]
     if "XAU" in upper:
         specs.append(
@@ -560,28 +661,36 @@ def _run_candidate(
     return scored
 
 
-def _split_features(features: list[FeatureVector]) -> tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]:
+def _split_features(features: list[FeatureVector], symbol: str) -> tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]:
     total = len(features)
     if total < 30:
         return features, [], []
-    train_end = max(int(total * 0.6), 1)
-    validation_end = max(int(total * 0.8), train_end + 1)
+    train_ratio = 0.5 if _is_crypto_symbol(symbol) else 0.6
+    validation_ratio = 0.25 if _is_crypto_symbol(symbol) else 0.2
+    train_end = max(int(total * train_ratio), 1)
+    validation_end = max(int(total * (train_ratio + validation_ratio)), train_end + 1)
     train = features[:train_end]
     validation = features[train_end:validation_end]
     test = features[validation_end:]
     return train, validation, test
 
 
-def _walk_forward_slices(features: list[FeatureVector]) -> list[tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]]:
+def _walk_forward_slices(features: list[FeatureVector], symbol: str) -> list[tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]]:
     total = len(features)
     if total < 90:
-        train, validation, test = _split_features(features)
+        train, validation, test = _split_features(features, symbol)
         return [(train, validation, test)] if validation and test else []
 
-    train_size = max(int(total * 0.5), 30)
-    validation_size = max(int(total * 0.2), 10)
-    test_size = max(int(total * 0.2), 10)
-    step_size = max(int(total * 0.1), 10)
+    if _is_crypto_symbol(symbol):
+        train_size = max(int(total * 0.45), 30)
+        validation_size = max(int(total * 0.25), 10)
+        test_size = max(int(total * 0.2), 10)
+        step_size = max(int(total * 0.08), 10)
+    else:
+        train_size = max(int(total * 0.5), 30)
+        validation_size = max(int(total * 0.2), 10)
+        test_size = max(int(total * 0.2), 10)
+        step_size = max(int(total * 0.1), 10)
     windows: list[tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]] = []
     start = 0
     while True:
@@ -599,7 +708,7 @@ def _walk_forward_slices(features: list[FeatureVector]) -> list[tuple[list[Featu
         )
         start += step_size
     if not windows:
-        train, validation, test = _split_features(features)
+        train, validation, test = _split_features(features, symbol)
         if validation and test:
             windows.append((train, validation, test))
     return windows
@@ -613,6 +722,8 @@ def _run_candidate_with_splits(
     artifact_prefix: str,
 ) -> CandidateResult:
     scored = _run_candidate(config, features, spec, archetype, artifact_prefix)
+    symbol = features[0].symbol if features else ""
+    thresholds = _research_thresholds(symbol)
 
     def _eval_slice(slice_features: list[FeatureVector]) -> ExecutionResult | None:
         if len(slice_features) < 10:
@@ -621,7 +732,7 @@ def _run_candidate_with_splits(
         engine = _build_engine(candidate_config, copy.deepcopy(spec.agents))
         return asyncio.run(engine.run(slice_features, sleep_seconds=0.0))
 
-    windows = _walk_forward_slices(features)
+    windows = _walk_forward_slices(features, symbol)
     validation_pnls: list[float] = []
     test_pnls: list[float] = []
     validation_pfs: list[float] = []
@@ -645,12 +756,12 @@ def _run_candidate_with_splits(
         validation_pfs.append(validation_result.profit_factor)
         test_pfs.append(test_result.profit_factor)
         if (
-            len(validation_result.closed_trades) >= 2
-            and len(test_result.closed_trades) >= 2
+            len(validation_result.closed_trades) >= int(thresholds["validation_closed_trades"])
+            and len(test_result.closed_trades) >= int(thresholds["test_closed_trades"])
             and validation_result.realized_pnl > 0.0
             and test_result.realized_pnl > 0.0
-            and validation_result.profit_factor >= 1.0
-            and test_result.profit_factor >= 1.0
+            and validation_result.profit_factor >= float(thresholds["min_profit_factor"])
+            and test_result.profit_factor >= float(thresholds["min_profit_factor"])
         ):
             pass_count += 1
 
@@ -1460,31 +1571,82 @@ def _regime_improvement_specs(specs: list[CandidateSpec], results: list[Candidat
     return generated
 
 
+def _regime_candidates_from_row(row: CandidateResult) -> list[str]:
+    candidates: list[str] = []
+    if row.best_regime:
+        candidates.append(row.best_regime)
+        best_parts = row.best_regime.split("_")
+        if len(best_parts) >= 3:
+            candidates.append("_".join(best_parts[:2]))
+            candidates.append("_".join(best_parts[2:]))
+    if row.worst_regime:
+        candidates.append(f"exclude:{row.worst_regime}")
+        worst_parts = row.worst_regime.split("_")
+        if len(worst_parts) >= 3:
+            candidates.append(f"exclude:{'_'.join(worst_parts[:2])}")
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for item in candidates:
+        if item and item not in seen:
+            seen.add(item)
+            deduped.append(item)
+    return deduped
+
+
+def _autopsy_improvement_specs(symbol: str, specs: list[CandidateSpec], results: list[CandidateResult]) -> list[CandidateSpec]:
+    if not _is_crypto_symbol(symbol):
+        return []
+    lookup = {spec.name: spec for spec in specs}
+    near_misses = [
+        row
+        for row in sorted(results, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
+        if row.realized_pnl > 0.0
+        and row.test_pnl > 0.0
+        and (row.validation_pnl <= 0.0 or row.validation_profit_factor < 1.0 or row.walk_forward_pass_rate_pct < 50.0)
+        and row.best_regime_pnl > 0.0
+    ]
+    generated: list[CandidateSpec] = []
+    seen: set[tuple[str, str]] = set()
+    for row in near_misses[:5]:
+        base_spec = lookup.get(row.name)
+        if base_spec is None:
+            continue
+        overrides = copy.deepcopy(base_spec.execution_overrides) or {}
+        if row.dominant_exit in {"structure_exit", "stale_breakout"}:
+            overrides = _merge_execution_overrides(
+                overrides,
+                {
+                    "structure_exit_bars": 0,
+                    "stale_breakout_bars": max(int(overrides.get("stale_breakout_bars", 6)), 8),
+                    "max_holding_bars": max(int(overrides.get("max_holding_bars", 24)), 24),
+                },
+            )
+        for regime_filter in _regime_candidates_from_row(row)[:3]:
+            key = (base_spec.name, regime_filter)
+            if key in seen:
+                continue
+            seen.add(key)
+            generated.append(
+                CandidateSpec(
+                    name=f"{base_spec.name}__autopsy_{_symbol_slug(regime_filter)}",
+                    description=f"{base_spec.description} autopsy-focused on {regime_filter}",
+                    agents=base_spec.agents,
+                    code_path=base_spec.code_path,
+                    execution_overrides=overrides,
+                    variant_label=base_spec.variant_label,
+                    timeframe_label=base_spec.timeframe_label,
+                    session_label=base_spec.session_label,
+                    regime_filter_label=regime_filter,
+                )
+            )
+    return generated
+
+
 def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 1) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     target_variant: str | None = None
-    viable_rows = [
-        row
-        for row in rows
-        if int(row.get("validation_closed_trades", 0)) >= 3
-        and int(row.get("test_closed_trades", 0)) >= 2
-        and float(row.get("validation_pnl", 0.0)) > 0.0
-        and float(row.get("test_pnl", 0.0)) > 0.0
-        and float(row.get("validation_profit_factor", 0.0)) >= 1.0
-        and float(row.get("test_profit_factor", 0.0)) >= 1.0
-        and int(row.get("walk_forward_windows", 0)) >= 1
-        and float(row.get("walk_forward_pass_rate_pct", 0.0)) >= 50.0
-        and float(row.get("walk_forward_avg_validation_pnl", 0.0)) > 0.0
-        and float(row.get("walk_forward_avg_test_pnl", 0.0)) > 0.0
-        and (
-            int(row.get("component_count", 1)) <= 1
-            or (
-                float(row.get("combo_outperformance_score", 0.0)) >= 0.0
-                and float(row.get("combo_trade_overlap_pct", 100.0)) <= 80.0
-            )
-        )
-    ]
+    viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
     ranked = sorted(
         viable_rows,
         key=lambda row: (
@@ -1660,16 +1822,7 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
     winners = [
         row
         for row in ranked
-        if row.validation_closed_trades >= 3
-        and row.test_closed_trades >= 2
-        and row.validation_pnl > 0
-        and row.test_pnl > 0
-        and row.validation_profit_factor >= 1.0
-        and row.test_profit_factor >= 1.0
-        and row.walk_forward_windows >= 1
-        and row.walk_forward_pass_rate_pct >= 50.0
-        and row.walk_forward_avg_validation_pnl > 0.0
-        and row.walk_forward_avg_test_pnl > 0.0
+        if _meets_viability(row, symbol)
     ]
     lines.extend(["", "Recommended active agents"])
     if winners:
@@ -1679,6 +1832,73 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         lines.append("No candidate met the positive-PnL and PF>=1.0 threshold.")
     txt_path.write_text("\n".join(lines), encoding="utf-8")
     return csv_path, txt_path
+
+
+def _candidate_failure_reasons(row: CandidateResult) -> list[str]:
+    reasons: list[str] = []
+    thresholds = _research_thresholds(row.trade_log_path.upper())
+    validation_min = int(thresholds["validation_closed_trades"])
+    test_min = int(thresholds["test_closed_trades"])
+    wf_pass_min = float(thresholds["walk_forward_min_pass_rate_pct"])
+    if row.validation_closed_trades < validation_min:
+        reasons.append(f"validation trades too low ({row.validation_closed_trades} < {validation_min})")
+    if row.test_closed_trades < test_min:
+        reasons.append(f"test trades too low ({row.test_closed_trades} < {test_min})")
+    if row.validation_pnl <= 0.0:
+        reasons.append(f"validation pnl <= 0 ({row.validation_pnl:.2f})")
+    if row.test_pnl <= 0.0:
+        reasons.append(f"test pnl <= 0 ({row.test_pnl:.2f})")
+    if row.validation_profit_factor < 1.0:
+        reasons.append(f"validation PF < 1.0 ({row.validation_profit_factor:.2f})")
+    if row.test_profit_factor < 1.0:
+        reasons.append(f"test PF < 1.0 ({row.test_profit_factor:.2f})")
+    if row.walk_forward_windows < 1:
+        reasons.append("no walk-forward windows")
+    if row.walk_forward_pass_rate_pct < wf_pass_min:
+        reasons.append(f"walk-forward pass rate too low ({row.walk_forward_pass_rate_pct:.2f}% < {wf_pass_min:.0f}%)")
+    if row.walk_forward_avg_validation_pnl <= 0.0:
+        reasons.append(f"walk-forward avg validation pnl <= 0 ({row.walk_forward_avg_validation_pnl:.2f})")
+    if row.walk_forward_avg_test_pnl <= 0.0:
+        reasons.append(f"walk-forward avg test pnl <= 0 ({row.walk_forward_avg_test_pnl:.2f})")
+    if row.component_count > 1 and row.combo_outperformance_score < 0.0:
+        reasons.append(f"combo underperformed components ({row.combo_outperformance_score:.2f})")
+    if row.component_count > 1 and row.combo_trade_overlap_pct > 80.0:
+        reasons.append(f"combo overlap too high ({row.combo_trade_overlap_pct:.2f}% > 80%)")
+    return reasons
+
+
+def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], execution_validation_summary: str) -> Path:
+    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    path = ARTIFACTS_DIR / f"{_symbol_slug(symbol)}_viability_autopsy.txt"
+    ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
+    counts: dict[str, int] = {}
+    near_misses: list[tuple[CandidateResult, list[str]]] = []
+    for row in ranked:
+        reasons = _candidate_failure_reasons(row)
+        for reason in reasons:
+            counts[reason] = counts.get(reason, 0) + 1
+        if reasons:
+            near_misses.append((row, reasons))
+
+    lines = [
+        f"Viability autopsy: {symbol}",
+        f"Execution validation summary: {execution_validation_summary}",
+        "",
+        "Top blockers",
+    ]
+    for reason, count in sorted(counts.items(), key=lambda item: item[1], reverse=True)[:8]:
+        lines.append(f"- {reason}: {count}")
+    lines.extend(["", "Top near-misses"])
+    for row, reasons in near_misses[:8]:
+        lines.append(
+            f"- {row.name}: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} "
+            f"val={row.validation_pnl:.2f}/{row.validation_profit_factor:.2f}/{row.validation_closed_trades} "
+            f"test={row.test_pnl:.2f}/{row.test_profit_factor:.2f}/{row.test_closed_trades} "
+            f"wf={row.walk_forward_pass_rate_pct:.2f}%"
+        )
+        lines.append(f"  reasons: {', '.join(reasons)}")
+    path.write_text("\n".join(lines), encoding="utf-8")
+    return path
 
 
 def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
@@ -1771,9 +1991,31 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             )
             for spec in regime_specs
         )
+    autopsy_specs = _autopsy_improvement_specs(
+        resolved.profile_symbol,
+        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs,
+        results,
+    )
+    if autopsy_specs:
+        results.extend(
+            _run_candidate_with_splits(
+                config,
+                load_execution_features_for_variant(
+                    config,
+                    resolved.profile_symbol,
+                    resolved.data_symbol,
+                    spec.variant_label,
+                    spec.regime_filter_label,
+                )[0],
+                spec,
+                "autopsy_improved",
+                f"{symbol_slug}_{spec.name}_symbol_candidate",
+            )
+            for spec in autopsy_specs
+        )
     combos = _combined_specs(
         config,
-        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs,
+        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs,
         results,
     )
     results.extend(
@@ -1792,20 +2034,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     ranked = sorted(
         results,
         key=lambda item: (
-            item.validation_closed_trades >= 3
-            and item.test_closed_trades >= 2
-            and item.validation_pnl > 0
-            and item.test_pnl > 0
-            and item.validation_profit_factor >= 1.0
-            and item.test_profit_factor >= 1.0
-            and item.walk_forward_windows >= 1
-            and item.walk_forward_pass_rate_pct >= 50.0
-            and item.walk_forward_avg_validation_pnl > 0.0
-            and item.walk_forward_avg_test_pnl > 0.0
-            and (
-                item.component_count <= 1
-                or (item.combo_outperformance_score >= 0.0 and item.combo_trade_overlap_pct <= 80.0)
-            ),
+            _meets_viability(item, resolved.profile_symbol),
             item.combo_outperformance_score,
             item.walk_forward_pass_rate_pct,
             item.walk_forward_avg_test_pnl,
@@ -1820,20 +2049,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     viable_ranked = [
         row
         for row in ranked
-        if row.validation_closed_trades >= 3
-        and row.test_closed_trades >= 2
-        and row.validation_pnl > 0
-        and row.test_pnl > 0
-        and row.validation_profit_factor >= 1.0
-        and row.test_profit_factor >= 1.0
-        and row.walk_forward_windows >= 1
-        and row.walk_forward_pass_rate_pct >= 50.0
-        and row.walk_forward_avg_validation_pnl > 0.0
-        and row.walk_forward_avg_test_pnl > 0.0
-        and (
-            row.component_count <= 1
-            or (row.combo_outperformance_score >= 0.0 and row.combo_trade_overlap_pct <= 80.0)
-        )
+        if _meets_viability(row, resolved.profile_symbol)
     ]
     best = viable_ranked[0] if viable_ranked else None
     recommended = [row.name for row in viable_ranked[:3]]
@@ -1843,6 +2059,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         [
             {
                 "candidate_name": row.name,
+                "symbol": resolved.profile_symbol,
                 "code_path": row.code_path,
                 "realized_pnl": row.realized_pnl,
                 "profit_factor": row.profit_factor,
@@ -1910,6 +2127,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             symbol_research_run_id=run_id,
             selected_candidates=selected_execution_candidates,
         )
+    autopsy_path = _export_viability_autopsy(resolved.profile_symbol, results, execution_validation_summary)
     descriptors = [
         AgentDescriptor(
             profile_name=profile_name,
@@ -1945,6 +2163,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         f"Candidates tested: {len(results)}",
         f"Research CSV: {csv_path}",
         f"Research report: {txt_path}",
+        f"Viability autopsy: {autopsy_path}",
     ]
     if plot_paths:
         lines.append("Plots: " + ", ".join(str(path) for path in plot_paths))
@@ -1962,8 +2181,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     else:
         lines.append("Best candidate: none")
         lines.append(
-            "No viable candidate met the minimum viability rules "
-            "(validation_closed_trades >= 3, test_closed_trades >= 2, validation/test pnl > 0, validation/test PF >= 1.0)."
+            "No viable candidate met the symbol-specific viability rules "
+            "(validation/test robustness, walk-forward robustness, and execution consistency)."
         )
     lines.append("Recommended active agents: " + (", ".join(recommended) if recommended else "none"))
     lines.append(

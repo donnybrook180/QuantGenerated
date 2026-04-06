@@ -1,14 +1,14 @@
 Artifact: xauusd_opening_range_breakout__5m_us__exit_fastfail_5m_us_symbol_candidate
 Closed trades: 5
-Realized pnl: 3.73
+Realized pnl: 559.82
 
 By entry hour
-14: trades=5 pnl=3.73 avg=0.75 win_rate=60.00%
+14: trades=5 pnl=559.82 avg=111.96 win_rate=60.00%
 
 By entry setup
-opening_range_breakout: trades=5 pnl=3.73 avg=0.75 win_rate=60.00%
+opening_range_breakout: trades=5 pnl=559.82 avg=111.96 win_rate=60.00%
 
 By exit reason
-signal_exit: trades=1 pnl=-3.11 avg=-3.11 win_rate=0.00%
-trailing_stop: trades=2 pnl=-0.00 avg=-0.00 win_rate=50.00%
-take_profit: trades=2 pnl=6.84 avg=3.42 win_rate=100.00%
+signal_exit: trades=1 pnl=-273.69 avg=-273.69 win_rate=0.00%
+trailing_stop: trades=2 pnl=74.31 avg=37.15 win_rate=50.00%
+take_profit: trades=2 pnl=759.21 avg=379.60 win_rate=100.00%

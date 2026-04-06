@@ -1,0 +1,5 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:EURUSD,2026-03-06T09:00:00+00:00,2026-03-09T08:45:00+00:00,9,8,forex_short_breakdown_momentum,take_profit,1.15902,1.15352,0.10000,54.52187,0.50000,1,1.00000,"{'breakout_low': 1.15918, 'rebound_high': 1.16239, 'position_intent': 'short_entry'}"
+C:EURUSD,2026-03-16T07:30:00+00:00,2026-03-16T08:15:00+00:00,7,8,forex_short_breakdown_momentum,stop_loss,1.14194,1.14425,0.10000,-23.57155,0.50000,1,1.00000,"{'breakout_low': 1.146, 'rebound_high': 1.16047, 'position_intent': 'short_entry'}"
+C:EURUSD,2026-03-16T10:15:00+00:00,2026-03-18T12:30:00+00:00,10,12,forex_short_breakdown_momentum,trailing_stop,1.14759,1.15157,0.10000,39.32521,0.50000,12,0.70000,"{'breakout_reversal': 1.0, 'position_intent': 'short_exit'}"
+C:EURUSD,2026-03-30T12:15:00+00:00,2026-03-31T11:15:00+00:00,12,11,forex_short_breakdown_momentum,trailing_stop,1.14778,1.14750,0.10000,2.32618,0.50000,2,1.00000,"{'breakout_low': 1.1497, 'rebound_high': 1.16108, 'position_intent': 'short_entry'}"

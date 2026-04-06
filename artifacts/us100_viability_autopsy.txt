@@ -1,0 +1,30 @@
+Viability autopsy: US100
+Execution validation summary: not_run
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 50%): 36
+- test PF < 1.0 (0.00): 17
+- test trades too low (0 < 2): 10
+- test pnl <= 0 (0.00): 10
+- validation PF < 1.0 (0.00): 7
+- test PF < 1.0 (0.21): 4
+- combo overlap too high (100.00% > 80%): 3
+- validation trades too low (0 < 3): 3
+
+Top near-misses
+- opening_range_short_breakdown__exit_trend: pnl=2.91 pf=2.55 val=3.19/11.76/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%)
+- opening_range_short_breakdown: pnl=2.39 pf=2.27 val=2.16/8.28/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%)
+- opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown: pnl=2.39 pf=2.27 val=2.16/8.28/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), combo underperformed components (-1.03), combo overlap too high (100.00% > 80%)
+- opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail: pnl=2.39 pf=2.27 val=2.16/8.28/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), combo underperformed components (-1.03), combo overlap too high (100.00% > 80%)
+- opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail: pnl=2.39 pf=2.27 val=2.16/8.28/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), combo overlap too high (100.00% > 80%)
+- opening_range_short_breakdown__exit_fastfail: pnl=1.83 pf=2.04 val=1.77/6.95/4 test=0.00/0.00/0 wf=0.00%
+  reasons: test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%)
+- opening_range_breakout__regime_trend_flat_vol_mid: pnl=0.48 pf=1.92 val=0.18/2.69/2 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (2 < 3), test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%)
+- opening_range_short_breakdown__exit_trend__regime_trend_down_vol_high: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)

@@ -1,30 +1,30 @@
 Viability autopsy: XAUUSD
-Execution validation summary: variant=volatility_breakout__5m_us__exit_trend@5m_us, trend__5m_us@5m_us, momentum__5m_overlap@5m_overlap data_source=duckdb_cache pnl=2129.83 pf=1.54 closed=47 -> accepted
+Execution validation summary: variant=volatility_breakout__5m_us__exit_trend@5m_us, trend__15m_overlap__exit_fastfail@15m_overlap, opening_range_breakout__5m_us@5m_us data_source=duckdb_cache pnl=4355.94 pf=4.29 closed=24 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 122
-- validation PF < 1.0 (0.00): 79
-- test PF < 1.0 (0.00): 71
-- test trades too low (0 < 2): 53
-- test pnl <= 0 (0.00): 53
-- validation trades too low (0 < 3): 48
-- validation pnl <= 0 (0.00): 48
-- walk-forward avg validation pnl <= 0 (0.00): 45
+- walk-forward pass rate too low (0.00% < 50%): 102
+- validation PF < 1.0 (0.00): 75
+- test PF < 1.0 (0.00): 70
+- walk-forward avg test pnl <= 0 (0.00): 62
+- test trades too low (0 < 2): 60
+- test pnl <= 0 (0.00): 60
+- walk-forward avg validation pnl <= 0 (0.00): 53
+- validation trades too low (0 < 3): 46
 
 Top near-misses
-- trend__15m_overlap: pnl=2727.12 pf=15.08 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
-  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
+- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_patient: pnl=2677.46 pf=4.41 val=0.00/0.00/0 test=-785.98/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-785.98), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-392.99)
+- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_dense__local_opt_density: pnl=2677.46 pf=4.41 val=0.00/0.00/0 test=-785.98/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-785.98), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-392.99)
+- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_dense: pnl=2517.27 pf=3.66 val=0.00/0.00/0 test=-946.17/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-946.17), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-473.08)
+- xauusd_short_breakdown__15m_overlap__exit_trend__local_opt_density: pnl=2517.27 pf=3.66 val=0.00/0.00/0 test=-946.17/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-946.17), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-473.08)
 - xauusd_short_breakdown__15m_overlap__exit_trend: pnl=2512.37 pf=3.64 val=0.00/0.00/0 test=-951.07/0.00/2 wf=0.00%
-  reasons: validation trades too low (0 < 3), validation pnl <= 0 (0.00), test pnl <= 0 (-951.07), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-475.53)
-- trend__15m_overlap__exit_trend: pnl=2479.41 pf=13.80 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
-  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
+  reasons: combined validation/test pnl <= 0 (-951.07), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-475.53)
 - xauusd_short_breakdown__15m_overlap: pnl=2282.60 pf=2.86 val=0.00/0.00/0 test=-992.16/0.00/2 wf=0.00%
-  reasons: validation trades too low (0 < 3), validation pnl <= 0 (0.00), test pnl <= 0 (-992.16), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-496.08)
-- trend__15m_overlap__exit_fastfail: pnl=1714.81 pf=9.86 val=551.50/999.00/1 test=1208.85/999.00/1 wf=0.00%
-  reasons: validation trades too low (1 < 3), test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 50%)
-- xauusd_short_breakdown__15m_overlap__exit_trend__regime_trend_down_vol_high: pnl=1229.15 pf=999.00 val=-386.91/0.00/1 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (1 < 3), test trades too low (0 < 2), validation pnl <= 0 (-386.91), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-58.86), walk-forward avg test pnl <= 0 (0.00)
-- xauusd_volatility_breakout__5m_overlap__exit_trend: pnl=1074.17 pf=7.02 val=966.06/999.00/1 test=86.39/2.52/3 wf=0.00%
-  reasons: validation trades too low (1 < 3), walk-forward pass rate too low (0.00% < 50%)
-- xauusd_volatility_breakout__5m_overlap__exit_fastfail: pnl=980.68 pf=5.47 val=511.60/999.00/1 test=47.19/1.83/3 wf=0.00%
-  reasons: validation trades too low (1 < 3), walk-forward pass rate too low (0.00% < 50%)
+  reasons: combined validation/test pnl <= 0 (-992.16), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-496.08)
+- xauusd_short_breakdown__15m_overlap__near_miss_patient: pnl=2243.40 pf=2.77 val=0.00/0.00/0 test=-1031.36/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-1031.36), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-515.68)
+- volatility_breakout__5m_us__exit_trend__regime_trend_flat_vol_high__near_miss_dense: pnl=2225.67 pf=25.07 val=254.06/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg test pnl <= 0 (0.00)

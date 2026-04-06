@@ -33,7 +33,12 @@ from quant_system.agents.strategies import (
     VolatilityBreakoutAgent,
     VolatilityShortBreakdownAgent,
 )
-from quant_system.agents.us500 import US500OpeningDriveShortReclaimAgent, US500ShortTrendRejectionAgent
+from quant_system.agents.us500 import (
+    US500MomentumImpulseAgent,
+    US500OpeningDriveShortReclaimAgent,
+    US500ShortTrendRejectionAgent,
+    US500ShortVWAPRejectAgent,
+)
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVolatilityBreakoutAgent
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
@@ -114,6 +119,8 @@ class CandidateResult:
     worst_regime_pnl: float = 0.0
     dominant_regime_share_pct: float = 0.0
     regime_filter_label: str = ""
+    sparse_strategy: bool = False
+    walk_forward_soft_pass_rate_pct: float = 0.0
 
 
 def _symbol_slug(symbol: str) -> str:
@@ -153,6 +160,10 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
             "min_profit_factor": 1.0,
             "walk_forward_min_windows": 1,
             "walk_forward_min_pass_rate_pct": 25.0,
+            "sparse_max_closed_trades": 18,
+            "sparse_min_payoff_ratio": 1.75,
+            "sparse_combined_closed_trades": 2,
+            "sparse_walk_forward_min_pass_rate_pct": 20.0,
         }
     if _is_crypto_symbol(symbol):
         return {
@@ -161,6 +172,10 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
             "min_profit_factor": 1.0,
             "walk_forward_min_windows": 1,
             "walk_forward_min_pass_rate_pct": 40.0,
+            "sparse_max_closed_trades": 20,
+            "sparse_min_payoff_ratio": 1.75,
+            "sparse_combined_closed_trades": 2,
+            "sparse_walk_forward_min_pass_rate_pct": 25.0,
         }
     return {
         "validation_closed_trades": 3,
@@ -168,7 +183,33 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
         "min_profit_factor": 1.0,
         "walk_forward_min_windows": 1,
         "walk_forward_min_pass_rate_pct": 50.0,
+        "sparse_max_closed_trades": 18,
+        "sparse_min_payoff_ratio": 1.75,
+        "sparse_combined_closed_trades": 2,
+        "sparse_walk_forward_min_pass_rate_pct": 25.0,
     }
+
+
+def _is_sparse_candidate(row: CandidateResult | dict[str, object], symbol: str) -> bool:
+    thresholds = _research_thresholds(symbol)
+    closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0))
+    payoff_ratio = float(row.payoff_ratio if isinstance(row, CandidateResult) else row.get("payoff_ratio", 0.0))
+    profit_factor = float(row.profit_factor if isinstance(row, CandidateResult) else row.get("profit_factor", 0.0))
+    return (
+        closed_trades > 0
+        and closed_trades <= int(thresholds["sparse_max_closed_trades"])
+        and payoff_ratio >= float(thresholds["sparse_min_payoff_ratio"])
+        and profit_factor >= float(thresholds["min_profit_factor"])
+    )
+
+
+def _aggregate_profit_factor(*pnl_groups: list[float]) -> float:
+    pnls = [pnl for group in pnl_groups for pnl in group]
+    wins = [pnl for pnl in pnls if pnl > 0]
+    losses = [pnl for pnl in pnls if pnl < 0]
+    gross_profit = sum(wins)
+    gross_loss = abs(sum(losses))
+    return (gross_profit / gross_loss) if gross_loss > 0 else (999.0 if gross_profit > 0 else 0.0)
 
 
 def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> bool:
@@ -196,18 +237,40 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     combo_trade_overlap_pct = float(
         row.combo_trade_overlap_pct if isinstance(row, CandidateResult) else row.get("combo_trade_overlap_pct", 0.0)
     )
+    sparse_strategy = _is_sparse_candidate(row, symbol)
+    sparse_combined_closed_trades = validation_closed_trades + test_closed_trades
+    sparse_pass_rate_threshold = (
+        float(thresholds["sparse_walk_forward_min_pass_rate_pct"]) if sparse_strategy else float(thresholds["walk_forward_min_pass_rate_pct"])
+    )
+    sparse_window_pass_rate = float(
+        row.walk_forward_soft_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_soft_pass_rate_pct", 0.0)
+    )
+    split_trade_requirement_met = (
+        sparse_combined_closed_trades >= int(thresholds["sparse_combined_closed_trades"])
+        if sparse_strategy
+        else validation_closed_trades >= int(thresholds["validation_closed_trades"]) and test_closed_trades >= int(thresholds["test_closed_trades"])
+    )
+    split_pnl_requirement_met = (
+        (validation_pnl + test_pnl) > 0.0 if sparse_strategy else validation_pnl > 0.0 and test_pnl > 0.0
+    )
+    split_pf_requirement_met = (
+        max(validation_profit_factor, test_profit_factor) >= float(thresholds["min_profit_factor"])
+        if sparse_strategy
+        else validation_profit_factor >= float(thresholds["min_profit_factor"]) and test_profit_factor >= float(thresholds["min_profit_factor"])
+    )
+    walk_forward_pass_requirement_met = (
+        sparse_window_pass_rate >= sparse_pass_rate_threshold
+        if sparse_strategy
+        else walk_forward_pass_rate_pct >= float(thresholds["walk_forward_min_pass_rate_pct"])
+    )
     return (
         realized_pnl > 0.0
         and profit_factor >= float(thresholds["min_profit_factor"])
-        and
-        validation_closed_trades >= int(thresholds["validation_closed_trades"])
-        and test_closed_trades >= int(thresholds["test_closed_trades"])
-        and validation_pnl > 0.0
-        and test_pnl > 0.0
-        and validation_profit_factor >= float(thresholds["min_profit_factor"])
-        and test_profit_factor >= float(thresholds["min_profit_factor"])
+        and split_trade_requirement_met
+        and split_pnl_requirement_met
+        and split_pf_requirement_met
         and walk_forward_windows >= int(thresholds["walk_forward_min_windows"])
-        and walk_forward_pass_rate_pct >= float(thresholds["walk_forward_min_pass_rate_pct"])
+        and walk_forward_pass_requirement_met
         and walk_forward_avg_validation_pnl > 0.0
         and walk_forward_avg_test_pnl > 0.0
         and (
@@ -842,6 +905,7 @@ def _run_candidate_with_splits(
     scored = _run_candidate(config, features, spec, archetype, artifact_prefix)
     symbol = features[0].symbol if features else ""
     thresholds = _research_thresholds(symbol)
+    scored.sparse_strategy = _is_sparse_candidate(scored, symbol)
 
     def _eval_slice(slice_features: list[FeatureVector]) -> ExecutionResult | None:
         if len(slice_features) < 10:
@@ -856,6 +920,7 @@ def _run_candidate_with_splits(
     validation_pfs: list[float] = []
     test_pfs: list[float] = []
     pass_count = 0
+    soft_pass_count = 0
     last_train_result: ExecutionResult | None = None
     last_validation_result: ExecutionResult | None = None
     last_test_result: ExecutionResult | None = None
@@ -873,6 +938,9 @@ def _run_candidate_with_splits(
         test_pnls.append(test_result.realized_pnl)
         validation_pfs.append(validation_result.profit_factor)
         test_pfs.append(test_result.profit_factor)
+        combined_closed_trades = len(validation_result.closed_trades) + len(test_result.closed_trades)
+        combined_pnl = validation_result.realized_pnl + test_result.realized_pnl
+        combined_pf = _aggregate_profit_factor(validation_result.closed_trade_pnls, test_result.closed_trade_pnls)
         if (
             len(validation_result.closed_trades) >= int(thresholds["validation_closed_trades"])
             and len(test_result.closed_trades) >= int(thresholds["test_closed_trades"])
@@ -882,6 +950,13 @@ def _run_candidate_with_splits(
             and test_result.profit_factor >= float(thresholds["min_profit_factor"])
         ):
             pass_count += 1
+        if (
+            scored.sparse_strategy
+            and combined_closed_trades >= int(thresholds["sparse_combined_closed_trades"])
+            and combined_pnl > 0.0
+            and combined_pf >= float(thresholds["min_profit_factor"])
+        ):
+            soft_pass_count += 1
 
     if last_train_result is not None:
         scored.train_pnl = last_train_result.realized_pnl
@@ -902,6 +977,7 @@ def _run_candidate_with_splits(
         scored.walk_forward_avg_test_pf = mean(test_pfs)
     if scored.walk_forward_windows > 0:
         scored.walk_forward_pass_rate_pct = pass_count / scored.walk_forward_windows * 100.0
+        scored.walk_forward_soft_pass_rate_pct = soft_pass_count / scored.walk_forward_windows * 100.0
 
     return scored
 
@@ -1291,6 +1367,93 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                 ),
             ]
         )
+        if upper == "US500":
+            specs.extend(
+                [
+                    CandidateSpec(
+                        name="us500_momentum_impulse",
+                        description="US500 momentum impulse in strong uptrend and high participation",
+                        agents=[
+                            US500MomentumImpulseAgent(
+                                config.agents.min_trend_strength * 1.05,
+                                allowed_hours={16, 17, 18},
+                                min_relative_volume=0.92,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500MomentumImpulseAgent",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 18,
+                            "take_profit_atr_multiple": 2.4,
+                            "trailing_stop_atr_multiple": 0.8,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_momentum_impulse_high_vol",
+                        description="US500 momentum impulse focused on trend-up/high-volatility regime",
+                        agents=[
+                            US500MomentumImpulseAgent(
+                                config.agents.min_trend_strength * 1.1,
+                                allowed_hours={16, 17},
+                                min_relative_volume=0.95,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500MomentumImpulseAgent",
+                        regime_filter_label="trend_up_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 2.5,
+                            "trailing_stop_atr_multiple": 0.78,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_short_vwap_reject",
+                        description="US500 short rejection around VWAP in weak or flat tape",
+                        agents=[
+                            US500ShortVWAPRejectAgent(
+                                config.agents.min_trend_strength,
+                                allowed_hours={16, 17},
+                                min_relative_volume=0.9,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500ShortVWAPRejectAgent",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 18,
+                            "take_profit_atr_multiple": 2.2,
+                            "trailing_stop_atr_multiple": 0.72,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_short_vwap_reject_flat_high",
+                        description="US500 short VWAP rejection limited to flat/high-volatility regime",
+                        agents=[
+                            US500ShortVWAPRejectAgent(
+                                config.agents.min_trend_strength * 0.9,
+                                allowed_hours={16},
+                                min_relative_volume=0.92,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500ShortVWAPRejectAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 2.15,
+                            "trailing_stop_atr_multiple": 0.7,
+                        },
+                    ),
+                ]
+            )
     elif upper == "GER40":
         specs.extend(
             [
@@ -1944,6 +2107,323 @@ def _autopsy_improvement_specs(symbol: str, specs: list[CandidateSpec], results:
     return generated
 
 
+def _near_miss_optimizer_specs(symbol: str, specs: list[CandidateSpec], results: list[CandidateResult]) -> list[CandidateSpec]:
+    lookup = {spec.name: spec for spec in specs}
+    generated: list[CandidateSpec] = []
+    seen: set[str] = set()
+    thresholds = _research_thresholds(symbol)
+    near_misses = [
+        row
+        for row in sorted(results, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
+        if row.component_count == 1
+        and row.name in lookup
+        and row.realized_pnl > 0.0
+        and row.profit_factor >= 1.0
+        and not _meets_viability(row, symbol)
+    ]
+    for row in near_misses[:4]:
+        base_spec = lookup[row.name]
+        autopsy = _analyze_trade_rows(row.trade_log_path)
+        weakest_exit = str(autopsy.get("weakest_exit", "") or "")
+        base_overrides = base_spec.execution_overrides or {}
+
+        patient_overrides = _merge_execution_overrides(
+            base_overrides,
+            {
+                "structure_exit_bars": 0,
+                "stale_breakout_bars": int(base_overrides.get("stale_breakout_bars", 5)) + 2,
+                "max_holding_bars": 0 if row.sparse_strategy else int(base_overrides.get("max_holding_bars", 18)) + 4,
+                "take_profit_atr_multiple": float(base_overrides.get("take_profit_atr_multiple", 2.2)) + 0.2,
+                "break_even_atr_multiple": max(float(base_overrides.get("break_even_atr_multiple", 0.4)), 0.3),
+                "trailing_stop_atr_multiple": max(float(base_overrides.get("trailing_stop_atr_multiple", 0.8)), 0.7),
+            },
+        )
+        if weakest_exit == "stale_breakout":
+            patient_overrides["stale_breakout_atr_fraction"] = max(float(base_overrides.get("stale_breakout_atr_fraction", 0.1)), 0.05)
+
+        protective_overrides = _merge_execution_overrides(
+            base_overrides,
+            {
+                "structure_exit_bars": 0,
+                "stale_breakout_bars": max(int(base_overrides.get("stale_breakout_bars", 5)), 4),
+                "stop_loss_atr_multiple": max(float(base_overrides.get("stop_loss_atr_multiple", 1.2)) - 0.1, 0.8),
+                "break_even_atr_multiple": 0.25,
+                "trailing_stop_atr_multiple": 0.55,
+                "take_profit_atr_multiple": max(float(base_overrides.get("take_profit_atr_multiple", 2.0)), 2.0),
+            },
+        )
+        dense_overrides = _merge_execution_overrides(
+            base_overrides,
+            {
+                "min_bars_between_trades": max(int(base_overrides.get("min_bars_between_trades", 10)) - 3, 2),
+                "stale_breakout_bars": int(base_overrides.get("stale_breakout_bars", 5)) + 1,
+                "max_holding_bars": 0 if row.sparse_strategy else max(int(base_overrides.get("max_holding_bars", 18)) + 2, 18),
+                "take_profit_atr_multiple": max(float(base_overrides.get("take_profit_atr_multiple", 2.0)), 2.0),
+            },
+        )
+
+        variant_triplets: list[tuple[str, dict[str, float | int], str]] = [
+            ("near_miss_patient", patient_overrides, "with patient near-miss optimization"),
+            ("near_miss_protective", protective_overrides, "with protective near-miss optimization"),
+        ]
+        low_trade_near_miss = (
+            row.validation_closed_trades < int(thresholds["validation_closed_trades"])
+            or row.test_closed_trades < int(thresholds["test_closed_trades"])
+            or row.sparse_strategy
+        )
+        if low_trade_near_miss:
+            variant_triplets.append(
+                ("near_miss_dense", dense_overrides, "with denser near-miss optimization")
+            )
+
+        for label, overrides, description_suffix in variant_triplets:
+            candidate_name = f"{base_spec.name}__{label}"
+            if candidate_name in seen:
+                continue
+            seen.add(candidate_name)
+            generated.append(
+                CandidateSpec(
+                    name=candidate_name,
+                    description=f"{base_spec.description} {description_suffix}",
+                    agents=base_spec.agents,
+                    code_path=base_spec.code_path,
+                    execution_overrides=overrides,
+                    variant_label=base_spec.variant_label,
+                    timeframe_label=base_spec.timeframe_label,
+                    session_label=base_spec.session_label,
+                    regime_filter_label=base_spec.regime_filter_label,
+                )
+            )
+            for regime_filter in _regime_candidates_from_row(row)[:2]:
+                regime_name = f"{candidate_name}__{_symbol_slug(regime_filter)}"
+                if regime_name in seen:
+                    continue
+                seen.add(regime_name)
+                generated.append(
+                    CandidateSpec(
+                        name=regime_name,
+                        description=f"{base_spec.description} {description_suffix} focused on {regime_filter}",
+                        agents=base_spec.agents,
+                        code_path=base_spec.code_path,
+                        execution_overrides=overrides,
+                        variant_label=base_spec.variant_label,
+                        timeframe_label=base_spec.timeframe_label,
+                        session_label=base_spec.session_label,
+                        regime_filter_label=regime_filter,
+                    )
+                )
+    return generated
+
+
+def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> dict[str, object]:
+    return {
+        "candidate_name": row.name,
+        "symbol": symbol,
+        "code_path": row.code_path,
+        "realized_pnl": row.realized_pnl,
+        "profit_factor": row.profit_factor,
+        "closed_trades": row.closed_trades,
+        "payoff_ratio": row.payoff_ratio,
+        "validation_pnl": row.validation_pnl,
+        "validation_profit_factor": row.validation_profit_factor,
+        "validation_closed_trades": row.validation_closed_trades,
+        "test_pnl": row.test_pnl,
+        "test_profit_factor": row.test_profit_factor,
+        "test_closed_trades": row.test_closed_trades,
+        "walk_forward_windows": row.walk_forward_windows,
+        "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
+        "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
+        "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
+        "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+        "sparse_strategy": row.sparse_strategy,
+        "component_count": row.component_count,
+        "combo_outperformance_score": row.combo_outperformance_score,
+        "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
+        "recommended": False,
+        "variant_label": row.variant_label,
+        "regime_filter_label": row.regime_filter_label,
+        "execution_overrides": row.execution_overrides or {},
+    }
+
+
+def _near_miss_local_score(candidate: CandidateResult, execution_result: ExecutionResult) -> float:
+    score = (
+        candidate.validation_pnl * 3.0
+        + candidate.test_pnl * 3.0
+        + candidate.walk_forward_avg_validation_pnl * 1.5
+        + candidate.walk_forward_avg_test_pnl * 1.5
+        + execution_result.realized_pnl * 3.0
+        + max(candidate.validation_profit_factor - 1.0, 0.0) * 0.5
+        + max(candidate.test_profit_factor - 1.0, 0.0) * 0.75
+        + max(execution_result.profit_factor - 1.0, 0.0) * 0.75
+    )
+    if execution_result.realized_pnl <= 0.0:
+        score -= 5.0
+    if candidate.validation_pnl <= 0.0:
+        score -= 3.0
+    if candidate.walk_forward_avg_validation_pnl <= 0.0:
+        score -= 2.0
+    return score
+
+
+def _near_miss_local_optimizer(
+    config: SystemConfig,
+    symbol: str,
+    data_symbol: str,
+    specs: list[CandidateSpec],
+    results: list[CandidateResult],
+    symbol_slug: str,
+) -> tuple[list[CandidateSpec], list[CandidateResult]]:
+    lookup = {spec.name: spec for spec in specs}
+    thresholds = _research_thresholds(symbol)
+    prioritized = [
+        row
+        for row in sorted(
+            results,
+            key=lambda item: (
+                item.realized_pnl,
+                item.profit_factor,
+                item.test_pnl,
+                item.validation_pnl,
+                item.closed_trades,
+            ),
+            reverse=True,
+        )
+        if row.component_count == 1
+        and row.name in lookup
+        and row.realized_pnl > 0.0
+        and row.profit_factor >= 1.0
+        and not _meets_viability(row, symbol)
+    ]
+
+    accepted_specs: list[CandidateSpec] = []
+    accepted_results: list[CandidateResult] = []
+    seen: set[str] = set()
+
+    for base_row in prioritized[:3]:
+        base_spec = lookup[base_row.name]
+        base_execution, _, _ = _run_candidate_bundle(
+            config,
+            symbol,
+            data_symbol,
+            [_execution_candidate_row_from_result(symbol, base_row)],
+        )
+        base_score = _near_miss_local_score(base_row, base_execution)
+        base_overrides = base_spec.execution_overrides or {}
+        low_trade = (
+            base_row.validation_closed_trades < int(thresholds["validation_closed_trades"])
+            or base_row.test_closed_trades < int(thresholds["test_closed_trades"])
+            or base_row.sparse_strategy
+        )
+        weak_validation = base_row.validation_pnl <= 0.0 or base_row.walk_forward_avg_validation_pnl <= 0.0
+
+        override_variants: list[tuple[str, dict[str, float | int], str]] = []
+        if weak_validation:
+            override_variants.extend(
+                [
+                    (
+                        "local_opt_consistency",
+                        _merge_execution_overrides(
+                            base_overrides,
+                            {
+                                "structure_exit_bars": 0,
+                                "stale_breakout_bars": max(int(base_overrides.get("stale_breakout_bars", 5)), 5),
+                                "break_even_atr_multiple": 0.25,
+                                "trailing_stop_atr_multiple": 0.6,
+                                "take_profit_atr_multiple": max(float(base_overrides.get("take_profit_atr_multiple", 2.0)), 2.0),
+                            },
+                        ),
+                        "with local consistency optimization",
+                    ),
+                    (
+                        "local_opt_validation",
+                        _merge_execution_overrides(
+                            base_overrides,
+                            {
+                                "structure_exit_bars": 0,
+                                "stale_breakout_bars": int(base_overrides.get("stale_breakout_bars", 5)) + 1,
+                                "stop_loss_atr_multiple": max(float(base_overrides.get("stop_loss_atr_multiple", 1.2)) - 0.05, 0.8),
+                                "break_even_atr_multiple": 0.2,
+                                "trailing_stop_atr_multiple": 0.55,
+                            },
+                        ),
+                        "with validation-focused optimization",
+                    ),
+                ]
+            )
+        if low_trade:
+            override_variants.append(
+                (
+                    "local_opt_density",
+                    _merge_execution_overrides(
+                        base_overrides,
+                        {
+                            "min_bars_between_trades": max(int(base_overrides.get("min_bars_between_trades", 10)) - 2, 2),
+                            "max_holding_bars": 0 if base_row.sparse_strategy else max(int(base_overrides.get("max_holding_bars", 18)) + 2, 18),
+                            "stale_breakout_bars": int(base_overrides.get("stale_breakout_bars", 5)) + 1,
+                        },
+                    ),
+                    "with density optimization",
+                )
+            )
+        if not override_variants:
+            continue
+
+        best_variant_score = base_score
+        best_variant_spec: CandidateSpec | None = None
+        best_variant_result: CandidateResult | None = None
+
+        for label, overrides, suffix in override_variants:
+            candidate_name = f"{base_spec.name}__{label}"
+            if candidate_name in seen:
+                continue
+            seen.add(candidate_name)
+            candidate_spec = CandidateSpec(
+                name=candidate_name,
+                description=f"{base_spec.description} {suffix}",
+                agents=base_spec.agents,
+                code_path=base_spec.code_path,
+                execution_overrides=overrides,
+                variant_label=base_spec.variant_label,
+                timeframe_label=base_spec.timeframe_label,
+                session_label=base_spec.session_label,
+                regime_filter_label=base_spec.regime_filter_label,
+            )
+            features, _ = load_execution_features_for_variant(
+                config,
+                symbol,
+                data_symbol,
+                candidate_spec.variant_label,
+                candidate_spec.regime_filter_label,
+            )
+            if not features:
+                continue
+            candidate_result = _run_candidate_with_splits(
+                config,
+                features,
+                candidate_spec,
+                "near_miss_local_optimized",
+                f"{symbol_slug}_{candidate_spec.name}_symbol_candidate",
+            )
+            execution_result, _, _ = _run_candidate_bundle(
+                config,
+                symbol,
+                data_symbol,
+                [_execution_candidate_row_from_result(symbol, candidate_result)],
+            )
+            candidate_score = _near_miss_local_score(candidate_result, execution_result)
+            if candidate_score > best_variant_score and execution_result.realized_pnl > base_execution.realized_pnl:
+                best_variant_score = candidate_score
+                best_variant_spec = candidate_spec
+                best_variant_result = candidate_result
+
+        if best_variant_spec is not None and best_variant_result is not None:
+            accepted_specs.append(best_variant_spec)
+            accepted_results.append(best_variant_result)
+
+    return accepted_specs, accepted_results
+
+
 def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 3) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
@@ -1953,7 +2433,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         key=lambda row: (
             bool(row.get("recommended")),
             float(row.get("combo_outperformance_score", 0.0)),
-            float(row.get("walk_forward_pass_rate_pct", 0.0)),
+            max(float(row.get("walk_forward_pass_rate_pct", 0.0)), float(row.get("walk_forward_soft_pass_rate_pct", 0.0))),
             float(row.get("walk_forward_avg_test_pnl", 0.0)),
             float(row.get("test_pnl", 0.0)),
             float(row.get("validation_pnl", 0.0)),
@@ -2103,6 +2583,8 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
             f"avg_val_pnl={row.walk_forward_avg_validation_pnl:.2f} avg_test_pnl={row.walk_forward_avg_test_pnl:.2f} "
             f"avg_val_pf={row.walk_forward_avg_validation_pf:.2f} avg_test_pf={row.walk_forward_avg_test_pf:.2f}"
         )
+        if row.sparse_strategy:
+            lines.append(f"  sparse_strategy: soft_pass_rate={row.walk_forward_soft_pass_rate_pct:.2f}%")
         if row.component_count > 1:
             lines.append(
                 f"  combo_validation: components={row.component_count} outperformance={row.combo_outperformance_score:.2f} "
@@ -2136,22 +2618,37 @@ def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
     validation_min = int(thresholds["validation_closed_trades"])
     test_min = int(thresholds["test_closed_trades"])
     wf_pass_min = float(thresholds["walk_forward_min_pass_rate_pct"])
-    if row.validation_closed_trades < validation_min:
-        reasons.append(f"validation trades too low ({row.validation_closed_trades} < {validation_min})")
-    if row.test_closed_trades < test_min:
-        reasons.append(f"test trades too low ({row.test_closed_trades} < {test_min})")
-    if row.validation_pnl <= 0.0:
-        reasons.append(f"validation pnl <= 0 ({row.validation_pnl:.2f})")
-    if row.test_pnl <= 0.0:
-        reasons.append(f"test pnl <= 0 ({row.test_pnl:.2f})")
-    if row.validation_profit_factor < 1.0:
-        reasons.append(f"validation PF < 1.0 ({row.validation_profit_factor:.2f})")
-    if row.test_profit_factor < 1.0:
-        reasons.append(f"test PF < 1.0 ({row.test_profit_factor:.2f})")
+    sparse_strategy = _is_sparse_candidate(row, symbol)
+    if sparse_strategy:
+        combined_closed = row.validation_closed_trades + row.test_closed_trades
+        combined_required = int(thresholds["sparse_combined_closed_trades"])
+        if combined_closed < combined_required:
+            reasons.append(f"combined validation/test trades too low ({combined_closed} < {combined_required})")
+        if (row.validation_pnl + row.test_pnl) <= 0.0:
+            reasons.append(f"combined validation/test pnl <= 0 ({row.validation_pnl + row.test_pnl:.2f})")
+        if max(row.validation_profit_factor, row.test_profit_factor) < 1.0:
+            reasons.append(
+                f"combined validation/test PF too low ({max(row.validation_profit_factor, row.test_profit_factor):.2f} < 1.00)"
+            )
+        wf_pass_min = float(thresholds["sparse_walk_forward_min_pass_rate_pct"])
+    else:
+        if row.validation_closed_trades < validation_min:
+            reasons.append(f"validation trades too low ({row.validation_closed_trades} < {validation_min})")
+        if row.test_closed_trades < test_min:
+            reasons.append(f"test trades too low ({row.test_closed_trades} < {test_min})")
+        if row.validation_pnl <= 0.0:
+            reasons.append(f"validation pnl <= 0 ({row.validation_pnl:.2f})")
+        if row.test_pnl <= 0.0:
+            reasons.append(f"test pnl <= 0 ({row.test_pnl:.2f})")
+        if row.validation_profit_factor < 1.0:
+            reasons.append(f"validation PF < 1.0 ({row.validation_profit_factor:.2f})")
+        if row.test_profit_factor < 1.0:
+            reasons.append(f"test PF < 1.0 ({row.test_profit_factor:.2f})")
     if row.walk_forward_windows < 1:
         reasons.append("no walk-forward windows")
-    if row.walk_forward_pass_rate_pct < wf_pass_min:
-        reasons.append(f"walk-forward pass rate too low ({row.walk_forward_pass_rate_pct:.2f}% < {wf_pass_min:.0f}%)")
+    effective_pass_rate = row.walk_forward_soft_pass_rate_pct if sparse_strategy else row.walk_forward_pass_rate_pct
+    if effective_pass_rate < wf_pass_min:
+        reasons.append(f"walk-forward pass rate too low ({effective_pass_rate:.2f}% < {wf_pass_min:.0f}%)")
     if row.walk_forward_avg_validation_pnl <= 0.0:
         reasons.append(f"walk-forward avg validation pnl <= 0 ({row.walk_forward_avg_validation_pnl:.2f})")
     if row.walk_forward_avg_test_pnl <= 0.0:
@@ -2309,9 +2806,49 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             )
             for spec in autopsy_specs
         )
+    near_miss_specs = _near_miss_optimizer_specs(
+        resolved.profile_symbol,
+        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs,
+        results,
+    )
+    if near_miss_specs:
+        results.extend(
+            _run_candidate_with_splits(
+                config,
+                load_execution_features_for_variant(
+                    config,
+                    resolved.profile_symbol,
+                    resolved.data_symbol,
+                    spec.variant_label,
+                    spec.regime_filter_label,
+                )[0],
+                spec,
+                "near_miss_optimized",
+                f"{symbol_slug}_{spec.name}_symbol_candidate",
+            )
+            for spec in near_miss_specs
+        )
+    local_optimized_specs, local_optimized_results = _near_miss_local_optimizer(
+        config,
+        resolved.profile_symbol,
+        resolved.data_symbol,
+        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs + near_miss_specs,
+        results,
+        symbol_slug,
+    )
+    results.extend(local_optimized_results)
     combos = _combined_specs(
         config,
-        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs,
+        (
+            explored_entry_exit_specs
+            + sweep_specs
+            + improvement_specs
+            + second_pass_specs
+            + regime_specs
+            + autopsy_specs
+            + near_miss_specs
+            + local_optimized_specs
+        ),
         results,
     )
     results.extend(
@@ -2360,6 +2897,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 "realized_pnl": row.realized_pnl,
                 "profit_factor": row.profit_factor,
                 "closed_trades": row.closed_trades,
+                "payoff_ratio": row.payoff_ratio,
                 "validation_pnl": row.validation_pnl,
                 "validation_profit_factor": row.validation_profit_factor,
                 "validation_closed_trades": row.validation_closed_trades,
@@ -2368,8 +2906,10 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 "test_closed_trades": row.test_closed_trades,
                 "walk_forward_windows": row.walk_forward_windows,
                 "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
+                "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
                 "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
                 "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+                "sparse_strategy": row.sparse_strategy,
                 "component_count": row.component_count,
                 "combo_outperformance_score": row.combo_outperformance_score,
                 "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
@@ -2397,10 +2937,12 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             f"pf={execution_validation_result.profit_factor:.2f} "
             f"closed={len(execution_validation_result.closed_trades)}"
         )
+        sparse_execution = any(bool(row.get("sparse_strategy")) for row in selected_execution_candidates)
+        min_execution_closed_trades = 1 if sparse_execution else 2
         if (
             execution_validation_result.realized_pnl <= 0.0
             or execution_validation_result.profit_factor < 1.0
-            or len(execution_validation_result.closed_trades) < 2
+            or len(execution_validation_result.closed_trades) < min_execution_closed_trades
         ):
             selected_execution_candidates = []
             recommended = []

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import csv
+import hashlib
 import logging
 from pathlib import Path
 from statistics import mean
@@ -34,6 +35,14 @@ from quant_system.risk.limits import RiskManager
 
 LOGGER = logging.getLogger(__name__)
 ARTIFACTS_DIR = Path("artifacts")
+
+
+def _safe_artifact_stem(name: str, max_length: int = 140) -> str:
+    if len(name) <= max_length:
+        return name
+    digest = hashlib.sha1(name.encode("utf-8")).hexdigest()[:12]
+    trimmed = name[: max_length - 13].rstrip("_")
+    return f"{trimmed}_{digest}"
 
 
 def _is_polygon_rate_limit(exc: Exception) -> bool:
@@ -318,8 +327,9 @@ def export_agent_catalog_artifact(profile: StrategyProfile, rendered_catalog: st
 
 def export_closed_trade_artifacts(closed_trades, realized_pnl: float, artifact_prefix: str) -> tuple[Path, Path]:
     ARTIFACTS_DIR.mkdir(exist_ok=True)
-    trades_path = ARTIFACTS_DIR / f"{artifact_prefix}_trades.csv"
-    analysis_path = ARTIFACTS_DIR / f"{artifact_prefix}_analysis.txt"
+    safe_prefix = _safe_artifact_stem(artifact_prefix)
+    trades_path = ARTIFACTS_DIR / f"{safe_prefix}_trades.csv"
+    analysis_path = ARTIFACTS_DIR / f"{safe_prefix}_analysis.txt"
 
     with trades_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)

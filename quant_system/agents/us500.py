@@ -400,10 +400,149 @@ class US500OpeningDriveShortReclaimAgent(Agent):
         return SignalEvent(feature.timestamp, self.name, feature.symbol, side, confidence if side != Side.FLAT else 0.0, metadata)
 
 
+class US500MomentumImpulseAgent(Agent):
+    name = "us500_momentum_impulse"
+
+    def __init__(
+        self,
+        min_trend_strength: float,
+        allowed_hours: set[int] | None = None,
+        min_relative_volume: float = 0.9,
+    ) -> None:
+        self.min_trend_strength = min_trend_strength
+        self.allowed_hours = allowed_hours
+        self.min_relative_volume = min_relative_volume
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or hour not in (self.allowed_hours if self.allowed_hours is not None else {16, 17, 18})
+            or relative_volume < self.min_relative_volume
+        ):
+            side = Side.FLAT
+        elif (
+            trend_strength > max(self.min_trend_strength, 0.00055)
+            and momentum_20 > 0.00045
+            and momentum_5 > 0.00015
+            and 0.1 <= z_score <= 1.1
+            and 0.00005 <= vwap_distance <= 0.0018
+            and session_position >= 0.55
+        ):
+            side = Side.BUY
+        elif trend_strength <= 0.0 or momentum_20 <= 0.0 or momentum_5 <= -0.00025 or z_score < -0.6:
+            side = Side.SELL
+        else:
+            side = Side.FLAT
+
+        confidence = scaled_confidence(
+            0.18,
+            (max(trend_strength, 0.0), 180),
+            (max(momentum_20, 0.0), 120),
+            (max(momentum_5, 0.0), 100),
+        )
+        return SignalEvent(
+            timestamp=feature.timestamp,
+            agent_name=self.name,
+            symbol=feature.symbol,
+            side=side,
+            confidence=confidence if side != Side.FLAT else 0.0,
+            metadata={
+                "trend_strength": trend_strength,
+                "momentum_20": momentum_20,
+                "vwap_distance": vwap_distance,
+                "session_position": session_position,
+                "hour_of_day": float(hour),
+            },
+        )
+
+
+class US500ShortVWAPRejectAgent(Agent):
+    name = "us500_short_vwap_reject"
+
+    def __init__(
+        self,
+        min_trend_strength: float,
+        allowed_hours: set[int] | None = None,
+        min_relative_volume: float = 0.88,
+    ) -> None:
+        self.min_trend_strength = min_trend_strength
+        self.allowed_hours = allowed_hours
+        self.min_relative_volume = min_relative_volume
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or hour not in (self.allowed_hours if self.allowed_hours is not None else {16, 17})
+            or relative_volume < self.min_relative_volume
+        ):
+            side = Side.FLAT
+        elif (
+            trend_strength < max(self.min_trend_strength * 0.5, 0.0001)
+            and momentum_20 <= 0.0001
+            and momentum_5 < 0.0
+            and 0.2 <= z_score <= 1.1
+            and 0.0 <= vwap_distance <= 0.0015
+            and session_position <= 0.62
+        ):
+            side = Side.SELL
+        elif trend_strength > max(self.min_trend_strength, 0.0004) or momentum_20 > 0.0002 or z_score < -0.7:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+
+        confidence = scaled_confidence(
+            0.17,
+            (max(z_score, 0.0), 0.14),
+            (max(-momentum_5, 0.0), 120),
+            (max(0.0, -trend_strength), 140),
+        )
+        metadata = directional_metadata(
+            side,
+            short_entry=True,
+            short_exit=True,
+            trend_strength=trend_strength,
+            momentum_20=momentum_20,
+            vwap_distance=vwap_distance,
+            session_position=session_position,
+            hour_of_day=float(hour),
+        )
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, side, confidence if side != Side.FLAT else 0.0, metadata)
+
+
 __all__ = [
     "US500TrendPullbackAgent",
     "US500VWAPContinuationAgent",
     "US500OpeningDriveReclaimAgent",
     "US500ShortTrendRejectionAgent",
     "US500OpeningDriveShortReclaimAgent",
+    "US500MomentumImpulseAgent",
+    "US500ShortVWAPRejectAgent",
 ]

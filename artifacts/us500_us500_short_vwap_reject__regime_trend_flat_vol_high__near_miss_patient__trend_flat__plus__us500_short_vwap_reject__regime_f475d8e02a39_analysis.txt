@@ -1,0 +1,17 @@
+Artifact: us500_us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate
+Closed trades: 59
+Realized pnl: -2.51
+
+By entry hour
+17: trades=32 pnl=-2.42 avg=-0.08 win_rate=9.38%
+16: trades=27 pnl=-0.09 avg=-0.00 win_rate=18.52%
+
+By entry setup
+us500_short_vwap_reject+us500_short_vwap_reject: trades=59 pnl=-2.51 avg=-0.04 win_rate=13.56%
+
+By exit reason
+structure_exit: trades=34 pnl=-2.84 avg=-0.08 win_rate=0.00%
+stop_loss: trades=12 pnl=-1.71 avg=-0.14 win_rate=0.00%
+trailing_stop: trades=4 pnl=-0.18 avg=-0.04 win_rate=25.00%
+stale_breakout: trades=2 pnl=-0.08 avg=-0.04 win_rate=0.00%
+take_profit: trades=7 pnl=2.30 avg=0.33 win_rate=100.00%

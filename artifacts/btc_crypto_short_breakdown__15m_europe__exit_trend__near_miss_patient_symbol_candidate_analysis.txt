@@ -1,0 +1,18 @@
+Artifact: btc_crypto_short_breakdown__15m_europe__exit_trend__near_miss_patient_symbol_candidate
+Closed trades: 8
+Realized pnl: 468.67
+
+By entry hour
+7: trades=4 pnl=-24.79 avg=-6.20 win_rate=50.00%
+8: trades=1 pnl=-3.89 avg=-3.89 win_rate=0.00%
+11: trades=2 pnl=244.34 avg=122.17 win_rate=50.00%
+9: trades=1 pnl=253.00 avg=253.00 win_rate=100.00%
+
+By entry setup
+crypto_short_breakdown: trades=8 pnl=468.67 avg=58.58 win_rate=50.00%
+
+By exit reason
+signal_exit: trades=2 pnl=-79.41 avg=-39.70 win_rate=0.00%
+stop_loss: trades=1 pnl=-57.07 avg=-57.07 win_rate=0.00%
+trailing_stop: trades=3 pnl=49.33 avg=16.44 win_rate=66.67%
+take_profit: trades=2 pnl=555.82 avg=277.91 win_rate=100.00%

@@ -1,6 +1,6 @@
 Symbol research: US100
 Broker symbol: US100.cash
-Data source: polygon
+Data source: duckdb_cache
 
 Ranked candidates
 opening_range_short_breakdown__exit_trend [entry_exit_family]: pnl=2.91 closed=17 pf=2.55 win_rate=52.94% dd=0.00%
@@ -8,6 +8,7 @@ opening_range_short_breakdown__exit_trend [entry_exit_family]: pnl=2.91 closed=1
   exits: dominant=stop_loss share=29.41%
   regimes: best=trend_down_vol_high pnl=2.40 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=2.82 avg_test_pnl=0.32 avg_val_pf=9.17 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   splits: train_pnl=-0.10 val_pnl=3.19 val_pf=11.76 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
@@ -16,6 +17,7 @@ opening_range_short_breakdown [single]: pnl=2.39 closed=17 pf=2.27 win_rate=52.9
   exits: dominant=take_profit share=47.06%
   regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown_default_symbol_candidate_analysis.txt
@@ -24,6 +26,7 @@ opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown [
   exits: dominant=take_profit share=47.06%
   regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   combo_validation: components=2 outperformance=-1.03 trade_overlap=100.00%
   splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown_symbol_candidate_trades.csv
@@ -33,6 +36,7 @@ opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__
   exits: dominant=take_profit share=47.06%
   regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   combo_validation: components=2 outperformance=-1.03 trade_overlap=100.00%
   splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_trades.csv
@@ -42,6 +46,7 @@ opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfai
   exits: dominant=take_profit share=47.06%
   regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
   splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_trades.csv
@@ -51,6 +56,7 @@ opening_range_short_breakdown__exit_fastfail [entry_exit_family]: pnl=1.83 close
   exits: dominant=take_profit share=47.06%
   regimes: best=trend_down_vol_high pnl=1.42 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.52 avg_test_pnl=0.19 avg_val_pf=5.45 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=100.00%
   splits: train_pnl=0.24 val_pnl=1.77 val_pf=6.95 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
@@ -60,6 +66,7 @@ opening_range_breakout__regime_trend_flat_vol_mid [regime_improved]: pnl=0.48 cl
   regimes: best=trend_flat_vol_mid pnl=0.48 worst=trend_flat_vol_mid pnl=0.48 dominant_share=100.00%
   regime_filter: trend_flat_vol_mid
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.09 avg_test_pnl=0.13 avg_val_pf=1.34 avg_test_pf=5.91
+  sparse_strategy: soft_pass_rate=100.00%
   splits: train_pnl=0.48 val_pnl=0.18 val_pf=2.69 val_closed=2 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_breakout__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_breakout__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
@@ -303,4 +310,6 @@ volatility_short_breakdown__exit_fastfail [entry_exit_family]: pnl=-29.40 closed
   analysis: artifacts\us100_volatility_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
 
 Recommended active agents
-No candidate met the positive-PnL and PF>=1.0 threshold.
+- opening_range_short_breakdown__exit_trend (Opening range short breakdown with trend-runner exits)
+- opening_range_short_breakdown (Opening range short breakdown)
+- opening_range_short_breakdown__exit_fastfail (Opening range short breakdown with fast-fail exits)

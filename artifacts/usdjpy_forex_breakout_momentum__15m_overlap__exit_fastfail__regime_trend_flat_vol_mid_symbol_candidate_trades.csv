@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:USDJPY,2025-10-27T13:30:00+00:00,2025-10-28T13:00:00+00:00,13,13,forex_breakout_momentum,stop_loss,153.17283,152.32819,0.10000,-8446.87525,0.50000,1,1.00000,{'breakout_high': 153.02}
+C:USDJPY,2025-11-17T15:00:00+00:00,2026-04-03T12:30:00+00:00,15,12,forex_breakout_momentum,end_of_run,155.28288,159.54901,0.10000,42660.79200,0.50000,184,1.00000,{'breakout_high': 154.663}

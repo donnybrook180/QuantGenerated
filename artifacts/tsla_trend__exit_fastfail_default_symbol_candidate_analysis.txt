@@ -1,0 +1,22 @@
+Artifact: tsla_trend__exit_fastfail_default_symbol_candidate
+Closed trades: 187
+Realized pnl: -94.15
+
+By entry hour
+14: trades=52 pnl=-25.09 avg=-0.48 win_rate=15.38%
+16: trades=33 pnl=-18.10 avg=-0.55 win_rate=0.00%
+18: trades=31 pnl=-16.36 avg=-0.53 win_rate=3.23%
+17: trades=26 pnl=-13.75 avg=-0.53 win_rate=0.00%
+15: trades=30 pnl=-12.90 avg=-0.43 win_rate=6.67%
+19: trades=15 pnl=-7.96 avg=-0.53 win_rate=0.00%
+
+By entry setup
+trend: trades=187 pnl=-94.15 avg=-0.50 win_rate=5.88%
+
+By exit reason
+stop_loss: trades=59 pnl=-44.07 avg=-0.75 win_rate=0.00%
+structure_exit: trades=33 pnl=-22.32 avg=-0.68 win_rate=0.00%
+trailing_stop: trades=30 pnl=-14.86 avg=-0.50 win_rate=0.00%
+time_stop: trades=12 pnl=-7.47 avg=-0.62 win_rate=0.00%
+take_profit: trades=51 pnl=-4.48 avg=-0.09 win_rate=21.57%
+stale_breakout: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%

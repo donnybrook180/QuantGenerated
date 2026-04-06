@@ -1,0 +1,34 @@
+Artifact: tsla_volatility_short_breakdown_default_symbol_candidate
+Closed trades: 368
+Realized pnl: -192.28
+
+By entry hour
+14: trades=49 pnl=-26.89 avg=-0.55 win_rate=12.24%
+20: trades=32 pnl=-17.91 avg=-0.56 win_rate=3.12%
+18: trades=32 pnl=-16.81 avg=-0.53 win_rate=0.00%
+19: trades=29 pnl=-16.34 avg=-0.56 win_rate=0.00%
+11: trades=26 pnl=-13.34 avg=-0.51 win_rate=3.85%
+9: trades=22 pnl=-11.40 avg=-0.52 win_rate=4.55%
+10: trades=19 pnl=-10.65 avg=-0.56 win_rate=0.00%
+12: trades=22 pnl=-10.54 avg=-0.48 win_rate=4.55%
+13: trades=16 pnl=-10.28 avg=-0.64 win_rate=12.50%
+16: trades=22 pnl=-10.00 avg=-0.45 win_rate=4.55%
+17: trades=20 pnl=-9.98 avg=-0.50 win_rate=5.00%
+23: trades=17 pnl=-8.70 avg=-0.51 win_rate=0.00%
+22: trades=16 pnl=-8.15 avg=-0.51 win_rate=0.00%
+8: trades=13 pnl=-7.57 avg=-0.58 win_rate=0.00%
+15: trades=18 pnl=-6.89 avg=-0.38 win_rate=22.22%
+0: trades=12 pnl=-5.80 avg=-0.48 win_rate=8.33%
+21: trades=3 pnl=-1.03 avg=-0.34 win_rate=33.33%
+
+By entry setup
+volatility_short_breakdown: trades=368 pnl=-192.28 avg=-0.52 win_rate=5.43%
+
+By exit reason
+stop_loss: trades=62 pnl=-45.73 avg=-0.74 win_rate=0.00%
+structure_exit: trades=67 pnl=-44.35 avg=-0.66 win_rate=0.00%
+trailing_stop: trades=87 pnl=-42.37 avg=-0.49 win_rate=0.00%
+stale_breakout: trades=56 pnl=-34.30 avg=-0.61 win_rate=0.00%
+signal_exit: trades=26 pnl=-14.90 avg=-0.57 win_rate=3.85%
+take_profit: trades=64 pnl=-5.94 avg=-0.09 win_rate=29.69%
+time_stop: trades=6 pnl=-4.69 avg=-0.78 win_rate=0.00%

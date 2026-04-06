@@ -1,0 +1,6 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:GBPUSD,2025-11-13T07:00:00+00:00,2025-11-13T07:15:00+00:00,7,7,forex_range_reversion,signal_exit,1.31146,1.31264,0.10000,11.24398,0.50000,1,0.84498,{'mean_level': 1.312403}
+C:GBPUSD,2026-01-06T09:00:00+00:00,2026-01-06T09:15:00+00:00,9,9,forex_range_reversion,signal_exit,1.35471,1.35454,0.10000,-2.27731,0.50000,1,0.81219,{'mean_level': 1.350237}
+C:GBPUSD,2026-01-07T07:15:00+00:00,2026-01-07T07:30:00+00:00,7,7,forex_range_reversion,signal_exit,1.35023,1.34990,0.10000,-3.87503,0.50000,1,0.77425,{'mean_level': 1.3529674999999999}
+C:GBPUSD,2026-01-13T07:00:00+00:00,2026-01-13T07:15:00+00:00,7,7,forex_range_reversion,signal_exit,1.34674,1.34663,0.10000,-1.67334,0.50000,1,0.74253,{'mean_level': 1.346214}
+C:GBPUSD,2026-02-25T10:15:00+00:00,2026-02-25T10:30:00+00:00,10,10,forex_range_reversion,signal_exit,1.35109,1.35118,0.10000,0.32443,0.50000,1,0.75080,{'mean_level': 1.350773}

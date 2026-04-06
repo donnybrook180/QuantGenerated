@@ -1,0 +1,20 @@
+Artifact: gbpusd_forex_breakout_momentum__15m_overlap__exit_fastfail__near_miss_patient_symbol_candidate
+Closed trades: 43
+Realized pnl: 140.50
+
+By entry hour
+14: trades=9 pnl=-97.78 avg=-10.86 win_rate=22.22%
+12: trades=12 pnl=-70.59 avg=-5.88 win_rate=16.67%
+16: trades=4 pnl=18.73 avg=4.68 win_rate=50.00%
+15: trades=7 pnl=64.07 avg=9.15 win_rate=57.14%
+13: trades=11 pnl=226.07 avg=20.55 win_rate=54.55%
+
+By entry setup
+forex_breakout_momentum: trades=43 pnl=140.50 avg=3.27 win_rate=37.21%
+
+By exit reason
+stop_loss: trades=8 pnl=-241.89 avg=-30.24 win_rate=0.00%
+trailing_stop: trades=15 pnl=-50.32 avg=-3.35 win_rate=13.33%
+stale_breakout: trades=2 pnl=-18.44 avg=-9.22 win_rate=0.00%
+signal_exit: trades=8 pnl=38.63 avg=4.83 win_rate=50.00%
+take_profit: trades=10 pnl=412.52 avg=41.25 win_rate=100.00%

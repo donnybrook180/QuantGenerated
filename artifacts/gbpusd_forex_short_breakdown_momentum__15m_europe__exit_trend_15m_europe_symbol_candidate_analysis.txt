@@ -1,0 +1,21 @@
+Artifact: gbpusd_forex_short_breakdown_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate
+Closed trades: 79
+Realized pnl: -367.50
+
+By entry hour
+7: trades=26 pnl=-94.20 avg=-3.62 win_rate=30.77%
+8: trades=16 pnl=-77.26 avg=-4.83 win_rate=25.00%
+12: trades=16 pnl=-62.57 avg=-3.91 win_rate=43.75%
+10: trades=6 pnl=-57.29 avg=-9.55 win_rate=33.33%
+11: trades=8 pnl=-54.18 avg=-6.77 win_rate=37.50%
+9: trades=7 pnl=-22.00 avg=-3.14 win_rate=14.29%
+
+By entry setup
+forex_short_breakdown_momentum: trades=79 pnl=-367.50 avg=-4.65 win_rate=31.65%
+
+By exit reason
+stop_loss: trades=25 pnl=-693.01 avg=-27.72 win_rate=0.00%
+stale_breakout: trades=10 pnl=-169.54 avg=-16.95 win_rate=0.00%
+signal_exit: trades=11 pnl=2.42 avg=0.22 win_rate=63.64%
+trailing_stop: trades=26 pnl=21.38 avg=0.82 win_rate=42.31%
+take_profit: trades=7 pnl=471.24 avg=67.32 win_rate=100.00%

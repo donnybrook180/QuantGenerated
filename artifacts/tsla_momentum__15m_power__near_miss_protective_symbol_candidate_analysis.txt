@@ -1,0 +1,16 @@
+Artifact: tsla_momentum__15m_power__near_miss_protective_symbol_candidate
+Closed trades: 6
+Realized pnl: 3.36
+
+By entry hour
+19: trades=2 pnl=0.52 avg=0.26 win_rate=50.00%
+18: trades=4 pnl=2.84 avg=0.71 win_rate=50.00%
+
+By entry setup
+momentum_confirmation: trades=6 pnl=3.36 avg=0.56 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-0.84 avg=-0.84 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.65 avg=-0.65 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.20 avg=-0.20 win_rate=0.00%
+take_profit: trades=3 pnl=5.05 avg=1.68 win_rate=100.00%

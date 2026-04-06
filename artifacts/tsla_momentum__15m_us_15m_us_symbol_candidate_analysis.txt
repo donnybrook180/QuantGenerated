@@ -1,0 +1,22 @@
+Artifact: tsla_momentum__15m_us_15m_us_symbol_candidate
+Closed trades: 18
+Realized pnl: -4.53
+
+By entry hour
+18: trades=3 pnl=-1.26 avg=-0.42 win_rate=33.33%
+16: trades=2 pnl=-1.00 avg=-0.50 win_rate=0.00%
+13: trades=3 pnl=-0.95 avg=-0.32 win_rate=33.33%
+17: trades=3 pnl=-0.83 avg=-0.28 win_rate=33.33%
+15: trades=1 pnl=-0.79 avg=-0.79 win_rate=0.00%
+19: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%
+14: trades=5 pnl=0.19 avg=0.04 win_rate=40.00%
+
+By entry setup
+momentum_confirmation: trades=18 pnl=-4.53 avg=-0.25 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=5 pnl=-3.72 avg=-0.74 win_rate=0.00%
+structure_exit: trades=2 pnl=-1.96 avg=-0.98 win_rate=0.00%
+trailing_stop: trades=3 pnl=-1.48 avg=-0.49 win_rate=0.00%
+time_stop: trades=1 pnl=-0.59 avg=-0.59 win_rate=0.00%
+take_profit: trades=7 pnl=3.22 avg=0.46 win_rate=85.71%

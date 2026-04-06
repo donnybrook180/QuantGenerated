@@ -1,0 +1,22 @@
+Artifact: usdjpy_forex_short_breakdown_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
+Closed trades: 18
+Realized pnl: -7107.95
+
+By entry hour
+13: trades=4 pnl=-10609.69 avg=-2652.42 win_rate=25.00%
+16: trades=2 pnl=-3615.37 avg=-1807.69 win_rate=0.00%
+12: trades=7 pnl=-3000.09 avg=-428.58 win_rate=28.57%
+15: trades=1 pnl=-186.14 avg=-186.14 win_rate=0.00%
+14: trades=4 pnl=10303.35 avg=2575.84 win_rate=75.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=18 pnl=-7107.95 avg=-394.89 win_rate=33.33%
+
+By exit reason
+structure_exit: trades=4 pnl=-14348.77 avg=-3587.19 win_rate=0.00%
+stop_loss: trades=3 pnl=-4892.28 avg=-1630.76 win_rate=0.00%
+time_stop: trades=1 pnl=-2666.77 avg=-2666.77 win_rate=0.00%
+signal_exit: trades=1 pnl=-948.87 avg=-948.87 win_rate=0.00%
+stale_breakout: trades=1 pnl=-647.22 avg=-647.22 win_rate=0.00%
+trailing_stop: trades=4 pnl=-26.51 avg=-6.63 win_rate=50.00%
+take_profit: trades=4 pnl=16422.48 avg=4105.62 win_rate=100.00%

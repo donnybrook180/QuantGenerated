@@ -1,0 +1,25 @@
+{
+  "profile_name": "symbol::gbpusd",
+  "symbol": "GBPUSD",
+  "data_symbol": "C:GBPUSD",
+  "broker_symbol": "GBPUSD",
+  "research_run_id": 101,
+  "execution_set_id": 53,
+  "execution_validation_summary": "variant=forex_breakout_momentum__15m_europe__exit_trend@15m_europe data_source=duckdb_cache pnl=189.94 pf=1.39 closed=47 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "forex_breakout_momentum__15m_europe__exit_trend",
+      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
+      "variant_label": "15m_europe",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+Artifact: usdjpy_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate
+Closed trades: 50
+Realized pnl: 20175.62
+
+By entry hour
+11: trades=6 pnl=-2710.52 avg=-451.75 win_rate=50.00%
+12: trades=10 pnl=886.44 avg=88.64 win_rate=70.00%
+10: trades=5 pnl=1641.64 avg=328.33 win_rate=40.00%
+7: trades=18 pnl=2814.36 avg=156.35 win_rate=44.44%
+9: trades=5 pnl=8749.10 avg=1749.82 win_rate=40.00%
+8: trades=6 pnl=8794.61 avg=1465.77 win_rate=50.00%
+
+By entry setup
+forex_breakout_momentum: trades=50 pnl=20175.62 avg=403.51 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=10 pnl=-34204.36 avg=-3420.44 win_rate=0.00%
+structure_exit: trades=5 pnl=-10660.21 avg=-2132.04 win_rate=0.00%
+stale_breakout: trades=3 pnl=-1264.05 avg=-421.35 win_rate=0.00%
+trailing_stop: trades=12 pnl=1302.74 avg=108.56 win_rate=66.67%
+signal_exit: trades=7 pnl=4290.98 avg=613.00 win_rate=57.14%
+take_profit: trades=13 pnl=60710.52 avg=4670.04 win_rate=100.00%

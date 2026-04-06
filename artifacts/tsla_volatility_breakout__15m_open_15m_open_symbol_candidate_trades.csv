@@ -1,0 +1,5 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+TSLA,2025-04-15T14:30:00+00:00,2025-04-15T14:45:00+00:00,14,14,volatility_breakout,signal_exit,258.26454,255.74514,0.10000,-0.75708,0.50514,1,0.98655,{'breakout_high': 257.86}
+TSLA,2025-05-13T14:00:00+00:00,2025-05-15T13:30:00+00:00,14,13,volatility_breakout,take_profit,323.72843,339.58707,0.10000,1.07923,0.50663,4,1.00000,{'breakout_high': 321.6}
+TSLA,2025-05-20T13:30:00+00:00,2025-05-21T13:30:00+00:00,13,13,volatility_breakout,signal_exit,350.15002,345.02878,0.10000,-1.01908,0.50695,6,1.00000,{'breakout_high': 343.0}
+TSLA,2025-12-09T14:45:00+00:00,2025-12-09T14:45:00+00:00,14,14,volatility_breakout,end_of_run,444.64391,444.46609,0.10000,-0.52667,0.50889,0,1.00000,{'breakout_high': 442.28}

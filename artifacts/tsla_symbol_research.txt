@@ -1,0 +1,522 @@
+Symbol research: TSLA
+Broker symbol: TSLA
+Data source: duckdb_cache
+
+Ranked candidates
+mean_reversion__15m_midday__regime_trend_up_vol_high [regime_improved]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense [autopsy_improved]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high [autopsy_improved]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up [autopsy_improved]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_patient__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_protective__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__near_miss_dense__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_patient__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_protective__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__near_miss_dense__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_patient__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_protective__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up_vol_high__near_miss_dense__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_patient__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_protective__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up_vol_high [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up [near_miss_optimized]: pnl=13.32 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=13.32 avg_win=13.32 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=13.32 worst=trend_up_vol_high pnl=13.32 dominant_share=100.00%
+  regime_filter: trend_up
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=8.88 avg_val_pf=0.00 avg_test_pf=666.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=13.32 test_pf=999.00 test_closed=1
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_trend_up__near_miss_dense__trend_up_symbol_candidate_analysis.txt
+mean_reversion__15m_midday [single]: pnl=9.46 closed=4 pf=4.94 win_rate=25.00% dd=0.00%
+  trade_metrics: expectancy=2.37 avg_win=11.86 avg_loss=-0.80 payoff=14.82 avg_hold=8.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=11.86 worst=trend_flat_vol_high pnl=-1.36 dominant_share=50.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=6.87 avg_val_pf=0.00 avg_test_pf=7.59
+  sparse_strategy: soft_pass_rate=66.67%
+  splits: train_pnl=-0.84 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=10.82 test_pf=11.39 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday_15m_midday_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday_15m_midday_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_vol_high [autopsy_improved]: pnl=9.46 closed=4 pf=4.94 win_rate=25.00% dd=0.00%
+  trade_metrics: expectancy=2.37 avg_win=11.86 avg_loss=-0.80 payoff=14.82 avg_hold=7.8
+  exits: dominant=stop_loss share=50.00%
+  regimes: best=trend_up_vol_high pnl=11.86 worst=trend_flat_vol_high pnl=-1.36 dominant_share=50.00%
+  regime_filter: vol_high
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=2.81 avg_val_pf=0.00 avg_test_pf=3.80
+  sparse_strategy: soft_pass_rate=33.33%
+  splits: train_pnl=-0.84 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=10.82 test_pf=11.39 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_midday_dense [combined]: pnl=9.46 closed=4 pf=4.94 win_rate=25.00% dd=0.00%
+  trade_metrics: expectancy=2.37 avg_win=11.86 avg_loss=-0.80 payoff=14.82 avg_hold=8.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=11.86 worst=trend_flat_vol_high pnl=-1.36 dominant_share=50.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=6.87 avg_val_pf=0.00 avg_test_pf=7.59
+  sparse_strategy: soft_pass_rate=66.67%
+  combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
+  splits: train_pnl=-0.84 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=10.82 test_pf=11.39 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_midday_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_midday_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high [combined]: pnl=9.46 closed=4 pf=4.94 win_rate=25.00% dd=0.00%
+  trade_metrics: expectancy=2.37 avg_win=11.86 avg_loss=-0.80 payoff=14.82 avg_hold=8.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=11.86 worst=trend_flat_vol_high pnl=-1.36 dominant_share=50.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.61 avg_test_pnl=6.87 avg_val_pf=0.00 avg_test_pf=7.59
+  sparse_strategy: soft_pass_rate=66.67%
+  combo_validation: components=2 outperformance=-0.78 trade_overlap=100.00%
+  splits: train_pnl=-0.84 val_pnl=-0.78 val_pf=0.00 val_closed=1 test_pnl=10.82 test_pf=11.39 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__regime_trend_up_vol_high__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__autopsy_midday_dense__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high [combined]: pnl=9.46 closed=4 pf=4.94 win_rate=25.00% dd=0.00%
+  trade_metrics: expectancy=2.37 avg_win=11.86 avg_loss=-0.80 payoff=14.82 avg_hold=8.0
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=11.86 worst=trend_flat_vol_high pnl=-1.36 dominant_share=50.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=6.87 avg_val_pf=0.00 avg_test_pf=7.59
+  sparse_strategy: soft_pass_rate=66.67%
+  combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
+  splits: train_pnl=-0.84 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=10.82 test_pf=11.39 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__autopsy_midday_dense__plus__mean_reversion__15m_midday__autopsy_trend_up_vol_high_symbol_candidate_analysis.txt
+tsla_stock_gap_and_go_selective [auto_improved]: pnl=1.33 closed=2 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.66 avg_win=0.66 avg_loss=0.00 payoff=999.00 avg_hold=11.5
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_up_vol_high pnl=1.33 worst=trend_up_vol_high pnl=1.33 dominant_share=100.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-0.04 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.07 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-0.13 test_pf=0.00 test_closed=1
+  trades: artifacts\tsla_tsla_stock_gap_and_go_selective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_gap_and_go_selective_symbol_candidate_analysis.txt
+tsla_stock_news_momentum_patient [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_news_momentum_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_news_momentum_patient_symbol_candidate_analysis.txt
+tsla_stock_gap_fade_selective [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_gap_fade_selective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_gap_fade_selective_symbol_candidate_analysis.txt
+tsla_stock_post_earnings_drift_patient [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_post_earnings_drift_patient_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_post_earnings_drift_patient_symbol_candidate_analysis.txt
+tsla_stock_power_hour_continuation_selective [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_power_hour_continuation_selective_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_power_hour_continuation_selective_symbol_candidate_analysis.txt
+tsla_stock_news_momentum_exit_relaxed [auto_second_pass]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_news_momentum_exit_relaxed_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_news_momentum_exit_relaxed_symbol_candidate_analysis.txt
+tsla_stock_post_earnings_drift_dense [auto_second_pass]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\tsla_tsla_stock_post_earnings_drift_dense_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_tsla_stock_post_earnings_drift_dense_symbol_candidate_analysis.txt
+mean_reversion__15m_midday__exit_quick [entry_exit_family]: pnl=-2.34 closed=4 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=-0.58 avg_win=0.00 avg_loss=-0.58 payoff=0.00 avg_hold=5.2
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=trend_up_vol_high pnl=-0.22 worst=trend_flat_vol_high pnl=-1.08 dominant_share=50.00%
+  walk_forward: windows=3 pass_rate=0.00% avg_val_pnl=-0.35 avg_test_pnl=-1.19 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-0.56 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-1.26 test_pf=0.00 test_closed=2
+  trades: artifacts\tsla_mean_reversion__15m_midday__exit_quick_15m_midday_symbol_candidate_trades.csv
+  analysis: artifacts\tsla_mean_reversion__15m_midday__exit_quick_15m_midday_symbol_candidate_analysis.txt
+
+Recommended active agents
+No candidate met the positive-PnL and PF>=1.0 threshold.

@@ -1,0 +1,26 @@
+{
+  "profile_name": "symbol::usdjpy",
+  "symbol": "USDJPY",
+  "data_symbol": "C:USDJPY",
+  "broker_symbol": "USDJPY",
+  "research_run_id": 90,
+  "execution_set_id": 52,
+  "execution_validation_summary": "variant=forex_breakout_momentum__15m_overlap__exit_trend__near_miss_patient__trend_flat@15m_overlap|trend_flat data_source=duckdb_cache pnl=57471.56 pf=9.32 closed=4 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "forex_breakout_momentum__15m_overlap__exit_trend__near_miss_patient__trend_flat",
+      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
+      "variant_label": "15m_overlap",
+      "regime_filter_label": "trend_flat",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.4000000000000004,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 10,
+        "structure_exit_bars": 0,
+        "break_even_atr_multiple": 0.4
+      },
+      "allocation_weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+TSLA,2025-05-13T15:00:00+00:00,2025-05-15T15:00:00+00:00,15,15,stock_gap_and_go,take_profit,322.42447,338.18435,0.10000,1.06938,0.50661,12,1.00000,{'minutes_from_open': 90.0}
+TSLA,2025-12-09T15:00:00+00:00,2025-12-09T17:45:00+00:00,15,17,stock_gap_and_go,take_profit,443.96878,451.63965,0.10000,0.25813,0.50896,11,1.00000,{'minutes_from_open': 90.0}

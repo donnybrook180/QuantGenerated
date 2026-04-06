@@ -1,0 +1,24 @@
+Artifact: gbpusd_forex_breakout_momentum_patient__regime_trend_flat_vol_mid_symbol_candidate
+Closed trades: 10
+Realized pnl: -2.11
+
+By entry hour
+10: trades=1 pnl=-61.38 avg=-61.38 win_rate=0.00%
+1: trades=1 pnl=-48.08 avg=-48.08 win_rate=0.00%
+14: trades=1 pnl=-36.87 avg=-36.87 win_rate=0.00%
+16: trades=1 pnl=-28.26 avg=-28.26 win_rate=0.00%
+15: trades=1 pnl=-24.66 avg=-24.66 win_rate=0.00%
+19: trades=1 pnl=9.33 avg=9.33 win_rate=100.00%
+11: trades=1 pnl=12.72 avg=12.72 win_rate=100.00%
+13: trades=1 pnl=30.43 avg=30.43 win_rate=100.00%
+17: trades=1 pnl=41.43 avg=41.43 win_rate=100.00%
+9: trades=1 pnl=103.22 avg=103.22 win_rate=100.00%
+
+By entry setup
+forex_breakout_momentum: trades=10 pnl=-2.11 avg=-0.21 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=5 pnl=-199.25 avg=-39.85 win_rate=0.00%
+trailing_stop: trades=1 pnl=9.33 avg=9.33 win_rate=100.00%
+signal_exit: trades=2 pnl=43.15 avg=21.58 win_rate=100.00%
+take_profit: trades=2 pnl=144.65 avg=72.33 win_rate=100.00%

@@ -1,0 +1,16 @@
+Artifact: tsla_momentum__15m_midday__exit_trend__regime_trend_up_vol_high_symbol_candidate
+Closed trades: 6
+Realized pnl: 1.19
+
+By entry hour
+17: trades=2 pnl=-1.30 avg=-0.65 win_rate=50.00%
+16: trades=1 pnl=0.04 avg=0.04 win_rate=100.00%
+15: trades=3 pnl=2.45 avg=0.82 win_rate=100.00%
+
+By entry setup
+momentum_confirmation: trades=6 pnl=1.19 avg=0.20 win_rate=83.33%
+
+By exit reason
+stop_loss: trades=1 pnl=-2.21 avg=-2.21 win_rate=0.00%
+end_of_run: trades=1 pnl=0.26 avg=0.26 win_rate=100.00%
+take_profit: trades=4 pnl=3.13 avg=0.78 win_rate=100.00%

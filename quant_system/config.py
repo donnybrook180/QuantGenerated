@@ -119,6 +119,32 @@ class FTMOEvaluationConfig:
 
 
 @dataclass(slots=True)
+class AIConfig:
+    enabled: bool = field(default_factory=lambda: os.getenv("AI_ENABLE", "true").lower() == "true")
+    provider: str = field(default_factory=lambda: os.getenv("AI_PROVIDER", "openai").lower())
+    model: str = field(default_factory=lambda: os.getenv("AI_MODEL", "gpt-5-mini"))
+    api_key: str | None = field(
+        default_factory=lambda: (
+            os.getenv("AI_API_KEY")
+            or os.getenv("AI_OPENAI_API_KEY")
+            or os.getenv("OPENAI_API_KEY")
+            or os.getenv("OPENROUTER_API_KEY")
+        )
+    )
+    api_base_url: str = field(
+        default_factory=lambda: os.getenv(
+            "AI_API_BASE_URL",
+            "https://openrouter.ai/api/v1" if os.getenv("AI_PROVIDER", "openai").lower() == "openrouter" else "https://api.openai.com/v1",
+        )
+    )
+    openrouter_site_url: str | None = field(default_factory=lambda: os.getenv("OPENROUTER_SITE_URL"))
+    openrouter_app_name: str | None = field(default_factory=lambda: os.getenv("OPENROUTER_APP_NAME", "QuantGenerated"))
+    max_context_chars: int = field(default_factory=lambda: int(os.getenv("AI_MAX_CONTEXT_CHARS", "12000")))
+    experiment_database_path: str = field(default_factory=lambda: os.getenv("AI_EXPERIMENT_DB_PATH", "quant_data.duckdb"))
+    history_lookback: int = field(default_factory=lambda: int(os.getenv("AI_HISTORY_LOOKBACK", "8")))
+
+
+@dataclass(slots=True)
 class SystemConfig:
     execution: ExecutionConfig = field(default_factory=ExecutionConfig)
     risk: RiskConfig = field(default_factory=RiskConfig)
@@ -129,3 +155,4 @@ class SystemConfig:
     polygon: PolygonConfig = field(default_factory=PolygonConfig)
     instrument: InstrumentConfig = field(default_factory=InstrumentConfig)
     ftmo: FTMOEvaluationConfig = field(default_factory=FTMOEvaluationConfig)
+    ai: AIConfig = field(default_factory=AIConfig)

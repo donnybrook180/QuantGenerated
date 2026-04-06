@@ -7,6 +7,10 @@ from pathlib import Path
 from statistics import mean
 import copy
 
+from quant_system.ai.analysis import build_profile_analysis
+from quant_system.ai.history import build_experiment_memory_report
+from quant_system.ai.models import ProfileArtifacts
+from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents
 from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
@@ -213,6 +217,33 @@ def build_system_with_agents(
 
 def export_trade_artifacts(profile: StrategyProfile, result) -> tuple[Path, Path]:
     return export_closed_trade_artifacts(result.closed_trades, result.realized_pnl, f"{profile.name}")
+
+
+def export_ai_artifacts(profile: StrategyProfile, package) -> tuple[Path, Path]:
+    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    summary_path = ARTIFACTS_DIR / f"{profile.name}_ai_summary.txt"
+    experiments_path = ARTIFACTS_DIR / f"{profile.name}_next_experiment.txt"
+
+    summary_lines = [package.local_summary]
+    if package.ai_summary:
+        summary_lines.extend(["", "AI summary", package.ai_summary])
+    else:
+        summary_lines.extend(["", "AI summary", "AI enrichment unavailable. Local analysis only."])
+    summary_path.write_text("\n".join(summary_lines), encoding="utf-8")
+
+    experiment_lines = [f"Profile: {profile.name}", "Recommended next experiments", ""]
+    experiment_lines.extend(f"- {item}" for item in package.next_experiments)
+    experiments_path.write_text("\n".join(experiment_lines), encoding="utf-8")
+    return summary_path, experiments_path
+
+
+def export_memory_artifacts(profile: StrategyProfile, package) -> tuple[Path, Path]:
+    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    history_path = ARTIFACTS_DIR / f"{profile.name}_experiment_history.txt"
+    comparison_path = ARTIFACTS_DIR / f"{profile.name}_run_comparison.txt"
+    history_path.write_text(package.history_summary, encoding="utf-8")
+    comparison_path.write_text(package.comparison_summary, encoding="utf-8")
+    return history_path, comparison_path
 
 
 def export_closed_trade_artifacts(closed_trades, realized_pnl: float, artifact_prefix: str) -> tuple[Path, Path]:
@@ -538,6 +569,44 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
         signals_path, signals_analysis_path = export_signal_artifacts(config, profile, features, optimized_agents)
         maybe_place_live_order(config, features, optimized_agents)
         report = build_ftmo_report(result, config.execution.initial_cash, config.risk, config.ftmo, config.instrument)
+        artifacts = ProfileArtifacts(
+            trade_log=trades_path,
+            trade_analysis=analysis_path,
+            signal_log=signals_path,
+            signal_analysis=signals_analysis_path,
+            shadow_log=shadow_csv_path,
+            shadow_analysis=shadow_analysis_path,
+        )
+        analysis_package = build_profile_analysis(
+            profile=profile,
+            result=result,
+            report=report,
+            artifacts=artifacts,
+            ai_config=config.ai,
+        )
+        ai_summary_path, next_experiment_path = export_ai_artifacts(profile, analysis_package)
+        experiment_store = ExperimentStore(config.ai.experiment_database_path)
+        experiment_store.record_experiment(
+            profile=profile,
+            result=result,
+            report=report,
+            optimized_agents=optimized_agents,
+            artifacts=artifacts,
+            local_summary=analysis_package.local_summary,
+            ai_summary=analysis_package.ai_summary,
+            next_experiments=analysis_package.next_experiments,
+        )
+        current_run, previous_run = experiment_store.compare_latest_runs(profile.name)
+        recent_runs = experiment_store.list_recent_experiments(profile.name, limit=config.ai.history_lookback)
+        best_run = experiment_store.get_best_experiment(profile.name)
+        memory_package = build_experiment_memory_report(
+            profile_name=profile.name,
+            recent_runs=recent_runs,
+            best_run=best_run,
+            current_run=current_run,
+            previous_run=previous_run,
+        )
+        history_path, comparison_path = export_memory_artifacts(profile, memory_package)
         LOGGER.info(
             "profile=%s finished ending_equity=%.2f realized_pnl=%.2f trades=%d locked=%s",
             profile.name,
@@ -565,6 +634,10 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Signal analysis: {signals_analysis_path}",
             f"Shadow setup log: {shadow_csv_path}" if shadow_csv_path is not None else "Shadow setup log: none",
             f"Shadow setup analysis: {shadow_analysis_path}" if shadow_analysis_path is not None else "Shadow setup analysis: none",
+            f"AI summary: {ai_summary_path}",
+            f"Next experiments: {next_experiment_path}",
+            f"Experiment history: {history_path}",
+            f"Run comparison: {comparison_path}",
             f"FTMO pass: {report.passed}",
             f"FTMO reasons: {', '.join(report.reasons) if report.reasons else 'none'}",
             f"Kill-switch triggered: {result.locked}",

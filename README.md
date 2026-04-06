@@ -41,6 +41,16 @@ Agents emit `SignalEvent`s. The coordinator aggregates them into a single action
 
 This fetches historical bars from Polygon, persists them in DuckDB, runs Optuna walk-forward tuning, and then runs a local paper-trading style execution simulation on the stored dataset.
 
+After each run, the app now also:
+
+- writes a local AI-style summary to `artifacts/<profile>_ai_summary.txt`
+- writes the next recommended experiments to `artifacts/<profile>_next_experiment.txt`
+- writes experiment memory to `artifacts/<profile>_experiment_history.txt`
+- writes latest-vs-previous comparisons to `artifacts/<profile>_run_comparison.txt`
+- stores the run, metrics, artifacts, and summaries in DuckDB for experiment memory
+
+If `AI_API_KEY` is set in `.env`, the app also attempts an LLM-enriched summary. Without a key, it still writes deterministic local summaries.
+
 ## MT5 Test
 
 Use this to test `XAUUSD`, `US500`, and `GER40` directly against your MetaTrader terminal without forcing live order placement:
@@ -62,6 +72,42 @@ Choose the tested profiles with `MT5_TEST_PROFILES` in `.env`, for example:
 ```powershell
 MT5_TEST_PROFILES=xauusd_volatility,us500_trend,ger40_orb
 ```
+
+## AI Chat
+
+Gebruik de lokale AI/query-laag om vragen te stellen over je experiment history:
+
+```powershell
+.\.venv\Scripts\python.exe main_ai_chat.py "vergelijk XAUUSD en US500"
+```
+
+De chatlaag werkt eerst lokaal op basis van DuckDB experiment memory. Als `AI_API_KEY` is gezet, probeert hij het antwoord compacter te herformuleren via het model, zonder nieuwe metrics te verzinnen.
+
+Voor OpenRouter gebruik je bijvoorbeeld:
+
+```powershell
+AI_PROVIDER=openrouter
+AI_MODEL=openai/gpt-5-mini
+AI_API_KEY=your_openrouter_key_here
+OPENROUTER_SITE_URL=https://your-local-app.example
+OPENROUTER_APP_NAME=QuantGenerated
+```
+
+Voor directe OpenAI kun je terugzetten naar:
+
+```powershell
+AI_PROVIDER=openai
+AI_MODEL=gpt-5-mini
+AI_API_KEY=your_openai_key_here
+```
+
+Controleer je provider/key snel met:
+
+```powershell
+.\.venv\Scripts\python.exe main_ai_doctor.py
+```
+
+Dat commando print de actieve AI-config en doet daarna een kleine testcall.
 
 ## Secrets
 

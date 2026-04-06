@@ -43,6 +43,7 @@ class CandidateSpec:
     variant_label: str = ""
     timeframe_label: str = ""
     session_label: str = ""
+    regime_filter_label: str = ""
 
 
 @dataclass(slots=True)
@@ -69,6 +70,29 @@ class CandidateResult:
     test_profit_factor: float = 0.0
     validation_closed_trades: int = 0
     test_closed_trades: int = 0
+    expectancy: float = 0.0
+    avg_win: float = 0.0
+    avg_loss: float = 0.0
+    payoff_ratio: float = 0.0
+    avg_hold_bars: float = 0.0
+    dominant_exit: str = ""
+    dominant_exit_share_pct: float = 0.0
+    execution_overrides: dict[str, float | int] | None = None
+    walk_forward_windows: int = 0
+    walk_forward_pass_rate_pct: float = 0.0
+    walk_forward_avg_validation_pnl: float = 0.0
+    walk_forward_avg_test_pnl: float = 0.0
+    walk_forward_avg_validation_pf: float = 0.0
+    walk_forward_avg_test_pf: float = 0.0
+    component_count: int = 1
+    combo_outperformance_score: float = 0.0
+    combo_trade_overlap_pct: float = 0.0
+    best_regime: str = ""
+    best_regime_pnl: float = 0.0
+    worst_regime: str = ""
+    worst_regime_pnl: float = 0.0
+    dominant_regime_share_pct: float = 0.0
+    regime_filter_label: str = ""
 
 
 def _symbol_slug(symbol: str) -> str:
@@ -280,6 +304,12 @@ def _filter_features_by_session(features: list[FeatureVector], session_name: str
     return [feature for feature in features if int(feature.values.get("hour_of_day", feature.timestamp.hour)) in allowed_hours]
 
 
+def _filter_features_by_regime(features: list[FeatureVector], regime_label: str) -> list[FeatureVector]:
+    if not regime_label:
+        return features
+    return [feature for feature in features if _feature_regime_label(feature) == regime_label]
+
+
 def _build_symbol_feature_variants(
     config: SystemConfig,
     profile_symbol: str,
@@ -314,21 +344,25 @@ def load_execution_features_for_variant(
     profile_symbol: str,
     data_symbol: str,
     variant_label: str,
+    regime_filter_label: str = "",
 ) -> tuple[list[FeatureVector], str]:
     if not variant_label or variant_label == "default":
-        return _load_symbol_features(config, data_symbol)
+        features, data_source = _load_symbol_features(config, data_symbol)
+        return _filter_features_by_regime(features, regime_filter_label), data_source
 
     timeframe_label, _, session_label = variant_label.partition("_")
     if timeframe_label.endswith("m") and timeframe_label[:-1].isdigit():
         multiplier = int(timeframe_label[:-1])
         timespan = "minute"
     else:
-        return _load_symbol_features(config, data_symbol)
+        features, data_source = _load_symbol_features(config, data_symbol)
+        return _filter_features_by_regime(features, regime_filter_label), data_source
 
     features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
     if _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol):
         features = _filter_weekday_features(features)
-    return _filter_features_by_session(features, session_label or "all"), data_source
+    features = _filter_features_by_session(features, session_label or "all")
+    return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
 def _evaluate_execution_candidate_set(
@@ -338,11 +372,21 @@ def _evaluate_execution_candidate_set(
     selected_candidates: list[dict[str, object]],
 ) -> tuple[ExecutionResult, str, str]:
     target_variant = str(selected_candidates[0].get("variant_label", "") or "")
-    features, data_source = load_execution_features_for_variant(config, profile_symbol, data_symbol, target_variant)
+    target_regime = str(selected_candidates[0].get("regime_filter_label", "") or "")
+    features, data_source = load_execution_features_for_variant(
+        config,
+        profile_symbol,
+        data_symbol,
+        target_variant,
+        target_regime,
+    )
     agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in selected_candidates], config)
     engine = _build_engine(config, agents)
     result = asyncio.run(engine.run(features, sleep_seconds=0.0))
-    return result, data_source, target_variant or "default"
+    variant_name = target_variant or "default"
+    if target_regime:
+        variant_name = f"{variant_name}|{target_regime}"
+    return result, data_source, variant_name
 
 
 def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSpec]:
@@ -453,6 +497,20 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
 
 
 def _score_result(name: str, description: str, archetype: str, code_path: str, result: ExecutionResult) -> CandidateResult:
+    wins = [trade.pnl for trade in result.closed_trades if trade.pnl > 0]
+    losses = [trade.pnl for trade in result.closed_trades if trade.pnl < 0]
+    expectancy = mean(result.closed_trade_pnls) if result.closed_trade_pnls else 0.0
+    avg_win = mean(wins) if wins else 0.0
+    avg_loss = mean(losses) if losses else 0.0
+    payoff_ratio = (avg_win / abs(avg_loss)) if avg_loss < 0 else (999.0 if avg_win > 0 else 0.0)
+    avg_hold_bars = mean([trade.hold_bars for trade in result.closed_trades]) if result.closed_trades else 0.0
+    exit_counts: dict[str, int] = {}
+    for trade in result.closed_trades:
+        exit_counts[trade.exit_reason] = exit_counts.get(trade.exit_reason, 0) + 1
+    dominant_exit = max(exit_counts, key=exit_counts.get) if exit_counts else ""
+    dominant_exit_share_pct = (
+        (exit_counts[dominant_exit] / len(result.closed_trades) * 100.0) if dominant_exit and result.closed_trades else 0.0
+    )
     return CandidateResult(
         name=name,
         description=description,
@@ -464,6 +522,13 @@ def _score_result(name: str, description: str, archetype: str, code_path: str, r
         profit_factor=result.profit_factor,
         max_drawdown_pct=result.max_drawdown * 100.0,
         total_costs=result.total_costs,
+        expectancy=expectancy,
+        avg_win=avg_win,
+        avg_loss=avg_loss,
+        payoff_ratio=payoff_ratio,
+        avg_hold_bars=avg_hold_bars,
+        dominant_exit=dominant_exit,
+        dominant_exit_share_pct=dominant_exit_share_pct,
     )
 
 
@@ -488,6 +553,9 @@ def _run_candidate(
     scored.variant_label = spec.variant_label
     scored.timeframe_label = spec.timeframe_label
     scored.session_label = spec.session_label
+    scored.regime_filter_label = spec.regime_filter_label
+    scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
+    _annotate_regime_metrics(scored, features, result.closed_trades)
     return scored
 
 
@@ -503,6 +571,39 @@ def _split_features(features: list[FeatureVector]) -> tuple[list[FeatureVector],
     return train, validation, test
 
 
+def _walk_forward_slices(features: list[FeatureVector]) -> list[tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]]:
+    total = len(features)
+    if total < 90:
+        train, validation, test = _split_features(features)
+        return [(train, validation, test)] if validation and test else []
+
+    train_size = max(int(total * 0.5), 30)
+    validation_size = max(int(total * 0.2), 10)
+    test_size = max(int(total * 0.2), 10)
+    step_size = max(int(total * 0.1), 10)
+    windows: list[tuple[list[FeatureVector], list[FeatureVector], list[FeatureVector]]] = []
+    start = 0
+    while True:
+        train_end = start + train_size
+        validation_end = train_end + validation_size
+        test_end = validation_end + test_size
+        if test_end > total:
+            break
+        windows.append(
+            (
+                features[start:train_end],
+                features[train_end:validation_end],
+                features[validation_end:test_end],
+            )
+        )
+        start += step_size
+    if not windows:
+        train, validation, test = _split_features(features)
+        if validation and test:
+            windows.append((train, validation, test))
+    return windows
+
+
 def _run_candidate_with_splits(
     config: SystemConfig,
     features: list[FeatureVector],
@@ -511,7 +612,6 @@ def _run_candidate_with_splits(
     artifact_prefix: str,
 ) -> CandidateResult:
     scored = _run_candidate(config, features, spec, archetype, artifact_prefix)
-    train_features, validation_features, test_features = _split_features(features)
 
     def _eval_slice(slice_features: list[FeatureVector]) -> ExecutionResult | None:
         if len(slice_features) < 10:
@@ -520,20 +620,58 @@ def _run_candidate_with_splits(
         engine = _build_engine(candidate_config, copy.deepcopy(spec.agents))
         return asyncio.run(engine.run(slice_features, sleep_seconds=0.0))
 
-    train_result = _eval_slice(train_features)
-    validation_result = _eval_slice(validation_features)
-    test_result = _eval_slice(test_features)
+    windows = _walk_forward_slices(features)
+    validation_pnls: list[float] = []
+    test_pnls: list[float] = []
+    validation_pfs: list[float] = []
+    test_pfs: list[float] = []
+    pass_count = 0
+    last_train_result: ExecutionResult | None = None
+    last_validation_result: ExecutionResult | None = None
+    last_test_result: ExecutionResult | None = None
 
-    if train_result is not None:
-        scored.train_pnl = train_result.realized_pnl
-    if validation_result is not None:
-        scored.validation_pnl = validation_result.realized_pnl
-        scored.validation_profit_factor = validation_result.profit_factor
-        scored.validation_closed_trades = len(validation_result.closed_trades)
-    if test_result is not None:
-        scored.test_pnl = test_result.realized_pnl
-        scored.test_profit_factor = test_result.profit_factor
-        scored.test_closed_trades = len(test_result.closed_trades)
+    for train_features, validation_features, test_features in windows:
+        train_result = _eval_slice(train_features)
+        validation_result = _eval_slice(validation_features)
+        test_result = _eval_slice(test_features)
+        if validation_result is None or test_result is None:
+            continue
+        last_train_result = train_result
+        last_validation_result = validation_result
+        last_test_result = test_result
+        validation_pnls.append(validation_result.realized_pnl)
+        test_pnls.append(test_result.realized_pnl)
+        validation_pfs.append(validation_result.profit_factor)
+        test_pfs.append(test_result.profit_factor)
+        if (
+            len(validation_result.closed_trades) >= 2
+            and len(test_result.closed_trades) >= 2
+            and validation_result.realized_pnl > 0.0
+            and test_result.realized_pnl > 0.0
+            and validation_result.profit_factor >= 1.0
+            and test_result.profit_factor >= 1.0
+        ):
+            pass_count += 1
+
+    if last_train_result is not None:
+        scored.train_pnl = last_train_result.realized_pnl
+    if last_validation_result is not None:
+        scored.validation_pnl = last_validation_result.realized_pnl
+        scored.validation_profit_factor = last_validation_result.profit_factor
+        scored.validation_closed_trades = len(last_validation_result.closed_trades)
+    if last_test_result is not None:
+        scored.test_pnl = last_test_result.realized_pnl
+        scored.test_profit_factor = last_test_result.profit_factor
+        scored.test_closed_trades = len(last_test_result.closed_trades)
+    scored.walk_forward_windows = len(validation_pnls)
+    if validation_pnls:
+        scored.walk_forward_avg_validation_pnl = mean(validation_pnls)
+        scored.walk_forward_avg_validation_pf = mean(validation_pfs)
+    if test_pnls:
+        scored.walk_forward_avg_test_pnl = mean(test_pnls)
+        scored.walk_forward_avg_test_pf = mean(test_pfs)
+    if scored.walk_forward_windows > 0:
+        scored.walk_forward_pass_rate_pct = pass_count / scored.walk_forward_windows * 100.0
 
     return scored
 
@@ -546,6 +684,89 @@ def _default_variant_features(feature_variants: dict[str, list[FeatureVector]]) 
         if features:
             return features
     return []
+
+
+def _merge_execution_overrides(
+    base: dict[str, float | int] | None,
+    overrides: dict[str, float | int],
+) -> dict[str, float | int]:
+    merged = dict(base or {})
+    merged.update(overrides)
+    return merged
+
+
+def _exit_family_specs(config: SystemConfig, symbol: str, specs: list[CandidateSpec]) -> list[CandidateSpec]:
+    del config
+    upper = symbol.upper()
+    exit_specs: list[CandidateSpec] = []
+    for spec in specs:
+        if "__exit_" in spec.name:
+            continue
+        if "mean_reversion" in spec.name or "range_reversion" in spec.name:
+            exit_specs.append(
+                CandidateSpec(
+                    name=f"{spec.name}__exit_quick",
+                    description=f"{spec.description} with quick-fail mean reversion exits",
+                    agents=spec.agents,
+                    code_path=spec.code_path,
+                    execution_overrides=_merge_execution_overrides(
+                        spec.execution_overrides,
+                        {
+                            "max_holding_bars": 12 if "XAU" in upper else 16,
+                            "take_profit_atr_multiple": 1.4,
+                            "stale_breakout_bars": 3,
+                            "structure_exit_bars": 2,
+                        },
+                    ),
+                    variant_label=spec.variant_label,
+                    timeframe_label=spec.timeframe_label,
+                    session_label=spec.session_label,
+                )
+            )
+            continue
+
+        exit_specs.extend(
+            [
+                CandidateSpec(
+                    name=f"{spec.name}__exit_trend",
+                    description=f"{spec.description} with trend-runner exits",
+                    agents=spec.agents,
+                    code_path=spec.code_path,
+                    execution_overrides=_merge_execution_overrides(
+                        spec.execution_overrides,
+                        {
+                            "max_holding_bars": 0,
+                            "take_profit_atr_multiple": 3.2,
+                            "trailing_stop_atr_multiple": 1.2,
+                            "stale_breakout_bars": 8,
+                            "structure_exit_bars": 0,
+                        },
+                    ),
+                    variant_label=spec.variant_label,
+                    timeframe_label=spec.timeframe_label,
+                    session_label=spec.session_label,
+                ),
+                CandidateSpec(
+                    name=f"{spec.name}__exit_fastfail",
+                    description=f"{spec.description} with fast-fail exits",
+                    agents=spec.agents,
+                    code_path=spec.code_path,
+                    execution_overrides=_merge_execution_overrides(
+                        spec.execution_overrides,
+                        {
+                            "max_holding_bars": 14 if "XAU" in upper else 18,
+                            "take_profit_atr_multiple": 1.8,
+                            "stale_breakout_bars": 4,
+                            "structure_exit_bars": 2,
+                        },
+                    ),
+                    variant_label=spec.variant_label,
+                    timeframe_label=spec.timeframe_label,
+                    session_label=spec.session_label,
+                ),
+            ]
+        )
+    return exit_specs
 
 
 def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[CandidateResult]) -> list[CandidateSpec]:
@@ -1126,7 +1347,119 @@ def _component_set(code_path: str) -> set[str]:
     return {part.strip() for part in code_path.split(";") if part.strip()}
 
 
-def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 2) -> list[dict[str, object]]:
+def _component_names(candidate_name: str) -> list[str]:
+    return [part.strip() for part in candidate_name.split("__plus__") if part.strip()]
+
+
+def _trade_entry_timestamps(trade_log_path: str) -> set[str]:
+    trade_path = Path(trade_log_path)
+    if not trade_path.exists():
+        return set()
+    with trade_path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        return {str(row.get("entry_timestamp", "")).strip() for row in reader if str(row.get("entry_timestamp", "")).strip()}
+
+
+def _feature_regime_label(feature: FeatureVector) -> str:
+    trend_strength = feature.values.get("trend_strength", 0.0)
+    atr_proxy = feature.values.get("atr_proxy", 0.0)
+    if trend_strength >= 0.001:
+        trend_label = "trend_up"
+    elif trend_strength <= -0.001:
+        trend_label = "trend_down"
+    else:
+        trend_label = "trend_flat"
+
+    if atr_proxy >= 0.003:
+        vol_label = "vol_high"
+    elif atr_proxy <= 0.0012:
+        vol_label = "vol_low"
+    else:
+        vol_label = "vol_mid"
+    return f"{trend_label}_{vol_label}"
+
+
+def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVector], trades) -> None:
+    if not trades:
+        return
+    regime_by_timestamp = {trade.timestamp.isoformat(): _feature_regime_label(trade) for trade in features}
+    regime_pnls: dict[str, list[float]] = {}
+    for trade in trades:
+        regime = regime_by_timestamp.get(trade.entry_timestamp.isoformat(), "unknown")
+        regime_pnls.setdefault(regime, []).append(trade.pnl)
+    if not regime_pnls:
+        return
+    best_regime = max(regime_pnls, key=lambda key: sum(regime_pnls[key]))
+    worst_regime = min(regime_pnls, key=lambda key: sum(regime_pnls[key]))
+    dominant_regime = max(regime_pnls, key=lambda key: len(regime_pnls[key]))
+    total_trades = sum(len(values) for values in regime_pnls.values())
+    result.best_regime = best_regime
+    result.best_regime_pnl = sum(regime_pnls[best_regime])
+    result.worst_regime = worst_regime
+    result.worst_regime_pnl = sum(regime_pnls[worst_regime])
+    result.dominant_regime_share_pct = (len(regime_pnls[dominant_regime]) / total_trades * 100.0) if total_trades else 0.0
+
+
+def _annotate_combo_results(results: list[CandidateResult]) -> None:
+    lookup = {row.name: row for row in results}
+    for row in results:
+        components = _component_names(row.name)
+        row.component_count = len(components)
+        if len(components) <= 1:
+            continue
+        component_rows = [lookup[name] for name in components if name in lookup]
+        if len(component_rows) != len(components):
+            continue
+        best_component_validation = max(component.validation_pnl for component in component_rows)
+        best_component_test = max(component.test_pnl for component in component_rows)
+        row.combo_outperformance_score = min(
+            row.validation_pnl - best_component_validation,
+            row.test_pnl - best_component_test,
+        )
+        component_entries = [_trade_entry_timestamps(component.trade_log_path) for component in component_rows]
+        if not component_entries:
+            continue
+        union_entries = set().union(*component_entries)
+        overlap_entries = set.intersection(*component_entries) if len(component_entries) > 1 else component_entries[0]
+        row.combo_trade_overlap_pct = (
+            len(overlap_entries) / len(union_entries) * 100.0 if union_entries else 0.0
+        )
+
+
+def _regime_improvement_specs(specs: list[CandidateSpec], results: list[CandidateResult]) -> list[CandidateSpec]:
+    lookup = {spec.name: spec for spec in specs}
+    ranked = sorted(
+        [row for row in results if row.best_regime and row.best_regime_pnl > 0.0 and row.worst_regime_pnl < 0.0],
+        key=lambda item: (item.best_regime_pnl - abs(item.worst_regime_pnl), item.profit_factor, item.closed_trades),
+        reverse=True,
+    )
+    generated: list[CandidateSpec] = []
+    seen: set[tuple[str, str]] = set()
+    for row in ranked[:4]:
+        base_spec = lookup.get(row.name)
+        if base_spec is None:
+            continue
+        key = (base_spec.name, row.best_regime)
+        if key in seen:
+            continue
+        seen.add(key)
+        generated.append(
+            CandidateSpec(
+                name=f"{base_spec.name}__regime_{row.best_regime}",
+                description=f"{base_spec.description} focused on {row.best_regime}",
+                agents=base_spec.agents,
+                code_path=base_spec.code_path,
+                execution_overrides=copy.deepcopy(base_spec.execution_overrides),
+                variant_label=base_spec.variant_label,
+                timeframe_label=base_spec.timeframe_label,
+                session_label=base_spec.session_label,
+                regime_filter_label=row.best_regime,
+            )
+        )
+    return generated
+
+
+def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 1) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     target_variant: str | None = None
@@ -1139,11 +1472,25 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         and float(row.get("test_pnl", 0.0)) > 0.0
         and float(row.get("validation_profit_factor", 0.0)) >= 1.0
         and float(row.get("test_profit_factor", 0.0)) >= 1.0
+        and int(row.get("walk_forward_windows", 0)) >= 1
+        and float(row.get("walk_forward_pass_rate_pct", 0.0)) >= 50.0
+        and float(row.get("walk_forward_avg_validation_pnl", 0.0)) > 0.0
+        and float(row.get("walk_forward_avg_test_pnl", 0.0)) > 0.0
+        and (
+            int(row.get("component_count", 1)) <= 1
+            or (
+                float(row.get("combo_outperformance_score", 0.0)) >= 0.0
+                and float(row.get("combo_trade_overlap_pct", 100.0)) <= 80.0
+            )
+        )
     ]
     ranked = sorted(
         viable_rows,
         key=lambda row: (
             bool(row.get("recommended")),
+            float(row.get("combo_outperformance_score", 0.0)),
+            float(row.get("walk_forward_pass_rate_pct", 0.0)),
+            float(row.get("walk_forward_avg_test_pnl", 0.0)),
             float(row.get("test_pnl", 0.0)),
             float(row.get("validation_pnl", 0.0)),
             float(row.get("test_profit_factor", 0.0)),
@@ -1186,6 +1533,28 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "profit_factor",
                 "max_drawdown_pct",
                 "total_costs",
+                "expectancy",
+                "avg_win",
+                "avg_loss",
+                "payoff_ratio",
+                "avg_hold_bars",
+                "dominant_exit",
+                "dominant_exit_share_pct",
+                "component_count",
+                "combo_outperformance_score",
+                "combo_trade_overlap_pct",
+                "best_regime",
+                "best_regime_pnl",
+                "worst_regime",
+                "worst_regime_pnl",
+                "dominant_regime_share_pct",
+                "regime_filter_label",
+                "walk_forward_windows",
+                "walk_forward_pass_rate_pct",
+                "walk_forward_avg_validation_pnl",
+                "walk_forward_avg_test_pnl",
+                "walk_forward_avg_validation_pf",
+                "walk_forward_avg_test_pf",
                 "train_pnl",
                 "validation_pnl",
                 "validation_profit_factor",
@@ -1209,6 +1578,28 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     f"{row.profit_factor:.5f}",
                     f"{row.max_drawdown_pct:.5f}",
                     f"{row.total_costs:.5f}",
+                    f"{row.expectancy:.5f}",
+                    f"{row.avg_win:.5f}",
+                    f"{row.avg_loss:.5f}",
+                    f"{row.payoff_ratio:.5f}",
+                    f"{row.avg_hold_bars:.5f}",
+                    row.dominant_exit,
+                    f"{row.dominant_exit_share_pct:.5f}",
+                    row.component_count,
+                    f"{row.combo_outperformance_score:.5f}",
+                    f"{row.combo_trade_overlap_pct:.5f}",
+                    row.best_regime,
+                    f"{row.best_regime_pnl:.5f}",
+                    row.worst_regime,
+                    f"{row.worst_regime_pnl:.5f}",
+                    f"{row.dominant_regime_share_pct:.5f}",
+                    row.regime_filter_label,
+                    row.walk_forward_windows,
+                    f"{row.walk_forward_pass_rate_pct:.5f}",
+                    f"{row.walk_forward_avg_validation_pnl:.5f}",
+                    f"{row.walk_forward_avg_test_pnl:.5f}",
+                    f"{row.walk_forward_avg_validation_pf:.5f}",
+                    f"{row.walk_forward_avg_test_pf:.5f}",
                     f"{row.train_pnl:.5f}",
                     f"{row.validation_pnl:.5f}",
                     f"{row.validation_profit_factor:.5f}",
@@ -1235,6 +1626,30 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
             f"pf={row.profit_factor:.2f} win_rate={row.win_rate_pct:.2f}% dd={row.max_drawdown_pct:.2f}%"
         )
         lines.append(
+            f"  trade_metrics: expectancy={row.expectancy:.2f} avg_win={row.avg_win:.2f} "
+            f"avg_loss={row.avg_loss:.2f} payoff={row.payoff_ratio:.2f} avg_hold={row.avg_hold_bars:.1f}"
+        )
+        lines.append(
+            f"  exits: dominant={row.dominant_exit or 'none'} share={row.dominant_exit_share_pct:.2f}%"
+        )
+        lines.append(
+            f"  regimes: best={row.best_regime or 'none'} pnl={row.best_regime_pnl:.2f} "
+            f"worst={row.worst_regime or 'none'} pnl={row.worst_regime_pnl:.2f} "
+            f"dominant_share={row.dominant_regime_share_pct:.2f}%"
+        )
+        if row.regime_filter_label:
+            lines.append(f"  regime_filter: {row.regime_filter_label}")
+        lines.append(
+            f"  walk_forward: windows={row.walk_forward_windows} pass_rate={row.walk_forward_pass_rate_pct:.2f}% "
+            f"avg_val_pnl={row.walk_forward_avg_validation_pnl:.2f} avg_test_pnl={row.walk_forward_avg_test_pnl:.2f} "
+            f"avg_val_pf={row.walk_forward_avg_validation_pf:.2f} avg_test_pf={row.walk_forward_avg_test_pf:.2f}"
+        )
+        if row.component_count > 1:
+            lines.append(
+                f"  combo_validation: components={row.component_count} outperformance={row.combo_outperformance_score:.2f} "
+                f"trade_overlap={row.combo_trade_overlap_pct:.2f}%"
+            )
+        lines.append(
             f"  splits: train_pnl={row.train_pnl:.2f} val_pnl={row.validation_pnl:.2f} "
             f"val_pf={row.validation_profit_factor:.2f} val_closed={row.validation_closed_trades} "
             f"test_pnl={row.test_pnl:.2f} test_pf={row.test_profit_factor:.2f} test_closed={row.test_closed_trades}"
@@ -1250,6 +1665,10 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         and row.test_pnl > 0
         and row.validation_profit_factor >= 1.0
         and row.test_profit_factor >= 1.0
+        and row.walk_forward_windows >= 1
+        and row.walk_forward_pass_rate_pct >= 50.0
+        and row.walk_forward_avg_validation_pnl > 0.0
+        and row.walk_forward_avg_test_pnl > 0.0
     ]
     lines.extend(["", "Recommended active agents"])
     if winners:
@@ -1277,18 +1696,22 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     singles = _candidate_specs(config, resolved.profile_symbol)
     symbol_slug = _symbol_slug(resolved.profile_symbol)
     results: list[CandidateResult] = []
+    explored_entry_exit_specs: list[CandidateSpec] = []
     for variant_label, features in feature_variants.items():
         if not features:
             continue
+        variant_specs = [_with_variant_name(spec, variant_label) for spec in singles]
+        exit_family_specs = _exit_family_specs(config, resolved.profile_symbol, variant_specs)
+        explored_entry_exit_specs.extend(variant_specs + exit_family_specs)
         results.extend(
             _run_candidate_with_splits(
                 config,
                 features,
-                _with_variant_name(spec, variant_label),
-                "single",
+                spec,
+                "single" if "__exit_" not in spec.name else "entry_exit_family",
                 f"{symbol_slug}_{spec.name}_{variant_label}_symbol_candidate",
             )
-            for spec in singles
+            for spec in (variant_specs + exit_family_specs)
         )
     sweep_specs = _parameter_sweep_specs(config, resolved.profile_symbol)
     if sweep_specs:
@@ -1329,7 +1752,29 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             )
             for spec in second_pass_specs
         )
-    combos = _combined_specs(config, singles + sweep_specs + improvement_specs + second_pass_specs, results)
+    regime_specs = _regime_improvement_specs(explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs, results)
+    if regime_specs:
+        results.extend(
+            _run_candidate_with_splits(
+                config,
+                load_execution_features_for_variant(
+                    config,
+                    resolved.profile_symbol,
+                    resolved.data_symbol,
+                    spec.variant_label,
+                    spec.regime_filter_label,
+                )[0],
+                spec,
+                "regime_improved",
+                f"{symbol_slug}_{spec.name}_symbol_candidate",
+            )
+            for spec in regime_specs
+        )
+    combos = _combined_specs(
+        config,
+        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs,
+        results,
+    )
     results.extend(
         _run_candidate_with_splits(
             config,
@@ -1340,6 +1785,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         )
         for spec in combos
     )
+    _annotate_combo_results(results)
     csv_path, txt_path = _export_results(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
     ranked = sorted(
         results,
@@ -1349,7 +1795,19 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             and item.validation_pnl > 0
             and item.test_pnl > 0
             and item.validation_profit_factor >= 1.0
-            and item.test_profit_factor >= 1.0,
+            and item.test_profit_factor >= 1.0
+            and item.walk_forward_windows >= 1
+            and item.walk_forward_pass_rate_pct >= 50.0
+            and item.walk_forward_avg_validation_pnl > 0.0
+            and item.walk_forward_avg_test_pnl > 0.0
+            and (
+                item.component_count <= 1
+                or (item.combo_outperformance_score >= 0.0 and item.combo_trade_overlap_pct <= 80.0)
+            ),
+            item.combo_outperformance_score,
+            item.walk_forward_pass_rate_pct,
+            item.walk_forward_avg_test_pnl,
+            item.walk_forward_avg_validation_pnl,
             item.test_pnl,
             item.validation_pnl,
             item.test_profit_factor,
@@ -1366,6 +1824,14 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         and row.test_pnl > 0
         and row.validation_profit_factor >= 1.0
         and row.test_profit_factor >= 1.0
+        and row.walk_forward_windows >= 1
+        and row.walk_forward_pass_rate_pct >= 50.0
+        and row.walk_forward_avg_validation_pnl > 0.0
+        and row.walk_forward_avg_test_pnl > 0.0
+        and (
+            row.component_count <= 1
+            or (row.combo_outperformance_score >= 0.0 and row.combo_trade_overlap_pct <= 80.0)
+        )
     ]
     best = viable_ranked[0] if viable_ranked else None
     recommended = [row.name for row in viable_ranked[:3]]
@@ -1385,11 +1851,21 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 "test_pnl": row.test_pnl,
                 "test_profit_factor": row.test_profit_factor,
                 "test_closed_trades": row.test_closed_trades,
+                "walk_forward_windows": row.walk_forward_windows,
+                "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
+                "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
+                "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+                "component_count": row.component_count,
+                "combo_outperformance_score": row.combo_outperformance_score,
+                "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
                 "recommended": row.name in recommended,
+                "variant_label": row.variant_label,
+                "regime_filter_label": row.regime_filter_label,
+                "execution_overrides": row.execution_overrides or {},
             }
             for row in results
         ],
-        max_candidates=2,
+        max_candidates=1,
     )
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"

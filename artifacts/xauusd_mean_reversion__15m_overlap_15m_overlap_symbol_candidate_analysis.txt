@@ -1,0 +1,15 @@
+Artifact: xauusd_mean_reversion__15m_overlap_15m_overlap_symbol_candidate
+Closed trades: 4
+Realized pnl: -4.49
+
+By entry hour
+15: trades=2 pnl=-8.80 avg=-4.40 win_rate=0.00%
+14: trades=1 pnl=-1.67 avg=-1.67 win_rate=0.00%
+16: trades=1 pnl=5.99 avg=5.99 win_rate=100.00%
+
+By entry setup
+mean_reversion: trades=4 pnl=-4.49 avg=-1.12 win_rate=25.00%
+
+By exit reason
+structure_exit: trades=3 pnl=-10.47 avg=-3.49 win_rate=0.00%
+signal_exit: trades=1 pnl=5.99 avg=5.99 win_rate=100.00%

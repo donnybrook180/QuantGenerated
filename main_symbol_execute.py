@@ -10,6 +10,7 @@ from quant_system.execution.engine import AgentCoordinator
 from quant_system.symbol_research import (
     _build_engine,
     _configure_symbol_execution,
+    _with_execution_overrides,
     _symbol_slug,
     load_execution_features_for_variant,
     select_execution_candidates,
@@ -53,7 +54,7 @@ def main() -> int:
         if not candidate_rows:
             print(f"No symbol research candidates found for {profile_name}.")
             return 1
-        selected_candidates = select_execution_candidates(candidate_rows, max_candidates=2)
+        selected_candidates = select_execution_candidates(candidate_rows, max_candidates=1)
         if not selected_candidates:
             print(
                 f"No executable candidates selected for {profile_name}. "
@@ -76,7 +77,13 @@ def main() -> int:
         return 1
 
     target_variant = str(enriched_candidates[0].get("variant_label", "") or "")
-    aligned_candidates = [row for row in enriched_candidates if str(row.get("variant_label", "") or "") == target_variant]
+    target_regime = str(enriched_candidates[0].get("regime_filter_label", "") or "")
+    aligned_candidates = [
+        row
+        for row in enriched_candidates
+        if str(row.get("variant_label", "") or "") == target_variant
+        and str(row.get("regime_filter_label", "") or "") == target_regime
+    ]
     if not aligned_candidates:
         print(f"No execution candidates matched a consistent variant for {profile_name}.")
         return 1
@@ -84,11 +91,13 @@ def main() -> int:
     _configure_symbol_execution(config, resolved.profile_symbol)
     config.polygon.symbol = str(research_run["data_symbol"])
     config.mt5.symbol = str(research_run["broker_symbol"])
+    config = _with_execution_overrides(config, aligned_candidates[0].get("execution_overrides"))
     features, data_source = load_execution_features_for_variant(
         config,
         resolved.profile_symbol,
         str(research_run["data_symbol"]),
         target_variant,
+        target_regime,
     )
     agents = build_agents_from_catalog_paths([str(row["code_path"]) for row in aligned_candidates], config)
     engine = _build_engine(config, agents)
@@ -102,7 +111,10 @@ def main() -> int:
     print(f"Broker symbol: {research_run['broker_symbol']}")
     print(f"Data source: {data_source}")
     print(f"Execution set source: {execution_set_label}")
-    print(f"Execution variant: {target_variant or 'default'}")
+    execution_variant_label = target_variant or 'default'
+    if target_regime:
+        execution_variant_label = f"{execution_variant_label}|{target_regime}"
+    print(f"Execution variant: {execution_variant_label}")
     print("Selected candidates: " + ", ".join(str(row["candidate_name"]) for row in aligned_candidates))
     print(f"Ending equity: {result.ending_equity:.2f}")
     print(f"Realized PnL: {result.realized_pnl:.2f}")

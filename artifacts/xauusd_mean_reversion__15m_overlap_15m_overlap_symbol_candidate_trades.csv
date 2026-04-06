@@ -1,0 +1,5 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:XAUUSD,2026-03-12T15:00:00+00:00,2026-03-12T16:45:00+00:00,15,16,mean_reversion,structure_exit,5125.26485,5122.02539,0.10000,-0.62517,0.60247,7,1.00000,"{'mean': 5150.9425, 'z_score_20': -2.690913644282295}"
+C:XAUUSD,2026-03-17T15:30:00+00:00,2026-03-18T12:00:00+00:00,15,12,mean_reversion,structure_exit,4985.27686,4906.50850,0.10000,-8.17590,0.59892,6,1.00000,"{'mean': 5006.1375, 'z_score_20': -2.7078281599906675}"
+C:XAUUSD,2026-03-20T14:00:00+00:00,2026-03-20T15:00:00+00:00,14,15,mean_reversion,structure_exit,4587.42730,4573.65509,0.10000,-1.67296,0.59161,4,1.00000,"{'mean': 4651.27875, 'z_score_20': -3.2716289526171733}"
+C:XAUUSD,2026-03-26T16:15:00+00:00,2026-03-27T14:00:00+00:00,16,14,mean_reversion,signal_exit,4396.62915,4459.42794,0.10000,5.98528,0.58856,11,1.00000,"{'mean': 4443.23375, 'z_score_20': -3.116029813434132}"

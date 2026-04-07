@@ -1,0 +1,15 @@
+Artifact: us30_opening_range_breakout__exit_trend_default_symbol_candidate
+Closed trades: 22
+Realized pnl: -11.12
+
+By entry hour
+14: trades=22 pnl=-11.12 avg=-0.51 win_rate=0.00%
+
+By entry setup
+opening_range_breakout: trades=22 pnl=-11.12 avg=-0.51 win_rate=0.00%
+
+By exit reason
+trailing_stop: trades=9 pnl=-4.35 avg=-0.48 win_rate=0.00%
+stop_loss: trades=6 pnl=-4.05 avg=-0.67 win_rate=0.00%
+take_profit: trades=5 pnl=-1.37 avg=-0.27 win_rate=0.00%
+signal_exit: trades=2 pnl=-1.35 avg=-0.67 win_rate=0.00%

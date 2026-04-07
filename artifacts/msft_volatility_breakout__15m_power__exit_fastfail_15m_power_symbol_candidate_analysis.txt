@@ -1,0 +1,19 @@
+Artifact: msft_volatility_breakout__15m_power__exit_fastfail_15m_power_symbol_candidate
+Closed trades: 48
+Realized pnl: -29.57
+
+By entry hour
+18: trades=34 pnl=-22.54 avg=-0.66 win_rate=2.94%
+19: trades=14 pnl=-7.03 avg=-0.50 win_rate=7.14%
+
+By entry setup
+volatility_breakout: trades=48 pnl=-29.57 avg=-0.62 win_rate=4.17%
+
+By exit reason
+structure_exit: trades=13 pnl=-12.69 avg=-0.98 win_rate=0.00%
+stop_loss: trades=11 pnl=-7.72 avg=-0.70 win_rate=0.00%
+signal_exit: trades=12 pnl=-7.09 avg=-0.59 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.89 avg=-0.45 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.71 avg=-0.71 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.43 avg=-0.43 win_rate=0.00%
+take_profit: trades=8 pnl=-0.03 avg=-0.00 win_rate=25.00%

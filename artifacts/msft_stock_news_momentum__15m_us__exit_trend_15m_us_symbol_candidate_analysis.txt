@@ -1,0 +1,22 @@
+Artifact: msft_stock_news_momentum__15m_us__exit_trend_15m_us_symbol_candidate
+Closed trades: 93
+Realized pnl: -46.42
+
+By entry hour
+13: trades=43 pnl=-24.10 avg=-0.56 win_rate=6.98%
+14: trades=33 pnl=-17.00 avg=-0.52 win_rate=15.15%
+17: trades=3 pnl=-1.84 avg=-0.61 win_rate=0.00%
+19: trades=8 pnl=-1.44 avg=-0.18 win_rate=25.00%
+15: trades=5 pnl=-1.32 avg=-0.26 win_rate=40.00%
+18: trades=1 pnl=-0.70 avg=-0.70 win_rate=0.00%
+
+By entry setup
+stock_news_momentum: trades=93 pnl=-46.42 avg=-0.50 win_rate=12.90%
+
+By exit reason
+stale_breakout: trades=47 pnl=-33.38 avg=-0.71 win_rate=0.00%
+stop_loss: trades=13 pnl=-13.20 avg=-1.02 win_rate=0.00%
+trailing_stop: trades=17 pnl=-7.11 avg=-0.42 win_rate=5.88%
+signal_exit: trades=6 pnl=-1.41 avg=-0.23 win_rate=33.33%
+end_of_run: trades=1 pnl=-0.11 avg=-0.11 win_rate=0.00%
+take_profit: trades=9 pnl=8.79 avg=0.98 win_rate=100.00%

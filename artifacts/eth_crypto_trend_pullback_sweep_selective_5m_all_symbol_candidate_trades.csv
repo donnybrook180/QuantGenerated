@@ -1,0 +1,9 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+ETH,2025-04-07T15:45:00+00:00,2025-04-07T15:50:00+00:00,15,15,crypto_trend_pullback,stop_loss,15.71721,13.64780,0.10000,-2.07895,0.00954,1,1.00000,{'pullback_floor': 14.61}
+ETH,2025-04-09T19:35:00+00:00,2025-04-09T19:40:00+00:00,19,19,crypto_trend_pullback,stop_loss,16.46232,14.43768,0.10000,-2.03468,0.01004,1,1.00000,{'pullback_floor': 15.45}
+ETH,2025-05-22T18:40:00+00:00,2025-05-22T18:45:00+00:00,18,18,crypto_trend_pullback,stop_loss,26.10377,24.11623,0.10000,-2.00385,0.01632,1,1.00000,{'pullback_floor': 25.1}
+ETH,2025-06-04T13:35:00+00:00,2025-06-04T13:40:00+00:00,13,13,crypto_trend_pullback,stop_loss,25.75371,23.77628,0.10000,-1.99353,0.01610,1,1.00000,{'pullback_floor': 24.6}
+ETH,2025-06-16T15:50:00+00:00,2025-06-16T15:55:00+00:00,15,15,crypto_trend_pullback,stop_loss,25.90374,23.80628,0.10000,-2.11361,0.01616,1,1.00000,{'pullback_floor': 24.86}
+ETH,2025-10-08T18:50:00+00:00,2025-10-08T18:55:00+00:00,18,18,crypto_trend_pullback,stop_loss,43.69640,41.59361,0.10000,-2.13051,0.02772,1,1.00000,{'pullback_floor': 42.51}
+ETH,2025-11-26T15:15:00+00:00,2025-11-26T15:20:00+00:00,15,15,crypto_trend_pullback,stop_loss,28.62414,26.53587,0.10000,-2.10620,0.01793,1,1.00000,{'pullback_floor': 27.5}
+ETH,2026-02-09T16:30:00+00:00,2026-02-09T16:35:00+00:00,16,16,crypto_trend_pullback,stop_loss,20.42291,18.42709,0.10000,-2.00845,0.01263,1,1.00000,{'pullback_floor': 19.39}

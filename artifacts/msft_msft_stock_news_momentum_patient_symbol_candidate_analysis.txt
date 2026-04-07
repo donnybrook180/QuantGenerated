@@ -1,0 +1,23 @@
+Artifact: msft_msft_stock_news_momentum_patient_symbol_candidate
+Closed trades: 125
+Realized pnl: -64.90
+
+By entry hour
+13: trades=51 pnl=-24.22 avg=-0.47 win_rate=13.73%
+14: trades=37 pnl=-19.35 avg=-0.52 win_rate=13.51%
+19: trades=21 pnl=-12.48 avg=-0.59 win_rate=4.76%
+18: trades=6 pnl=-3.46 avg=-0.58 win_rate=0.00%
+16: trades=5 pnl=-2.34 avg=-0.47 win_rate=0.00%
+15: trades=3 pnl=-1.90 avg=-0.63 win_rate=0.00%
+17: trades=2 pnl=-1.15 avg=-0.58 win_rate=0.00%
+
+By entry setup
+stock_news_momentum: trades=125 pnl=-64.90 avg=-0.52 win_rate=10.40%
+
+By exit reason
+stale_breakout: trades=55 pnl=-37.67 avg=-0.68 win_rate=0.00%
+stop_loss: trades=17 pnl=-16.86 avg=-0.99 win_rate=0.00%
+trailing_stop: trades=27 pnl=-11.12 avg=-0.41 win_rate=0.00%
+time_stop: trades=4 pnl=-2.37 avg=-0.59 win_rate=0.00%
+signal_exit: trades=6 pnl=-2.18 avg=-0.36 win_rate=16.67%
+take_profit: trades=16 pnl=5.29 avg=0.33 win_rate=75.00%

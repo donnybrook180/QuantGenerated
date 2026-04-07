@@ -1,14 +1,15 @@
 Artifact: tsla_stock_trend_breakout__15m_midday_15m_midday_symbol_candidate
 Closed trades: 5
-Realized pnl: 0.09
+Realized pnl: -2.52
 
 By entry hour
-15: trades=4 pnl=0.01 avg=0.00 win_rate=50.00%
-17: trades=1 pnl=0.08 avg=0.08 win_rate=100.00%
+16: trades=2 pnl=-2.19 avg=-1.10 win_rate=0.00%
+15: trades=3 pnl=-0.33 avg=-0.11 win_rate=33.33%
 
 By entry setup
-stock_trend_breakout: trades=5 pnl=0.09 avg=0.02 win_rate=60.00%
+stock_trend_breakout: trades=5 pnl=-2.52 avg=-0.50 win_rate=20.00%
 
 By exit reason
-structure_exit: trades=2 pnl=-1.32 avg=-0.66 win_rate=0.00%
-take_profit: trades=3 pnl=1.41 avg=0.47 win_rate=100.00%
+stop_loss: trades=2 pnl=-2.02 avg=-1.01 win_rate=0.00%
+structure_exit: trades=2 pnl=-1.85 avg=-0.93 win_rate=0.00%
+take_profit: trades=1 pnl=1.36 avg=1.36 win_rate=100.00%

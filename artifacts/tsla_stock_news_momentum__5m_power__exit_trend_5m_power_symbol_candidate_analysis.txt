@@ -1,9 +1,17 @@
 Artifact: tsla_stock_news_momentum__5m_power__exit_trend_5m_power_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 23
+Realized pnl: -15.93
 
 By entry hour
+19: trades=14 pnl=-11.70 avg=-0.84 win_rate=28.57%
+18: trades=9 pnl=-4.23 avg=-0.47 win_rate=22.22%
 
 By entry setup
+stock_news_momentum: trades=23 pnl=-15.93 avg=-0.69 win_rate=26.09%
 
 By exit reason
+stop_loss: trades=9 pnl=-13.82 avg=-1.54 win_rate=0.00%
+stale_breakout: trades=6 pnl=-4.32 avg=-0.72 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.52 avg=-0.26 win_rate=50.00%
+signal_exit: trades=1 pnl=-0.29 avg=-0.29 win_rate=0.00%
+take_profit: trades=5 pnl=3.03 avg=0.61 win_rate=100.00%

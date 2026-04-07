@@ -1,0 +1,15 @@
+Artifact: nvda_mean_reversion__5m_power__exit_quick_5m_power_symbol_candidate
+Closed trades: 41
+Realized pnl: -20.83
+
+By entry hour
+18: trades=29 pnl=-14.55 avg=-0.50 win_rate=0.00%
+19: trades=12 pnl=-6.28 avg=-0.52 win_rate=0.00%
+
+By entry setup
+mean_reversion: trades=41 pnl=-20.83 avg=-0.51 win_rate=0.00%
+
+By exit reason
+structure_exit: trades=30 pnl=-16.08 avg=-0.54 win_rate=0.00%
+take_profit: trades=9 pnl=-3.60 avg=-0.40 win_rate=0.00%
+time_stop: trades=2 pnl=-1.15 avg=-0.57 win_rate=0.00%

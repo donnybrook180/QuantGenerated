@@ -1,0 +1,19 @@
+Artifact: msft_stock_power_hour_sweep_dense_5m_power_symbol_candidate
+Closed trades: 148
+Realized pnl: -79.45
+
+By entry hour
+18: trades=82 pnl=-43.04 avg=-0.52 win_rate=3.66%
+19: trades=66 pnl=-36.41 avg=-0.55 win_rate=7.58%
+
+By entry setup
+stock_power_hour_continuation: trades=148 pnl=-79.45 avg=-0.54 win_rate=5.41%
+
+By exit reason
+stop_loss: trades=56 pnl=-40.26 avg=-0.72 win_rate=0.00%
+stale_breakout: trades=28 pnl=-18.57 avg=-0.66 win_rate=0.00%
+trailing_stop: trades=27 pnl=-13.51 avg=-0.50 win_rate=0.00%
+take_profit: trades=30 pnl=-4.49 avg=-0.15 win_rate=20.00%
+time_stop: trades=2 pnl=-1.19 avg=-0.60 win_rate=0.00%
+signal_exit: trades=4 pnl=-0.99 avg=-0.25 win_rate=50.00%
+end_of_run: trades=1 pnl=-0.44 avg=-0.44 win_rate=0.00%

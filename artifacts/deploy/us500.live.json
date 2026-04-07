@@ -3,8 +3,8 @@
   "symbol": "US500",
   "data_symbol": "SPY",
   "broker_symbol": "US500.cash",
-  "research_run_id": 83,
-  "execution_set_id": 46,
+  "research_run_id": 104,
+  "execution_set_id": 56,
   "execution_validation_summary": "variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_momentum_selective__regime_trend_up_vol_high@default|trend_up_vol_high data_source=duckdb_cache pnl=1.05 pf=3.72 closed=8 -> accepted",
   "strategies": [
     {

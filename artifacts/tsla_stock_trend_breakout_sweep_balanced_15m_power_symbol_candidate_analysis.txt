@@ -1,0 +1,15 @@
+Artifact: tsla_stock_trend_breakout_sweep_balanced_15m_power_symbol_candidate
+Closed trades: 4
+Realized pnl: -1.91
+
+By entry hour
+19: trades=3 pnl=-1.18 avg=-0.39 win_rate=33.33%
+18: trades=1 pnl=-0.73 avg=-0.73 win_rate=0.00%
+
+By entry setup
+stock_trend_breakout: trades=4 pnl=-1.91 avg=-0.48 win_rate=25.00%
+
+By exit reason
+stale_breakout: trades=1 pnl=-1.55 avg=-1.55 win_rate=0.00%
+stop_loss: trades=2 pnl=-1.53 avg=-0.77 win_rate=0.00%
+take_profit: trades=1 pnl=1.17 avg=1.17 win_rate=100.00%

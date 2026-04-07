@@ -1,0 +1,19 @@
+Artifact: nvda_stock_news_momentum__15m_open_15m_open_symbol_candidate
+Closed trades: 66
+Realized pnl: -31.08
+
+By entry hour
+14: trades=32 pnl=-17.30 avg=-0.54 win_rate=9.38%
+13: trades=34 pnl=-13.78 avg=-0.41 win_rate=17.65%
+
+By entry setup
+stock_news_momentum: trades=66 pnl=-31.08 avg=-0.47 win_rate=13.64%
+
+By exit reason
+structure_exit: trades=25 pnl=-17.56 avg=-0.70 win_rate=0.00%
+stop_loss: trades=8 pnl=-6.43 avg=-0.80 win_rate=0.00%
+trailing_stop: trades=6 pnl=-3.25 avg=-0.54 win_rate=0.00%
+signal_exit: trades=7 pnl=-2.66 avg=-0.38 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.51 avg=-0.51 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.50 avg=-0.50 win_rate=0.00%
+take_profit: trades=18 pnl=-0.16 avg=-0.01 win_rate=50.00%

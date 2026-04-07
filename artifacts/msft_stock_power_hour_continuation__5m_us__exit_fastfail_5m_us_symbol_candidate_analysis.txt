@@ -1,0 +1,18 @@
+Artifact: msft_stock_power_hour_continuation__5m_us__exit_fastfail_5m_us_symbol_candidate
+Closed trades: 135
+Realized pnl: -74.05
+
+By entry hour
+18: trades=78 pnl=-43.30 avg=-0.56 win_rate=0.00%
+19: trades=57 pnl=-30.75 avg=-0.54 win_rate=1.75%
+
+By entry setup
+stock_power_hour_continuation: trades=135 pnl=-74.05 avg=-0.55 win_rate=0.74%
+
+By exit reason
+stop_loss: trades=38 pnl=-26.77 avg=-0.70 win_rate=0.00%
+structure_exit: trades=23 pnl=-14.70 avg=-0.64 win_rate=0.00%
+trailing_stop: trades=28 pnl=-14.68 avg=-0.52 win_rate=0.00%
+time_stop: trades=16 pnl=-9.64 avg=-0.60 win_rate=0.00%
+take_profit: trades=29 pnl=-7.89 avg=-0.27 win_rate=3.45%
+end_of_run: trades=1 pnl=-0.37 avg=-0.37 win_rate=0.00%

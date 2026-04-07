@@ -1,0 +1,33 @@
+{
+  "profile_name": "symbol::us100",
+  "symbol": "US100",
+  "data_symbol": "QQQ",
+  "broker_symbol": "US100.cash",
+  "research_run_id": 103,
+  "execution_set_id": 55,
+  "execution_validation_summary": "variant=opening_range_short_breakdown__exit_trend@default, opening_range_breakout__regime_trend_flat_vol_mid@default|trend_flat_vol_mid data_source=duckdb_cache pnl=3.39 pf=2.41 closed=22 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "opening_range_short_breakdown__exit_trend",
+      "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+      "variant_label": "",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.5
+    },
+    {
+      "candidate_name": "opening_range_breakout__regime_trend_flat_vol_mid",
+      "code_path": "quant_system.agents.strategies.OpeningRangeBreakoutAgent",
+      "variant_label": "",
+      "regime_filter_label": "trend_flat_vol_mid",
+      "execution_overrides": {},
+      "allocation_weight": 0.5
+    }
+  ]
+}

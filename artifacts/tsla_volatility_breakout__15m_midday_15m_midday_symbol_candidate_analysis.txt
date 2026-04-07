@@ -1,17 +1,19 @@
 Artifact: tsla_volatility_breakout__15m_midday_15m_midday_symbol_candidate
-Closed trades: 7
-Realized pnl: -0.06
+Closed trades: 54
+Realized pnl: -23.26
 
 By entry hour
-17: trades=3 pnl=-0.70 avg=-0.23 win_rate=66.67%
-16: trades=1 pnl=-0.15 avg=-0.15 win_rate=0.00%
-15: trades=3 pnl=0.78 avg=0.26 win_rate=66.67%
+15: trades=36 pnl=-17.16 avg=-0.48 win_rate=22.22%
+17: trades=12 pnl=-3.13 avg=-0.26 win_rate=25.00%
+16: trades=6 pnl=-2.98 avg=-0.50 win_rate=0.00%
 
 By entry setup
-volatility_breakout: trades=7 pnl=-0.06 avg=-0.01 win_rate=57.14%
+volatility_breakout: trades=54 pnl=-23.26 avg=-0.43 win_rate=20.37%
 
 By exit reason
-structure_exit: trades=1 pnl=-1.40 avg=-1.40 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.15 avg=-0.15 win_rate=0.00%
-take_profit: trades=4 pnl=2.03 avg=0.51 win_rate=100.00%
+structure_exit: trades=8 pnl=-10.36 avg=-1.29 win_rate=0.00%
+signal_exit: trades=17 pnl=-8.39 avg=-0.49 win_rate=11.76%
+trailing_stop: trades=14 pnl=-4.85 avg=-0.35 win_rate=7.14%
+stop_loss: trades=5 pnl=-4.46 avg=-0.89 win_rate=0.00%
+stale_breakout: trades=2 pnl=-1.18 avg=-0.59 win_rate=0.00%
+take_profit: trades=8 pnl=5.98 avg=0.75 win_rate=100.00%

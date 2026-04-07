@@ -1,0 +1,22 @@
+Artifact: us30_momentum__exit_trend_default_symbol_candidate
+Closed trades: 48
+Realized pnl: -23.14
+
+By entry hour
+14: trades=19 pnl=-8.55 avg=-0.45 win_rate=10.53%
+13: trades=9 pnl=-5.45 avg=-0.61 win_rate=0.00%
+15: trades=8 pnl=-4.13 avg=-0.52 win_rate=0.00%
+19: trades=6 pnl=-2.62 avg=-0.44 win_rate=0.00%
+18: trades=2 pnl=-1.07 avg=-0.54 win_rate=0.00%
+16: trades=3 pnl=-0.79 avg=-0.26 win_rate=33.33%
+17: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
+
+By entry setup
+momentum_confirmation: trades=48 pnl=-23.14 avg=-0.48 win_rate=6.25%
+
+By exit reason
+stop_loss: trades=16 pnl=-10.85 avg=-0.68 win_rate=0.00%
+trailing_stop: trades=14 pnl=-6.10 avg=-0.44 win_rate=0.00%
+stale_breakout: trades=11 pnl=-5.86 avg=-0.53 win_rate=0.00%
+take_profit: trades=6 pnl=-0.38 avg=-0.06 win_rate=33.33%
+signal_exit: trades=1 pnl=0.05 avg=0.05 win_rate=100.00%

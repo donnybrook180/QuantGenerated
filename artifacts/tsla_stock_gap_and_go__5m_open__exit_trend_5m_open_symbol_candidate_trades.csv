@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-12-09T14:35:00+00:00,2025-12-09T14:55:00+00:00,14,14,stock_gap_and_go,end_of_run,440.61811,444.46609,0.10000,-0.12405,0.50885,4,1.00000,{'minutes_from_open': 65.0}
+TSLA,2025-12-09T14:35:00+00:00,2025-12-11T14:45:00+00:00,14,14,stock_gap_and_go,trailing_stop,440.61811,443.14635,0.10000,-0.25601,0.50884,38,1.00000,{'minutes_from_open': 65.0}

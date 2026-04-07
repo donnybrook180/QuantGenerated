@@ -1,0 +1,775 @@
+Symbol research: ETH
+Broker symbol: ETH
+Data source: polygon
+
+Ranked candidates
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat [near_miss_optimized]: pnl=1.42 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.42 avg_win=1.42 avg_loss=0.00 payoff=999.00 avg_hold=7.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.42 worst=trend_flat_vol_high pnl=1.42 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.42 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient [near_miss_optimized]: pnl=1.41 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.41 avg_win=1.41 avg_loss=0.00 payoff=999.00 avg_hold=3.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.41 worst=trend_flat_vol_high pnl=1.41 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.41 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [near_miss_optimized]: pnl=1.41 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.41 avg_win=1.41 avg_loss=0.00 payoff=999.00 avg_hold=3.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.41 worst=trend_flat_vol_high pnl=1.41 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.41 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high [regime_improved]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high [regime_improved]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high [regime_improved]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high_s_4a4526c30a79_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high_s_4a4526c30a79_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=4.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=4.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_s_9b0706c2e725_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high_s_9b0706c2e725_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_hig_338b7f587bcf_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_hig_338b7f587bcf_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [near_miss_optimized]: pnl=1.26 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=1.26 avg_win=1.26 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_flat_vol_high pnl=1.26 dominant_share=100.00%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=1.26 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_patient__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_protective__trend_flat_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat [near_miss_optimized]: pnl=0.97 closed=1 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.97 avg_win=0.97 avg_loss=0.00 payoff=999.00 avg_hold=1.0
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_flat_vol_high pnl=0.97 worst=trend_flat_vol_high pnl=0.97 dominant_share=100.00%
+  regime_filter: trend_flat
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.97 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_all [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_all [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_all__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_all__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_all__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_all__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_europe [single]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_europe__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback__5m_europe__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_europe__exit_trend [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_short_reversion__5m_europe__exit_fastfail [entry_exit_family]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_short_reversion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_reversion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_balanced__5m_europe [parameter_sweep]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback_sweep_balanced_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_balanced_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_dense__5m_europe [parameter_sweep]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback_sweep_dense_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_dense_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_selective__5m_europe [parameter_sweep]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\eth_crypto_trend_pullback_sweep_selective_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_selective_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_selective__5m_all [parameter_sweep]: pnl=-16.47 closed=8 pf=0.00 win_rate=0.00% dd=0.02%
+  trade_metrics: expectancy=-2.06 avg_win=0.00 avg_loss=-2.06 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_up_vol_mid pnl=-4.11 worst=trend_up_vol_high pnl=-12.36 dominant_share=75.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.17 avg_test_pnl=-2.01 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-8.24 val_pnl=-2.11 val_pf=0.00 val_closed=1 test_pnl=-2.01 test_pf=0.00 test_closed=1
+  trades: artifacts\eth_crypto_trend_pullback_sweep_selective_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_selective_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_balanced__5m_europe [parameter_sweep]: pnl=-41.89 closed=20 pf=0.00 win_rate=0.00% dd=0.04%
+  trade_metrics: expectancy=-2.09 avg_win=0.00 avg_loss=-2.09 payoff=0.00 avg_hold=1.8
+  exits: dominant=stop_loss share=80.00%
+  regimes: best=trend_flat_vol_mid pnl=-2.04 worst=trend_up_vol_mid pnl=-17.80 dominant_share=45.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-8.66 avg_test_pnl=-5.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-32.23 val_pnl=-5.07 val_pf=0.00 val_closed=1 test_pnl=-8.00 test_pf=0.00 test_closed=4
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_balanced_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_balanced_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_dense__5m_europe [parameter_sweep]: pnl=-42.08 closed=21 pf=0.00 win_rate=0.00% dd=0.04%
+  trade_metrics: expectancy=-2.00 avg_win=0.00 avg_loss=-2.00 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=90.48%
+  regimes: best=trend_flat_vol_mid pnl=-2.04 worst=trend_up_vol_mid pnl=-17.66 dominant_share=42.86%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-8.24 avg_test_pnl=-4.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-28.57 val_pnl=-2.11 val_pf=0.00 val_closed=1 test_pnl=-4.03 test_pf=0.00 test_closed=2
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_dense_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_dense_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_europe [single]: pnl=-43.18 closed=20 pf=0.00 win_rate=0.00% dd=0.04%
+  trade_metrics: expectancy=-2.16 avg_win=0.00 avg_loss=-2.16 payoff=0.00 avg_hold=1.9
+  exits: dominant=stop_loss share=90.00%
+  regimes: best=trend_flat_vol_high pnl=-1.97 worst=trend_up_vol_high pnl=-28.66 dominant_share=65.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-5.15 avg_test_pnl=-7.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-35.01 val_pnl=-2.24 val_pf=0.00 val_closed=1 test_pnl=-10.14 test_pf=0.00 test_closed=5
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_europe__exit_fastfail [entry_exit_family]: pnl=-43.18 closed=20 pf=0.00 win_rate=0.00% dd=0.04%
+  trade_metrics: expectancy=-2.16 avg_win=0.00 avg_loss=-2.16 payoff=0.00 avg_hold=1.9
+  exits: dominant=stop_loss share=90.00%
+  regimes: best=trend_flat_vol_high pnl=-1.97 worst=trend_up_vol_high pnl=-28.66 dominant_share=65.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-5.15 avg_test_pnl=-7.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-35.01 val_pnl=-2.24 val_pf=0.00 val_closed=1 test_pnl=-10.14 test_pf=0.00 test_closed=5
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_europe__exit_trend [entry_exit_family]: pnl=-43.32 closed=20 pf=0.00 win_rate=0.00% dd=0.04%
+  trade_metrics: expectancy=-2.17 avg_win=0.00 avg_loss=-2.17 payoff=0.00 avg_hold=1.9
+  exits: dominant=stop_loss share=90.00%
+  regimes: best=trend_flat_vol_high pnl=-1.97 worst=trend_up_vol_high pnl=-28.80 dominant_share=65.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-5.15 avg_test_pnl=-7.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-35.15 val_pnl=-2.24 val_pf=0.00 val_closed=1 test_pnl=-10.14 test_pf=0.00 test_closed=5
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_balanced__5m_all [parameter_sweep]: pnl=-47.11 closed=23 pf=0.00 win_rate=0.00% dd=0.05%
+  trade_metrics: expectancy=-2.05 avg_win=0.00 avg_loss=-2.05 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-4.03 worst=trend_up_vol_high pnl=-24.58 dominant_share=52.17%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-5.25 avg_test_pnl=-7.12 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-22.55 val_pnl=-4.19 val_pf=0.00 val_closed=2 test_pnl=-10.19 test_pf=0.00 test_closed=5
+  trades: artifacts\eth_crypto_trend_pullback_sweep_balanced_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_balanced_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_selective__5m_europe [parameter_sweep]: pnl=-49.60 closed=23 pf=0.00 win_rate=0.00% dd=0.05%
+  trade_metrics: expectancy=-2.16 avg_win=0.00 avg_loss=-2.16 payoff=0.00 avg_hold=2.7
+  exits: dominant=stop_loss share=82.61%
+  regimes: best=trend_flat_vol_high pnl=-2.29 worst=trend_up_vol_high pnl=-22.96 dominant_share=43.48%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.03 avg_test_pnl=-11.11 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-39.49 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=-12.14 test_pf=0.00 test_closed=6
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_selective_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_selective_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend [entry_exit_family]: pnl=-75.58 closed=37 pf=0.02 win_rate=2.70% dd=0.08%
+  trade_metrics: expectancy=-2.04 avg_win=1.26 avg_loss=-2.13 payoff=0.59 avg_hold=3.5
+  exits: dominant=stop_loss share=86.49%
+  regimes: best=trend_flat_vol_high pnl=1.26 worst=trend_up_vol_high pnl=-76.84 dominant_share=97.30%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.68 avg_test_pnl=-16.16 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-36.45 val_pnl=-10.53 val_pf=0.00 val_closed=5 test_pnl=-18.26 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe [single]: pnl=-75.81 closed=37 pf=0.01 win_rate=2.70% dd=0.08%
+  trade_metrics: expectancy=-2.05 avg_win=1.11 avg_loss=-2.14 payoff=0.52 avg_hold=2.6
+  exits: dominant=stop_loss share=86.49%
+  regimes: best=trend_flat_vol_high pnl=1.11 worst=trend_up_vol_high pnl=-76.92 dominant_share=97.30%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.76 avg_test_pnl=-16.16 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-36.60 val_pnl=-10.61 val_pf=0.00 val_closed=5 test_pnl=-18.26 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_fastfail [entry_exit_family]: pnl=-76.48 closed=37 pf=0.01 win_rate=2.70% dd=0.08%
+  trade_metrics: expectancy=-2.07 avg_win=0.40 avg_loss=-2.14 payoff=0.19 avg_hold=2.3
+  exits: dominant=stop_loss share=86.49%
+  regimes: best=trend_flat_vol_high pnl=0.40 worst=trend_up_vol_high pnl=-76.88 dominant_share=97.30%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.76 avg_test_pnl=-16.14 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-37.31 val_pnl=-10.61 val_pf=0.00 val_closed=5 test_pnl=-18.22 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_expansion_sweep_selective__5m_europe [parameter_sweep]: pnl=-84.53 closed=40 pf=0.01 win_rate=2.50% dd=0.08%
+  trade_metrics: expectancy=-2.11 avg_win=1.11 avg_loss=-2.20 payoff=0.51 avg_hold=3.0
+  exits: dominant=stop_loss share=85.00%
+  regimes: best=trend_up_vol_mid pnl=-2.05 worst=trend_up_vol_high pnl=-79.19 dominant_share=90.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-14.47 avg_test_pnl=-17.22 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-36.06 val_pnl=-13.33 val_pf=0.00 val_closed=5 test_pnl=-20.34 test_pf=0.00 test_closed=10
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_selective_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_selective_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_expansion_sweep_balanced__5m_europe [parameter_sweep]: pnl=-102.45 closed=48 pf=0.01 win_rate=2.08% dd=0.10%
+  trade_metrics: expectancy=-2.13 avg_win=1.11 avg_loss=-2.20 payoff=0.50 avg_hold=2.9
+  exits: dominant=stop_loss share=85.42%
+  regimes: best=trend_flat_vol_high pnl=-5.18 worst=trend_up_vol_high pnl=-76.94 dominant_share=70.83%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-18.50 avg_test_pnl=-18.04 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-48.05 val_pnl=-17.32 val_pf=0.00 val_closed=7 test_pnl=-20.19 test_pf=0.00 test_closed=10
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_balanced_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_balanced_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_dense__5m_all [parameter_sweep]: pnl=-110.92 closed=55 pf=0.00 win_rate=0.00% dd=0.11%
+  trade_metrics: expectancy=-2.02 avg_win=0.00 avg_loss=-2.02 payoff=0.00 avg_hold=1.4
+  exits: dominant=stop_loss share=98.18%
+  regimes: best=trend_flat_vol_mid pnl=-2.04 worst=trend_up_vol_high pnl=-72.68 dominant_share=65.45%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-25.38 avg_test_pnl=-24.98 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-84.94 val_pnl=-16.45 val_pf=0.00 val_closed=8 test_pnl=-17.74 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_dense_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_dense_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_all [single]: pnl=-115.51 closed=57 pf=0.00 win_rate=0.00% dd=0.12%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.3
+  exits: dominant=stop_loss share=98.25%
+  regimes: best=trend_flat_vol_mid pnl=-2.02 worst=trend_up_vol_high pnl=-72.86 dominant_share=63.16%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.00 avg_test_pnl=-23.97 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-82.85 val_pnl=-12.86 val_pf=0.00 val_closed=6 test_pnl=-17.53 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_all__exit_trend [entry_exit_family]: pnl=-115.51 closed=57 pf=0.00 win_rate=0.00% dd=0.12%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.3
+  exits: dominant=stop_loss share=98.25%
+  regimes: best=trend_flat_vol_mid pnl=-2.02 worst=trend_up_vol_high pnl=-72.86 dominant_share=63.16%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.00 avg_test_pnl=-23.97 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-82.85 val_pnl=-12.86 val_pf=0.00 val_closed=6 test_pnl=-17.53 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim__5m_all__exit_fastfail [entry_exit_family]: pnl=-115.51 closed=57 pf=0.00 win_rate=0.00% dd=0.12%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.3
+  exits: dominant=stop_loss share=98.25%
+  regimes: best=trend_flat_vol_mid pnl=-2.02 worst=trend_up_vol_high pnl=-72.86 dominant_share=63.16%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.00 avg_test_pnl=-23.97 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-82.85 val_pnl=-12.86 val_pf=0.00 val_closed=6 test_pnl=-17.53 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_breakout_reclaim__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion_sweep_dense__5m_europe [parameter_sweep]: pnl=-123.26 closed=60 pf=0.01 win_rate=1.67% dd=0.12%
+  trade_metrics: expectancy=-2.05 avg_win=1.11 avg_loss=-2.11 payoff=0.53 avg_hold=2.2
+  exits: dominant=stop_loss share=90.00%
+  regimes: best=trend_flat_vol_mid pnl=-4.09 worst=trend_up_vol_high pnl=-75.61 dominant_share=58.33%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-21.89 avg_test_pnl=-24.19 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-55.73 val_pnl=-22.81 val_pf=0.00 val_closed=11 test_pnl=-26.34 test_pf=0.00 test_closed=13
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_dense_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_dense_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_trend [entry_exit_family]: pnl=-127.63 closed=64 pf=0.01 win_rate=1.56% dd=0.13%
+  trade_metrics: expectancy=-1.99 avg_win=1.26 avg_loss=-2.05 payoff=0.62 avg_hold=2.3
+  exits: dominant=stop_loss share=90.62%
+  regimes: best=trend_flat_vol_low pnl=-2.05 worst=trend_up_vol_high pnl=-63.81 dominant_share=48.44%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-26.13 avg_test_pnl=-21.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-60.36 val_pnl=-24.88 val_pf=0.00 val_closed=12 test_pnl=-20.11 test_pf=0.00 test_closed=10
+  trades: artifacts\eth_crypto_volatility_breakout__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe [single]: pnl=-127.86 closed=64 pf=0.01 win_rate=1.56% dd=0.13%
+  trade_metrics: expectancy=-2.00 avg_win=1.11 avg_loss=-2.05 payoff=0.54 avg_hold=1.7
+  exits: dominant=stop_loss share=90.62%
+  regimes: best=trend_flat_vol_low pnl=-2.05 worst=trend_up_vol_high pnl=-63.89 dominant_share=48.44%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-26.21 avg_test_pnl=-21.05 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-60.51 val_pnl=-24.96 val_pf=0.00 val_closed=12 test_pnl=-20.11 test_pf=0.00 test_closed=10
+  trades: artifacts\eth_crypto_volatility_breakout__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_europe__exit_fastfail [entry_exit_family]: pnl=-128.73 closed=64 pf=0.00 win_rate=1.56% dd=0.13%
+  trade_metrics: expectancy=-2.01 avg_win=0.40 avg_loss=-2.05 payoff=0.20 avg_hold=1.5
+  exits: dominant=stop_loss share=90.62%
+  regimes: best=trend_flat_vol_low pnl=-2.05 worst=trend_up_vol_high pnl=-64.05 dominant_share=48.44%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-26.21 avg_test_pnl=-21.03 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-61.42 val_pnl=-24.96 val_pf=0.00 val_closed=12 test_pnl=-20.07 test_pf=0.00 test_closed=10
+  trades: artifacts\eth_crypto_volatility_breakout__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_selective__5m_all [parameter_sweep]: pnl=-132.56 closed=65 pf=0.00 win_rate=0.00% dd=0.13%
+  trade_metrics: expectancy=-2.04 avg_win=0.00 avg_loss=-2.04 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-8.08 worst=trend_up_vol_high pnl=-79.86 dominant_share=60.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-23.77 avg_test_pnl=-29.20 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-99.92 val_pnl=-18.79 val_pf=0.00 val_closed=9 test_pnl=-15.77 test_pf=0.00 test_closed=8
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_selective_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_selective_5m_all_symbol_candidate_analysis.txt
+crypto_breakout_reclaim_sweep_balanced__5m_all [parameter_sweep]: pnl=-139.12 closed=69 pf=0.00 win_rate=0.00% dd=0.14%
+  trade_metrics: expectancy=-2.02 avg_win=0.00 avg_loss=-2.02 payoff=0.00 avg_hold=1.3
+  exits: dominant=stop_loss share=98.55%
+  regimes: best=trend_flat_vol_mid pnl=-2.13 worst=trend_up_vol_high pnl=-92.51 dominant_share=66.67%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-24.48 avg_test_pnl=-26.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-107.04 val_pnl=-14.50 val_pf=0.00 val_closed=7 test_pnl=-17.88 test_pf=0.00 test_closed=9
+  trades: artifacts\eth_crypto_breakout_reclaim_sweep_balanced_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_breakout_reclaim_sweep_balanced_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe [single]: pnl=-153.91 closed=74 pf=0.00 win_rate=0.00% dd=0.15%
+  trade_metrics: expectancy=-2.08 avg_win=0.00 avg_loss=-2.08 payoff=0.00 avg_hold=1.5
+  exits: dominant=stop_loss share=95.95%
+  regimes: best=trend_flat_vol_low pnl=-3.92 worst=trend_down_vol_high pnl=-98.70 dominant_share=63.51%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-45.70 avg_test_pnl=-50.50 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-46.20 val_pnl=-46.85 val_pf=0.00 val_closed=23 test_pnl=-50.65 test_pf=0.00 test_closed=25
+  trades: artifacts\eth_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_europe_5m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe__exit_fastfail [entry_exit_family]: pnl=-153.91 closed=74 pf=0.00 win_rate=0.00% dd=0.15%
+  trade_metrics: expectancy=-2.08 avg_win=0.00 avg_loss=-2.08 payoff=0.00 avg_hold=1.5
+  exits: dominant=stop_loss share=95.95%
+  regimes: best=trend_flat_vol_low pnl=-3.92 worst=trend_down_vol_high pnl=-98.70 dominant_share=63.51%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-45.70 avg_test_pnl=-50.50 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-46.20 val_pnl=-46.85 val_pf=0.00 val_closed=23 test_pnl=-50.65 test_pf=0.00 test_closed=25
+  trades: artifacts\eth_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_europe__exit_fastfail_5m_europe_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_europe__exit_trend [entry_exit_family]: pnl=-154.05 closed=74 pf=0.00 win_rate=0.00% dd=0.15%
+  trade_metrics: expectancy=-2.08 avg_win=0.00 avg_loss=-2.08 payoff=0.00 avg_hold=1.6
+  exits: dominant=stop_loss share=95.95%
+  regimes: best=trend_flat_vol_low pnl=-3.92 worst=trend_down_vol_high pnl=-98.84 dominant_share=63.51%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-45.70 avg_test_pnl=-50.50 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-46.34 val_pnl=-46.85 val_pf=0.00 val_closed=23 test_pnl=-50.65 test_pf=0.00 test_closed=25
+  trades: artifacts\eth_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_europe__exit_trend_5m_europe_symbol_candidate_analysis.txt
+crypto_trend_pullback_sweep_dense__5m_all [parameter_sweep]: pnl=-172.72 closed=85 pf=0.00 win_rate=0.00% dd=0.17%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.0
+  exits: dominant=stop_loss share=100.00%
+  regimes: best=trend_flat_vol_high pnl=-18.22 worst=trend_up_vol_mid pnl=-62.97 dominant_share=36.47%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-33.77 avg_test_pnl=-30.52 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-85.22 val_pnl=-34.89 val_pf=0.00 val_closed=17 test_pnl=-34.47 test_pf=0.00 test_closed=17
+  trades: artifacts\eth_crypto_trend_pullback_sweep_dense_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_trend_pullback_sweep_dense_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_all [single]: pnl=-591.42 closed=293 pf=0.00 win_rate=0.34% dd=0.59%
+  trade_metrics: expectancy=-2.02 avg_win=1.88 avg_loss=-2.03 payoff=0.92 avg_hold=2.0
+  exits: dominant=stop_loss share=96.93%
+  regimes: best=trend_flat_vol_high pnl=-50.30 worst=trend_up_vol_high pnl=-541.12 dominant_share=91.47%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-133.47 avg_test_pnl=-126.14 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-259.12 val_pnl=-127.52 val_pf=0.00 val_closed=62 test_pnl=-136.28 test_pf=0.00 test_closed=67
+  trades: artifacts\eth_crypto_volatility_expansion__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_all__exit_trend [entry_exit_family]: pnl=-591.51 closed=293 pf=0.00 win_rate=0.34% dd=0.59%
+  trade_metrics: expectancy=-2.02 avg_win=1.88 avg_loss=-2.03 payoff=0.92 avg_hold=2.0
+  exits: dominant=stop_loss share=96.93%
+  regimes: best=trend_flat_vol_high pnl=-50.30 worst=trend_up_vol_high pnl=-541.21 dominant_share=91.47%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-133.47 avg_test_pnl=-126.14 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-259.21 val_pnl=-127.52 val_pf=0.00 val_closed=62 test_pnl=-136.28 test_pf=0.00 test_closed=67
+  trades: artifacts\eth_crypto_volatility_expansion__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_all__exit_fastfail [entry_exit_family]: pnl=-596.00 closed=294 pf=0.00 win_rate=0.00% dd=0.60%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.6
+  exits: dominant=stop_loss share=96.94%
+  regimes: best=trend_flat_vol_high pnl=-50.62 worst=trend_up_vol_high pnl=-545.38 dominant_share=91.50%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-133.80 avg_test_pnl=-126.16 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-263.36 val_pnl=-127.90 val_pf=0.00 val_closed=62 test_pnl=-136.24 test_pf=0.00 test_closed=67
+  trades: artifacts\eth_crypto_volatility_expansion__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion_sweep_selective__5m_all [parameter_sweep]: pnl=-602.45 closed=298 pf=0.00 win_rate=0.34% dd=0.60%
+  trade_metrics: expectancy=-2.02 avg_win=1.88 avg_loss=-2.03 payoff=0.92 avg_hold=1.8
+  exits: dominant=stop_loss share=96.98%
+  regimes: best=trend_up_vol_mid pnl=-16.50 worst=trend_up_vol_high pnl=-530.89 dominant_share=88.26%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-137.23 avg_test_pnl=-127.22 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-257.37 val_pnl=-135.44 val_pf=0.00 val_closed=66 test_pnl=-136.45 test_pf=0.00 test_closed=67
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_selective_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_selective_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion_selective [auto_improved]: pnl=-644.12 closed=319 pf=0.00 win_rate=0.31% dd=0.64%
+  trade_metrics: expectancy=-2.02 avg_win=1.88 avg_loss=-2.03 payoff=0.92 avg_hold=2.0
+  exits: dominant=stop_loss share=96.55%
+  regimes: best=trend_flat_vol_mid pnl=-4.07 worst=trend_up_vol_high pnl=-514.35 dominant_share=79.94%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-146.49 avg_test_pnl=-131.43 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-277.24 val_pnl=-144.73 val_pf=0.00 val_closed=71 test_pnl=-140.74 test_pf=0.00 test_closed=69
+  trades: artifacts\eth_crypto_volatility_expansion_selective_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_selective_symbol_candidate_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient [combined]: pnl=-646.89 closed=319 pf=0.00 win_rate=0.00% dd=0.65%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.6
+  exits: dominant=stop_loss share=97.18%
+  regimes: best=trend_flat_vol_high pnl=-69.16 worst=trend_up_vol_high pnl=-577.73 dominant_share=89.34%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-147.95 avg_test_pnl=-138.34 avg_val_pf=0.00 avg_test_pf=0.00
+  combo_validation: components=2 outperformance=-146.24 trade_overlap=100.00%
+  splits: train_pnl=-280.03 val_pnl=-144.21 val_pf=0.00 val_closed=70 test_pnl=-146.24 test_pf=0.00 test_closed=72
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_d3f6ad77e2bc_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_d3f6ad77e2bc_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [combined]: pnl=-646.89 closed=319 pf=0.00 win_rate=0.00% dd=0.65%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.6
+  exits: dominant=stop_loss share=97.18%
+  regimes: best=trend_flat_vol_high pnl=-69.16 worst=trend_up_vol_high pnl=-577.73 dominant_share=89.34%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-147.95 avg_test_pnl=-138.34 avg_val_pf=0.00 avg_test_pf=0.00
+  combo_validation: components=2 outperformance=-146.24 trade_overlap=100.00%
+  splits: train_pnl=-280.03 val_pnl=-144.21 val_pf=0.00 val_closed=70 test_pnl=-146.24 test_pf=0.00 test_closed=72
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_5cdcf54c8f7e_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat__plus__crypto_5cdcf54c8f7e_analysis.txt
+crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__plus__crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [combined]: pnl=-646.89 closed=319 pf=0.00 win_rate=0.00% dd=0.65%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.6
+  exits: dominant=stop_loss share=97.18%
+  regimes: best=trend_flat_vol_high pnl=-69.16 worst=trend_up_vol_high pnl=-577.73 dominant_share=89.34%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-147.95 avg_test_pnl=-138.34 avg_val_pf=0.00 avg_test_pf=0.00
+  combo_validation: components=2 outperformance=-146.24 trade_overlap=100.00%
+  splits: train_pnl=-280.03 val_pnl=-144.21 val_pf=0.00 val_closed=70 test_pnl=-146.24 test_pf=0.00 test_closed=72
+  trades: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__plus__crypto_volatility_1cc1e69f3fae_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__plus__crypto_volatility_1cc1e69f3fae_analysis.txt
+crypto_volatility_expansion_sweep_balanced__5m_all [parameter_sweep]: pnl=-668.78 closed=330 pf=0.00 win_rate=0.30% dd=0.67%
+  trade_metrics: expectancy=-2.03 avg_win=1.88 avg_loss=-2.04 payoff=0.92 avg_hold=1.9
+  exits: dominant=stop_loss share=96.97%
+  regimes: best=trend_flat_vol_mid pnl=-8.19 worst=trend_up_vol_high pnl=-497.02 dominant_share=74.55%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-149.62 avg_test_pnl=-133.49 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-293.44 val_pnl=-147.65 val_pf=0.00 val_closed=72 test_pnl=-142.50 test_pf=0.00 test_closed=70
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_balanced_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_balanced_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_expansion_sweep_dense__5m_all [parameter_sweep]: pnl=-732.25 closed=362 pf=0.00 win_rate=0.28% dd=0.73%
+  trade_metrics: expectancy=-2.02 avg_win=1.01 avg_loss=-2.03 payoff=0.50 avg_hold=1.7
+  exits: dominant=stop_loss share=97.24%
+  regimes: best=trend_flat_vol_mid pnl=-22.39 worst=trend_up_vol_high pnl=-476.55 dominant_share=65.19%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-171.59 avg_test_pnl=-154.82 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-306.80 val_pnl=-175.91 val_pf=0.00 val_closed=86 test_pnl=-158.68 test_pf=0.00 test_closed=78
+  trades: artifacts\eth_crypto_volatility_expansion_sweep_dense_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_expansion_sweep_dense_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_all [single]: pnl=-814.35 closed=403 pf=0.00 win_rate=0.25% dd=0.81%
+  trade_metrics: expectancy=-2.02 avg_win=1.01 avg_loss=-2.03 payoff=0.50 avg_hold=1.5
+  exits: dominant=stop_loss share=97.02%
+  regimes: best=trend_flat_vol_low pnl=-14.22 worst=trend_up_vol_high pnl=-468.42 dominant_share=57.57%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-181.56 avg_test_pnl=-155.34 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-392.58 val_pnl=-172.59 val_pf=0.00 val_closed=84 test_pnl=-158.07 test_pf=0.00 test_closed=78
+  trades: artifacts\eth_crypto_volatility_breakout__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_all__exit_trend [entry_exit_family]: pnl=-814.35 closed=403 pf=0.00 win_rate=0.25% dd=0.81%
+  trade_metrics: expectancy=-2.02 avg_win=1.01 avg_loss=-2.03 payoff=0.50 avg_hold=1.5
+  exits: dominant=stop_loss share=97.02%
+  regimes: best=trend_flat_vol_low pnl=-14.22 worst=trend_up_vol_high pnl=-468.42 dominant_share=57.57%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-181.56 avg_test_pnl=-155.34 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-392.58 val_pnl=-172.59 val_pf=0.00 val_closed=84 test_pnl=-158.07 test_pf=0.00 test_closed=78
+  trades: artifacts\eth_crypto_volatility_breakout__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_volatility_breakout__5m_all__exit_fastfail [entry_exit_family]: pnl=-818.00 closed=404 pf=0.00 win_rate=0.00% dd=0.82%
+  trade_metrics: expectancy=-2.02 avg_win=0.00 avg_loss=-2.02 payoff=0.00 avg_hold=1.3
+  exits: dominant=stop_loss share=97.03%
+  regimes: best=trend_flat_vol_low pnl=-14.22 worst=trend_up_vol_high pnl=-471.75 dominant_share=57.67%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-181.89 avg_test_pnl=-155.36 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-395.89 val_pnl=-172.97 val_pf=0.00 val_closed=84 test_pnl=-158.03 test_pf=0.00 test_closed=78
+  trades: artifacts\eth_crypto_volatility_breakout__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_volatility_breakout__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all [single]: pnl=-996.57 closed=490 pf=0.00 win_rate=0.00% dd=1.00%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.2
+  exits: dominant=stop_loss share=98.78%
+  regimes: best=trend_up_vol_low pnl=-2.01 worst=trend_down_vol_high pnl=-727.42 dominant_share=73.06%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-280.55 avg_test_pnl=-232.98 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-409.30 val_pnl=-289.19 val_pf=0.00 val_closed=142 test_pnl=-231.03 test_pf=0.00 test_closed=115
+  trades: artifacts\eth_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_all_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all__exit_trend [entry_exit_family]: pnl=-996.57 closed=490 pf=0.00 win_rate=0.00% dd=1.00%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.2
+  exits: dominant=stop_loss share=98.78%
+  regimes: best=trend_up_vol_low pnl=-2.01 worst=trend_down_vol_high pnl=-727.42 dominant_share=73.06%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-280.55 avg_test_pnl=-232.98 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-409.30 val_pnl=-289.19 val_pf=0.00 val_closed=142 test_pnl=-231.03 test_pf=0.00 test_closed=115
+  trades: artifacts\eth_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_all__exit_trend_5m_all_symbol_candidate_analysis.txt
+crypto_short_breakdown__5m_all__exit_fastfail [entry_exit_family]: pnl=-1003.39 closed=494 pf=0.00 win_rate=0.00% dd=1.00%
+  trade_metrics: expectancy=-2.03 avg_win=0.00 avg_loss=-2.03 payoff=0.00 avg_hold=1.2
+  exits: dominant=stop_loss share=98.79%
+  regimes: best=trend_up_vol_low pnl=-2.01 worst=trend_down_vol_high pnl=-728.23 dominant_share=72.67%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-282.35 avg_test_pnl=-232.96 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-414.35 val_pnl=-290.99 val_pf=0.00 val_closed=143 test_pnl=-231.01 test_pf=0.00 test_closed=115
+  trades: artifacts\eth_crypto_short_breakdown__5m_all__exit_fastfail_5m_all_symbol_candidate_trades.csv
+  analysis: artifacts\eth_crypto_short_breakdown__5m_all__exit_fastfail_5m_all_symbol_candidate_analysis.txt
+
+Recommended active agents
+No candidate met the positive-PnL and PF>=1.0 threshold.

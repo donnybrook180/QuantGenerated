@@ -1,0 +1,30 @@
+Viability autopsy: US30
+Execution validation summary: not_run
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 50%): 20
+- validation PF < 1.0 (0.00): 16
+- test PF < 1.0 (0.00): 16
+- test pnl <= 0 (-1.28): 3
+- walk-forward avg test pnl <= 0 (-1.89): 3
+- test PF < 1.0 (0.01): 3
+- test pnl <= 0 (-1.20): 2
+- walk-forward avg test pnl <= 0 (-1.55): 2
+
+Top near-misses
+- mean_reversion__exit_quick: pnl=-8.22 pf=0.00 val=-2.40/0.00/4 test=-1.21/0.00/3 wf=0.00%
+  reasons: validation pnl <= 0 (-2.40), test pnl <= 0 (-1.21), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.80), walk-forward avg test pnl <= 0 (-1.68)
+- mean_reversion: pnl=-8.23 pf=0.00 val=-2.31/0.00/4 test=-1.27/0.00/3 wf=0.00%
+  reasons: validation pnl <= 0 (-2.31), test pnl <= 0 (-1.27), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.76), walk-forward avg test pnl <= 0 (-1.58)
+- opening_range_short_breakdown__exit_trend: pnl=-9.53 pf=0.00 val=-1.86/0.00/4 test=-1.28/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-1.86), test pnl <= 0 (-1.28), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.55), walk-forward avg test pnl <= 0 (-1.89)
+- opening_range_short_breakdown: pnl=-9.74 pf=0.00 val=-1.91/0.00/4 test=-1.28/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-1.91), test pnl <= 0 (-1.28), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.59), walk-forward avg test pnl <= 0 (-1.89)
+- opening_range_short_breakdown__exit_fastfail: pnl=-10.45 pf=0.00 val=-2.66/0.00/5 test=-1.28/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-2.66), test pnl <= 0 (-1.28), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-2.34), walk-forward avg test pnl <= 0 (-1.89)
+- opening_range_breakout__exit_trend: pnl=-11.12 pf=0.00 val=-3.32/0.00/6 test=-1.24/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-3.32), test pnl <= 0 (-1.24), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-3.57), walk-forward avg test pnl <= 0 (-1.60)
+- opening_range_breakout: pnl=-11.28 pf=0.00 val=-3.17/0.00/6 test=-1.20/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-3.17), test pnl <= 0 (-1.20), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-3.42), walk-forward avg test pnl <= 0 (-1.55)
+- opening_range_breakout__exit_fastfail: pnl=-11.36 pf=0.00 val=-3.23/0.00/6 test=-1.20/0.00/2 wf=0.00%
+  reasons: validation pnl <= 0 (-3.23), test pnl <= 0 (-1.20), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-3.43), walk-forward avg test pnl <= 0 (-1.55)

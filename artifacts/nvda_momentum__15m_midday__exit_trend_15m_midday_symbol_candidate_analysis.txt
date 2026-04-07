@@ -1,0 +1,19 @@
+Artifact: nvda_momentum__15m_midday__exit_trend_15m_midday_symbol_candidate
+Closed trades: 77
+Realized pnl: -38.57
+
+By entry hour
+15: trades=48 pnl=-25.31 avg=-0.53 win_rate=6.25%
+17: trades=15 pnl=-6.90 avg=-0.46 win_rate=13.33%
+16: trades=14 pnl=-6.35 avg=-0.45 win_rate=14.29%
+
+By entry setup
+momentum_confirmation: trades=77 pnl=-38.57 avg=-0.50 win_rate=9.09%
+
+By exit reason
+stop_loss: trades=23 pnl=-16.47 avg=-0.72 win_rate=0.00%
+stale_breakout: trades=19 pnl=-13.75 avg=-0.72 win_rate=0.00%
+trailing_stop: trades=11 pnl=-5.53 avg=-0.50 win_rate=0.00%
+signal_exit: trades=5 pnl=-1.96 avg=-0.39 win_rate=0.00%
+take_profit: trades=18 pnl=-0.66 avg=-0.04 win_rate=38.89%
+end_of_run: trades=1 pnl=-0.20 avg=-0.20 win_rate=0.00%

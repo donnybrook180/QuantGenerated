@@ -1,0 +1,31 @@
+Artifact: eth_crypto_volatility_expansion_sweep_dense_5m_all_symbol_candidate
+Closed trades: 362
+Realized pnl: -732.25
+
+By entry hour
+13: trades=46 pnl=-94.73 avg=-2.06 win_rate=0.00%
+14: trades=44 pnl=-86.33 avg=-1.96 win_rate=2.27%
+16: trades=33 pnl=-66.12 avg=-2.00 win_rate=0.00%
+19: trades=32 pnl=-65.33 avg=-2.04 win_rate=0.00%
+15: trades=31 pnl=-62.57 avg=-2.02 win_rate=0.00%
+12: trades=26 pnl=-53.26 avg=-2.05 win_rate=0.00%
+18: trades=26 pnl=-53.23 avg=-2.05 win_rate=0.00%
+17: trades=24 pnl=-48.72 avg=-2.03 win_rate=0.00%
+21: trades=17 pnl=-33.97 avg=-2.00 win_rate=0.00%
+20: trades=15 pnl=-30.88 avg=-2.06 win_rate=0.00%
+9: trades=15 pnl=-29.89 avg=-1.99 win_rate=0.00%
+8: trades=13 pnl=-26.60 avg=-2.05 win_rate=0.00%
+22: trades=13 pnl=-25.81 avg=-1.99 win_rate=0.00%
+23: trades=9 pnl=-18.49 avg=-2.05 win_rate=0.00%
+11: trades=9 pnl=-18.28 avg=-2.03 win_rate=0.00%
+10: trades=8 pnl=-15.98 avg=-2.00 win_rate=0.00%
+0: trades=1 pnl=-2.04 avg=-2.04 win_rate=0.00%
+
+By entry setup
+crypto_volatility_expansion: trades=362 pnl=-732.25 avg=-2.02 win_rate=0.28%
+
+By exit reason
+stop_loss: trades=352 pnl=-716.50 avg=-2.04 win_rate=0.00%
+stale_breakout: trades=7 pnl=-13.25 avg=-1.89 win_rate=0.00%
+time_stop: trades=1 pnl=-1.53 avg=-1.53 win_rate=0.00%
+signal_exit: trades=2 pnl=-0.97 avg=-0.49 win_rate=50.00%

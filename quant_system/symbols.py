@@ -17,9 +17,16 @@ _SYMBOL_ALIASES: dict[str, tuple[str, str, str]] = {
     "I:SPX": ("US500", "SPY", "US500.cash"),
     "SPX": ("US500", "SPY", "US500.cash"),
     "US100": ("US100", "QQQ", "US100.cash"),
+    "NAS100": ("US100", "QQQ", "US100.cash"),
     "QQQ": ("US100", "QQQ", "US100.cash"),
     "I:NDX": ("US100", "QQQ", "US100.cash"),
     "NDX": ("US100", "QQQ", "US100.cash"),
+    "US30": ("US30", "DIA", "US30.cash"),
+    "DJ30": ("US30", "DIA", "US30.cash"),
+    "DOW30": ("US30", "DIA", "US30.cash"),
+    "DIA": ("US30", "DIA", "US30.cash"),
+    "I:DJI": ("US30", "DIA", "US30.cash"),
+    "DJI": ("US30", "DIA", "US30.cash"),
     "GER40": ("GER40", "DAX", "GER40.cash"),
     "DAX": ("GER40", "DAX", "GER40.cash"),
     "DE40": ("GER40", "DAX", "GER40.cash"),
@@ -56,7 +63,26 @@ def is_forex_symbol(symbol: str) -> bool:
 
 def is_index_symbol(symbol: str) -> bool:
     upper = symbol.upper()
-    return upper in {"US500", "SPY", "SPX", "I:SPX", "US100", "QQQ", "NDX", "I:NDX", "GER40", "DAX", "DE40"}
+    return upper in {
+        "US500",
+        "SPY",
+        "SPX",
+        "I:SPX",
+        "US100",
+        "NAS100",
+        "QQQ",
+        "NDX",
+        "I:NDX",
+        "US30",
+        "DJ30",
+        "DOW30",
+        "DIA",
+        "DJI",
+        "I:DJI",
+        "GER40",
+        "DAX",
+        "DE40",
+    }
 
 
 def is_stock_symbol(symbol: str) -> bool:

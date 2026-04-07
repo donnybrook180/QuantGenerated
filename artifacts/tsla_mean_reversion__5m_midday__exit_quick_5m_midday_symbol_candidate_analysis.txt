@@ -1,12 +1,17 @@
 Artifact: tsla_mean_reversion__5m_midday__exit_quick_5m_midday_symbol_candidate
-Closed trades: 1
-Realized pnl: 1.01
+Closed trades: 54
+Realized pnl: -32.68
 
 By entry hour
-17: trades=1 pnl=1.01 avg=1.01 win_rate=100.00%
+15: trades=23 pnl=-12.86 avg=-0.56 win_rate=0.00%
+17: trades=16 pnl=-11.18 avg=-0.70 win_rate=12.50%
+16: trades=15 pnl=-8.64 avg=-0.58 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=1 pnl=1.01 avg=1.01 win_rate=100.00%
+mean_reversion: trades=54 pnl=-32.68 avg=-0.61 win_rate=3.70%
 
 By exit reason
-take_profit: trades=1 pnl=1.01 avg=1.01 win_rate=100.00%
+structure_exit: trades=40 pnl=-28.34 avg=-0.71 win_rate=0.00%
+stale_breakout: trades=4 pnl=-2.02 avg=-0.50 win_rate=0.00%
+stop_loss: trades=2 pnl=-1.37 avg=-0.68 win_rate=0.00%
+take_profit: trades=8 pnl=-0.96 avg=-0.12 win_rate=25.00%

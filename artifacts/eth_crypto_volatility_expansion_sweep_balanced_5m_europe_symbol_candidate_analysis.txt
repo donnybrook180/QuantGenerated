@@ -1,0 +1,18 @@
+Artifact: eth_crypto_volatility_expansion_sweep_balanced_5m_europe_symbol_candidate
+Closed trades: 48
+Realized pnl: -102.45
+
+By entry hour
+12: trades=24 pnl=-52.97 avg=-2.21 win_rate=4.17%
+8: trades=8 pnl=-16.71 avg=-2.09 win_rate=0.00%
+11: trades=7 pnl=-14.52 avg=-2.07 win_rate=0.00%
+9: trades=5 pnl=-10.14 avg=-2.03 win_rate=0.00%
+10: trades=4 pnl=-8.11 avg=-2.03 win_rate=0.00%
+
+By entry setup
+crypto_volatility_expansion: trades=48 pnl=-102.45 avg=-2.13 win_rate=2.08%
+
+By exit reason
+stop_loss: trades=41 pnl=-84.40 avg=-2.06 win_rate=0.00%
+stale_breakout: trades=6 pnl=-19.16 avg=-3.19 win_rate=0.00%
+take_profit: trades=1 pnl=1.11 avg=1.11 win_rate=100.00%

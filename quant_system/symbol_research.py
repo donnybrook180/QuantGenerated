@@ -167,7 +167,7 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     if symbol.upper() == "US500":
         return max(base_history, 365)
     if _is_stock_symbol(symbol):
-        return max(base_history, 365)
+        return max(base_history, 730)
     if _is_metal_symbol(symbol) or _is_forex_symbol(symbol):
         return max(base_history, 180)
     return max(base_history, 180)
@@ -413,8 +413,10 @@ def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[
 
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
-    if profile_symbol.upper() == "TSLA":
-        return [("15m", 15, "minute")], ("midday",), True
+    if profile_symbol.upper() in {"TSLA", "NVDA"}:
+        if mode == "seed":
+            return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "power"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
     if profile_symbol.upper() == "GBPUSD":
         return [("15m", 15, "minute")], ("europe",), True
     if _is_crypto_symbol(profile_symbol):
@@ -585,11 +587,7 @@ def _build_symbol_feature_variants(
                 timeframe_features = _filter_weekday_features(timeframe_features)
             data_sources.append(data_source)
             for session_name in session_names:
-                filtered = [
-                    feature
-                    for feature in _filter_features_by_session(timeframe_features, session_name)
-                    if feature.values.get("event_blackout", 0.0) < 1.0
-                ]
+                filtered = _filter_features_by_session(timeframe_features, session_name)
                 if len(filtered) < 50:
                     continue
                 variants[f"{timeframe_label}_{session_name}"] = filtered
@@ -638,8 +636,6 @@ def load_execution_features_for_variant(
     if _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol):
         features = _filter_weekday_features(features)
     features = _filter_features_by_session(features, session_label or "all")
-    if _is_stock_symbol(profile_symbol):
-        features = [feature for feature in features if feature.values.get("event_blackout", 0.0) < 1.0]
     return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
@@ -876,15 +872,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         ]
     if _is_stock_symbol(data_symbol):
         stock_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=False)
-        if upper == "TSLA":
-            return [
-                CandidateSpec(
-                    name="mean_reversion",
-                    description="TSLA-focused midday mean reversion",
-                    agents=[MeanReversionAgent(max(config.agents.mean_reversion_window - 2, 4), config.agents.mean_reversion_threshold * 0.85), stock_risk, risk],
-                    code_path="quant_system.agents.trend.MeanReversionAgent",
-                ),
-            ]
+        stock_event_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=True, allow_event_blackout=True)
         return [
             CandidateSpec(
                 name="stock_trend_breakout",
@@ -895,13 +883,13 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             CandidateSpec(
                 name="stock_news_momentum",
                 description="Stock post-news momentum on high-impact event days",
-                agents=[StockNewsMomentumAgent(), EventAwareRiskSentinelAgent(allow_high_impact_day=True), risk],
+                agents=[StockNewsMomentumAgent(), stock_event_risk, risk],
                 code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
             ),
             CandidateSpec(
                 name="stock_post_earnings_drift",
                 description="Stock post-earnings drift continuation after the open",
-                agents=[StockPostEarningsDriftAgent(), EventAwareRiskSentinelAgent(allow_high_impact_day=True), risk],
+                agents=[StockPostEarningsDriftAgent(), stock_event_risk, risk],
                 code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
             ),
             CandidateSpec(
@@ -1380,7 +1368,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_news_momentum_patient",
                     description=f"{upper} news momentum with slower exits and wider event follow-through",
-                    agents=[StockNewsMomentumAgent(min_relative_volume=1.25, min_atr_proxy=0.0036), EventAwareRiskSentinelAgent(True), risk],
+                    agents=[StockNewsMomentumAgent(min_relative_volume=1.25, min_atr_proxy=0.0036), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
                     code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
                 ),
@@ -1401,7 +1389,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_patient",
                     description=f"{upper} post-earnings drift with patient exits",
-                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.05, max_minutes_from_open=180.0), EventAwareRiskSentinelAgent(True), risk],
+                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.05, max_minutes_from_open=180.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
                     code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 28},
                 ),
@@ -1878,6 +1866,134 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
                     },
                 )
             )
+    elif _is_stock_symbol(symbol):
+        stock_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=False)
+        stock_event_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=True, allow_event_blackout=True)
+        trend_variants = [
+            ("balanced", 8, 24, 0.95, 0.0022, 0.0004, 0.0006),
+            ("dense", 6, 18, 0.85, 0.0016, 0.0002, 0.00035),
+            ("selective", 10, 30, 1.10, 0.0028, 0.0006, 0.0009),
+        ]
+        for label, fast_window, slow_window, rel_vol, atr, mom5, mom20 in trend_variants:
+            specs.append(
+                CandidateSpec(
+                    name=f"stock_trend_breakout_sweep_{label}",
+                    description=f"Stock trend breakout sweep {label}",
+                    agents=[
+                        StockTrendBreakoutAgent(
+                            fast_window=fast_window,
+                            slow_window=slow_window,
+                            min_relative_volume=rel_vol,
+                            min_atr_proxy=atr,
+                            min_momentum_5=mom5,
+                            min_momentum_20=mom20,
+                            max_news_count=6.0 if label == "dense" else 4.0,
+                        ),
+                        stock_risk,
+                        RiskSentinelAgent(
+                            max_volatility=config.risk.max_volatility * 1.15,
+                            min_relative_volume=max(rel_vol - 0.05, 0.7),
+                        ),
+                    ],
+                    code_path="quant_system.agents.stocks.StockTrendBreakoutAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6 if label == "dense" else 5,
+                        "max_holding_bars": 20 if label == "dense" else 16,
+                    },
+                )
+            )
+
+        gap_variants = [
+            ("balanced", 1.10, 0.0028, 0.0002, 0.0005, 120.0),
+            ("dense", 1.00, 0.0022, 0.0001, 0.00025, 150.0),
+            ("selective", 1.25, 0.0034, 0.0004, 0.0008, 90.0),
+        ]
+        for label, rel_vol, atr, mom5, mom20, max_minutes in gap_variants:
+            specs.append(
+                CandidateSpec(
+                    name=f"stock_gap_and_go_sweep_{label}",
+                    description=f"Stock gap-and-go sweep {label}",
+                    agents=[
+                        StockGapAndGoAgent(
+                            min_relative_volume=rel_vol,
+                            min_atr_proxy=atr,
+                            min_momentum_5=mom5,
+                            min_momentum_20=mom20,
+                            max_minutes_from_open=max_minutes,
+                        ),
+                        stock_risk,
+                        RiskSentinelAgent(
+                            max_volatility=config.risk.max_volatility * 1.2,
+                            min_relative_volume=max(rel_vol - 0.1, 0.7),
+                        ),
+                    ],
+                    code_path="quant_system.agents.stocks.StockGapAndGoAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5 if label != "dense" else 6,
+                        "max_holding_bars": 18 if label != "dense" else 22,
+                    },
+                )
+            )
+
+        power_variants = [
+            ("balanced", 0.90, 0.0022, 0.0002, (18, 19)),
+            ("dense", 0.82, 0.0017, 0.0001, (17, 18, 19)),
+            ("selective", 1.00, 0.0028, 0.00035, (18, 19)),
+        ]
+        for label, rel_vol, mom20, mom5, hours in power_variants:
+            specs.append(
+                CandidateSpec(
+                    name=f"stock_power_hour_sweep_{label}",
+                    description=f"Stock power-hour continuation sweep {label}",
+                    agents=[
+                        StockPowerHourContinuationAgent(
+                            min_relative_volume=rel_vol,
+                            min_momentum_20=mom20,
+                            min_momentum_5=mom5,
+                            allowed_hours=hours,
+                        ),
+                        stock_risk,
+                        RiskSentinelAgent(
+                            max_volatility=config.risk.max_volatility * 1.1,
+                            min_relative_volume=max(rel_vol - 0.05, 0.7),
+                        ),
+                    ],
+                    code_path="quant_system.agents.stocks.StockPowerHourContinuationAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16 if label != "dense" else 20,
+                    },
+                )
+            )
+
+        event_variants = [
+            ("balanced", 1.20, 0.0032, 180.0),
+            ("dense", 1.05, 0.0028, 210.0),
+        ]
+        for label, rel_vol, atr, max_minutes in event_variants:
+            specs.append(
+                CandidateSpec(
+                    name=f"stock_post_earnings_drift_sweep_{label}",
+                    description=f"Stock post-earnings drift sweep {label}",
+                    agents=[
+                        StockPostEarningsDriftAgent(min_relative_volume=rel_vol, max_minutes_from_open=max_minutes),
+                        stock_event_risk,
+                        RiskSentinelAgent(
+                            max_volatility=config.risk.max_volatility * 1.2,
+                            min_relative_volume=max(rel_vol - 0.1, 0.7),
+                        ),
+                    ],
+                    code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 7,
+                        "max_holding_bars": 24 if label == "balanced" else 28,
+                    },
+                )
+            )
     return specs
 
 
@@ -2033,7 +2149,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_news_momentum_exit_relaxed",
                     description=f"{upper} stock news momentum with relaxed structure exit after autopsy",
-                    agents=[StockNewsMomentumAgent(min_relative_volume=1.2, min_atr_proxy=0.0035), EventAwareRiskSentinelAgent(True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
+                    agents=[StockNewsMomentumAgent(min_relative_volume=1.2, min_atr_proxy=0.0035), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
                     code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 26},
                 )
@@ -2043,7 +2159,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_dense",
                     description=f"{upper} denser post-earnings drift variant",
-                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.0, max_minutes_from_open=210.0), EventAwareRiskSentinelAgent(True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
+                    agents=[StockPostEarningsDriftAgent(min_relative_volume=1.0, max_minutes_from_open=210.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
                     code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 30},
                 )

@@ -1,9 +1,16 @@
 Artifact: eurusd_forex_trend_continuation__15m_europe__exit_fastfail_15m_europe_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 3
+Realized pnl: -13.15
 
 By entry hour
+10: trades=1 pnl=-7.59 avg=-7.59 win_rate=0.00%
+9: trades=1 pnl=-7.49 avg=-7.49 win_rate=0.00%
+12: trades=1 pnl=1.92 avg=1.92 win_rate=100.00%
 
 By entry setup
+forex_trend_continuation: trades=3 pnl=-13.15 avg=-4.38 win_rate=33.33%
 
 By exit reason
+stop_loss: trades=1 pnl=-7.59 avg=-7.59 win_rate=0.00%
+structure_exit: trades=1 pnl=-7.49 avg=-7.49 win_rate=0.00%
+trailing_stop: trades=1 pnl=1.92 avg=1.92 win_rate=100.00%

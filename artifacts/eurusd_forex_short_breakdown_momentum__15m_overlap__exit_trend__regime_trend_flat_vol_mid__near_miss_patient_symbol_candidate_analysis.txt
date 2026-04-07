@@ -1,0 +1,19 @@
+Artifact: eurusd_forex_short_breakdown_momentum__15m_overlap__exit_trend__regime_trend_flat_vol_mid__near_miss_patient_symbol_candidate
+Closed trades: 14
+Realized pnl: 44.97
+
+By entry hour
+15: trades=5 pnl=-132.91 avg=-26.58 win_rate=40.00%
+14: trades=1 pnl=-66.48 avg=-66.48 win_rate=0.00%
+12: trades=1 pnl=90.12 avg=90.12 win_rate=100.00%
+16: trades=7 pnl=154.24 avg=22.03 win_rate=57.14%
+
+By entry setup
+forex_short_breakdown_momentum: trades=14 pnl=44.97 avg=3.21 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=5 pnl=-353.40 avg=-70.68 win_rate=0.00%
+time_stop: trades=1 pnl=-7.58 avg=-7.58 win_rate=0.00%
+trailing_stop: trades=3 pnl=35.05 avg=11.68 win_rate=66.67%
+signal_exit: trades=2 pnl=78.34 avg=39.17 win_rate=100.00%
+take_profit: trades=3 pnl=292.56 avg=97.52 win_rate=100.00%

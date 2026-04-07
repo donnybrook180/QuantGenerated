@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
+from quant_system.integrations.mt5 import MT5Client, MT5Error
 
 
 @dataclass(frozen=True, slots=True)
@@ -15,6 +17,14 @@ class CostProfile:
     commission_notional_pct: float
     fee_bps: float
     overnight_cost_per_lot_day: float
+    notes: str
+
+
+@dataclass(frozen=True, slots=True)
+class CostCalibration:
+    spread_points: float
+    slippage_bps: float
+    source: str
     notes: str
 
 
@@ -110,8 +120,71 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
     )
 
 
-def apply_ftmo_cost_profile(config: SystemConfig, symbol: str) -> CostProfile:
+def calibrate_cost_profile_with_mt5(config: SystemConfig, symbol: str, broker_symbol: str | None, profile: CostProfile) -> CostProfile:
+    target_symbol = (broker_symbol or config.mt5.symbol or symbol).strip()
+    if not target_symbol:
+        return profile
+    fill_calibration = ExperimentStore(config.ai.experiment_database_path, read_only=True).load_mt5_fill_calibration(target_symbol)
+    if fill_calibration is not None:
+        calibrated_spread = max(profile.spread_points, float(fill_calibration["median_spread_points"]) * 1.05)
+        calibrated_slippage = max(profile.slippage_bps, float(fill_calibration["p75_slippage_bps"]) * 1.1)
+        return CostProfile(
+            contract_size=profile.contract_size,
+            spread_points=calibrated_spread,
+            slippage_bps=calibrated_slippage,
+            commission_mode=profile.commission_mode,
+            commission_per_lot=profile.commission_per_lot,
+            commission_notional_pct=profile.commission_notional_pct,
+            fee_bps=profile.fee_bps,
+            overnight_cost_per_lot_day=profile.overnight_cost_per_lot_day,
+            notes=(
+                profile.notes
+                + f" MT5 fill calibration applied from {target_symbol}: fills={int(fill_calibration['count'])},"
+                + f" median_spread={float(fill_calibration['median_spread_points']):.6f},"
+                + f" p75_slippage_bps={float(fill_calibration['p75_slippage_bps']):.3f}."
+            ),
+        )
+    mt5_config = config.mt5
+    mt5_config.symbol = target_symbol
+    client = MT5Client(mt5_config)
+    try:
+        client.initialize()
+        snapshot = client.market_snapshot()
+    except MT5Error:
+        return profile
+    finally:
+        try:
+            client.shutdown()
+        except Exception:
+            pass
+
+    mid_price = (snapshot.bid + snapshot.ask) / 2.0 if snapshot.bid > 0 and snapshot.ask > 0 else 0.0
+    if mid_price <= 0.0:
+        return profile
+
+    observed_spread = max(snapshot.spread_points, 0.0)
+    spread_bps = (observed_spread / mid_price) * 10_000 if observed_spread > 0.0 else 0.0
+    calibrated_spread = max(profile.spread_points, observed_spread * 1.05)
+    calibrated_slippage = max(profile.slippage_bps, min(25.0, spread_bps * 0.5))
+    if calibrated_spread == profile.spread_points and calibrated_slippage == profile.slippage_bps:
+        return profile
+
+    return CostProfile(
+        contract_size=profile.contract_size,
+        spread_points=calibrated_spread,
+        slippage_bps=calibrated_slippage,
+        commission_mode=profile.commission_mode,
+        commission_per_lot=profile.commission_per_lot,
+        commission_notional_pct=profile.commission_notional_pct,
+        fee_bps=profile.fee_bps,
+        overnight_cost_per_lot_day=profile.overnight_cost_per_lot_day,
+        notes=profile.notes + f" MT5 calibration applied from {snapshot.symbol}: spread={observed_spread:.6f}, spread_bps={spread_bps:.3f}.",
+    )
+
+
+def apply_ftmo_cost_profile(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> CostProfile:
     profile = resolve_ftmo_cost_profile(symbol)
+    profile = calibrate_cost_profile_with_mt5(config, symbol, broker_symbol, profile)
     config.execution.contract_size = profile.contract_size
     config.execution.spread_points = profile.spread_points
     config.execution.slippage_bps = profile.slippage_bps

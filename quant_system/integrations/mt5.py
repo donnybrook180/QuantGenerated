@@ -6,6 +6,7 @@ import logging
 
 import MetaTrader5 as mt5
 
+from quant_system.ai.storage import ExperimentStore
 from quant_system.config import MT5Config
 from quant_system.models import FillEvent, MarketBar, OrderRequest, PortfolioSnapshot, Position, Side
 
@@ -44,6 +45,15 @@ class MT5PositionInfo:
     price_open: float
     magic_number: int
     comment: str
+
+
+@dataclass(slots=True)
+class MT5MarketSnapshot:
+    symbol: str
+    bid: float
+    ask: float
+    point: float
+    spread_points: float
 
 
 @dataclass(slots=True)
@@ -196,6 +206,28 @@ class MT5Client:
             return float(tick.ask)
         return float(tick.bid)
 
+    def market_snapshot(self) -> MT5MarketSnapshot:
+        symbol = self.resolved_symbol or self.config.symbol
+        tick = mt5.symbol_info_tick(symbol)
+        if tick is None:
+            raise MT5Error(f"MT5 symbol_info_tick failed: {mt5.last_error()}")
+        symbol_info = mt5.symbol_info(symbol)
+        if symbol_info is None:
+            raise MT5Error(f"MT5 symbol_info failed: {mt5.last_error()}")
+        bid = float(tick.bid)
+        ask = float(tick.ask)
+        point = float(symbol_info.point or 0.0)
+        raw_spread = max(ask - bid, 0.0)
+        quoted_spread = float(getattr(symbol_info, "spread", 0.0) or 0.0) * point
+        spread_points = max(raw_spread, quoted_spread)
+        return MT5MarketSnapshot(
+            symbol=symbol,
+            bid=bid,
+            ask=ask,
+            point=point,
+            spread_points=spread_points,
+        )
+
     def send_market_order(
         self,
         order: OrderRequest,
@@ -214,7 +246,8 @@ class MT5Client:
             raise MT5Error(f"MT5 symbol_info failed: {mt5.last_error()}")
         volume_step = float(symbol_info.volume_step or 0.01)
         volume = max(float(symbol_info.volume_min), round(order.quantity / volume_step) * volume_step)
-        price = self.current_price(order.side)
+        snapshot = self.market_snapshot()
+        price = snapshot.ask if order.side == Side.BUY else snapshot.bid
         request = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": symbol,
@@ -233,13 +266,55 @@ class MT5Client:
         if result is None or result.retcode != mt5.TRADE_RETCODE_DONE:
             raise MT5Error(f"MT5 order_send failed: {result.retcode if result else None} {mt5.last_error()}")
         LOGGER.info("mt5 order sent side=%s volume=%.2f price=%.2f", order.side.value, volume, result.price)
-        return FillEvent(
+        fill_price = float(result.price)
+        slippage_points = abs(fill_price - price)
+        slippage_bps = (slippage_points / price * 10_000.0) if price > 0 else 0.0
+        fill = FillEvent(
             timestamp=order.timestamp,
             symbol=order.symbol,
             side=order.side,
             quantity=volume,
-            price=float(result.price),
+            price=fill_price,
+            metadata={
+                "broker_symbol": symbol,
+                "requested_price": price,
+                "bid": snapshot.bid,
+                "ask": snapshot.ask,
+                "spread_points": snapshot.spread_points,
+                "slippage_points": slippage_points,
+                "slippage_bps": slippage_bps,
+                "reason": order.reason,
+                "confidence": order.confidence,
+                "magic_number": int(magic_number if magic_number is not None else self.config.magic_number),
+                "comment": (comment or order.reason)[:31],
+                "position_ticket": int(position_ticket) if position_ticket is not None else 0,
+            },
         )
+        try:
+            ExperimentStore(self.config.database_path).record_mt5_fill_event(
+                event_timestamp=order.timestamp.replace(tzinfo=None),
+                broker_symbol=symbol,
+                requested_symbol=order.symbol,
+                side=order.side.value,
+                quantity=volume,
+                requested_price=price,
+                fill_price=fill_price,
+                bid=snapshot.bid,
+                ask=snapshot.ask,
+                spread_points=snapshot.spread_points,
+                slippage_points=slippage_points,
+                slippage_bps=slippage_bps,
+                costs=0.0,
+                reason=order.reason,
+                confidence=order.confidence,
+                metadata=order.metadata,
+                magic_number=int(magic_number if magic_number is not None else self.config.magic_number),
+                comment=(comment or order.reason)[:31],
+                position_ticket=int(position_ticket) if position_ticket is not None else None,
+            )
+        except Exception as exc:
+            LOGGER.warning("Failed to persist MT5 fill event for %s: %s", symbol, exc)
+        return fill
 
 
 @dataclass(slots=True)

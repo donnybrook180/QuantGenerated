@@ -10,12 +10,14 @@ from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, Experim
 
 
 class ExperimentStore:
-    def __init__(self, database_path: str) -> None:
+    def __init__(self, database_path: str, *, read_only: bool = False) -> None:
         self.database_path = database_path
-        self._initialize_schema()
+        self.read_only = read_only
+        if not self.read_only:
+            self._initialize_schema()
 
     def _connect(self):
-        return duckdb.connect(self.database_path)
+        return duckdb.connect(self.database_path, read_only=self.read_only)
 
     def _initialize_schema(self) -> None:
         with self._connect() as connection:
@@ -281,6 +283,33 @@ class ExperimentStore:
             )
             connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS regime_filter_label VARCHAR")
             connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS execution_overrides_json TEXT")
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS mt5_fill_events (
+                    id BIGINT PRIMARY KEY,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    event_timestamp TIMESTAMP,
+                    broker_symbol VARCHAR,
+                    requested_symbol VARCHAR,
+                    side VARCHAR,
+                    quantity DOUBLE,
+                    requested_price DOUBLE,
+                    fill_price DOUBLE,
+                    bid DOUBLE,
+                    ask DOUBLE,
+                    spread_points DOUBLE,
+                    slippage_points DOUBLE,
+                    slippage_bps DOUBLE,
+                    costs DOUBLE,
+                    reason VARCHAR,
+                    confidence DOUBLE,
+                    metadata_json TEXT,
+                    magic_number BIGINT,
+                    comment VARCHAR,
+                    position_ticket BIGINT
+                )
+                """
+            )
 
     def _serialize(self, value) -> str:
         if is_dataclass(value):
@@ -970,6 +999,149 @@ class ExperimentStore:
                     ],
                 )
         return execution_set_id
+
+    def record_mt5_fill_event(
+        self,
+        *,
+        event_timestamp,
+        broker_symbol: str,
+        requested_symbol: str,
+        side: str,
+        quantity: float,
+        requested_price: float,
+        fill_price: float,
+        bid: float,
+        ask: float,
+        spread_points: float,
+        slippage_points: float,
+        slippage_bps: float,
+        costs: float,
+        reason: str,
+        confidence: float,
+        metadata: dict[str, object] | None = None,
+        magic_number: int | None = None,
+        comment: str | None = None,
+        position_ticket: int | None = None,
+    ) -> int:
+        with self._connect() as connection:
+            fill_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM mt5_fill_events").fetchone()[0])
+            connection.execute(
+                """
+                INSERT INTO mt5_fill_events (
+                    id,
+                    event_timestamp,
+                    broker_symbol,
+                    requested_symbol,
+                    side,
+                    quantity,
+                    requested_price,
+                    fill_price,
+                    bid,
+                    ask,
+                    spread_points,
+                    slippage_points,
+                    slippage_bps,
+                    costs,
+                    reason,
+                    confidence,
+                    metadata_json,
+                    magic_number,
+                    comment,
+                    position_ticket
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    fill_id,
+                    event_timestamp,
+                    broker_symbol,
+                    requested_symbol,
+                    side,
+                    quantity,
+                    requested_price,
+                    fill_price,
+                    bid,
+                    ask,
+                    spread_points,
+                    slippage_points,
+                    slippage_bps,
+                    costs,
+                    reason,
+                    confidence,
+                    self._serialize(metadata or {}),
+                    magic_number,
+                    comment,
+                    position_ticket,
+                ],
+            )
+        return fill_id
+
+    def load_mt5_fill_calibration(self, broker_symbol: str, lookback_rows: int = 250) -> dict[str, float] | None:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT spread_points, slippage_bps
+                FROM mt5_fill_events
+                WHERE broker_symbol = ?
+                ORDER BY event_timestamp DESC, id DESC
+                LIMIT ?
+                """,
+                [broker_symbol, lookback_rows],
+            ).fetchall()
+        if len(rows) < 5:
+            return None
+        spreads = sorted(float(row[0] or 0.0) for row in rows)
+        slippages = sorted(float(row[1] or 0.0) for row in rows)
+        def _quantile(values: list[float], q: float) -> float:
+            index = int((len(values) - 1) * q)
+            return values[index]
+        return {
+            "count": float(len(rows)),
+            "median_spread_points": _quantile(spreads, 0.50),
+            "p75_spread_points": _quantile(spreads, 0.75),
+            "median_slippage_bps": _quantile(slippages, 0.50),
+            "p75_slippage_bps": _quantile(slippages, 0.75),
+            "p90_slippage_bps": _quantile(slippages, 0.90),
+        }
+
+    def list_mt5_fill_symbols(self) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT DISTINCT broker_symbol
+                FROM mt5_fill_events
+                WHERE broker_symbol IS NOT NULL AND broker_symbol <> ''
+                ORDER BY broker_symbol ASC
+                """
+            ).fetchall()
+        return [str(row[0]) for row in rows]
+
+    def load_mt5_fill_summary(self, broker_symbol: str) -> dict[str, object] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT
+                    COUNT(*) AS fill_count,
+                    MIN(event_timestamp) AS first_fill_at,
+                    MAX(event_timestamp) AS last_fill_at,
+                    AVG(spread_points) AS avg_spread_points,
+                    AVG(slippage_bps) AS avg_slippage_bps
+                FROM mt5_fill_events
+                WHERE broker_symbol = ?
+                """
+                ,
+                [broker_symbol],
+            ).fetchone()
+        if row is None or int(row[0] or 0) <= 0:
+            return None
+        return {
+            "broker_symbol": broker_symbol,
+            "fill_count": int(row[0] or 0),
+            "first_fill_at": row[1],
+            "last_fill_at": row[2],
+            "avg_spread_points": float(row[3] or 0.0),
+            "avg_slippage_bps": float(row[4] or 0.0),
+        }
 
     def get_latest_symbol_execution_set(self, profile_name: str) -> dict[str, object] | None:
         with self._connect() as connection:

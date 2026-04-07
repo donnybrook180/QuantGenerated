@@ -67,6 +67,7 @@ class FillEvent:
     quantity: float
     price: float
     costs: float = 0.0
+    metadata: dict[str, float | str] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

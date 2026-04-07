@@ -1,1 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:EURUSD,2026-01-06T09:15:00+00:00,2026-01-06T09:45:00+00:00,9,9,forex_trend_continuation,stop_loss,1.17353,1.17283,0.10000,-7.48659,0.50000,2,1.00000,{'pullback_floor': 1.17344}
+C:EURUSD,2026-02-27T10:45:00+00:00,2026-02-27T11:00:00+00:00,10,11,forex_trend_continuation,stop_loss,1.18104,1.18033,0.10000,-7.59034,0.50000,1,0.67594,{'pullback_floor': 1.18097}
+C:EURUSD,2026-03-09T12:15:00+00:00,2026-03-09T15:45:00+00:00,12,15,forex_trend_continuation,trailing_stop,1.15502,1.15526,0.10000,1.92243,0.50000,14,1.00000,{'pullback_floor': 1.15225}

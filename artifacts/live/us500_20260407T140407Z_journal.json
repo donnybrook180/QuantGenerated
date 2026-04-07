@@ -1,0 +1,27 @@
+{
+  "symbol": "US500",
+  "broker_symbol": "US500.cash",
+  "deployment_path": "artifacts\\deploy\\us500.live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "actions": [
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-07T17:00:00+00:00",
+      "confidence": 0.5524460189904211,
+      "current_quantity": 0.0,
+      "intended_action": "dry_run_open_long",
+      "magic_number": 2692798
+    },
+    {
+      "candidate_name": "us500_momentum_selective__regime_trend_up_vol_high",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2887414
+    }
+  ]
+}

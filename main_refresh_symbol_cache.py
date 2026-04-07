@@ -20,6 +20,7 @@ def main() -> int:
             return 1
 
     resolved = resolve_symbol_request(requested_symbol, broker_symbol)
+    config.symbol_research.broker_symbol = resolved.broker_symbol
     config.polygon.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
     timeframe_specs, _, _ = _research_variant_plan(resolved.profile_symbol, "full")
     lines = [
@@ -29,7 +30,14 @@ def main() -> int:
     ]
 
     for timeframe_label, multiplier, timespan in timeframe_specs:
-        features, source = _load_symbol_features_variant(config, resolved.data_symbol, multiplier, timespan)
+        features, source = _load_symbol_features_variant(
+            config,
+            resolved.data_symbol,
+            multiplier,
+            timespan,
+            resolved.broker_symbol,
+            resolved.profile_symbol,
+        )
         lines.append(f"{timeframe_label}: source={source} bars={len(features)}")
 
     print("\n".join(lines))

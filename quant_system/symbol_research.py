@@ -62,6 +62,7 @@ from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
 from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
 from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
+from quant_system.integrations.mt5 import MT5Client, MT5Error
 from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
 from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
@@ -393,7 +394,7 @@ def _with_execution_overrides(config: SystemConfig, overrides: dict[str, float |
     return tuned
 
 
-def _configure_symbol_execution(config: SystemConfig, symbol: str) -> None:
+def _configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> None:
     upper = symbol.upper()
     if "XAU" in upper:
         config.execution.min_bars_between_trades = 30
@@ -445,11 +446,12 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str) -> None:
         config.execution.stale_breakout_bars = 5
         config.execution.stale_breakout_atr_fraction = 0.1
         config.execution.structure_exit_bars = 3
-    apply_ftmo_cost_profile(config, symbol)
+    apply_ftmo_cost_profile(config, symbol, broker_symbol)
 
 
 def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[FeatureVector], str]:
-    return _load_symbol_features_variant(config, data_symbol, config.polygon.multiplier, config.polygon.timespan)
+    broker_symbol = config.symbol_research.broker_symbol.strip() or None
+    return _load_symbol_features_variant(config, data_symbol, config.polygon.multiplier, config.polygon.timespan, broker_symbol)
 
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
@@ -575,6 +577,62 @@ def _cache_bar_limit(config: SystemConfig, multiplier: int, timespan: str) -> in
     return 50_000
 
 
+def _mt5_bar_limit(config: SystemConfig, symbol: str, multiplier: int, timespan: str) -> int:
+    if timespan != "minute":
+        return 0
+    trading_minutes_per_day = 24 * 60 if _uses_continuous_session_stream(symbol) else 8 * 60
+    estimated = int((config.polygon.history_days * trading_minutes_per_day) / max(multiplier, 1))
+    return max(2_500, estimated + 512)
+
+
+def _normalize_bars_symbol(bars: list[MarketBar], target_symbol: str) -> list[MarketBar]:
+    return [
+        MarketBar(
+            timestamp=bar.timestamp,
+            symbol=target_symbol,
+            open=bar.open,
+            high=bar.high,
+            low=bar.low,
+            close=bar.close,
+            volume=bar.volume,
+        )
+        for bar in bars
+    ]
+
+
+def _load_mt5_network_bars(
+    config: SystemConfig,
+    profile_symbol: str,
+    data_symbol: str,
+    broker_symbol: str,
+    multiplier: int,
+    timespan: str,
+) -> tuple[list[MarketBar], str]:
+    if timespan != "minute":
+        raise MT5Error(f"Unsupported MT5 timespan {timespan}.")
+    timeframe_map = {1: "M1", 5: "M5", 15: "M15", 30: "M30", 60: "H1"}
+    timeframe = timeframe_map.get(multiplier)
+    if timeframe is None:
+        raise MT5Error(f"Unsupported MT5 minute multiplier {multiplier}.")
+    mt5_config = copy.deepcopy(config.mt5)
+    mt5_config.symbol = broker_symbol
+    mt5_config.timeframe = timeframe
+    mt5_config.history_bars = _mt5_bar_limit(config, profile_symbol, multiplier, timespan)
+    client = MT5Client(mt5_config)
+    try:
+        client.initialize()
+        bars = client.fetch_bars(mt5_config.history_bars)
+    finally:
+        try:
+            client.shutdown()
+        except Exception:
+            pass
+    normalized = _normalize_bars_symbol(bars, data_symbol)
+    if not normalized:
+        raise MT5Error(f"No MT5 bars returned for {broker_symbol}/{timeframe}.")
+    return normalized, "mt5"
+
+
 def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol: str) -> str:
     requested_mode = config.symbol_research.mode
     if requested_mode in {"seed", "full"}:
@@ -610,6 +668,8 @@ def _load_symbol_features_variant(
     data_symbol: str,
     multiplier: int,
     timespan: str,
+    broker_symbol: str | None = None,
+    profile_symbol: str | None = None,
 ) -> tuple[list[FeatureVector], str]:
     config.polygon.symbol = data_symbol
     store = DuckDBMarketDataStore(config.mt5.database_path)
@@ -617,6 +677,27 @@ def _load_symbol_features_variant(
     scoped_timeframe = f"symbol_research_{_symbol_slug(data_symbol)}_{timeframe}"
     cache_limit = _cache_bar_limit(config, multiplier, timespan)
     base_cache_limit = _cache_bar_limit(config, 5, "minute")
+    resolved_profile_symbol = profile_symbol or data_symbol
+    source_preference = config.symbol_research.source_preference
+
+    def _try_mt5_fetch() -> tuple[list[FeatureVector], str] | None:
+        if not broker_symbol or source_preference in {"external_only", "cache_only"}:
+            return None
+        bars, source = _load_mt5_network_bars(
+            config,
+            resolved_profile_symbol,
+            data_symbol,
+            broker_symbol,
+            multiplier,
+            timespan,
+        )
+        if not _has_plausible_price_scale(data_symbol, bars):
+            raise RuntimeError(f"Fetched implausible MT5 price scale for {data_symbol}; refusing to persist suspect bars.")
+        store.upsert_bars(bars, timeframe=scoped_timeframe, source=source)
+        persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
+        if not persisted:
+            raise RuntimeError(f"No {source} bars were loaded into DuckDB for {data_symbol}.")
+        return _build_features_with_events(config, data_symbol, persisted), source
 
     if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
         for cache_symbol in _cache_symbol_candidates(data_symbol):
@@ -631,6 +712,19 @@ def _load_symbol_features_variant(
                         return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
         if config.polygon.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
+
+    mt5_errors: list[str] = []
+    if source_preference in {"broker_first", "broker_only"}:
+        try:
+            mt5_result = _try_mt5_fetch()
+            if mt5_result is not None:
+                return mt5_result
+        except MT5Error as exc:
+            mt5_errors.append(str(exc))
+            if source_preference == "broker_only":
+                raise RuntimeError(f"MT5 broker fetch failed for {broker_symbol or data_symbol}: {exc}") from exc
+        except RuntimeError:
+            raise
 
     try:
         if _is_crypto_symbol(data_symbol):
@@ -652,6 +746,13 @@ def _load_symbol_features_variant(
             raise RuntimeError(f"No {source} bars were loaded into DuckDB for {data_symbol}.")
         return _build_features_with_events(config, data_symbol, persisted), source
     except PolygonError:
+        if source_preference not in {"broker_only", "external_only"} and broker_symbol:
+            try:
+                mt5_result = _try_mt5_fetch()
+                if mt5_result is not None:
+                    return mt5_result
+            except MT5Error as exc:
+                mt5_errors.append(str(exc))
         for cache_symbol in _cache_symbol_candidates(data_symbol):
             cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
@@ -662,6 +763,8 @@ def _load_symbol_features_variant(
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
                         return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
+        if mt5_errors:
+            raise RuntimeError("; ".join(mt5_errors)) from None
         raise
 
 
@@ -766,7 +869,14 @@ def _build_symbol_feature_variants(
     timeframe_specs, session_names, weekday_only = _research_variant_plan(profile_symbol, mode)
 
     for timeframe_label, multiplier, timespan in timeframe_specs:
-        timeframe_features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
+        timeframe_features, data_source = _load_symbol_features_variant(
+            config,
+            data_symbol,
+            multiplier,
+            timespan,
+            config.symbol_research.broker_symbol.strip() or None,
+            profile_symbol,
+        )
         if weekday_only:
             timeframe_features = _filter_weekday_features(timeframe_features)
         data_sources.append(data_source)
@@ -799,7 +909,14 @@ def load_execution_features_for_variant(
         features, data_source = _load_symbol_features(config, data_symbol)
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
-    features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
+    features, data_source = _load_symbol_features_variant(
+        config,
+        data_symbol,
+        multiplier,
+        timespan,
+        config.symbol_research.broker_symbol.strip() or None,
+        profile_symbol,
+    )
     if _should_skip_weekends(profile_symbol) or _is_stock_symbol(profile_symbol):
         features = _filter_weekday_features(features)
     if not _uses_continuous_session_stream(profile_symbol):
@@ -3599,8 +3716,9 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
 def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
     config = SystemConfig()
     resolved = resolve_symbol_request(data_symbol, broker_symbol)
+    config.symbol_research.broker_symbol = resolved.broker_symbol
     config.polygon.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
-    _configure_symbol_execution(config, resolved.profile_symbol)
+    _configure_symbol_execution(config, resolved.profile_symbol, resolved.broker_symbol)
     feature_variants, data_source, effective_mode = _build_symbol_feature_variants(
         config,
         resolved.profile_symbol,

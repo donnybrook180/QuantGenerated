@@ -134,6 +134,7 @@ class SymbolResearchConfig:
     broker_symbol: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_BROKER_SYMBOL", ""))
     history_days: int = field(default_factory=lambda: int(os.getenv("SYMBOL_RESEARCH_HISTORY_DAYS", "180")))
     mode: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_MODE", "auto").lower())
+    source_preference: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_SOURCE_PREFERENCE", "broker_first").lower())
 
 
 @dataclass(slots=True)

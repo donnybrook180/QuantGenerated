@@ -96,7 +96,7 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_bars = 6
         config.execution.stale_breakout_atr_fraction = 0.2
         config.execution.structure_exit_bars = 4
-    apply_ftmo_cost_profile(config, profile.broker_symbol or profile.data_symbol)
+    apply_ftmo_cost_profile(config, profile.broker_symbol or profile.data_symbol, profile.broker_symbol)
 
 
 def configure_profile_optimization(config: SystemConfig, profile: StrategyProfile) -> None:

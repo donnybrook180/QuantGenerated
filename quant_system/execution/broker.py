@@ -197,6 +197,7 @@ class SimulatedBroker:
             quantity=order.quantity,
             price=fill_price,
             costs=total_cost,
+            metadata={},
         )
 
     def snapshot(self, timestamp, mark_price: float) -> PortfolioSnapshot:

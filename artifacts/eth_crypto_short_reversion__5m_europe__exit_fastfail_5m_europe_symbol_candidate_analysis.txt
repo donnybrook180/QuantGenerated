@@ -1,9 +1,17 @@
 Artifact: eth_crypto_short_reversion__5m_europe__exit_fastfail_5m_europe_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 8
+Realized pnl: -68.28
 
 By entry hour
+7: trades=3 pnl=-38.40 avg=-12.80 win_rate=0.00%
+10: trades=2 pnl=-15.34 avg=-7.67 win_rate=0.00%
+8: trades=2 pnl=-7.96 avg=-3.98 win_rate=0.00%
+9: trades=1 pnl=-6.58 avg=-6.58 win_rate=0.00%
 
 By entry setup
+crypto_short_reversion: trades=8 pnl=-68.28 avg=-8.54 win_rate=0.00%
 
 By exit reason
+structure_exit: trades=4 pnl=-35.54 avg=-8.88 win_rate=0.00%
+signal_exit: trades=2 pnl=-25.52 avg=-12.76 win_rate=0.00%
+stale_breakout: trades=2 pnl=-7.23 avg=-3.61 win_rate=0.00%

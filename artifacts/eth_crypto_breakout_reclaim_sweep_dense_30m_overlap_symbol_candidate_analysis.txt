@@ -1,0 +1,19 @@
+Artifact: eth_crypto_breakout_reclaim_sweep_dense_30m_overlap_symbol_candidate
+Closed trades: 19
+Realized pnl: -37.76
+
+By entry hour
+19: trades=6 pnl=-12.16 avg=-2.03 win_rate=0.00%
+15: trades=4 pnl=-8.02 avg=-2.00 win_rate=0.00%
+14: trades=3 pnl=-5.13 avg=-1.71 win_rate=0.00%
+17: trades=2 pnl=-4.67 avg=-2.33 win_rate=0.00%
+16: trades=2 pnl=-3.62 avg=-1.81 win_rate=0.00%
+18: trades=1 pnl=-2.14 avg=-2.14 win_rate=0.00%
+13: trades=1 pnl=-2.02 avg=-2.02 win_rate=0.00%
+
+By entry setup
+crypto_breakout_reclaim: trades=19 pnl=-37.76 avg=-1.99 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=18 pnl=-36.63 avg=-2.04 win_rate=0.00%
+trailing_stop: trades=1 pnl=-1.13 avg=-1.13 win_rate=0.00%

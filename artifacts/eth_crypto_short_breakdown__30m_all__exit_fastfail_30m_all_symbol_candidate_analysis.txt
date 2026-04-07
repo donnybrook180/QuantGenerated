@@ -1,0 +1,25 @@
+Artifact: eth_crypto_short_breakdown__30m_all__exit_fastfail_30m_all_symbol_candidate
+Closed trades: 49
+Realized pnl: -92.24
+
+By entry hour
+16: trades=9 pnl=-18.28 avg=-2.03 win_rate=0.00%
+14: trades=9 pnl=-16.12 avg=-1.79 win_rate=0.00%
+19: trades=9 pnl=-15.60 avg=-1.73 win_rate=0.00%
+13: trades=6 pnl=-12.15 avg=-2.03 win_rate=0.00%
+15: trades=7 pnl=-9.59 avg=-1.37 win_rate=14.29%
+17: trades=4 pnl=-8.17 avg=-2.04 win_rate=0.00%
+20: trades=2 pnl=-6.16 avg=-3.08 win_rate=0.00%
+18: trades=2 pnl=-4.14 avg=-2.07 win_rate=0.00%
+12: trades=1 pnl=-2.03 avg=-2.03 win_rate=0.00%
+
+By entry setup
+crypto_short_breakdown: trades=49 pnl=-92.24 avg=-1.88 win_rate=2.04%
+
+By exit reason
+stop_loss: trades=39 pnl=-83.52 avg=-2.14 win_rate=0.00%
+time_stop: trades=4 pnl=-5.23 avg=-1.31 win_rate=0.00%
+stale_breakout: trades=2 pnl=-2.41 avg=-1.20 win_rate=0.00%
+trailing_stop: trades=2 pnl=-2.32 avg=-1.16 win_rate=0.00%
+structure_exit: trades=1 pnl=-1.62 avg=-1.62 win_rate=0.00%
+take_profit: trades=1 pnl=2.85 avg=2.85 win_rate=100.00%

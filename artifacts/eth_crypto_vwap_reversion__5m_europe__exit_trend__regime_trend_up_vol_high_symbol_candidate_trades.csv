@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:ETHUSD,2024-07-16T19:55:00+00:00,2024-07-17T01:00:00+00:00,19,1,crypto_vwap_reversion,trailing_stop,3471.51024,3480.46103,0.10000,-11.21018,2.25939,4,0.96836,"{'position_intent': 'short_entry', 'z_score_20': 1.5100331216306944, 'vwap_distance': 0.01215384326186153}"

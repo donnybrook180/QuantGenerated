@@ -1,0 +1,18 @@
+{
+  "symbol": "GBPUSD",
+  "broker_symbol": "GBPUSD",
+  "deployment_path": "artifacts\\deploy\\gbpusd.live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "actions": [
+    {
+      "candidate_name": "forex_breakout_momentum__15m_europe__exit_trend",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-07T11:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 2896489
+    }
+  ]
+}

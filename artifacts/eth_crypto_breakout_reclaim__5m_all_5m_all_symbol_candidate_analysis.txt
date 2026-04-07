@@ -1,25 +1,26 @@
 Artifact: eth_crypto_breakout_reclaim__5m_all_5m_all_symbol_candidate
-Closed trades: 57
-Realized pnl: -115.51
+Closed trades: 52
+Realized pnl: -105.43
 
 By entry hour
-13: trades=10 pnl=-20.95 avg=-2.09 win_rate=0.00%
-18: trades=7 pnl=-14.30 avg=-2.04 win_rate=0.00%
-12: trades=5 pnl=-10.17 avg=-2.03 win_rate=0.00%
-19: trades=5 pnl=-10.11 avg=-2.02 win_rate=0.00%
-17: trades=5 pnl=-9.79 avg=-1.96 win_rate=0.00%
-16: trades=5 pnl=-9.41 avg=-1.88 win_rate=0.00%
-10: trades=4 pnl=-8.29 avg=-2.07 win_rate=0.00%
-15: trades=4 pnl=-8.24 avg=-2.06 win_rate=0.00%
-14: trades=4 pnl=-8.16 avg=-2.04 win_rate=0.00%
-23: trades=4 pnl=-7.95 avg=-1.99 win_rate=0.00%
-8: trades=2 pnl=-3.99 avg=-2.00 win_rate=0.00%
-21: trades=1 pnl=-2.09 avg=-2.09 win_rate=0.00%
-22: trades=1 pnl=-2.06 avg=-2.06 win_rate=0.00%
+18: trades=7 pnl=-14.20 avg=-2.03 win_rate=0.00%
+13: trades=6 pnl=-12.66 avg=-2.11 win_rate=0.00%
+17: trades=6 pnl=-12.07 avg=-2.01 win_rate=0.00%
+14: trades=6 pnl=-12.07 avg=-2.01 win_rate=0.00%
+15: trades=5 pnl=-10.20 avg=-2.04 win_rate=0.00%
+16: trades=4 pnl=-8.18 avg=-2.05 win_rate=0.00%
+23: trades=4 pnl=-8.06 avg=-2.01 win_rate=0.00%
+19: trades=3 pnl=-6.19 avg=-2.06 win_rate=0.00%
+8: trades=3 pnl=-6.04 avg=-2.01 win_rate=0.00%
+10: trades=2 pnl=-4.07 avg=-2.03 win_rate=0.00%
+12: trades=2 pnl=-3.96 avg=-1.98 win_rate=0.00%
+21: trades=2 pnl=-3.65 avg=-1.82 win_rate=0.00%
+11: trades=1 pnl=-2.06 avg=-2.06 win_rate=0.00%
+9: trades=1 pnl=-2.03 avg=-2.03 win_rate=0.00%
 
 By entry setup
-crypto_breakout_reclaim: trades=57 pnl=-115.51 avg=-2.03 win_rate=0.00%
+crypto_breakout_reclaim: trades=52 pnl=-105.43 avg=-2.03 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=56 pnl=-114.29 avg=-2.04 win_rate=0.00%
-signal_exit: trades=1 pnl=-1.22 avg=-1.22 win_rate=0.00%
+stop_loss: trades=51 pnl=-103.84 avg=-2.04 win_rate=0.00%
+stale_breakout: trades=1 pnl=-1.59 avg=-1.59 win_rate=0.00%

@@ -14,9 +14,12 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.base import Agent
 from quant_system.agents.crypto import (
     CryptoBreakoutReclaimAgent,
+    EthLiquiditySweepReversalAgent,
+    CryptoMomentumContinuationAgent,
     CryptoShortBreakdownAgent,
     CryptoShortReversionAgent,
     CryptoTrendPullbackAgent,
+    CryptoVWAPReversionAgent,
     CryptoVolatilityExpansionAgent,
 )
 from quant_system.agents.forex import (
@@ -27,6 +30,7 @@ from quant_system.agents.forex import (
     ForexTrendContinuationAgent,
 )
 from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
+from quant_system.agents.session import SessionEntryFilterAgent
 from quant_system.agents.stocks import (
     EventAwareRiskSentinelAgent,
     StockGapFadeAgent,
@@ -56,6 +60,8 @@ from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
+from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
+from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
 from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
 from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
@@ -87,6 +93,7 @@ class CandidateSpec:
     timeframe_label: str = ""
     session_label: str = ""
     regime_filter_label: str = ""
+    allowed_variants: tuple[str, ...] = ()
 
 
 @dataclass(slots=True)
@@ -160,8 +167,41 @@ def _is_stock_symbol(symbol: str) -> bool:
     return symbol_is_stock(symbol)
 
 
+def _uses_continuous_session_stream(symbol: str) -> bool:
+    return _is_crypto_symbol(symbol) or _is_metal_symbol(symbol) or _is_forex_symbol(symbol)
+
+
+def _should_skip_weekends(symbol: str) -> bool:
+    return _uses_continuous_session_stream(symbol)
+
+
+def _session_allowed_hours(session_label: str) -> set[int] | None:
+    if session_label == "europe":
+        return set(range(7, 13))
+    if session_label == "us":
+        return set(range(13, 21))
+    if session_label == "overlap":
+        return set(range(12, 17))
+    if session_label == "power":
+        return {18, 19}
+    if session_label == "midday":
+        return {15, 16, 17}
+    return None
+
+
+def _with_session_gate(agents: list[Agent], session_label: str, symbol: str) -> list[Agent]:
+    if not _uses_continuous_session_stream(symbol):
+        return agents
+    allowed_hours = _session_allowed_hours(session_label)
+    if not allowed_hours:
+        return agents
+    return [*agents, SessionEntryFilterAgent(allowed_hours)]
+
+
 def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     base_history = max(config.symbol_research.history_days, config.polygon.history_days)
+    if symbol.upper() == "ETH":
+        return max(base_history, 1460)
     if _is_crypto_symbol(symbol):
         return max(base_history, 365)
     if symbol.upper() == "US500":
@@ -419,6 +459,8 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
     if profile_symbol.upper() == "GBPUSD":
         return [("15m", 15, "minute")], ("europe",), True
+    if profile_symbol.upper() == "ETH":
+        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap", "us"), True
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute")], ("all", "europe"), True
@@ -442,6 +484,97 @@ def _variant_timeframe_key(data_symbol: str, multiplier: int, timespan: str) -> 
     return f"symbol_research_{_symbol_slug(data_symbol)}_{multiplier}_{timespan}"
 
 
+def _cache_symbol_candidates(data_symbol: str) -> list[str]:
+    return [data_symbol]
+
+
+def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source_multiplier: int) -> list[MarketBar]:
+    if not bars or target_multiplier <= source_multiplier or target_multiplier % source_multiplier != 0:
+        return []
+    ratio = target_multiplier // source_multiplier
+    aggregated: list[MarketBar] = []
+    bucket: list[MarketBar] = []
+    current_bucket_key: tuple[int, int, int, int] | None = None
+
+    def flush_bucket(items: list[MarketBar], bucket_key: tuple[int, int, int, int] | None) -> None:
+        if len(items) != ratio or bucket_key is None:
+            return
+        bucket_minute = bucket_key[3] % 60
+        aggregated.append(
+            MarketBar(
+                timestamp=items[0].timestamp.replace(minute=bucket_minute, second=0, microsecond=0),
+                symbol=items[0].symbol,
+                open=items[0].open,
+                high=max(item.high for item in items),
+                low=min(item.low for item in items),
+                close=items[-1].close,
+                volume=sum(item.volume for item in items),
+            )
+        )
+
+    for bar in bars:
+        minute_bucket = (bar.timestamp.minute // target_multiplier) * target_multiplier
+        bucket_key = (bar.timestamp.year, bar.timestamp.month, bar.timestamp.day, (bar.timestamp.hour * 60) + minute_bucket)
+        if current_bucket_key != bucket_key:
+            flush_bucket(bucket, current_bucket_key)
+            bucket = [bar]
+            current_bucket_key = bucket_key
+        else:
+            bucket.append(bar)
+
+    flush_bucket(bucket, current_bucket_key)
+    return aggregated
+
+
+def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
+    if not bars:
+        return False
+    closes = sorted(bar.close for bar in bars if bar.close > 0)
+    if not closes:
+        return False
+    median_close = closes[len(closes) // 2]
+    upper = data_symbol.upper()
+    if upper == "X:ETHUSD":
+        return median_close >= 100.0
+    if upper == "X:BTCUSD":
+        return median_close >= 1_000.0
+    return True
+
+
+def _load_crypto_network_bars(config: SystemConfig, data_symbol: str, multiplier: int, timespan: str) -> tuple[list[MarketBar], str]:
+    errors: list[str] = []
+    try:
+        bars = BinanceKlineClient(
+            symbol=data_symbol,
+            multiplier=multiplier,
+            timespan=timespan,
+            history_days=config.polygon.history_days,
+        ).fetch_bars()
+        return bars, "binance"
+    except BinanceError as exc:
+        errors.append(str(exc))
+
+    try:
+        bars = KrakenOHLCClient(
+            symbol=data_symbol,
+            multiplier=multiplier,
+            timespan=timespan,
+            history_days=config.polygon.history_days,
+        ).fetch_bars()
+        return bars, "kraken"
+    except KrakenError as exc:
+        errors.append(str(exc))
+
+    raise PolygonError("; ".join(errors))
+
+
+def _cache_bar_limit(config: SystemConfig, multiplier: int, timespan: str) -> int:
+    if timespan == "minute":
+        minutes = max(config.polygon.history_days * 24 * 60, multiplier)
+        return max(50_000, int(minutes / max(multiplier, 1)) + 512)
+    return 50_000
+
+
 def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol: str) -> str:
     requested_mode = config.symbol_research.mode
     if requested_mode in {"seed", "full"}:
@@ -454,8 +587,20 @@ def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol
     timeframe_specs, _, _ = _research_variant_plan(profile_symbol, "full")
     for _, multiplier, timespan in timeframe_specs:
         scoped_timeframe = _variant_timeframe_key(data_symbol, multiplier, timespan)
-        bars = store.load_bars(data_symbol, scoped_timeframe, 2_500)
-        if len(bars) < 500:
+        has_sufficient_cache = False
+        for cache_symbol in _cache_symbol_candidates(data_symbol):
+            scoped = _variant_timeframe_key(cache_symbol, multiplier, timespan)
+            bars = store.load_bars(cache_symbol, scoped, 2_500)
+            if len(bars) >= 500:
+                has_sufficient_cache = True
+                break
+            if timespan == "minute" and multiplier in {15, 30}:
+                base_bars = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), 50_000)
+                aggregated = _aggregate_minute_bars(base_bars, multiplier, 5) if base_bars else []
+                if len(aggregated) >= 500:
+                    has_sufficient_cache = True
+                    break
+        if not has_sufficient_cache:
             return "seed"
     return "full"
 
@@ -470,31 +615,53 @@ def _load_symbol_features_variant(
     store = DuckDBMarketDataStore(config.mt5.database_path)
     timeframe = f"{multiplier}_{timespan}"
     scoped_timeframe = f"symbol_research_{_symbol_slug(data_symbol)}_{timeframe}"
+    cache_limit = _cache_bar_limit(config, multiplier, timespan)
+    base_cache_limit = _cache_bar_limit(config, 5, "minute")
 
     if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
-        cached = store.load_bars(data_symbol, scoped_timeframe, 50_000)
-        if cached:
-            return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+        for cache_symbol in _cache_symbol_candidates(data_symbol):
+            cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+            if cached and _has_plausible_price_scale(data_symbol, cached):
+                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+            if timespan == "minute" and multiplier in {15, 30}:
+                base_cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit)
+                if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
+                    aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
+                    if aggregated:
+                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
         if config.polygon.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
 
     try:
-        variant_config = copy.deepcopy(config.polygon)
-        variant_config.symbol = data_symbol
-        variant_config.multiplier = multiplier
-        variant_config.timespan = timespan
-        variant_config.history_days = config.polygon.history_days
-        client = PolygonDataClient(variant_config)
-        bars = client.fetch_bars()
-        store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
+        if _is_crypto_symbol(data_symbol):
+            bars, source = _load_crypto_network_bars(config, data_symbol, multiplier, timespan)
+        else:
+            variant_config = copy.deepcopy(config.polygon)
+            variant_config.symbol = data_symbol
+            variant_config.multiplier = multiplier
+            variant_config.timespan = timespan
+            variant_config.history_days = config.polygon.history_days
+            client = PolygonDataClient(variant_config)
+            bars = client.fetch_bars()
+            source = "polygon"
+        if not _has_plausible_price_scale(data_symbol, bars):
+            raise RuntimeError(f"Fetched implausible price scale for {data_symbol}; refusing to persist suspect bars.")
+        store.upsert_bars(bars, timeframe=scoped_timeframe, source=source)
         persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
         if not persisted:
-            raise RuntimeError(f"No Polygon bars were loaded into DuckDB for {data_symbol}.")
-        return _build_features_with_events(config, data_symbol, persisted), "polygon"
+            raise RuntimeError(f"No {source} bars were loaded into DuckDB for {data_symbol}.")
+        return _build_features_with_events(config, data_symbol, persisted), source
     except PolygonError:
-        cached = store.load_bars(data_symbol, scoped_timeframe, 50_000)
-        if cached:
-            return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+        for cache_symbol in _cache_symbol_candidates(data_symbol):
+            cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+            if cached and _has_plausible_price_scale(data_symbol, cached):
+                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+            if timespan == "minute" and multiplier in {15, 30}:
+                base_cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit)
+                if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
+                    aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
+                    if aggregated:
+                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
         raise
 
 
@@ -604,7 +771,7 @@ def _build_symbol_feature_variants(
             timeframe_features = _filter_weekday_features(timeframe_features)
         data_sources.append(data_source)
         for session_name in session_names:
-            filtered = _filter_features_by_session(timeframe_features, session_name)
+            filtered = timeframe_features if _uses_continuous_session_stream(profile_symbol) else _filter_features_by_session(timeframe_features, session_name)
             if len(filtered) < 50:
                 continue
             variants[f"{timeframe_label}_{session_name}"] = filtered
@@ -633,9 +800,10 @@ def load_execution_features_for_variant(
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
-    if _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol):
+    if _should_skip_weekends(profile_symbol) or _is_stock_symbol(profile_symbol):
         features = _filter_weekday_features(features)
-    features = _filter_features_by_session(features, session_label or "all")
+    if not _uses_continuous_session_stream(profile_symbol):
+        features = _filter_features_by_session(features, session_label or "all")
     return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
@@ -696,6 +864,7 @@ def _run_candidate_bundle(
     for row in candidates:
         candidate_config = _with_execution_overrides(config, row.get("execution_overrides"))
         variant_label = str(row.get("variant_label", "") or "")
+        session_label = str(row.get("session_label", "") or "")
         regime_filter_label = str(row.get("regime_filter_label", "") or "")
         features, data_source = load_execution_features_for_variant(
             candidate_config,
@@ -704,7 +873,13 @@ def _run_candidate_bundle(
             variant_label,
             regime_filter_label,
         )
-        agents = build_agents_from_catalog_paths([str(row["code_path"])], candidate_config)
+        prebuilt_agents = row.get("agents")
+        if isinstance(prebuilt_agents, list) and prebuilt_agents:
+            agents = copy.deepcopy(prebuilt_agents)
+        else:
+            agents = build_agents_from_catalog_paths([str(row["code_path"])], candidate_config)
+        symbol = features[0].symbol if features else ""
+        agents = _with_session_gate(agents, session_label, symbol)
         engine = _build_engine(candidate_config, agents)
         results.append(asyncio.run(engine.run(features, sleep_seconds=0.0)))
         data_sources.append(data_source)
@@ -764,6 +939,121 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         ),
     ]
     if "BTC" in upper or "ETH" in upper:
+        if "ETH" in upper:
+            return [
+                CandidateSpec(
+                    name="crypto_vwap_reversion",
+                    description="ETH selective VWAP/z-score mean reversion",
+                    agents=[
+                        CryptoVWAPReversionAgent(
+                            z_score_entry=1.2,
+                            min_relative_volume=0.55,
+                            max_trend_strength=0.0015,
+                            min_atr_proxy=0.0007,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
+                ),
+                CandidateSpec(
+                    name="eth_liquidity_sweep_reversal",
+                    description="ETH selective liquidity sweep reversal",
+                    agents=[
+                        EthLiquiditySweepReversalAgent(
+                            sweep_margin=0.0003,
+                            min_relative_volume=0.55,
+                            min_atr_proxy=0.0005,
+                            max_trend_strength=0.0020,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
+                ),
+                CandidateSpec(
+                    name="crypto_short_reversion",
+                    description="ETH short mean reversion in downtrend",
+                    agents=[
+                        CryptoShortReversionAgent(
+                            lookback=12,
+                            min_negative_trend=-0.0006,
+                            z_score_low=0.2,
+                            z_score_high=3.2,
+                            min_relative_volume=0.50,
+                            min_atr_proxy=0.0006,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
+                ),
+                CandidateSpec(
+                    name="crypto_short_reversion_late_europe",
+                    description="ETH short mean reversion focused on late Europe handoff",
+                    agents=[
+                        CryptoShortReversionAgent(
+                            lookback=10,
+                            min_negative_trend=-0.0006,
+                            z_score_low=0.1,
+                            z_score_high=3.2,
+                            min_relative_volume=0.50,
+                            min_atr_proxy=0.0006,
+                        ),
+                        SessionEntryFilterAgent({11, 12}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
+                    allowed_variants=("15m_europe",),
+                ),
+                CandidateSpec(
+                    name="crypto_short_reversion_europe_noon",
+                    description="ETH short mean reversion limited to Europe noon reversals",
+                    agents=[
+                        CryptoShortReversionAgent(
+                            lookback=10,
+                            min_negative_trend=-0.0006,
+                            z_score_low=0.1,
+                            z_score_high=3.2,
+                            min_relative_volume=0.50,
+                            min_atr_proxy=0.0006,
+                        ),
+                        SessionEntryFilterAgent({12}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
+                    allowed_variants=("15m_europe",),
+                ),
+                CandidateSpec(
+                    name="crypto_vwap_reversion_us_core",
+                    description="ETH VWAP reversion focused on core US reversal hours",
+                    agents=[
+                        CryptoVWAPReversionAgent(
+                            z_score_entry=1.2,
+                            min_relative_volume=0.55,
+                            max_trend_strength=0.0015,
+                            min_atr_proxy=0.0007,
+                        ),
+                        SessionEntryFilterAgent({14, 16, 17}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
+                    allowed_variants=("15m_us",),
+                ),
+                CandidateSpec(
+                    name="crypto_vwap_reversion_us_hour17",
+                    description="ETH VWAP reversion limited to the 30m US 17:00 bar",
+                    agents=[
+                        CryptoVWAPReversionAgent(
+                            z_score_entry=1.2,
+                            min_relative_volume=0.55,
+                            max_trend_strength=0.0015,
+                            min_atr_proxy=0.0007,
+                        ),
+                        SessionEntryFilterAgent({17}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
+                    allowed_variants=("30m_us",),
+                ),
+            ]
         return [
             CandidateSpec(
                 name="crypto_trend_pullback",
@@ -992,7 +1282,9 @@ def _run_candidate(
     artifact_prefix: str,
 ) -> CandidateResult:
     candidate_config = _with_execution_overrides(config, spec.execution_overrides)
-    engine = _build_engine(candidate_config, copy.deepcopy(spec.agents))
+    symbol = features[0].symbol if features else ""
+    agents = _with_session_gate(copy.deepcopy(spec.agents), spec.session_label, symbol)
+    engine = _build_engine(candidate_config, agents)
     result = asyncio.run(engine.run(features, sleep_seconds=0.0))
     trades_path, analysis_path = export_closed_trade_artifacts(
         result.closed_trades,
@@ -1097,7 +1389,9 @@ def _run_candidate_with_splits(
         if len(slice_features) < 10:
             return None
         candidate_config = _with_execution_overrides(config, spec.execution_overrides)
-        engine = _build_engine(candidate_config, copy.deepcopy(spec.agents))
+        symbol = slice_features[0].symbol if slice_features else ""
+        agents = _with_session_gate(copy.deepcopy(spec.agents), spec.session_label, symbol)
+        engine = _build_engine(candidate_config, agents)
         return asyncio.run(engine.run(slice_features, sleep_seconds=0.0))
 
     windows = _walk_forward_slices(features, symbol)
@@ -1269,6 +1563,9 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
         max_volatility=config.risk.max_volatility,
         min_relative_volume=config.agents.min_relative_volume,
     )
+
+    if "ETH" in upper:
+        return specs
 
     if "BTC" in upper or "ETH" in upper:
         best = max(results, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), default=None)
@@ -1775,6 +2072,63 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
     specs: list[CandidateSpec] = []
 
     if "BTC" in upper or "ETH" in upper:
+        if "ETH" in upper:
+            reversion_variants = [
+                ("balanced", 1.8, 0.60, 0.00035, 0.0008),
+                ("selective", 2.1, 0.68, 0.00028, 0.0009),
+            ]
+            for label, z_entry, rel_vol, max_trend, atr in reversion_variants:
+                specs.append(
+                    CandidateSpec(
+                        name=f"crypto_vwap_reversion_sweep_{label}",
+                        description=f"ETH VWAP reversion sweep {label}",
+                        agents=[
+                            CryptoVWAPReversionAgent(
+                                z_score_entry=z_entry,
+                                min_relative_volume=rel_vol,
+                                max_trend_strength=max_trend,
+                                min_atr_proxy=atr,
+                            ),
+                            RiskSentinelAgent(max_volatility=config.risk.max_volatility * 1.8, min_relative_volume=max(rel_vol - 0.05, 0.5)),
+                        ],
+                        code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
+                        execution_overrides={
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 1.4,
+                            "stale_breakout_bars": 4,
+                            "structure_exit_bars": 1,
+                        },
+                    )
+                )
+            sweep_variants = [
+                ("balanced", 18, 0.0009, 0.60, 0.0006, 0.0010),
+                ("selective", 22, 0.0011, 0.68, 0.0007, 0.0008),
+            ]
+            for label, lookback, sweep_margin, rel_vol, atr, max_trend in sweep_variants:
+                specs.append(
+                    CandidateSpec(
+                        name=f"eth_liquidity_sweep_reversal_sweep_{label}",
+                        description=f"ETH liquidity sweep reversal sweep {label}",
+                        agents=[
+                            EthLiquiditySweepReversalAgent(
+                                lookback=lookback,
+                                sweep_margin=sweep_margin,
+                                min_relative_volume=rel_vol,
+                                min_atr_proxy=atr,
+                                max_trend_strength=max_trend,
+                            ),
+                            RiskSentinelAgent(max_volatility=config.risk.max_volatility * 1.8, min_relative_volume=max(rel_vol - 0.05, 0.5)),
+                        ],
+                        code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
+                        execution_overrides={
+                            "max_holding_bars": 14,
+                            "take_profit_atr_multiple": 1.3,
+                            "stale_breakout_bars": 4,
+                            "structure_exit_bars": 1,
+                        },
+                    )
+                )
+            return specs
         trend_variants = [
             ("balanced", 12, 0.00055, 0.00045, -2.1, 0.15, 0.65, 0.0014),
             ("dense", 9, 0.00035, 0.00030, -2.5, 0.40, 0.55, 0.0010),
@@ -1997,7 +2351,9 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
     return specs
 
 
-def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec:
+def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec | None:
+    if spec.allowed_variants and variant_label not in spec.allowed_variants:
+        return None
     if variant_label == "default":
         return spec
     timeframe_label, _, session_label = variant_label.partition("_")
@@ -2010,6 +2366,7 @@ def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec
         variant_label=variant_label,
         timeframe_label=timeframe_label,
         session_label=session_label,
+        allowed_variants=spec.allowed_variants,
     )
 
 
@@ -2664,9 +3021,29 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
         "recommended": False,
         "variant_label": row.variant_label,
+        "session_label": row.session_label,
         "regime_filter_label": row.regime_filter_label,
         "execution_overrides": row.execution_overrides or {},
     }
+
+
+def _selection_component_keys(row: dict[str, object]) -> set[str]:
+    candidate_name = str(row.get("candidate_name", "")).strip()
+    variant_label = str(row.get("variant_label", "")).strip()
+    regime_filter_label = str(row.get("regime_filter_label", "")).strip()
+    parts = _component_names(candidate_name)
+    if parts:
+        return {
+            f"{part}|{variant_label}|{regime_filter_label}"
+            for part in parts
+        }
+    code_paths = _component_set(str(row.get("code_path", "")))
+    if code_paths:
+        return {
+            f"{path}|{variant_label}|{regime_filter_label}"
+            for path in code_paths
+        }
+    return {f"{candidate_name}|{variant_label}|{regime_filter_label}"}
 
 
 def _near_miss_local_score(candidate: CandidateResult, execution_result: ExecutionResult) -> float:
@@ -2866,13 +3243,115 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         reverse=True,
     )
     for row in ranked:
-        components = _component_set(str(row["code_path"]))
+        components = _selection_component_keys(row)
         if selected and components & used_components:
             continue
         selected.append(row)
         used_components.update(components)
         if len(selected) >= max_candidates:
             break
+    return selected
+
+
+def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: str, max_candidates: int = 3) -> list[dict[str, object]]:
+    thresholds = _research_thresholds(symbol)
+    selected: list[dict[str, object]] = []
+    used_components: set[str] = set()
+    used_variants: set[str] = set()
+    sparse_rows = [
+        row
+        for row in rows
+        if bool(row.get("sparse_strategy"))
+        and float(row.get("realized_pnl", 0.0)) > 0.0
+        and float(row.get("profit_factor", 0.0)) >= float(thresholds["min_profit_factor"])
+        and (float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0))) > 0.0
+        and (int(row.get("validation_closed_trades", 0)) + int(row.get("test_closed_trades", 0))) > 0
+    ]
+    ranked = sorted(
+        sparse_rows,
+        key=lambda row: (
+            float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+            int(row.get("validation_closed_trades", 0)) + int(row.get("test_closed_trades", 0)),
+            max(float(row.get("walk_forward_pass_rate_pct", 0.0)), float(row.get("walk_forward_soft_pass_rate_pct", 0.0))),
+            float(row.get("test_pnl", 0.0)),
+            float(row.get("validation_pnl", 0.0)),
+            float(row.get("realized_pnl", 0.0)),
+        ),
+        reverse=True,
+    )
+    while len(selected) < max_candidates:
+        current_validation_closed = sum(int(item.get("validation_closed_trades", 0)) for item in selected)
+        current_test_closed = sum(int(item.get("test_closed_trades", 0)) for item in selected)
+        current_validation_pnl = sum(float(item.get("validation_pnl", 0.0)) for item in selected)
+        current_test_pnl = sum(float(item.get("test_pnl", 0.0)) for item in selected)
+        best_row: dict[str, object] | None = None
+        best_score: tuple[float, ...] | None = None
+        for row in ranked:
+            if row in selected:
+                continue
+            components = _selection_component_keys(row)
+            if selected and components & used_components:
+                continue
+            variant_label = str(row.get("variant_label", "")).strip()
+            if selected and variant_label and variant_label in used_variants:
+                continue
+            validation_closed = int(row.get("validation_closed_trades", 0))
+            test_closed = int(row.get("test_closed_trades", 0))
+            validation_pnl = float(row.get("validation_pnl", 0.0))
+            test_pnl = float(row.get("test_pnl", 0.0))
+            coverage_gain = 0
+            if current_validation_pnl <= 0.0 and validation_closed > 0 and validation_pnl > 0.0:
+                coverage_gain += 1
+            if current_test_pnl <= 0.0 and test_closed > 0 and test_pnl > 0.0:
+                coverage_gain += 1
+            score = (
+                float(coverage_gain),
+                float(validation_pnl > 0.0 and test_pnl > 0.0),
+                validation_pnl + test_pnl,
+                test_pnl,
+                validation_pnl,
+                float(row.get("realized_pnl", 0.0)),
+            )
+            if best_score is None or score > best_score:
+                best_score = score
+                best_row = row
+        if best_row is None:
+            break
+        selected.append(best_row)
+        used_components.update(_selection_component_keys(best_row))
+        variant_label = str(best_row.get("variant_label", "")).strip()
+        if variant_label:
+            used_variants.add(variant_label)
+        combined_validation_closed = sum(int(item.get("validation_closed_trades", 0)) for item in selected)
+        combined_test_closed = sum(int(item.get("test_closed_trades", 0)) for item in selected)
+        combined_validation_pnl = sum(float(item.get("validation_pnl", 0.0)) for item in selected)
+        combined_test_pnl = sum(float(item.get("test_pnl", 0.0)) for item in selected)
+        combined_closed = combined_validation_closed + combined_test_closed
+        combined_pnl = sum(float(item.get("validation_pnl", 0.0)) + float(item.get("test_pnl", 0.0)) for item in selected)
+        if (
+            combined_closed >= int(thresholds["sparse_combined_closed_trades"])
+            and combined_pnl > 0.0
+            and combined_validation_closed > 0
+            and combined_test_closed > 0
+            and combined_validation_pnl > 0.0
+            and combined_test_pnl > 0.0
+        ):
+            break
+    combined_closed = sum(int(item.get("validation_closed_trades", 0)) + int(item.get("test_closed_trades", 0)) for item in selected)
+    combined_validation_closed = sum(int(item.get("validation_closed_trades", 0)) for item in selected)
+    combined_test_closed = sum(int(item.get("test_closed_trades", 0)) for item in selected)
+    combined_validation_pnl = sum(float(item.get("validation_pnl", 0.0)) for item in selected)
+    combined_test_pnl = sum(float(item.get("test_pnl", 0.0)) for item in selected)
+    combined_pnl = sum(float(item.get("validation_pnl", 0.0)) + float(item.get("test_pnl", 0.0)) for item in selected)
+    if (
+        combined_closed < int(thresholds["sparse_combined_closed_trades"])
+        or combined_pnl <= 0.0
+        or combined_validation_closed <= 0
+        or combined_test_closed <= 0
+        or combined_validation_pnl <= 0.0
+        or combined_test_pnl <= 0.0
+    ):
+        return []
     return selected
 
 
@@ -3149,7 +3628,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     for variant_label, features in feature_variants.items():
         if not features:
             continue
-        variant_specs = [_with_variant_name(spec, variant_label) for spec in singles]
+        variant_specs = [spec for base_spec in singles if (spec := _with_variant_name(base_spec, variant_label)) is not None]
         exit_family_specs = _exit_family_specs(config, resolved.profile_symbol, variant_specs)
         explored_entry_exit_specs.extend(variant_specs + exit_family_specs)
         results.extend(
@@ -3171,11 +3650,12 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 _run_candidate_with_splits(
                     config,
                     features,
-                    _with_variant_name(spec, variant_label),
+                    materialized_spec,
                     "parameter_sweep",
-                    f"{symbol_slug}_{spec.name}_{variant_label}_symbol_candidate",
+                    f"{symbol_slug}_{materialized_spec.name}_{variant_label}_symbol_candidate",
                 )
-                for spec in sweep_specs
+                for base_spec in sweep_specs
+                if (materialized_spec := _with_variant_name(base_spec, variant_label)) is not None
             )
     improvement_specs = _auto_improvement_specs(config, resolved.profile_symbol, results)
     if improvement_specs:
@@ -3297,6 +3777,20 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         )
         for spec in combos
     )
+    spec_lookup = {
+        spec.name: spec
+        for spec in (
+            explored_entry_exit_specs
+            + sweep_specs
+            + improvement_specs
+            + second_pass_specs
+            + regime_specs
+            + autopsy_specs
+            + near_miss_specs
+            + local_optimized_specs
+            + combos
+        )
+    }
     _annotate_combo_results(results)
     csv_path, txt_path = _export_results(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
     plot_paths = plot_symbol_research(resolved.profile_symbol, results)
@@ -3351,13 +3845,53 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
                 "recommended": row.name in recommended,
                 "variant_label": row.variant_label,
+                "session_label": row.session_label,
                 "regime_filter_label": row.regime_filter_label,
                 "execution_overrides": row.execution_overrides or {},
+                "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
             }
             for row in results
         ],
         max_candidates=3,
     )
+    if not selected_execution_candidates:
+        selected_execution_candidates = select_sparse_execution_candidates(
+            [
+                {
+                    "candidate_name": row.name,
+                    "symbol": resolved.profile_symbol,
+                    "code_path": row.code_path,
+                    "realized_pnl": row.realized_pnl,
+                    "profit_factor": row.profit_factor,
+                    "closed_trades": row.closed_trades,
+                    "payoff_ratio": row.payoff_ratio,
+                    "validation_pnl": row.validation_pnl,
+                    "validation_profit_factor": row.validation_profit_factor,
+                    "validation_closed_trades": row.validation_closed_trades,
+                    "test_pnl": row.test_pnl,
+                    "test_profit_factor": row.test_profit_factor,
+                    "test_closed_trades": row.test_closed_trades,
+                    "walk_forward_windows": row.walk_forward_windows,
+                    "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
+                    "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
+                    "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
+                    "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+                    "sparse_strategy": row.sparse_strategy,
+                    "component_count": row.component_count,
+                    "combo_outperformance_score": row.combo_outperformance_score,
+                    "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
+                    "recommended": row.name in recommended,
+                    "variant_label": row.variant_label,
+                    "session_label": row.session_label,
+                    "regime_filter_label": row.regime_filter_label,
+                    "execution_overrides": row.execution_overrides or {},
+                    "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
+                }
+                for row in results
+            ],
+            resolved.profile_symbol,
+            max_candidates=3,
+        )
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"
     if selected_execution_candidates:

@@ -1,0 +1,18 @@
+{
+  "symbol": "USDJPY",
+  "broker_symbol": "USDJPY",
+  "deployment_path": "artifacts\\deploy\\usdjpy.live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "actions": [
+    {
+      "candidate_name": "forex_breakout_momentum__15m_overlap__exit_trend__near_miss_patient__trend_flat",
+      "signal_side": "sell",
+      "signal_timestamp": "2026-04-02T15:15:00+00:00",
+      "confidence": 0.7,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_short",
+      "magic_number": 2697044
+    }
+  ]
+}

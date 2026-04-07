@@ -1,0 +1,13 @@
+Artifact: eth_crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high__plus__crypto_vwap_reversion__30m_us__exit_trend__regime_trend_flat_vol_high_symbol_candidate
+Closed trades: 2
+Realized pnl: 9.67
+
+By entry hour
+17: trades=2 pnl=9.67 avg=4.84 win_rate=50.00%
+
+By entry setup
+crypto_vwap_reversion+crypto_vwap_reversion: trades=2 pnl=9.67 avg=4.84 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-11.88 avg=-11.88 win_rate=0.00%
+take_profit: trades=1 pnl=21.55 avg=21.55 win_rate=100.00%

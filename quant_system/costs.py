@@ -40,14 +40,14 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
     if "ETH" in upper:
         return CostProfile(
             contract_size=10.0,
-            spread_points=2.0,
-            slippage_bps=1.5,
+            spread_points=3.0,
+            slippage_bps=4.0,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
             commission_notional_pct=0.0325,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO crypto model: 0.0325% per side, contract size 10 for ETHUSD; spread is a conservative inference.",
+            notes="FTMO crypto model: 0.0325% per side, contract size 10 for ETHUSD; spread/slippage slightly inflated to reflect observed MT5-vs-Binance intraday divergence.",
         )
     if "XAU" in upper:
         return CostProfile(

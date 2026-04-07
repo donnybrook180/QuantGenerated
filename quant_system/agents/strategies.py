@@ -132,11 +132,23 @@ class OpeningRangeShortBreakdownAgent(Agent):
 class VolatilityBreakoutAgent(Agent):
     name = "volatility_breakout"
 
-    def __init__(self, lookback: int = 12, allowed_hours: set[int] | None = None) -> None:
+    def __init__(
+        self,
+        lookback: int = 12,
+        allowed_hours: set[int] | None = None,
+        min_atr_proxy: float = 0.0005,
+        min_trend_strength: float = 0.0003,
+        min_relative_volume: float = 1.0,
+        min_momentum_20: float = 0.0,
+    ) -> None:
         self.range_state = RollingHighLowState(lookback)
         self.breakout_side: Side = Side.FLAT
         self.entry_anchor: float | None = None
         self.allowed_hours = allowed_hours
+        self.min_atr_proxy = min_atr_proxy
+        self.min_trend_strength = min_trend_strength
+        self.min_relative_volume = min_relative_volume
+        self.min_momentum_20 = min_momentum_20
 
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         high = feature.values.get("high", feature.values["close"])
@@ -161,10 +173,10 @@ class VolatilityBreakoutAgent(Agent):
         if (
             self.breakout_side == Side.FLAT
             and close > breakout_high
-            and atr_proxy > 0.0005
-            and trend_strength > 0.0003
-            and momentum_20 > 0.0
-            and relative_volume >= 1.0
+            and atr_proxy > self.min_atr_proxy
+            and trend_strength > self.min_trend_strength
+            and momentum_20 > self.min_momentum_20
+            and relative_volume >= self.min_relative_volume
         ):
             self.breakout_side = Side.BUY
             self.entry_anchor = breakout_high
@@ -172,10 +184,10 @@ class VolatilityBreakoutAgent(Agent):
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.BUY, confidence, {"breakout_high": breakout_high})
         if (
             close < breakout_low
-            and atr_proxy > 0.0005
-            and trend_strength < -0.0003
-            and momentum_20 < 0
-            and relative_volume >= 1.0
+            and atr_proxy > self.min_atr_proxy
+            and trend_strength < -self.min_trend_strength
+            and momentum_20 < -self.min_momentum_20
+            and relative_volume >= self.min_relative_volume
         ):
             self.breakout_side = Side.FLAT
             self.entry_anchor = None
@@ -194,11 +206,23 @@ class VolatilityBreakoutAgent(Agent):
 class VolatilityShortBreakdownAgent(Agent):
     name = "volatility_short_breakdown"
 
-    def __init__(self, lookback: int = 12, allowed_hours: set[int] | None = None) -> None:
+    def __init__(
+        self,
+        lookback: int = 12,
+        allowed_hours: set[int] | None = None,
+        min_atr_proxy: float = 0.0005,
+        min_trend_strength: float = 0.0003,
+        min_relative_volume: float = 1.0,
+        min_momentum_20: float = 0.0,
+    ) -> None:
         self.range_state = RollingHighLowState(lookback)
         self.breakdown_active = False
         self.entry_anchor: float | None = None
         self.allowed_hours = allowed_hours
+        self.min_atr_proxy = min_atr_proxy
+        self.min_trend_strength = min_trend_strength
+        self.min_relative_volume = min_relative_volume
+        self.min_momentum_20 = min_momentum_20
 
     def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
         high = feature.values.get("high", feature.values["close"])
@@ -223,10 +247,10 @@ class VolatilityShortBreakdownAgent(Agent):
         if (
             not self.breakdown_active
             and close < breakout_low
-            and atr_proxy > 0.0005
-            and trend_strength < -0.0003
-            and momentum_20 < 0.0
-            and relative_volume >= 1.0
+            and atr_proxy > self.min_atr_proxy
+            and trend_strength < -self.min_trend_strength
+            and momentum_20 < -self.min_momentum_20
+            and relative_volume >= self.min_relative_volume
         ):
             self.breakdown_active = True
             self.entry_anchor = breakout_low

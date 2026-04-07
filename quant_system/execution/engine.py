@@ -51,7 +51,7 @@ class AgentCoordinator:
                 signal.confidence,
                 signal.metadata,
             )
-            if signal.agent_name == "risk_sentinel" and signal.side == Side.FLAT:
+            if signal.side == Side.FLAT and (signal.agent_name == "risk_sentinel" or "veto" in signal.metadata):
                 veto = True
             if signal.side != Side.FLAT:
                 votes[signal.side] += 1

@@ -6,14 +6,17 @@ import math
 
 from quant_system.integrations.polygon_events import DailyEventFlags
 from quant_system.models import FeatureVector, MarketBar
+from quant_system.symbols import is_crypto_symbol, is_forex_symbol, is_metal_symbol
 
 
 def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, DailyEventFlags] | None = None) -> list[FeatureVector]:
     closes = [bar.close for bar in bars]
     volumes = [bar.volume for bar in bars]
     features: list[FeatureVector] = []
-    regular_open = 13 * 60 + 30
-    regular_close = 20 * 60
+    symbol = bars[0].symbol if bars else ""
+    is_twenty_four_hour_asset = is_crypto_symbol(symbol) or is_forex_symbol(symbol) or is_metal_symbol(symbol)
+    regular_open = 0 if is_twenty_four_hour_asset else (13 * 60 + 30)
+    regular_close = 24 * 60 if is_twenty_four_hour_asset else (20 * 60)
     cumulative_session_pv = 0.0
     cumulative_session_volume = 0.0
     session_high = 0.0

@@ -1,0 +1,31 @@
+Artifact: eth_crypto_momentum_continuation_sweep_dense_15m_overlap_symbol_candidate
+Closed trades: 1018
+Realized pnl: -2060.56
+
+By entry hour
+19: trades=161 pnl=-326.70 avg=-2.03 win_rate=0.00%
+15: trades=135 pnl=-271.02 avg=-2.01 win_rate=0.74%
+18: trades=130 pnl=-264.89 avg=-2.04 win_rate=0.00%
+14: trades=131 pnl=-260.78 avg=-1.99 win_rate=0.00%
+17: trades=106 pnl=-213.41 avg=-2.01 win_rate=0.00%
+13: trades=104 pnl=-211.36 avg=-2.03 win_rate=0.00%
+16: trades=104 pnl=-209.95 avg=-2.02 win_rate=0.00%
+20: trades=57 pnl=-118.75 avg=-2.08 win_rate=0.00%
+12: trades=41 pnl=-83.59 avg=-2.04 win_rate=0.00%
+11: trades=19 pnl=-38.25 avg=-2.01 win_rate=0.00%
+8: trades=7 pnl=-15.39 avg=-2.20 win_rate=0.00%
+10: trades=7 pnl=-14.49 avg=-2.07 win_rate=0.00%
+9: trades=5 pnl=-10.06 avg=-2.01 win_rate=0.00%
+23: trades=5 pnl=-9.75 avg=-1.95 win_rate=0.00%
+0: trades=4 pnl=-8.03 avg=-2.01 win_rate=0.00%
+22: trades=2 pnl=-4.14 avg=-2.07 win_rate=0.00%
+
+By entry setup
+crypto_momentum_continuation: trades=1018 pnl=-2060.56 avg=-2.02 win_rate=0.10%
+
+By exit reason
+stop_loss: trades=995 pnl=-2026.83 avg=-2.04 win_rate=0.00%
+stale_breakout: trades=13 pnl=-26.15 avg=-2.01 win_rate=0.00%
+time_stop: trades=7 pnl=-7.46 avg=-1.07 win_rate=0.00%
+trailing_stop: trades=2 pnl=-2.21 avg=-1.11 win_rate=0.00%
+take_profit: trades=1 pnl=2.10 avg=2.10 win_rate=100.00%

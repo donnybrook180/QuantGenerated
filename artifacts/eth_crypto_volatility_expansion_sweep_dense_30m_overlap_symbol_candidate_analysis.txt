@@ -1,0 +1,23 @@
+Artifact: eth_crypto_volatility_expansion_sweep_dense_30m_overlap_symbol_candidate
+Closed trades: 51
+Realized pnl: -104.10
+
+By entry hour
+17: trades=11 pnl=-24.76 avg=-2.25 win_rate=0.00%
+15: trades=9 pnl=-18.89 avg=-2.10 win_rate=0.00%
+16: trades=7 pnl=-14.80 avg=-2.11 win_rate=0.00%
+14: trades=8 pnl=-14.71 avg=-1.84 win_rate=0.00%
+13: trades=5 pnl=-10.39 avg=-2.08 win_rate=0.00%
+19: trades=4 pnl=-8.35 avg=-2.09 win_rate=0.00%
+12: trades=4 pnl=-6.24 avg=-1.56 win_rate=0.00%
+18: trades=2 pnl=-4.00 avg=-2.00 win_rate=0.00%
+20: trades=1 pnl=-1.95 avg=-1.95 win_rate=0.00%
+
+By entry setup
+crypto_volatility_expansion: trades=51 pnl=-104.10 avg=-2.04 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=45 pnl=-93.87 avg=-2.09 win_rate=0.00%
+stale_breakout: trades=3 pnl=-9.08 avg=-3.03 win_rate=0.00%
+time_stop: trades=2 pnl=-0.70 avg=-0.35 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.45 avg=-0.45 win_rate=0.00%

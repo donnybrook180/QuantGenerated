@@ -1,0 +1,14 @@
+Artifact: eth_crypto_short_reversion__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
+Closed trades: 2
+Realized pnl: -40.31
+
+By entry hour
+12: trades=1 pnl=-28.15 avg=-28.15 win_rate=0.00%
+13: trades=1 pnl=-12.17 avg=-12.17 win_rate=0.00%
+
+By entry setup
+crypto_short_reversion: trades=2 pnl=-40.31 avg=-20.16 win_rate=0.00%
+
+By exit reason
+signal_exit: trades=1 pnl=-28.15 avg=-28.15 win_rate=0.00%
+structure_exit: trades=1 pnl=-12.17 avg=-12.17 win_rate=0.00%

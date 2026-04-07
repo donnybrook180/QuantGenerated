@@ -1,0 +1,18 @@
+Artifact: eth_crypto_short_reversion__5m_us_5m_us_symbol_candidate
+Closed trades: 12
+Realized pnl: -50.12
+
+By entry hour
+15: trades=3 pnl=-70.57 avg=-23.52 win_rate=0.00%
+14: trades=1 pnl=-31.09 avg=-31.09 win_rate=0.00%
+16: trades=7 pnl=14.58 avg=2.08 win_rate=42.86%
+19: trades=1 pnl=36.96 avg=36.96 win_rate=100.00%
+
+By entry setup
+crypto_short_reversion: trades=12 pnl=-50.12 avg=-4.18 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=3 pnl=-77.43 avg=-25.81 win_rate=0.00%
+structure_exit: trades=3 pnl=-48.92 avg=-16.31 win_rate=0.00%
+signal_exit: trades=3 pnl=-14.45 avg=-4.82 win_rate=33.33%
+take_profit: trades=3 pnl=90.69 avg=30.23 win_rate=100.00%

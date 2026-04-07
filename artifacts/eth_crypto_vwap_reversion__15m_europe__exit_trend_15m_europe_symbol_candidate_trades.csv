@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:ETHUSD,2025-06-02T10:15:00+00:00,2025-06-02T12:15:00+00:00,10,12,crypto_vwap_reversion,stale_breakout,2484.89296,2481.50640,0.10000,-5.00064,1.61408,8,0.72598,"{'z_score_20': -1.2401320299181795, 'vwap_distance': -0.007578844450331967}"

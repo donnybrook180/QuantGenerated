@@ -1,0 +1,15 @@
+Artifact: eth_crypto_vwap_reversion_us_core__15m_us__exit_fastfail_15m_us_symbol_candidate
+Closed trades: 3
+Realized pnl: 164.93
+
+By entry hour
+17: trades=1 pnl=-7.71 avg=-7.71 win_rate=0.00%
+14: trades=1 pnl=42.93 avg=42.93 win_rate=100.00%
+16: trades=1 pnl=129.71 avg=129.71 win_rate=100.00%
+
+By entry setup
+crypto_vwap_reversion: trades=3 pnl=164.93 avg=54.98 win_rate=66.67%
+
+By exit reason
+structure_exit: trades=1 pnl=-7.71 avg=-7.71 win_rate=0.00%
+take_profit: trades=2 pnl=172.64 avg=86.32 win_rate=100.00%

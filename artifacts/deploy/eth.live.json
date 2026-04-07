@@ -1,0 +1,33 @@
+{
+  "profile_name": "symbol::eth",
+  "symbol": "ETH",
+  "data_symbol": "X:ETHUSD",
+  "broker_symbol": "ETHUSD",
+  "research_run_id": 152,
+  "execution_set_id": 58,
+  "execution_validation_summary": "variant=crypto_vwap_reversion__30m_us@30m_us, crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us data_source=duckdb_cache_aggregated pnl=407.06 pf=37.11 closed=5 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "crypto_vwap_reversion__30m_us",
+      "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
+      "variant_label": "30m_us",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 0.5
+    },
+    {
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
+      "variant_label": "15m_us",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.5
+    }
+  ]
+}

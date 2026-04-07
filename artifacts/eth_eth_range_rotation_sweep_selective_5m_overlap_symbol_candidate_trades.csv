@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+ETH,2026-03-12T10:20:00+00:00,2026-03-12T10:30:00+00:00,10,10,eth_range_rotation,structure_exit,18.53707,20.56293,0.10000,-2.03857,0.01271,1,1.00000,"{'position_intent': 'short_entry', 'range_low': 19.31, 'range_high': 19.56, 'range_width': 0.0127942681678608}"

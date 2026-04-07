@@ -1,0 +1,15 @@
+Artifact: eth_eth_session_handoff__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
+Closed trades: 17
+Realized pnl: -34.40
+
+By entry hour
+13: trades=11 pnl=-22.21 avg=-2.02 win_rate=0.00%
+14: trades=4 pnl=-8.09 avg=-2.02 win_rate=0.00%
+17: trades=2 pnl=-4.09 avg=-2.05 win_rate=0.00%
+
+By entry setup
+eth_session_handoff: trades=17 pnl=-34.40 avg=-2.02 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=16 pnl=-33.24 avg=-2.08 win_rate=0.00%
+time_stop: trades=1 pnl=-1.16 avg=-1.16 win_rate=0.00%

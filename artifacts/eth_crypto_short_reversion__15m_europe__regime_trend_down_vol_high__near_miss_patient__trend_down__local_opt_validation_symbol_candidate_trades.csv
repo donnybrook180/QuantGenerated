@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:ETHUSD,2024-05-29T12:45:00+00:00,2024-05-29T15:45:00+00:00,12,15,crypto_short_reversion,take_profit,3812.37384,3762.85394,0.10000,47.05795,2.46195,12,0.87305,"{'position_intent': 'short_entry', 'rebound_high': 3822.1, 'short_reversion_anchor': 3822.1}"

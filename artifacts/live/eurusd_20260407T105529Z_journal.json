@@ -1,0 +1,18 @@
+{
+  "symbol": "EURUSD",
+  "broker_symbol": "EURUSD",
+  "deployment_path": "artifacts\\deploy\\eurusd.live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "actions": [
+    {
+      "candidate_name": "forex_short_trend_continuation__15m_overlap",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2912999
+    }
+  ]
+}

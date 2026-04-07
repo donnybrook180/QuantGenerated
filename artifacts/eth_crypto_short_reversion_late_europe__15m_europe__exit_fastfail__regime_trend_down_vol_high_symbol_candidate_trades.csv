@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:ETHUSD,2025-04-07T11:30:00+00:00,2025-04-08T01:15:00+00:00,11,1,crypto_short_reversion,take_profit,1482.27207,1564.90319,0.10000,81.64078,0.99033,3,0.68000,"{'position_intent': 'short_exit', 'short_reversion_exit': 1.0}"

@@ -1,30 +1,30 @@
 Viability autopsy: ETH
-Execution validation summary: not_run
+Execution validation summary: variant=crypto_vwap_reversion__30m_us@30m_us, crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us data_source=duckdb_cache_aggregated pnl=407.06 pf=37.11 closed=5 -> accepted
 
 Top blockers
-- validation PF < 1.0 (0.00): 58
-- test PF < 1.0 (0.00): 58
-- walk-forward pass rate too low (0.00% < 40%): 58
-- walk-forward avg validation pnl <= 0 (0.00): 45
-- walk-forward avg test pnl <= 0 (0.00): 45
-- combined validation/test trades too low (0 < 2): 30
-- combined validation/test pnl <= 0 (0.00): 30
-- combined validation/test PF too low (0.00 < 1.00): 30
+- walk-forward avg validation pnl <= 0 (0.00): 148
+- walk-forward pass rate too low (0.00% < 40%): 102
+- test PF < 1.0 (0.00): 95
+- validation PF < 1.0 (0.00): 90
+- walk-forward avg test pnl <= 0 (0.00): 81
+- validation trades too low (0 < 2): 78
+- test trades too low (0 < 1): 78
+- validation pnl <= 0 (0.00): 78
 
 Top near-misses
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat: pnl=1.42 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient: pnl=1.41 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high: pnl=1.41 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high: pnl=1.26 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__regime_trend_flat_vol_high: pnl=1.26 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_fastfail__regime_trend_flat_vol_high: pnl=1.26 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective: pnl=1.26 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- crypto_volatility_expansion__5m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high: pnl=1.26 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
+- crypto_vwap_reversion__30m_us__regime_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion__30m_us__exit_trend__regime_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion_us_hour17__30m_us__exit_trend__regime_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat_vol_high: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat: pnl=241.33 pf=999.00 val=0.00/0.00/0 test=241.33/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00)

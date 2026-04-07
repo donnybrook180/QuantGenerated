@@ -1,0 +1,25 @@
+Artifact: eth_crypto_volatility_breakout__15m_us__exit_fastfail_15m_us_symbol_candidate
+Closed trades: 82
+Realized pnl: -166.18
+
+By entry hour
+13: trades=18 pnl=-37.16 avg=-2.06 win_rate=0.00%
+14: trades=13 pnl=-27.34 avg=-2.10 win_rate=0.00%
+16: trades=11 pnl=-22.60 avg=-2.05 win_rate=0.00%
+15: trades=12 pnl=-22.31 avg=-1.86 win_rate=0.00%
+17: trades=9 pnl=-18.20 avg=-2.02 win_rate=0.00%
+19: trades=4 pnl=-8.28 avg=-2.07 win_rate=0.00%
+11: trades=4 pnl=-8.27 avg=-2.07 win_rate=0.00%
+12: trades=4 pnl=-7.42 avg=-1.86 win_rate=0.00%
+18: trades=3 pnl=-6.48 avg=-2.16 win_rate=0.00%
+20: trades=2 pnl=-4.13 avg=-2.07 win_rate=0.00%
+23: trades=1 pnl=-2.04 avg=-2.04 win_rate=0.00%
+0: trades=1 pnl=-1.96 avg=-1.96 win_rate=0.00%
+
+By entry setup
+volatility_breakout: trades=82 pnl=-166.18 avg=-2.03 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=76 pnl=-156.94 avg=-2.06 win_rate=0.00%
+signal_exit: trades=2 pnl=-4.66 avg=-2.33 win_rate=0.00%
+time_stop: trades=4 pnl=-4.58 avg=-1.15 win_rate=0.00%

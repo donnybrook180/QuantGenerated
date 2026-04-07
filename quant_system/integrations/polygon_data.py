@@ -38,15 +38,17 @@ class PolygonDataClient:
         last_error: Exception | None = None
         for attempt in range(1, max_attempts + 1):
             try:
-                return self.client.list_aggs(
-                    ticker=self.config.symbol,
-                    multiplier=self.config.multiplier,
-                    timespan=self.config.timespan,
-                    from_=start_date,
-                    to=end_date,
-                    adjusted=self.config.adjusted,
-                    sort="asc",
-                    limit=50_000,
+                return list(
+                    self.client.list_aggs(
+                        ticker=self.config.symbol,
+                        multiplier=self.config.multiplier,
+                        timespan=self.config.timespan,
+                        from_=start_date,
+                        to=end_date,
+                        adjusted=self.config.adjusted,
+                        sort="asc",
+                        limit=50_000,
+                    )
                 )
             except Exception as exc:
                 last_error = exc

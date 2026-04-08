@@ -1,15 +1,18 @@
 Artifact: eth_crypto_vwap_reversion__15m_overlap__exit_trend_15m_overlap_symbol_candidate
-Closed trades: 3
-Realized pnl: 138.93
+Closed trades: 6
+Realized pnl: 88.07
 
 By entry hour
-15: trades=1 pnl=-0.46 avg=-0.46 win_rate=0.00%
-16: trades=1 pnl=67.49 avg=67.49 win_rate=100.00%
+15: trades=2 pnl=-27.60 avg=-13.80 win_rate=0.00%
+12: trades=1 pnl=-3.98 avg=-3.98 win_rate=0.00%
+16: trades=2 pnl=47.76 avg=23.88 win_rate=50.00%
 14: trades=1 pnl=71.89 avg=71.89 win_rate=100.00%
 
 By entry setup
-crypto_vwap_reversion: trades=3 pnl=138.93 avg=46.31 win_rate=66.67%
+crypto_vwap_reversion: trades=6 pnl=88.07 avg=14.68 win_rate=33.33%
 
 By exit reason
-trailing_stop: trades=2 pnl=67.04 avg=33.52 win_rate=50.00%
+stop_loss: trades=1 pnl=-27.15 avg=-27.15 win_rate=0.00%
+stale_breakout: trades=1 pnl=-19.73 avg=-19.73 win_rate=0.00%
+trailing_stop: trades=3 pnl=63.05 avg=21.02 win_rate=33.33%
 take_profit: trades=1 pnl=71.89 avg=71.89 win_rate=100.00%

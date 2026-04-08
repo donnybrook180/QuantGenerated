@@ -1,0 +1,20 @@
+Artifact: jp225_momentum__exit_fastfail_default_symbol_candidate
+Closed trades: 10
+Realized pnl: -81.19
+
+By entry hour
+14: trades=2 pnl=-111.64 avg=-55.82 win_rate=0.00%
+18: trades=2 pnl=-47.50 avg=-23.75 win_rate=0.00%
+17: trades=2 pnl=-3.95 avg=-1.97 win_rate=50.00%
+16: trades=3 pnl=11.58 avg=3.86 win_rate=33.33%
+19: trades=1 pnl=70.33 avg=70.33 win_rate=100.00%
+
+By entry setup
+momentum_confirmation: trades=10 pnl=-81.19 avg=-8.12 win_rate=30.00%
+
+By exit reason
+time_stop: trades=2 pnl=-106.66 avg=-53.33 win_rate=0.00%
+stop_loss: trades=2 pnl=-71.95 avg=-35.98 win_rate=0.00%
+structure_exit: trades=1 pnl=-34.98 avg=-34.98 win_rate=0.00%
+trailing_stop: trades=3 pnl=-9.44 avg=-3.15 win_rate=33.33%
+take_profit: trades=2 pnl=141.85 avg=70.92 win_rate=100.00%

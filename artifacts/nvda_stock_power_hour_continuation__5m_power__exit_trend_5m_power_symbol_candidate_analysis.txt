@@ -1,18 +1,12 @@
 Artifact: nvda_stock_power_hour_continuation__5m_power__exit_trend_5m_power_symbol_candidate
-Closed trades: 125
-Realized pnl: -64.74
+Closed trades: 1
+Realized pnl: -0.68
 
 By entry hour
-18: trades=74 pnl=-38.42 avg=-0.52 win_rate=1.35%
-19: trades=51 pnl=-26.32 avg=-0.52 win_rate=5.88%
+18: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%
 
 By entry setup
-stock_power_hour_continuation: trades=125 pnl=-64.74 avg=-0.52 win_rate=3.20%
+stock_power_hour_continuation: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=53 pnl=-32.72 avg=-0.62 win_rate=0.00%
-trailing_stop: trades=28 pnl=-13.98 avg=-0.50 win_rate=0.00%
-stale_breakout: trades=22 pnl=-13.61 avg=-0.62 win_rate=0.00%
-take_profit: trades=19 pnl=-3.09 avg=-0.16 win_rate=21.05%
-signal_exit: trades=2 pnl=-0.87 avg=-0.43 win_rate=0.00%
-end_of_run: trades=1 pnl=-0.47 avg=-0.47 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%

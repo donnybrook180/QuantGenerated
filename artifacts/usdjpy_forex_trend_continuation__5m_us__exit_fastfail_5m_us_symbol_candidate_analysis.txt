@@ -1,0 +1,17 @@
+Artifact: usdjpy_forex_trend_continuation__5m_us__exit_fastfail_5m_us_symbol_candidate
+Closed trades: 6
+Realized pnl: -4799.70
+
+By entry hour
+16: trades=1 pnl=-3272.59 avg=-3272.59 win_rate=0.00%
+13: trades=2 pnl=-2267.23 avg=-1133.62 win_rate=0.00%
+17: trades=1 pnl=-156.70 avg=-156.70 win_rate=0.00%
+18: trades=2 pnl=896.83 avg=448.42 win_rate=50.00%
+
+By entry setup
+forex_trend_continuation: trades=6 pnl=-4799.70 avg=-799.95 win_rate=16.67%
+
+By exit reason
+structure_exit: trades=4 pnl=-4306.71 avg=-1076.68 win_rate=0.00%
+stop_loss: trades=1 pnl=-1912.05 avg=-1912.05 win_rate=0.00%
+take_profit: trades=1 pnl=1419.06 avg=1419.06 win_rate=100.00%

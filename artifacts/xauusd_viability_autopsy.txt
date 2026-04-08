@@ -1,30 +1,30 @@
 Viability autopsy: XAUUSD
-Execution validation summary: variant=volatility_breakout__5m_us__exit_trend@5m_us, trend__15m_overlap__exit_fastfail@15m_overlap, opening_range_breakout__5m_us@5m_us data_source=duckdb_cache pnl=4355.94 pf=4.29 closed=24 -> accepted
+Execution validation summary: selection=standard variant=volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up__plus__volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high@default, trend__5m_us__exit_trend@5m_us, trend__5m_us@5m_us data_source=duckdb_cache pnl=2702.50 pf=1.47 closed=95 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 102
-- validation PF < 1.0 (0.00): 75
-- test PF < 1.0 (0.00): 70
-- walk-forward avg test pnl <= 0 (0.00): 62
-- test trades too low (0 < 2): 60
-- test pnl <= 0 (0.00): 60
-- walk-forward avg validation pnl <= 0 (0.00): 53
-- validation trades too low (0 < 3): 46
+- walk-forward pass rate too low (0.00% < 50%): 100
+- validation PF < 1.0 (0.00): 72
+- test PF < 1.0 (0.00): 56
+- walk-forward avg test pnl <= 0 (0.00): 38
+- validation trades too low (0 < 3): 35
+- validation pnl <= 0 (0.00): 35
+- test trades too low (0 < 2): 31
+- test pnl <= 0 (0.00): 31
 
 Top near-misses
-- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_patient: pnl=2677.46 pf=4.41 val=0.00/0.00/0 test=-785.98/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-785.98), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-392.99)
-- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_dense__local_opt_density: pnl=2677.46 pf=4.41 val=0.00/0.00/0 test=-785.98/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-785.98), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-392.99)
-- xauusd_short_breakdown__15m_overlap__exit_trend__near_miss_dense: pnl=2517.27 pf=3.66 val=0.00/0.00/0 test=-946.17/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-946.17), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-473.08)
-- xauusd_short_breakdown__15m_overlap__exit_trend__local_opt_density: pnl=2517.27 pf=3.66 val=0.00/0.00/0 test=-946.17/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-946.17), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-473.08)
-- xauusd_short_breakdown__15m_overlap__exit_trend: pnl=2512.37 pf=3.64 val=0.00/0.00/0 test=-951.07/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-951.07), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-475.53)
-- xauusd_short_breakdown__15m_overlap: pnl=2282.60 pf=2.86 val=0.00/0.00/0 test=-992.16/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-992.16), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-496.08)
-- xauusd_short_breakdown__15m_overlap__near_miss_patient: pnl=2243.40 pf=2.77 val=0.00/0.00/0 test=-1031.36/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-1031.36), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-515.68)
-- volatility_breakout__5m_us__exit_trend__regime_trend_flat_vol_high__near_miss_dense: pnl=2225.67 pf=25.07 val=254.06/999.00/1 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg test pnl <= 0 (0.00)
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high: pnl=1769.56 pf=9.37 val=100.50/999.00/1 test=-151.33/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-50.83), walk-forward avg validation pnl <= 0 (-35.05)
+- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up: pnl=1301.36 pf=26.61 val=433.73/50.33/2 test=-67.38/0.00/1 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-38.09)
+- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high: pnl=909.97 pf=5.31 val=100.50/999.00/1 test=-83.95/0.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-35.05)
+- volatility_breakout__5m_us__regime_trend_flat_vol_high__near_miss_protective: pnl=656.90 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-47.86), walk-forward avg test pnl <= 0 (0.00)
+- volatility_breakout__5m_us__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high: pnl=656.90 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-47.86), walk-forward avg test pnl <= 0 (0.00)
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up__plus__volatility_breakout__5m_us__regime_trend_flat_vol_high__near_miss_dense__trend_flat: pnl=642.07 pf=1.25 val=1316.14/3.83/8 test=252.54/1.36/13 wf=100.00%
+  reasons: combo underperformed components (-69.76)
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high__plus__volatility_breakout__5m_us__regime_trend_flat_vol_high__near_miss_dense__trend_flat: pnl=642.07 pf=1.25 val=1316.14/3.83/8 test=252.54/1.36/13 wf=100.00%
+  reasons: combo underperformed components (-69.76)
+- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up_vol_high: pnl=639.46 pf=3.90 val=100.50/999.00/1 test=-67.38/0.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-35.05), walk-forward avg test pnl <= 0 (-38.09)

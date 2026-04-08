@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-10-09T14:40:00+00:00,2025-10-09T14:55:00+00:00,14,14,mean_reversion,end_of_run,426.94037,429.92400,0.10000,-0.21021,0.50857,3,1.00000,"{'mean': 430.5918625, 'z_score_20': -2.866765160020614}"
+TSLA,2025-10-09T14:40:00+00:00,2025-10-14T13:40:00+00:00,14,13,mean_reversion,stop_loss,426.94037,419.02118,0.10000,-1.30038,0.50846,4,1.00000,"{'mean': 430.5918625, 'z_score_20': -2.866765160020614}"

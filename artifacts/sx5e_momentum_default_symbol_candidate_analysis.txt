@@ -1,0 +1,21 @@
+Artifact: sx5e_momentum_default_symbol_candidate
+Closed trades: 17
+Realized pnl: -17.25
+
+By entry hour
+18: trades=7 pnl=-11.03 avg=-1.58 win_rate=0.00%
+16: trades=2 pnl=-3.87 avg=-1.93 win_rate=0.00%
+17: trades=4 pnl=-1.93 avg=-0.48 win_rate=25.00%
+13: trades=2 pnl=-1.37 avg=-0.68 win_rate=50.00%
+19: trades=1 pnl=0.12 avg=0.12 win_rate=100.00%
+14: trades=1 pnl=0.82 avg=0.82 win_rate=100.00%
+
+By entry setup
+momentum_confirmation: trades=17 pnl=-17.25 avg=-1.01 win_rate=23.53%
+
+By exit reason
+stop_loss: trades=7 pnl=-11.53 avg=-1.65 win_rate=0.00%
+structure_exit: trades=6 pnl=-10.39 avg=-1.73 win_rate=0.00%
+stale_breakout: trades=2 pnl=0.94 avg=0.47 win_rate=100.00%
+trailing_stop: trades=1 pnl=1.02 avg=1.02 win_rate=100.00%
+take_profit: trades=1 pnl=2.72 avg=2.72 win_rate=100.00%

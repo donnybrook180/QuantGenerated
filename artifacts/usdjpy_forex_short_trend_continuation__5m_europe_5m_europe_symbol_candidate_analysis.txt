@@ -1,0 +1,18 @@
+Artifact: usdjpy_forex_short_trend_continuation__5m_europe_5m_europe_symbol_candidate
+Closed trades: 7
+Realized pnl: -1313.97
+
+By entry hour
+8: trades=1 pnl=-998.35 avg=-998.35 win_rate=0.00%
+10: trades=1 pnl=-508.91 avg=-508.91 win_rate=0.00%
+7: trades=2 pnl=-322.78 avg=-161.39 win_rate=0.00%
+11: trades=3 pnl=516.07 avg=172.02 win_rate=66.67%
+
+By entry setup
+forex_short_trend_continuation: trades=7 pnl=-1313.97 avg=-187.71 win_rate=28.57%
+
+By exit reason
+stop_loss: trades=2 pnl=-1950.50 avg=-975.25 win_rate=0.00%
+structure_exit: trades=2 pnl=-657.90 avg=-328.95 win_rate=0.00%
+trailing_stop: trades=1 pnl=-173.79 avg=-173.79 win_rate=0.00%
+take_profit: trades=2 pnl=1468.22 avg=734.11 win_rate=100.00%

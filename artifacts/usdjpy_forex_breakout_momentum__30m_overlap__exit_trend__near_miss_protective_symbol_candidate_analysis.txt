@@ -1,0 +1,21 @@
+Artifact: usdjpy_forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective_symbol_candidate
+Closed trades: 39
+Realized pnl: 6888.17
+
+By entry hour
+16: trades=7 pnl=-8931.02 avg=-1275.86 win_rate=28.57%
+13: trades=2 pnl=-4098.02 avg=-2049.01 win_rate=0.00%
+12: trades=4 pnl=512.72 avg=128.18 win_rate=50.00%
+14: trades=8 pnl=1199.28 avg=149.91 win_rate=62.50%
+15: trades=18 pnl=18205.21 avg=1011.40 win_rate=55.56%
+
+By entry setup
+forex_breakout_momentum: trades=39 pnl=6888.17 avg=176.62 win_rate=48.72%
+
+By exit reason
+stop_loss: trades=11 pnl=-27622.73 avg=-2511.16 win_rate=0.00%
+signal_exit: trades=4 pnl=-5513.07 avg=-1378.27 win_rate=25.00%
+stale_breakout: trades=1 pnl=-3744.38 avg=-3744.38 win_rate=0.00%
+end_of_run: trades=1 pnl=443.01 avg=443.01 win_rate=100.00%
+take_profit: trades=2 pnl=8857.28 avg=4428.64 win_rate=100.00%
+trailing_stop: trades=20 pnl=34468.06 avg=1723.40 win_rate=75.00%

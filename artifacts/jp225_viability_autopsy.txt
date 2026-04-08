@@ -1,0 +1,30 @@
+Viability autopsy: JP225
+Execution validation summary: selection=sparse variant=jp225_volatility_short_breakdown_core_hours@default data_source=duckdb_cache pnl=317.72 pf=4.43 closed=13 -> accepted
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 50%): 26
+- validation PF < 1.0 (0.00): 20
+- test trades too low (1 < 2): 13
+- test PF < 1.0 (0.00): 10
+- validation trades too low (1 < 3): 10
+- walk-forward avg validation pnl <= 0 (-22.38): 9
+- test trades too low (0 < 2): 7
+- test pnl <= 0 (0.00): 7
+
+Top near-misses
+- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend: pnl=313.20 pf=4.38 val=122.10/999.00/2 test=55.17/2.72/3 wf=0.00%
+  reasons: combo underperformed components (-30.15), combo overlap too high (100.00% > 80%)
+- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_asia_hours: pnl=274.10 pf=4.37 val=93.04/999.00/1 test=62.18/2.94/4 wf=0.00%
+  reasons: combo underperformed components (-29.05)
+- jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_asia_hours: pnl=274.10 pf=4.37 val=93.04/999.00/1 test=62.18/2.94/4 wf=0.00%
+  reasons: combo underperformed components (-23.13)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high: pnl=36.87 pf=1.27 val=-44.77/0.00/1 test=72.02/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-22.38)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense: pnl=36.87 pf=1.27 val=-44.77/0.00/1 test=72.02/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-22.38)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high: pnl=36.87 pf=1.27 val=-44.77/0.00/1 test=72.02/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-22.38)
+- mean_reversion__exit_quick: pnl=11.85 pf=1.33 val=-8.26/0.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), combined validation/test pnl <= 0 (-8.26), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-4.13), walk-forward avg test pnl <= 0 (-4.13)
+- mean_reversion__exit_quick__near_miss_patient__trend_flat: pnl=5.01 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)

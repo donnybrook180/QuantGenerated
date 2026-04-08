@@ -641,7 +641,7 @@ def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol
     if not symbol_specific:
         return "full"
 
-    store = DuckDBMarketDataStore(config.mt5.database_path)
+    store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe_specs, _, _ = _research_variant_plan(profile_symbol, "full")
     for _, multiplier, timespan in timeframe_specs:
         scoped_timeframe = _variant_timeframe_key(data_symbol, multiplier, timespan)
@@ -672,7 +672,7 @@ def _load_symbol_features_variant(
     profile_symbol: str | None = None,
 ) -> tuple[list[FeatureVector], str]:
     config.polygon.symbol = data_symbol
-    store = DuckDBMarketDataStore(config.mt5.database_path)
+    cache_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe = f"{multiplier}_{timespan}"
     scoped_timeframe = f"symbol_research_{_symbol_slug(data_symbol)}_{timeframe}"
     cache_limit = _cache_bar_limit(config, multiplier, timespan)
@@ -693,19 +693,24 @@ def _load_symbol_features_variant(
         )
         if not _has_plausible_price_scale(data_symbol, bars):
             raise RuntimeError(f"Fetched implausible MT5 price scale for {data_symbol}; refusing to persist suspect bars.")
-        store.upsert_bars(bars, timeframe=scoped_timeframe, source=source)
-        persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
-        if not persisted:
-            raise RuntimeError(f"No {source} bars were loaded into DuckDB for {data_symbol}.")
-        return _build_features_with_events(config, data_symbol, persisted), source
+        try:
+            DuckDBMarketDataStore(config.mt5.database_path).upsert_bars(bars, timeframe=scoped_timeframe, source=source)
+        except (duckdb.IOException, RuntimeError):
+            return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+        persisted = cache_store.load_bars(data_symbol, scoped_timeframe, len(bars))
+        if persisted:
+            return _build_features_with_events(config, data_symbol, persisted), source
+        return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
 
     if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
         for cache_symbol in _cache_symbol_candidates(data_symbol):
-            cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+            cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
                 return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
             if timespan == "minute" and multiplier in {15, 30}:
-                base_cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit)
+                base_cached = cache_store.load_bars(
+                    cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
+                )
                 if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
@@ -740,11 +745,14 @@ def _load_symbol_features_variant(
             source = "polygon"
         if not _has_plausible_price_scale(data_symbol, bars):
             raise RuntimeError(f"Fetched implausible price scale for {data_symbol}; refusing to persist suspect bars.")
-        store.upsert_bars(bars, timeframe=scoped_timeframe, source=source)
-        persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
-        if not persisted:
-            raise RuntimeError(f"No {source} bars were loaded into DuckDB for {data_symbol}.")
-        return _build_features_with_events(config, data_symbol, persisted), source
+        try:
+            DuckDBMarketDataStore(config.mt5.database_path).upsert_bars(bars, timeframe=scoped_timeframe, source=source)
+        except (duckdb.IOException, RuntimeError):
+            return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+        persisted = cache_store.load_bars(data_symbol, scoped_timeframe, len(bars))
+        if persisted:
+            return _build_features_with_events(config, data_symbol, persisted), source
+        return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
     except PolygonError:
         if source_preference not in {"broker_only", "external_only"} and broker_symbol:
             try:
@@ -754,11 +762,13 @@ def _load_symbol_features_variant(
             except MT5Error as exc:
                 mt5_errors.append(str(exc))
         for cache_symbol in _cache_symbol_candidates(data_symbol):
-            cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+            cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
                 return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
             if timespan == "minute" and multiplier in {15, 30}:
-                base_cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit)
+                base_cached = cache_store.load_bars(
+                    cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
+                )
                 if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
@@ -1277,6 +1287,31 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
             ),
         ]
+    if upper == "JP225":
+        specs.extend(
+            [
+                CandidateSpec(
+                    name="jp225_volatility_short_breakdown_core_hours",
+                    description="JP225 short volatility breakdown limited to the strongest historical entry hours",
+                    agents=[
+                        VolatilityShortBreakdownAgent(lookback=max(8, config.agents.mean_reversion_window)),
+                        SessionEntryFilterAgent({3, 4, 9, 17, 20}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_volatility_short_breakdown_asia_hours",
+                    description="JP225 short volatility breakdown focused on the strongest Asia-Europe handoff hours",
+                    agents=[
+                        VolatilityShortBreakdownAgent(lookback=max(8, config.agents.mean_reversion_window)),
+                        SessionEntryFilterAgent({3, 4, 9}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+                ),
+            ]
+        )
     if _is_stock_symbol(data_symbol):
         stock_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=False)
         stock_event_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=True, allow_event_blackout=True)
@@ -3911,7 +3946,6 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     }
     _annotate_combo_results(results)
     csv_path, txt_path = _export_results(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
-    plot_paths = plot_symbol_research(resolved.profile_symbol, results)
     ranked = sorted(
         results,
         key=lambda item: (
@@ -3933,111 +3967,92 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         if _meets_viability(row, resolved.profile_symbol)
     ]
     best = viable_ranked[0] if viable_ranked else None
+    plot_paths = plot_symbol_research(resolved.profile_symbol, results, best_row=best)
     recommended = [row.name for row in viable_ranked[:3]]
     profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
 
-    selected_execution_candidates = select_execution_candidates(
-        [
-            {
-                "candidate_name": row.name,
-                "symbol": resolved.profile_symbol,
-                "code_path": row.code_path,
-                "realized_pnl": row.realized_pnl,
-                "profit_factor": row.profit_factor,
-                "closed_trades": row.closed_trades,
-                "payoff_ratio": row.payoff_ratio,
-                "validation_pnl": row.validation_pnl,
-                "validation_profit_factor": row.validation_profit_factor,
-                "validation_closed_trades": row.validation_closed_trades,
-                "test_pnl": row.test_pnl,
-                "test_profit_factor": row.test_profit_factor,
-                "test_closed_trades": row.test_closed_trades,
-                "walk_forward_windows": row.walk_forward_windows,
-                "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
-                "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
-                "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
-                "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
-                "sparse_strategy": row.sparse_strategy,
-                "component_count": row.component_count,
-                "combo_outperformance_score": row.combo_outperformance_score,
-                "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
-                "recommended": row.name in recommended,
-                "variant_label": row.variant_label,
-                "session_label": row.session_label,
-                "regime_filter_label": row.regime_filter_label,
-                "execution_overrides": row.execution_overrides or {},
-                "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
-            }
-            for row in results
-        ],
-        max_candidates=3,
-    )
-    if not selected_execution_candidates:
-        selected_execution_candidates = select_sparse_execution_candidates(
-            [
-                {
-                    "candidate_name": row.name,
-                    "symbol": resolved.profile_symbol,
-                    "code_path": row.code_path,
-                    "realized_pnl": row.realized_pnl,
-                    "profit_factor": row.profit_factor,
-                    "closed_trades": row.closed_trades,
-                    "payoff_ratio": row.payoff_ratio,
-                    "validation_pnl": row.validation_pnl,
-                    "validation_profit_factor": row.validation_profit_factor,
-                    "validation_closed_trades": row.validation_closed_trades,
-                    "test_pnl": row.test_pnl,
-                    "test_profit_factor": row.test_profit_factor,
-                    "test_closed_trades": row.test_closed_trades,
-                    "walk_forward_windows": row.walk_forward_windows,
-                    "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
-                    "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
-                    "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
-                    "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
-                    "sparse_strategy": row.sparse_strategy,
-                    "component_count": row.component_count,
-                    "combo_outperformance_score": row.combo_outperformance_score,
-                    "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
-                    "recommended": row.name in recommended,
-                    "variant_label": row.variant_label,
-                    "session_label": row.session_label,
-                    "regime_filter_label": row.regime_filter_label,
-                    "execution_overrides": row.execution_overrides or {},
-                    "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
-                }
-                for row in results
-            ],
-            resolved.profile_symbol,
-            max_candidates=3,
-        )
+    execution_candidate_rows = [
+        {
+            "candidate_name": row.name,
+            "symbol": resolved.profile_symbol,
+            "code_path": row.code_path,
+            "realized_pnl": row.realized_pnl,
+            "profit_factor": row.profit_factor,
+            "closed_trades": row.closed_trades,
+            "payoff_ratio": row.payoff_ratio,
+            "validation_pnl": row.validation_pnl,
+            "validation_profit_factor": row.validation_profit_factor,
+            "validation_closed_trades": row.validation_closed_trades,
+            "test_pnl": row.test_pnl,
+            "test_profit_factor": row.test_profit_factor,
+            "test_closed_trades": row.test_closed_trades,
+            "walk_forward_windows": row.walk_forward_windows,
+            "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
+            "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
+            "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
+            "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+            "sparse_strategy": row.sparse_strategy,
+            "component_count": row.component_count,
+            "combo_outperformance_score": row.combo_outperformance_score,
+            "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
+            "recommended": row.name in recommended,
+            "variant_label": row.variant_label,
+            "session_label": row.session_label,
+            "regime_filter_label": row.regime_filter_label,
+            "execution_overrides": row.execution_overrides or {},
+            "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
+        }
+        for row in results
+    ]
+    candidate_sets: list[tuple[str, list[dict[str, object]]]] = []
+    standard_candidates = select_execution_candidates(execution_candidate_rows, max_candidates=3)
+    if standard_candidates:
+        candidate_sets.append(("standard", standard_candidates))
+    sparse_candidates = select_sparse_execution_candidates(execution_candidate_rows, resolved.profile_symbol, max_candidates=3)
+    if sparse_candidates and tuple(str(row["candidate_name"]) for row in sparse_candidates) != tuple(
+        str(row["candidate_name"]) for row in standard_candidates
+    ):
+        candidate_sets.append(("sparse", sparse_candidates))
+    selected_execution_candidates: list[dict[str, object]] = []
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"
-    if selected_execution_candidates:
+    best_execution_choice: tuple[tuple[float, float, int], list[dict[str, object]], str] | None = None
+    for selection_kind, candidate_set in candidate_sets:
         execution_validation_result, execution_validation_source, execution_variant = _evaluate_execution_candidate_set(
             config,
             resolved.profile_symbol,
             resolved.data_symbol,
-            selected_execution_candidates,
+            candidate_set,
         )
-        execution_validation_summary = (
-            f"variant={execution_variant} data_source={execution_validation_source} "
+        sparse_execution = any(bool(row.get("sparse_strategy")) for row in candidate_set)
+        min_execution_closed_trades = 1 if sparse_execution else 2
+        accepted = (
+            execution_validation_result.realized_pnl > 0.0
+            and execution_validation_result.profit_factor >= 1.0
+            and len(execution_validation_result.closed_trades) >= min_execution_closed_trades
+        )
+        summary = (
+            f"selection={selection_kind} variant={execution_variant} data_source={execution_validation_source} "
             f"pnl={execution_validation_result.realized_pnl:.2f} "
             f"pf={execution_validation_result.profit_factor:.2f} "
             f"closed={len(execution_validation_result.closed_trades)}"
         )
-        sparse_execution = any(bool(row.get("sparse_strategy")) for row in selected_execution_candidates)
-        min_execution_closed_trades = 1 if sparse_execution else 2
-        if (
-            execution_validation_result.realized_pnl <= 0.0
-            or execution_validation_result.profit_factor < 1.0
-            or len(execution_validation_result.closed_trades) < min_execution_closed_trades
-        ):
-            selected_execution_candidates = []
-            recommended = []
-            execution_validation_summary += " -> rejected"
-        else:
-            recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
-            execution_validation_summary += " -> accepted"
+        if accepted:
+            summary += " -> accepted"
+            score = (
+                execution_validation_result.realized_pnl,
+                execution_validation_result.profit_factor,
+                len(execution_validation_result.closed_trades),
+            )
+            if best_execution_choice is None or score > best_execution_choice[0]:
+                best_execution_choice = (score, candidate_set, summary)
+        elif best_execution_choice is None:
+            execution_validation_summary = summary + " -> rejected"
+    if best_execution_choice is not None:
+        _, selected_execution_candidates, execution_validation_summary = best_execution_choice
+        recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
+    else:
+        recommended = []
     store = ExperimentStore(config.ai.experiment_database_path)
     run_id = store.record_symbol_research_run(
         profile_name=profile_name,

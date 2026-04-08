@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
+import shutil
+import tempfile
+from pathlib import Path
 
 import duckdb
 
@@ -11,12 +14,32 @@ from quant_system.models import MarketBar
 @dataclass(slots=True)
 class DuckDBMarketDataStore:
     database_path: str
+    read_only: bool = False
 
     def __post_init__(self) -> None:
-        self._initialize_schema()
+        if not self.read_only:
+            self._initialize_schema()
 
     def _connect(self) -> duckdb.DuckDBPyConnection:
-        return duckdb.connect(self.database_path)
+        try:
+            return duckdb.connect(self.database_path, read_only=self.read_only)
+        except duckdb.IOException:
+            if not self.read_only:
+                raise
+            snapshot_path = self._create_snapshot_copy()
+            return duckdb.connect(snapshot_path, read_only=True)
+
+    def _create_snapshot_copy(self) -> str:
+        source = Path(self.database_path)
+        suffix = source.suffix or ".duckdb"
+        with tempfile.NamedTemporaryFile(prefix=f"{source.stem}_snapshot_", suffix=suffix, delete=False) as handle:
+            snapshot_path = handle.name
+        shutil.copy2(source, snapshot_path)
+        wal_path = source.with_suffix(source.suffix + ".wal")
+        if wal_path.exists():
+            snapshot_wal = Path(snapshot_path + ".wal")
+            shutil.copy2(wal_path, snapshot_wal)
+        return snapshot_path
 
     def _initialize_schema(self) -> None:
         with self._connect() as connection:
@@ -41,6 +64,8 @@ class DuckDBMarketDataStore:
     def upsert_bars(self, bars: list[MarketBar], timeframe: str, source: str) -> None:
         if not bars:
             return
+        if self.read_only:
+            raise RuntimeError("Cannot upsert bars with a read-only DuckDBMarketDataStore.")
         rows = [
             (
                 bar.symbol,

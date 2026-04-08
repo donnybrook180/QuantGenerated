@@ -1,23 +1,14 @@
 Artifact: nvda_volatility_breakout__5m_us__exit_trend_5m_us_symbol_candidate
-Closed trades: 323
-Realized pnl: -165.10
+Closed trades: 2
+Realized pnl: -0.98
 
 By entry hour
-13: trades=84 pnl=-44.36 avg=-0.53 win_rate=0.00%
-16: trades=44 pnl=-21.62 avg=-0.49 win_rate=2.27%
-14: trades=43 pnl=-21.19 avg=-0.49 win_rate=2.33%
-15: trades=37 pnl=-20.05 avg=-0.54 win_rate=0.00%
-17: trades=35 pnl=-17.39 avg=-0.50 win_rate=0.00%
-19: trades=32 pnl=-16.05 avg=-0.50 win_rate=0.00%
-18: trades=31 pnl=-16.03 avg=-0.52 win_rate=0.00%
-20: trades=17 pnl=-8.42 avg=-0.50 win_rate=0.00%
+17: trades=1 pnl=-0.60 avg=-0.60 win_rate=0.00%
+13: trades=1 pnl=-0.38 avg=-0.38 win_rate=0.00%
 
 By entry setup
-volatility_breakout: trades=323 pnl=-165.10 avg=-0.51 win_rate=0.62%
+volatility_breakout: trades=2 pnl=-0.98 avg=-0.49 win_rate=0.00%
 
 By exit reason
-signal_exit: trades=154 pnl=-80.40 avg=-0.52 win_rate=0.65%
-trailing_stop: trades=57 pnl=-28.15 avg=-0.49 win_rate=0.00%
-stale_breakout: trades=45 pnl=-25.29 avg=-0.56 win_rate=0.00%
-stop_loss: trades=39 pnl=-23.10 avg=-0.59 win_rate=0.00%
-take_profit: trades=28 pnl=-8.17 avg=-0.29 win_rate=3.57%
+trailing_stop: trades=1 pnl=-0.60 avg=-0.60 win_rate=0.00%
+take_profit: trades=1 pnl=-0.38 avg=-0.38 win_rate=0.00%

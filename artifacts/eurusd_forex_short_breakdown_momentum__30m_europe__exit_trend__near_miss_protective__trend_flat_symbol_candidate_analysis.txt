@@ -1,0 +1,20 @@
+Artifact: eurusd_forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_protective__trend_flat_symbol_candidate
+Closed trades: 9
+Realized pnl: 189.39
+
+By entry hour
+10: trades=2 pnl=-18.45 avg=-9.22 win_rate=0.00%
+11: trades=1 pnl=-10.59 avg=-10.59 win_rate=0.00%
+8: trades=1 pnl=1.62 avg=1.62 win_rate=100.00%
+9: trades=2 pnl=15.84 avg=7.92 win_rate=50.00%
+12: trades=3 pnl=200.97 avg=66.99 win_rate=100.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=9 pnl=189.39 avg=21.04 win_rate=55.56%
+
+By exit reason
+stale_breakout: trades=1 pnl=-11.28 avg=-11.28 win_rate=0.00%
+stop_loss: trades=1 pnl=-10.59 avg=-10.59 win_rate=0.00%
+trailing_stop: trades=2 pnl=-2.25 avg=-1.13 win_rate=50.00%
+signal_exit: trades=2 pnl=20.95 avg=10.47 win_rate=50.00%
+take_profit: trades=3 pnl=192.57 avg=64.19 win_rate=100.00%

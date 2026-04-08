@@ -1,18 +1,14 @@
 Artifact: msft_volatility_breakout__15m_midday__exit_trend_15m_midday_symbol_candidate
-Closed trades: 50
-Realized pnl: -24.66
+Closed trades: 2
+Realized pnl: -0.06
 
 By entry hour
-15: trades=35 pnl=-18.76 avg=-0.54 win_rate=5.71%
-17: trades=8 pnl=-3.43 avg=-0.43 win_rate=12.50%
-16: trades=7 pnl=-2.46 avg=-0.35 win_rate=28.57%
+15: trades=1 pnl=-0.57 avg=-0.57 win_rate=0.00%
+17: trades=1 pnl=0.52 avg=0.52 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=50 pnl=-24.66 avg=-0.49 win_rate=10.00%
+volatility_breakout: trades=2 pnl=-0.06 avg=-0.03 win_rate=50.00%
 
 By exit reason
-stop_loss: trades=11 pnl=-8.81 avg=-0.80 win_rate=0.00%
-stale_breakout: trades=11 pnl=-8.39 avg=-0.76 win_rate=0.00%
-signal_exit: trades=14 pnl=-6.13 avg=-0.44 win_rate=7.14%
-trailing_stop: trades=7 pnl=-3.43 avg=-0.49 win_rate=0.00%
-take_profit: trades=7 pnl=2.10 avg=0.30 win_rate=57.14%
+stale_breakout: trades=1 pnl=-0.57 avg=-0.57 win_rate=0.00%
+take_profit: trades=1 pnl=0.52 avg=0.52 win_rate=100.00%

@@ -3,9 +3,9 @@
   "symbol": "US500",
   "data_symbol": "SPY",
   "broker_symbol": "US500.cash",
-  "research_run_id": 104,
-  "execution_set_id": 56,
-  "execution_validation_summary": "variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_momentum_selective__regime_trend_up_vol_high@default|trend_up_vol_high data_source=duckdb_cache pnl=1.05 pf=3.72 closed=8 -> accepted",
+  "research_run_id": 187,
+  "execution_set_id": 85,
+  "execution_validation_summary": "selection=standard variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective__trend_flat@default|trend_flat, us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat@default|trend_flat data_source=duckdb_cache pnl=2.95 pf=4.67 closed=18 -> accepted",
   "strategies": [
     {
       "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
@@ -20,20 +20,38 @@
         "trailing_stop_atr_multiple": 0.72,
         "break_even_atr_multiple": 0.4
       },
-      "allocation_weight": 0.5
+      "allocation_weight": 0.3333333333333333
     },
     {
-      "candidate_name": "us500_momentum_selective__regime_trend_up_vol_high",
-      "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective__trend_flat",
+      "code_path": "quant_system.agents.us500.US500ShortVWAPRejectAgent",
       "variant_label": "",
-      "regime_filter_label": "trend_up_vol_high",
+      "regime_filter_label": "trend_flat",
       "execution_overrides": {
         "structure_exit_bars": 0,
         "stale_breakout_bars": 5,
-        "take_profit_atr_multiple": 2.6,
-        "trailing_stop_atr_multiple": 0.85
+        "max_holding_bars": 18,
+        "take_profit_atr_multiple": 2.2,
+        "trailing_stop_atr_multiple": 0.55,
+        "stop_loss_atr_multiple": 1.0999999999999999,
+        "break_even_atr_multiple": 0.25
       },
-      "allocation_weight": 0.5
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat",
+      "code_path": "quant_system.agents.us500.US500ShortVWAPRejectAgent",
+      "variant_label": "",
+      "regime_filter_label": "trend_flat",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 6,
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 2.2,
+        "trailing_stop_atr_multiple": 0.72,
+        "min_bars_between_trades": 7
+      },
+      "allocation_weight": 0.3333333333333333
     }
   ]
 }

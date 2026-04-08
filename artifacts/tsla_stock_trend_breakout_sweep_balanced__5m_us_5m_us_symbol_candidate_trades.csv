@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+TSLA,2025-10-08T15:15:00+00:00,2025-10-08T16:05:00+00:00,15,16,stock_trend_breakout,stale_breakout,434.53689,434.25313,0.10000,-0.53706,0.50869,10,1.00000,"{'atr_proxy': 0.004764644953389327, 'momentum_20': 0.012418408793790192}"
+TSLA,2025-10-08T17:20:00+00:00,2025-10-08T17:40:00+00:00,17,17,stock_trend_breakout,stop_loss,436.20222,434.61306,0.10000,-0.66762,0.50871,4,1.00000,"{'atr_proxy': 0.0026825493275855774, 'momentum_20': 0.004456676954258665}"
+TSLA,2025-10-08T19:50:00+00:00,2025-10-08T20:15:00+00:00,19,20,stock_trend_breakout,stale_breakout,440.00798,438.06937,0.10000,-0.70264,0.50878,5,1.00000,"{'atr_proxy': 0.004432624113475152, 'momentum_20': 0.007269688262029339}"

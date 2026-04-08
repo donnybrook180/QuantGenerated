@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:XAUUSD,2026-03-10T13:00:00+00:00,2026-03-10T19:30:00+00:00,13,19,momentum_confirmation,structure_exit,5200.95477,5186.37628,0.10000,-146.51198,0.72711,2,1.00000,"{'momentum_5': 0.004960789088196638, 'momentum_20': 0.004050763910744104}"
+C:XAUUSD,2026-03-24T20:15:00+00:00,2026-03-26T12:45:00+00:00,20,12,momentum_confirmation,time_stop,4455.20511,4428.80689,0.10000,-264.60409,0.62188,15,1.00000,"{'momentum_5': 0.011446022501504505, 'momentum_20': 0.009532011331444767}"

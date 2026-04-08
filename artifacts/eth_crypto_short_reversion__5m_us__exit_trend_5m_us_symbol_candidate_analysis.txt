@@ -1,19 +1,22 @@
 Artifact: eth_crypto_short_reversion__5m_us__exit_trend_5m_us_symbol_candidate
-Closed trades: 12
-Realized pnl: -79.58
+Closed trades: 21
+Realized pnl: -113.14
 
 By entry hour
-15: trades=3 pnl=-76.86 avg=-25.62 win_rate=0.00%
-14: trades=1 pnl=-31.09 avg=-31.09 win_rate=0.00%
+15: trades=6 pnl=-98.93 avg=-16.49 win_rate=0.00%
+14: trades=2 pnl=-26.28 avg=-13.14 win_rate=50.00%
+17: trades=2 pnl=-9.13 avg=-4.56 win_rate=0.00%
 16: trades=7 pnl=-8.60 avg=-1.23 win_rate=42.86%
-19: trades=1 pnl=36.96 avg=36.96 win_rate=100.00%
+18: trades=1 pnl=-2.89 avg=-2.89 win_rate=0.00%
+20: trades=1 pnl=-2.85 avg=-2.85 win_rate=0.00%
+19: trades=2 pnl=35.54 avg=17.77 win_rate=50.00%
 
 By entry setup
-crypto_short_reversion: trades=12 pnl=-79.58 avg=-6.63 win_rate=33.33%
+crypto_short_reversion: trades=21 pnl=-113.14 avg=-5.39 win_rate=23.81%
 
 By exit reason
-stop_loss: trades=4 pnl=-107.95 avg=-26.99 win_rate=0.00%
-stale_breakout: trades=2 pnl=-24.08 avg=-12.04 win_rate=0.00%
-signal_exit: trades=3 pnl=-14.45 avg=-4.82 win_rate=33.33%
-trailing_stop: trades=1 pnl=15.54 avg=15.54 win_rate=100.00%
+stop_loss: trades=5 pnl=-115.10 avg=-23.02 win_rate=0.00%
+stale_breakout: trades=5 pnl=-43.52 avg=-8.70 win_rate=0.00%
+signal_exit: trades=4 pnl=-16.43 avg=-4.11 win_rate=25.00%
+trailing_stop: trades=5 pnl=10.55 avg=2.11 win_rate=40.00%
 take_profit: trades=2 pnl=51.36 avg=25.68 win_rate=100.00%

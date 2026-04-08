@@ -1,23 +1,12 @@
 Artifact: msft_mean_reversion__5m_us_5m_us_symbol_candidate
-Closed trades: 85
-Realized pnl: -46.09
+Closed trades: 1
+Realized pnl: -0.61
 
 By entry hour
-14: trades=49 pnl=-26.29 avg=-0.54 win_rate=4.08%
-15: trades=15 pnl=-8.76 avg=-0.58 win_rate=0.00%
-18: trades=7 pnl=-3.86 avg=-0.55 win_rate=0.00%
-16: trades=7 pnl=-3.54 avg=-0.51 win_rate=0.00%
-17: trades=6 pnl=-3.12 avg=-0.52 win_rate=0.00%
-19: trades=1 pnl=-0.52 avg=-0.52 win_rate=0.00%
+15: trades=1 pnl=-0.61 avg=-0.61 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=85 pnl=-46.09 avg=-0.54 win_rate=2.35%
+mean_reversion: trades=1 pnl=-0.61 avg=-0.61 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=54 pnl=-33.88 avg=-0.63 win_rate=0.00%
-trailing_stop: trades=12 pnl=-5.24 avg=-0.44 win_rate=0.00%
-stop_loss: trades=5 pnl=-3.82 avg=-0.76 win_rate=0.00%
-stale_breakout: trades=4 pnl=-2.00 avg=-0.50 win_rate=0.00%
-time_stop: trades=1 pnl=-0.55 avg=-0.55 win_rate=0.00%
-signal_exit: trades=8 pnl=-0.33 avg=-0.04 win_rate=25.00%
-take_profit: trades=1 pnl=-0.27 avg=-0.27 win_rate=0.00%
+structure_exit: trades=1 pnl=-0.61 avg=-0.61 win_rate=0.00%

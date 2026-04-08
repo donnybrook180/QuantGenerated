@@ -1,15 +1,9 @@
 Artifact: msft_mean_reversion__15m_power__exit_quick_15m_power_symbol_candidate
-Closed trades: 22
-Realized pnl: -9.16
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-18: trades=17 pnl=-6.88 avg=-0.40 win_rate=11.76%
-19: trades=5 pnl=-2.28 avg=-0.46 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=22 pnl=-9.16 avg=-0.42 win_rate=9.09%
 
 By exit reason
-structure_exit: trades=14 pnl=-8.04 avg=-0.57 win_rate=0.00%
-take_profit: trades=7 pnl=-0.60 avg=-0.09 win_rate=28.57%
-stale_breakout: trades=1 pnl=-0.52 avg=-0.52 win_rate=0.00%

@@ -1,0 +1,20 @@
+Artifact: jp225_momentum__regime_trend_flat_vol_high__local_opt_density__plus__momentum__regime_trend_flat_vol_high__near_miss_dense_symbol_candidate
+Closed trades: 10
+Realized pnl: -13.40
+
+By entry hour
+14: trades=2 pnl=-62.28 avg=-31.14 win_rate=0.00%
+18: trades=2 pnl=-47.63 avg=-23.82 win_rate=0.00%
+17: trades=2 pnl=-5.58 avg=-2.79 win_rate=50.00%
+16: trades=3 pnl=11.38 avg=3.79 win_rate=33.33%
+19: trades=1 pnl=90.71 avg=90.71 win_rate=100.00%
+
+By entry setup
+momentum_confirmation+momentum_confirmation: trades=10 pnl=-13.40 avg=-1.34 win_rate=30.00%
+
+By exit reason
+structure_exit: trades=2 pnl=-87.31 avg=-43.65 win_rate=0.00%
+stop_loss: trades=2 pnl=-72.08 avg=-36.04 win_rate=0.00%
+trailing_stop: trades=3 pnl=-9.63 avg=-3.21 win_rate=33.33%
+time_stop: trades=1 pnl=-6.54 avg=-6.54 win_rate=0.00%
+take_profit: trades=2 pnl=162.16 avg=81.08 win_rate=100.00%

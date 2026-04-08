@@ -1,9 +1,8 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-09T13:25:00+00:00,2026-03-09T14:05:00+00:00,13,14,crypto_volatility_expansion,trailing_stop,68790.32550,68750.11444,0.10000,-8.49117,4.47006,8,0.98910,{'breakout_high': 68622.0}
+X:BTCUSD,2026-03-09T12:35:00+00:00,2026-03-09T14:05:00+00:00,12,14,crypto_volatility_expansion,trailing_stop,68290.62056,68750.11444,0.10000,41.49556,4.45382,18,0.75410,{'breakout_high': 68168.0}
 X:BTCUSD,2026-03-10T15:00:00+00:00,2026-03-10T15:05:00+00:00,15,15,crypto_volatility_expansion,signal_exit,71810.64848,71171.76113,0.10000,-68.53566,4.64693,1,1.00000,{'breakout_high': 71574.0}
-X:BTCUSD,2026-03-11T13:30:00+00:00,2026-03-11T13:50:00+00:00,13,13,crypto_volatility_expansion,signal_exit,70749.71937,69972.96098,0.10000,-82.24933,4.57349,4,1.00000,{'breakout_high': 70416.78}
+X:BTCUSD,2026-03-11T13:20:00+00:00,2026-03-11T13:40:00+00:00,13,13,crypto_volatility_expansion,trailing_stop,70302.61231,70446.16999,0.10000,9.78143,4.57434,4,0.84489,{'breakout_high': 70128.0}
 X:BTCUSD,2026-03-13T13:15:00+00:00,2026-03-13T14:40:00+00:00,13,14,crypto_volatility_expansion,trailing_stop,73281.22904,72965.09209,0.10000,-36.36670,4.75301,17,1.00000,{'breakout_high': 72950.0}
-X:BTCUSD,2026-03-16T12:25:00+00:00,2026-03-16T13:05:00+00:00,12,13,crypto_volatility_expansion,stale_breakout,73895.08110,73855.98844,0.10000,-8.71118,4.80191,8,0.56616,{'breakout_high': 73816.9}
 X:BTCUSD,2026-03-17T15:00:00+00:00,2026-03-17T15:10:00+00:00,15,15,crypto_volatility_expansion,signal_exit,74730.70643,74131.98703,0.10000,-64.70998,4.83804,2,1.00000,{'breakout_high': 74452.47}
 X:BTCUSD,2026-03-23T13:35:00+00:00,2026-03-23T15:15:00+00:00,13,15,crypto_volatility_expansion,trailing_stop,71120.86503,71093.03294,0.10000,-7.40516,4.62195,20,0.92524,{'breakout_high': 70939.0}
 X:BTCUSD,2026-03-26T13:45:00+00:00,2026-03-26T14:45:00+00:00,13,14,crypto_volatility_expansion,stale_breakout,69650.44450,69400.58685,0.10000,-29.50492,4.51916,12,0.68882,{'breakout_high': 69537.0}

@@ -1,0 +1,15 @@
+Artifact: jp225_jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective_symbol_candidate
+Closed trades: 6
+Realized pnl: -32.56
+
+By entry hour
+4: trades=3 pnl=-22.05 avg=-7.35 win_rate=33.33%
+3: trades=3 pnl=-10.51 avg=-3.50 win_rate=33.33%
+
+By entry setup
+volatility_short_breakdown: trades=6 pnl=-32.56 avg=-5.43 win_rate=33.33%
+
+By exit reason
+signal_exit: trades=1 pnl=-44.77 avg=-44.77 win_rate=0.00%
+stop_loss: trades=1 pnl=-30.12 avg=-30.12 win_rate=0.00%
+trailing_stop: trades=4 pnl=42.33 avg=10.58 win_rate=50.00%

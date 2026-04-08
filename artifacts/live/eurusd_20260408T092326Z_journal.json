@@ -1,0 +1,36 @@
+{
+  "symbol": "EURUSD",
+  "broker_symbol": "EURUSD",
+  "deployment_path": "artifacts\\deploy\\eurusd.live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "actions": [
+    {
+      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-06T12:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 3090374
+    },
+    {
+      "candidate_name": "forex_breakout_momentum__30m_overlap",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-06T12:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 3095145
+    },
+    {
+      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_fastfail",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-06T12:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 3068486
+    }
+  ]
+}

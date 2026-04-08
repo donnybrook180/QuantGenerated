@@ -3,111 +3,72 @@ Broker symbol: GBPUSD
 Data source: duckdb_cache
 
 Ranked candidates
-forex_breakout_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=278.89 closed=49 pf=1.59 win_rate=34.69% dd=0.25%
-  trade_metrics: expectancy=5.69 avg_win=44.07 avg_loss=-14.70 payoff=3.00 avg_hold=8.2
-  exits: dominant=signal_exit share=32.65%
-  regimes: best=trend_flat_vol_mid pnl=301.63 worst=trend_flat_vol_high pnl=-37.96 dominant_share=57.14%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=147.22 avg_test_pnl=125.88 avg_val_pf=3.22 avg_test_pf=3.13
-  splits: train_pnl=5.32 val_pnl=150.55 val_pf=3.52 val_closed=9 test_pnl=201.59 test_pf=3.87 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe [single]: pnl=207.82 closed=50 pf=1.51 win_rate=38.00% dd=0.16%
-  trade_metrics: expectancy=4.16 avg_win=32.37 avg_loss=-13.13 payoff=2.46 avg_hold=6.4
-  exits: dominant=signal_exit share=22.00%
-  regimes: best=trend_flat_vol_mid pnl=328.73 worst=trend_flat_vol_low pnl=-58.18 dominant_share=58.00%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=160.69 avg_test_pnl=111.73 avg_val_pf=3.52 avg_test_pf=3.39
-  splits: train_pnl=-55.85 val_pnl=170.75 val_pf=4.17 val_closed=9 test_pnl=166.09 test_pf=3.70 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum_patient [combined]: pnl=207.82 closed=50 pf=1.51 win_rate=38.00% dd=0.16%
-  trade_metrics: expectancy=4.16 avg_win=32.37 avg_loss=-13.13 payoff=2.46 avg_hold=6.4
-  exits: dominant=signal_exit share=22.00%
-  regimes: best=trend_flat_vol_mid pnl=328.73 worst=trend_flat_vol_low pnl=-58.18 dominant_share=58.00%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=160.69 avg_test_pnl=111.73 avg_val_pf=3.52 avg_test_pf=3.39
-  combo_validation: components=2 outperformance=-35.50 trade_overlap=98.00%
-  splits: train_pnl=-55.85 val_pnl=170.75 val_pf=4.17 val_closed=9 test_pnl=166.09 test_pf=3.70 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum_patient_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum_patient_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__plus__forex_breakout_momentum_patient [combined]: pnl=207.82 closed=50 pf=1.51 win_rate=38.00% dd=0.16%
-  trade_metrics: expectancy=4.16 avg_win=32.37 avg_loss=-13.13 payoff=2.46 avg_hold=6.4
-  exits: dominant=signal_exit share=22.00%
-  regimes: best=trend_flat_vol_mid pnl=328.73 worst=trend_flat_vol_low pnl=-58.18 dominant_share=58.00%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=160.69 avg_test_pnl=111.73 avg_val_pf=3.52 avg_test_pf=3.39
-  combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
-  splits: train_pnl=-55.85 val_pnl=170.75 val_pf=4.17 val_closed=9 test_pnl=166.09 test_pf=3.70 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__plus__forex_breakout_momentum_patient_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__plus__forex_breakout_momentum_patient_symbol_candidate_analysis.txt
-forex_breakout_momentum_patient [auto_improved]: pnl=193.52 closed=50 pf=1.46 win_rate=38.00% dd=0.17%
-  trade_metrics: expectancy=3.87 avg_win=32.37 avg_loss=-13.60 payoff=2.38 avg_hold=6.5
-  exits: dominant=signal_exit share=28.00%
-  regimes: best=trend_flat_vol_mid pnl=314.43 worst=trend_flat_vol_low pnl=-58.18 dominant_share=58.00%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=160.69 avg_test_pnl=111.73 avg_val_pf=3.52 avg_test_pf=3.39
-  splits: train_pnl=-70.15 val_pnl=170.75 val_pf=4.17 val_closed=9 test_pnl=166.09 test_pf=3.70 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=85.82 closed=50 pf=1.21 win_rate=36.00% dd=0.17%
-  trade_metrics: expectancy=1.72 avg_win=27.13 avg_loss=-12.58 payoff=2.16 avg_hold=5.9
-  exits: dominant=structure_exit share=30.00%
-  regimes: best=trend_flat_vol_mid pnl=203.84 worst=trend_flat_vol_low pnl=-55.28 dominant_share=58.00%
-  walk_forward: windows=2 pass_rate=100.00% avg_val_pnl=36.24 avg_test_pnl=99.33 avg_val_pf=1.54 avg_test_pf=3.07
-  splits: train_pnl=-35.35 val_pnl=40.65 val_pf=1.70 val_closed=9 test_pnl=153.69 test_pf=3.49 test_closed=9
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
-forex_trend_continuation_looser [auto_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
-  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
-  exits: dominant=none share=0.00%
-  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+forex_trend_continuation_looser [auto_improved]: pnl=-26.18 closed=8 pf=0.42 win_rate=25.00% dd=0.03%
+  trade_metrics: expectancy=-3.27 avg_win=9.66 avg_loss=-7.58 payoff=1.27 avg_hold=3.8
+  exits: dominant=signal_exit share=62.50%
+  regimes: best=trend_flat_vol_low pnl=-26.18 worst=trend_flat_vol_low pnl=-26.18 dominant_share=100.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.55 avg_test_pnl=-16.84 avg_val_pf=0.00 avg_test_pf=0.06
+  splits: train_pnl=-21.10 val_pnl=-4.90 val_pf=0.00 val_closed=1 test_pnl=-16.98 test_pf=0.13 test_closed=4
   trades: artifacts\gbpusd_forex_trend_continuation_looser_symbol_candidate_trades.csv
   analysis: artifacts\gbpusd_forex_trend_continuation_looser_symbol_candidate_analysis.txt
-forex_breakout_momentum_patient__regime_trend_flat_vol_mid [regime_improved]: pnl=-2.11 closed=10 pf=0.99 win_rate=50.00% dd=0.05%
-  trade_metrics: expectancy=-0.21 avg_win=39.43 avg_loss=-39.85 payoff=0.99 avg_hold=1.6
-  exits: dominant=stop_loss share=50.00%
-  regimes: best=trend_flat_vol_mid pnl=-2.11 worst=trend_flat_vol_mid pnl=-2.11 dominant_share=100.00%
+forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid [regime_improved]: pnl=-104.62 closed=12 pf=0.62 win_rate=25.00% dd=0.16%
+  trade_metrics: expectancy=-8.72 avg_win=56.90 avg_loss=-30.59 payoff=1.86 avg_hold=3.2
+  exits: dominant=stop_loss share=41.67%
+  regimes: best=trend_flat_vol_mid pnl=-104.62 worst=trend_flat_vol_mid pnl=-104.62 dominant_share=100.00%
   regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-63.35 avg_test_pnl=27.66 avg_val_pf=0.10 avg_test_pf=500.06
-  splits: train_pnl=60.33 val_pnl=-38.75 val_pf=0.19 val_closed=2 test_pnl=4.56 test_pf=1.12 test_closed=2
-  trades: artifacts\gbpusd_forex_breakout_momentum_patient__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum_patient__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum__15m_europe [combined]: pnl=-70.39 closed=63 pf=0.90 win_rate=34.92% dd=0.33%
-  trade_metrics: expectancy=-1.12 avg_win=29.88 avg_loss=-17.75 payoff=1.68 avg_hold=7.2
-  exits: dominant=signal_exit share=25.40%
-  regimes: best=trend_flat_vol_mid pnl=360.60 worst=trend_flat_vol_low pnl=-331.94 dominant_share=60.32%
-  walk_forward: windows=2 pass_rate=50.00% avg_val_pnl=25.03 avg_test_pnl=81.69 avg_val_pf=1.12 avg_test_pf=1.89
-  combo_validation: components=2 outperformance=-134.92 trade_overlap=98.00%
-  splits: train_pnl=-174.60 val_pnl=35.83 val_pf=1.18 val_closed=13 test_pnl=168.73 test_pf=2.83 test_closed=10
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum__15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__plus__forex_breakout_momentum__15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid [regime_improved]: pnl=-197.61 closed=7 pf=0.39 win_rate=14.29% dd=0.22%
-  trade_metrics: expectancy=-28.23 avg_win=125.62 avg_loss=-53.87 payoff=2.33 avg_hold=1.7
-  exits: dominant=stop_loss share=71.43%
-  regimes: best=trend_flat_vol_mid pnl=-197.61 worst=trend_flat_vol_mid pnl=-197.61 dominant_share=100.00%
-  regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=8.21 avg_test_pnl=-28.22 avg_val_pf=499.50 avg_test_pf=0.00
-  splits: train_pnl=-141.17 val_pnl=16.43 val_pf=999.00 val_closed=1 test_pnl=-52.77 test_pf=0.00 test_closed=1
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=7.98 avg_test_pnl=-0.85 avg_val_pf=0.73 avg_test_pf=0.00
+  splits: train_pnl=-99.53 val_pnl=-1.70 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
   analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid [regime_improved]: pnl=-197.61 closed=7 pf=0.39 win_rate=14.29% dd=0.22%
-  trade_metrics: expectancy=-28.23 avg_win=125.62 avg_loss=-53.87 payoff=2.33 avg_hold=1.7
-  exits: dominant=stop_loss share=71.43%
-  regimes: best=trend_flat_vol_mid pnl=-197.61 worst=trend_flat_vol_mid pnl=-197.61 dominant_share=100.00%
+forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid [regime_improved]: pnl=-179.52 closed=12 pf=0.45 win_rate=25.00% dd=0.22%
+  trade_metrics: expectancy=-14.96 avg_win=48.50 avg_loss=-36.11 payoff=1.34 avg_hold=4.2
+  exits: dominant=stop_loss share=50.00%
+  regimes: best=trend_flat_vol_mid pnl=-179.52 worst=trend_flat_vol_mid pnl=-179.52 dominant_share=100.00%
   regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=8.21 avg_test_pnl=-28.22 avg_val_pf=499.50 avg_test_pf=0.00
-  splits: train_pnl=-141.17 val_pnl=16.43 val_pf=999.00 val_closed=1 test_pnl=-52.77 test_pf=0.00 test_closed=1
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.72 avg_test_pnl=-2.40 avg_val_pf=0.54 avg_test_pf=0.00
+  splits: train_pnl=-171.32 val_pnl=-4.79 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
   analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_fastfail__regime_trend_flat_vol_mid [regime_improved]: pnl=-197.61 closed=7 pf=0.39 win_rate=14.29% dd=0.22%
-  trade_metrics: expectancy=-28.23 avg_win=125.62 avg_loss=-53.87 payoff=2.33 avg_hold=1.7
-  exits: dominant=stop_loss share=42.86%
-  regimes: best=trend_flat_vol_mid pnl=-197.61 worst=trend_flat_vol_mid pnl=-197.61 dominant_share=100.00%
-  regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=8.21 avg_test_pnl=-28.22 avg_val_pf=499.50 avg_test_pf=0.00
-  splits: train_pnl=-141.17 val_pnl=16.43 val_pf=999.00 val_closed=1 test_pnl=-52.77 test_pf=0.00 test_closed=1
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=-277.46 closed=59 pf=0.62 win_rate=23.73% dd=0.39%
+  trade_metrics: expectancy=-4.70 avg_win=32.60 avg_loss=-16.31 payoff=2.00 avg_hold=14.0
+  exits: dominant=stop_loss share=28.81%
+  regimes: best=trend_flat_vol_mid pnl=88.11 worst=trend_flat_vol_low pnl=-205.13 dominant_share=54.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-13.30 avg_test_pnl=-20.02 avg_val_pf=0.90 avg_test_pf=0.87
+  splits: train_pnl=-206.50 val_pnl=-14.56 val_pf=0.89 val_closed=10 test_pnl=19.28 test_pf=1.11 test_closed=14
+  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe [single]: pnl=-292.96 closed=59 pf=0.57 win_rate=30.51% dd=0.39%
+  trade_metrics: expectancy=-4.97 avg_win=21.52 avg_loss=-16.59 payoff=1.30 avg_hold=11.1
+  exits: dominant=trailing_stop share=25.42%
+  regimes: best=trend_flat_vol_mid pnl=40.12 worst=trend_flat_vol_low pnl=-194.23 dominant_share=54.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-62.00 avg_test_pnl=-33.12 avg_val_pf=0.53 avg_test_pf=0.79
+  splits: train_pnl=-171.00 val_pnl=-62.26 val_pf=0.53 val_closed=10 test_pnl=1.69 test_pf=1.01 test_closed=14
+  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=-410.66 closed=59 pf=0.38 win_rate=27.12% dd=0.42%
+  trade_metrics: expectancy=-6.96 avg_win=15.44 avg_loss=-15.29 payoff=1.01 avg_hold=10.2
+  exits: dominant=structure_exit share=30.51%
+  regimes: best=trend_down_vol_mid pnl=-20.19 worst=trend_flat_vol_low pnl=-163.53 dominant_share=54.24%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-132.99 avg_test_pnl=-83.87 avg_val_pf=0.03 avg_test_pf=0.50
+  splits: train_pnl=-130.40 val_pnl=-133.26 val_pf=0.03 val_closed=10 test_pnl=-85.61 test_pf=0.53 test_closed=14
+  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum_patient [auto_improved]: pnl=-1098.18 closed=183 pf=0.44 win_rate=26.78% dd=1.12%
+  trade_metrics: expectancy=-6.00 avg_win=17.86 avg_loss=-14.72 payoff=1.21 avg_hold=10.6
+  exits: dominant=stop_loss share=27.87%
+  regimes: best=trend_up_vol_low pnl=-2.00 worst=trend_flat_vol_low pnl=-673.16 dominant_share=66.67%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-213.81 avg_test_pnl=-220.26 avg_val_pf=0.46 avg_test_pf=0.56
+  splits: train_pnl=-506.94 val_pnl=-216.96 val_pf=0.51 val_closed=38 test_pnl=-162.38 test_pf=0.67 test_closed=38
+  trades: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_trades.csv
+  analysis: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_analysis.txt
+forex_breakout_momentum_exit_relaxed [auto_second_pass]: pnl=-1154.08 closed=183 pf=0.42 win_rate=26.78% dd=1.18%
+  trade_metrics: expectancy=-6.31 avg_win=17.37 avg_loss=-14.96 payoff=1.16 avg_hold=10.3
+  exits: dominant=stop_loss share=28.96%
+  regimes: best=trend_up_vol_low pnl=-2.00 worst=trend_flat_vol_low pnl=-671.47 dominant_share=65.57%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-211.21 avg_test_pnl=-261.46 avg_val_pf=0.47 avg_test_pf=0.52
+  splits: train_pnl=-494.34 val_pnl=-216.96 val_pf=0.51 val_closed=38 test_pnl=-203.58 test_pf=0.62 test_closed=39
+  trades: artifacts\gbpusd_forex_breakout_momentum_exit_relaxed_symbol_candidate_trades.csv
+  analysis: artifacts\gbpusd_forex_breakout_momentum_exit_relaxed_symbol_candidate_analysis.txt
 
 Recommended active agents
-- forex_breakout_momentum__15m_europe__exit_trend (GBPUSD-focused Europe-session breakout momentum [15m_europe] with trend-runner exits)
-- forex_breakout_momentum__15m_europe (GBPUSD-focused Europe-session breakout momentum [15m_europe])
-- forex_breakout_momentum_patient (Forex breakout momentum with slower exits)
+No candidate met the positive-PnL and PF>=1.0 threshold.

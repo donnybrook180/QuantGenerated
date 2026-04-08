@@ -1,9 +1,19 @@
 Artifact: xauusd_momentum__5m_europe__exit_trend_5m_europe_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 14
+Realized pnl: -1114.71
 
 By entry hour
+11: trades=5 pnl=-404.35 avg=-80.87 win_rate=20.00%
+7: trades=4 pnl=-279.45 avg=-69.86 win_rate=25.00%
+10: trades=1 pnl=-264.38 avg=-264.38 win_rate=0.00%
+12: trades=1 pnl=-207.91 avg=-207.91 win_rate=0.00%
+9: trades=1 pnl=-7.38 avg=-7.38 win_rate=0.00%
+8: trades=2 pnl=48.76 avg=24.38 win_rate=50.00%
 
 By entry setup
+momentum_confirmation: trades=14 pnl=-1114.71 avg=-79.62 win_rate=21.43%
 
 By exit reason
+stop_loss: trades=6 pnl=-1228.27 avg=-204.71 win_rate=0.00%
+stale_breakout: trades=3 pnl=17.48 avg=5.83 win_rate=33.33%
+trailing_stop: trades=5 pnl=96.08 avg=19.22 win_rate=40.00%

@@ -1,0 +1,18 @@
+Artifact: btc_crypto_volatility_expansion__5m_europe__exit_trend__near_miss_patient_symbol_candidate
+Closed trades: 10
+Realized pnl: -26.79
+
+By entry hour
+11: trades=1 pnl=-49.71 avg=-49.71 win_rate=0.00%
+10: trades=1 pnl=-27.20 avg=-27.20 win_rate=0.00%
+12: trades=1 pnl=-6.47 avg=-6.47 win_rate=0.00%
+7: trades=2 pnl=-4.78 avg=-2.39 win_rate=50.00%
+8: trades=5 pnl=61.37 avg=12.27 win_rate=20.00%
+
+By entry setup
+crypto_volatility_expansion: trades=10 pnl=-26.79 avg=-2.68 win_rate=20.00%
+
+By exit reason
+stale_breakout: trades=4 pnl=-166.59 avg=-41.65 win_rate=0.00%
+trailing_stop: trades=5 pnl=-33.77 avg=-6.75 win_rate=20.00%
+take_profit: trades=1 pnl=173.57 avg=173.57 win_rate=100.00%

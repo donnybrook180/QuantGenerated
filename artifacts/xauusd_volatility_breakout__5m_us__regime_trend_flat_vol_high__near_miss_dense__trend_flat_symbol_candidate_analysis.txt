@@ -1,0 +1,17 @@
+Artifact: xauusd_volatility_breakout__5m_us__regime_trend_flat_vol_high__near_miss_dense__trend_flat_symbol_candidate
+Closed trades: 5
+Realized pnl: 1765.37
+
+By entry hour
+18: trades=1 pnl=-15.79 avg=-15.79 win_rate=0.00%
+13: trades=2 pnl=395.26 avg=197.63 win_rate=100.00%
+14: trades=1 pnl=572.02 avg=572.02 win_rate=100.00%
+20: trades=1 pnl=813.89 avg=813.89 win_rate=100.00%
+
+By entry setup
+volatility_breakout: trades=5 pnl=1765.37 avg=353.07 win_rate=80.00%
+
+By exit reason
+trailing_stop: trades=1 pnl=-15.79 avg=-15.79 win_rate=0.00%
+signal_exit: trades=2 pnl=854.49 avg=427.25 win_rate=100.00%
+take_profit: trades=2 pnl=926.67 avg=463.34 win_rate=100.00%

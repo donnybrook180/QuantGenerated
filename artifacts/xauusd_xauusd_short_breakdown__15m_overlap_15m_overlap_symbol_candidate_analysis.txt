@@ -1,18 +1,19 @@
 Artifact: xauusd_xauusd_short_breakdown__15m_overlap_15m_overlap_symbol_candidate
-Closed trades: 7
-Realized pnl: 2282.60
+Closed trades: 11
+Realized pnl: -2319.17
 
 By entry hour
-14: trades=1 pnl=-396.23 avg=-396.23 win_rate=0.00%
-16: trades=2 pnl=708.01 avg=354.01 win_rate=100.00%
-13: trades=4 pnl=1970.82 avg=492.71 win_rate=50.00%
+13: trades=7 pnl=-1676.65 avg=-239.52 win_rate=14.29%
+14: trades=1 pnl=-399.51 avg=-399.51 win_rate=0.00%
+16: trades=3 pnl=-243.01 avg=-81.00 win_rate=33.33%
 
 By entry setup
-xauusd_short_breakdown: trades=7 pnl=2282.60 avg=326.09 win_rate=57.14%
+xauusd_short_breakdown: trades=11 pnl=-2319.17 avg=-210.83 win_rate=18.18%
 
 By exit reason
-stop_loss: trades=1 pnl=-595.93 avg=-595.93 win_rate=0.00%
-stale_breakout: trades=1 pnl=-396.23 avg=-396.23 win_rate=0.00%
-structure_exit: trades=1 pnl=-232.58 avg=-232.58 win_rate=0.00%
-signal_exit: trades=1 pnl=82.95 avg=82.95 win_rate=100.00%
-take_profit: trades=3 pnl=3424.39 avg=1141.46 win_rate=100.00%
+stop_loss: trades=4 pnl=-1377.39 avg=-344.35 win_rate=0.00%
+structure_exit: trades=2 pnl=-615.39 avg=-307.69 win_rate=0.00%
+stale_breakout: trades=1 pnl=-399.51 avg=-399.51 win_rate=0.00%
+time_stop: trades=1 pnl=-373.76 avg=-373.76 win_rate=0.00%
+trailing_stop: trades=2 pnl=52.18 avg=26.09 win_rate=50.00%
+take_profit: trades=1 pnl=394.70 avg=394.70 win_rate=100.00%

@@ -1,20 +1,12 @@
 Artifact: nvda_volatility_breakout__5m_midday__exit_fastfail_5m_midday_symbol_candidate
-Closed trades: 128
-Realized pnl: -60.89
+Closed trades: 1
+Realized pnl: 0.07
 
 By entry hour
-15: trades=51 pnl=-26.67 avg=-0.52 win_rate=0.00%
-16: trades=42 pnl=-21.47 avg=-0.51 win_rate=4.76%
-17: trades=35 pnl=-12.75 avg=-0.36 win_rate=8.57%
+17: trades=1 pnl=0.07 avg=0.07 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=128 pnl=-60.89 avg=-0.48 win_rate=3.91%
+volatility_breakout: trades=1 pnl=0.07 avg=0.07 win_rate=100.00%
 
 By exit reason
-signal_exit: trades=35 pnl=-18.54 avg=-0.53 win_rate=0.00%
-trailing_stop: trades=22 pnl=-11.12 avg=-0.51 win_rate=0.00%
-stop_loss: trades=15 pnl=-8.98 avg=-0.60 win_rate=0.00%
-structure_exit: trades=14 pnl=-8.68 avg=-0.62 win_rate=0.00%
-take_profit: trades=29 pnl=-5.08 avg=-0.18 win_rate=17.24%
-stale_breakout: trades=8 pnl=-4.45 avg=-0.56 win_rate=0.00%
-time_stop: trades=5 pnl=-4.04 avg=-0.81 win_rate=0.00%
+take_profit: trades=1 pnl=0.07 avg=0.07 win_rate=100.00%

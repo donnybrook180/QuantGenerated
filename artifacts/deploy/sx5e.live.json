@@ -1,0 +1,26 @@
+{
+  "profile_name": "symbol::sx5e",
+  "symbol": "SX5E",
+  "data_symbol": "SX5E",
+  "broker_symbol": "EU50.cash",
+  "research_run_id": 179,
+  "execution_set_id": 79,
+  "execution_validation_summary": "selection=standard variant=trend__near_miss_patient__trend_up@default|trend_up data_source=duckdb_cache pnl=0.94 pf=1.09 closed=16 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "trend__near_miss_patient__trend_up",
+      "code_path": "quant_system.agents.trend.TrendAgent",
+      "variant_label": "",
+      "regime_filter_label": "trend_up",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 7,
+        "max_holding_bars": 22,
+        "take_profit_atr_multiple": 2.4000000000000004,
+        "break_even_atr_multiple": 0.4,
+        "trailing_stop_atr_multiple": 0.8
+      },
+      "allocation_weight": 1.0
+    }
+  ]
+}

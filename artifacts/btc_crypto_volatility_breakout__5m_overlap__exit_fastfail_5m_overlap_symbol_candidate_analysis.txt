@@ -1,19 +1,19 @@
 Artifact: btc_crypto_volatility_breakout__5m_overlap__exit_fastfail_5m_overlap_symbol_candidate
-Closed trades: 11
-Realized pnl: -13.37
+Closed trades: 10
+Realized pnl: -135.87
 
 By entry hour
+12: trades=4 pnl=-87.45 avg=-21.86 win_rate=0.00%
 15: trades=1 pnl=-68.54 avg=-68.54 win_rate=0.00%
-12: trades=4 pnl=7.79 avg=1.95 win_rate=25.00%
+13: trades=4 pnl=-0.80 avg=-0.20 win_rate=25.00%
 14: trades=1 pnl=20.92 avg=20.92 win_rate=100.00%
-13: trades=5 pnl=26.46 avg=5.29 win_rate=40.00%
 
 By entry setup
-volatility_breakout: trades=11 pnl=-13.37 avg=-1.22 win_rate=36.36%
+volatility_breakout: trades=10 pnl=-135.87 avg=-13.59 win_rate=20.00%
 
 By exit reason
-signal_exit: trades=4 pnl=-54.86 avg=-13.72 win_rate=50.00%
-structure_exit: trades=2 pnl=-42.86 avg=-21.43 win_rate=0.00%
-time_stop: trades=1 pnl=-16.30 avg=-16.30 win_rate=0.00%
-trailing_stop: trades=2 pnl=-9.87 avg=-4.93 win_rate=0.00%
-take_profit: trades=2 pnl=110.53 avg=55.27 win_rate=100.00%
+signal_exit: trades=5 pnl=-117.13 avg=-23.43 win_rate=20.00%
+structure_exit: trades=2 pnl=-64.92 avg=-32.46 win_rate=0.00%
+stale_breakout: trades=1 pnl=-7.52 avg=-7.52 win_rate=0.00%
+trailing_stop: trades=1 pnl=-1.38 avg=-1.38 win_rate=0.00%
+take_profit: trades=1 pnl=55.07 avg=55.07 win_rate=100.00%

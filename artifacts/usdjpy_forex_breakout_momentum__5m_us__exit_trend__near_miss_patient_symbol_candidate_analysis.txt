@@ -1,0 +1,23 @@
+Artifact: usdjpy_forex_breakout_momentum__5m_us__exit_trend__near_miss_patient_symbol_candidate
+Closed trades: 19
+Realized pnl: 124880.29
+
+By entry hour
+16: trades=2 pnl=-2687.36 avg=-1343.68 win_rate=0.00%
+18: trades=4 pnl=-2524.65 avg=-631.16 win_rate=25.00%
+17: trades=2 pnl=-1317.00 avg=-658.50 win_rate=0.00%
+14: trades=3 pnl=-846.15 avg=-282.05 win_rate=33.33%
+20: trades=1 pnl=-208.47 avg=-208.47 win_rate=0.00%
+19: trades=1 pnl=229.44 avg=229.44 win_rate=100.00%
+13: trades=1 pnl=301.21 avg=301.21 win_rate=100.00%
+15: trades=5 pnl=131933.26 avg=26386.65 win_rate=40.00%
+
+By entry setup
+forex_breakout_momentum: trades=19 pnl=124880.29 avg=6572.65 win_rate=31.58%
+
+By exit reason
+time_stop: trades=10 pnl=-5293.95 avg=-529.40 win_rate=0.00%
+stop_loss: trades=1 pnl=-2278.51 avg=-2278.51 win_rate=0.00%
+signal_exit: trades=3 pnl=-377.22 avg=-125.74 win_rate=33.33%
+trailing_stop: trades=4 pnl=1922.48 avg=480.62 win_rate=100.00%
+end_of_run: trades=1 pnl=130907.50 avg=130907.50 win_rate=100.00%

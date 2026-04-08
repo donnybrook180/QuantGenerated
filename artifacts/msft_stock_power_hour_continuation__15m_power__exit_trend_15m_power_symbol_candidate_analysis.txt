@@ -1,18 +1,13 @@
 Artifact: msft_stock_power_hour_continuation__15m_power__exit_trend_15m_power_symbol_candidate
-Closed trades: 62
-Realized pnl: -30.88
+Closed trades: 2
+Realized pnl: -1.09
 
 By entry hour
-18: trades=40 pnl=-22.59 avg=-0.56 win_rate=10.00%
-19: trades=22 pnl=-8.28 avg=-0.38 win_rate=22.73%
+19: trades=2 pnl=-1.09 avg=-0.54 win_rate=0.00%
 
 By entry setup
-stock_power_hour_continuation: trades=62 pnl=-30.88 avg=-0.50 win_rate=14.52%
+stock_power_hour_continuation: trades=2 pnl=-1.09 avg=-0.54 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=27 pnl=-21.22 avg=-0.79 win_rate=0.00%
-stale_breakout: trades=8 pnl=-6.78 avg=-0.85 win_rate=0.00%
-trailing_stop: trades=8 pnl=-4.18 avg=-0.52 win_rate=0.00%
-signal_exit: trades=2 pnl=-0.56 avg=-0.28 win_rate=50.00%
-end_of_run: trades=1 pnl=-0.33 avg=-0.33 win_rate=0.00%
-take_profit: trades=16 pnl=2.19 avg=0.14 win_rate=50.00%
+stop_loss: trades=1 pnl=-0.80 avg=-0.80 win_rate=0.00%
+take_profit: trades=1 pnl=-0.28 avg=-0.28 win_rate=0.00%

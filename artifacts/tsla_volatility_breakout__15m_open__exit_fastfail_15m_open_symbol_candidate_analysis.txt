@@ -1,17 +1,14 @@
 Artifact: tsla_volatility_breakout__15m_open__exit_fastfail_15m_open_symbol_candidate
-Closed trades: 42
-Realized pnl: -16.49
+Closed trades: 3
+Realized pnl: -0.82
 
 By entry hour
-13: trades=22 pnl=-12.05 avg=-0.55 win_rate=22.73%
-14: trades=20 pnl=-4.44 avg=-0.22 win_rate=30.00%
+13: trades=1 pnl=-1.12 avg=-1.12 win_rate=0.00%
+14: trades=2 pnl=0.30 avg=0.15 win_rate=50.00%
 
 By entry setup
-volatility_breakout: trades=42 pnl=-16.49 avg=-0.39 win_rate=26.19%
+volatility_breakout: trades=3 pnl=-0.82 avg=-0.27 win_rate=33.33%
 
 By exit reason
-signal_exit: trades=21 pnl=-10.77 avg=-0.51 win_rate=19.05%
-structure_exit: trades=6 pnl=-5.68 avg=-0.95 win_rate=0.00%
-stop_loss: trades=6 pnl=-5.01 avg=-0.83 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.73 avg=-0.73 win_rate=0.00%
-take_profit: trades=8 pnl=5.70 avg=0.71 win_rate=87.50%
+signal_exit: trades=2 pnl=-1.85 avg=-0.93 win_rate=0.00%
+take_profit: trades=1 pnl=1.03 avg=1.03 win_rate=100.00%

@@ -1,26 +1,17 @@
 Artifact: msft_volatility_breakout__15m_us__exit_fastfail_15m_us_symbol_candidate
-Closed trades: 131
-Realized pnl: -73.33
+Closed trades: 4
+Realized pnl: -1.52
 
 By entry hour
-13: trades=55 pnl=-32.83 avg=-0.60 win_rate=1.82%
-18: trades=14 pnl=-8.87 avg=-0.63 win_rate=0.00%
-14: trades=17 pnl=-8.61 avg=-0.51 win_rate=5.88%
-19: trades=11 pnl=-6.82 avg=-0.62 win_rate=0.00%
-15: trades=9 pnl=-5.01 avg=-0.56 win_rate=0.00%
-20: trades=8 pnl=-4.67 avg=-0.58 win_rate=12.50%
-17: trades=9 pnl=-3.56 avg=-0.40 win_rate=11.11%
-16: trades=8 pnl=-2.97 avg=-0.37 win_rate=12.50%
+13: trades=2 pnl=-1.13 avg=-0.57 win_rate=0.00%
+15: trades=1 pnl=-0.56 avg=-0.56 win_rate=0.00%
+17: trades=1 pnl=0.17 avg=0.17 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=131 pnl=-73.33 avg=-0.56 win_rate=3.82%
+volatility_breakout: trades=4 pnl=-1.52 avg=-0.38 win_rate=25.00%
 
 By exit reason
-signal_exit: trades=57 pnl=-34.89 avg=-0.61 win_rate=0.00%
-structure_exit: trades=14 pnl=-11.00 avg=-0.79 win_rate=0.00%
-stop_loss: trades=14 pnl=-10.91 avg=-0.78 win_rate=0.00%
-trailing_stop: trades=16 pnl=-7.06 avg=-0.44 win_rate=0.00%
-stale_breakout: trades=8 pnl=-4.68 avg=-0.59 win_rate=0.00%
-time_stop: trades=6 pnl=-4.13 avg=-0.69 win_rate=0.00%
-end_of_run: trades=1 pnl=-0.37 avg=-0.37 win_rate=0.00%
-take_profit: trades=15 pnl=-0.28 avg=-0.02 win_rate=33.33%
+signal_exit: trades=1 pnl=-0.58 avg=-0.58 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.56 avg=-0.56 win_rate=0.00%
+time_stop: trades=1 pnl=-0.55 avg=-0.55 win_rate=0.00%
+take_profit: trades=1 pnl=0.17 avg=0.17 win_rate=100.00%

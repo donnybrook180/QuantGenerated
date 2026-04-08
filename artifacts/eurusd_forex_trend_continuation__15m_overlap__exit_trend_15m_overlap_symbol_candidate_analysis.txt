@@ -1,12 +1,13 @@
 Artifact: eurusd_forex_trend_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate
-Closed trades: 1
-Realized pnl: 8.82
+Closed trades: 2
+Realized pnl: 8.94
 
 By entry hour
+15: trades=1 pnl=0.12 avg=0.12 win_rate=100.00%
 12: trades=1 pnl=8.82 avg=8.82 win_rate=100.00%
 
 By entry setup
-forex_trend_continuation: trades=1 pnl=8.82 avg=8.82 win_rate=100.00%
+forex_trend_continuation: trades=2 pnl=8.94 avg=4.47 win_rate=100.00%
 
 By exit reason
-signal_exit: trades=1 pnl=8.82 avg=8.82 win_rate=100.00%
+signal_exit: trades=2 pnl=8.94 avg=4.47 win_rate=100.00%

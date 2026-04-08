@@ -1,1 +1,9 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:GBPUSD,2025-10-08T12:15:00+00:00,2025-10-08T14:00:00+00:00,12,14,forex_trend_continuation,take_profit,1.34146,1.34319,0.10000,16.80000,0.50000,7,0.90021,{'pullback_floor': 1.34038}
+C:GBPUSD,2025-12-16T16:15:00+00:00,2025-12-16T18:00:00+00:00,16,18,forex_trend_continuation,stale_breakout,1.34278,1.34174,0.10000,-10.89996,0.50000,7,0.69639,{'pullback_floor': 1.3413}
+C:GBPUSD,2026-01-16T14:00:00+00:00,2026-01-16T14:30:00+00:00,14,14,forex_trend_continuation,signal_exit,1.34049,1.33952,0.10000,-10.19828,0.50000,2,0.72997,{'pullback_floor': 1.33933}
+C:GBPUSD,2026-02-20T19:00:00+00:00,2026-02-20T20:45:00+00:00,19,20,forex_trend_continuation,stale_breakout,1.34924,1.34880,0.10000,-4.90499,0.50000,7,0.96580,{'pullback_floor': 1.34912}
+C:GBPUSD,2026-03-10T00:45:00+00:00,2026-03-10T01:15:00+00:00,0,1,forex_trend_continuation,signal_exit,1.34361,1.34248,0.10000,-11.80054,0.50000,2,0.78137,{'pullback_floor': 1.34211}
+C:GBPUSD,2026-03-23T22:15:00+00:00,2026-03-23T22:30:00+00:00,22,22,forex_trend_continuation,signal_exit,1.34351,1.34285,0.10000,-7.10064,0.50000,1,1.00000,{'pullback_floor': 1.3431}
+C:GBPUSD,2026-03-27T00:45:00+00:00,2026-03-27T01:00:00+00:00,0,1,forex_trend_continuation,signal_exit,1.33345,1.33344,0.10000,-0.59339,0.50000,1,1.00000,{'pullback_floor': 1.33249}
+C:GBPUSD,2026-03-31T05:30:00+00:00,2026-03-31T06:15:00+00:00,5,6,forex_trend_continuation,signal_exit,1.32026,1.32056,0.10000,2.51632,0.50000,3,1.00000,{'pullback_floor': 1.3192}

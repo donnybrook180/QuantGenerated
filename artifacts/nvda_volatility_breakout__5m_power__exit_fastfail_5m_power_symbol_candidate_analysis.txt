@@ -1,18 +1,9 @@
 Artifact: nvda_volatility_breakout__5m_power__exit_fastfail_5m_power_symbol_candidate
-Closed trades: 84
-Realized pnl: -42.81
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-18: trades=50 pnl=-25.46 avg=-0.51 win_rate=0.00%
-19: trades=34 pnl=-17.34 avg=-0.51 win_rate=2.94%
 
 By entry setup
-volatility_breakout: trades=84 pnl=-42.81 avg=-0.51 win_rate=1.19%
 
 By exit reason
-signal_exit: trades=33 pnl=-17.56 avg=-0.53 win_rate=0.00%
-stop_loss: trades=14 pnl=-9.40 avg=-0.67 win_rate=0.00%
-take_profit: trades=22 pnl=-6.90 avg=-0.31 win_rate=4.55%
-trailing_stop: trades=8 pnl=-4.02 avg=-0.50 win_rate=0.00%
-structure_exit: trades=5 pnl=-3.86 avg=-0.77 win_rate=0.00%
-stale_breakout: trades=2 pnl=-1.06 avg=-0.53 win_rate=0.00%

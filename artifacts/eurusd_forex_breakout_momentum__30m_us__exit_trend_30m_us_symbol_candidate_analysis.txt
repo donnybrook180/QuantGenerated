@@ -1,0 +1,18 @@
+Artifact: eurusd_forex_breakout_momentum__30m_us__exit_trend_30m_us_symbol_candidate
+Closed trades: 6
+Realized pnl: 51.83
+
+By entry hour
+18: trades=1 pnl=-51.09 avg=-51.09 win_rate=0.00%
+17: trades=1 pnl=-17.98 avg=-17.98 win_rate=0.00%
+13: trades=1 pnl=2.13 avg=2.13 win_rate=100.00%
+16: trades=2 pnl=52.84 avg=26.42 win_rate=100.00%
+14: trades=1 pnl=65.92 avg=65.92 win_rate=100.00%
+
+By entry setup
+forex_breakout_momentum: trades=6 pnl=51.83 avg=8.64 win_rate=66.67%
+
+By exit reason
+stale_breakout: trades=4 pnl=-62.12 avg=-15.53 win_rate=50.00%
+trailing_stop: trades=1 pnl=48.02 avg=48.02 win_rate=100.00%
+take_profit: trades=1 pnl=65.92 avg=65.92 win_rate=100.00%

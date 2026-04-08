@@ -71,7 +71,7 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
             overnight_cost_per_lot_day=0.0,
             notes="FTMO metals model: 0.0007% per side; contract size 100 follows standard metal CFD convention; spread is a conservative inference.",
         )
-    if upper in {"GER40", "GER40.CASH", "DAX", "US500", "US500.CASH", "SPY", "US100", "US100.CASH", "QQQ"}:
+    if upper in {"GER40", "GER40.CASH", "DAX", "SX5E", "EU50", "EU50.CASH", "ESTX50", "JP225", "JP225.CASH", "JPN225", "NK225", "HK50", "HK50.CASH", "HSI50", "HANGSENG", "US500", "US500.CASH", "SPY", "US100", "US100.CASH", "QQQ"}:
         spread_points = 1.0
         if "US500" in upper or upper == "SPY":
             spread_points = 0.5

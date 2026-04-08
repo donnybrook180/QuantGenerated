@@ -28,7 +28,7 @@ def _equity_curve(pnls: list[float]) -> list[float]:
     return curve
 
 
-def plot_symbol_research(symbol: str, rows) -> list[Path]:
+def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
     try:
         import matplotlib
 
@@ -95,13 +95,13 @@ def plot_symbol_research(symbol: str, rows) -> list[Path]:
         plt.close(fig)
         paths.append(regime_path)
 
-        best = top[0]
-        trade_pnls = _load_trade_pnls(best.trade_log_path)
+        equity_row = best_row if best_row is not None else top[0]
+        trade_pnls = _load_trade_pnls(equity_row.trade_log_path)
         if trade_pnls:
             equity_path = ARTIFACTS_DIR / f"{slug}_best_candidate_equity.png"
             fig, ax = plt.subplots(figsize=(12, 5))
             ax.plot(_equity_curve(trade_pnls), color="#1f4e79", linewidth=2)
-            ax.set_title(f"{symbol} Equity Curve: {best.name}")
+            ax.set_title(f"{symbol} Equity Curve: {equity_row.name}")
             ax.set_xlabel("Closed trade number")
             ax.set_ylabel("Cumulative PnL")
             ax.axhline(0.0, color="gray", linewidth=1)

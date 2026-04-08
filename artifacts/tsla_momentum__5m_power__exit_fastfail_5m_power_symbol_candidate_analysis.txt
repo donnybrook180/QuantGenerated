@@ -1,19 +1,13 @@
 Artifact: tsla_momentum__5m_power__exit_fastfail_5m_power_symbol_candidate
-Closed trades: 57
-Realized pnl: -25.67
+Closed trades: 2
+Realized pnl: -0.96
 
 By entry hour
-18: trades=35 pnl=-15.13 avg=-0.43 win_rate=8.57%
-19: trades=22 pnl=-10.55 avg=-0.48 win_rate=18.18%
+18: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%
 
 By entry setup
-momentum_confirmation: trades=57 pnl=-25.67 avg=-0.45 win_rate=12.28%
+momentum_confirmation: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=11 pnl=-9.67 avg=-0.88 win_rate=0.00%
-structure_exit: trades=11 pnl=-8.18 avg=-0.74 win_rate=0.00%
-trailing_stop: trades=11 pnl=-5.76 avg=-0.52 win_rate=0.00%
-time_stop: trades=3 pnl=-1.72 avg=-0.57 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.50 avg=-0.50 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.17 avg=-0.17 win_rate=0.00%
-take_profit: trades=19 pnl=0.33 avg=0.02 win_rate=36.84%
+time_stop: trades=1 pnl=-0.65 avg=-0.65 win_rate=0.00%
+take_profit: trades=1 pnl=-0.31 avg=-0.31 win_rate=0.00%

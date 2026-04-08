@@ -1,0 +1,17 @@
+Artifact: usdjpy_forex_short_trend_continuation__30m_us__exit_trend_30m_us_symbol_candidate
+Closed trades: 5
+Realized pnl: 195.36
+
+By entry hour
+15: trades=2 pnl=-5978.43 avg=-2989.22 win_rate=0.00%
+14: trades=1 pnl=1064.25 avg=1064.25 win_rate=100.00%
+16: trades=2 pnl=5109.55 avg=2554.77 win_rate=50.00%
+
+By entry setup
+forex_short_trend_continuation: trades=5 pnl=195.36 avg=39.07 win_rate=40.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-4867.83 avg=-4867.83 win_rate=0.00%
+signal_exit: trades=2 pnl=-2152.12 avg=-1076.06 win_rate=0.00%
+trailing_stop: trades=1 pnl=1064.25 avg=1064.25 win_rate=100.00%
+take_profit: trades=1 pnl=6151.07 avg=6151.07 win_rate=100.00%

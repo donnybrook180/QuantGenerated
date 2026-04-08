@@ -1,30 +1,30 @@
 Viability autopsy: US500
-Execution validation summary: variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_momentum_selective__regime_trend_up_vol_high@default|trend_up_vol_high data_source=duckdb_cache pnl=1.05 pf=3.72 closed=8 -> accepted
+Execution validation summary: selection=standard variant=us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat@default|trend_flat, us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective__trend_flat@default|trend_flat, us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat@default|trend_flat data_source=duckdb_cache pnl=2.95 pf=4.67 closed=18 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 25%): 39
-- validation PF < 1.0 (0.00): 30
-- walk-forward avg validation pnl <= 0 (0.00): 29
-- walk-forward pass rate too low (0.00% < 20%): 22
-- combined validation/test trades too low (1 < 2): 21
+- walk-forward avg validation pnl <= 0 (0.00): 35
+- walk-forward pass rate too low (0.00% < 25%): 34
+- walk-forward pass rate too low (0.00% < 20%): 28
+- combined validation/test trades too low (1 < 2): 27
+- validation PF < 1.0 (0.00): 27
 - test PF < 1.0 (0.00): 14
 - validation trades too low (0 < 2): 8
 - validation pnl <= 0 (0.00): 8
 
 Top near-misses
-- us500_short_vwap_reject__regime_trend_flat_vol_high: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject__regime_trend_flat_vol_high: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_protective: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_dense: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)
-- us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high: pnl=0.85 pf=999.00 val=0.00/0.00/0 test=0.85/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high: pnl=0.84 pf=999.00 val=0.00/0.00/0 test=0.84/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 20%), walk-forward avg validation pnl <= 0 (0.00)

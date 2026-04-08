@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+JP225,2026-03-25T15:30:00+00:00,2026-03-25T16:50:00+00:00,15,16,mean_reversion,structure_exit,53680.46108,53648.53997,0.10000,-3.19211,0.00000,8,1.00000,"{'mean': 53913.375, 'z_score_20': -2.5817875434889235}"
+JP225,2026-03-25T18:15:00+00:00,2026-03-26T02:40:00+00:00,18,2,mean_reversion,trailing_stop,53558.45037,53639.77074,0.10000,8.13204,0.00000,45,1.00000,"{'mean': 53862.5, 'z_score_20': -2.2338526222632233}"

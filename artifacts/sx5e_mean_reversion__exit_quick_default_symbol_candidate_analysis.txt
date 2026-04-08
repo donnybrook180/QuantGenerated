@@ -1,0 +1,16 @@
+Artifact: sx5e_mean_reversion__exit_quick_default_symbol_candidate
+Closed trades: 7
+Realized pnl: -0.97
+
+By entry hour
+16: trades=1 pnl=-2.18 avg=-2.18 win_rate=0.00%
+15: trades=3 pnl=-1.45 avg=-0.48 win_rate=0.00%
+18: trades=2 pnl=0.14 avg=0.07 win_rate=50.00%
+17: trades=1 pnl=2.52 avg=2.52 win_rate=100.00%
+
+By entry setup
+mean_reversion: trades=7 pnl=-0.97 avg=-0.14 win_rate=28.57%
+
+By exit reason
+structure_exit: trades=5 pnl=-5.21 avg=-1.04 win_rate=0.00%
+take_profit: trades=2 pnl=4.24 avg=2.12 win_rate=100.00%

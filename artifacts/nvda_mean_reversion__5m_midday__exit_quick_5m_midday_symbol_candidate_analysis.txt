@@ -1,20 +1,9 @@
 Artifact: nvda_mean_reversion__5m_midday__exit_quick_5m_midday_symbol_candidate
-Closed trades: 66
-Realized pnl: -33.65
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-17: trades=26 pnl=-14.15 avg=-0.54 win_rate=0.00%
-15: trades=26 pnl=-12.34 avg=-0.47 win_rate=0.00%
-16: trades=14 pnl=-7.16 avg=-0.51 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=66 pnl=-33.65 avg=-0.51 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=41 pnl=-22.95 avg=-0.56 win_rate=0.00%
-take_profit: trades=15 pnl=-5.45 avg=-0.36 win_rate=0.00%
-stop_loss: trades=4 pnl=-2.43 avg=-0.61 win_rate=0.00%
-trailing_stop: trades=2 pnl=-1.06 avg=-0.53 win_rate=0.00%
-stale_breakout: trades=2 pnl=-0.99 avg=-0.50 win_rate=0.00%
-time_stop: trades=1 pnl=-0.53 avg=-0.53 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.23 avg=-0.23 win_rate=0.00%

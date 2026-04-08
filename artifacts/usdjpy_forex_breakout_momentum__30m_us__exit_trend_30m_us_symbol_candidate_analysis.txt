@@ -1,0 +1,14 @@
+Artifact: usdjpy_forex_breakout_momentum__30m_us__exit_trend_30m_us_symbol_candidate
+Closed trades: 3
+Realized pnl: 140849.55
+
+By entry hour
+14: trades=2 pnl=11032.05 avg=5516.02 win_rate=100.00%
+15: trades=1 pnl=129817.50 avg=129817.50 win_rate=100.00%
+
+By entry setup
+forex_breakout_momentum: trades=3 pnl=140849.55 avg=46949.85 win_rate=100.00%
+
+By exit reason
+take_profit: trades=2 pnl=11032.05 avg=5516.02 win_rate=100.00%
+end_of_run: trades=1 pnl=129817.50 avg=129817.50 win_rate=100.00%

@@ -1,0 +1,14 @@
+Artifact: tsla_stock_power_hour_sweep_dense__15m_midday_15m_midday_symbol_candidate
+Closed trades: 6
+Realized pnl: -0.00
+
+By entry hour
+17: trades=6 pnl=-0.00 avg=-0.00 win_rate=66.67%
+
+By entry setup
+stock_power_hour_continuation: trades=6 pnl=-0.00 avg=-0.00 win_rate=66.67%
+
+By exit reason
+stop_loss: trades=1 pnl=-1.40 avg=-1.40 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.55 avg=-0.55 win_rate=0.00%
+take_profit: trades=4 pnl=1.95 avg=0.49 win_rate=100.00%

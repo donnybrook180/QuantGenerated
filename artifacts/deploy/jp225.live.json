@@ -1,0 +1,19 @@
+{
+  "profile_name": "symbol::jp225",
+  "symbol": "JP225",
+  "data_symbol": "JP225",
+  "broker_symbol": "JP225.cash",
+  "research_run_id": 175,
+  "execution_set_id": 77,
+  "execution_validation_summary": "selection=sparse variant=jp225_volatility_short_breakdown_core_hours@default data_source=duckdb_cache pnl=317.72 pf=4.43 closed=13 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+      "code_path": "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+      "variant_label": "",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 1.0
+    }
+  ]
+}

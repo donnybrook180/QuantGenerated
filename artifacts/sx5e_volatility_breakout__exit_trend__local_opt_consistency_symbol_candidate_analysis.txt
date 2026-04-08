@@ -1,0 +1,28 @@
+Artifact: sx5e_volatility_breakout__exit_trend__local_opt_consistency_symbol_candidate
+Closed trades: 29
+Realized pnl: -7.13
+
+By entry hour
+18: trades=3 pnl=-3.85 avg=-1.28 win_rate=33.33%
+15: trades=4 pnl=-2.55 avg=-0.64 win_rate=50.00%
+17: trades=2 pnl=-2.47 avg=-1.23 win_rate=0.00%
+10: trades=3 pnl=-2.18 avg=-0.73 win_rate=0.00%
+23: trades=1 pnl=-2.13 avg=-2.13 win_rate=0.00%
+12: trades=2 pnl=-1.92 avg=-0.96 win_rate=0.00%
+19: trades=1 pnl=-1.68 avg=-1.68 win_rate=0.00%
+14: trades=2 pnl=-0.71 avg=-0.36 win_rate=0.00%
+9: trades=1 pnl=-0.28 avg=-0.28 win_rate=0.00%
+16: trades=1 pnl=-0.18 avg=-0.18 win_rate=0.00%
+11: trades=3 pnl=0.01 avg=0.00 win_rate=33.33%
+13: trades=2 pnl=1.98 avg=0.99 win_rate=100.00%
+22: trades=4 pnl=8.83 avg=2.21 win_rate=25.00%
+
+By entry setup
+volatility_breakout: trades=29 pnl=-7.13 avg=-0.25 win_rate=24.14%
+
+By exit reason
+signal_exit: trades=6 pnl=-9.60 avg=-1.60 win_rate=0.00%
+stop_loss: trades=3 pnl=-5.03 avg=-1.68 win_rate=0.00%
+stale_breakout: trades=3 pnl=-3.04 avg=-1.01 win_rate=0.00%
+trailing_stop: trades=16 pnl=-0.63 avg=-0.04 win_rate=37.50%
+take_profit: trades=1 pnl=11.17 avg=11.17 win_rate=100.00%

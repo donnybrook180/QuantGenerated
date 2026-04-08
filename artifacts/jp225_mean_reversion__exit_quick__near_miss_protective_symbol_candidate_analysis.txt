@@ -1,0 +1,17 @@
+Artifact: jp225_mean_reversion__exit_quick__near_miss_protective_symbol_candidate
+Closed trades: 7
+Realized pnl: -39.65
+
+By entry hour
+18: trades=2 pnl=-29.47 avg=-14.74 win_rate=0.00%
+16: trades=1 pnl=-26.97 avg=-26.97 win_rate=0.00%
+17: trades=2 pnl=1.76 avg=0.88 win_rate=100.00%
+15: trades=2 pnl=15.04 avg=7.52 win_rate=50.00%
+
+By entry setup
+mean_reversion: trades=7 pnl=-39.65 avg=-5.66 win_rate=42.86%
+
+By exit reason
+stop_loss: trades=2 pnl=-41.97 avg=-20.98 win_rate=0.00%
+stale_breakout: trades=2 pnl=-13.96 avg=-6.98 win_rate=50.00%
+trailing_stop: trades=3 pnl=16.28 avg=5.43 win_rate=66.67%

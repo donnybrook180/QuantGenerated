@@ -3,18 +3,10 @@
   "symbol": "ETH",
   "data_symbol": "X:ETHUSD",
   "broker_symbol": "ETHUSD",
-  "research_run_id": 152,
-  "execution_set_id": 58,
-  "execution_validation_summary": "variant=crypto_vwap_reversion__30m_us@30m_us, crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us data_source=duckdb_cache_aggregated pnl=407.06 pf=37.11 closed=5 -> accepted",
+  "research_run_id": 171,
+  "execution_set_id": 75,
+  "execution_validation_summary": "selection=standard variant=crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us, crypto_vwap_reversion__15m_us__exit_trend@15m_us, crypto_short_reversion_late_europe__15m_europe__exit_fastfail@15m_europe data_source=duckdb_cache_aggregated pnl=333.34 pf=3.55 closed=19 -> accepted",
   "strategies": [
-    {
-      "candidate_name": "crypto_vwap_reversion__30m_us",
-      "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
-      "variant_label": "30m_us",
-      "regime_filter_label": "",
-      "execution_overrides": {},
-      "allocation_weight": 0.5
-    },
     {
       "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
       "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
@@ -27,7 +19,34 @@
         "stale_breakout_bars": 8,
         "structure_exit_bars": 0
       },
-      "allocation_weight": 0.5
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "crypto_vwap_reversion__15m_us__exit_trend",
+      "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
+      "variant_label": "15m_us",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "crypto_short_reversion_late_europe__15m_europe__exit_fastfail",
+      "code_path": "quant_system.agents.crypto.CryptoShortReversionAgent",
+      "variant_label": "15m_europe",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 18,
+        "take_profit_atr_multiple": 1.8,
+        "stale_breakout_bars": 4,
+        "structure_exit_bars": 2
+      },
+      "allocation_weight": 0.3333333333333333
     }
   ]
 }

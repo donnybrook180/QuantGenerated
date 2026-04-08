@@ -1,0 +1,19 @@
+Artifact: btc_crypto_volatility_expansion_sweep_selective__15m_europe_15m_europe_symbol_candidate
+Closed trades: 8
+Realized pnl: -87.03
+
+By entry hour
+7: trades=2 pnl=-80.52 avg=-40.26 win_rate=0.00%
+11: trades=1 pnl=-52.02 avg=-52.02 win_rate=0.00%
+9: trades=2 pnl=-5.64 avg=-2.82 win_rate=50.00%
+8: trades=3 pnl=51.15 avg=17.05 win_rate=33.33%
+
+By entry setup
+crypto_volatility_expansion: trades=8 pnl=-87.03 avg=-10.88 win_rate=25.00%
+
+By exit reason
+stale_breakout: trades=3 pnl=-132.54 avg=-44.18 win_rate=0.00%
+stop_loss: trades=1 pnl=-103.46 avg=-103.46 win_rate=0.00%
+signal_exit: trades=1 pnl=-40.86 avg=-40.86 win_rate=0.00%
+trailing_stop: trades=2 pnl=13.47 avg=6.74 win_rate=50.00%
+take_profit: trades=1 pnl=176.36 avg=176.36 win_rate=100.00%

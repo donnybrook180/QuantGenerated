@@ -1,0 +1,16 @@
+Artifact: sx5e_trend__exit_trend__near_miss_protective__trend_up_vol_low_symbol_candidate
+Closed trades: 7
+Realized pnl: 3.51
+
+By entry hour
+14: trades=1 pnl=-1.15 avg=-1.15 win_rate=0.00%
+15: trades=3 pnl=1.41 avg=0.47 win_rate=66.67%
+19: trades=3 pnl=3.25 avg=1.08 win_rate=33.33%
+
+By entry setup
+trend: trades=7 pnl=3.51 avg=0.50 win_rate=42.86%
+
+By exit reason
+stop_loss: trades=3 pnl=-2.42 avg=-0.81 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.17 avg=-0.08 win_rate=50.00%
+take_profit: trades=2 pnl=6.09 avg=3.05 win_rate=100.00%

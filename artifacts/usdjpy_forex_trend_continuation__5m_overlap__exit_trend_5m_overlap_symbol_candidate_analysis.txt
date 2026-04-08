@@ -1,0 +1,17 @@
+Artifact: usdjpy_forex_trend_continuation__5m_overlap__exit_trend_5m_overlap_symbol_candidate
+Closed trades: 5
+Realized pnl: -3038.18
+
+By entry hour
+16: trades=1 pnl=-3272.59 avg=-3272.59 win_rate=0.00%
+13: trades=2 pnl=-2287.23 avg=-1143.62 win_rate=0.00%
+12: trades=2 pnl=2521.65 avg=1260.82 win_rate=50.00%
+
+By entry setup
+forex_trend_continuation: trades=5 pnl=-3038.18 avg=-607.64 win_rate=20.00%
+
+By exit reason
+stop_loss: trades=2 pnl=-5184.65 avg=-2592.32 win_rate=0.00%
+signal_exit: trades=1 pnl=-375.18 avg=-375.18 win_rate=0.00%
+trailing_stop: trades=1 pnl=-145.55 avg=-145.55 win_rate=0.00%
+take_profit: trades=1 pnl=2667.20 avg=2667.20 win_rate=100.00%

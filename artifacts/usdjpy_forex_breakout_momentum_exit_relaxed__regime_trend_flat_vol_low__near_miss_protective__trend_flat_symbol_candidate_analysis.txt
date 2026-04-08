@@ -1,0 +1,32 @@
+Artifact: usdjpy_forex_breakout_momentum_exit_relaxed__regime_trend_flat_vol_low__near_miss_protective__trend_flat_symbol_candidate
+Closed trades: 40
+Realized pnl: 120075.06
+
+By entry hour
+2: trades=3 pnl=-2795.62 avg=-931.87 win_rate=0.00%
+3: trades=3 pnl=-2193.19 avg=-731.06 win_rate=0.00%
+7: trades=2 pnl=-2056.31 avg=-1028.15 win_rate=0.00%
+18: trades=4 pnl=-1701.17 avg=-425.29 win_rate=25.00%
+1: trades=2 pnl=-1695.01 avg=-847.50 win_rate=0.00%
+8: trades=3 pnl=-1463.15 avg=-487.72 win_rate=0.00%
+14: trades=2 pnl=-1167.45 avg=-583.72 win_rate=0.00%
+9: trades=3 pnl=-542.67 avg=-180.89 win_rate=33.33%
+22: trades=1 pnl=-287.38 avg=-287.38 win_rate=0.00%
+5: trades=1 pnl=142.77 avg=142.77 win_rate=100.00%
+4: trades=1 pnl=272.08 avg=272.08 win_rate=100.00%
+13: trades=2 pnl=753.57 avg=376.79 win_rate=50.00%
+19: trades=1 pnl=1100.32 avg=1100.32 win_rate=100.00%
+21: trades=3 pnl=2114.21 avg=704.74 win_rate=33.33%
+15: trades=4 pnl=2278.57 avg=569.64 win_rate=50.00%
+10: trades=3 pnl=6545.61 avg=2181.87 win_rate=33.33%
+16: trades=2 pnl=120769.87 avg=60384.93 win_rate=50.00%
+
+By entry setup
+forex_breakout_momentum: trades=40 pnl=120075.06 avg=3001.88 win_rate=27.50%
+
+By exit reason
+stop_loss: trades=11 pnl=-11339.18 avg=-1030.83 win_rate=0.00%
+trailing_stop: trades=14 pnl=-4546.55 avg=-324.75 win_rate=14.29%
+signal_exit: trades=8 pnl=-907.15 avg=-113.39 win_rate=25.00%
+take_profit: trades=6 pnl=15029.63 avg=2504.94 win_rate=100.00%
+end_of_run: trades=1 pnl=121838.31 avg=121838.31 win_rate=100.00%

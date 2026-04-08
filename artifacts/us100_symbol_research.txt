@@ -3,73 +3,116 @@ Broker symbol: US100.cash
 Data source: duckdb_cache
 
 Ranked candidates
-opening_range_short_breakdown__exit_trend [entry_exit_family]: pnl=2.91 closed=17 pf=2.55 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.17 avg_win=0.53 avg_loss=-0.24 payoff=2.26 avg_hold=25.5
-  exits: dominant=stop_loss share=29.41%
-  regimes: best=trend_down_vol_high pnl=2.40 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=2.82 avg_test_pnl=0.32 avg_val_pf=9.17 avg_test_pf=499.50
+opening_range_short_breakdown__exit_trend [entry_exit_family]: pnl=1.75 closed=18 pf=1.67 win_rate=38.89% dd=0.00%
+  trade_metrics: expectancy=0.10 avg_win=0.62 avg_loss=-0.24 payoff=2.63 avg_hold=23.8
+  exits: dominant=stop_loss share=44.44%
+  regimes: best=trend_down_vol_high pnl=2.10 worst=trend_flat_vol_mid pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=2.52 avg_test_pnl=0.30 avg_val_pf=6.78 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=-0.10 val_pnl=3.19 val_pf=11.76 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  splits: train_pnl=-1.00 val_pnl=2.98 val_pf=9.55 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
-opening_range_short_breakdown [single]: pnl=2.39 closed=17 pf=2.27 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.14 avg_win=0.47 avg_loss=-0.24 payoff=2.02 avg_hold=20.9
-  exits: dominant=take_profit share=47.06%
-  regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+opening_range_short_breakdown [single]: pnl=1.27 closed=18 pf=1.49 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.07 avg_win=0.48 avg_loss=-0.26 payoff=1.86 avg_hold=19.7
+  exits: dominant=stop_loss share=44.44%
+  regimes: best=trend_down_vol_high pnl=1.60 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.65 avg_test_pnl=0.16 avg_val_pf=4.78 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  splits: train_pnl=-0.48 val_pnl=1.99 val_pf=6.70 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown_default_symbol_candidate_analysis.txt
-opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown [combined]: pnl=2.39 closed=17 pf=2.27 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.14 avg_win=0.47 avg_loss=-0.24 payoff=2.02 avg_hold=20.9
-  exits: dominant=take_profit share=47.06%
-  regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown [combined]: pnl=1.27 closed=18 pf=1.49 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.07 avg_win=0.48 avg_loss=-0.26 payoff=1.86 avg_hold=19.7
+  exits: dominant=stop_loss share=44.44%
+  regimes: best=trend_down_vol_high pnl=1.60 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.65 avg_test_pnl=0.16 avg_val_pf=4.78 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=100.00%
-  combo_validation: components=2 outperformance=-1.03 trade_overlap=100.00%
-  splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  combo_validation: components=2 outperformance=-1.00 trade_overlap=100.00%
+  splits: train_pnl=-0.48 val_pnl=1.99 val_pf=6.70 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown_symbol_candidate_analysis.txt
-opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail [combined]: pnl=2.39 closed=17 pf=2.27 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.14 avg_win=0.47 avg_loss=-0.24 payoff=2.02 avg_hold=20.9
-  exits: dominant=take_profit share=47.06%
-  regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense [combined]: pnl=1.27 closed=18 pf=1.49 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.07 avg_win=0.48 avg_loss=-0.26 payoff=1.86 avg_hold=19.7
+  exits: dominant=stop_loss share=44.44%
+  regimes: best=trend_down_vol_high pnl=1.60 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.65 avg_test_pnl=0.16 avg_val_pf=4.78 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=100.00%
-  combo_validation: components=2 outperformance=-1.03 trade_overlap=100.00%
-  splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_trades.csv
-  analysis: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_analysis.txt
-opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail [combined]: pnl=2.39 closed=17 pf=2.27 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.14 avg_win=0.47 avg_loss=-0.24 payoff=2.02 avg_hold=20.9
-  exits: dominant=take_profit share=47.06%
-  regimes: best=trend_down_vol_high pnl=1.86 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.92 avg_test_pnl=0.19 avg_val_pf=6.54 avg_test_pf=499.50
+  combo_validation: components=2 outperformance=-1.00 trade_overlap=100.00%
+  splits: train_pnl=-0.48 val_pnl=1.99 val_pf=6.70 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_analysis.txt
+opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense [combined]: pnl=1.27 closed=18 pf=1.49 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.07 avg_win=0.48 avg_loss=-0.26 payoff=1.86 avg_hold=19.7
+  exits: dominant=stop_loss share=44.44%
+  regimes: best=trend_down_vol_high pnl=1.60 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.65 avg_test_pnl=0.16 avg_val_pf=4.78 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=100.00%
   combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
-  splits: train_pnl=0.41 val_pnl=2.16 val_pf=8.28 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\us100_opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_trades.csv
-  analysis: artifacts\us100_opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail_symbol_candidate_analysis.txt
-opening_range_short_breakdown__exit_fastfail [entry_exit_family]: pnl=1.83 closed=17 pf=2.04 win_rate=52.94% dd=0.00%
-  trade_metrics: expectancy=0.11 avg_win=0.40 avg_loss=-0.22 payoff=1.81 avg_hold=18.9
-  exits: dominant=take_profit share=47.06%
-  regimes: best=trend_down_vol_high pnl=1.42 worst=trend_flat_vol_mid pnl=-0.30 dominant_share=47.06%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.52 avg_test_pnl=0.19 avg_val_pf=5.45 avg_test_pf=499.50
-  sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=0.24 val_pnl=1.77 val_pf=6.95 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  splits: train_pnl=-0.48 val_pnl=1.99 val_pf=6.70 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__plus__opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_dense [near_miss_optimized]: pnl=0.89 closed=18 pf=1.34 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.05 avg_win=0.44 avg_loss=-0.26 payoff=1.68 avg_hold=18.2
+  exits: dominant=take_profit share=44.44%
+  regimes: best=trend_down_vol_high pnl=1.22 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.33 avg_test_pnl=0.16 avg_val_pf=4.10 avg_test_pf=499.50
+  splits: train_pnl=-0.55 val_pnl=1.67 val_pf=5.78 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail [entry_exit_family]: pnl=0.78 closed=18 pf=1.30 win_rate=50.00% dd=0.00%
+  trade_metrics: expectancy=0.04 avg_win=0.37 avg_loss=-0.29 payoff=1.30 avg_hold=17.7
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_down_vol_high pnl=1.07 worst=trend_flat_vol_high pnl=-0.35 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.22 avg_test_pnl=0.16 avg_val_pf=3.86 avg_test_pf=499.50
+  splits: train_pnl=-0.54 val_pnl=1.56 val_pf=5.46 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
-opening_range_breakout__regime_trend_flat_vol_mid [regime_improved]: pnl=0.48 closed=5 pf=1.92 win_rate=40.00% dd=0.00%
-  trade_metrics: expectancy=0.10 avg_win=0.50 avg_loss=-0.17 payoff=2.89 avg_hold=3.8
-  exits: dominant=stop_loss share=40.00%
-  regimes: best=trend_flat_vol_mid pnl=0.48 worst=trend_flat_vol_mid pnl=0.48 dominant_share=100.00%
-  regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.09 avg_test_pnl=0.13 avg_val_pf=1.34 avg_test_pf=5.91
-  sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=0.48 val_pnl=0.18 val_pf=2.69 val_closed=2 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\us100_opening_range_breakout__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\us100_opening_range_breakout__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down [near_miss_optimized]: pnl=0.58 closed=2 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.29 avg_win=0.29 avg_loss=0.00 payoff=999.00 avg_hold=17.5
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_down_vol_high pnl=0.33 worst=trend_down_vol_mid pnl=0.25 dominant_share=50.00%
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.58 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down [near_miss_optimized]: pnl=0.58 closed=2 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.29 avg_win=0.29 avg_loss=0.00 payoff=999.00 avg_hold=17.5
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_down_vol_high pnl=0.33 worst=trend_down_vol_mid pnl=0.25 dominant_share=50.00%
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.58 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down [near_miss_optimized]: pnl=0.58 closed=2 pf=999.00 win_rate=100.00% dd=0.00%
+  trade_metrics: expectancy=0.29 avg_win=0.29 avg_loss=0.00 payoff=999.00 avg_hold=17.5
+  exits: dominant=take_profit share=100.00%
+  regimes: best=trend_down_vol_high pnl=0.33 worst=trend_down_vol_mid pnl=0.25 dominant_share=50.00%
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=0.58 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_protective [near_miss_optimized]: pnl=0.27 closed=18 pf=1.10 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.01 avg_win=0.36 avg_loss=-0.26 payoff=1.38 avg_hold=8.8
+  exits: dominant=stop_loss share=38.89%
+  regimes: best=trend_down_vol_high pnl=0.92 worst=trend_flat_vol_high pnl=-0.57 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.63 avg_test_pnl=0.16 avg_val_pf=2.64 avg_test_pf=499.50
+  splits: train_pnl=-0.57 val_pnl=1.07 val_pf=4.08 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_patient [near_miss_optimized]: pnl=0.02 closed=18 pf=1.01 win_rate=44.44% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.34 avg_loss=-0.27 payoff=1.26 avg_hold=9.2
+  exits: dominant=stop_loss share=38.89%
+  regimes: best=trend_down_vol_high pnl=0.68 worst=trend_flat_vol_high pnl=-0.59 dominant_share=50.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.45 avg_test_pnl=0.16 avg_val_pf=2.28 avg_test_pf=499.50
+  splits: train_pnl=-0.65 val_pnl=0.90 val_pf=3.58 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient_symbol_candidate_analysis.txt
 opening_range_short_breakdown__exit_trend__regime_trend_down_vol_high [regime_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
   exits: dominant=none share=0.00%
@@ -97,219 +140,254 @@ opening_range_short_breakdown__exit_fastfail__regime_trend_down_vol_high [regime
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_analysis.txt
-opening_range_breakout__exit_trend [entry_exit_family]: pnl=-0.46 closed=17 pf=0.79 win_rate=29.41% dd=0.00%
-  trade_metrics: expectancy=-0.03 avg_win=0.34 avg_loss=-0.18 payoff=1.89 avg_hold=19.7
-  exits: dominant=stop_loss share=47.06%
-  regimes: best=trend_up_vol_high pnl=0.15 worst=trend_flat_vol_high pnl=-0.41 dominant_share=41.18%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.16 avg_test_pnl=-0.34 avg_val_pf=0.73 avg_test_pf=0.00
-  splits: train_pnl=0.67 val_pnl=-0.19 val_pf=0.64 val_closed=4 test_pnl=-0.56 test_pf=0.00 test_closed=3
-  trades: artifacts\us100_opening_range_breakout__exit_trend_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_opening_range_breakout__exit_trend_default_symbol_candidate_analysis.txt
-opening_range_breakout [single]: pnl=-0.47 closed=17 pf=0.78 win_rate=29.41% dd=0.00%
-  trade_metrics: expectancy=-0.03 avg_win=0.32 avg_loss=-0.17 payoff=1.86 avg_hold=15.2
-  exits: dominant=stop_loss share=41.18%
-  regimes: best=trend_flat_vol_mid pnl=0.21 worst=trend_flat_vol_high pnl=-0.41 dominant_share=41.18%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.08 avg_test_pnl=-0.32 avg_val_pf=0.82 avg_test_pf=0.00
-  splits: train_pnl=0.66 val_pnl=-0.19 val_pf=0.59 val_closed=4 test_pnl=-0.56 test_pf=0.00 test_closed=3
+opening_range_breakout__exit_trend__regime_trend_up_vol_high [regime_improved]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_breakout__exit_trend__regime_trend_up_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_breakout__exit_trend__regime_trend_up_vol_high_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down_vol_high [near_miss_optimized]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient__trend_down_vol_high_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down_vol_high [near_miss_optimized]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_protective__trend_down_vol_high_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down_vol_high [near_miss_optimized]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00%
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_short_breakdown__exit_fastfail__near_miss_dense__trend_down_vol_high_symbol_candidate_analysis.txt
+opening_range_breakout [single]: pnl=-1.27 closed=17 pf=0.49 win_rate=23.53% dd=0.00%
+  trade_metrics: expectancy=-0.07 avg_win=0.31 avg_loss=-0.19 payoff=1.60 avg_hold=10.8
+  exits: dominant=stop_loss share=52.94%
+  regimes: best=trend_up_vol_high pnl=-0.14 worst=trend_flat_vol_high pnl=-0.33 dominant_share=41.18%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.29 avg_test_pnl=-0.42 avg_val_pf=0.50 avg_test_pf=0.00
+  splits: train_pnl=0.02 val_pnl=-0.22 val_pf=0.49 val_closed=4 test_pnl=-0.66 test_pf=0.00 test_closed=3
   trades: artifacts\us100_opening_range_breakout_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_breakout_default_symbol_candidate_analysis.txt
-opening_range_breakout__exit_fastfail [entry_exit_family]: pnl=-1.18 closed=17 pf=0.44 win_rate=23.53% dd=0.00%
-  trade_metrics: expectancy=-0.07 avg_win=0.23 avg_loss=-0.16 payoff=1.43 avg_hold=13.2
-  exits: dominant=stop_loss share=35.29%
-  regimes: best=trend_up_vol_low pnl=-0.12 worst=trend_flat_vol_high pnl=-0.41 dominant_share=41.18%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.32 avg_test_pnl=-0.32 avg_val_pf=0.42 avg_test_pf=0.00
-  splits: train_pnl=0.05 val_pnl=-0.29 val_pf=0.36 val_closed=4 test_pnl=-0.56 test_pf=0.00 test_closed=3
+opening_range_breakout__exit_trend [entry_exit_family]: pnl=-1.33 closed=17 pf=0.48 win_rate=23.53% dd=0.00%
+  trade_metrics: expectancy=-0.08 avg_win=0.31 avg_loss=-0.20 payoff=1.57 avg_hold=16.2
+  exits: dominant=stop_loss share=52.94%
+  regimes: best=trend_up_vol_high pnl=0.01 worst=trend_up_vol_mid pnl=-0.46 dominant_share=41.18%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.51 avg_test_pnl=-0.42 avg_val_pf=0.25 avg_test_pf=0.00
+  splits: train_pnl=0.12 val_pnl=-0.39 val_pf=0.25 val_closed=4 test_pnl=-0.66 test_pf=0.00 test_closed=3
+  trades: artifacts\us100_opening_range_breakout__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_opening_range_breakout__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_breakout__exit_fastfail [entry_exit_family]: pnl=-1.67 closed=17 pf=0.34 win_rate=23.53% dd=0.00%
+  trade_metrics: expectancy=-0.10 avg_win=0.22 avg_loss=-0.20 payoff=1.12 avg_hold=8.2
+  exits: dominant=stop_loss share=47.06%
+  regimes: best=trend_up_vol_low pnl=-0.17 worst=trend_flat_vol_mid pnl=-0.55 dominant_share=41.18%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.36 avg_test_pnl=-0.42 avg_val_pf=0.44 avg_test_pf=0.00
+  splits: train_pnl=-0.34 val_pnl=-0.26 val_pf=0.45 val_closed=4 test_pnl=-0.66 test_pf=0.00 test_closed=3
   trades: artifacts\us100_opening_range_breakout__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_opening_range_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
-us100_opening_drive_short_reclaim_selective [auto_improved]: pnl=-2.69 closed=16 pf=0.09 win_rate=6.25% dd=0.00%
-  trade_metrics: expectancy=-0.17 avg_win=0.25 avg_loss=-0.20 payoff=1.30 avg_hold=6.9
+us100_opening_drive_short_reclaim_selective [auto_improved]: pnl=-3.30 closed=16 pf=0.07 win_rate=6.25% dd=0.00%
+  trade_metrics: expectancy=-0.21 avg_win=0.23 avg_loss=-0.24 payoff=0.99 avg_hold=7.3
   exits: dominant=stale_breakout share=50.00%
-  regimes: best=trend_up_vol_high pnl=-0.17 worst=trend_flat_vol_high pnl=-1.27 dominant_share=37.50%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.93 avg_test_pnl=-0.86 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-0.35 val_pnl=-1.22 val_pf=0.00 val_closed=6 test_pnl=-0.95 test_pf=0.00 test_closed=5
+  regimes: best=trend_down_vol_mid pnl=-0.27 worst=trend_flat_vol_high pnl=-1.47 dominant_share=37.50%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.07 avg_test_pnl=-1.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-0.53 val_pnl=-1.34 val_pf=0.00 val_closed=6 test_pnl=-1.21 test_pf=0.00 test_closed=5
   trades: artifacts\us100_us100_opening_drive_short_reclaim_selective_symbol_candidate_trades.csv
   analysis: artifacts\us100_us100_opening_drive_short_reclaim_selective_symbol_candidate_analysis.txt
-us100_opening_drive_short_reclaim [auto_improved]: pnl=-2.69 closed=17 pf=0.09 win_rate=5.88% dd=0.00%
-  trade_metrics: expectancy=-0.16 avg_win=0.27 avg_loss=-0.19 payoff=1.46 avg_hold=8.4
-  exits: dominant=stale_breakout share=35.29%
-  regimes: best=trend_up_vol_high pnl=-0.21 worst=trend_flat_vol_high pnl=-1.20 dominant_share=41.18%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.95 avg_test_pnl=-0.85 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-0.45 val_pnl=-1.26 val_pf=0.00 val_closed=6 test_pnl=-0.90 test_pf=0.00 test_closed=5
+us100_opening_drive_short_reclaim [auto_improved]: pnl=-3.31 closed=17 pf=0.07 win_rate=5.88% dd=0.00%
+  trade_metrics: expectancy=-0.19 avg_win=0.25 avg_loss=-0.22 payoff=1.11 avg_hold=8.5
+  exits: dominant=stale_breakout share=41.18%
+  regimes: best=trend_down_vol_mid pnl=-0.27 worst=trend_flat_vol_high pnl=-1.46 dominant_share=41.18%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.12 avg_test_pnl=-1.02 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-0.58 val_pnl=-1.44 val_pf=0.00 val_closed=6 test_pnl=-1.15 test_pf=0.00 test_closed=5
   trades: artifacts\us100_us100_opening_drive_short_reclaim_symbol_candidate_trades.csv
   analysis: artifacts\us100_us100_opening_drive_short_reclaim_symbol_candidate_analysis.txt
-momentum__exit_fastfail [entry_exit_family]: pnl=-5.51 closed=77 pf=0.46 win_rate=24.68% dd=0.01%
-  trade_metrics: expectancy=-0.07 avg_win=0.25 avg_loss=-0.18 payoff=1.40 avg_hold=17.6
-  exits: dominant=stop_loss share=35.06%
-  regimes: best=trend_up_vol_high pnl=0.08 worst=trend_flat_vol_mid pnl=-3.16 dominant_share=37.66%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.82 avg_test_pnl=-1.86 avg_val_pf=0.50 avg_test_pf=0.51
-  splits: train_pnl=-1.29 val_pnl=-3.35 val_pf=0.16 val_closed=22 test_pnl=-0.28 test_pf=0.87 test_closed=19
-  trades: artifacts\us100_momentum__exit_fastfail_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_momentum__exit_fastfail_default_symbol_candidate_analysis.txt
-momentum [single]: pnl=-6.15 closed=77 pf=0.45 win_rate=22.08% dd=0.01%
-  trade_metrics: expectancy=-0.08 avg_win=0.30 avg_loss=-0.19 payoff=1.59 avg_hold=20.7
-  exits: dominant=stop_loss share=35.06%
-  regimes: best=trend_up_vol_high pnl=0.45 worst=trend_flat_vol_mid pnl=-3.88 dominant_share=37.66%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.04 avg_test_pnl=-1.85 avg_val_pf=0.50 avg_test_pf=0.60
-  splits: train_pnl=-1.74 val_pnl=-3.76 val_pf=0.16 val_closed=22 test_pnl=0.07 test_pf=1.03 test_closed=19
-  trades: artifacts\us100_momentum_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_momentum_default_symbol_candidate_analysis.txt
-us100_short_trend_rejection_flat_high_dense [auto_improved]: pnl=-6.35 closed=78 pf=0.36 win_rate=19.23% dd=0.01%
-  trade_metrics: expectancy=-0.08 avg_win=0.24 avg_loss=-0.16 payoff=1.50 avg_hold=8.0
-  exits: dominant=stale_breakout share=41.03%
-  regimes: best=trend_flat_vol_high pnl=0.74 worst=trend_down_vol_mid pnl=-4.91 dominant_share=60.26%
-  regime_filter: trend_flat_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.58 avg_test_pnl=-0.99 avg_val_pf=0.56 avg_test_pf=0.27
-  splits: train_pnl=-3.53 val_pnl=-0.71 val_pf=0.48 val_closed=14 test_pnl=-0.77 test_pf=0.50 test_closed=14
-  trades: artifacts\us100_us100_short_trend_rejection_flat_high_dense_symbol_candidate_trades.csv
-  analysis: artifacts\us100_us100_short_trend_rejection_flat_high_dense_symbol_candidate_analysis.txt
-us100_short_trend_rejection_selective [auto_improved]: pnl=-6.88 closed=71 pf=0.24 win_rate=19.72% dd=0.01%
-  trade_metrics: expectancy=-0.10 avg_win=0.15 avg_loss=-0.16 payoff=0.97 avg_hold=5.9
-  exits: dominant=stale_breakout share=45.07%
-  regimes: best=trend_flat_vol_high pnl=0.12 worst=trend_down_vol_mid pnl=-5.13 dominant_share=63.38%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.76 avg_test_pnl=-0.78 avg_val_pf=0.43 avg_test_pf=0.20
-  splits: train_pnl=-4.17 val_pnl=-0.94 val_pf=0.39 val_closed=14 test_pnl=-0.67 test_pf=0.26 test_closed=12
-  trades: artifacts\us100_us100_short_trend_rejection_selective_symbol_candidate_trades.csv
-  analysis: artifacts\us100_us100_short_trend_rejection_selective_symbol_candidate_analysis.txt
-momentum__exit_trend [entry_exit_family]: pnl=-7.19 closed=77 pf=0.39 win_rate=20.78% dd=0.01%
-  trade_metrics: expectancy=-0.09 avg_win=0.28 avg_loss=-0.19 payoff=1.47 avg_hold=25.7
-  exits: dominant=stop_loss share=40.26%
-  regimes: best=trend_up_vol_high pnl=-0.17 worst=trend_flat_vol_mid pnl=-3.96 dominant_share=37.66%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.74 avg_test_pnl=-2.36 avg_val_pf=0.28 avg_test_pf=0.48
-  splits: train_pnl=-2.03 val_pnl=-4.41 val_pf=0.09 val_closed=22 test_pnl=-0.25 test_pf=0.89 test_closed=19
-  trades: artifacts\us100_momentum__exit_trend_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_momentum__exit_trend_default_symbol_candidate_analysis.txt
-mean_reversion__exit_quick [entry_exit_family]: pnl=-7.25 closed=41 pf=0.03 win_rate=2.44% dd=0.01%
-  trade_metrics: expectancy=-0.18 avg_win=0.25 avg_loss=-0.19 payoff=1.33 avg_hold=6.2
-  exits: dominant=structure_exit share=82.93%
-  regimes: best=trend_up_vol_mid pnl=-0.28 worst=trend_flat_vol_high pnl=-3.00 dominant_share=36.59%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.47 avg_test_pnl=-0.95 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-3.80 val_pnl=-1.60 val_pf=0.00 val_closed=8 test_pnl=-0.69 test_pf=0.00 test_closed=6
+mean_reversion__exit_quick [entry_exit_family]: pnl=-8.90 closed=41 pf=0.03 win_rate=2.44% dd=0.01%
+  trade_metrics: expectancy=-0.22 avg_win=0.27 avg_loss=-0.23 payoff=1.17 avg_hold=2.4
+  exits: dominant=structure_exit share=80.49%
+  regimes: best=trend_up_vol_high pnl=-0.33 worst=trend_flat_vol_high pnl=-3.65 dominant_share=36.59%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.77 avg_test_pnl=-1.10 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-4.79 val_pnl=-1.84 val_pf=0.00 val_closed=8 test_pnl=-0.91 test_pf=0.00 test_closed=6
   trades: artifacts\us100_mean_reversion__exit_quick_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_mean_reversion__exit_quick_default_symbol_candidate_analysis.txt
-us100_short_trend_rejection_flat_high [auto_improved]: pnl=-7.39 closed=74 pf=0.23 win_rate=18.92% dd=0.01%
-  trade_metrics: expectancy=-0.10 avg_win=0.15 avg_loss=-0.16 payoff=0.96 avg_hold=5.5
-  exits: dominant=stale_breakout share=43.24%
-  regimes: best=trend_flat_vol_high pnl=0.12 worst=trend_down_vol_mid pnl=-5.10 dominant_share=60.81%
-  regime_filter: trend_flat_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.76 avg_test_pnl=-0.97 avg_val_pf=0.43 avg_test_pf=0.17
-  splits: train_pnl=-4.25 val_pnl=-0.94 val_pf=0.39 val_closed=14 test_pnl=-0.87 test_pf=0.21 test_closed=13
-  trades: artifacts\us100_us100_short_trend_rejection_flat_high_symbol_candidate_trades.csv
-  analysis: artifacts\us100_us100_short_trend_rejection_flat_high_symbol_candidate_analysis.txt
-mean_reversion [single]: pnl=-7.74 closed=41 pf=0.00 win_rate=2.44% dd=0.01%
-  trade_metrics: expectancy=-0.19 avg_win=0.00 avg_loss=-0.19 payoff=0.00 avg_hold=7.8
-  exits: dominant=structure_exit share=68.29%
-  regimes: best=trend_up_vol_mid pnl=-0.27 worst=trend_down_vol_high pnl=-2.70 dominant_share=36.59%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.85 avg_test_pnl=-0.89 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=-4.15 val_pnl=-1.87 val_pf=0.00 val_closed=8 test_pnl=-0.64 test_pf=0.00 test_closed=6
+mean_reversion [single]: pnl=-9.46 closed=41 pf=0.00 win_rate=0.00% dd=0.01%
+  trade_metrics: expectancy=-0.23 avg_win=0.00 avg_loss=-0.23 payoff=0.00 avg_hold=6.1
+  exits: dominant=structure_exit share=75.61%
+  regimes: best=trend_up_vol_mid pnl=-0.40 worst=trend_flat_vol_high pnl=-3.47 dominant_share=36.59%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.04 avg_test_pnl=-1.02 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=-5.39 val_pnl=-1.97 val_pf=0.00 val_closed=8 test_pnl=-0.80 test_pf=0.00 test_closed=6
   trades: artifacts\us100_mean_reversion_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_mean_reversion_default_symbol_candidate_analysis.txt
-us100_short_trend_rejection_flat_high_exit_optimized [auto_improved]: pnl=-8.09 closed=83 pf=0.23 win_rate=20.48% dd=0.01%
-  trade_metrics: expectancy=-0.10 avg_win=0.14 avg_loss=-0.16 payoff=0.91 avg_hold=5.3
-  exits: dominant=stop_loss share=45.78%
-  regimes: best=trend_flat_vol_high pnl=0.12 worst=trend_down_vol_mid pnl=-5.14 dominant_share=61.45%
+momentum__exit_fastfail [entry_exit_family]: pnl=-10.61 closed=77 pf=0.24 win_rate=12.99% dd=0.01%
+  trade_metrics: expectancy=-0.14 avg_win=0.33 avg_loss=-0.21 payoff=1.58 avg_hold=14.2
+  exits: dominant=stop_loss share=45.45%
+  regimes: best=trend_flat_vol_low pnl=-0.31 worst=trend_flat_vol_mid pnl=-5.57 dominant_share=37.66%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.90 avg_test_pnl=-2.82 avg_val_pf=0.27 avg_test_pf=0.34
+  splits: train_pnl=-4.10 val_pnl=-4.37 val_pf=0.12 val_closed=22 test_pnl=-1.24 test_pf=0.57 test_closed=19
+  trades: artifacts\us100_momentum__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_momentum__exit_fastfail_default_symbol_candidate_analysis.txt
+momentum [single]: pnl=-10.64 closed=77 pf=0.27 win_rate=12.99% dd=0.01%
+  trade_metrics: expectancy=-0.14 avg_win=0.39 avg_loss=-0.22 payoff=1.81 avg_hold=20.1
+  exits: dominant=stop_loss share=45.45%
+  regimes: best=trend_up_vol_high pnl=-0.18 worst=trend_flat_vol_mid pnl=-5.76 dominant_share=37.66%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.90 avg_test_pnl=-3.00 avg_val_pf=0.35 avg_test_pf=0.36
+  splits: train_pnl=-3.81 val_pnl=-4.70 val_pf=0.13 val_closed=22 test_pnl=-1.10 test_pf=0.63 test_closed=19
+  trades: artifacts\us100_momentum_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_momentum_default_symbol_candidate_analysis.txt
+momentum__exit_trend [entry_exit_family]: pnl=-11.15 closed=77 pf=0.26 win_rate=16.88% dd=0.01%
+  trade_metrics: expectancy=-0.14 avg_win=0.29 avg_loss=-0.23 payoff=1.26 avg_hold=26.0
+  exits: dominant=stop_loss share=48.05%
+  regimes: best=trend_flat_vol_low pnl=-0.31 worst=trend_flat_vol_mid pnl=-5.58 dominant_share=37.66%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.60 avg_test_pnl=-3.43 avg_val_pf=0.17 avg_test_pf=0.30
+  splits: train_pnl=-3.73 val_pnl=-5.38 val_pf=0.06 val_closed=22 test_pnl=-1.29 test_pf=0.58 test_closed=19
+  trades: artifacts\us100_momentum__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_momentum__exit_trend_default_symbol_candidate_analysis.txt
+us100_short_trend_rejection_flat_high_dense [auto_improved]: pnl=-11.78 closed=85 pf=0.21 win_rate=11.76% dd=0.01%
+  trade_metrics: expectancy=-0.14 avg_win=0.31 avg_loss=-0.20 payoff=1.55 avg_hold=6.8
+  exits: dominant=stop_loss share=49.41%
+  regimes: best=trend_flat_vol_high pnl=0.69 worst=trend_down_vol_mid pnl=-8.14 dominant_share=58.82%
   regime_filter: trend_flat_vol_high
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.61 avg_test_pnl=-1.47 avg_val_pf=0.51 avg_test_pf=0.14
-  splits: train_pnl=-4.52 val_pnl=-0.66 val_pf=0.47 val_closed=13 test_pnl=-1.67 test_pf=0.15 test_closed=17
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.27 avg_test_pnl=-1.99 avg_val_pf=0.34 avg_test_pf=0.14
+  splits: train_pnl=-6.68 val_pnl=-1.41 val_pf=0.29 val_closed=14 test_pnl=-1.98 test_pf=0.27 test_closed=16
+  trades: artifacts\us100_us100_short_trend_rejection_flat_high_dense_symbol_candidate_trades.csv
+  analysis: artifacts\us100_us100_short_trend_rejection_flat_high_dense_symbol_candidate_analysis.txt
+us100_short_trend_rejection_selective [auto_improved]: pnl=-12.15 closed=78 pf=0.11 win_rate=14.10% dd=0.01%
+  trade_metrics: expectancy=-0.16 avg_win=0.13 avg_loss=-0.20 payoff=0.65 avg_hold=4.6
+  exits: dominant=stop_loss share=43.59%
+  regimes: best=trend_up_vol_mid pnl=-0.00 worst=trend_down_vol_mid pnl=-8.47 dominant_share=64.10%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.58 avg_test_pnl=-1.59 avg_val_pf=0.21 avg_test_pf=0.04
+  splits: train_pnl=-7.35 val_pnl=-1.73 val_pf=0.20 val_closed=14 test_pnl=-1.61 test_pf=0.05 test_closed=13
+  trades: artifacts\us100_us100_short_trend_rejection_selective_symbol_candidate_trades.csv
+  analysis: artifacts\us100_us100_short_trend_rejection_selective_symbol_candidate_analysis.txt
+us100_short_trend_rejection_flat_high_exit_optimized [auto_improved]: pnl=-12.28 closed=86 pf=0.12 win_rate=17.44% dd=0.01%
+  trade_metrics: expectancy=-0.14 avg_win=0.12 avg_loss=-0.20 payoff=0.58 avg_hold=5.0
+  exits: dominant=stop_loss share=52.33%
+  regimes: best=trend_flat_vol_high pnl=0.02 worst=trend_down_vol_mid pnl=-7.39 dominant_share=59.30%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.05 avg_test_pnl=-2.00 avg_val_pf=0.37 avg_test_pf=0.03
+  splits: train_pnl=-7.29 val_pnl=-1.14 val_pf=0.34 val_closed=13 test_pnl=-2.34 test_pf=0.04 test_closed=17
   trades: artifacts\us100_us100_short_trend_rejection_flat_high_exit_optimized_symbol_candidate_trades.csv
   analysis: artifacts\us100_us100_short_trend_rejection_flat_high_exit_optimized_symbol_candidate_analysis.txt
-us100_momentum_selective [auto_improved]: pnl=-8.11 closed=98 pf=0.42 win_rate=24.49% dd=0.01%
-  trade_metrics: expectancy=-0.08 avg_win=0.25 avg_loss=-0.19 payoff=1.31 avg_hold=19.2
-  exits: dominant=stop_loss share=38.78%
-  regimes: best=trend_up_vol_high pnl=1.15 worst=trend_flat_vol_mid pnl=-5.14 dominant_share=38.78%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.01 avg_test_pnl=-2.17 avg_val_pf=0.51 avg_test_pf=0.56
-  splits: train_pnl=-3.34 val_pnl=-3.64 val_pf=0.21 val_closed=25 test_pnl=-0.15 test_pf=0.94 test_closed=21
+us100_short_trend_rejection_flat_high [auto_improved]: pnl=-12.50 closed=80 pf=0.12 win_rate=13.75% dd=0.01%
+  trade_metrics: expectancy=-0.16 avg_win=0.15 avg_loss=-0.21 payoff=0.74 avg_hold=4.4
+  exits: dominant=stop_loss share=45.00%
+  regimes: best=trend_up_vol_mid pnl=-0.00 worst=trend_down_vol_mid pnl=-8.20 dominant_share=61.25%
+  regime_filter: trend_flat_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.46 avg_test_pnl=-1.84 avg_val_pf=0.27 avg_test_pf=0.03
+  splits: train_pnl=-7.29 val_pnl=-1.61 val_pf=0.26 val_closed=14 test_pnl=-1.86 test_pf=0.04 test_closed=14
+  trades: artifacts\us100_us100_short_trend_rejection_flat_high_symbol_candidate_trades.csv
+  analysis: artifacts\us100_us100_short_trend_rejection_flat_high_symbol_candidate_analysis.txt
+us100_momentum_selective [auto_improved]: pnl=-13.74 closed=97 pf=0.23 win_rate=13.40% dd=0.02%
+  trade_metrics: expectancy=-0.14 avg_win=0.31 avg_loss=-0.21 payoff=1.47 avg_hold=18.6
+  exits: dominant=stop_loss share=47.42%
+  regimes: best=trend_up_vol_high pnl=0.35 worst=trend_flat_vol_mid pnl=-7.02 dominant_share=39.18%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.60 avg_test_pnl=-3.25 avg_val_pf=0.18 avg_test_pf=0.38
+  splits: train_pnl=-6.06 val_pnl=-5.15 val_pf=0.08 val_closed=25 test_pnl=-1.10 test_pf=0.66 test_closed=21
   trades: artifacts\us100_us100_momentum_selective_symbol_candidate_trades.csv
   analysis: artifacts\us100_us100_momentum_selective_symbol_candidate_analysis.txt
-trend [single]: pnl=-12.83 closed=122 pf=0.28 win_rate=17.21% dd=0.01%
-  trade_metrics: expectancy=-0.11 avg_win=0.24 avg_loss=-0.18 payoff=1.36 avg_hold=12.6
-  exits: dominant=stop_loss share=56.56%
-  regimes: best=trend_up_vol_high pnl=0.70 worst=trend_up_vol_mid pnl=-8.55 dominant_share=54.10%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.41 avg_test_pnl=-3.42 avg_val_pf=0.33 avg_test_pf=0.29
-  splits: train_pnl=-5.71 val_pnl=-3.25 val_pf=0.20 val_closed=26 test_pnl=-2.28 test_pf=0.50 test_closed=27
-  trades: artifacts\us100_trend_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_trend_default_symbol_candidate_analysis.txt
-us100_short_trend_rejection [auto_improved]: pnl=-12.97 closed=141 pf=0.29 win_rate=18.44% dd=0.01%
-  trade_metrics: expectancy=-0.09 avg_win=0.20 avg_loss=-0.16 payoff=1.28 avg_hold=7.8
-  exits: dominant=stale_breakout share=38.30%
-  regimes: best=trend_flat_vol_high pnl=0.60 worst=trend_down_vol_mid pnl=-9.67 dominant_share=56.03%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.23 avg_test_pnl=-3.01 avg_val_pf=0.30 avg_test_pf=0.26
-  splits: train_pnl=-5.19 val_pnl=-2.10 val_pf=0.37 val_closed=31 test_pnl=-4.06 test_pf=0.21 test_closed=36
-  trades: artifacts\us100_us100_short_trend_rejection_symbol_candidate_trades.csv
-  analysis: artifacts\us100_us100_short_trend_rejection_symbol_candidate_analysis.txt
-trend__exit_trend [entry_exit_family]: pnl=-13.17 closed=118 pf=0.27 win_rate=16.95% dd=0.01%
-  trade_metrics: expectancy=-0.11 avg_win=0.24 avg_loss=-0.18 payoff=1.30 avg_hold=16.7
-  exits: dominant=stop_loss share=59.32%
-  regimes: best=trend_up_vol_high pnl=-0.15 worst=trend_up_vol_mid pnl=-8.35 dominant_share=54.24%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.77 avg_test_pnl=-3.83 avg_val_pf=0.28 avg_test_pf=0.21
-  splits: train_pnl=-5.68 val_pnl=-3.40 val_pf=0.17 val_closed=26 test_pnl=-2.73 test_pf=0.38 test_closed=26
+trend__exit_trend [entry_exit_family]: pnl=-19.25 closed=123 pf=0.16 win_rate=8.13% dd=0.02%
+  trade_metrics: expectancy=-0.16 avg_win=0.37 avg_loss=-0.20 payoff=1.84 avg_hold=12.8
+  exits: dominant=stop_loss share=66.67%
+  regimes: best=trend_up_vol_high pnl=-0.47 worst=trend_up_vol_mid pnl=-11.96 dominant_share=54.47%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.26 avg_test_pnl=-5.48 avg_val_pf=0.25 avg_test_pf=0.13
+  splits: train_pnl=-7.69 val_pnl=-4.39 val_pf=0.13 val_closed=27 test_pnl=-4.20 test_pf=0.25 test_closed=27
   trades: artifacts\us100_trend__exit_trend_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_trend__exit_trend_default_symbol_candidate_analysis.txt
-trend__exit_fastfail [entry_exit_family]: pnl=-14.19 closed=124 pf=0.20 win_rate=16.94% dd=0.01%
-  trade_metrics: expectancy=-0.11 avg_win=0.16 avg_loss=-0.17 payoff=0.96 avg_hold=9.1
-  exits: dominant=stop_loss share=52.42%
-  regimes: best=trend_up_vol_high pnl=-0.59 worst=trend_up_vol_mid pnl=-9.13 dominant_share=56.45%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.79 avg_test_pnl=-3.89 avg_val_pf=0.24 avg_test_pf=0.16
-  splits: train_pnl=-5.66 val_pnl=-3.64 val_pf=0.13 val_closed=28 test_pnl=-3.34 test_pf=0.21 test_closed=27
+trend [single]: pnl=-20.87 closed=128 pf=0.11 win_rate=7.81% dd=0.02%
+  trade_metrics: expectancy=-0.16 avg_win=0.27 avg_loss=-0.20 payoff=1.33 avg_hold=9.2
+  exits: dominant=stop_loss share=65.62%
+  regimes: best=trend_up_vol_high pnl=-0.99 worst=trend_up_vol_mid pnl=-12.79 dominant_share=54.69%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.49 avg_test_pnl=-5.74 avg_val_pf=0.20 avg_test_pf=0.06
+  splits: train_pnl=-8.64 val_pnl=-4.33 val_pf=0.12 val_closed=27 test_pnl=-4.94 test_pf=0.12 test_closed=28
+  trades: artifacts\us100_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_trend_default_symbol_candidate_analysis.txt
+trend__exit_fastfail [entry_exit_family]: pnl=-21.52 closed=128 pf=0.09 win_rate=8.59% dd=0.02%
+  trade_metrics: expectancy=-0.17 avg_win=0.19 avg_loss=-0.20 payoff=0.94 avg_hold=6.7
+  exits: dominant=stop_loss share=64.06%
+  regimes: best=trend_up_vol_high pnl=-1.46 worst=trend_up_vol_mid pnl=-13.44 dominant_share=56.25%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.73 avg_test_pnl=-5.64 avg_val_pf=0.16 avg_test_pf=0.06
+  splits: train_pnl=-9.17 val_pnl=-4.44 val_pf=0.11 val_closed=27 test_pnl=-4.95 test_pf=0.09 test_closed=28
   trades: artifacts\us100_trend__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_trend__exit_fastfail_default_symbol_candidate_analysis.txt
-volatility_breakout [single]: pnl=-15.09 closed=168 pf=0.30 win_rate=13.69% dd=0.02%
-  trade_metrics: expectancy=-0.09 avg_win=0.29 avg_loss=-0.15 payoff=1.92 avg_hold=10.1
-  exits: dominant=stop_loss share=36.90%
-  regimes: best=trend_up_vol_high pnl=0.02 worst=trend_flat_vol_mid pnl=-5.69 dominant_share=29.76%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.62 avg_test_pnl=-5.20 avg_val_pf=0.39 avg_test_pf=0.18
-  splits: train_pnl=-5.12 val_pnl=-3.84 val_pf=0.21 val_closed=33 test_pnl=-4.96 test_pf=0.21 test_closed=40
+us100_short_trend_rejection [auto_improved]: pnl=-22.33 closed=159 pf=0.17 win_rate=12.58% dd=0.02%
+  trade_metrics: expectancy=-0.14 avg_win=0.22 avg_loss=-0.19 payoff=1.16 avg_hold=6.7
+  exits: dominant=stop_loss share=46.54%
+  regimes: best=trend_flat_vol_high pnl=0.46 worst=trend_down_vol_mid pnl=-13.66 dominant_share=54.72%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.70 avg_test_pnl=-4.72 avg_val_pf=0.19 avg_test_pf=0.15
+  splits: train_pnl=-10.27 val_pnl=-3.43 val_pf=0.24 val_closed=31 test_pnl=-6.08 test_pf=0.12 test_closed=39
+  trades: artifacts\us100_us100_short_trend_rejection_symbol_candidate_trades.csv
+  analysis: artifacts\us100_us100_short_trend_rejection_symbol_candidate_analysis.txt
+volatility_breakout [single]: pnl=-24.23 closed=168 pf=0.17 win_rate=10.12% dd=0.02%
+  trade_metrics: expectancy=-0.14 avg_win=0.30 avg_loss=-0.19 payoff=1.54 avg_hold=8.6
+  exits: dominant=stop_loss share=50.00%
+  regimes: best=trend_up_vol_high pnl=-0.66 worst=trend_flat_vol_mid pnl=-8.71 dominant_share=29.76%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.43 avg_test_pnl=-7.27 avg_val_pf=0.22 avg_test_pf=0.10
+  splits: train_pnl=-9.35 val_pnl=-5.48 val_pf=0.13 val_closed=33 test_pnl=-7.37 test_pf=0.11 test_closed=40
   trades: artifacts\us100_volatility_breakout_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_volatility_breakout_default_symbol_candidate_analysis.txt
-volatility_breakout__exit_fastfail [entry_exit_family]: pnl=-15.71 closed=169 pf=0.28 win_rate=14.79% dd=0.02%
-  trade_metrics: expectancy=-0.09 avg_win=0.24 avg_loss=-0.15 payoff=1.60 avg_hold=8.3
-  exits: dominant=stop_loss share=35.50%
-  regimes: best=trend_up_vol_high pnl=0.28 worst=trend_flat_vol_mid pnl=-5.70 dominant_share=29.59%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.93 avg_test_pnl=-5.32 avg_val_pf=0.35 avg_test_pf=0.15
-  splits: train_pnl=-5.06 val_pnl=-4.13 val_pf=0.18 val_closed=34 test_pnl=-5.22 test_pf=0.17 test_closed=40
-  trades: artifacts\us100_volatility_breakout__exit_fastfail_default_symbol_candidate_trades.csv
-  analysis: artifacts\us100_volatility_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
-volatility_breakout__exit_trend [entry_exit_family]: pnl=-15.78 closed=167 pf=0.28 win_rate=16.17% dd=0.02%
-  trade_metrics: expectancy=-0.09 avg_win=0.23 avg_loss=-0.16 payoff=1.47 avg_hold=11.7
-  exits: dominant=stop_loss share=39.52%
-  regimes: best=trend_up_vol_high pnl=-0.03 worst=trend_flat_vol_mid pnl=-6.23 dominant_share=29.94%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.82 avg_test_pnl=-4.82 avg_val_pf=0.36 avg_test_pf=0.23
-  splits: train_pnl=-6.04 val_pnl=-3.88 val_pf=0.22 val_closed=33 test_pnl=-4.57 test_pf=0.27 test_closed=40
+volatility_breakout__exit_trend [entry_exit_family]: pnl=-24.75 closed=167 pf=0.16 win_rate=10.78% dd=0.02%
+  trade_metrics: expectancy=-0.15 avg_win=0.26 avg_loss=-0.20 payoff=1.30 avg_hold=10.0
+  exits: dominant=stop_loss share=52.10%
+  regimes: best=trend_up_vol_high pnl=-0.71 worst=trend_flat_vol_mid pnl=-8.91 dominant_share=29.94%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.71 avg_test_pnl=-6.91 avg_val_pf=0.17 avg_test_pf=0.14
+  splits: train_pnl=-10.05 val_pnl=-5.66 val_pf=0.11 val_closed=33 test_pnl=-7.03 test_pf=0.15 test_closed=40
   trades: artifacts\us100_volatility_breakout__exit_trend_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_volatility_breakout__exit_trend_default_symbol_candidate_analysis.txt
-us100_trend_density [auto_improved]: pnl=-17.87 closed=151 pf=0.20 win_rate=13.91% dd=0.02%
-  trade_metrics: expectancy=-0.12 avg_win=0.21 avg_loss=-0.17 payoff=1.21 avg_hold=8.7
-  exits: dominant=stop_loss share=59.60%
-  regimes: best=trend_down_vol_mid pnl=-0.15 worst=trend_up_vol_mid pnl=-8.79 dominant_share=50.99%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.37 avg_test_pnl=-4.55 avg_val_pf=0.30 avg_test_pf=0.19
-  splits: train_pnl=-7.51 val_pnl=-4.58 val_pf=0.18 val_closed=32 test_pnl=-3.40 test_pf=0.28 test_closed=30
+volatility_breakout__exit_fastfail [entry_exit_family]: pnl=-25.52 closed=170 pf=0.13 win_rate=9.41% dd=0.03%
+  trade_metrics: expectancy=-0.15 avg_win=0.24 avg_loss=-0.19 payoff=1.28 avg_hold=7.0
+  exits: dominant=stop_loss share=47.65%
+  regimes: best=trend_up_vol_high pnl=-0.76 worst=trend_flat_vol_mid pnl=-8.89 dominant_share=30.00%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.86 avg_test_pnl=-7.53 avg_val_pf=0.17 avg_test_pf=0.07
+  splits: train_pnl=-10.38 val_pnl=-5.54 val_pf=0.12 val_closed=33 test_pnl=-7.69 test_pf=0.08 test_closed=40
+  trades: artifacts\us100_volatility_breakout__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\us100_volatility_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
+us100_trend_density [auto_improved]: pnl=-27.35 closed=159 pf=0.10 win_rate=6.29% dd=0.03%
+  trade_metrics: expectancy=-0.17 avg_win=0.31 avg_loss=-0.20 payoff=1.50 avg_hold=6.6
+  exits: dominant=stop_loss share=70.44%
+  regimes: best=trend_down_vol_mid pnl=-0.29 worst=trend_up_vol_mid pnl=-14.83 dominant_share=50.94%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.80 avg_test_pnl=-6.93 avg_val_pf=0.18 avg_test_pf=0.09
+  splits: train_pnl=-11.84 val_pnl=-5.99 val_pf=0.11 val_closed=32 test_pnl=-5.58 test_pf=0.15 test_closed=32
   trades: artifacts\us100_us100_trend_density_symbol_candidate_trades.csv
   analysis: artifacts\us100_us100_trend_density_symbol_candidate_analysis.txt
-volatility_short_breakdown__exit_trend [entry_exit_family]: pnl=-28.67 closed=267 pf=0.26 win_rate=14.98% dd=0.03%
-  trade_metrics: expectancy=-0.11 avg_win=0.26 avg_loss=-0.17 payoff=1.49 avg_hold=10.6
-  exits: dominant=stop_loss share=49.06%
-  regimes: best=trend_flat_vol_high pnl=-0.72 worst=trend_flat_vol_mid pnl=-9.91 dominant_share=31.84%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.81 avg_test_pnl=-6.89 avg_val_pf=0.40 avg_test_pf=0.30
-  splits: train_pnl=-15.06 val_pnl=-3.75 val_pf=0.48 val_closed=55 test_pnl=-8.40 test_pf=0.22 test_closed=69
+volatility_short_breakdown__exit_trend [entry_exit_family]: pnl=-41.65 closed=271 pf=0.17 win_rate=10.70% dd=0.04%
+  trade_metrics: expectancy=-0.15 avg_win=0.29 avg_loss=-0.21 payoff=1.40 avg_hold=9.4
+  exits: dominant=stop_loss share=57.20%
+  regimes: best=trend_flat_vol_high pnl=-1.91 worst=trend_flat_vol_mid pnl=-14.56 dominant_share=32.10%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-6.00 avg_test_pnl=-10.22 avg_val_pf=0.26 avg_test_pf=0.19
+  splits: train_pnl=-21.13 val_pnl=-5.85 val_pf=0.34 val_closed=57 test_pnl=-12.19 test_pf=0.11 test_closed=70
   trades: artifacts\us100_volatility_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_volatility_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
-volatility_short_breakdown [single]: pnl=-29.22 closed=275 pf=0.23 win_rate=13.09% dd=0.03%
-  trade_metrics: expectancy=-0.11 avg_win=0.24 avg_loss=-0.16 payoff=1.51 avg_hold=7.7
-  exits: dominant=stop_loss share=40.73%
-  regimes: best=trend_flat_vol_high pnl=-1.21 worst=trend_flat_vol_mid pnl=-9.97 dominant_share=32.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.54 avg_test_pnl=-6.89 avg_val_pf=0.29 avg_test_pf=0.26
-  splits: train_pnl=-14.70 val_pnl=-4.32 val_pf=0.40 val_closed=57 test_pnl=-8.75 test_pf=0.13 test_closed=72
+volatility_short_breakdown [single]: pnl=-42.10 closed=277 pf=0.13 win_rate=9.03% dd=0.04%
+  trade_metrics: expectancy=-0.15 avg_win=0.26 avg_loss=-0.19 payoff=1.35 avg_hold=6.5
+  exits: dominant=stop_loss share=50.90%
+  regimes: best=trend_flat_vol_high pnl=-2.29 worst=trend_flat_vol_mid pnl=-14.65 dominant_share=31.77%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.33 avg_test_pnl=-10.31 avg_val_pf=0.15 avg_test_pf=0.15
+  splits: train_pnl=-20.63 val_pnl=-7.37 val_pf=0.21 val_closed=58 test_pnl=-12.18 test_pf=0.08 test_closed=72
   trades: artifacts\us100_volatility_short_breakdown_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_volatility_short_breakdown_default_symbol_candidate_analysis.txt
-volatility_short_breakdown__exit_fastfail [entry_exit_family]: pnl=-29.40 closed=277 pf=0.22 win_rate=11.55% dd=0.03%
-  trade_metrics: expectancy=-0.11 avg_win=0.25 avg_loss=-0.15 payoff=1.65 avg_hold=5.9
-  exits: dominant=stop_loss share=32.13%
-  regimes: best=trend_flat_vol_high pnl=-1.10 worst=trend_flat_vol_mid pnl=-9.86 dominant_share=32.13%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-5.00 avg_test_pnl=-7.23 avg_val_pf=0.24 avg_test_pf=0.24
-  splits: train_pnl=-13.82 val_pnl=-4.86 val_pf=0.33 val_closed=58 test_pnl=-9.19 test_pf=0.12 test_closed=72
+volatility_short_breakdown__exit_fastfail [entry_exit_family]: pnl=-43.29 closed=280 pf=0.12 win_rate=8.93% dd=0.04%
+  trade_metrics: expectancy=-0.15 avg_win=0.24 avg_loss=-0.19 payoff=1.23 avg_hold=5.1
+  exits: dominant=stop_loss share=45.00%
+  regimes: best=trend_down_vol_low pnl=-2.24 worst=trend_flat_vol_mid pnl=-14.80 dominant_share=31.79%
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.69 avg_test_pnl=-10.90 avg_val_pf=0.11 avg_test_pf=0.13
+  splits: train_pnl=-20.24 val_pnl=-8.02 val_pf=0.16 val_closed=59 test_pnl=-12.57 test_pf=0.08 test_closed=72
   trades: artifacts\us100_volatility_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\us100_volatility_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
 
 Recommended active agents
 - opening_range_short_breakdown__exit_trend (Opening range short breakdown with trend-runner exits)
 - opening_range_short_breakdown (Opening range short breakdown)
-- opening_range_short_breakdown__exit_fastfail (Opening range short breakdown with fast-fail exits)

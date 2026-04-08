@@ -1,17 +1,15 @@
 Artifact: tsla_stock_power_hour_continuation__15m_us__exit_fastfail_15m_us_symbol_candidate
-Closed trades: 83
-Realized pnl: -37.92
+Closed trades: 7
+Realized pnl: -3.48
 
 By entry hour
-18: trades=46 pnl=-23.23 avg=-0.51 win_rate=19.57%
-19: trades=37 pnl=-14.69 avg=-0.40 win_rate=24.32%
+18: trades=5 pnl=-3.49 avg=-0.70 win_rate=20.00%
+19: trades=2 pnl=0.02 avg=0.01 win_rate=50.00%
 
 By entry setup
-stock_power_hour_continuation: trades=83 pnl=-37.92 avg=-0.46 win_rate=21.69%
+stock_power_hour_continuation: trades=7 pnl=-3.48 avg=-0.50 win_rate=28.57%
 
 By exit reason
-structure_exit: trades=24 pnl=-20.55 avg=-0.86 win_rate=0.00%
-stop_loss: trades=19 pnl=-15.94 avg=-0.84 win_rate=0.00%
-trailing_stop: trades=8 pnl=-3.85 avg=-0.48 win_rate=0.00%
-stale_breakout: trades=2 pnl=-1.02 avg=-0.51 win_rate=0.00%
-take_profit: trades=30 pnl=3.43 avg=0.11 win_rate=60.00%
+structure_exit: trades=2 pnl=-2.08 avg=-1.04 win_rate=0.00%
+stop_loss: trades=2 pnl=-1.50 avg=-0.75 win_rate=0.00%
+take_profit: trades=3 pnl=0.10 avg=0.03 win_rate=66.67%

@@ -1,0 +1,19 @@
+Artifact: usdjpy_forex_short_breakdown_momentum__5m_europe__exit_fastfail_5m_europe_symbol_candidate
+Closed trades: 14
+Realized pnl: -9181.74
+
+By entry hour
+7: trades=4 pnl=-3274.37 avg=-818.59 win_rate=0.00%
+9: trades=3 pnl=-3026.28 avg=-1008.76 win_rate=33.33%
+10: trades=3 pnl=-2307.28 avg=-769.09 win_rate=0.00%
+8: trades=2 pnl=-467.48 avg=-233.74 win_rate=50.00%
+12: trades=2 pnl=-106.32 avg=-53.16 win_rate=50.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=14 pnl=-9181.74 avg=-655.84 win_rate=21.43%
+
+By exit reason
+structure_exit: trades=7 pnl=-9898.81 avg=-1414.12 win_rate=0.00%
+stop_loss: trades=1 pnl=-1310.49 avg=-1310.49 win_rate=0.00%
+trailing_stop: trades=4 pnl=-985.78 avg=-246.44 win_rate=25.00%
+take_profit: trades=2 pnl=3013.34 avg=1506.67 win_rate=100.00%

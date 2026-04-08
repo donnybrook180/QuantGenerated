@@ -1,0 +1,23 @@
+Artifact: usdjpy_forex_range_reversion__5m_us__exit_quick_5m_us_symbol_candidate
+Closed trades: 29
+Realized pnl: 62850.97
+
+By entry hour
+14: trades=5 pnl=-1934.87 avg=-386.97 win_rate=20.00%
+13: trades=4 pnl=-1193.51 avg=-298.38 win_rate=0.00%
+18: trades=2 pnl=-419.55 avg=-209.78 win_rate=0.00%
+19: trades=2 pnl=-416.27 avg=-208.14 win_rate=0.00%
+20: trades=8 pnl=293.12 avg=36.64 win_rate=50.00%
+16: trades=1 pnl=440.89 avg=440.89 win_rate=100.00%
+15: trades=7 pnl=66081.17 avg=9440.17 win_rate=28.57%
+
+By entry setup
+forex_range_reversion: trades=29 pnl=62850.97 avg=2167.27 win_rate=27.59%
+
+By exit reason
+signal_exit: trades=13 pnl=-5059.28 avg=-389.18 win_rate=15.38%
+stop_loss: trades=1 pnl=-3518.90 avg=-3518.90 win_rate=0.00%
+structure_exit: trades=8 pnl=-3220.26 avg=-402.53 win_rate=0.00%
+stale_breakout: trades=1 pnl=-78.17 avg=-78.17 win_rate=0.00%
+take_profit: trades=5 pnl=3222.14 avg=644.43 win_rate=100.00%
+end_of_run: trades=1 pnl=71505.44 avg=71505.44 win_rate=100.00%

@@ -1,30 +1,30 @@
 Viability autopsy: USDJPY
-Execution validation summary: variant=forex_breakout_momentum__15m_overlap__exit_trend__near_miss_patient__trend_flat@15m_overlap|trend_flat data_source=duckdb_cache pnl=57471.56 pf=9.32 closed=4 -> accepted
+Execution validation summary: selection=standard variant=forex_short_breakdown_momentum__30m_us@30m_us, forex_breakout_momentum__30m_overlap__exit_trend__near_miss_patient__trend_flat@30m_overlap|trend_flat, forex_breakout_momentum__30m_us__exit_trend@30m_us data_source=duckdb_cache_aggregated pnl=259674.43 pf=10.93 closed=15 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 16
-- walk-forward avg validation pnl <= 0 (0.00): 14
-- test PF < 1.0 (0.00): 14
-- combined validation/test pnl <= 0 (-1887.55): 13
-- walk-forward avg test pnl <= 0 (0.00): 11
-- validation trades too low (0 < 3): 10
-- test trades too low (0 < 2): 10
-- validation pnl <= 0 (0.00): 10
+- walk-forward pass rate too low (0.00% < 50%): 90
+- validation PF < 1.0 (0.00): 49
+- test PF < 1.0 (0.00): 45
+- walk-forward avg test pnl <= 0 (0.00): 33
+- walk-forward avg validation pnl <= 0 (0.00): 28
+- walk-forward pass rate too low (0.00% < 25%): 26
+- validation trades too low (1 < 3): 26
+- test trades too low (0 < 2): 22
 
 Top near-misses
-- forex_breakout_momentum__15m_overlap__near_miss_protective: pnl=59798.81 pf=13.74 val=-546.62/0.93/7 test=-6588.90/0.65/11 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-7135.52), combined validation/test PF too low (0.93 < 1.00), walk-forward avg test pnl <= 0 (-2495.49)
-- forex_breakout_momentum__15m_overlap__exit_trend__near_miss_protective: pnl=59798.81 pf=13.74 val=-2536.57/0.68/7 test=-6268.91/0.67/11 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-8805.47), combined validation/test PF too low (0.68 < 1.00), walk-forward avg validation pnl <= 0 (-143.47), walk-forward avg test pnl <= 0 (-1085.53)
-- forex_breakout_momentum__15m_overlap__exit_fastfail__near_miss_protective: pnl=59798.81 pf=13.74 val=-546.62/0.93/7 test=-6588.90/0.65/11 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-7135.52), combined validation/test PF too low (0.93 < 1.00), walk-forward avg test pnl <= 0 (-2495.49)
-- forex_breakout_momentum__15m_overlap: pnl=58328.85 pf=10.46 val=-2146.58/0.73/7 test=-9768.82/0.59/11 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-11915.40), combined validation/test PF too low (0.73 < 1.00), walk-forward avg validation pnl <= 0 (-278.46), walk-forward avg test pnl <= 0 (-3760.46)
-- forex_breakout_momentum__15m_overlap__exit_trend: pnl=58328.85 pf=10.46 val=-7806.44/0.03/7 test=-8948.84/0.61/11 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-16755.27), combined validation/test PF too low (0.61 < 1.00), walk-forward avg validation pnl <= 0 (-1553.70), walk-forward avg test pnl <= 0 (-2545.49)
-- forex_breakout_momentum__15m_overlap__exit_fastfail: pnl=58328.85 pf=10.46 val=-2146.58/0.73/7 test=-4838.44/0.62/7 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-6985.01), combined validation/test PF too low (0.73 < 1.00), walk-forward avg validation pnl <= 0 (-278.46), walk-forward avg test pnl <= 0 (-2025.25)
-- forex_breakout_momentum__15m_overlap__near_miss_patient: pnl=58328.85 pf=10.46 val=-4136.53/0.48/7 test=-9528.82/0.58/11 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-13665.35), combined validation/test PF too low (0.58 < 1.00), walk-forward avg validation pnl <= 0 (-2268.41), walk-forward avg test pnl <= 0 (-2950.48)
-- forex_breakout_momentum__15m_overlap__near_miss_dense: pnl=58328.85 pf=10.46 val=-2146.58/0.73/7 test=-5277.82/0.60/8 wf=50.00%
-  reasons: combined validation/test pnl <= 0 (-7424.40), combined validation/test PF too low (0.73 < 1.00), walk-forward avg validation pnl <= 0 (-278.46), walk-forward avg test pnl <= 0 (-2079.95)
+- forex_breakout_momentum__30m_overlap__exit_trend: pnl=146349.40 pf=999.00 val=3147.30/1.18/9 test=-1394.18/0.84/10 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-3434.34)
+- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense: pnl=146349.40 pf=999.00 val=3147.30/1.18/9 test=-1394.18/0.84/10 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-3434.34)
+- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_patient: pnl=144179.48 pf=999.00 val=4537.25/1.26/9 test=-1394.18/0.84/10 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-2739.36)
+- forex_breakout_momentum__5m_overlap__exit_trend__near_miss_patient: pnl=135652.31 pf=26.64 val=-5804.82/0.69/28 test=3767.27/1.18/28 wf=50.00%
+  reasons: combined validation/test pnl <= 0 (-2037.55)
+- forex_breakout_momentum__5m_overlap__exit_trend: pnl=135142.33 pf=26.54 val=-8624.18/0.24/15 test=3157.29/1.15/28 wf=50.00%
+  reasons: combined validation/test pnl <= 0 (-5466.89)
+- forex_breakout_momentum__5m_overlap__exit_trend__near_miss_dense: pnl=135142.33 pf=26.54 val=-8624.18/0.24/15 test=1062.98/1.05/29 wf=50.00%
+  reasons: combined validation/test pnl <= 0 (-7561.20)
+- forex_breakout_momentum__5m_overlap__exit_trend__near_miss_patient__trend_flat: pnl=133794.04 pf=20.83 val=-9289.22/0.32/21 test=2577.31/1.12/28 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-6711.90), walk-forward avg test pnl <= 0 (-1273.97)
+- forex_breakout_momentum__5m_overlap__exit_trend__near_miss_dense__trend_flat: pnl=131564.12 pf=16.54 val=-9169.86/0.25/16 test=-136.98/0.99/29 wf=50.00%
+  reasons: combined validation/test pnl <= 0 (-9306.84), combined validation/test PF too low (0.99 < 1.00)

@@ -48,6 +48,7 @@ from quant_system.agents.ger40 import (
     GER40RangeReclaimLongAgent,
     GER40RangeRejectShortAgent,
 )
+from quant_system.agents.eu50 import EU50OpenReclaimLongAgent
 from quant_system.agents.session import SessionEntryFilterAgent
 from quant_system.agents.stocks import (
     EventAwareRiskSentinelAgent,
@@ -1877,6 +1878,124 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
             ),
         ]
+    if upper == "EU50":
+        specs.extend(
+            [
+                CandidateSpec(
+                    name="eu50_range_reject_short",
+                    description="EU50 Europe-session failed range reclaim short",
+                    agents=[GER40RangeRejectShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40RangeRejectShortAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.4,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_failed_breakout_short",
+                    description="EU50 Europe-session failed upside breakout short",
+                    agents=[GER40FailedBreakoutShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40FailedBreakoutShortAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.3,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_opening_drive_fade_long",
+                    description="EU50 Europe open drive fade back into range",
+                    agents=[GER40OpeningDriveFadeLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40OpeningDriveFadeLongAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.25,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_range_reclaim_long",
+                    description="EU50 Europe-session failed breakdown reclaim long",
+                    agents=[GER40RangeReclaimLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40RangeReclaimLongAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.3,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_midday_breakout_long",
+                    description="EU50 midday continuation breakout long",
+                    agents=[GER40MiddayBreakoutLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40MiddayBreakoutLongAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_midday_breakout_short",
+                    description="EU50 midday continuation breakout short",
+                    agents=[GER40MiddayBreakoutShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40MiddayBreakoutShortAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_mean_reversion_down_mid",
+                    description="EU50 Europe-session mean reversion after downside extension in down-mid regimes",
+                    agents=[MeanReversionAgent(max(config.agents.mean_reversion_window - 2, 4), config.agents.mean_reversion_threshold * 0.8), risk],
+                    code_path="quant_system.agents.trend.MeanReversionAgent",
+                    regime_filter_label="trend_down_vol_mid",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.1,
+                        "trailing_stop_atr_multiple": 0.4,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_open_reclaim_long",
+                    description="EU50 Europe-open reclaim long after downside washout",
+                    agents=[EU50OpenReclaimLongAgent(), risk],
+                    code_path="quant_system.agents.eu50.EU50OpenReclaimLongAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.25,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+            ]
+        )
     if upper == "JP225":
         specs.extend(
             [

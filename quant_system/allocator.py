@@ -112,7 +112,7 @@ def _correlation_bucket(symbol: str) -> str:
     upper = symbol.upper()
     if upper in {"US500", "US100", "US30"}:
         return "us_indices"
-    if upper in {"GER40", "SX5E"}:
+    if upper in {"GER40", "EU50", "SX5E"}:
         return "eu_indices"
     if upper in {"BTC", "ETH"}:
         return "crypto_beta"

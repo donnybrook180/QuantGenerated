@@ -1,0 +1,11 @@
+Profile: us500_trend
+Candidate buy signals: 8
+
+By setup (6-bar forward return)
+us500_trend_pullback: signals=6 accepted=6 avg_6bar=0.039% win_rate=83.33%
+us500_opening_drive_reclaim: signals=2 accepted=2 avg_6bar=0.314% win_rate=100.00%
+
+By hour (6-bar forward return)
+16: signals=4 avg_6bar=-0.015% win_rate=75.00%
+18: signals=2 avg_6bar=0.148% win_rate=100.00%
+15: signals=2 avg_6bar=0.314% win_rate=100.00%

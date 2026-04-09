@@ -15,6 +15,7 @@ from quant_system.ai.models import ProfileArtifacts
 from quant_system.ai.registry import build_agent_registry_records, render_agent_catalog, render_agent_registry
 from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents, describe_profile_agents
+from quant_system.artifacts import ARTIFACTS_DIR, profile_logs_dir, profile_reports_dir, research_candidates_dir
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
@@ -31,12 +32,7 @@ from quant_system.models import MarketBar, OrderRequest, Side
 from quant_system.profiles import StrategyProfile, resolve_profiles
 from quant_system.research.features import build_feature_library
 from quant_system.risk.limits import RiskManager
-
-
 LOGGER = logging.getLogger(__name__)
-ARTIFACTS_DIR = Path("artifacts")
-
-
 def _safe_artifact_stem(name: str, max_length: int = 140) -> str:
     if len(name) <= max_length:
         return name
@@ -285,9 +281,9 @@ def export_trade_artifacts(profile: StrategyProfile, result) -> tuple[Path, Path
 
 
 def export_ai_artifacts(profile: StrategyProfile, package) -> tuple[Path, Path]:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    summary_path = ARTIFACTS_DIR / f"{profile.name}_ai_summary.txt"
-    experiments_path = ARTIFACTS_DIR / f"{profile.name}_next_experiment.txt"
+    reports_dir = profile_reports_dir(profile.name)
+    summary_path = reports_dir / "ai_summary.txt"
+    experiments_path = reports_dir / "next_experiment.txt"
 
     summary_lines = [package.local_summary]
     if package.ai_summary:
@@ -303,33 +299,37 @@ def export_ai_artifacts(profile: StrategyProfile, package) -> tuple[Path, Path]:
 
 
 def export_memory_artifacts(profile: StrategyProfile, package) -> tuple[Path, Path]:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    history_path = ARTIFACTS_DIR / f"{profile.name}_experiment_history.txt"
-    comparison_path = ARTIFACTS_DIR / f"{profile.name}_run_comparison.txt"
+    reports_dir = profile_reports_dir(profile.name)
+    history_path = reports_dir / "experiment_history.txt"
+    comparison_path = reports_dir / "run_comparison.txt"
     history_path.write_text(package.history_summary, encoding="utf-8")
     comparison_path.write_text(package.comparison_summary, encoding="utf-8")
     return history_path, comparison_path
 
 
 def export_agent_registry_artifact(profile: StrategyProfile, rendered_registry: str) -> Path:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    registry_path = ARTIFACTS_DIR / f"{profile.name}_agent_registry.txt"
+    reports_dir = profile_reports_dir(profile.name)
+    registry_path = reports_dir / "agent_registry.txt"
     registry_path.write_text(rendered_registry, encoding="utf-8")
     return registry_path
 
 
 def export_agent_catalog_artifact(profile: StrategyProfile, rendered_catalog: str) -> Path:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    catalog_path = ARTIFACTS_DIR / f"{profile.name}_agent_catalog.txt"
+    reports_dir = profile_reports_dir(profile.name)
+    catalog_path = reports_dir / "agent_catalog.txt"
     catalog_path.write_text(rendered_catalog, encoding="utf-8")
     return catalog_path
 
 
 def export_closed_trade_artifacts(closed_trades, realized_pnl: float, artifact_prefix: str) -> tuple[Path, Path]:
     ARTIFACTS_DIR.mkdir(exist_ok=True)
+    symbol = artifact_prefix.split("_", 1)[0]
     safe_prefix = _safe_artifact_stem(artifact_prefix)
-    trades_path = ARTIFACTS_DIR / f"{safe_prefix}_trades.csv"
-    analysis_path = ARTIFACTS_DIR / f"{safe_prefix}_analysis.txt"
+    file_stem = safe_prefix[len(symbol) + 1 :] if safe_prefix.startswith(f"{symbol}_") else safe_prefix
+    file_stem = _safe_artifact_stem(file_stem, max_length=110)
+    candidate_dir = research_candidates_dir(symbol)
+    trades_path = candidate_dir / f"{file_stem}_trades.csv"
+    analysis_path = candidate_dir / f"{file_stem}_analysis.txt"
 
     with trades_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
@@ -391,7 +391,7 @@ def export_closed_trade_artifacts(closed_trades, realized_pnl: float, artifact_p
         return lines
 
     analysis_lines = [
-        f"Artifact: {artifact_prefix}",
+        f"Artifact: {file_stem}",
         f"Closed trades: {len(closed_trades)}",
         f"Realized pnl: {realized_pnl:.2f}",
         "",
@@ -416,9 +416,10 @@ def export_shadow_execution_artifacts(
         return None, None
     shadow_features, shadow_data_source = load_shadow_features(config, profile)
 
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    csv_path = ARTIFACTS_DIR / f"{profile.name}_shadow_setups.csv"
-    analysis_path = ARTIFACTS_DIR / f"{profile.name}_shadow_setups.txt"
+    logs_dir = profile_logs_dir(profile.name)
+    reports_dir = profile_reports_dir(profile.name)
+    csv_path = logs_dir / "shadow_setups.csv"
+    analysis_path = reports_dir / "shadow_setups.txt"
     rows: list[dict[str, object]] = []
 
     for setup_name, agents in candidates.items():
@@ -505,9 +506,10 @@ def export_signal_artifacts(
     features: list[FeatureVector],
     optimized_agents,
 ) -> tuple[Path, Path]:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    signals_path = ARTIFACTS_DIR / f"{profile.name}_signals.csv"
-    analysis_path = ARTIFACTS_DIR / f"{profile.name}_signals_analysis.txt"
+    logs_dir = profile_logs_dir(profile.name)
+    reports_dir = profile_reports_dir(profile.name)
+    signals_path = logs_dir / "signals.csv"
+    analysis_path = reports_dir / "signals_analysis.txt"
     agents = build_alpha_agents(optimized_agents, config.risk, profile.name)
     coordinator = AgentCoordinator(agents, consensus_min_confidence=optimized_agents.consensus_min_confidence)
     horizons = (3, 6, 12)

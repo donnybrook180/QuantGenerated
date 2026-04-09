@@ -1,0 +1,16 @@
+Artifact: crypto_breakout_reclaim__5m_us_5m_us_symbol_candidate
+Closed trades: 6
+Realized pnl: -152.78
+
+By entry hour
+13: trades=3 pnl=-96.91 avg=-32.30 win_rate=33.33%
+17: trades=2 pnl=-32.71 avg=-16.36 win_rate=0.00%
+14: trades=1 pnl=-23.16 avg=-23.16 win_rate=0.00%
+
+By entry setup
+crypto_breakout_reclaim: trades=6 pnl=-152.78 avg=-25.46 win_rate=16.67%
+
+By exit reason
+signal_exit: trades=1 pnl=-82.25 avg=-82.25 win_rate=0.00%
+trailing_stop: trades=4 pnl=-47.38 avg=-11.84 win_rate=25.00%
+stale_breakout: trades=1 pnl=-23.16 avg=-23.16 win_rate=0.00%

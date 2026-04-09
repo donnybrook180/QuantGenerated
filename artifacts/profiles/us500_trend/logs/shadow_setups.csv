@@ -1,0 +1,4 @@
+setup_name,trades,closed_trades,realized_pnl,win_rate_pct,profit_factor,max_drawdown_pct,total_costs,kill_switch_triggered,data_source
+us500_trend_pullback,10,5,-0.17673,20.00000,0.92267,0.00281,0.00000,False,duckdb_cache
+us500_vwap_continuation,12,6,-0.71799,33.33333,0.83022,0.00093,0.00000,False,duckdb_cache
+us500_opening_drive_reclaim,4,2,1.74162,50.00000,2.59411,0.00190,0.00000,False,duckdb_cache

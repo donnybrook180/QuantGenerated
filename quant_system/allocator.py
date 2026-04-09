@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
 
 from quant_system.ai.storage import ExperimentStore
+from quant_system.artifacts import system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.symbol_research import _symbol_slug
 from quant_system.symbols import resolve_symbol_request
-
-
-ARTIFACTS_DIR = Path("artifacts")
 
 
 @dataclass(slots=True)
@@ -148,8 +145,7 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         weight_pct = 0.0 if total_score <= 0.0 else (score / total_score) * 100.0
         allocations.append(_row_to_allocation(profile_name, symbol, row, score, weight_pct))
 
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    report_path = ARTIFACTS_DIR / "portfolio_allocator.txt"
+    report_path = system_reports_dir() / "portfolio_allocator.txt"
     if not allocations:
         report_path.write_text(
             "Portfolio allocator\n\nNo eligible symbol execution sets were found from the latest symbol research runs.\n",

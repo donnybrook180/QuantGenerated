@@ -5,10 +5,10 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
+from quant_system.artifacts import LIVE_DIR, live_incidents_dir, live_journals_dir
 from quant_system.live.runtime import LiveRunResult
 
-
-LIVE_ARTIFACTS_DIR = Path("artifacts") / "live"
+LIVE_ARTIFACTS_DIR = LIVE_DIR
 
 
 def _slug(value: str) -> str:
@@ -26,9 +26,8 @@ def _json_safe(value):
 
 
 def write_live_run_journal(result: LiveRunResult, deployment_path: str) -> Path:
-    LIVE_ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = LIVE_ARTIFACTS_DIR / f"{_slug(result.symbol)}_{timestamp}_journal.json"
+    path = live_journals_dir(result.symbol) / f"{timestamp}_journal.json"
     payload = {
         "symbol": result.symbol,
         "broker_symbol": result.broker_symbol,
@@ -42,9 +41,8 @@ def write_live_run_journal(result: LiveRunResult, deployment_path: str) -> Path:
 
 
 def write_live_incident(symbol: str, deployment_path: str, message: str) -> Path:
-    LIVE_ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = LIVE_ARTIFACTS_DIR / f"{_slug(symbol)}_{timestamp}_incident.txt"
+    path = live_incidents_dir(symbol) / f"{timestamp}_incident.txt"
     path.write_text(
         "\n".join(
             [

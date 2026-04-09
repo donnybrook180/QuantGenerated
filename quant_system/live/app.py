@@ -21,7 +21,7 @@ def resolve_live_deployment_paths(args: list[str]) -> list[Path]:
         return paths
     if not DEPLOY_DIR.exists():
         return []
-    return sorted(DEPLOY_DIR.glob("*.live.json"))
+    return sorted(DEPLOY_DIR.glob("*/live.json"))
 
 
 def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> list[str]:

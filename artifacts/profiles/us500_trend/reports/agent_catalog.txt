@@ -1,0 +1,27 @@
+Profile: us500_trend
+Agent catalog
+
+us500_trend_pullback [active]: status=rejected active=True class=US500TrendPullbackAgent
+path: quant_system.agents.us500.US500TrendPullbackAgent
+description: Active agent US500TrendPullbackAgent
+version_id=25897 evaluation_id=25897 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381
+risk_sentinel [active]: status=testing active=True class=RiskSentinelAgent
+path: quant_system.agents.trend.RiskSentinelAgent
+description: Active agent RiskSentinelAgent
+version_id=25899 evaluation_id=25899 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381
+us500_opening_drive_reclaim [active]: status=testing active=True class=US500OpeningDriveReclaimAgent
+path: quant_system.agents.us500.US500OpeningDriveReclaimAgent
+description: Active agent US500OpeningDriveReclaimAgent
+version_id=25898 evaluation_id=25898 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381
+us500_trend_pullback [shadow]: status=rejected active=False class=US500TrendPullbackAgent
+path: quant_system.agents.us500.US500TrendPullbackAgent
+description: Shadow candidate US500TrendPullbackAgent
+version_id=25900 evaluation_id=25900 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381
+us500_vwap_continuation [shadow]: status=rejected active=False class=US500VWAPContinuationAgent
+path: quant_system.agents.us500.US500VWAPContinuationAgent
+description: Shadow candidate US500VWAPContinuationAgent
+version_id=25901 evaluation_id=25901 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381
+us500_opening_drive_reclaim [shadow]: status=testing active=False class=US500OpeningDriveReclaimAgent
+path: quant_system.agents.us500.US500OpeningDriveReclaimAgent
+description: Shadow candidate US500OpeningDriveReclaimAgent
+version_id=25902 evaluation_id=25902 first_seen=2026-04-09 00:29:29.455381 last_seen=2026-04-09 00:29:29.455381

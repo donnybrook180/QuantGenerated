@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-ARTIFACTS_DIR = Path("artifacts")
+from quant_system.artifacts import research_plots_dir
 
 
 def _safe_name(value: str) -> str:
@@ -37,14 +37,14 @@ def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
     except ModuleNotFoundError:
         return []
 
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
+    plot_dir = research_plots_dir(symbol)
     slug = _safe_name(symbol)
     ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
     top = ranked[:8]
     paths: list[Path] = []
 
     if top:
-        ranking_path = ARTIFACTS_DIR / f"{slug}_candidate_ranking.png"
+        ranking_path = plot_dir / "candidate_ranking.png"
         fig, ax = plt.subplots(figsize=(12, 6))
         labels = [row.name[:36] for row in top]
         values = [row.realized_pnl for row in top]
@@ -57,7 +57,7 @@ def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
         plt.close(fig)
         paths.append(ranking_path)
 
-        scatter_path = ARTIFACTS_DIR / f"{slug}_validation_test_scatter.png"
+        scatter_path = plot_dir / "validation_test_scatter.png"
         fig, ax = plt.subplots(figsize=(8, 6))
         x = [row.validation_pnl for row in top]
         y = [row.test_pnl for row in top]
@@ -77,7 +77,7 @@ def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
         plt.close(fig)
         paths.append(scatter_path)
 
-        regime_path = ARTIFACTS_DIR / f"{slug}_regimes.png"
+        regime_path = plot_dir / "regimes.png"
         fig, ax = plt.subplots(figsize=(12, 6))
         labels = [row.name[:24] for row in top[:6]]
         best_values = [row.best_regime_pnl for row in top[:6]]
@@ -98,7 +98,7 @@ def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
         equity_row = best_row if best_row is not None else top[0]
         trade_pnls = _load_trade_pnls(equity_row.trade_log_path)
         if trade_pnls:
-            equity_path = ARTIFACTS_DIR / f"{slug}_best_candidate_equity.png"
+            equity_path = plot_dir / "best_candidate_equity.png"
             fig, ax = plt.subplots(figsize=(12, 5))
             ax.plot(_equity_curve(trade_pnls), color="#1f4e79", linewidth=2)
             ax.set_title(f"{symbol} Equity Curve: {equity_row.name}")

@@ -12,6 +12,7 @@ from quant_system.app import export_closed_trade_artifacts
 from quant_system.ai.models import AgentDescriptor
 from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.base import Agent
+from quant_system.artifacts import research_reports_dir
 from quant_system.agents.crypto import (
     CryptoBreakoutReclaimAgent,
     EthLiquiditySweepReversalAgent,
@@ -78,9 +79,6 @@ from quant_system.symbols import (
     is_stock_symbol as symbol_is_stock,
     resolve_symbol_request,
 )
-
-
-ARTIFACTS_DIR = Path("artifacts")
 
 
 @dataclass(slots=True)
@@ -3508,10 +3506,9 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
 
 
 def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: list[CandidateResult]) -> tuple[Path, Path]:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    slug = _symbol_slug(symbol)
-    csv_path = ARTIFACTS_DIR / f"{slug}_symbol_research.csv"
-    txt_path = ARTIFACTS_DIR / f"{slug}_symbol_research.txt"
+    reports_dir = research_reports_dir(symbol)
+    csv_path = reports_dir / "symbol_research.csv"
+    txt_path = reports_dir / "symbol_research.txt"
 
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
@@ -3715,8 +3712,7 @@ def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
 
 
 def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], execution_validation_summary: str) -> Path:
-    ARTIFACTS_DIR.mkdir(exist_ok=True)
-    path = ARTIFACTS_DIR / f"{_symbol_slug(symbol)}_viability_autopsy.txt"
+    path = research_reports_dir(symbol) / "viability_autopsy.txt"
     ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
     counts: dict[str, int] = {}
     near_misses: list[tuple[CandidateResult, list[str]]] = []

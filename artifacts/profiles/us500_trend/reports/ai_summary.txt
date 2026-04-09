@@ -1,0 +1,26 @@
+Profile: us500_trend
+Description: US500 trend continuation via SPY proxy data
+Data symbol: SPY
+Broker symbol: US500.cash
+Ending equity: 100001.56
+Realized PnL: 1.56
+Closed trades: 7
+Win rate: 28.57%
+Profit factor: 1.46
+Max drawdown: 0.00%
+FTMO pass: False
+FTMO reasons: profit target not met (0.00% < 10.00%), win rate too low (28.57% < 35.00%), too few closed trades (7 < 10)
+Strongest realized setup: us500_opening_drive_reclaim (1.74 pnl)
+Weakest realized exit: stale_breakout (-2.12 pnl)
+Best signal hour: 15 (0.629% 6-bar forward return)
+Best shadow setup: us500_opening_drive_reclaim (1.74 pnl)
+
+AI summary
+**Diagnosis**  
+The us500_trend profile shows modest equity growth (ending equity ≈ 100,001.56) with a tiny realized PnL of 1.56 from only seven closed trades. The win rate is low at 28.6 %, and the profit factor of 1.46 is driven by a few larger winners. The strategy fails FTMO criteria because it hasn’t met the profit‑target threshold, the win rate is below the required 35 %, and the trade count is insufficient (<10). The strongest contributor is the “us500_opening_drive_reclaim” setup (+1.74 pnl), while the biggest drag comes from the “stale_breakout” exit (‑2.12 pnl). The best‑performing hour for forward returns is 15 (0.629% 6‑bar return), whereas hour 18 shows negative realized PnL.
+
+**Highest‑value next experiment**  
+Prioritize and test the shadow candidate **“us500_opening_drive_reclaim”** as a core setup in the us500_trend strategy, since it currently delivers the highest unused PnL (+1.74) and represents the best‑performing signal identified in the analysis.
+
+**Warning about overfitting / sample quality**  
+With only seven closed trades, the statistical sample is very small; metrics such as win rate, profit factor, and hour‑specific returns are prone to large sampling error. Any optimization or parameter tweaks based on this limited data risk overfitting to noise rather than capturing a robust edge. Increasing the trade count before drawing firm conclusions is essential.

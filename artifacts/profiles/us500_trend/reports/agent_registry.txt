@@ -1,0 +1,13 @@
+Profile: us500_trend
+Agent registry
+
+us500_opening_drive_reclaim [realized]: pnl=1.74 closed=2 pf=2.59 win_rate=50.00% verdict=needs_retest data_source=polygon
+action: Edge is positive but sample is thin; increase evaluation sample size.
+us500_opening_drive_reclaim [shadow]: pnl=1.74 closed=2 pf=2.59 win_rate=50.00% verdict=needs_retest data_source=duckdb_cache
+action: Edge is positive but sample is thin; increase evaluation sample size.
+us500_trend_pullback [shadow]: pnl=-0.18 closed=5 pf=0.92 win_rate=20.00% verdict=rejected data_source=duckdb_cache
+action: Do not prioritize this agent until the entry or exit logic is redesigned.
+us500_trend_pullback [realized]: pnl=-0.18 closed=5 pf=0.92 win_rate=20.00% verdict=rejected data_source=polygon
+action: Do not prioritize this agent until the entry or exit logic is redesigned.
+us500_vwap_continuation [shadow]: pnl=-0.72 closed=6 pf=0.83 win_rate=33.33% verdict=rejected data_source=duckdb_cache
+action: Do not prioritize this agent until the entry or exit logic is redesigned.

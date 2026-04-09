@@ -1,0 +1,6 @@
+Profile: us500_trend
+Recommended next experiments
+
+- Reduce the 'stale_breakout' loss bucket in us500_trend; it is the weakest realized exit.
+- Review or isolate hour 18 for us500_trend; realized PnL there is negative.
+- Prioritize the shadow candidate 'us500_opening_drive_reclaim' for us500_trend; it is currently the best unused setup.

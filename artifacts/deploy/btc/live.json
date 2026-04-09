@@ -1,0 +1,46 @@
+{
+  "profile_name": "symbol::btc",
+  "symbol": "BTC",
+  "data_symbol": "X:BTCUSD",
+  "broker_symbol": "BTCUSD",
+  "research_run_id": 190,
+  "execution_set_id": 88,
+  "execution_validation_summary": "selection=standard variant=crypto_short_breakdown__15m_europe__exit_fastfail@15m_europe, crypto_short_breakdown__15m_europe@15m_europe, crypto_short_breakdown__15m_europe__exit_trend@15m_europe data_source=duckdb_cache pnl=592.32 pf=2.08 closed=23 -> accepted",
+  "strategies": [
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
+      "code_path": "quant_system.agents.crypto.CryptoShortBreakdownAgent",
+      "variant_label": "15m_europe",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 18,
+        "take_profit_atr_multiple": 1.8,
+        "stale_breakout_bars": 4,
+        "structure_exit_bars": 2
+      },
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe",
+      "code_path": "quant_system.agents.crypto.CryptoShortBreakdownAgent",
+      "variant_label": "15m_europe",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 0.3333333333333333
+    },
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_trend",
+      "code_path": "quant_system.agents.crypto.CryptoShortBreakdownAgent",
+      "variant_label": "15m_europe",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.3333333333333333
+    }
+  ]
+}

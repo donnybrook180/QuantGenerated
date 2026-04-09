@@ -87,12 +87,12 @@ For multi-symbol research on a rate-limited Polygon plan, `cache_first` is usual
 
 After each run, the app now also:
 
-- writes a local AI-style summary to `artifacts/<profile>_ai_summary.txt`
-- writes the next recommended experiments to `artifacts/<profile>_next_experiment.txt`
-- writes experiment memory to `artifacts/<profile>_experiment_history.txt`
-- writes latest-vs-previous comparisons to `artifacts/<profile>_run_comparison.txt`
-- writes per-agent status to `artifacts/<profile>_agent_registry.txt`
-- writes per-agent lifecycle catalog to `artifacts/<profile>_agent_catalog.txt`
+- writes a local AI-style summary to `artifacts/profiles/<profile>/reports/ai_summary.txt`
+- writes the next recommended experiments to `artifacts/profiles/<profile>/reports/next_experiment.txt`
+- writes experiment memory to `artifacts/profiles/<profile>/reports/experiment_history.txt`
+- writes latest-vs-previous comparisons to `artifacts/profiles/<profile>/reports/run_comparison.txt`
+- writes per-agent status to `artifacts/profiles/<profile>/reports/agent_registry.txt`
+- writes per-agent lifecycle catalog to `artifacts/profiles/<profile>/reports/agent_catalog.txt`
 - stores the run, metrics, artifacts, and summaries in DuckDB for experiment memory
 
 If `AI_API_KEY` is set in `.env`, the app also attempts an LLM-enriched summary. Without a key, it still writes deterministic local summaries.
@@ -129,8 +129,20 @@ Voor symbol research kun je nu ook generieke aliassen gebruiken. De app mappt di
 
 Deze runner test meerdere archetypes op hetzelfde symbool, zoals trend, mean reversion, opening range breakout en volatility breakout. Daarna test hij ook combinaties van de best scorende losse archetypes. De resultaten komen in:
 
-- `artifacts/<symbol>_symbol_research.csv`
-- `artifacts/<symbol>_symbol_research.txt`
+- `artifacts/research/<symbol>/reports/symbol_research.csv`
+- `artifacts/research/<symbol>/reports/symbol_research.txt`
+
+Candidate-level trade logs en analyses komen in:
+
+- `artifacts/research/<symbol>/candidates/<candidate>_trades.csv`
+- `artifacts/research/<symbol>/candidates/<candidate>_analysis.txt`
+
+Plots komen in:
+
+- `artifacts/research/<symbol>/plots/candidate_ranking.png`
+- `artifacts/research/<symbol>/plots/validation_test_scatter.png`
+- `artifacts/research/<symbol>/plots/regimes.png`
+- `artifacts/research/<symbol>/plots/best_candidate_equity.png`
 
 Symbol research bepaalt nu zelf het symbooltype en kiest automatisch de horizon:
 
@@ -214,17 +226,17 @@ Dit gebruikt alleen de nieuwste, geldige symbol execution sets en weegt ze op re
 
 De output komt ook in:
 
-- `artifacts/portfolio_allocator.txt`
+- `artifacts/system/reports/portfolio_allocator.txt`
 
 Als een symbol research-run een `accepted` execution set vindt, exporteert hij nu ook automatisch een live deployment artifact:
 
-- `artifacts/deploy/<symbol>.live.json`
+- `artifacts/deploy/<symbol>/live.json`
 
 Bijvoorbeeld:
 
-- `artifacts/deploy/us500.live.json`
-- `artifacts/deploy/xauusd.live.json`
-- `artifacts/deploy/btc.live.json`
+- `artifacts/deploy/us500/live.json`
+- `artifacts/deploy/xauusd/live.json`
+- `artifacts/deploy/btc/live.json`
 
 Die deployment artifacts zijn de brug tussen research en live. De live runner doet zelf geen research; hij leest alleen deze bestanden.
 
@@ -265,9 +277,9 @@ Dus eerst dry-run laten meelopen.
 
 De live laag schrijft nu ook naar:
 
-- `artifacts/live/*_journal.json`
-- `artifacts/live/*_incident.txt`
-- `artifacts/live/loop_state.json`
+- `artifacts/live/<symbol>/journals/<timestamp>_journal.json`
+- `artifacts/live/<symbol>/incidents/<timestamp>_incident.txt`
+- `artifacts/live/state/loop_state.json`
 
 ### Hedging vs Netting
 

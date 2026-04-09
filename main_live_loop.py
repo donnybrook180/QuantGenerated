@@ -10,11 +10,12 @@ from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
 from quant_system.live.app import resolve_live_deployment_paths
 from quant_system.live.deploy import load_symbol_deployment
+from quant_system.artifacts import ensure_dir
 from quant_system.live.journal import LIVE_ARTIFACTS_DIR, write_live_incident, write_live_run_journal
 from quant_system.live.runtime import MT5LiveExecutor
 
 
-STATE_PATH = LIVE_ARTIFACTS_DIR / "loop_state.json"
+STATE_PATH = LIVE_ARTIFACTS_DIR / "state" / "loop_state.json"
 
 
 def _load_state() -> dict[str, dict[str, object]]:
@@ -27,7 +28,7 @@ def _load_state() -> dict[str, dict[str, object]]:
 
 
 def _save_state(state: dict[str, dict[str, object]]) -> None:
-    LIVE_ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    ensure_dir(STATE_PATH.parent)
     STATE_PATH.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
@@ -73,7 +74,7 @@ def main() -> int:
     if not paths:
         print(
             "No live deployment artifacts found. Run main_symbol_research.py first so it exports "
-            "artifacts/deploy/<symbol>.live.json."
+            "artifacts/deploy/<symbol>/live.json and stores research outputs under artifacts/research/<symbol>/."
         )
         return 1
 

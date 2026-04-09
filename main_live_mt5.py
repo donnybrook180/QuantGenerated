@@ -12,7 +12,7 @@ def main() -> int:
     if not paths:
         print(
             "No live deployment artifacts found. Run main_symbol_research.py first so it exports "
-            "artifacts/deploy/<symbol>.live.json."
+            "artifacts/deploy/<symbol>/live.json and stores research outputs under artifacts/research/<symbol>/."
         )
         return 1
     print("\n".join(run_live_once_app(paths, config)))

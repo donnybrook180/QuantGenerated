@@ -1,0 +1,19 @@
+Artifact: crypto_volatility_expansion__5m_europe__exit_trend__near_miss_patient__trend_up_symbol_candidate
+Closed trades: 6
+Realized pnl: -176.34
+
+By entry hour
+7: trades=1 pnl=-187.49 avg=-187.49 win_rate=0.00%
+11: trades=1 pnl=-49.71 avg=-49.71 win_rate=0.00%
+9: trades=1 pnl=-44.10 avg=-44.10 win_rate=0.00%
+10: trades=1 pnl=-8.72 avg=-8.72 win_rate=0.00%
+8: trades=2 pnl=113.69 avg=56.85 win_rate=50.00%
+
+By entry setup
+crypto_volatility_expansion: trades=6 pnl=-176.34 avg=-29.39 win_rate=16.67%
+
+By exit reason
+stop_loss: trades=1 pnl=-187.49 avg=-187.49 win_rate=0.00%
+stale_breakout: trades=3 pnl=-153.69 avg=-51.23 win_rate=0.00%
+trailing_stop: trades=1 pnl=-8.72 avg=-8.72 win_rate=0.00%
+take_profit: trades=1 pnl=173.57 avg=173.57 win_rate=100.00%

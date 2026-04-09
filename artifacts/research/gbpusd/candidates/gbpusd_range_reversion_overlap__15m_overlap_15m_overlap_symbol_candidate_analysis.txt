@@ -1,0 +1,19 @@
+Artifact: gbpusd_range_reversion_overlap__15m_overlap_15m_overlap_symbol_candidate
+Closed trades: 27
+Realized pnl: -37.56
+
+By entry hour
+13: trades=8 pnl=-48.63 avg=-6.08 win_rate=25.00%
+16: trades=5 pnl=-21.04 avg=-4.21 win_rate=0.00%
+14: trades=2 pnl=-13.44 avg=-6.72 win_rate=0.00%
+15: trades=3 pnl=9.80 avg=3.27 win_rate=33.33%
+12: trades=9 pnl=35.75 avg=3.97 win_rate=55.56%
+
+By entry setup
+forex_range_reversion: trades=27 pnl=-37.56 avg=-1.39 win_rate=29.63%
+
+By exit reason
+structure_exit: trades=17 pnl=-120.56 avg=-7.09 win_rate=0.00%
+trailing_stop: trades=1 pnl=-1.27 avg=-1.27 win_rate=0.00%
+signal_exit: trades=5 pnl=36.16 avg=7.23 win_rate=80.00%
+take_profit: trades=4 pnl=48.11 avg=12.03 win_rate=100.00%

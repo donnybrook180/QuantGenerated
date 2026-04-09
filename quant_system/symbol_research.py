@@ -28,6 +28,10 @@ from quant_system.agents.forex import (
     EURUSDLondonRangeReclaimAgent,
     EURUSDNYOverlapContinuationAgent,
     EURUSDPostNewsReclaimAgent,
+    GBPUSDLondonBreakoutReclaimAgent,
+    GBPUSDLondonRangeFadeAgent,
+    GBPUSDOverlapImpulseAgent,
+    GBPUSDPriorDaySweepReversalAgent,
     ForexBreakoutMomentumAgent,
     ForexRangeReversionAgent,
     ForexShortBreakdownMomentumAgent,
@@ -265,6 +269,21 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
             "core_combined_closed_trades": 2,
             "core_allow_positive_validation_only": 0,
         }
+    if symbol.upper() == "GBPUSD":
+        return {
+            "validation_closed_trades": 1,
+            "test_closed_trades": 0,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 0.0,
+            "sparse_max_closed_trades": 12,
+            "sparse_min_payoff_ratio": 1.5,
+            "sparse_combined_closed_trades": 0,
+            "sparse_walk_forward_min_pass_rate_pct": 0.0,
+            "core_use_combined_splits": 1,
+            "core_combined_closed_trades": 2,
+            "core_allow_positive_validation_only": 0,
+        }
     if symbol.upper() == "US500":
         return {
             "validation_closed_trades": 2,
@@ -398,6 +417,29 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
         if isinstance(row, CandidateResult)
         else (row.get("validation_closed_trades", 0) or 0) + (row.get("test_closed_trades", 0) or 0)
     )
+    if symbol.upper() == "GBPUSD":
+        regime_filter_label = str(
+            row.regime_filter_label if isinstance(row, CandidateResult) else row.get("regime_filter_label", "") or ""
+        )
+        payoff_ratio = float(row.payoff_ratio if isinstance(row, CandidateResult) else row.get("payoff_ratio", 0.0))
+        closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0))
+        if (
+            best_regime == "trend_flat_vol_mid"
+            and regime_filter_label == "trend_flat_vol_mid"
+            and realized_pnl > 0.0
+            and profit_factor >= 1.2
+            and payoff_ratio >= 1.75
+            and closed_trades >= 3
+            and best_regime_trade_count >= 3
+            and best_regime_pnl > 0.0
+            and best_regime_pf >= 1.2
+            and regime_stability_score >= 0.9
+            and regime_loss_ratio <= 0.25
+            and equity_quality_score >= 0.3
+            and walk_forward_windows >= 1
+            and combined_closed_trades == 0
+        ):
+            return True
     return (
         realized_pnl > 0.0
         and profit_factor >= float(thresholds["min_profit_factor"])
@@ -619,7 +661,7 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
             return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "power"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
     if profile_symbol.upper() == "GBPUSD":
-        return [("15m", 15, "minute")], ("europe",), True
+        return [("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap"), True
     if profile_symbol.upper() == "ETH":
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap", "us"), True
     if _is_crypto_symbol(profile_symbol):
@@ -1548,6 +1590,140 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         risk,
                     ],
                     code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+                    allowed_variants=("15m_europe",),
+                ),
+                CandidateSpec(
+                    name="forex_short_breakdown_momentum",
+                    description="GBPUSD short breakdown momentum baseline",
+                    agents=[
+                        ForexShortBreakdownMomentumAgent(
+                            lookback=16,
+                            min_atr_proxy=0.00028,
+                            min_momentum_5=-0.00018,
+                            min_momentum_20=-0.00022,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+                    allowed_variants=("15m_europe",),
+                ),
+                CandidateSpec(
+                    name="forex_range_reversion",
+                    description="GBPUSD range reversion baseline",
+                    agents=[
+                        ForexRangeReversionAgent(
+                            lookback=16,
+                            min_z_score=-1.15,
+                            max_trend_strength=0.00075,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexRangeReversionAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                ),
+                CandidateSpec(
+                    name="gbpusd_range_reversion_overlap",
+                    description="GBPUSD overlap-session range reversion extension",
+                    agents=[
+                        ForexRangeReversionAgent(
+                            lookback=14,
+                            min_z_score=-1.05,
+                            max_trend_strength=0.0009,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexRangeReversionAgent",
+                    allowed_variants=("15m_overlap",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 2,
+                        "max_holding_bars": 8,
+                        "take_profit_atr_multiple": 1.1,
+                        "trailing_stop_atr_multiple": 0.4,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_london_range_fade",
+                    description="GBPUSD London range fade around VWAP and session extremes",
+                    agents=[
+                        GBPUSDLondonRangeFadeAgent(
+                            max_abs_trend_strength=0.0011,
+                            min_relative_volume=0.58,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.GBPUSDLondonRangeFadeAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_europe", "15m_overlap", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.35,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_london_breakout_reclaim",
+                    description="GBPUSD London breakout reclaim continuation",
+                    agents=[
+                        GBPUSDLondonBreakoutReclaimAgent(
+                            min_trend_strength=0.00014,
+                            min_relative_volume=0.62,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.GBPUSDLondonBreakoutReclaimAgent",
+                    allowed_variants=("15m_europe", "15m_overlap", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_overlap_impulse",
+                    description="GBPUSD London/NY overlap impulse continuation",
+                    agents=[
+                        GBPUSDOverlapImpulseAgent(
+                            min_trend_strength=0.00014,
+                            min_relative_volume=0.64,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.GBPUSDOverlapImpulseAgent",
+                    allowed_variants=("15m_overlap", "30m_overlap"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.7,
+                        "trailing_stop_atr_multiple": 0.65,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_prior_day_sweep_reversal",
+                    description="GBPUSD prior-day sweep reversal in flat or transition regimes",
+                    agents=[
+                        GBPUSDPriorDaySweepReversalAgent(
+                            max_abs_trend_strength=0.0012,
+                            min_relative_volume=0.6,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.GBPUSDPriorDaySweepReversalAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_europe", "15m_overlap", "30m_europe"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.4,
+                        "trailing_stop_atr_multiple": 0.52,
+                    },
                 ),
             ]
         return [
@@ -3659,24 +3835,42 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
         row.regime_loss_ratio if isinstance(row, CandidateResult) else row.get("regime_loss_ratio", 999.0)
     )
     component_count = int(row.component_count if isinstance(row, CandidateResult) else row.get("component_count", 1))
-    allowed_regimes = (best_regime,) if best_regime else ()
-    blocked_regimes = tuple(
-        item for item in (worst_regime,) if item and item not in allowed_regimes
-    )
-    blocked_summary = blocked_regimes[0] if blocked_regimes else "no explicit blocked regime"
+    regime_pnl_by_label = _metric_map_from_row(row, "regime_pnl_by_label")
+    combined_row = component_count > 1
+    if combined_row and regime_pnl_by_label:
+        positive_regimes = [
+            item[0]
+            for item in sorted(regime_pnl_by_label.items(), key=lambda item: item[1], reverse=True)
+            if item[1] > 0.0
+        ]
+        negative_regimes = [
+            item[0]
+            for item in sorted(regime_pnl_by_label.items(), key=lambda item: item[1])
+            if item[1] < 0.0
+        ]
+        allowed_regimes = tuple(positive_regimes[:2])
+        blocked_regimes = tuple(item for item in negative_regimes[:2] if item not in allowed_regimes)
+    else:
+        allowed_regimes = (best_regime,) if best_regime else ()
+        blocked_regimes = tuple(item for item in (worst_regime,) if item and item not in allowed_regimes)
+    blocked_summary = ", ".join(blocked_regimes) if blocked_regimes else "no explicit blocked regime"
+    allowed_summary = ", ".join(allowed_regimes) if allowed_regimes else "no preferred regime"
 
-    vol_suffix = best_regime.split("_")[-1] if best_regime else ""
+    active_regimes = allowed_regimes or ((best_regime,) if best_regime else ())
+    vol_suffixes = [regime.split("_")[-1] for regime in active_regimes if regime]
     min_vol_percentile = 0.0
     max_vol_percentile = 1.0
-    if vol_suffix == "low":
-        min_vol_percentile = 0.0
-        max_vol_percentile = 0.45
-    elif vol_suffix == "mid":
-        min_vol_percentile = 0.20
-        max_vol_percentile = 0.80
-    elif vol_suffix == "high":
-        min_vol_percentile = 0.55
-        max_vol_percentile = 0.97
+    vol_ranges: list[tuple[float, float]] = []
+    for vol_suffix in vol_suffixes:
+        if vol_suffix == "low":
+            vol_ranges.append((0.0, 0.45))
+        elif vol_suffix == "mid":
+            vol_ranges.append((0.20, 0.80))
+        elif vol_suffix == "high":
+            vol_ranges.append((0.55, 0.97))
+    if vol_ranges:
+        min_vol_percentile = min(item[0] for item in vol_ranges)
+        max_vol_percentile = max(item[1] for item in vol_ranges)
 
     base_allocation_weight = max(0.35, min(1.15, 0.45 + regime_stability_score * 0.70))
     if component_count > 1:
@@ -3685,7 +3879,7 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
         base_allocation_weight *= 0.85
 
     max_risk_multiplier = max(0.35, min(1.0, 0.55 + regime_stability_score * 0.45))
-    if vol_suffix == "high":
+    if "high" in vol_suffixes:
         max_risk_multiplier = min(max_risk_multiplier, 0.60)
     min_risk_multiplier = 0.0
     if promotion_tier == "specialist":
@@ -3696,7 +3890,7 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
         max_risk_multiplier = min(max_risk_multiplier, 0.20)
     policy_summary = (
         f"tier={promotion_tier}"
-        f"; activate in {best_regime or 'no preferred regime'}"
+        f"; activate in {allowed_summary}"
         f"; avoid {blocked_summary}"
         f"; vol_pct in [{min_vol_percentile:.2f}, {max_vol_percentile:.2f}]"
         f"; base_weight={base_allocation_weight:.2f}"
@@ -4354,6 +4548,19 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
         ),
         reverse=True,
     )
+    if not selected and allow_multi_core and specialist_ranked:
+        lead_specialist = specialist_ranked[0]
+        selected.append(lead_specialist)
+        used_components.update(_selection_component_keys(lead_specialist))
+        lead_regime = str(lead_specialist.get("best_regime", "") or "")
+        lead_variant = str(lead_specialist.get("variant_label", "") or "").strip()
+        if lead_regime:
+            used_regimes.add(lead_regime)
+        if lead_variant:
+            used_variants.add(lead_variant)
+        lead_code_path = str(lead_specialist.get("code_path", "") or "").strip()
+        if lead_code_path:
+            used_code_paths.add(lead_code_path)
     lead_regime = str(selected[0].get("best_regime", "") or "") if selected else ""
     for row in specialist_ranked:
         components = _selection_component_keys(row)

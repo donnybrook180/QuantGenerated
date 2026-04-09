@@ -1,14 +1,21 @@
-Artifact: gbpusd_forex_range_reversion__15m_europe_15m_europe_symbol_candidate
-Closed trades: 5
-Realized pnl: 3.74
+Artifact: forex_range_reversion__15m_europe_15m_europe_symbol_candidate
+Closed trades: 51
+Realized pnl: -48.68
 
 By entry hour
-9: trades=1 pnl=-2.28 avg=-2.28 win_rate=0.00%
-10: trades=1 pnl=0.32 avg=0.32 win_rate=100.00%
-7: trades=3 pnl=5.70 avg=1.90 win_rate=33.33%
+7: trades=14 pnl=-65.61 avg=-4.69 win_rate=14.29%
+9: trades=8 pnl=-32.04 avg=-4.01 win_rate=25.00%
+8: trades=8 pnl=-16.87 avg=-2.11 win_rate=25.00%
+11: trades=6 pnl=-3.10 avg=-0.52 win_rate=33.33%
+10: trades=7 pnl=26.22 avg=3.75 win_rate=28.57%
+12: trades=8 pnl=42.72 avg=5.34 win_rate=37.50%
 
 By entry setup
-forex_range_reversion: trades=5 pnl=3.74 avg=0.75 win_rate=40.00%
+forex_range_reversion: trades=51 pnl=-48.68 avg=-0.95 win_rate=25.49%
 
 By exit reason
-signal_exit: trades=5 pnl=3.74 avg=0.75 win_rate=40.00%
+signal_exit: trades=35 pnl=-86.80 avg=-2.48 win_rate=22.86%
+structure_exit: trades=8 pnl=-47.59 avg=-5.95 win_rate=0.00%
+stop_loss: trades=2 pnl=-30.47 avg=-15.23 win_rate=0.00%
+trailing_stop: trades=1 pnl=-6.49 avg=-6.49 win_rate=0.00%
+take_profit: trades=5 pnl=122.66 avg=24.53 win_rate=100.00%

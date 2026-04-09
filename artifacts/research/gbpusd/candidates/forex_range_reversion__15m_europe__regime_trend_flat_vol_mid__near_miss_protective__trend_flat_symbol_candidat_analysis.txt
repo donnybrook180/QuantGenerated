@@ -1,0 +1,21 @@
+Artifact: forex_range_reversion__15m_europe__regime_trend_flat_vol_mid__near_miss_protective__trend_flat_symbol_candidat
+Closed trades: 37
+Realized pnl: -82.35
+
+By entry hour
+9: trades=7 pnl=-51.28 avg=-7.33 win_rate=0.00%
+7: trades=9 pnl=-43.21 avg=-4.80 win_rate=11.11%
+8: trades=7 pnl=-23.68 avg=-3.38 win_rate=14.29%
+10: trades=4 pnl=9.35 avg=2.34 win_rate=25.00%
+11: trades=4 pnl=9.70 avg=2.42 win_rate=50.00%
+12: trades=6 pnl=16.77 avg=2.80 win_rate=33.33%
+
+By entry setup
+forex_range_reversion: trades=37 pnl=-82.35 avg=-2.23 win_rate=18.92%
+
+By exit reason
+signal_exit: trades=24 pnl=-77.38 avg=-3.22 win_rate=12.50%
+stop_loss: trades=4 pnl=-51.83 avg=-12.96 win_rate=0.00%
+trailing_stop: trades=2 pnl=-16.11 avg=-8.06 win_rate=0.00%
+stale_breakout: trades=3 pnl=-12.92 avg=-4.31 win_rate=0.00%
+take_profit: trades=4 pnl=75.89 avg=18.97 win_rate=100.00%

@@ -1,0 +1,66 @@
+{
+  "symbol": "ETH",
+  "broker_symbol": "ETHUSD",
+  "deployment_path": "artifacts\\deploy\\eth\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T21:15:00+00:00",
+    "symbol": "ETH",
+    "regime_label": "event_risk",
+    "volatility_label": "event_risk",
+    "structure_label": "trend",
+    "realized_vol_20": 0.07100734777076016,
+    "realized_vol_100": 0.04568705985186828,
+    "vol_ratio": 1.5542113675291902,
+    "vol_percentile": 0.9917355371900827,
+    "atr_percent": 0.007317832954146295,
+    "trend_strength": 0.00970081373588716,
+    "range_efficiency": 0.27498422049232063,
+    "risk_multiplier": 0.0,
+    "block_new_entries": true,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 3051813,
+      "regime_label": "event_risk",
+      "vol_percentile": 0.9917355371900827,
+      "risk_multiplier": 0.0,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 1.15,
+      "effective_size_factor": 0.0
+    },
+    {
+      "candidate_name": "crypto_short_reversion_late_europe__15m_europe__exit_fastfail",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2877354,
+      "regime_label": "event_risk",
+      "vol_percentile": 0.9917355371900827,
+      "risk_multiplier": 0.0,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 0.9587856680998661,
+      "effective_size_factor": 0.0
+    }
+  ]
+}

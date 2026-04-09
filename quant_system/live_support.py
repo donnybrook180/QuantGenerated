@@ -6,6 +6,7 @@ from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
+from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
 from quant_system.symbols import is_stock_symbol
 
@@ -72,7 +73,17 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
     if not bars:
         return []
     if not is_stock_symbol(data_symbol):
-        return build_feature_library(bars)
+        features = build_feature_library(bars)
+        if supports_cross_asset_context(data_symbol):
+            multiplier, timespan = _infer_bars_timeframe(bars)
+            features = apply_cross_asset_context(
+                features,
+                config.mt5.database_path,
+                data_symbol,
+                multiplier,
+                timespan,
+            )
+        return features
     try:
         event_flags = fetch_stock_event_flags(
             config.polygon.api_key,
@@ -84,5 +95,25 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
         )
     except RuntimeError as exc:
         LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
-        return build_feature_library(bars)
-    return build_feature_library(bars, event_flags)
+        features = build_feature_library(bars)
+    else:
+        features = build_feature_library(bars, event_flags)
+    if supports_cross_asset_context(data_symbol):
+        multiplier, timespan = _infer_bars_timeframe(bars)
+        features = apply_cross_asset_context(
+            features,
+            config.mt5.database_path,
+            data_symbol,
+            multiplier,
+            timespan,
+        )
+    return features
+
+
+def _infer_bars_timeframe(bars: list[MarketBar]) -> tuple[int, str]:
+    if len(bars) < 2:
+        return 5, "minute"
+    delta_seconds = int((bars[1].timestamp - bars[0].timestamp).total_seconds())
+    if delta_seconds <= 0:
+        return 5, "minute"
+    return max(delta_seconds // 60, 1), "minute"

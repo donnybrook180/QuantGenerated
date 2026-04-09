@@ -30,6 +30,7 @@ class SymbolDeployment:
     research_run_id: int
     execution_set_id: int | None
     execution_validation_summary: str
+    symbol_status: str = "research_only"
     strategies: list[DeploymentStrategy] = field(default_factory=list)
     target_volatility: float = 0.0
     max_symbol_vol_percentile: float = 0.98

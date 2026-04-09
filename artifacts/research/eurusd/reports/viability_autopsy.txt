@@ -1,9 +1,9 @@
 Viability autopsy: EURUSD
-Execution validation summary: selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk
+Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=134.36 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
 Tier counts: core=7 specialist=15 reject=161
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 104
+- regime stability too low (0.00 < 0.50): 106
 - validation PF < 1.0 (0.00): 95
 - test PF < 1.0 (0.00): 90
 - walk-forward avg validation pnl <= 0 (0.00): 88

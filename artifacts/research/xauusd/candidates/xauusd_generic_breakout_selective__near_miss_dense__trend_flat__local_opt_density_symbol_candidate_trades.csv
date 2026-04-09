@@ -1,5 +1,5 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:XAUUSD,2026-03-10T13:00:00+00:00,2026-03-10T18:10:00+00:00,13,18,volatility_breakout,trailing_stop,5195.84436,5214.71402,0.10000,187.96781,0.72874,19,0.78454,{'breakout_high': 5189.04}
-C:XAUUSD,2026-03-27T14:00:00+00:00,2026-03-27T16:55:00+00:00,14,16,volatility_breakout,signal_exit,4457.73532,4515.00000,0.10000,572.01872,0.62809,3,1.00000,{'breakout_high': 4440.91}
-C:XAUUSD,2026-03-31T13:50:00+00:00,2026-03-31T16:10:00+00:00,13,16,volatility_breakout,signal_exit,4606.90725,4611.03231,0.10000,40.60539,0.64526,2,1.00000,{'breakout_high': 4592.48}
-C:XAUUSD,2026-03-31T16:35:00+00:00,2026-03-31T22:35:00+00:00,16,22,volatility_breakout,take_profit,4633.36937,4693.51572,0.10000,600.81061,0.65288,14,1.00000,{'breakout_high': 4619.64}
+C:XAUUSD,2026-03-10T13:00:00+00:00,2026-03-10T18:10:00+00:00,13,18,volatility_breakout,trailing_stop,5195.82336,5214.73502,0.10000,188.38781,0.72874,19,0.78454,{'breakout_high': 5189.04}
+C:XAUUSD,2026-03-27T14:00:00+00:00,2026-03-27T16:55:00+00:00,14,16,volatility_breakout,signal_exit,4457.71432,4515.02100,0.10000,572.43872,0.62809,3,1.00000,{'breakout_high': 4440.91}
+C:XAUUSD,2026-03-31T13:50:00+00:00,2026-03-31T16:10:00+00:00,13,16,volatility_breakout,signal_exit,4606.88625,4611.05331,0.10000,41.02539,0.64526,2,1.00000,{'breakout_high': 4592.48}
+C:XAUUSD,2026-03-31T16:35:00+00:00,2026-03-31T22:35:00+00:00,16,22,volatility_breakout,take_profit,4633.34837,4693.53672,0.10000,601.23061,0.65288,14,1.00000,{'breakout_high': 4619.64}

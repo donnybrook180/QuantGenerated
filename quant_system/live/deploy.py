@@ -17,6 +17,7 @@ def build_symbol_deployment(
     research_run_id: int,
     execution_set_id: int | None,
     execution_validation_summary: str,
+    symbol_status: str,
     selected_candidates: list[dict[str, object]],
 ) -> SymbolDeployment:
     strategies = [
@@ -47,6 +48,7 @@ def build_symbol_deployment(
         research_run_id=research_run_id,
         execution_set_id=execution_set_id,
         execution_validation_summary=execution_validation_summary,
+        symbol_status=symbol_status,
         strategies=strategies,
         target_volatility=0.0,
         max_symbol_vol_percentile=0.98,

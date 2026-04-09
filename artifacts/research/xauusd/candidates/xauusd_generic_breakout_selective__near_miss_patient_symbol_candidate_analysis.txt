@@ -1,16 +1,16 @@
 Artifact: xauusd_generic_breakout_selective__near_miss_patient_symbol_candidate
 Closed trades: 9
-Realized pnl: 526.07
+Realized pnl: 529.85
 
 By entry hour
-13: trades=4 pnl=-175.93 avg=-43.98 win_rate=25.00%
-15: trades=1 pnl=-118.37 avg=-118.37 win_rate=0.00%
-14: trades=4 pnl=820.37 avg=205.09 win_rate=75.00%
+13: trades=4 pnl=-174.25 avg=-43.56 win_rate=25.00%
+15: trades=1 pnl=-117.95 avg=-117.95 win_rate=0.00%
+14: trades=4 pnl=822.05 avg=205.51 win_rate=75.00%
 
 By entry setup
-volatility_breakout: trades=9 pnl=526.07 avg=58.45 win_rate=44.44%
+volatility_breakout: trades=9 pnl=529.85 avg=58.87 win_rate=44.44%
 
 By exit reason
-signal_exit: trades=4 pnl=-437.47 avg=-109.37 win_rate=0.00%
-trailing_stop: trades=4 pnl=120.24 avg=30.06 win_rate=75.00%
-take_profit: trades=1 pnl=843.30 avg=843.30 win_rate=100.00%
+signal_exit: trades=4 pnl=-435.79 avg=-108.95 win_rate=0.00%
+trailing_stop: trades=4 pnl=121.92 avg=30.48 win_rate=75.00%
+take_profit: trades=1 pnl=843.72 avg=843.72 win_rate=100.00%

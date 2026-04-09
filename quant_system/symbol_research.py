@@ -95,6 +95,7 @@ from quant_system.live.deploy import build_symbol_deployment, export_symbol_depl
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
+from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
 from quant_system.risk.limits import RiskManager
 from quant_system.symbols import (
@@ -121,6 +122,8 @@ class CandidateSpec:
     timeframe_label: str = ""
     session_label: str = ""
     regime_filter_label: str = ""
+    reference_filter_label: str = ""
+    cross_filter_label: str = ""
     allowed_variants: tuple[str, ...] = ()
 
 
@@ -181,6 +184,8 @@ class CandidateResult:
     regime_stability_score: float = 0.0
     regime_loss_ratio: float = 0.0
     regime_filter_label: str = ""
+    reference_filter_label: str = ""
+    cross_filter_label: str = ""
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
 
@@ -1013,7 +1018,17 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
     if not bars:
         return []
     if not _is_stock_symbol(data_symbol):
-        return build_feature_library(bars)
+        features = build_feature_library(bars)
+        if supports_cross_asset_context(data_symbol):
+            multiplier, timespan = _infer_bars_timeframe(bars)
+            features = apply_cross_asset_context(
+                features,
+                config.mt5.database_path,
+                data_symbol,
+                multiplier,
+                timespan,
+            )
+        return features
     try:
         from quant_system.integrations.polygon_events import fetch_stock_event_flags
 
@@ -1026,9 +1041,29 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
             backoff_seconds=config.polygon.retry_backoff_seconds,
         )
     except RuntimeError as exc:
-        LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
-        return build_feature_library(bars)
-    return build_feature_library(bars, event_flags)
+        _ = exc
+        features = build_feature_library(bars)
+    else:
+        features = build_feature_library(bars, event_flags)
+    if supports_cross_asset_context(data_symbol):
+        multiplier, timespan = _infer_bars_timeframe(bars)
+        features = apply_cross_asset_context(
+            features,
+            config.mt5.database_path,
+            data_symbol,
+            multiplier,
+            timespan,
+        )
+    return features
+
+
+def _infer_bars_timeframe(bars: list[MarketBar]) -> tuple[int, str]:
+    if len(bars) < 2:
+        return 5, "minute"
+    delta_seconds = int((bars[1].timestamp - bars[0].timestamp).total_seconds())
+    if delta_seconds <= 0:
+        return 5, "minute"
+    return max(delta_seconds // 60, 1), "minute"
 
 
 def _filter_weekday_bars(bars: list[MarketBar]) -> list[MarketBar]:
@@ -1079,6 +1114,27 @@ def _filter_features_by_regime(features: list[FeatureVector], regime_label: str)
     if regime_label.startswith("vol_") and regime_label.count("_") == 1:
         return [feature for feature in features if _feature_regime_label(feature).endswith("_" + regime_label)]
     return [feature for feature in features if _feature_regime_label(feature) == regime_label]
+
+
+def _filter_features_by_cross_context(features: list[FeatureVector], cross_filter_label: str) -> list[FeatureVector]:
+    if not cross_filter_label:
+        return features
+    label = cross_filter_label.strip().lower()
+    if label == "risk_on_confirm":
+        return [feature for feature in features if feature.values.get("cross_risk_on_score", 0.0) > 0.0]
+    if label == "us100_breakout_confirm":
+        return [
+            feature
+            for feature in features
+            if feature.values.get("cross_us100_breakout_confirm", 0.0) > 0.0
+            and feature.values.get("cross_us100_reentry_warning", 0.0) <= 0.0
+            and feature.values.get("cross_risk_on_score", 0.0) > -0.15
+        ]
+    if label == "risk_off_confirm":
+        return [feature for feature in features if feature.values.get("cross_risk_on_score", 0.0) < 0.0]
+    if label == "gold_tailwind_confirm":
+        return [feature for feature in features if feature.values.get("cross_gold_macro_tailwind_score", 0.0) > 0.0]
+    return features
 
 
 def _build_symbol_feature_variants(
@@ -1139,9 +1195,11 @@ def load_execution_features_for_variant(
     data_symbol: str,
     variant_label: str,
     regime_filter_label: str = "",
+    cross_filter_label: str = "",
 ) -> tuple[list[FeatureVector], str]:
     if not variant_label or variant_label == "default":
         features, data_source = _load_symbol_features(config, data_symbol)
+        features = _filter_features_by_cross_context(features, cross_filter_label)
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     timeframe_label, _, session_label = variant_label.partition("_")
@@ -1150,6 +1208,7 @@ def load_execution_features_for_variant(
         timespan = "minute"
     else:
         features, data_source = _load_symbol_features(config, data_symbol)
+        features = _filter_features_by_cross_context(features, cross_filter_label)
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     features, data_source = _load_symbol_features_variant(
@@ -1164,6 +1223,7 @@ def load_execution_features_for_variant(
         features = _filter_weekday_features(features)
     if not _uses_continuous_session_stream(profile_symbol):
         features = _filter_features_by_session(features, session_label or "all")
+    features = _filter_features_by_cross_context(features, cross_filter_label)
     return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
@@ -1250,6 +1310,20 @@ def _execution_result_score(result: ExecutionResult, candidate_set: list[dict[st
     )
 
 
+def _derive_symbol_status(
+    selected_execution_candidates: list[dict[str, object]],
+    execution_validation_summary: str,
+) -> str:
+    if not selected_execution_candidates:
+        return "research_only"
+    tiers = {str(row.get("promotion_tier", "") or "") for row in selected_execution_candidates}
+    if "accepted_with_reduced_risk" in execution_validation_summary:
+        return "reduced_risk_only"
+    if tiers and tiers <= {"specialist"}:
+        return "reduced_risk_only"
+    return "live_ready"
+
+
 def _aggregate_execution_results(initial_cash: float, results: list[ExecutionResult]) -> ExecutionResult:
     combined_closed_trade_pnls: list[float] = []
     combined_closed_trades = []
@@ -1306,6 +1380,7 @@ def _run_candidate_bundle(
             data_symbol,
             variant_label,
             regime_filter_label,
+            str(row.get("cross_filter_label", "") or ""),
         )
         prebuilt_agents = row.get("agents")
         if isinstance(prebuilt_agents, list) and prebuilt_agents:
@@ -1320,6 +1395,9 @@ def _run_candidate_bundle(
         label = variant_label or "default"
         if regime_filter_label:
             label = f"{label}|{regime_filter_label}"
+        cross_filter_label = str(row.get("cross_filter_label", "") or "")
+        if cross_filter_label:
+            label = f"{label}|{cross_filter_label}"
         variant_labels.append(f"{row['candidate_name']}@{label}")
     data_source_label = ",".join(sorted(set(data_sources))) if data_sources else "unknown"
     variant_label = ", ".join(variant_labels) if variant_labels else "default"
@@ -1628,6 +1706,15 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="XAUUSD-tuned volatility breakout",
                 agents=[XAUUSDVolatilityBreakoutAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
                 code_path="quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
+            )
+        )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_volatility_breakout_cross_tailwind",
+                description="XAUUSD-tuned volatility breakout with cross-asset gold tailwind confirmation",
+                agents=[XAUUSDVolatilityBreakoutAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
+                cross_filter_label="gold_tailwind_confirm",
             )
         )
         specs.append(
@@ -2318,6 +2405,7 @@ def _run_candidate(
     scored.timeframe_label = spec.timeframe_label
     scored.session_label = spec.session_label
     scored.regime_filter_label = spec.regime_filter_label
+    scored.cross_filter_label = spec.cross_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     _annotate_regime_metrics(scored, features, result.closed_trades)
     return scored
@@ -2922,6 +3010,20 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     },
                 ),
                 CandidateSpec(
+                    name=f"{upper.lower()}_opening_range_short_breakdown_trend_cross_risk_off",
+                    description=f"{upper} opening-range short breakdown with cross-asset risk-off confirmation",
+                    agents=[OpeningRangeShortBreakdownAgent(), risk],
+                    code_path="quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+                    cross_filter_label="risk_off_confirm",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 8,
+                        "max_holding_bars": 0,
+                        "take_profit_atr_multiple": 3.0,
+                        "trailing_stop_atr_multiple": 1.0,
+                    },
+                ),
+                CandidateSpec(
                     name=f"{upper.lower()}_opening_range_short_breakdown_fast",
                     description=f"{upper} opening-range short breakdown with faster failure control",
                     agents=[OpeningRangeShortBreakdownAgent(), risk],
@@ -3143,6 +3245,28 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         ],
                         code_path="quant_system.agents.us500.US500MomentumImpulseAgent",
                         regime_filter_label="trend_up_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 2.5,
+                            "trailing_stop_atr_multiple": 0.78,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_momentum_impulse_high_vol_us100_breakout_confirm",
+                        description="US500 momentum impulse with US100 breakout confirmation",
+                        agents=[
+                            US500MomentumImpulseAgent(
+                                config.agents.min_trend_strength * 1.1,
+                                allowed_hours={16, 17},
+                                min_relative_volume=0.95,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500MomentumImpulseAgent",
+                        regime_filter_label="trend_up_vol_high",
+                        cross_filter_label="us100_breakout_confirm",
                         execution_overrides={
                             "structure_exit_bars": 0,
                             "stale_breakout_bars": 4,
@@ -3875,6 +3999,9 @@ def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec
         variant_label=variant_label,
         timeframe_label=timeframe_label,
         session_label=session_label,
+        regime_filter_label=spec.regime_filter_label,
+        reference_filter_label=spec.reference_filter_label,
+        cross_filter_label=spec.cross_filter_label,
         allowed_variants=spec.allowed_variants,
     )
 
@@ -4663,6 +4790,7 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "variant_label": row.variant_label,
         "session_label": row.session_label,
         "regime_filter_label": row.regime_filter_label,
+        "cross_filter_label": row.cross_filter_label,
         "execution_overrides": row.execution_overrides or {},
         "best_regime": row.best_regime,
         "best_regime_pnl": row.best_regime_pnl,
@@ -4923,6 +5051,8 @@ def _near_miss_local_optimizer(
                 timeframe_label=base_spec.timeframe_label,
                 session_label=base_spec.session_label,
                 regime_filter_label=base_spec.regime_filter_label,
+                reference_filter_label=base_spec.reference_filter_label,
+                cross_filter_label=base_spec.cross_filter_label,
             )
             features, _ = load_execution_features_for_variant(
                 config,
@@ -4930,6 +5060,7 @@ def _near_miss_local_optimizer(
                 data_symbol,
                 candidate_spec.variant_label,
                 candidate_spec.regime_filter_label,
+                candidate_spec.cross_filter_label,
             )
             if not features:
                 continue
@@ -5653,6 +5784,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.cross_filter_label,
                 )[0],
                 spec,
                 "regime_improved",
@@ -5676,6 +5808,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.cross_filter_label,
                 )[0],
                 spec,
                 "autopsy_improved",
@@ -5698,6 +5831,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.cross_filter_label,
                 )[0],
                 spec,
                 "near_miss_optimized",
@@ -5925,6 +6059,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 f"-> accepted_with_reduced_risk"
             )
     recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
+    symbol_status = _derive_symbol_status(selected_execution_candidates, execution_validation_summary)
     tier_counts = {"core": 0, "specialist": 0, "reject": 0}
     for row in results:
         tier = _promotion_tier_for_row(row, resolved.profile_symbol)
@@ -5979,6 +6114,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             research_run_id=run_id,
             execution_set_id=execution_set_id,
             execution_validation_summary=execution_validation_summary,
+            symbol_status=symbol_status,
             selected_candidates=selected_execution_candidates,
         )
         deployment_path = export_symbol_deployment(deployment)
@@ -6022,6 +6158,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             "(validation/test robustness, walk-forward robustness, and execution consistency)."
         )
     lines.append("Recommended active agents: " + (", ".join(recommended) if recommended else "none"))
+    lines.append(f"Symbol status: {symbol_status}")
     lines.append(
         f"Tier counts: core={tier_counts['core']} specialist={tier_counts['specialist']} reject={tier_counts['reject']}"
     )

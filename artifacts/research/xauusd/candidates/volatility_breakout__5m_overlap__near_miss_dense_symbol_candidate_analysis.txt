@@ -1,18 +1,18 @@
 Artifact: volatility_breakout__5m_overlap__near_miss_dense_symbol_candidate
 Closed trades: 9
-Realized pnl: 928.50
+Realized pnl: 932.28
 
 By entry hour
-12: trades=2 pnl=-57.03 avg=-28.51 win_rate=50.00%
-15: trades=1 pnl=-55.87 avg=-55.87 win_rate=0.00%
-13: trades=2 pnl=22.79 avg=11.40 win_rate=50.00%
-16: trades=1 pnl=357.43 avg=357.43 win_rate=100.00%
-14: trades=3 pnl=661.17 avg=220.39 win_rate=100.00%
+12: trades=2 pnl=-56.19 avg=-28.09 win_rate=50.00%
+15: trades=1 pnl=-55.45 avg=-55.45 win_rate=0.00%
+13: trades=2 pnl=23.63 avg=11.82 win_rate=50.00%
+16: trades=1 pnl=357.85 avg=357.85 win_rate=100.00%
+14: trades=3 pnl=662.43 avg=220.81 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=9 pnl=928.50 avg=103.17 win_rate=66.67%
+volatility_breakout: trades=9 pnl=932.28 avg=103.59 win_rate=66.67%
 
 By exit reason
-signal_exit: trades=2 pnl=-120.58 avg=-60.29 win_rate=0.00%
-trailing_stop: trades=5 pnl=127.92 avg=25.58 win_rate=80.00%
-take_profit: trades=2 pnl=921.15 avg=460.58 win_rate=100.00%
+signal_exit: trades=2 pnl=-119.74 avg=-59.87 win_rate=0.00%
+trailing_stop: trades=5 pnl=130.02 avg=26.00 win_rate=80.00%
+take_profit: trades=2 pnl=921.99 avg=461.00 win_rate=100.00%

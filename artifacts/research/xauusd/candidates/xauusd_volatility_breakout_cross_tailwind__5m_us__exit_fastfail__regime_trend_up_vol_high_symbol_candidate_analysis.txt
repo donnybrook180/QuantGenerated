@@ -1,0 +1,14 @@
+Artifact: xauusd_volatility_breakout_cross_tailwind__5m_us__exit_fastfail__regime_trend_up_vol_high_symbol_candidate
+Closed trades: 3
+Realized pnl: -1264.69
+
+By entry hour
+13: trades=2 pnl=-1793.87 avg=-896.94 win_rate=50.00%
+14: trades=1 pnl=529.19 avg=529.19 win_rate=100.00%
+
+By entry setup
+volatility_breakout: trades=3 pnl=-1264.69 avg=-421.56 win_rate=66.67%
+
+By exit reason
+stop_loss: trades=1 pnl=-2289.33 avg=-2289.33 win_rate=0.00%
+take_profit: trades=2 pnl=1024.64 avg=512.32 win_rate=100.00%

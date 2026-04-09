@@ -6,7 +6,20 @@ import math
 
 from quant_system.integrations.polygon_events import DailyEventFlags
 from quant_system.models import FeatureVector, MarketBar
-from quant_system.symbols import is_crypto_symbol, is_forex_symbol, is_metal_symbol
+from quant_system.symbols import is_crypto_symbol, is_forex_symbol, is_index_symbol, is_metal_symbol
+
+
+def _regular_session_bounds(symbol: str) -> tuple[int, int]:
+    upper = symbol.upper()
+    if upper in {"GER40", "DAX", "DE40", "SX5E", "EU50", "EU50.CASH", "ESTX50"}:
+        return 8 * 60, 16 * 60 + 30
+    if upper in {"JP225", "JP225.CASH", "JPN225", "NK225"}:
+        return 0, 6 * 60
+    if upper in {"HK50", "HK50.CASH", "HSI50", "HANGSENG"}:
+        return 1 * 60 + 30, 8 * 60
+    if upper in {"US500", "SPY", "SPX", "I:SPX", "US100", "NAS100", "QQQ", "NDX", "I:NDX", "US30", "DJ30", "DOW30", "DIA", "DJI", "I:DJI"}:
+        return 13 * 60 + 30, 20 * 60
+    return 13 * 60 + 30, 20 * 60
 
 
 def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, DailyEventFlags] | None = None) -> list[FeatureVector]:
@@ -15,8 +28,13 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
     features: list[FeatureVector] = []
     symbol = bars[0].symbol if bars else ""
     is_twenty_four_hour_asset = is_crypto_symbol(symbol) or is_forex_symbol(symbol) or is_metal_symbol(symbol)
-    regular_open = 0 if is_twenty_four_hour_asset else (13 * 60 + 30)
-    regular_close = 24 * 60 if is_twenty_four_hour_asset else (20 * 60)
+    if is_twenty_four_hour_asset:
+        regular_open = 0
+        regular_close = 24 * 60
+    elif is_index_symbol(symbol):
+        regular_open, regular_close = _regular_session_bounds(symbol)
+    else:
+        regular_open, regular_close = 13 * 60 + 30, 20 * 60
     cumulative_session_pv = 0.0
     cumulative_session_volume = 0.0
     session_high = 0.0

@@ -38,7 +38,16 @@ from quant_system.agents.forex import (
     ForexShortTrendContinuationAgent,
     ForexTrendContinuationAgent,
 )
-from quant_system.agents.ger40 import GER40FailedBreakoutShortAgent, GER40RangeRejectShortAgent
+from quant_system.agents.ger40 import (
+    GER40EuropeMeanReversionLongAgent,
+    GER40EuropeMeanReversionShortAgent,
+    GER40FailedBreakoutShortAgent,
+    GER40MiddayBreakoutLongAgent,
+    GER40MiddayBreakoutShortAgent,
+    GER40OpeningDriveFadeLongAgent,
+    GER40RangeReclaimLongAgent,
+    GER40RangeRejectShortAgent,
+)
 from quant_system.agents.session import SessionEntryFilterAgent
 from quant_system.agents.stocks import (
     EventAwareRiskSentinelAgent,
@@ -662,6 +671,10 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
     if profile_symbol.upper() == "GBPUSD":
         return [("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap"), True
+    if profile_symbol.upper() == "GER40":
+        if mode == "seed":
+            return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe", "midday"), True
     if profile_symbol.upper() == "ETH":
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap", "us"), True
     if _is_crypto_symbol(profile_symbol):
@@ -3042,6 +3055,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "stop_loss_atr_multiple": 2.4,
                         "take_profit_atr_multiple": 1.4,
                     },
+                    allowed_variants=("5m_open", "15m_open"),
                 ),
                 CandidateSpec(
                     name="ger40_volatility_breakout",
@@ -3053,6 +3067,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "stale_breakout_bars": 5,
                         "max_holding_bars": 18,
                     },
+                    allowed_variants=("5m_open",),
                 ),
                 CandidateSpec(
                     name="ger40_range_reject_short",
@@ -3065,6 +3080,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "max_holding_bars": 18,
                         "take_profit_atr_multiple": 1.9,
                     },
+                    allowed_variants=("5m_europe", "15m_europe"),
                 ),
                 CandidateSpec(
                     name="ger40_failed_breakout_short",
@@ -3076,6 +3092,97 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "stale_breakout_bars": 5,
                         "max_holding_bars": 16,
                         "take_profit_atr_multiple": 1.8,
+                    },
+                    allowed_variants=("5m_europe", "15m_europe"),
+                ),
+                CandidateSpec(
+                    name="ger40_opening_drive_fade_long",
+                    description="GER40 long fade after opening drive washout and reclaim",
+                    agents=[GER40OpeningDriveFadeLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40OpeningDriveFadeLongAgent",
+                    allowed_variants=("5m_europe", "15m_europe"),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.5,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_range_reclaim_long",
+                    description="GER40 long reclaim after failed breakdown below opening range",
+                    agents=[GER40RangeReclaimLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40RangeReclaimLongAgent",
+                    allowed_variants=("5m_europe", "15m_europe"),
+                    regime_filter_label="trend_down_vol_low",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.4,
+                        "trailing_stop_atr_multiple": 0.4,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_midday_breakout_long",
+                    description="GER40 midday continuation breakout after opening range compression",
+                    agents=[GER40MiddayBreakoutLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40MiddayBreakoutLongAgent",
+                    allowed_variants=("5m_midday", "15m_midday"),
+                    regime_filter_label="trend_up_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_midday_breakout_short",
+                    description="GER40 midday downside continuation after opening range compression",
+                    agents=[GER40MiddayBreakoutShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40MiddayBreakoutShortAgent",
+                    allowed_variants=("5m_midday", "15m_midday"),
+                    regime_filter_label="trend_down_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_europe_mean_reversion_long",
+                    description="GER40 higher-frequency Europe-session mean reversion from session lows",
+                    agents=[GER40EuropeMeanReversionLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40EuropeMeanReversionLongAgent",
+                    allowed_variants=("5m_europe", "15m_europe"),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 2,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.1,
+                        "trailing_stop_atr_multiple": 0.35,
+                    },
+                ),
+                CandidateSpec(
+                    name="ger40_europe_mean_reversion_short",
+                    description="GER40 higher-frequency Europe-session mean reversion from session highs",
+                    agents=[GER40EuropeMeanReversionShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40EuropeMeanReversionShortAgent",
+                    allowed_variants=("5m_europe", "15m_europe"),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 2,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.1,
+                        "trailing_stop_atr_multiple": 0.35,
                     },
                 ),
             ]

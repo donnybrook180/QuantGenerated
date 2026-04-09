@@ -5,7 +5,7 @@ import csv
 import itertools
 import copy
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import mean
 
@@ -80,8 +80,13 @@ from quant_system.agents.us500 import (
     US500ShortTrendRejectionAgent,
     US500ShortVWAPRejectAgent,
 )
+from quant_system.agents.macro import MacroEventRiskSentinelAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
-from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVWAPReclaimAgent, XAUUSDVolatilityBreakoutAgent
+from quant_system.agents.xauusd import (
+    XAUUSDShortBreakdownAgent,
+    XAUUSDVWAPReclaimAgent,
+    XAUUSDVolatilityBreakoutAgent,
+)
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
@@ -89,13 +94,14 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
 from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
+from quant_system.integrations.macro_events import apply_macro_event_context
 from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
 from quant_system.integrations.mt5 import MT5Client, MT5Error
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
-from quant_system.research.features import build_feature_library
+from quant_system.research.features import _regular_session_bounds, build_feature_library
 from quant_system.risk.limits import RiskManager
 from quant_system.symbols import (
     is_crypto_symbol as symbol_is_crypto,
@@ -925,17 +931,17 @@ def _load_symbol_features_variant(
         try:
             DuckDBMarketDataStore(config.mt5.database_path).upsert_bars(bars, timeframe=scoped_timeframe, source=source)
         except (duckdb.IOException, RuntimeError):
-            return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+            return _build_features_with_events(config, data_symbol, bars, broker_symbol, resolved_profile_symbol), f"{source}_direct"
         persisted = cache_store.load_bars(data_symbol, scoped_timeframe, len(bars))
         if persisted:
-            return _build_features_with_events(config, data_symbol, persisted), source
-        return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+            return _build_features_with_events(config, data_symbol, persisted, broker_symbol, resolved_profile_symbol), source
+        return _build_features_with_events(config, data_symbol, bars, broker_symbol, resolved_profile_symbol), f"{source}_direct"
 
     if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
         for cache_symbol in _cache_symbol_candidates(data_symbol):
             cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
-                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+                return _build_features_with_events(config, data_symbol, cached, broker_symbol, resolved_profile_symbol), "duckdb_cache"
             if timespan == "minute" and multiplier in {15, 30}:
                 base_cached = cache_store.load_bars(
                     cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
@@ -943,7 +949,7 @@ def _load_symbol_features_variant(
                 if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
-                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
+                        return _build_features_with_events(config, data_symbol, aggregated, broker_symbol, resolved_profile_symbol), "duckdb_cache_aggregated"
         if config.polygon.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
 
@@ -979,11 +985,11 @@ def _load_symbol_features_variant(
         try:
             DuckDBMarketDataStore(config.mt5.database_path).upsert_bars(bars, timeframe=scoped_timeframe, source=source)
         except (duckdb.IOException, RuntimeError):
-            return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+            return _build_features_with_events(config, data_symbol, bars, broker_symbol, resolved_profile_symbol), f"{source}_direct"
         persisted = cache_store.load_bars(data_symbol, scoped_timeframe, len(bars))
         if persisted:
-            return _build_features_with_events(config, data_symbol, persisted), source
-        return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
+            return _build_features_with_events(config, data_symbol, persisted, broker_symbol, resolved_profile_symbol), source
+        return _build_features_with_events(config, data_symbol, bars, broker_symbol, resolved_profile_symbol), f"{source}_direct"
     except (PolygonError, PolygonUnavailableError):
         if source_preference not in {"broker_only", "external_only"} and broker_symbol:
             try:
@@ -995,7 +1001,7 @@ def _load_symbol_features_variant(
         for cache_symbol in _cache_symbol_candidates(data_symbol):
             cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
-                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
+                return _build_features_with_events(config, data_symbol, cached, broker_symbol, resolved_profile_symbol), "duckdb_cache"
             if timespan == "minute" and multiplier in {15, 30}:
                 base_cached = cache_store.load_bars(
                     cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
@@ -1003,17 +1009,193 @@ def _load_symbol_features_variant(
                 if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
-                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
+                        return _build_features_with_events(config, data_symbol, aggregated, broker_symbol, resolved_profile_symbol), "duckdb_cache_aggregated"
         if mt5_errors:
             raise RuntimeError("; ".join(mt5_errors)) from None
         raise
 
 
-def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: list[MarketBar]) -> list[FeatureVector]:
+def _should_attach_minute_context(profile_symbol: str) -> bool:
+    return profile_symbol.upper() in {"US100", "US500", "XAUUSD", "EURUSD", "GBPUSD", "USDJPY"}
+
+
+def _load_context_minute_bars(
+    config: SystemConfig,
+    data_symbol: str,
+    broker_symbol: str | None,
+    profile_symbol: str,
+) -> list[MarketBar]:
+    cache_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
+    cache_limit = _cache_bar_limit(config, 1, "minute")
+    for cache_symbol in _cache_symbol_candidates(data_symbol):
+        cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 1, "minute"), cache_limit)
+        if cached and _has_plausible_price_scale(data_symbol, cached):
+            return cached
+    if not broker_symbol:
+        return []
+    try:
+        bars, source = _load_mt5_network_bars(config, profile_symbol, data_symbol, broker_symbol, 1, "minute")
+        if bars:
+            try:
+                DuckDBMarketDataStore(config.mt5.database_path).upsert_bars(
+                    bars,
+                    timeframe=_variant_timeframe_key(data_symbol, 1, "minute"),
+                    source=source,
+                )
+            except (duckdb.IOException, RuntimeError):
+                return bars
+            persisted = cache_store.load_bars(data_symbol, _variant_timeframe_key(data_symbol, 1, "minute"), len(bars))
+            return persisted or bars
+    except Exception:
+        return []
+    return []
+
+
+def _augment_features_with_minute_context(
+    profile_symbol: str,
+    bars: list[MarketBar],
+    features: list[FeatureVector],
+    minute_bars: list[MarketBar],
+) -> list[FeatureVector]:
+    if not bars or not features or not minute_bars:
+        return features
+    minute_features = build_feature_library(minute_bars)
+    if not minute_features:
+        return features
+
+    upper_symbol = profile_symbol.upper()
+    if _is_crypto_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_metal_symbol(profile_symbol):
+        regular_open = 0
+    else:
+        regular_open, _ = _regular_session_bounds(profile_symbol)
+
+    if _is_forex_symbol(profile_symbol):
+        context_windows = {
+            "session_opening_drive": (0, 30),
+            "london_opening_drive": (8 * 60, (8 * 60) + 30),
+            "us_opening_drive": (13 * 60, (13 * 60) + 30),
+            "overlap_opening_drive": (13 * 60, (13 * 60) + 60),
+        }
+    elif _is_metal_symbol(profile_symbol):
+        context_windows = {
+            "session_opening_drive": (0, 30),
+            "london_opening_drive": (8 * 60, (8 * 60) + 30),
+            "us_opening_drive": (13 * 60 + 30, (13 * 60) + 60),
+        }
+    else:
+        context_windows = {
+            "opening_drive": (regular_open, regular_open + 30),
+        }
+
+    def _empty_context() -> dict[str, float]:
+        values: dict[str, float] = {}
+        for label in context_windows:
+            values[f"{label}_high_1m"] = 0.0
+            values[f"{label}_low_1m"] = 0.0
+            values[f"{label}_range_pct_1m"] = 0.0
+            values[f"{label}_distance_high_1m"] = 0.0
+            values[f"{label}_distance_low_1m"] = 0.0
+            values[f"{label}_break_above_1m"] = 0.0
+            values[f"{label}_break_below_1m"] = 0.0
+        values["vwap_distance_1m"] = 0.0
+        values["minute_context_profile"] = 0.0
+        return values
+
+    context_by_timestamp: dict[datetime, dict[str, float]] = {}
+    current_session: tuple[int, int, int] | None = None
+    window_state = {
+        label: {"high": 0.0, "low": 0.0, "ready": False}
+        for label in context_windows
+    }
+
+    for bar, feature in zip(minute_bars, minute_features):
+        session_key = (bar.timestamp.year, bar.timestamp.month, bar.timestamp.day)
+        session_minutes = (bar.timestamp.hour * 60) + bar.timestamp.minute
+        if session_key != current_session:
+            current_session = session_key
+            window_state = {
+                label: {"high": 0.0, "low": 0.0, "ready": False}
+                for label in context_windows
+            }
+        context_values = _empty_context()
+        for label, (window_open, window_close) in context_windows.items():
+            state = window_state[label]
+            if window_open <= session_minutes < window_close:
+                if not state["ready"]:
+                    state["high"] = bar.high
+                    state["low"] = bar.low
+                    state["ready"] = True
+                else:
+                    state["high"] = max(state["high"], bar.high)
+                    state["low"] = min(state["low"], bar.low)
+            if state["ready"]:
+                drive_range = max(state["high"] - state["low"], bar.close * 0.0005)
+                context_values[f"{label}_high_1m"] = state["high"]
+                context_values[f"{label}_low_1m"] = state["low"]
+                context_values[f"{label}_range_pct_1m"] = (drive_range / bar.close) if bar.close else 0.0
+                context_values[f"{label}_distance_high_1m"] = ((bar.close / state["high"]) - 1.0) if state["high"] else 0.0
+                context_values[f"{label}_distance_low_1m"] = ((bar.close / state["low"]) - 1.0) if state["low"] else 0.0
+                context_values[f"{label}_break_above_1m"] = 1.0 if bar.close > state["high"] else 0.0
+                context_values[f"{label}_break_below_1m"] = 1.0 if bar.close < state["low"] else 0.0
+        if "opening_drive" in context_windows:
+            context_values["distance_to_opening_drive_high_1m"] = context_values["opening_drive_distance_high_1m"]
+            context_values["distance_to_opening_drive_low_1m"] = context_values["opening_drive_distance_low_1m"]
+        elif "session_opening_drive" in context_windows:
+            context_values["opening_drive_high_1m"] = context_values["session_opening_drive_high_1m"]
+            context_values["opening_drive_low_1m"] = context_values["session_opening_drive_low_1m"]
+            context_values["opening_drive_range_pct_1m"] = context_values["session_opening_drive_range_pct_1m"]
+            context_values["distance_to_opening_drive_high_1m"] = context_values["session_opening_drive_distance_high_1m"]
+            context_values["distance_to_opening_drive_low_1m"] = context_values["session_opening_drive_distance_low_1m"]
+            context_values["opening_drive_break_above_1m"] = context_values["session_opening_drive_break_above_1m"]
+            context_values["opening_drive_break_below_1m"] = context_values["session_opening_drive_break_below_1m"]
+        else:
+            context_values["opening_drive_high_1m"] = 0.0
+            context_values["opening_drive_low_1m"] = 0.0
+            context_values["opening_drive_range_pct_1m"] = 0.0
+            context_values["distance_to_opening_drive_high_1m"] = 0.0
+            context_values["distance_to_opening_drive_low_1m"] = 0.0
+            context_values["opening_drive_break_above_1m"] = 0.0
+            context_values["opening_drive_break_below_1m"] = 0.0
+        context_values["vwap_distance_1m"] = feature.values.get("vwap_distance", 0.0)
+        context_values["minute_context_profile"] = 1.0 if upper_symbol in {"EURUSD", "GBPUSD", "USDJPY", "XAUUSD"} else 0.0
+        context_by_timestamp[bar.timestamp] = context_values
+
+    minute_index = 0
+    latest_context: dict[str, float] = {}
+    minute_timestamps = [bar.timestamp for bar in minute_bars]
+    for feature in features:
+        while minute_index < len(minute_timestamps) and minute_timestamps[minute_index] <= feature.timestamp:
+            latest_context = context_by_timestamp.get(minute_timestamps[minute_index], latest_context)
+            minute_index += 1
+        if latest_context:
+            feature.values.update(latest_context)
+    return features
+
+
+def _build_features_with_events(
+    config: SystemConfig,
+    data_symbol: str,
+    bars: list[MarketBar],
+    broker_symbol: str | None = None,
+    profile_symbol: str | None = None,
+) -> list[FeatureVector]:
     if not bars:
         return []
+    resolved_profile_symbol = profile_symbol or data_symbol
     if not _is_stock_symbol(data_symbol):
-        return build_feature_library(bars)
+        features = build_feature_library(bars)
+        if config.macro_calendar.enabled:
+            features = apply_macro_event_context(
+                features,
+                resolved_profile_symbol,
+                config.macro_calendar.calendar_path,
+                pre_event_minutes=config.macro_calendar.pre_event_minutes,
+                post_event_minutes=config.macro_calendar.post_event_minutes,
+            )
+        if _should_attach_minute_context(resolved_profile_symbol):
+            minute_bars = _load_context_minute_bars(config, data_symbol, broker_symbol, resolved_profile_symbol)
+            features = _augment_features_with_minute_context(resolved_profile_symbol, bars, features, minute_bars)
+        return features
     try:
         from quant_system.integrations.polygon_events import fetch_stock_event_flags
 
@@ -1027,8 +1209,21 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
         )
     except RuntimeError as exc:
         LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
-        return build_feature_library(bars)
-    return build_feature_library(bars, event_flags)
+        features = build_feature_library(bars)
+    else:
+        features = build_feature_library(bars, event_flags)
+    if config.macro_calendar.enabled:
+        features = apply_macro_event_context(
+            features,
+            resolved_profile_symbol,
+            config.macro_calendar.calendar_path,
+            pre_event_minutes=config.macro_calendar.pre_event_minutes,
+            post_event_minutes=config.macro_calendar.post_event_minutes,
+        )
+    if _should_attach_minute_context(resolved_profile_symbol):
+        minute_bars = _load_context_minute_bars(config, data_symbol, broker_symbol, resolved_profile_symbol)
+        features = _augment_features_with_minute_context(resolved_profile_symbol, bars, features, minute_bars)
+    return features
 
 
 def _filter_weekday_bars(bars: list[MarketBar]) -> list[MarketBar]:
@@ -1332,6 +1527,25 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         max_volatility=config.risk.max_volatility,
         min_relative_volume=config.agents.min_relative_volume,
     )
+    macro_risk = MacroEventRiskSentinelAgent(
+        allow_event_day=True,
+        allow_pre_event_window=False,
+        allow_post_event_window=False,
+    )
+
+    def _with_macro_risk(specs: list[CandidateSpec]) -> list[CandidateSpec]:
+        wrapped: list[CandidateSpec] = []
+        for spec in specs:
+            agents = list(spec.agents)
+            if any(isinstance(agent, MacroEventRiskSentinelAgent) for agent in agents):
+                wrapped.append(spec)
+                continue
+            if agents and isinstance(agents[-1], RiskSentinelAgent):
+                agents.insert(len(agents) - 1, macro_risk)
+            else:
+                agents.append(macro_risk)
+            wrapped.append(replace(spec, agents=agents))
+        return wrapped
     specs = [
         CandidateSpec(
             name="trend",
@@ -1646,7 +1860,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.xauusd.XAUUSDVWAPReclaimAgent",
             )
         )
-        return specs
+        return _with_macro_risk(specs)
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         if upper == "EURUSD":
             return [
@@ -1770,7 +1984,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 ),
             ]
         if upper == "GBPUSD":
-            return [
+            return _with_macro_risk([
                 CandidateSpec(
                     name="forex_breakout_momentum",
                     description="GBPUSD-focused Europe-session breakout momentum",
@@ -1919,8 +2133,8 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.52,
                     },
                 ),
-            ]
-        return [
+            ])
+        return _with_macro_risk([
             CandidateSpec(
                 name="forex_trend_continuation",
                 description="Forex trend continuation",
@@ -1951,7 +2165,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 agents=[ForexShortBreakdownMomentumAgent(), risk],
                 code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
             ),
-        ]
+        ])
     if upper == "EU50":
         specs.extend(
             [

@@ -205,3 +205,70 @@ class XAUUSDVWAPReclaimAgent(Agent):
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.68, {"mean_reverted": 1.0})
 
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class XAUUSDOpeningDriveReclaimAgent(Agent):
+    name = "xauusd_opening_drive_reclaim"
+
+    def __init__(self) -> None:
+        self.in_position = False
+        self.allowed_hours = {13, 14, 15, 16}
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        hour = int(feature.values.get("hour_of_day", 0))
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        z_score_20 = feature.values.get("z_score_20", 0.0)
+        drive_range_pct = feature.values.get("opening_drive_range_pct_1m", 0.0)
+        distance_to_open_low = feature.values.get("distance_to_opening_drive_low_1m", 0.0)
+        break_below = feature.values.get("opening_drive_break_below_1m", 0.0)
+        vwap_distance_1m = feature.values.get("vwap_distance_1m", 0.0)
+
+        if hour not in self.allowed_hours:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+        if (
+            not self.in_position
+            and break_below > 0.0
+            and drive_range_pct > 0.0008
+            and distance_to_open_low >= -0.0004
+            and relative_volume >= 0.85
+            and z_score_20 <= -0.15
+            and trend_strength > -0.0007
+            and momentum_20 > -0.0006
+            and momentum_5 > -0.0004
+            and vwap_distance_1m >= -0.0012
+        ):
+            self.in_position = True
+            confidence = scaled_confidence(
+                0.24,
+                (break_below, 0.25),
+                (max(-z_score_20, 0.0), 0.16),
+                (max(drive_range_pct - 0.0008, 0.0), 180),
+            )
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                confidence,
+                {
+                    "opening_drive_break_below_1m": break_below,
+                    "distance_to_opening_drive_low_1m": distance_to_open_low,
+                    "opening_drive_range_pct_1m": drive_range_pct,
+                    "vwap_distance_1m": vwap_distance_1m,
+                },
+            )
+
+        if self.in_position and (
+            z_score_20 >= 0.2
+            or trend_strength < -0.0009
+            or momentum_20 < -0.0008
+            or vwap_distance_1m < -0.0015
+        ):
+            self.in_position = False
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.7, {"opening_drive_reclaim_exit": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})

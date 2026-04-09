@@ -33,8 +33,12 @@ class AgentCoordinator:
     def __init__(self, agents: list[Agent], consensus_min_confidence: float = 1.0) -> None:
         self.agents = agents
         self.consensus_min_confidence = consensus_min_confidence
+        self.last_veto_reason: str = ""
+        self.last_veto_metadata: dict[str, float | str] = {}
 
     def evaluate(self, feature: FeatureVector) -> DecisionContext | None:
+        self.last_veto_reason = ""
+        self.last_veto_metadata = {}
         votes: Counter[Side] = Counter()
         confidences: Counter[Side] = Counter()
         reasons: dict[Side, list[str]] = {Side.BUY: [], Side.SELL: []}
@@ -53,6 +57,8 @@ class AgentCoordinator:
             )
             if signal.side == Side.FLAT and (signal.agent_name == "risk_sentinel" or "veto" in signal.metadata):
                 veto = True
+                self.last_veto_reason = str(signal.metadata.get("veto") or signal.agent_name)
+                self.last_veto_metadata = dict(signal.metadata)
             if signal.side != Side.FLAT:
                 votes[signal.side] += 1
                 confidences[signal.side] += signal.confidence

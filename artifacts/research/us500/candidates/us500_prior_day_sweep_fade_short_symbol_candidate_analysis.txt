@@ -1,0 +1,18 @@
+Artifact: us500_prior_day_sweep_fade_short_symbol_candidate
+Closed trades: 17
+Realized pnl: -0.09
+
+By entry hour
+18: trades=4 pnl=-0.34 avg=-0.08 win_rate=25.00%
+15: trades=4 pnl=-0.30 avg=-0.07 win_rate=25.00%
+17: trades=6 pnl=0.03 avg=0.00 win_rate=33.33%
+16: trades=3 pnl=0.52 avg=0.17 win_rate=66.67%
+
+By entry setup
+prior_day_sweep_fade_short: trades=17 pnl=-0.09 avg=-0.01 win_rate=35.29%
+
+By exit reason
+stale_breakout: trades=6 pnl=-0.75 avg=-0.12 win_rate=0.00%
+stop_loss: trades=4 pnl=-0.48 avg=-0.12 win_rate=0.00%
+trailing_stop: trades=4 pnl=-0.02 avg=-0.00 win_rate=75.00%
+take_profit: trades=3 pnl=1.15 avg=0.38 win_rate=100.00%

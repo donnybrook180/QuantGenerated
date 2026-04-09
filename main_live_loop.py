@@ -143,6 +143,8 @@ def main() -> int:
                     f"tier={action.get('promotion_tier', 'core')} "
                     f"score={action.get('allocator_score', 0.0):.2f}"
                 )
+                if action.get("veto_reason"):
+                    print(f"  veto: {action['veto_reason']}")
                 if strategy is not None and strategy.policy_summary:
                     print(f"  policy: {strategy.policy_summary}")
             print("")

@@ -1,5 +1,5 @@
 Viability autopsy: XAUUSD
-Execution validation summary: selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk
+Execution validation summary: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1645.22 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
 Tier counts: core=30 specialist=11 reject=146
 
 Top blockers

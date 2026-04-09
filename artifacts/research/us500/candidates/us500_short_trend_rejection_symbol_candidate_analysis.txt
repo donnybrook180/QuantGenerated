@@ -1,16 +1,16 @@
 Artifact: us500_short_trend_rejection_symbol_candidate
 Closed trades: 25
-Realized pnl: -1.32
+Realized pnl: -1.30
 
 By entry hour
-17: trades=14 pnl=-1.07 avg=-0.08 win_rate=14.29%
-16: trades=11 pnl=-0.25 avg=-0.02 win_rate=18.18%
+17: trades=14 pnl=-1.06 avg=-0.08 win_rate=14.29%
+16: trades=11 pnl=-0.24 avg=-0.02 win_rate=18.18%
 
 By entry setup
-us500_short_trend_rejection: trades=25 pnl=-1.32 avg=-0.05 win_rate=16.00%
+us500_short_trend_rejection: trades=25 pnl=-1.30 avg=-0.05 win_rate=16.00%
 
 By exit reason
-stop_loss: trades=9 pnl=-1.50 avg=-0.17 win_rate=0.00%
-stale_breakout: trades=11 pnl=-1.12 avg=-0.10 win_rate=0.00%
+stop_loss: trades=9 pnl=-1.49 avg=-0.17 win_rate=0.00%
+stale_breakout: trades=11 pnl=-1.11 avg=-0.10 win_rate=0.00%
 trailing_stop: trades=2 pnl=0.04 avg=0.02 win_rate=50.00%
-take_profit: trades=3 pnl=1.26 avg=0.42 win_rate=100.00%
+take_profit: trades=3 pnl=1.27 avg=0.42 win_rate=100.00%

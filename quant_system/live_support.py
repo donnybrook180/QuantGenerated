@@ -4,6 +4,7 @@ import logging
 
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
+from quant_system.integrations.macro_events import apply_macro_event_context
 from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.research.features import build_feature_library
@@ -72,7 +73,16 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
     if not bars:
         return []
     if not is_stock_symbol(data_symbol):
-        return build_feature_library(bars)
+        features = build_feature_library(bars)
+        if config.macro_calendar.enabled:
+            features = apply_macro_event_context(
+                features,
+                data_symbol,
+                config.macro_calendar.calendar_path,
+                pre_event_minutes=config.macro_calendar.pre_event_minutes,
+                post_event_minutes=config.macro_calendar.post_event_minutes,
+            )
+        return features
     try:
         event_flags = fetch_stock_event_flags(
             config.polygon.api_key,
@@ -84,5 +94,15 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
         )
     except RuntimeError as exc:
         LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
-        return build_feature_library(bars)
-    return build_feature_library(bars, event_flags)
+        features = build_feature_library(bars)
+    else:
+        features = build_feature_library(bars, event_flags)
+    if config.macro_calendar.enabled:
+        features = apply_macro_event_context(
+            features,
+            data_symbol,
+            config.macro_calendar.calendar_path,
+            pre_event_minutes=config.macro_calendar.pre_event_minutes,
+            post_event_minutes=config.macro_calendar.post_event_minutes,
+        )
+    return features

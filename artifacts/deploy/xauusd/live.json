@@ -3,76 +3,23 @@
   "symbol": "XAUUSD",
   "data_symbol": "C:XAUUSD",
   "broker_symbol": "XAUUSD",
-  "research_run_id": 255,
-  "execution_set_id": 134,
-  "execution_validation_summary": "selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk",
+  "research_run_id": 278,
+  "execution_set_id": 155,
+  "execution_validation_summary": "selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1645.22 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted",
   "strategies": [
     {
-      "candidate_name": "trend__5m_us__exit_trend",
-      "code_path": "quant_system.agents.trend.TrendAgent",
+      "candidate_name": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat",
+      "code_path": "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
       "promotion_tier": "core",
-      "policy_summary": "tier=core; activate in trend_up_vol_high; avoid trend_up_vol_low; vol_pct in [0.55, 0.97]; base_weight=1.03; risk_cap=0.60; stability=0.83; loss_ratio=0.28",
-      "variant_label": "5m_us",
-      "regime_filter_label": "",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
-      },
-      "allocation_weight": 1.0,
-      "allowed_regimes": [
-        "trend_up_vol_high"
-      ],
-      "blocked_regimes": [
-        "trend_up_vol_low"
-      ],
-      "min_vol_percentile": 0.55,
-      "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.033837473357218,
-      "max_risk_multiplier": 0.6,
-      "min_risk_multiplier": 0.0
-    },
-    {
-      "candidate_name": "momentum__15m_us__exit_fastfail",
-      "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
-      "promotion_tier": "core",
-      "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid trend_up_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.09; risk_cap=0.60; stability=0.92; loss_ratio=0.10",
-      "variant_label": "15m_us",
-      "regime_filter_label": "",
-      "execution_overrides": {
-        "max_holding_bars": 14,
-        "take_profit_atr_multiple": 1.8,
-        "stale_breakout_bars": 4,
-        "structure_exit_bars": 2
-      },
-      "allocation_weight": 1.0,
-      "allowed_regimes": [
-        "trend_flat_vol_high"
-      ],
-      "blocked_regimes": [
-        "trend_up_vol_mid"
-      ],
-      "min_vol_percentile": 0.55,
-      "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.0940439021791077,
-      "max_risk_multiplier": 0.6,
-      "min_risk_multiplier": 0.0
-    },
-    {
-      "candidate_name": "xauusd_generic_breakout_selective__near_miss_patient__trend_flat",
-      "code_path": "quant_system.agents.strategies.VolatilityBreakoutAgent",
-      "promotion_tier": "specialist",
-      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00",
+      "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
       "variant_label": "",
       "regime_filter_label": "trend_flat",
       "execution_overrides": {
         "structure_exit_bars": 0,
-        "stale_breakout_bars": 9,
-        "take_profit_atr_multiple": 3.0,
-        "trailing_stop_atr_multiple": 0.9,
+        "stale_breakout_bars": 11,
         "max_holding_bars": 0,
+        "trailing_stop_atr_multiple": 0.95,
+        "take_profit_atr_multiple": 2.4000000000000004,
         "break_even_atr_multiple": 0.4
       },
       "allocation_weight": 1.0,
@@ -84,8 +31,8 @@
       ],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 0.35,
-      "max_risk_multiplier": 0.35,
+      "base_allocation_weight": 1.15,
+      "max_risk_multiplier": 0.6,
       "min_risk_multiplier": 0.0
     }
   ],

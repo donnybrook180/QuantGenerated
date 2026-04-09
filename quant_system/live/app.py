@@ -99,6 +99,8 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
                 f"tier={action.promotion_tier} "
                 f"score={action.allocator_score:.2f} magic={action.magic_number}"
             )
+            if action.veto_reason:
+                lines.append(f"  veto: {action.veto_reason}")
             if strategy is not None and strategy.policy_summary:
                 lines.append(f"  policy: {strategy.policy_summary}")
         lines.append("")

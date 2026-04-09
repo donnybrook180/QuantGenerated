@@ -1,5 +1,5 @@
 Viability autopsy: US100
-Execution validation summary: selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk
+Execution validation summary: selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.19 pf=1.39 closed=18 quality=0.39 underwater=88.9% -> accepted_with_reduced_risk
 Tier counts: core=5 specialist=0 reject=41
 
 Top blockers

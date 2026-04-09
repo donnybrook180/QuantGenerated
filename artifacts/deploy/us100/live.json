@@ -3,23 +3,23 @@
   "symbol": "US100",
   "data_symbol": "QQQ",
   "broker_symbol": "US100.cash",
-  "research_run_id": 229,
-  "execution_set_id": 118,
-  "execution_validation_summary": "selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk",
+  "research_run_id": 264,
+  "execution_set_id": 141,
+  "execution_validation_summary": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.19 pf=1.39 closed=18 quality=0.39 underwater=88.9% -> accepted_with_reduced_risk",
   "strategies": [
     {
-      "candidate_name": "opening_range_short_breakdown__exit_trend",
+      "candidate_name": "us100_opening_range_short_breakdown_trend",
       "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
       "promotion_tier": "core",
-      "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.93; risk_cap=0.60; stability=0.68; loss_ratio=0.20",
+      "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.93; risk_cap=0.60; stability=0.68; loss_ratio=0.22",
       "variant_label": "",
       "regime_filter_label": "",
       "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
+        "structure_exit_bars": 0,
         "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.0,
+        "trailing_stop_atr_multiple": 1.0
       },
       "allocation_weight": 1.0,
       "allowed_regimes": [
@@ -30,7 +30,7 @@
       ],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 0.9289587902536944,
+      "base_allocation_weight": 0.928776244802761,
       "max_risk_multiplier": 0.6,
       "min_risk_multiplier": 0.0
     }

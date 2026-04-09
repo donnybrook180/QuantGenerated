@@ -1176,6 +1176,80 @@ def _evaluate_execution_candidate_set(
     return _run_candidate_bundle(config, profile_symbol, data_symbol, selected_candidates)
 
 
+def _execution_path_metrics(result: ExecutionResult) -> dict[str, float]:
+    pnls = list(result.closed_trade_pnls)
+    if not pnls:
+        return {
+            "best_trade_share_pct": 100.0,
+            "equity_new_high_share_pct": 0.0,
+            "time_under_water_pct": 100.0,
+            "max_consecutive_losses": 0.0,
+            "equity_quality_score": 0.0,
+        }
+    wins = [pnl for pnl in pnls if pnl > 0.0]
+    gross_profit = sum(wins)
+    best_trade_share_pct = (max(wins) / gross_profit * 100.0) if wins and gross_profit > 0.0 else 100.0
+    equity = 0.0
+    peak = 0.0
+    new_high_count = 0
+    underwater_count = 0
+    current_loss_streak = 0
+    max_consecutive_losses = 0
+    for pnl in pnls:
+        equity += pnl
+        if equity >= peak:
+            peak = equity
+            new_high_count += 1
+        else:
+            underwater_count += 1
+        if pnl < 0.0:
+            current_loss_streak += 1
+            max_consecutive_losses = max(max_consecutive_losses, current_loss_streak)
+        else:
+            current_loss_streak = 0
+    trade_count = len(pnls)
+    equity_new_high_share_pct = (new_high_count / trade_count * 100.0) if trade_count > 0 else 0.0
+    time_under_water_pct = (underwater_count / trade_count * 100.0) if trade_count > 0 else 100.0
+    quality_components = [
+        min(max(result.profit_factor, 0.0), 3.0) / 3.0,
+        min(max(equity_new_high_share_pct, 0.0), 100.0) / 100.0,
+        1.0 - min(best_trade_share_pct, 100.0) / 100.0,
+        1.0 - min(time_under_water_pct, 100.0) / 100.0,
+        1.0 - (max_consecutive_losses / trade_count if trade_count > 0 else 1.0),
+    ]
+    return {
+        "best_trade_share_pct": best_trade_share_pct,
+        "equity_new_high_share_pct": equity_new_high_share_pct,
+        "time_under_water_pct": time_under_water_pct,
+        "max_consecutive_losses": float(max_consecutive_losses),
+        "equity_quality_score": sum(quality_components) / float(len(quality_components)) if quality_components else 0.0,
+    }
+
+
+def _execution_result_score(result: ExecutionResult, candidate_set: list[dict[str, object]]) -> tuple[float, float, float, float, int]:
+    metrics = _execution_path_metrics(result)
+    distinct_regimes = len({str(row.get("best_regime", "") or "") for row in candidate_set if str(row.get("best_regime", "") or "")})
+    specialist_count = sum(1 for row in candidate_set if str(row.get("promotion_tier", "")) == "specialist")
+    score = (
+        result.realized_pnl * 1.0
+        + max(result.profit_factor - 1.0, 0.0) * 250.0
+        + metrics["equity_quality_score"] * 200.0
+        + metrics["equity_new_high_share_pct"] * 2.0
+        - metrics["time_under_water_pct"] * 1.5
+        - metrics["best_trade_share_pct"] * 1.0
+        - metrics["max_consecutive_losses"] * 15.0
+        + distinct_regimes * 40.0
+        - specialist_count * 10.0
+    )
+    return (
+        score,
+        metrics["equity_quality_score"],
+        result.realized_pnl,
+        result.profit_factor,
+        len(result.closed_trades),
+    )
+
+
 def _aggregate_execution_results(initial_cash: float, results: list[ExecutionResult]) -> ExecutionResult:
     combined_closed_trade_pnls: list[float] = []
     combined_closed_trades = []
@@ -4619,6 +4693,94 @@ def _selection_component_keys(row: dict[str, object]) -> set[str]:
     return {f"{candidate_name}|{variant_label}|{regime_filter_label}"}
 
 
+def _candidate_selection_score(row: dict[str, object]) -> tuple[float, ...]:
+    return (
+        float(row.get("equity_quality_score", 0.0)),
+        float(row.get("regime_stability_score", 0.0)),
+        -float(row.get("best_trade_share_pct", 100.0)),
+        float(row.get("equity_new_high_share_pct", 0.0)),
+        -float(row.get("regime_loss_ratio", 999.0)),
+        float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+        float(row.get("test_pnl", 0.0)),
+        float(row.get("validation_pnl", 0.0)),
+        float(row.get("realized_pnl", 0.0)),
+    )
+
+
+def _is_valid_execution_combo(combo: tuple[dict[str, object], ...], symbol: str) -> bool:
+    used_components: set[str] = set()
+    used_signatures: set[tuple[str, str, str]] = set()
+    used_code_paths: set[str] = set()
+    used_regimes: set[str] = set()
+    allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
+    specialist_count = 0
+    core_count = 0
+    for row in combo:
+        components = _selection_component_keys(row)
+        if components & used_components:
+            return False
+        used_components.update(components)
+        code_path = str(row.get("code_path", "") or "").strip()
+        variant_label = str(row.get("variant_label", "") or "").strip()
+        best_regime = str(row.get("best_regime", "") or "").strip()
+        signature = (code_path, variant_label, best_regime)
+        if signature in used_signatures:
+            return False
+        used_signatures.add(signature)
+        if code_path and code_path in used_code_paths:
+            return False
+        if code_path:
+            used_code_paths.add(code_path)
+        if best_regime:
+            if best_regime in used_regimes:
+                return False
+            used_regimes.add(best_regime)
+        tier = str(row.get("promotion_tier", "reject"))
+        if tier == "specialist":
+            specialist_count += 1
+        if tier == "core":
+            core_count += 1
+    if specialist_count > 1:
+        return False
+    if core_count == 0 and any(str(row.get("promotion_tier", "")) == "core" for row in combo):
+        return False
+    if not allow_multi_core and len(combo) > 1:
+        return False
+    return True
+
+
+def _build_execution_candidate_sets(rows: list[dict[str, object]], symbol: str, max_candidates: int = 3) -> list[tuple[str, list[dict[str, object]]]]:
+    candidate_sets: list[tuple[str, list[dict[str, object]]]] = []
+    seen_names: set[tuple[str, ...]] = set()
+
+    def _append_set(label: str, candidate_set: list[dict[str, object]]) -> None:
+        if not candidate_set:
+            return
+        key = tuple(sorted(str(row.get("candidate_name", "")) for row in candidate_set))
+        if key in seen_names:
+            return
+        seen_names.add(key)
+        candidate_sets.append((label, candidate_set))
+
+    standard_candidates = select_execution_candidates(rows, max_candidates=max_candidates)
+    _append_set("standard", standard_candidates)
+
+    sparse_candidates = select_sparse_execution_candidates(rows, symbol, max_candidates=max_candidates)
+    _append_set("sparse", sparse_candidates)
+
+    pool = sorted(
+        [row for row in rows if str(row.get("promotion_tier", "reject")) in {"core", "specialist"}],
+        key=_candidate_selection_score,
+        reverse=True,
+    )[:6]
+    for size in range(1, min(max_candidates, len(pool)) + 1):
+        for combo in itertools.combinations(pool, size):
+            if not _is_valid_execution_combo(combo, symbol):
+                continue
+            _append_set(f"combo_{size}", list(combo))
+    return candidate_sets
+
+
 def _near_miss_local_score(candidate: CandidateResult, execution_result: ExecutionResult) -> float:
     score = (
         candidate.validation_pnl * 3.0
@@ -5661,15 +5823,14 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         )
         for row in results
     ]
-    candidate_sets: list[tuple[str, list[dict[str, object]]]] = []
-    standard_candidates = select_execution_candidates(execution_candidate_rows, max_candidates=3)
-    if standard_candidates:
-        candidate_sets.append(("standard", standard_candidates))
-    sparse_candidates = select_sparse_execution_candidates(execution_candidate_rows, resolved.profile_symbol, max_candidates=3)
-    if sparse_candidates and tuple(str(row["candidate_name"]) for row in sparse_candidates) != tuple(
-        str(row["candidate_name"]) for row in standard_candidates
-    ):
-        candidate_sets.append(("sparse", sparse_candidates))
+    fallback_limit = 3 if symbol_is_forex(resolved.profile_symbol) or _is_crypto_symbol(resolved.profile_symbol) else 2
+    candidate_sets = _build_execution_candidate_sets(
+        execution_candidate_rows,
+        resolved.profile_symbol,
+        max_candidates=fallback_limit,
+    )
+    standard_candidates = next((candidate_set for label, candidate_set in candidate_sets if label == "standard"), [])
+    sparse_candidates = next((candidate_set for label, candidate_set in candidate_sets if label == "sparse"), [])
     selected_execution_candidates: list[dict[str, object]] = []
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"
@@ -5677,7 +5838,11 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     selection_diagnostics = (
         f"standard={len(standard_candidates)} sparse={len(sparse_candidates)}"
     )
-    best_execution_choice: tuple[tuple[float, float, int], list[dict[str, object]], str] | None = None
+    generated_combo_count = sum(1 for label, _ in candidate_sets if label.startswith("combo_"))
+    if generated_combo_count:
+        selection_diagnostics += f" combos={generated_combo_count}"
+    best_execution_choice: tuple[tuple[float, float, float, float, int], list[dict[str, object]], str] | None = None
+    best_reduced_risk_choice: tuple[tuple[float, float, float, float, int], list[dict[str, object]], str] | None = None
     for selection_kind, candidate_set in candidate_sets:
         execution_validation_result, execution_validation_source, execution_variant = _evaluate_execution_candidate_set(
             config,
@@ -5685,6 +5850,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             resolved.data_symbol,
             candidate_set,
         )
+        path_metrics = _execution_path_metrics(execution_validation_result)
         sparse_execution = any(bool(row.get("sparse_strategy")) for row in candidate_set)
         min_execution_closed_trades = 3 if sparse_execution else 2
         accepted = (
@@ -5692,21 +5858,37 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             and execution_validation_result.profit_factor >= 1.0
             and len(execution_validation_result.closed_trades) >= min_execution_closed_trades
         )
+        normal_quality = (
+            path_metrics["equity_quality_score"] >= 0.35
+            and path_metrics["time_under_water_pct"] <= 75.0
+            and path_metrics["best_trade_share_pct"] <= 75.0
+        )
+        reduced_risk_acceptable = (
+            execution_validation_result.realized_pnl > 0.0
+            and execution_validation_result.profit_factor >= 1.0
+            and len(execution_validation_result.closed_trades) >= min_execution_closed_trades
+            and path_metrics["equity_quality_score"] >= 0.18
+            and path_metrics["time_under_water_pct"] <= 90.0
+            and path_metrics["best_trade_share_pct"] <= 90.0
+        )
         summary = (
             f"selection={selection_kind} variant={execution_variant} data_source={execution_validation_source} "
             f"pnl={execution_validation_result.realized_pnl:.2f} "
             f"pf={execution_validation_result.profit_factor:.2f} "
-            f"closed={len(execution_validation_result.closed_trades)}"
+            f"closed={len(execution_validation_result.closed_trades)} "
+            f"quality={path_metrics['equity_quality_score']:.2f} "
+            f"underwater={path_metrics['time_under_water_pct']:.1f}%"
         )
-        if accepted:
+        if accepted and normal_quality:
             summary += " -> accepted"
-            score = (
-                execution_validation_result.realized_pnl,
-                execution_validation_result.profit_factor,
-                len(execution_validation_result.closed_trades),
-            )
+            score = _execution_result_score(execution_validation_result, candidate_set)
             if best_execution_choice is None or score > best_execution_choice[0]:
                 best_execution_choice = (score, candidate_set, summary)
+        elif reduced_risk_acceptable:
+            summary += " -> accepted_with_reduced_risk"
+            score = _execution_result_score(execution_validation_result, candidate_set)
+            if best_reduced_risk_choice is None or score > best_reduced_risk_choice[0]:
+                best_reduced_risk_choice = (score, candidate_set, summary)
         elif best_execution_choice is None:
             execution_validation_summary = summary + " -> rejected"
             rejection_reasons: list[str] = []
@@ -5718,11 +5900,14 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 rejection_reasons.append(
                     f"execution closed trades too low ({len(execution_validation_result.closed_trades)} < {min_execution_closed_trades})"
                 )
+            if path_metrics["equity_quality_score"] < 0.2:
+                rejection_reasons.append(f"execution quality too low ({path_metrics['equity_quality_score']:.2f})")
             execution_rejection_reason = ", ".join(rejection_reasons) if rejection_reasons else "execution set rejected by validation"
     if best_execution_choice is not None:
         _, selected_execution_candidates, execution_validation_summary = best_execution_choice
+    elif best_reduced_risk_choice is not None:
+        _, selected_execution_candidates, execution_validation_summary = best_reduced_risk_choice
     else:
-        fallback_limit = 3 if symbol_is_forex(resolved.profile_symbol) else 2
         tiered_fallback = _tiered_fallback_candidates(
             execution_candidate_rows,
             resolved.profile_symbol,

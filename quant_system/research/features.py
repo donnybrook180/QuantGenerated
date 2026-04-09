@@ -22,6 +22,18 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
     session_high = 0.0
     session_low = 0.0
     current_session_key: tuple[int, int, int] | None = None
+    previous_regular_high = 0.0
+    previous_regular_low = 0.0
+    previous_regular_close = 0.0
+    current_regular_high = 0.0
+    current_regular_low = 0.0
+    current_regular_close = 0.0
+    current_regular_open = 0.0
+    current_overnight_high = 0.0
+    current_overnight_low = 0.0
+    current_overnight_open = 0.0
+    saw_regular_bar_today = False
+    saw_overnight_bar_today = False
 
     for index, bar in enumerate(bars):
         lookback = closes[max(0, index - 14) : index + 1]
@@ -47,11 +59,34 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
         session_key = (bar.timestamp.year, bar.timestamp.month, bar.timestamp.day)
 
         if session_key != current_session_key:
+            if current_session_key is not None and saw_regular_bar_today:
+                previous_regular_high = current_regular_high
+                previous_regular_low = current_regular_low
+                previous_regular_close = current_regular_close
             current_session_key = session_key
             cumulative_session_pv = 0.0
             cumulative_session_volume = 0.0
             session_high = bar.high
             session_low = bar.low
+            current_regular_high = 0.0
+            current_regular_low = 0.0
+            current_regular_close = 0.0
+            current_regular_open = 0.0
+            current_overnight_high = 0.0
+            current_overnight_low = 0.0
+            current_overnight_open = 0.0
+            saw_regular_bar_today = False
+            saw_overnight_bar_today = False
+
+        if not is_twenty_four_hour_asset and session_minutes < regular_open:
+            if not saw_overnight_bar_today:
+                current_overnight_open = bar.open
+                current_overnight_high = bar.high
+                current_overnight_low = bar.low
+                saw_overnight_bar_today = True
+            else:
+                current_overnight_high = max(current_overnight_high, bar.high)
+                current_overnight_low = min(current_overnight_low, bar.low)
 
         if in_regular_session:
             typical_price = (bar.high + bar.low + bar.close) / 3.0
@@ -59,11 +94,45 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
             cumulative_session_volume += max(bar.volume, 1.0)
             session_high = max(session_high, bar.high)
             session_low = min(session_low, bar.low)
+            if not saw_regular_bar_today:
+                current_regular_open = bar.open
+                current_regular_high = bar.high
+                current_regular_low = bar.low
+                saw_regular_bar_today = True
+            else:
+                current_regular_high = max(current_regular_high, bar.high)
+                current_regular_low = min(current_regular_low, bar.low)
+            current_regular_close = bar.close
 
         session_vwap = (cumulative_session_pv / cumulative_session_volume) if cumulative_session_volume > 0 else bar.close
         vwap_distance = ((bar.close / session_vwap) - 1.0) if session_vwap else 0.0
         session_range = max(session_high - session_low, bar.close * 0.0005)
         session_position = ((bar.close - session_low) / session_range) if session_range else 0.5
+        prior_day_range = max(previous_regular_high - previous_regular_low, bar.close * 0.0005) if previous_regular_close else 0.0
+        overnight_range = max(current_overnight_high - current_overnight_low, bar.close * 0.0005) if saw_overnight_bar_today else 0.0
+        opening_gap_pct = (
+            ((current_regular_open / previous_regular_close) - 1.0)
+            if previous_regular_close and current_regular_open
+            else 0.0
+        )
+        distance_to_prior_day_high = ((bar.close / previous_regular_high) - 1.0) if previous_regular_high else 0.0
+        distance_to_prior_day_low = ((bar.close / previous_regular_low) - 1.0) if previous_regular_low else 0.0
+        distance_to_prior_day_close = ((bar.close / previous_regular_close) - 1.0) if previous_regular_close else 0.0
+        distance_to_overnight_high = ((bar.close / current_overnight_high) - 1.0) if current_overnight_high else 0.0
+        distance_to_overnight_low = ((bar.close / current_overnight_low) - 1.0) if current_overnight_low else 0.0
+        prior_day_position = (
+            ((bar.close - previous_regular_low) / prior_day_range)
+            if prior_day_range > 0.0 and previous_regular_close
+            else 0.5
+        )
+        overnight_position = (
+            ((bar.close - current_overnight_low) / overnight_range)
+            if overnight_range > 0.0 and saw_overnight_bar_today
+            else 0.5
+        )
+        morning_session = 1.0 if in_regular_session and 0 <= minutes_from_open < 90 else 0.0
+        midday_session = 1.0 if in_regular_session and 90 <= minutes_from_open < 180 else 0.0
+        afternoon_session = 1.0 if in_regular_session and 180 <= minutes_from_open < 330 else 0.0
         event_flags = (daily_event_flags or {}).get(bar.timestamp.date(), DailyEventFlags())
         features.append(
             FeatureVector(
@@ -92,6 +161,25 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
                     "session_high": session_high,
                     "session_low": session_low,
                     "session_position": session_position,
+                    "prior_day_high": previous_regular_high,
+                    "prior_day_low": previous_regular_low,
+                    "prior_day_close": previous_regular_close,
+                    "prior_day_range_pct": (prior_day_range / previous_regular_close) if previous_regular_close else 0.0,
+                    "distance_to_prior_day_high": distance_to_prior_day_high,
+                    "distance_to_prior_day_low": distance_to_prior_day_low,
+                    "distance_to_prior_day_close": distance_to_prior_day_close,
+                    "prior_day_position": prior_day_position,
+                    "overnight_high": current_overnight_high,
+                    "overnight_low": current_overnight_low,
+                    "overnight_open": current_overnight_open,
+                    "overnight_range_pct": (overnight_range / bar.close) if bar.close and saw_overnight_bar_today else 0.0,
+                    "distance_to_overnight_high": distance_to_overnight_high,
+                    "distance_to_overnight_low": distance_to_overnight_low,
+                    "overnight_position": overnight_position,
+                    "opening_gap_pct": opening_gap_pct,
+                    "morning_session": morning_session,
+                    "midday_session": midday_session,
+                    "afternoon_session": afternoon_session,
                     "news_count_1d": float(event_flags.news_count),
                     "high_impact_news_count_1d": float(event_flags.high_impact_count),
                     "earnings_news_count_1d": float(event_flags.earnings_like_count),

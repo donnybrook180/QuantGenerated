@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from quant_system.agents.base import Agent
-from quant_system.agents.common import RollingHighLowState, SessionRangeState, directional_metadata, scaled_confidence
+from quant_system.agents.common import RollingCloseState, RollingHighLowState, SessionRangeState, directional_metadata, scaled_confidence
 from quant_system.models import FeatureVector, Side, SignalEvent
 
 
@@ -279,3 +279,166 @@ class VolatilityShortBreakdownAgent(Agent):
                 directional_metadata(Side.BUY, short_exit=True, trend_flip=1.0),
             )
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class AfternoonDownsideContinuationAgent(Agent):
+    name = "afternoon_downside_continuation"
+
+    def __init__(
+        self,
+        allowed_hours: set[int] | None = None,
+        min_trend_strength: float = 0.00035,
+        min_relative_volume: float = 0.85,
+        max_z_score: float = 0.4,
+    ) -> None:
+        self.allowed_hours = allowed_hours or {15, 16, 17, 18}
+        self.min_trend_strength = min_trend_strength
+        self.min_relative_volume = min_relative_volume
+        self.max_z_score = max_z_score
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or hour not in self.allowed_hours
+            or relative_volume < self.min_relative_volume
+        ):
+            side = Side.FLAT
+        elif (
+            trend_strength < -self.min_trend_strength
+            and momentum_20 < -0.00015
+            and momentum_5 < 0.0001
+            and z_score <= self.max_z_score
+            and vwap_distance <= -0.00015
+            and session_position >= 0.35
+        ):
+            side = Side.SELL
+        elif trend_strength > 0.0002 or momentum_20 > 0.0 or vwap_distance > 0.0002:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+
+        confidence = scaled_confidence(
+            0.2,
+            (max(-trend_strength, 0.0), 150),
+            (max(-momentum_20, 0.0), 120),
+            (max(-vwap_distance, 0.0), 180),
+            (max(0.0, self.max_z_score - z_score), 0.25),
+        )
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            confidence if side != Side.FLAT else 0.0,
+            directional_metadata(
+                side,
+                trend_strength=trend_strength,
+                momentum_20=momentum_20,
+                vwap_distance=vwap_distance,
+                session_position=session_position,
+                close=close,
+            ),
+        )
+
+
+class FailedBounceShortAgent(Agent):
+    name = "failed_bounce_short"
+
+    def __init__(
+        self,
+        lookback: int = 6,
+        allowed_hours: set[int] | None = None,
+        min_relative_volume: float = 0.82,
+        min_negative_trend: float = 0.00035,
+        min_z_score: float = 0.25,
+    ) -> None:
+        self.state = RollingCloseState(lookback)
+        self.allowed_hours = allowed_hours or {15, 16, 17}
+        self.min_relative_volume = min_relative_volume
+        self.min_negative_trend = min_negative_trend
+        self.min_z_score = min_z_score
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        self.state.append(close)
+        if not self.state.ready:
+            return None
+
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+
+        recent_high = self.state.recent_high(4)
+        recent_mean = self.state.mean()
+        failed_bounce = close < recent_high * 0.9992 and close <= recent_mean
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or hour not in self.allowed_hours
+            or relative_volume < self.min_relative_volume
+        ):
+            side = Side.FLAT
+        elif (
+            failed_bounce
+            and trend_strength <= -self.min_negative_trend
+            and momentum_20 < -0.0001
+            and momentum_5 <= 0.00015
+            and z_score >= self.min_z_score
+            and vwap_distance <= 0.00025
+            and session_position >= 0.30
+        ):
+            side = Side.SELL
+        elif trend_strength > 0.0002 or momentum_20 > 0.0 or vwap_distance > 0.00035:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+
+        confidence = scaled_confidence(
+            0.18,
+            (max(-trend_strength, 0.0), 150),
+            (max(z_score - self.min_z_score, 0.0), 0.22),
+            (max(recent_high - close, 0.0), 180),
+        )
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            confidence if side != Side.FLAT else 0.0,
+            directional_metadata(
+                side,
+                short_entry=True,
+                short_exit=True,
+                trend_strength=trend_strength,
+                z_score_20=z_score,
+                vwap_distance=vwap_distance,
+                recent_high=recent_high,
+                recent_mean=recent_mean,
+                session_position=session_position,
+            ),
+        )

@@ -1,16 +1,16 @@
 Artifact: us500_short_vwap_reject_symbol_candidate
 Closed trades: 18
-Realized pnl: -0.42
+Realized pnl: -0.44
 
 By entry hour
-17: trades=14 pnl=-0.82 avg=-0.06 win_rate=14.29%
+17: trades=14 pnl=-0.84 avg=-0.06 win_rate=14.29%
 16: trades=4 pnl=0.40 avg=0.10 win_rate=50.00%
 
 By entry setup
-us500_short_vwap_reject: trades=18 pnl=-0.42 avg=-0.02 win_rate=22.22%
+us500_short_vwap_reject: trades=18 pnl=-0.44 avg=-0.02 win_rate=22.22%
 
 By exit reason
-stop_loss: trades=7 pnl=-1.06 avg=-0.15 win_rate=0.00%
+stop_loss: trades=7 pnl=-1.07 avg=-0.15 win_rate=0.00%
 stale_breakout: trades=6 pnl=-0.74 avg=-0.12 win_rate=0.00%
 trailing_stop: trades=1 pnl=-0.02 avg=-0.02 win_rate=0.00%
 take_profit: trades=4 pnl=1.40 avg=0.35 win_rate=100.00%

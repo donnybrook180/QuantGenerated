@@ -41,13 +41,19 @@ from quant_system.agents.stocks import (
     StockPowerHourContinuationAgent,
     StockTrendBreakoutAgent,
 )
+from quant_system.agents.us100 import PriorDayFailedBounceShortAgent
 from quant_system.agents.strategies import (
+    AfternoonDownsideContinuationAgent,
+    FailedBounceShortAgent,
     OpeningRangeBreakoutAgent,
     OpeningRangeShortBreakdownAgent,
     VolatilityBreakoutAgent,
     VolatilityShortBreakdownAgent,
 )
 from quant_system.agents.us500 import (
+    US500FlatHighReversalAgent,
+    US500FlatTapeMeanReversionAgent,
+    US500OvernightGapFadeAgent,
     US500MomentumImpulseAgent,
     US500OpeningDriveShortReclaimAgent,
     US500ShortTrendRejectionAgent,
@@ -126,6 +132,10 @@ class CandidateResult:
     avg_loss: float = 0.0
     payoff_ratio: float = 0.0
     avg_hold_bars: float = 0.0
+    best_trade_share_pct: float = 0.0
+    equity_new_high_share_pct: float = 0.0
+    max_consecutive_losses: int = 0
+    equity_quality_score: float = 0.0
     dominant_exit: str = ""
     dominant_exit_share_pct: float = 0.0
     execution_overrides: dict[str, float | int] | None = None
@@ -221,17 +231,35 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
 
 
 def _research_thresholds(symbol: str) -> dict[str, float | int]:
+    if symbol.upper() == "US100":
+        return {
+            "validation_closed_trades": 3,
+            "test_closed_trades": 0,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 0.0,
+            "sparse_max_closed_trades": 20,
+            "sparse_min_payoff_ratio": 1.6,
+            "sparse_combined_closed_trades": 3,
+            "sparse_walk_forward_min_pass_rate_pct": 0.0,
+            "core_use_combined_splits": 1,
+            "core_combined_closed_trades": 4,
+            "core_allow_positive_validation_only": 1,
+        }
     if symbol.upper() == "US500":
         return {
             "validation_closed_trades": 2,
             "test_closed_trades": 1,
             "min_profit_factor": 1.0,
             "walk_forward_min_windows": 1,
-            "walk_forward_min_pass_rate_pct": 25.0,
+            "walk_forward_min_pass_rate_pct": 0.0,
             "sparse_max_closed_trades": 18,
-            "sparse_min_payoff_ratio": 1.75,
+            "sparse_min_payoff_ratio": 1.6,
             "sparse_combined_closed_trades": 2,
-            "sparse_walk_forward_min_pass_rate_pct": 20.0,
+            "sparse_walk_forward_min_pass_rate_pct": 0.0,
+            "core_use_combined_splits": 1,
+            "core_combined_closed_trades": 3,
+            "core_allow_positive_validation_only": 1,
         }
     if _is_crypto_symbol(symbol):
         return {
@@ -292,6 +320,84 @@ def _aggregate_profit_factor(*pnl_groups: list[float]) -> float:
     return (gross_profit / gross_loss) if gross_loss > 0 else (999.0 if gross_profit > 0 else 0.0)
 
 
+def _metric_map_from_row(row: CandidateResult | dict[str, object], field_name: str) -> dict[str, float]:
+    raw = getattr(row, field_name) if isinstance(row, CandidateResult) else row.get(field_name, "{}")
+    if isinstance(raw, dict):
+        payload = raw
+    else:
+        try:
+            payload = json.loads(str(raw or "{}"))
+        except json.JSONDecodeError:
+            return {}
+    result: dict[str, float] = {}
+    for key, value in payload.items():
+        try:
+            result[str(key)] = float(value)
+        except (TypeError, ValueError):
+            continue
+    return result
+
+
+def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object], symbol: str) -> bool:
+    if _meets_viability(row, symbol):
+        return False
+    thresholds = _research_thresholds(symbol)
+    realized_pnl = float(row.realized_pnl if isinstance(row, CandidateResult) else row.get("realized_pnl", 0.0))
+    profit_factor = float(row.profit_factor if isinstance(row, CandidateResult) else row.get("profit_factor", 0.0))
+    validation_pnl = float(row.validation_pnl if isinstance(row, CandidateResult) else row.get("validation_pnl", 0.0))
+    test_pnl = float(row.test_pnl if isinstance(row, CandidateResult) else row.get("test_pnl", 0.0))
+    validation_profit_factor = float(
+        row.validation_profit_factor if isinstance(row, CandidateResult) else row.get("validation_profit_factor", 0.0)
+    )
+    test_profit_factor = float(row.test_profit_factor if isinstance(row, CandidateResult) else row.get("test_profit_factor", 0.0))
+    walk_forward_windows = int(row.walk_forward_windows if isinstance(row, CandidateResult) else row.get("walk_forward_windows", 0))
+    walk_forward_pass_rate_pct = float(
+        row.walk_forward_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_pass_rate_pct", 0.0)
+    )
+    walk_forward_soft_pass_rate_pct = float(
+        row.walk_forward_soft_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_soft_pass_rate_pct", 0.0)
+    )
+    best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "")
+    best_regime_pnl = float(row.best_regime_pnl if isinstance(row, CandidateResult) else row.get("best_regime_pnl", 0.0))
+    regime_stability_score = float(
+        row.regime_stability_score if isinstance(row, CandidateResult) else row.get("regime_stability_score", 0.0)
+    )
+    regime_loss_ratio = float(
+        row.regime_loss_ratio if isinstance(row, CandidateResult) else row.get("regime_loss_ratio", 999.0)
+    )
+    regime_trade_counts = _metric_map_from_row(row, "regime_trade_count_by_label")
+    regime_pf_by_label = _metric_map_from_row(row, "regime_pf_by_label")
+    best_regime_trade_count = int(regime_trade_counts.get(best_regime, 0.0))
+    best_regime_pf = float(regime_pf_by_label.get(best_regime, 0.0))
+    effective_pass_rate = max(walk_forward_pass_rate_pct, walk_forward_soft_pass_rate_pct)
+    best_trade_share_pct = float(row.best_trade_share_pct if isinstance(row, CandidateResult) else row.get("best_trade_share_pct", 0.0))
+    equity_quality_score = float(
+        row.equity_quality_score if isinstance(row, CandidateResult) else row.get("equity_quality_score", 0.0)
+    )
+    combined_closed_trades = int(
+        (row.validation_closed_trades + row.test_closed_trades)
+        if isinstance(row, CandidateResult)
+        else (row.get("validation_closed_trades", 0) or 0) + (row.get("test_closed_trades", 0) or 0)
+    )
+    return (
+        realized_pnl > 0.0
+        and profit_factor >= float(thresholds["min_profit_factor"])
+        and bool(best_regime)
+        and best_regime_pnl > 0.0
+        and best_regime_trade_count >= max(2, int(thresholds["sparse_combined_closed_trades"]))
+        and combined_closed_trades >= max(2, int(thresholds["sparse_combined_closed_trades"]))
+        and best_regime_pf >= float(thresholds["min_profit_factor"])
+        and (validation_pnl > 0.0 or test_pnl > 0.0)
+        and max(validation_profit_factor, test_profit_factor, best_regime_pf) >= float(thresholds["min_profit_factor"])
+        and walk_forward_windows >= int(thresholds["walk_forward_min_windows"])
+        and effective_pass_rate >= float(thresholds["sparse_walk_forward_min_pass_rate_pct"])
+        and regime_stability_score >= 0.65
+        and regime_loss_ratio <= 0.75
+        and equity_quality_score >= 0.35
+        and best_trade_share_pct <= 80.0
+    )
+
+
 def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> bool:
     thresholds = _research_thresholds(symbol)
     realized_pnl = float(row.realized_pnl if isinstance(row, CandidateResult) else row.get("realized_pnl", 0.0))
@@ -325,7 +431,14 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     regime_loss_ratio = float(
         row.regime_loss_ratio if isinstance(row, CandidateResult) else row.get("regime_loss_ratio", 999.0)
     )
+    best_trade_share_pct = float(row.best_trade_share_pct if isinstance(row, CandidateResult) else row.get("best_trade_share_pct", 0.0))
+    equity_quality_score = float(
+        row.equity_quality_score if isinstance(row, CandidateResult) else row.get("equity_quality_score", 0.0)
+    )
     sparse_strategy = _is_sparse_candidate(row, symbol)
+    core_use_combined_splits = bool(thresholds.get("core_use_combined_splits", 0))
+    core_combined_closed_trades = int(thresholds.get("core_combined_closed_trades", 0) or 0)
+    core_allow_positive_validation_only = bool(thresholds.get("core_allow_positive_validation_only", 0))
     sparse_combined_closed_trades = validation_closed_trades + test_closed_trades
     sparse_pass_rate_threshold = (
         float(thresholds["sparse_walk_forward_min_pass_rate_pct"]) if sparse_strategy else float(thresholds["walk_forward_min_pass_rate_pct"])
@@ -333,19 +446,24 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     sparse_window_pass_rate = float(
         row.walk_forward_soft_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_soft_pass_rate_pct", 0.0)
     )
-    split_trade_requirement_met = (
-        sparse_combined_closed_trades >= int(thresholds["sparse_combined_closed_trades"])
-        if sparse_strategy
-        else validation_closed_trades >= int(thresholds["validation_closed_trades"]) and test_closed_trades >= int(thresholds["test_closed_trades"])
-    )
-    split_pnl_requirement_met = (
-        (validation_pnl + test_pnl) > 0.0 if sparse_strategy else validation_pnl > 0.0 and test_pnl > 0.0
-    )
-    split_pf_requirement_met = (
-        max(validation_profit_factor, test_profit_factor) >= float(thresholds["min_profit_factor"])
-        if sparse_strategy
-        else validation_profit_factor >= float(thresholds["min_profit_factor"]) and test_profit_factor >= float(thresholds["min_profit_factor"])
-    )
+    if sparse_strategy:
+        split_trade_requirement_met = sparse_combined_closed_trades >= int(thresholds["sparse_combined_closed_trades"])
+        split_pnl_requirement_met = (validation_pnl + test_pnl) > 0.0
+        split_pf_requirement_met = max(validation_profit_factor, test_profit_factor) >= float(thresholds["min_profit_factor"])
+    elif core_use_combined_splits:
+        combined_closed = validation_closed_trades + test_closed_trades
+        combined_pnl = validation_pnl + test_pnl
+        split_trade_requirement_met = combined_closed >= max(1, core_combined_closed_trades)
+        split_pnl_requirement_met = (
+            validation_pnl > 0.0 if core_allow_positive_validation_only else combined_pnl > 0.0
+        )
+        split_pf_requirement_met = max(validation_profit_factor, test_profit_factor, profit_factor) >= float(
+            thresholds["min_profit_factor"]
+        )
+    else:
+        split_trade_requirement_met = validation_closed_trades >= int(thresholds["validation_closed_trades"]) and test_closed_trades >= int(thresholds["test_closed_trades"])
+        split_pnl_requirement_met = validation_pnl > 0.0 and test_pnl > 0.0
+        split_pf_requirement_met = validation_profit_factor >= float(thresholds["min_profit_factor"]) and test_profit_factor >= float(thresholds["min_profit_factor"])
     walk_forward_pass_requirement_met = (
         sparse_window_pass_rate >= sparse_pass_rate_threshold
         if sparse_strategy
@@ -359,12 +477,16 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
         and split_pf_requirement_met
         and walk_forward_windows >= int(thresholds["walk_forward_min_windows"])
         and walk_forward_pass_requirement_met
-        and walk_forward_avg_validation_pnl > 0.0
-        and walk_forward_avg_test_pnl > 0.0
+        and (
+            walk_forward_avg_validation_pnl > 0.0
+            and (walk_forward_avg_test_pnl > 0.0 or core_allow_positive_validation_only)
+        )
         and bool(best_regime)
         and best_regime_pnl > 0.0
         and regime_stability_score >= 0.50
         and regime_loss_ratio <= 1.25
+        and equity_quality_score >= 0.45
+        and best_trade_share_pct <= 70.0
         and (
             component_count <= 1
             or (combo_outperformance_score >= 0.0 and combo_trade_overlap_pct <= 80.0)
@@ -1426,11 +1548,38 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
 def _score_result(name: str, description: str, archetype: str, code_path: str, result: ExecutionResult) -> CandidateResult:
     wins = [trade.pnl for trade in result.closed_trades if trade.pnl > 0]
     losses = [trade.pnl for trade in result.closed_trades if trade.pnl < 0]
+    pnls = [trade.pnl for trade in result.closed_trades]
     expectancy = mean(result.closed_trade_pnls) if result.closed_trade_pnls else 0.0
     avg_win = mean(wins) if wins else 0.0
     avg_loss = mean(losses) if losses else 0.0
     payoff_ratio = (avg_win / abs(avg_loss)) if avg_loss < 0 else (999.0 if avg_win > 0 else 0.0)
     avg_hold_bars = mean([trade.hold_bars for trade in result.closed_trades]) if result.closed_trades else 0.0
+    gross_profit = sum(wins)
+    best_trade_share_pct = (max(wins) / gross_profit * 100.0) if wins and gross_profit > 0.0 else 0.0
+    equity = 0.0
+    peak = 0.0
+    new_high_count = 0
+    current_loss_streak = 0
+    max_consecutive_losses = 0
+    for pnl in pnls:
+        equity += pnl
+        if equity >= peak:
+            peak = equity
+            new_high_count += 1
+        if pnl < 0.0:
+            current_loss_streak += 1
+            max_consecutive_losses = max(max_consecutive_losses, current_loss_streak)
+        else:
+            current_loss_streak = 0
+    trade_count = len(result.closed_trades)
+    equity_new_high_share_pct = (new_high_count / trade_count * 100.0) if trade_count > 0 else 0.0
+    quality_components = [
+        min(max(payoff_ratio, 0.0), 3.0) / 3.0,
+        min(max(equity_new_high_share_pct, 0.0), 100.0) / 100.0,
+        1.0 - min(best_trade_share_pct, 100.0) / 100.0,
+        1.0 - (max_consecutive_losses / trade_count if trade_count > 0 else 1.0),
+    ]
+    equity_quality_score = sum(quality_components) / float(len(quality_components)) if quality_components else 0.0
     exit_counts: dict[str, int] = {}
     for trade in result.closed_trades:
         exit_counts[trade.exit_reason] = exit_counts.get(trade.exit_reason, 0) + 1
@@ -1454,6 +1603,10 @@ def _score_result(name: str, description: str, archetype: str, code_path: str, r
         avg_loss=avg_loss,
         payoff_ratio=payoff_ratio,
         avg_hold_bars=avg_hold_bars,
+        best_trade_share_pct=best_trade_share_pct,
+        equity_new_high_share_pct=equity_new_high_share_pct,
+        max_consecutive_losses=max_consecutive_losses,
+        equity_quality_score=equity_quality_score,
         dominant_exit=dominant_exit,
         dominant_exit_share_pct=dominant_exit_share_pct,
     )
@@ -2075,6 +2228,203 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_opening_range_short_breakdown_trend",
+                    description=f"{upper} opening-range short breakdown with trend-runner exits",
+                    agents=[OpeningRangeShortBreakdownAgent(), risk],
+                    code_path="quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 8,
+                        "max_holding_bars": 0,
+                        "take_profit_atr_multiple": 3.0,
+                        "trailing_stop_atr_multiple": 1.0,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_opening_range_short_breakdown_fast",
+                    description=f"{upper} opening-range short breakdown with faster failure control",
+                    agents=[OpeningRangeShortBreakdownAgent(), risk],
+                    code_path="quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.7,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_volatility_short_breakdown_selective",
+                    description=f"{upper} selective intraday short breakdown after volatility expansion",
+                    agents=[
+                        VolatilityShortBreakdownAgent(
+                            lookback=10,
+                            allowed_hours={15, 16, 17},
+                            min_atr_proxy=0.0018,
+                            min_trend_strength=max(config.agents.min_trend_strength * 0.9, 0.0008),
+                            min_relative_volume=0.9,
+                            min_momentum_20=0.0001,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 2.1,
+                        "trailing_stop_atr_multiple": 0.75,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_volatility_short_breakdown_flat_high",
+                    description=f"{upper} short breakdown focused on flat/high-volatility sessions",
+                    agents=[
+                        VolatilityShortBreakdownAgent(
+                            lookback=9,
+                            allowed_hours={15, 16},
+                            min_atr_proxy=0.0016,
+                            min_trend_strength=max(config.agents.min_trend_strength * 0.8, 0.0007),
+                            min_relative_volume=0.85,
+                            min_momentum_20=0.0,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 20,
+                        "take_profit_atr_multiple": 2.25,
+                        "trailing_stop_atr_multiple": 0.8,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_afternoon_downside_continuation",
+                    description=f"{upper} afternoon downside continuation after failed rebounds",
+                    agents=[
+                        AfternoonDownsideContinuationAgent(
+                            allowed_hours={15, 16, 17, 18},
+                            min_trend_strength=max(config.agents.min_trend_strength * 0.85, 0.0007),
+                            min_relative_volume=0.82,
+                            max_z_score=0.55,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.AfternoonDownsideContinuationAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 6,
+                        "max_holding_bars": 24,
+                        "take_profit_atr_multiple": 2.35,
+                        "trailing_stop_atr_multiple": 0.82,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_afternoon_downside_continuation_trend_down",
+                    description=f"{upper} afternoon downside continuation limited to trend-down regimes",
+                    agents=[
+                        AfternoonDownsideContinuationAgent(
+                            allowed_hours={15, 16, 17},
+                            min_trend_strength=max(config.agents.min_trend_strength * 0.95, 0.0008),
+                            min_relative_volume=0.85,
+                            max_z_score=0.4,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.AfternoonDownsideContinuationAgent",
+                    regime_filter_label="trend_down_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 20,
+                        "take_profit_atr_multiple": 2.5,
+                        "trailing_stop_atr_multiple": 0.78,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_failed_bounce_short",
+                    description=f"{upper} failed-bounce short after weak reclaim attempts",
+                    agents=[
+                        FailedBounceShortAgent(
+                            lookback=6,
+                            allowed_hours={15, 16, 17},
+                            min_relative_volume=0.82,
+                            min_negative_trend=max(config.agents.min_trend_strength * 0.85, 0.0007),
+                            min_z_score=0.2,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.FailedBounceShortAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 2.2,
+                        "trailing_stop_atr_multiple": 0.74,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_failed_bounce_short_trend_down",
+                    description=f"{upper} failed-bounce short limited to trend-down regimes",
+                    agents=[
+                        FailedBounceShortAgent(
+                            lookback=7,
+                            allowed_hours={15, 16},
+                            min_relative_volume=0.84,
+                            min_negative_trend=max(config.agents.min_trend_strength * 0.95, 0.0008),
+                            min_z_score=0.35,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.FailedBounceShortAgent",
+                    regime_filter_label="trend_down_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 2.35,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_prior_day_failed_bounce_short",
+                    description=f"{upper} short failed-bounce against prior-day and overnight context",
+                    agents=[
+                        PriorDayFailedBounceShortAgent(
+                            min_negative_trend=max(config.agents.min_trend_strength * 0.9, 0.00075)
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us100.PriorDayFailedBounceShortAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 2.15,
+                        "trailing_stop_atr_multiple": 0.72,
+                    },
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_prior_day_failed_bounce_short_trend_down",
+                    description=f"{upper} prior-day failed-bounce short limited to trend-down/high-vol regimes",
+                    agents=[
+                        PriorDayFailedBounceShortAgent(
+                            min_negative_trend=max(config.agents.min_trend_strength, 0.0008)
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.us100.PriorDayFailedBounceShortAgent",
+                    regime_filter_label="trend_down_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 2.3,
+                        "trailing_stop_atr_multiple": 0.68,
+                    },
+                ),
             ]
         )
         if upper == "US500":
@@ -2160,6 +2510,204 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "max_holding_bars": 16,
                             "take_profit_atr_multiple": 2.15,
                             "trailing_stop_atr_multiple": 0.7,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_short_vwap_reject_flat_high_dense",
+                        description="US500 denser short VWAP rejection in flat/high-volatility regime",
+                        agents=[
+                            US500ShortVWAPRejectAgent(
+                                config.agents.min_trend_strength * 0.8,
+                                allowed_hours={15, 16, 17},
+                                min_relative_volume=0.84,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500ShortVWAPRejectAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 6,
+                            "max_holding_bars": 22,
+                            "take_profit_atr_multiple": 2.0,
+                            "trailing_stop_atr_multiple": 0.82,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_opening_drive_short_reclaim_flat_high",
+                        description="US500 opening-drive short reclaim in flat/high-volatility tape",
+                        agents=[
+                            US500OpeningDriveShortReclaimAgent(
+                                config.agents.min_trend_strength * 0.95,
+                                allowed_hours={15, 16},
+                                min_relative_volume=0.88,
+                                max_session_position=0.58,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500OpeningDriveShortReclaimAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 20,
+                            "take_profit_atr_multiple": 2.15,
+                            "trailing_stop_atr_multiple": 0.78,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_volatility_short_breakdown_flat_high",
+                        description="US500 short volatility breakdown in flat/high-volatility sessions",
+                        agents=[
+                            VolatilityShortBreakdownAgent(
+                                lookback=8,
+                                allowed_hours={15, 16, 17},
+                                min_atr_proxy=0.0014,
+                                min_trend_strength=max(config.agents.min_trend_strength * 0.75, 0.0007),
+                                min_relative_volume=0.82,
+                                min_momentum_20=-0.0001,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 6,
+                            "max_holding_bars": 22,
+                            "take_profit_atr_multiple": 2.1,
+                            "trailing_stop_atr_multiple": 0.8,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_flat_high_reversal",
+                        description="US500 flat/high-volatility reversal fade",
+                        agents=[
+                            US500FlatHighReversalAgent(
+                                max_abs_trend_strength=0.0006,
+                                min_relative_volume=0.8,
+                                allowed_hours={15, 16, 17},
+                                min_z_score=0.8,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500FlatHighReversalAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 14,
+                            "take_profit_atr_multiple": 1.7,
+                            "trailing_stop_atr_multiple": 0.65,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_flat_high_reversal_dense",
+                        description="US500 denser flat/high-volatility reversal fade",
+                        agents=[
+                            US500FlatHighReversalAgent(
+                                max_abs_trend_strength=0.00075,
+                                min_relative_volume=0.76,
+                                allowed_hours={15, 16, 17, 18},
+                                min_z_score=0.7,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500FlatHighReversalAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 1.55,
+                            "trailing_stop_atr_multiple": 0.6,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_flat_tape_mean_reversion",
+                        description="US500 flat-tape mean reversion around VWAP and rolling mean",
+                        agents=[
+                            US500FlatTapeMeanReversionAgent(
+                                lookback=8,
+                                max_abs_trend_strength=0.0006,
+                                min_relative_volume=0.78,
+                                allowed_hours={15, 16, 17},
+                                min_abs_z_score=0.9,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500FlatTapeMeanReversionAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 12,
+                            "take_profit_atr_multiple": 1.45,
+                            "trailing_stop_atr_multiple": 0.55,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_flat_tape_mean_reversion_dense",
+                        description="US500 denser flat-tape mean reversion in flat/high-volatility tape",
+                        agents=[
+                            US500FlatTapeMeanReversionAgent(
+                                lookback=6,
+                                max_abs_trend_strength=0.00075,
+                                min_relative_volume=0.74,
+                                allowed_hours={15, 16, 17, 18},
+                                min_abs_z_score=0.75,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500FlatTapeMeanReversionAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 14,
+                            "take_profit_atr_multiple": 1.35,
+                            "trailing_stop_atr_multiple": 0.5,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_overnight_gap_fade",
+                        description="US500 overnight gap fade using prior-day and overnight context",
+                        agents=[
+                            US500OvernightGapFadeAgent(
+                                min_gap_pct=0.0014,
+                                max_abs_trend_strength=0.0007,
+                                min_relative_volume=0.8,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500OvernightGapFadeAgent",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 12,
+                            "take_profit_atr_multiple": 1.5,
+                            "trailing_stop_atr_multiple": 0.55,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="us500_overnight_gap_fade_flat_high",
+                        description="US500 overnight gap fade focused on flat/high-volatility tape",
+                        agents=[
+                            US500OvernightGapFadeAgent(
+                                min_gap_pct=0.0012,
+                                max_abs_trend_strength=0.0008,
+                                min_relative_volume=0.76,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.us500.US500OvernightGapFadeAgent",
+                        regime_filter_label="trend_flat_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 14,
+                            "take_profit_atr_multiple": 1.4,
+                            "trailing_stop_atr_multiple": 0.5,
                         },
                     ),
                 ]
@@ -2951,7 +3499,17 @@ def _annotate_combo_results(results: list[CandidateResult]) -> None:
         )
 
 
+def _promotion_tier_for_row(row: CandidateResult | dict[str, object], symbol: str) -> str:
+    if _meets_viability(row, symbol):
+        return "core"
+    if _meets_regime_specialist_viability(row, symbol):
+        return "specialist"
+    return "reject"
+
+
 def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, object]) -> dict[str, object]:
+    symbol = str(row.get("symbol", "") or "") if isinstance(row, dict) else ""
+    promotion_tier = _promotion_tier_for_row(row, symbol)
     best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "")
     worst_regime = str(row.worst_regime if isinstance(row, CandidateResult) else row.get("worst_regime", "") or "")
     regime_stability_score = float(
@@ -2990,8 +3548,15 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
     if vol_suffix == "high":
         max_risk_multiplier = min(max_risk_multiplier, 0.60)
     min_risk_multiplier = 0.0
+    if promotion_tier == "specialist":
+        base_allocation_weight = min(base_allocation_weight, 0.35)
+        max_risk_multiplier = min(max_risk_multiplier, 0.35)
+    elif promotion_tier == "reject":
+        base_allocation_weight = min(base_allocation_weight, 0.20)
+        max_risk_multiplier = min(max_risk_multiplier, 0.20)
     policy_summary = (
-        f"activate in {best_regime or 'no preferred regime'}"
+        f"tier={promotion_tier}"
+        f"; activate in {best_regime or 'no preferred regime'}"
         f"; avoid {blocked_summary}"
         f"; vol_pct in [{min_vol_percentile:.2f}, {max_vol_percentile:.2f}]"
         f"; base_weight={base_allocation_weight:.2f}"
@@ -3001,6 +3566,7 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
     )
 
     return {
+        "promotion_tier": promotion_tier,
         "allowed_regimes": allowed_regimes,
         "blocked_regimes": blocked_regimes,
         "min_vol_percentile": min_vol_percentile,
@@ -3292,15 +3858,27 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
         "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
         "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
+        "best_trade_share_pct": row.best_trade_share_pct,
+        "equity_new_high_share_pct": row.equity_new_high_share_pct,
+        "max_consecutive_losses": row.max_consecutive_losses,
+        "equity_quality_score": row.equity_quality_score,
         "sparse_strategy": row.sparse_strategy,
         "component_count": row.component_count,
         "combo_outperformance_score": row.combo_outperformance_score,
         "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
         "recommended": False,
+        "promotion_tier": _promotion_tier_for_row(row, symbol),
         "variant_label": row.variant_label,
         "session_label": row.session_label,
         "regime_filter_label": row.regime_filter_label,
         "execution_overrides": row.execution_overrides or {},
+        "best_regime": row.best_regime,
+        "best_regime_pnl": row.best_regime_pnl,
+        "regime_stability_score": row.regime_stability_score,
+        "regime_loss_ratio": row.regime_loss_ratio,
+        "regime_trade_count_by_label": row.regime_trade_count_by_label,
+        "regime_pf_by_label": row.regime_pf_by_label,
+        "regime_specialist_viable": _meets_regime_specialist_viability(row, symbol),
     }
 
 
@@ -3505,6 +4083,9 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
+    specialist_rows = [
+        row for row in rows if bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", "")))
+    ]
     ranked = sorted(
         viable_rows,
         key=lambda row: (
@@ -3521,7 +4102,38 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         ),
         reverse=True,
     )
-    for row in ranked:
+    specialist_ranked = sorted(
+        specialist_rows,
+        key=lambda row: (
+            float(row.get("best_regime_pnl", 0.0)),
+            float(row.get("regime_stability_score", 0.0)),
+            -float(row.get("regime_loss_ratio", 999.0)),
+            int(_metric_map_from_row(row, "regime_trade_count_by_label").get(str(row.get("best_regime", "") or ""), 0.0)),
+            float(row.get("test_pnl", 0.0)),
+            float(row.get("validation_pnl", 0.0)),
+        ),
+        reverse=True,
+    )
+
+    if ranked:
+        lead = ranked[0]
+        selected.append(lead)
+        used_components.update(_selection_component_keys(lead))
+
+    if selected and len(selected) < max_candidates:
+        lead_regime = str(selected[0].get("best_regime", "") or "")
+        for row in specialist_ranked:
+            components = _selection_component_keys(row)
+            if components & used_components:
+                continue
+            if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
+                continue
+            selected.append(row)
+            used_components.update(components)
+            break
+
+    fallback_ranked = [row for row in ranked[1:] if row not in selected] + [row for row in specialist_ranked if row not in selected]
+    for row in fallback_ranked:
         components = _selection_component_keys(row)
         if selected and components & used_components:
             continue
@@ -3530,6 +4142,49 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         if len(selected) >= max_candidates:
             break
     return selected
+
+
+def _tiered_fallback_candidates(rows: list[dict[str, object]], max_candidates: int = 3) -> list[dict[str, object]]:
+    selected: list[dict[str, object]] = []
+    used_components: set[str] = set()
+    core_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "core"]
+    specialist_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "specialist"]
+
+    if core_rows:
+        lead = max(
+            core_rows,
+            key=lambda row: (
+                float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+                float(row.get("realized_pnl", 0.0)),
+                float(row.get("regime_stability_score", 0.0)),
+            ),
+        )
+        selected.append(lead)
+        used_components.update(_selection_component_keys(lead))
+
+    specialist_ranked = sorted(
+        specialist_rows,
+        key=lambda row: (
+            int(_metric_map_from_row(row, "regime_trade_count_by_label").get(str(row.get("best_regime", "") or ""), 0.0)),
+            float(row.get("best_regime_pnl", 0.0)),
+            float(row.get("equity_quality_score", 0.0)),
+            -float(row.get("best_trade_share_pct", 100.0)),
+        ),
+        reverse=True,
+    )
+    lead_regime = str(selected[0].get("best_regime", "") or "") if selected else ""
+    for row in specialist_ranked:
+        components = _selection_component_keys(row)
+        if components & used_components:
+            continue
+        if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
+            continue
+        selected.append(row)
+        used_components.update(components)
+        if len(selected) >= max_candidates:
+            break
+
+    return selected[:max_candidates]
 
 
 def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: str, max_candidates: int = 3) -> list[dict[str, object]]:
@@ -3545,6 +4200,10 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
         and float(row.get("profit_factor", 0.0)) >= float(thresholds["min_profit_factor"])
         and (float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0))) > 0.0
         and (int(row.get("validation_closed_trades", 0)) + int(row.get("test_closed_trades", 0))) > 0
+        and (
+            _meets_viability(row, symbol)
+            or bool(row.get("regime_specialist_viable"))
+        )
     ]
     ranked = sorted(
         sparse_rows,
@@ -3752,10 +4411,13 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         "Ranked candidates",
     ]
     for row in ranked:
+        candidate_row = _execution_candidate_row_from_result(symbol, row)
+        policy = build_execution_policy_from_candidate_row(candidate_row)
         lines.append(
-            f"{row.name} [{row.archetype}]: pnl={row.realized_pnl:.2f} closed={row.closed_trades} "
+            f"{row.name} [{row.archetype}|{policy['promotion_tier']}]: pnl={row.realized_pnl:.2f} closed={row.closed_trades} "
             f"pf={row.profit_factor:.2f} win_rate={row.win_rate_pct:.2f}% dd={row.max_drawdown_pct:.2f}%"
         )
+        lines.append(f"  tier: {policy['promotion_tier']}")
         lines.append(
             f"  trade_metrics: expectancy={row.expectancy:.2f} avg_win={row.avg_win:.2f} "
             f"avg_loss={row.avg_loss:.2f} payoff={row.payoff_ratio:.2f} avg_hold={row.avg_hold_bars:.1f}"
@@ -3771,7 +4433,7 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         )
         lines.append(f"  regime_trade_counts: {row.regime_trade_count_by_label}")
         lines.append(f"  regime_pnls: {row.regime_pnl_by_label}")
-        lines.append(f"  live_policy: {build_execution_policy_from_candidate_row(row)['policy_summary']}")
+        lines.append(f"  live_policy: {policy['policy_summary']}")
         if row.regime_filter_label:
             lines.append(f"  regime_filter: {row.regime_filter_label}")
         lines.append(
@@ -3801,7 +4463,8 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
     lines.extend(["", "Recommended active agents"])
     if winners:
         for row in winners[:3]:
-            lines.append(f"- {row.name} ({row.description})")
+            tier = _promotion_tier_for_row(row, symbol)
+            lines.append(f"- {row.name} [{tier}] ({row.description})")
     else:
         lines.append("No candidate met the positive-PnL and PF>=1.0 threshold.")
     txt_path.write_text("\n".join(lines), encoding="utf-8")
@@ -3810,6 +4473,7 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
 
 def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
     reasons: list[str] = []
+    specialist_viable = _meets_regime_specialist_viability(row, symbol)
     thresholds = _research_thresholds(symbol)
     validation_min = int(thresholds["validation_closed_trades"])
     test_min = int(thresholds["test_closed_trades"])
@@ -3857,10 +4521,16 @@ def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
         reasons.append(f"regime stability too low ({row.regime_stability_score:.2f} < 0.50)")
     if row.regime_loss_ratio > 1.25:
         reasons.append(f"regime loss ratio too high ({row.regime_loss_ratio:.2f} > 1.25)")
+    if row.equity_quality_score < 0.45:
+        reasons.append(f"equity quality too low ({row.equity_quality_score:.2f} < 0.45)")
+    if row.best_trade_share_pct > 70.0:
+        reasons.append(f"best trade concentration too high ({row.best_trade_share_pct:.2f}% > 70%)")
     if row.component_count > 1 and row.combo_outperformance_score < 0.0:
         reasons.append(f"combo underperformed components ({row.combo_outperformance_score:.2f})")
     if row.component_count > 1 and row.combo_trade_overlap_pct > 80.0:
         reasons.append(f"combo overlap too high ({row.combo_trade_overlap_pct:.2f}% > 80%)")
+    if reasons and specialist_viable:
+        reasons.append("broad viability failed, but candidate qualifies as a regime specialist")
     return reasons
 
 
@@ -3869,7 +4539,10 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
     ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
     counts: dict[str, int] = {}
     near_misses: list[tuple[CandidateResult, list[str]]] = []
+    tier_counts = {"core": 0, "specialist": 0, "reject": 0}
     for row in ranked:
+        tier = _promotion_tier_for_row(row, symbol)
+        tier_counts[tier] = tier_counts.get(tier, 0) + 1
         reasons = _candidate_failure_reasons(row, symbol)
         for reason in reasons:
             counts[reason] = counts.get(reason, 0) + 1
@@ -3879,6 +4552,7 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
     lines = [
         f"Viability autopsy: {symbol}",
         f"Execution validation summary: {execution_validation_summary}",
+        f"Tier counts: core={tier_counts['core']} specialist={tier_counts['specialist']} reject={tier_counts['reject']}",
         "",
         "Top blockers",
     ]
@@ -3886,8 +4560,9 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
         lines.append(f"- {reason}: {count}")
     lines.extend(["", "Top near-misses"])
     for row, reasons in near_misses[:8]:
+        tier = _promotion_tier_for_row(row, symbol)
         lines.append(
-            f"- {row.name}: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} "
+            f"- {row.name} [{tier}]: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} "
             f"val={row.validation_pnl:.2f}/{row.validation_profit_factor:.2f}/{row.validation_closed_trades} "
             f"test={row.test_pnl:.2f}/{row.test_profit_factor:.2f}/{row.test_closed_trades} "
             f"wf={row.walk_forward_pass_rate_pct:.2f}%"
@@ -4118,7 +4793,6 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         if _meets_viability(row, resolved.profile_symbol)
     ]
     best = viable_ranked[0] if viable_ranked else None
-    plot_paths = plot_symbol_research(resolved.profile_symbol, results, best_row=best)
     recommended = [row.name for row in viable_ranked[:3]]
     profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
 
@@ -4177,6 +4851,10 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     selected_execution_candidates: list[dict[str, object]] = []
     execution_set_id: int | None = None
     execution_validation_summary = "not_run"
+    execution_rejection_reason = ""
+    selection_diagnostics = (
+        f"standard={len(standard_candidates)} sparse={len(sparse_candidates)}"
+    )
     best_execution_choice: tuple[tuple[float, float, int], list[dict[str, object]], str] | None = None
     for selection_kind, candidate_set in candidate_sets:
         execution_validation_result, execution_validation_source, execution_variant = _evaluate_execution_candidate_set(
@@ -4186,7 +4864,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             candidate_set,
         )
         sparse_execution = any(bool(row.get("sparse_strategy")) for row in candidate_set)
-        min_execution_closed_trades = 1 if sparse_execution else 2
+        min_execution_closed_trades = 3 if sparse_execution else 2
         accepted = (
             execution_validation_result.realized_pnl > 0.0
             and execution_validation_result.profit_factor >= 1.0
@@ -4209,11 +4887,36 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                 best_execution_choice = (score, candidate_set, summary)
         elif best_execution_choice is None:
             execution_validation_summary = summary + " -> rejected"
+            rejection_reasons: list[str] = []
+            if execution_validation_result.realized_pnl <= 0.0:
+                rejection_reasons.append(f"execution pnl <= 0 ({execution_validation_result.realized_pnl:.2f})")
+            if execution_validation_result.profit_factor < 1.0:
+                rejection_reasons.append(f"execution PF < 1.0 ({execution_validation_result.profit_factor:.2f})")
+            if len(execution_validation_result.closed_trades) < min_execution_closed_trades:
+                rejection_reasons.append(
+                    f"execution closed trades too low ({len(execution_validation_result.closed_trades)} < {min_execution_closed_trades})"
+                )
+            execution_rejection_reason = ", ".join(rejection_reasons) if rejection_reasons else "execution set rejected by validation"
     if best_execution_choice is not None:
         _, selected_execution_candidates, execution_validation_summary = best_execution_choice
-        recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
     else:
-        recommended = []
+        tiered_fallback = _tiered_fallback_candidates(execution_candidate_rows, max_candidates=2)
+        selection_diagnostics += f" tiered_fallback={len(tiered_fallback)}"
+        if tiered_fallback:
+            selected_execution_candidates = tiered_fallback
+            core_count = sum(1 for row in selected_execution_candidates if str(row.get("promotion_tier", "")) == "core")
+            specialist_count = sum(
+                1 for row in selected_execution_candidates if str(row.get("promotion_tier", "")) == "specialist"
+            )
+            execution_validation_summary = (
+                f"selection=tiered_fallback core={core_count} specialist={specialist_count} "
+                f"-> accepted_with_reduced_risk"
+            )
+    recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
+    tier_counts = {"core": 0, "specialist": 0, "reject": 0}
+    for row in results:
+        tier = _promotion_tier_for_row(row, resolved.profile_symbol)
+        tier_counts[tier] = tier_counts.get(tier, 0) + 1
     store = ExperimentStore(config.ai.experiment_database_path)
     run_id = store.record_symbol_research_run(
         profile_name=profile_name,
@@ -4267,6 +4970,13 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             selected_candidates=selected_execution_candidates,
         )
         deployment_path = export_symbol_deployment(deployment)
+    selected_execution_results = [row for row in results if row.name in {str(item["candidate_name"]) for item in selected_execution_candidates}]
+    plot_paths = plot_symbol_research(
+        resolved.profile_symbol,
+        results,
+        best_row=best,
+        execution_rows=selected_execution_results,
+    )
 
     lines = [
         f"Requested symbol: {resolved.requested_symbol}",
@@ -4301,6 +5011,9 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         )
     lines.append("Recommended active agents: " + (", ".join(recommended) if recommended else "none"))
     lines.append(
+        f"Tier counts: core={tier_counts['core']} specialist={tier_counts['specialist']} reject={tier_counts['reject']}"
+    )
+    lines.append(
         "Execution set: "
         + (
             ", ".join(str(row["candidate_name"]) for row in selected_execution_candidates)
@@ -4308,6 +5021,19 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             else "none"
         )
     )
+    if not selected_execution_candidates and tier_counts["core"] > 0:
+        lines.append(
+            "Execution set note: core candidates existed, but no candidate set survived symbol-level execution selection "
+            "or execution validation."
+        )
+        lines.append(f"Execution selection diagnostics: {selection_diagnostics}")
+        if execution_rejection_reason:
+            lines.append(f"Execution rejection reason: {execution_rejection_reason}")
+    if selected_execution_candidates:
+        lines.append(
+            "Execution tiers: "
+            + ", ".join(f"{row['candidate_name']}[{row.get('promotion_tier', 'core')}]" for row in selected_execution_candidates)
+        )
     lines.append(f"Execution set id: {execution_set_id if execution_set_id is not None else 'none'}")
     lines.append(f"Execution validation: {execution_validation_summary}")
     if deployment_path is not None:

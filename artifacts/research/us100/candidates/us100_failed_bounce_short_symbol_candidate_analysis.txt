@@ -1,0 +1,19 @@
+Artifact: us100_failed_bounce_short_symbol_candidate
+Closed trades: 455
+Realized pnl: -91.88
+
+By entry hour
+17: trades=174 pnl=-35.72 avg=-0.21 win_rate=3.45%
+15: trades=150 pnl=-31.59 avg=-0.21 win_rate=4.67%
+16: trades=131 pnl=-24.57 avg=-0.19 win_rate=5.34%
+
+By entry setup
+failed_bounce_short: trades=455 pnl=-91.88 avg=-0.20 win_rate=4.40%
+
+By exit reason
+stop_loss: trades=333 pnl=-77.91 avg=-0.23 win_rate=0.00%
+stale_breakout: trades=62 pnl=-13.65 avg=-0.22 win_rate=0.00%
+trailing_stop: trades=26 pnl=-1.30 avg=-0.05 win_rate=23.08%
+time_stop: trades=19 pnl=-1.13 avg=-0.06 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.33 avg=-0.33 win_rate=0.00%
+take_profit: trades=14 pnl=2.44 avg=0.17 win_rate=100.00%

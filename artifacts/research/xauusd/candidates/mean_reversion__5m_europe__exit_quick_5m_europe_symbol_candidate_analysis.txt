@@ -1,15 +1,15 @@
 Artifact: mean_reversion__5m_europe__exit_quick_5m_europe_symbol_candidate
 Closed trades: 4
-Realized pnl: 233.11
+Realized pnl: 235.21
 
 By entry hour
-12: trades=2 pnl=-180.92 avg=-90.46 win_rate=0.00%
-10: trades=2 pnl=414.03 avg=207.02 win_rate=100.00%
+12: trades=2 pnl=-179.87 avg=-89.94 win_rate=0.00%
+10: trades=2 pnl=415.08 avg=207.54 win_rate=100.00%
 
 By entry setup
-mean_reversion: trades=4 pnl=233.11 avg=58.28 win_rate=50.00%
+mean_reversion: trades=4 pnl=235.21 avg=58.80 win_rate=50.00%
 
 By exit reason
-structure_exit: trades=2 pnl=-180.92 avg=-90.46 win_rate=0.00%
-stale_breakout: trades=1 pnl=17.06 avg=17.06 win_rate=100.00%
-take_profit: trades=1 pnl=396.98 avg=396.98 win_rate=100.00%
+structure_exit: trades=2 pnl=-179.87 avg=-89.94 win_rate=0.00%
+stale_breakout: trades=1 pnl=17.58 avg=17.58 win_rate=100.00%
+take_profit: trades=1 pnl=397.50 avg=397.50 win_rate=100.00%

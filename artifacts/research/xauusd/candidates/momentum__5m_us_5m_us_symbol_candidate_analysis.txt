@@ -1,21 +1,21 @@
 Artifact: momentum__5m_us_5m_us_symbol_candidate
 Closed trades: 15
-Realized pnl: -12.79
+Realized pnl: -4.92
 
 By entry hour
-15: trades=1 pnl=-133.91 avg=-133.91 win_rate=0.00%
-17: trades=2 pnl=-114.41 avg=-57.20 win_rate=50.00%
-19: trades=1 pnl=-69.36 avg=-69.36 win_rate=0.00%
-13: trades=3 pnl=-57.43 avg=-19.14 win_rate=33.33%
-18: trades=1 pnl=160.64 avg=160.64 win_rate=100.00%
-14: trades=7 pnl=201.68 avg=28.81 win_rate=42.86%
+15: trades=1 pnl=-133.38 avg=-133.38 win_rate=0.00%
+17: trades=2 pnl=-113.36 avg=-56.68 win_rate=50.00%
+19: trades=1 pnl=-68.84 avg=-68.84 win_rate=0.00%
+13: trades=3 pnl=-55.86 avg=-18.62 win_rate=33.33%
+18: trades=1 pnl=161.17 avg=161.17 win_rate=100.00%
+14: trades=7 pnl=205.36 avg=29.34 win_rate=42.86%
 
 By entry setup
-momentum_confirmation: trades=15 pnl=-12.79 avg=-0.85 win_rate=40.00%
+momentum_confirmation: trades=15 pnl=-4.92 avg=-0.33 win_rate=40.00%
 
 By exit reason
-stop_loss: trades=4 pnl=-710.73 avg=-177.68 win_rate=0.00%
-structure_exit: trades=2 pnl=-695.04 avg=-347.52 win_rate=0.00%
-time_stop: trades=1 pnl=-84.77 avg=-84.77 win_rate=0.00%
-trailing_stop: trades=6 pnl=356.97 avg=59.50 win_rate=66.67%
-take_profit: trades=2 pnl=1120.77 avg=560.38 win_rate=100.00%
+stop_loss: trades=4 pnl=-708.63 avg=-177.16 win_rate=0.00%
+structure_exit: trades=2 pnl=-693.99 avg=-347.00 win_rate=0.00%
+time_stop: trades=1 pnl=-84.24 avg=-84.24 win_rate=0.00%
+trailing_stop: trades=6 pnl=360.12 avg=60.02 win_rate=66.67%
+take_profit: trades=2 pnl=1121.82 avg=560.91 win_rate=100.00%

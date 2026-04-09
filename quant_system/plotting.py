@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+from datetime import datetime
 from pathlib import Path
 
 from quant_system.artifacts import research_plots_dir
@@ -19,6 +20,30 @@ def _load_trade_pnls(path: str) -> list[float]:
         return [float(row["pnl"]) for row in reader if row.get("pnl")]
 
 
+def _load_trade_records(path: str) -> list[dict[str, object]]:
+    trade_path = Path(path)
+    if not trade_path.exists():
+        return []
+    records: list[dict[str, object]] = []
+    with trade_path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            if not row.get("pnl"):
+                continue
+            try:
+                exit_timestamp = datetime.fromisoformat(str(row.get("exit_timestamp") or ""))
+            except ValueError:
+                continue
+            records.append(
+                {
+                    "candidate_name": row.get("entry_reason") or trade_path.stem,
+                    "exit_timestamp": exit_timestamp,
+                    "pnl": float(row["pnl"]),
+                }
+            )
+    return records
+
+
 def _equity_curve(pnls: list[float]) -> list[float]:
     equity = 0.0
     curve: list[float] = []
@@ -28,7 +53,7 @@ def _equity_curve(pnls: list[float]) -> list[float]:
     return curve
 
 
-def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
+def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) -> list[Path]:
     try:
         import matplotlib
 
@@ -109,5 +134,24 @@ def plot_symbol_research(symbol: str, rows, best_row=None) -> list[Path]:
             fig.savefig(equity_path, dpi=150)
             plt.close(fig)
             paths.append(equity_path)
+
+        if execution_rows:
+            execution_records: list[dict[str, object]] = []
+            for row in execution_rows:
+                trade_log_path = getattr(row, "trade_log_path", "") if hasattr(row, "trade_log_path") else row.get("trade_log_path", "")
+                execution_records.extend(_load_trade_records(str(trade_log_path or "")))
+            execution_records.sort(key=lambda item: item["exit_timestamp"])
+            if execution_records:
+                execution_equity_path = plot_dir / "execution_set_equity.png"
+                fig, ax = plt.subplots(figsize=(12, 5))
+                ax.plot(_equity_curve([float(item["pnl"]) for item in execution_records]), color="#8c2d04", linewidth=2)
+                ax.set_title(f"{symbol} Equity Curve: Execution Set")
+                ax.set_xlabel("Closed trade number")
+                ax.set_ylabel("Cumulative PnL")
+                ax.axhline(0.0, color="gray", linewidth=1)
+                fig.tight_layout()
+                fig.savefig(execution_equity_path, dpi=150)
+                plt.close(fig)
+                paths.append(execution_equity_path)
 
     return paths

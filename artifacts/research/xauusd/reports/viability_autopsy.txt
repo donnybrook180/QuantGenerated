@@ -1,9 +1,9 @@
 Viability autopsy: XAUUSD
-Execution validation summary: selection=standard variant=volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up@15m_overlap|trend_up, volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up, xauusd_volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up data_source=duckdb_cache pnl=3519.68 pf=8.83 closed=12 -> accepted
+Execution validation summary: selection=standard variant=volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up@15m_overlap|trend_up, volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up, xauusd_volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up data_source=duckdb_cache pnl=3525.98 pf=8.87 closed=12 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 107
-- validation PF < 1.0 (0.00): 75
+- walk-forward pass rate too low (0.00% < 50%): 105
+- validation PF < 1.0 (0.00): 73
 - regime stability too low (0.00 < 0.50): 65
 - test PF < 1.0 (0.00): 60
 - validation trades too low (0 < 3): 35
@@ -12,19 +12,19 @@ Top blockers
 - walk-forward avg validation pnl <= 0 (0.00): 32
 
 Top near-misses
-- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high: pnl=1767.46 pf=9.32 val=99.97/999.00/1 test=-152.38/0.00/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-52.41), walk-forward avg validation pnl <= 0 (-35.58)
-- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up: pnl=1298.73 pf=26.04 val=432.68/47.44/2 test=-67.90/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-38.61)
-- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high: pnl=908.40 pf=5.28 val=99.97/999.00/1 test=-84.48/0.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-35.58)
-- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up_vol_high: pnl=637.36 pf=3.87 val=99.97/999.00/1 test=-67.90/0.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-35.58), walk-forward avg test pnl <= 0 (-38.61)
-- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up__plus__volatility_breakout__5m_us: pnl=636.32 pf=1.25 val=1311.94/3.81/8 test=245.72/1.35/13 wf=100.00%
-  reasons: combo underperformed components (-146.21)
-- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high__plus__volatility_breakout__5m_us: pnl=636.32 pf=1.25 val=1311.94/3.81/8 test=245.72/1.35/13 wf=100.00%
-  reasons: combo underperformed components (-146.21)
-- volatility_breakout__15m_overlap__near_miss_dense__trend_up: pnl=597.53 pf=2.47 val=432.68/47.44/2 test=0.00/0.00/0 wf=0.00%
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high: pnl=1769.56 pf=9.37 val=100.50/999.00/1 test=-151.33/0.00/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-50.83), walk-forward avg validation pnl <= 0 (-35.05), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up: pnl=1301.36 pf=26.61 val=433.73/50.33/2 test=-67.38/0.00/1 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-38.09), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high: pnl=909.97 pf=5.31 val=100.50/999.00/1 test=-83.95/0.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-35.05), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up__plus__volatility_breakout__5m_us: pnl=642.07 pf=1.25 val=1316.14/3.83/8 test=252.54/1.36/13 wf=100.00%
+  reasons: combo underperformed components (-143.58)
+- volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up_vol_high__plus__volatility_breakout__5m_us: pnl=642.07 pf=1.25 val=1316.14/3.83/8 test=252.54/1.36/13 wf=100.00%
+  reasons: combo underperformed components (-143.58)
+- volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up_vol_high: pnl=639.46 pf=3.90 val=100.50/999.00/1 test=-67.38/0.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-35.05), walk-forward avg test pnl <= 0 (-38.09), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__15m_overlap__near_miss_dense__trend_up: pnl=600.15 pf=2.48 val=433.73/50.33/2 test=0.00/0.00/0 wf=0.00%
   reasons: validation trades too low (2 < 3), test trades too low (0 < 2), test pnl <= 0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%)
-- volatility_breakout__15m_us__exit_trend__near_miss_protective__trend_up: pnl=594.19 pf=12.46 val=432.68/47.44/2 test=-67.90/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-38.61)
+- volatility_breakout__15m_us__exit_trend__near_miss_protective__trend_up: pnl=596.82 pf=12.75 val=433.73/50.33/2 test=-67.38/0.00/1 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-38.09), broad viability failed, but candidate qualifies as a regime specialist

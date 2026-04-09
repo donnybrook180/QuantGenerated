@@ -1,19 +1,20 @@
 Artifact: opening_range_short_breakdown__exit_trend__plus__us100_short_trend_rejection_flat_high_dense__regime_trend_fla
 Closed trades: 109
-Realized pnl: -13.94
+Realized pnl: -15.44
 
 By entry hour
-16: trades=91 pnl=-14.04 avg=-0.15 win_rate=7.69%
-14: trades=18 pnl=0.10 avg=0.01 win_rate=55.56%
+16: trades=91 pnl=-15.35 avg=-0.17 win_rate=5.49%
+14: trades=18 pnl=-0.09 avg=-0.00 win_rate=55.56%
 
 By entry setup
-us500_short_trend_rejection: trades=91 pnl=-14.04 avg=-0.15 win_rate=7.69%
-opening_range_short_breakdown: trades=18 pnl=0.10 avg=0.01 win_rate=55.56%
+us500_short_trend_rejection: trades=91 pnl=-15.35 avg=-0.17 win_rate=5.49%
+opening_range_short_breakdown: trades=18 pnl=-0.09 avg=-0.00 win_rate=55.56%
 
 By exit reason
-stop_loss: trades=40 pnl=-10.15 avg=-0.25 win_rate=0.00%
-structure_exit: trades=47 pnl=-8.53 avg=-0.18 win_rate=0.00%
-stale_breakout: trades=2 pnl=-0.15 avg=-0.07 win_rate=0.00%
-trailing_stop: trades=4 pnl=-0.07 avg=-0.02 win_rate=25.00%
-signal_exit: trades=4 pnl=0.83 avg=0.21 win_rate=100.00%
-take_profit: trades=12 pnl=4.13 avg=0.34 win_rate=100.00%
+stop_loss: trades=41 pnl=-10.72 avg=-0.26 win_rate=0.00%
+structure_exit: trades=48 pnl=-8.76 avg=-0.18 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.08 avg=-0.08 win_rate=0.00%
+time_stop: trades=1 pnl=-0.00 avg=-0.00 win_rate=0.00%
+trailing_stop: trades=4 pnl=0.12 avg=0.03 win_rate=25.00%
+signal_exit: trades=4 pnl=0.79 avg=0.20 win_rate=100.00%
+take_profit: trades=10 pnl=3.22 avg=0.32 win_rate=100.00%

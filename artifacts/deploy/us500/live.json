@@ -3,31 +3,63 @@
   "symbol": "US500",
   "data_symbol": "SPY",
   "broker_symbol": "US500.cash",
-  "research_run_id": 193,
-  "execution_set_id": 91,
-  "execution_validation_summary": "selection=standard variant=us500_momentum_selective__regime_trend_up_vol_high@default|trend_up_vol_high data_source=duckdb_cache pnl=0.12 pf=999.00 closed=2 -> accepted",
+  "research_run_id": 225,
+  "execution_set_id": 117,
+  "execution_validation_summary": "selection=tiered_fallback core=0 specialist=2 -> accepted_with_reduced_risk",
   "strategies": [
     {
-      "candidate_name": "us500_momentum_selective__regime_trend_up_vol_high",
+      "candidate_name": "momentum__exit_trend__near_miss_patient",
       "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
-      "policy_summary": "activate in trend_up_vol_high; avoid trend_up_vol_high; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.75; loss_ratio=0.55",
       "variant_label": "",
-      "regime_filter_label": "trend_up_vol_high",
+      "regime_filter_label": "",
       "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.4000000000000004,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 10,
         "structure_exit_bars": 0,
-        "stale_breakout_bars": 5,
-        "take_profit_atr_multiple": 2.6,
-        "trailing_stop_atr_multiple": 0.85
+        "break_even_atr_multiple": 0.4
       },
-      "allocation_weight": 1.0,
+      "allocation_weight": 0.5,
       "allowed_regimes": [
-        "trend_up_vol_high"
+        "trend_flat_vol_high"
       ],
-      "blocked_regimes": [],
+      "blocked_regimes": [
+        "trend_flat_vol_mid"
+      ],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.15,
-      "max_risk_multiplier": 0.6,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
+      "min_risk_multiplier": 0.0
+    },
+    {
+      "candidate_name": "momentum__exit_trend",
+      "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.75; loss_ratio=0.57",
+      "variant_label": "",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2,
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
+      },
+      "allocation_weight": 0.5,
+      "allowed_regimes": [
+        "trend_flat_vol_high"
+      ],
+      "blocked_regimes": [
+        "trend_flat_vol_mid"
+      ],
+      "min_vol_percentile": 0.55,
+      "max_vol_percentile": 0.97,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
       "min_risk_multiplier": 0.0
     }
   ],

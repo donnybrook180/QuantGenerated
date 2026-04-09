@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 class DeploymentStrategy:
     candidate_name: str
     code_path: str
+    promotion_tier: str = "core"
     policy_summary: str = ""
     variant_label: str = ""
     regime_filter_label: str = ""

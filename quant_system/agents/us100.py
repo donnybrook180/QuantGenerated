@@ -440,3 +440,73 @@ class LateSessionBreakoutAgent(Agent):
             confidence=confidence,
             metadata={"trend_strength": trend_strength, "breakout_level": breakout_level, "z_score_20": z_score, "hour_of_day": float(hour)},
         )
+
+
+class PriorDayFailedBounceShortAgent(Agent):
+    name = "prior_day_failed_bounce_short"
+
+    def __init__(self, min_negative_trend: float = 0.0007) -> None:
+        self.min_negative_trend = min_negative_trend
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        afternoon_session = feature.values.get("afternoon_session", 0.0)
+        opening_gap_pct = feature.values.get("opening_gap_pct", 0.0)
+        distance_to_prior_day_close = feature.values.get("distance_to_prior_day_close", 0.0)
+        distance_to_overnight_high = feature.values.get("distance_to_overnight_high", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or afternoon_session < 1.0
+            or relative_volume < 0.82
+        ):
+            side = Side.FLAT
+        elif (
+            opening_gap_pct >= 0.0005
+            and trend_strength <= -self.min_negative_trend
+            and momentum_20 < -0.0001
+            and momentum_5 <= 0.00015
+            and z_score >= 0.2
+            and distance_to_prior_day_close <= 0.0002
+            and distance_to_overnight_high <= -0.0003
+            and vwap_distance <= 0.00015
+            and session_position <= 0.62
+        ):
+            side = Side.SELL
+        elif trend_strength > 0.00025 or momentum_20 > 0.0 or vwap_distance > 0.0004:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+
+        confidence = min(
+            0.16
+            + max(-trend_strength, 0.0) * 150
+            + max(opening_gap_pct, 0.0) * 80
+            + max(z_score, 0.0) * 0.08,
+            1.0,
+        )
+        return SignalEvent(
+            timestamp=feature.timestamp,
+            agent_name=self.name,
+            symbol=feature.symbol,
+            side=side,
+            confidence=confidence if side != Side.FLAT else 0.0,
+            metadata={
+                "trend_strength": trend_strength,
+                "opening_gap_pct": opening_gap_pct,
+                "distance_to_prior_day_close": distance_to_prior_day_close,
+                "distance_to_overnight_high": distance_to_overnight_high,
+                "vwap_distance": vwap_distance,
+            },
+        )

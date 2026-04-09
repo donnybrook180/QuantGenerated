@@ -25,6 +25,7 @@ def build_symbol_deployment(
         DeploymentStrategy(
             candidate_name=str(row["candidate_name"]),
             code_path=str(row["code_path"]),
+            promotion_tier=str(row.get("promotion_tier", "core") or "core"),
             policy_summary=str(row.get("policy_summary", "") or ""),
             variant_label=str(row.get("variant_label", "") or ""),
             regime_filter_label=str(row.get("regime_filter_label", "") or ""),

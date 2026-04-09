@@ -3,14 +3,15 @@
   "symbol": "ETH",
   "data_symbol": "X:ETHUSD",
   "broker_symbol": "ETHUSD",
-  "research_run_id": 199,
-  "execution_set_id": 96,
-  "execution_validation_summary": "selection=standard variant=crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us, crypto_vwap_reversion__15m_us__exit_trend@15m_us, crypto_short_reversion_late_europe__15m_europe__exit_fastfail@15m_europe data_source=duckdb_cache_aggregated pnl=333.34 pf=3.55 closed=19 -> accepted",
+  "research_run_id": 250,
+  "execution_set_id": 129,
+  "execution_validation_summary": "selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk",
   "strategies": [
     {
       "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
       "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
-      "policy_summary": "activate in trend_flat_vol_high; avoid no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
       "variant_label": "15m_us",
       "regime_filter_label": "",
       "execution_overrides": {
@@ -20,31 +21,7 @@
         "stale_breakout_bars": 8,
         "structure_exit_bars": 0
       },
-      "allocation_weight": 0.3333333333333333,
-      "allowed_regimes": [
-        "trend_flat_vol_high"
-      ],
-      "blocked_regimes": [],
-      "min_vol_percentile": 0.55,
-      "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.15,
-      "max_risk_multiplier": 0.6,
-      "min_risk_multiplier": 0.0
-    },
-    {
-      "candidate_name": "crypto_vwap_reversion__15m_us__exit_trend",
-      "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
-      "policy_summary": "activate in trend_flat_vol_high; avoid no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
-      "variant_label": "15m_us",
-      "regime_filter_label": "",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
-      },
-      "allocation_weight": 0.3333333333333333,
+      "allocation_weight": 0.5,
       "allowed_regimes": [
         "trend_flat_vol_high"
       ],
@@ -58,7 +35,8 @@
     {
       "candidate_name": "crypto_short_reversion_late_europe__15m_europe__exit_fastfail",
       "code_path": "quant_system.agents.crypto.CryptoShortReversionAgent",
-      "policy_summary": "activate in trend_down_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.96; risk_cap=0.60; stability=0.73; loss_ratio=0.29",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.96; risk_cap=0.60; stability=0.73; loss_ratio=0.29",
       "variant_label": "15m_europe",
       "regime_filter_label": "",
       "execution_overrides": {
@@ -67,7 +45,7 @@
         "stale_breakout_bars": 4,
         "structure_exit_bars": 2
       },
-      "allocation_weight": 0.3333333333333333,
+      "allocation_weight": 0.5,
       "allowed_regimes": [
         "trend_down_vol_high"
       ],

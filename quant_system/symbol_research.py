@@ -4618,6 +4618,8 @@ def _near_miss_local_optimizer(
 def select_execution_candidates(rows: list[dict[str, object]], max_candidates: int = 3) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
+    used_code_paths: set[str] = set()
+    used_variant_regimes: set[tuple[str, str, str]] = set()
     viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
     specialist_rows = [
         row for row in rows if bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", "")))
@@ -4655,6 +4657,16 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         lead = ranked[0]
         selected.append(lead)
         used_components.update(_selection_component_keys(lead))
+        lead_code_path = str(lead.get("code_path", "") or "").strip()
+        if lead_code_path:
+            used_code_paths.add(lead_code_path)
+        used_variant_regimes.add(
+            (
+                str(lead.get("code_path", "") or "").strip(),
+                str(lead.get("variant_label", "") or "").strip(),
+                str(lead.get("best_regime", "") or "").strip(),
+            )
+        )
 
     if selected and len(selected) < max_candidates:
         lead_regime = str(selected[0].get("best_regime", "") or "")
@@ -4662,10 +4674,21 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             components = _selection_component_keys(row)
             if components & used_components:
                 continue
+            candidate_code_path = str(row.get("code_path", "") or "").strip()
+            candidate_signature = (
+                candidate_code_path,
+                str(row.get("variant_label", "") or "").strip(),
+                str(row.get("best_regime", "") or "").strip(),
+            )
+            if candidate_signature in used_variant_regimes:
+                continue
             if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
                 continue
             selected.append(row)
             used_components.update(components)
+            if candidate_code_path:
+                used_code_paths.add(candidate_code_path)
+            used_variant_regimes.add(candidate_signature)
             break
 
     fallback_ranked = [row for row in ranked[1:] if row not in selected] + [row for row in specialist_ranked if row not in selected]
@@ -4673,8 +4696,21 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         components = _selection_component_keys(row)
         if selected and components & used_components:
             continue
+        candidate_code_path = str(row.get("code_path", "") or "").strip()
+        candidate_signature = (
+            candidate_code_path,
+            str(row.get("variant_label", "") or "").strip(),
+            str(row.get("best_regime", "") or "").strip(),
+        )
+        if candidate_signature in used_variant_regimes:
+            continue
+        if candidate_code_path and candidate_code_path in used_code_paths and selected:
+            continue
         selected.append(row)
         used_components.update(components)
+        if candidate_code_path:
+            used_code_paths.add(candidate_code_path)
+        used_variant_regimes.add(candidate_signature)
         if len(selected) >= max_candidates:
             break
     return selected

@@ -93,7 +93,11 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
                 f"current_qty={action.current_quantity:.2f} action={action.intended_action} "
                 f"regime={action.regime_label or 'n/a'} vol_pct={action.vol_percentile:.2f} "
                 f"risk={action.risk_multiplier:.2f} alloc={action.allocation_fraction:.2f} "
-                f"portfolio={action.portfolio_weight:.2f} score={action.allocator_score:.2f} magic={action.magic_number}"
+                f"portfolio={action.portfolio_weight:.2f} "
+                f"base_alloc={action.base_allocation_weight:.2f} "
+                f"size_factor={action.effective_size_factor:.3f} "
+                f"tier={action.promotion_tier} "
+                f"score={action.allocator_score:.2f} magic={action.magic_number}"
             )
             if strategy is not None and strategy.policy_summary:
                 lines.append(f"  policy: {strategy.policy_summary}")

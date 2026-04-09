@@ -8,6 +8,7 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.artifacts import system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
+from quant_system.live.deploy import DEPLOY_DIR, load_symbol_deployment
 from quant_system.symbols import (
     is_crypto_symbol,
     is_forex_symbol,
@@ -25,8 +26,13 @@ class AllocationRow:
     asset_class: str
     correlation_bucket: str
     candidate_name: str
+    promotion_tier: str
+    policy_summary: str
     variant_label: str
     regime_filter_label: str
+    base_allocation_weight: float
+    max_risk_multiplier: float
+    min_risk_multiplier: float
     base_score: float
     score: float
     weight_pct: float
@@ -306,8 +312,13 @@ def _row_to_allocation(
         asset_class=_asset_class(symbol),
         correlation_bucket=_correlation_bucket(symbol),
         candidate_name=str(row.get("candidate_name", "")),
+        promotion_tier=str(row.get("promotion_tier", "core") or "core"),
+        policy_summary=str(row.get("policy_summary", "") or ""),
         variant_label=str(row.get("variant_label", "") or ""),
         regime_filter_label=str(row.get("regime_filter_label", "") or ""),
+        base_allocation_weight=float(row.get("base_allocation_weight", 1.0) or 1.0),
+        max_risk_multiplier=float(row.get("max_risk_multiplier", 1.0) or 1.0),
+        min_risk_multiplier=float(row.get("min_risk_multiplier", 0.0) or 0.0),
         base_score=base_score,
         score=score,
         weight_pct=weight_pct,
@@ -358,6 +369,11 @@ def allocate_portfolio_candidates(
     if not scored_rows:
         return []
     normalized_method = method.strip().lower()
+    if normalized_method == "agent_first":
+        return [
+            _row_to_allocation(profile_name, symbol, row, base_score, base_score, 100.0)
+            for profile_name, symbol, row, base_score in scored_rows
+        ]
     if normalized_method == "naive":
         weights = _equal_weights(len(scored_rows))
         return [
@@ -385,9 +401,14 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         requested_profiles = [_resolve_profile_symbol(item) for item in symbols_or_profiles]
     else:
         requested_profiles = []
-        for profile_name in store.list_symbol_research_profiles():
-            if profile_name.startswith("symbol::"):
-                requested_profiles.append((profile_name, profile_name.split("::", 1)[1].upper()))
+        if DEPLOY_DIR.exists():
+            for path in sorted(DEPLOY_DIR.glob("*/live.json")):
+                deployment = load_symbol_deployment(path)
+                requested_profiles.append((deployment.profile_name, deployment.symbol.upper()))
+        else:
+            for profile_name in store.list_symbol_research_profiles():
+                if profile_name.startswith("symbol::"):
+                    requested_profiles.append((profile_name, profile_name.split("::", 1)[1].upper()))
 
     inputs: list[AllocationInput] = []
     for profile_name, symbol in requested_profiles:
@@ -400,14 +421,27 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         candidate_rows = {str(row["candidate_name"]): row for row in store.list_latest_symbol_research_candidates(profile_name)}
         if not execution_set["items"]:
             continue
-        lead_item = execution_set["items"][0]
-        candidate_row = candidate_rows.get(str(lead_item["candidate_name"]))
-        if candidate_row is None:
-            continue
-        inputs.append(AllocationInput(profile_name=profile_name, symbol=symbol, candidate_row=candidate_row))
+        for execution_item in execution_set["items"]:
+            candidate_row = candidate_rows.get(str(execution_item["candidate_name"]))
+            if candidate_row is None:
+                continue
+            merged_row = dict(candidate_row)
+            merged_row.update(
+                {
+                    "promotion_tier": execution_item.get("promotion_tier", merged_row.get("promotion_tier", "core")),
+                    "policy_summary": execution_item.get("policy_summary", ""),
+                    "regime_filter_label": execution_item.get(
+                        "regime_filter_label", merged_row.get("regime_filter_label", "")
+                    ),
+                    "base_allocation_weight": execution_item.get("base_allocation_weight", 1.0),
+                    "max_risk_multiplier": execution_item.get("max_risk_multiplier", 1.0),
+                    "min_risk_multiplier": execution_item.get("min_risk_multiplier", 0.0),
+                }
+            )
+            inputs.append(AllocationInput(profile_name=profile_name, symbol=symbol, candidate_row=merged_row))
 
     returns_by_symbol = {item.symbol: _rolling_close_returns(market_store, item.symbol) for item in inputs}
-    allocations = allocate_portfolio_candidates(inputs, method="correlation_aware", returns_by_symbol=returns_by_symbol)
+    allocations = allocate_portfolio_candidates(inputs, method="agent_first", returns_by_symbol=returns_by_symbol)
 
     report_path = system_reports_dir() / "portfolio_allocator.txt"
     if not allocations:
@@ -420,6 +454,8 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
     data_ready_symbols = sum(1 for values in returns_by_symbol.values() if len(values) >= 10)
     lines = [
         "Portfolio allocator",
+        "Mode: agent_first",
+        "Interpretation: each live strategy is treated as its own opportunity; weight_pct is not diluted across symbols.",
         f"Correlation data coverage: {data_ready_symbols}/{len(returns_by_symbol)} symbols",
         "",
     ]
@@ -434,12 +470,14 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
                 f"  weight_pct: {row.weight_pct:.2f}",
                 f"  score: adjusted={row.score:.4f} base={row.base_score:.4f}",
                 f"  candidate: {row.candidate_name}",
+                f"  tier: {row.promotion_tier} base_alloc={row.base_allocation_weight:.2f} risk_cap={row.max_risk_multiplier:.2f}",
                 f"  variant: {variant}",
                 f"  realized: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} closed={row.closed_trades} dd={row.max_drawdown_pct:.2f}%",
                 f"  validation: pnl={row.validation_pnl:.2f} pf={row.validation_profit_factor:.2f} closed={row.validation_closed_trades}",
                 f"  test: pnl={row.test_pnl:.2f} pf={row.test_profit_factor:.2f} closed={row.test_closed_trades}",
                 f"  walk_forward: pass_rate={row.walk_forward_pass_rate_pct:.2f}% windows={row.walk_forward_windows}",
                 f"  regime_stability: dominant_share={row.dominant_regime_share_pct:.2f}% combo_score={row.combo_outperformance_score:.2f}",
+                f"  policy: {row.policy_summary or 'n/a'}",
                 "",
             ]
         )

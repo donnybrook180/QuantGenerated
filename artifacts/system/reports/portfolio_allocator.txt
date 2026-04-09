@@ -1,110 +1,242 @@
 Portfolio allocator
+Mode: agent_first
+Interpretation: each live strategy is treated as its own opportunity; weight_pct is not diluted across symbols.
 Correlation data coverage: 9/9 symbols
-
-XAUUSD (symbol::xauusd)
-  asset_class: metals bucket=gold
-  weight_pct: 20.00
-  score: adjusted=0.9700 base=0.9700
-  candidate: trend__5m_us__exit_trend
-  variant: 5m_us
-  realized: pnl=1237.90 pf=1.72 closed=26 dd=1.67%
-  validation: pnl=1490.64 pf=11.27 closed=5
-  test: pnl=537.76 pf=3.32 closed=7
-  walk_forward: pass_rate=100.00% windows=2
-  regime_stability: dominant_share=53.85% combo_score=0.00
-
-USDJPY (symbol::usdjpy)
-  asset_class: forex bucket=majors_fx
-  weight_pct: 15.40
-  score: adjusted=0.7444 base=0.8044
-  candidate: forex_short_breakdown_momentum__30m_us
-  variant: 30m_us
-  realized: pnl=874.65 pf=1.08 closed=6 dd=4.32%
-  validation: pnl=28566.48 pf=2.32 closed=12
-  test: pnl=46015.66 pf=25.50 closed=3
-  walk_forward: pass_rate=50.00% windows=2
-  regime_stability: dominant_share=50.00% combo_score=0.00
-
-ETH (symbol::eth)
-  asset_class: crypto bucket=crypto_beta
-  weight_pct: 16.64
-  score: adjusted=0.7318 base=0.7806
-  candidate: crypto_vwap_reversion_us_core__15m_us__exit_trend
-  variant: 15m_us
-  realized: pnl=155.49 pf=8.88 closed=4 dd=0.02%
-  validation: pnl=139.38 pf=999.00 closed=2
-  test: pnl=35.84 pf=999.00 closed=1
-  walk_forward: pass_rate=100.00% windows=2
-  regime_stability: dominant_share=100.00% combo_score=0.00
-
-JP225 (symbol::jp225)
-  asset_class: indices bucket=indices
-  weight_pct: 15.50
-  score: adjusted=0.6820 base=0.7229
-  candidate: jp225_volatility_short_breakdown_core_hours
-  variant: default
-  realized: pnl=317.51 pf=4.42 closed=13 dd=0.01%
-  validation: pnl=122.06 pf=999.00 closed=2
-  test: pnl=55.12 pf=2.72 closed=3
-  walk_forward: pass_rate=0.00% windows=2
-  regime_stability: dominant_share=46.15% combo_score=0.00
-
-EURUSD (symbol::eurusd)
-  asset_class: forex bucket=majors_fx
-  weight_pct: 9.31
-  score: adjusted=0.4501 base=0.6099
-  candidate: forex_breakout_momentum__30m_overlap__exit_trend
-  variant: 30m_overlap
-  realized: pnl=111.03 pf=10.19 closed=6 dd=0.01%
-  validation: pnl=14.22 pf=999.00 closed=1
-  test: pnl=65.92 pf=999.00 closed=1
-  walk_forward: pass_rate=0.00% windows=2
-  regime_stability: dominant_share=33.33% combo_score=0.00
-
-GBPUSD (symbol::gbpusd)
-  asset_class: forex bucket=majors_fx
-  weight_pct: 5.28
-  score: adjusted=0.2553 base=0.4687
-  candidate: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_dense__trend_down
-  variant: default
-  realized: pnl=65.21 pf=1.07 closed=113 dd=0.15%
-  validation: pnl=30.43 pf=1.18 closed=27
-  test: pnl=41.26 pf=1.12 closed=33
-  walk_forward: pass_rate=50.00% windows=2
-  regime_stability: dominant_share=58.41% combo_score=-108.50
 
 BTC (symbol::btc)
   asset_class: crypto bucket=crypto_beta
-  weight_pct: 7.55
-  score: adjusted=0.3322 base=0.4501
+  weight_pct: 100.00
+  score: adjusted=0.4501 base=0.4501
   candidate: crypto_short_breakdown__15m_europe__exit_fastfail
+  tier: core base_alloc=1.02 risk_cap=0.60
   variant: 15m_europe
   realized: pnl=118.77 pf=1.73 closed=9 dd=0.14%
   validation: pnl=124.40 pf=999.00 closed=1
   test: pnl=-12.99 pf=0.20 closed=2
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=77.78% combo_score=0.00
+  policy: tier=core; activate in trend_flat_vol_high; avoid trend_down_vol_high; vol_pct in [0.55, 0.97]; base_weight=1.02; risk_cap=0.60; stability=0.82; loss_ratio=0.17
+
+BTC (symbol::btc)
+  asset_class: crypto bucket=crypto_beta
+  weight_pct: 100.00
+  score: adjusted=0.6886 base=0.6886
+  candidate: btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up
+  tier: core base_alloc=1.12 risk_cap=0.98
+  variant: 5m_all|trend_up
+  realized: pnl=215.79 pf=4.68 closed=8 dd=0.00%
+  validation: pnl=5.97 pf=1.16 closed=3
+  test: pnl=67.42 pf=6.76 closed=2
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=62.50% combo_score=0.00
+  policy: tier=core; activate in trend_up_vol_mid; avoid trend_up_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.12; risk_cap=0.98; stability=0.96; loss_ratio=0.09
+
+ETH (symbol::eth)
+  asset_class: crypto bucket=crypto_beta
+  weight_pct: 100.00
+  score: adjusted=0.7806 base=0.7806
+  candidate: crypto_vwap_reversion_us_core__15m_us__exit_trend
+  tier: core base_alloc=1.15 risk_cap=0.60
+  variant: 15m_us
+  realized: pnl=155.49 pf=8.88 closed=4 dd=0.02%
+  validation: pnl=139.38 pf=999.00 closed=2
+  test: pnl=35.84 pf=999.00 closed=1
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=100.00% combo_score=0.00
+  policy: tier=core; activate in trend_flat_vol_high; avoid no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
+
+ETH (symbol::eth)
+  asset_class: crypto bucket=crypto_beta
+  weight_pct: 100.00
+  score: adjusted=0.3216 base=0.3216
+  candidate: crypto_short_reversion_late_europe__15m_europe__exit_fastfail
+  tier: core base_alloc=0.96 risk_cap=0.60
+  variant: 15m_europe
+  realized: pnl=70.95 pf=2.66 closed=7 dd=0.00%
+  validation: pnl=35.67 pf=999.00 closed=1
+  test: pnl=-16.09 pf=0.00 closed=1
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=57.14% combo_score=0.00
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.96; risk_cap=0.60; stability=0.73; loss_ratio=0.29
+
+EURUSD (symbol::eurusd)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.6099 base=0.6099
+  candidate: forex_breakout_momentum__30m_overlap__exit_trend
+  tier: core base_alloc=1.09 risk_cap=0.96
+  variant: 30m_overlap
+  realized: pnl=111.03 pf=10.19 closed=6 dd=0.01%
+  validation: pnl=14.22 pf=999.00 closed=1
+  test: pnl=65.92 pf=999.00 closed=1
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=33.33% combo_score=0.00
+  policy: tier=core; activate in trend_flat_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.09; risk_cap=0.96; stability=0.91; loss_ratio=0.18
+
+EURUSD (symbol::eurusd)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.5391 base=0.5391
+  candidate: forex_breakout_momentum__30m_us__exit_fastfail
+  tier: core base_alloc=1.10 risk_cap=0.97
+  variant: 30m_us
+  realized: pnl=126.35 pf=8.07 closed=7 dd=0.02%
+  validation: pnl=14.22 pf=999.00 closed=1
+  test: pnl=30.95 pf=4.83 closed=2
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=28.57% combo_score=0.00
+  policy: tier=core; activate in trend_up_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.97; stability=0.93; loss_ratio=0.17
+
+EURUSD (symbol::eurusd)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.3607 base=0.3607
+  candidate: forex_short_breakdown_momentum__30m_europe__exit_trend
+  tier: core base_alloc=0.35 risk_cap=0.35
+  variant: 30m_europe
+  realized: pnl=90.04 pf=1.58 closed=16 dd=0.01%
+  validation: pnl=-62.39 pf=0.00 closed=5
+  test: pnl=27.12 pf=999.00 closed=1
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=56.25% combo_score=0.00
+  policy: tier=specialist; activate in trend_flat_vol_mid; avoid trend_down_vol_mid; vol_pct in [0.20, 0.80]; base_weight=0.35; risk_cap=0.35; stability=0.74; loss_ratio=0.30
+
+GBPUSD (symbol::gbpusd)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.4687 base=0.4687
+  candidate: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_dense__trend_down
+  tier: core base_alloc=0.35 risk_cap=0.35
+  variant: default
+  realized: pnl=65.21 pf=1.07 closed=113 dd=0.15%
+  validation: pnl=30.43 pf=1.18 closed=27
+  test: pnl=41.26 pf=1.12 closed=33
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=58.41% combo_score=-108.50
+  policy: tier=specialist; activate in trend_up_vol_mid, trend_up_vol_low; avoid trend_flat_vol_mid, trend_flat_vol_high; vol_pct in [0.00, 0.80]; base_weight=0.35; risk_cap=0.35; stability=0.65; loss_ratio=0.60
+
+JP225 (symbol::jp225)
+  asset_class: indices bucket=indices
+  weight_pct: 100.00
+  score: adjusted=0.7229 base=0.7229
+  candidate: jp225_volatility_short_breakdown_core_hours
+  tier: core base_alloc=1.15 risk_cap=0.60
+  variant: default
+  realized: pnl=317.51 pf=4.42 closed=13 dd=0.01%
+  validation: pnl=122.06 pf=999.00 closed=2
+  test: pnl=55.12 pf=2.72 closed=3
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=46.15% combo_score=0.00
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_down_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
 
 US100 (symbol::us100)
   asset_class: indices bucket=us_indices
-  weight_pct: 5.79
-  score: adjusted=0.2546 base=0.3076
+  weight_pct: 100.00
+  score: adjusted=0.3076 base=0.3076
   candidate: us100_opening_range_short_breakdown_trend
+  tier: core base_alloc=0.93 risk_cap=0.60
   variant: default
   realized: pnl=1.19 pf=1.39 closed=18 dd=0.00%
   validation: pnl=2.84 pf=8.35 closed=4
   test: pnl=0.00 pf=0.00 closed=0
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=50.00% combo_score=0.00
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.93; risk_cap=0.60; stability=0.68; loss_ratio=0.22
 
 US500 (symbol::us500)
   asset_class: indices bucket=us_indices
-  weight_pct: 4.52
-  score: adjusted=0.1989 base=0.2995
+  weight_pct: 100.00
+  score: adjusted=0.2995 base=0.2995
   candidate: momentum__exit_trend__near_miss_patient
+  tier: core base_alloc=0.35 risk_cap=0.35
   variant: default
   realized: pnl=0.77 pf=1.74 closed=9 dd=0.00%
   validation: pnl=-0.52 pf=0.00 closed=2
   test: pnl=1.39 pf=4.66 closed=3
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=33.33% combo_score=0.00
+  policy: tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.75; loss_ratio=0.55
+
+USDJPY (symbol::usdjpy)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.8044 base=0.8044
+  candidate: forex_short_breakdown_momentum__30m_us
+  tier: core base_alloc=0.82 risk_cap=0.79
+  variant: 30m_us
+  realized: pnl=874.65 pf=1.08 closed=6 dd=4.32%
+  validation: pnl=28566.48 pf=2.32 closed=12
+  test: pnl=46015.66 pf=25.50 closed=3
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=50.00% combo_score=0.00
+  policy: tier=core; activate in trend_flat_vol_low; avoid trend_down_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.82; risk_cap=0.79; stability=0.54; loss_ratio=0.65
+
+USDJPY (symbol::usdjpy)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.8500 base=0.8500
+  candidate: forex_short_breakdown_momentum__30m_overlap
+  tier: core base_alloc=1.06 risk_cap=0.94
+  variant: 30m_overlap
+  realized: pnl=50030.95 pf=2.14 closed=35 dd=10.25%
+  validation: pnl=27999.66 pf=3.81 closed=7
+  test: pnl=46015.66 pf=25.50 closed=3
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=42.86% combo_score=0.00
+  policy: tier=core; activate in trend_down_vol_mid; avoid trend_flat_vol_high; vol_pct in [0.20, 0.80]; base_weight=1.06; risk_cap=0.94; stability=0.87; loss_ratio=0.13
+
+USDJPY (symbol::usdjpy)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 100.00
+  score: adjusted=0.4632 base=0.4632
+  candidate: forex_breakout_momentum_patient
+  tier: core base_alloc=0.35 risk_cap=0.35
+  variant: default
+  realized: pnl=127059.75 pf=4.14 closed=81 dd=7.68%
+  validation: pnl=-8641.46 pf=0.14 closed=13
+  test: pnl=1407.77 pf=1.03 closed=105
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=83.95% combo_score=0.00
+  policy: tier=specialist; activate in trend_flat_vol_low; avoid trend_flat_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00
+
+XAUUSD (symbol::xauusd)
+  asset_class: metals bucket=gold
+  weight_pct: 100.00
+  score: adjusted=0.9700 base=0.9700
+  candidate: trend__5m_us__exit_trend
+  tier: core base_alloc=1.03 risk_cap=0.60
+  variant: 5m_us
+  realized: pnl=1237.90 pf=1.72 closed=26 dd=1.67%
+  validation: pnl=1490.64 pf=11.27 closed=5
+  test: pnl=537.76 pf=3.32 closed=7
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=53.85% combo_score=0.00
+  policy: tier=core; activate in trend_up_vol_high; avoid trend_up_vol_low; vol_pct in [0.55, 0.97]; base_weight=1.03; risk_cap=0.60; stability=0.83; loss_ratio=0.28
+
+XAUUSD (symbol::xauusd)
+  asset_class: metals bucket=gold
+  weight_pct: 100.00
+  score: adjusted=0.8594 base=0.8594
+  candidate: momentum__15m_us__exit_fastfail
+  tier: core base_alloc=1.09 risk_cap=0.60
+  variant: 15m_us
+  realized: pnl=975.38 pf=1.58 closed=11 dd=0.68%
+  validation: pnl=1127.41 pf=6.11 closed=3
+  test: pnl=528.69 pf=2.29 closed=3
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=54.55% combo_score=0.00
+  policy: tier=core; activate in trend_flat_vol_high; avoid trend_up_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.09; risk_cap=0.60; stability=0.92; loss_ratio=0.10
+
+XAUUSD (symbol::xauusd)
+  asset_class: metals bucket=gold
+  weight_pct: 100.00
+  score: adjusted=0.5984 base=0.5984
+  candidate: xauusd_generic_breakout_selective__near_miss_patient__trend_flat
+  tier: core base_alloc=0.35 risk_cap=0.35
+  variant: default|trend_flat
+  realized: pnl=800.59 pf=999.00 closed=3 dd=0.00%
+  validation: pnl=18.77 pf=999.00 closed=1
+  test: pnl=40.61 pf=999.00 closed=1
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=66.67% combo_score=0.00
+  policy: tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00

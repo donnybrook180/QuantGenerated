@@ -138,6 +138,9 @@ def main() -> int:
                     f"risk={action.get('risk_multiplier', 0.0):.2f} "
                     f"alloc={action.get('allocation_fraction', 0.0):.2f} "
                     f"portfolio={action.get('portfolio_weight', 0.0):.2f} "
+                    f"base_alloc={action.get('base_allocation_weight', 1.0):.2f} "
+                    f"size_factor={action.get('effective_size_factor', 0.0):.3f} "
+                    f"tier={action.get('promotion_tier', 'core')} "
                     f"score={action.get('allocator_score', 0.0):.2f}"
                 )
                 if strategy is not None and strategy.policy_summary:

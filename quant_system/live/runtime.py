@@ -146,6 +146,9 @@ class StrategyAction:
     allocation_fraction: float = 0.0
     allocator_score: float = 0.0
     portfolio_weight: float = 1.0
+    promotion_tier: str = "core"
+    base_allocation_weight: float = 1.0
+    effective_size_factor: float = 0.0
 
 
 @dataclass(slots=True)
@@ -293,6 +296,8 @@ class MT5LiveExecutor:
             allocation_fraction=allocation_fraction,
             allocator_score=allocator_score,
             portfolio_weight=self._strategy_portfolio_weight(strategy),
+            promotion_tier=strategy.promotion_tier,
+            base_allocation_weight=strategy.base_allocation_weight,
         )
         if signal_side == Side.FLAT:
             return candidate_action
@@ -304,6 +309,11 @@ class MT5LiveExecutor:
         order_size = (
             self._build_strategy_config(strategy).execution.order_size
             * candidate_action.portfolio_weight
+            * allocation_fraction
+            * candidate_action.risk_multiplier
+        )
+        candidate_action.effective_size_factor = (
+            candidate_action.portfolio_weight
             * allocation_fraction
             * candidate_action.risk_multiplier
         )
@@ -402,7 +412,7 @@ class MT5LiveExecutor:
                             risk_multiplier=0.0,
                             allocation_fraction=0.0,
                             allocator_score=0.0,
-                            portfolio_weight=self.portfolio_weight,
+                            portfolio_weight=self._strategy_portfolio_weight(item.strategy),
                         )
                     )
                 return LiveRunResult(
@@ -456,6 +466,9 @@ class MT5LiveExecutor:
                             allocation_fraction=0.0,
                             allocator_score=item.allocator_score,
                             portfolio_weight=self.portfolio_weight,
+                            promotion_tier=item.strategy.promotion_tier,
+                            base_allocation_weight=item.strategy.base_allocation_weight,
+                            effective_size_factor=0.0,
                         )
                     )
                     continue

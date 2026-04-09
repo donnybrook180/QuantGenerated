@@ -1410,7 +1410,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     allowed_variants=("30m_us",),
                 ),
             ]
-        return [
+        specs = [
             CandidateSpec(
                 name="crypto_trend_pullback",
                 description="Crypto trend pullback continuation",
@@ -1448,6 +1448,101 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
             ),
         ]
+        if "BTC" in upper:
+            specs.extend(
+                [
+                    CandidateSpec(
+                        name="btc_trend_pullback_high_beta",
+                        description="BTC trend pullback continuation in stronger trend regimes",
+                        agents=[
+                            CryptoTrendPullbackAgent(
+                                lookback=10,
+                                min_trend_strength=0.00045,
+                                min_momentum_20=0.00035,
+                                z_score_low=-2.4,
+                                z_score_high=0.25,
+                                min_relative_volume=0.55,
+                                min_atr_proxy=0.0009,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.crypto.CryptoTrendPullbackAgent",
+                        regime_filter_label="trend_up_vol_mid",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 10,
+                            "max_holding_bars": 42,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="btc_breakout_reclaim_trend",
+                        description="BTC breakout reclaim continuation for trend-up volatility regimes",
+                        agents=[
+                            CryptoBreakoutReclaimAgent(
+                                lookback=14,
+                                reclaim_buffer=0.9955,
+                                min_trend_strength=0.00025,
+                                min_momentum_20=0.00030,
+                                min_relative_volume=0.60,
+                                min_atr_proxy=0.0009,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.crypto.CryptoBreakoutReclaimAgent",
+                        regime_filter_label="trend_up_vol_high",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 9,
+                            "max_holding_bars": 40,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="btc_vwap_reversion_flat_mid",
+                        description="BTC VWAP mean reversion for flat mid-volatility tape",
+                        agents=[
+                            CryptoVWAPReversionAgent(
+                                z_score_entry=1.35,
+                                min_relative_volume=0.55,
+                                max_trend_strength=0.0012,
+                                min_atr_proxy=0.0007,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
+                        regime_filter_label="trend_flat_vol_mid",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 4,
+                            "max_holding_bars": 18,
+                            "take_profit_atr_multiple": 1.35,
+                            "trailing_stop_atr_multiple": 0.45,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="btc_momentum_continuation_overlap",
+                        description="BTC momentum continuation with denser participation threshold",
+                        agents=[
+                            CryptoMomentumContinuationAgent(
+                                min_momentum_5=0.00018,
+                                min_momentum_20=0.00028,
+                                min_trend_strength=0.00012,
+                                min_relative_volume=0.50,
+                                min_atr_proxy=0.0006,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.crypto.CryptoMomentumContinuationAgent",
+                        allowed_variants=("15m_overlap", "15m_us"),
+                        regime_filter_label="trend_up_vol_mid",
+                        execution_overrides={
+                            "structure_exit_bars": 0,
+                            "stale_breakout_bars": 8,
+                            "max_holding_bars": 28,
+                        },
+                    ),
+                ]
+            )
+        return specs
     if "XAU" in upper:
         specs.append(
             CandidateSpec(
@@ -4590,8 +4685,8 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
     used_components: set[str] = set()
     core_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "core"]
     specialist_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "specialist"]
-    allow_multi_core = symbol_is_forex(symbol)
-    allow_forex_specialist_third = symbol_is_forex(symbol)
+    allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol)
+    allow_forex_specialist_third = symbol_is_forex(symbol) or _is_crypto_symbol(symbol)
     used_regimes: set[str] = set()
     used_variants: set[str] = set()
     used_code_paths: set[str] = set()

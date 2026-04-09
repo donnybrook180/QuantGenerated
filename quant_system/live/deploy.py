@@ -19,8 +19,6 @@ def build_symbol_deployment(
     execution_validation_summary: str,
     selected_candidates: list[dict[str, object]],
 ) -> SymbolDeployment:
-    strategy_count = max(len(selected_candidates), 1)
-    weight = 1.0 / strategy_count
     strategies = [
         DeploymentStrategy(
             candidate_name=str(row["candidate_name"]),
@@ -30,7 +28,7 @@ def build_symbol_deployment(
             variant_label=str(row.get("variant_label", "") or ""),
             regime_filter_label=str(row.get("regime_filter_label", "") or ""),
             execution_overrides=dict(row.get("execution_overrides", {}) or {}),
-            allocation_weight=weight,
+            allocation_weight=1.0,
             allowed_regimes=tuple(str(item) for item in row.get("allowed_regimes", ()) or ()),
             blocked_regimes=tuple(str(item) for item in row.get("blocked_regimes", ()) or ()),
             min_vol_percentile=float(row.get("min_vol_percentile", 0.0) or 0.0),

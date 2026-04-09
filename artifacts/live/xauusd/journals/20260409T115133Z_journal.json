@@ -1,0 +1,75 @@
+{
+  "symbol": "XAUUSD",
+  "broker_symbol": "XAUUSD",
+  "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.20000000000000004,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T14:50:00+00:00",
+    "symbol": "XAUUSD",
+    "regime_label": "calm_trend",
+    "volatility_label": "low",
+    "structure_label": "trend",
+    "realized_vol_20": 0.009199469722664203,
+    "realized_vol_100": 0.012682183373979859,
+    "vol_ratio": 0.7253853261212759,
+    "vol_percentile": 0.1487603305785124,
+    "atr_percent": 0.0009183430642341347,
+    "trend_strength": 0.0017743988637322072,
+    "range_efficiency": 0.6517241379310149,
+    "risk_multiplier": 1.0,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "trend__5m_us__exit_trend",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-09T14:45:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_trend",
+      "magic_number": 2874889,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1487603305785124,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.20000000000000004
+    },
+    {
+      "candidate_name": "momentum__15m_us__exit_fastfail",
+      "signal_side": "sell",
+      "signal_timestamp": "2026-04-08T20:45:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_trend",
+      "magic_number": 2628566,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.09090909090909091,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.20000000000000004
+    },
+    {
+      "candidate_name": "xauusd_generic_breakout_selective__near_miss_patient__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-09T13:20:00+00:00",
+      "confidence": 0.7191459823294218,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_trend",
+      "magic_number": 2916202,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1487603305785124,
+      "risk_multiplier": 0.35,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.20000000000000004
+    }
+  ]
+}

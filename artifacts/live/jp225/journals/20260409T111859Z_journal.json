@@ -1,0 +1,45 @@
+{
+  "symbol": "JP225",
+  "broker_symbol": "JP225.cash",
+  "deployment_path": "artifacts\\deploy\\jp225\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.15504377351052462,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T14:15:00+00:00",
+    "symbol": "JP225",
+    "regime_label": "calm_range",
+    "volatility_label": "low",
+    "structure_label": "range",
+    "realized_vol_20": 0.008816487815987787,
+    "realized_vol_100": 0.015369661626426128,
+    "vol_ratio": 0.5736292724121517,
+    "vol_percentile": 0.049586776859504134,
+    "atr_percent": 0.00094611389860547,
+    "trend_strength": -0.0002647528138930433,
+    "range_efficiency": 0.14583333333333334,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-09T12:05:00+00:00",
+      "confidence": 0.7,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_range",
+      "magic_number": 2759815,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.049586776859504134,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.15504377351052462
+    }
+  ]
+}

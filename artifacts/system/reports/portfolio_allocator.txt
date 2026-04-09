@@ -1,22 +1,34 @@
 Portfolio allocator
 Correlation data coverage: 9/9 symbols
 
+XAUUSD (symbol::xauusd)
+  asset_class: metals bucket=gold
+  weight_pct: 20.00
+  score: adjusted=0.9700 base=0.9700
+  candidate: trend__5m_us__exit_trend
+  variant: 5m_us
+  realized: pnl=1237.90 pf=1.72 closed=26 dd=1.67%
+  validation: pnl=1490.64 pf=11.27 closed=5
+  test: pnl=537.76 pf=3.32 closed=7
+  walk_forward: pass_rate=100.00% windows=2
+  regime_stability: dominant_share=53.85% combo_score=0.00
+
 USDJPY (symbol::usdjpy)
   asset_class: forex bucket=majors_fx
-  weight_pct: 18.22
-  score: adjusted=0.7996 base=0.7996
+  weight_pct: 15.40
+  score: adjusted=0.7444 base=0.8044
   candidate: forex_short_breakdown_momentum__30m_us
   variant: 30m_us
-  realized: pnl=489.98 pf=1.05 closed=6 dd=4.39%
-  validation: pnl=27776.66 pf=2.25 closed=12
-  test: pnl=45818.81 pf=24.58 closed=3
+  realized: pnl=874.65 pf=1.08 closed=6 dd=4.32%
+  validation: pnl=28566.48 pf=2.32 closed=12
+  test: pnl=46015.66 pf=25.50 closed=3
   walk_forward: pass_rate=50.00% windows=2
   regime_stability: dominant_share=50.00% combo_score=0.00
 
 ETH (symbol::eth)
   asset_class: crypto bucket=crypto_beta
-  weight_pct: 17.27
-  score: adjusted=0.7578 base=0.7806
+  weight_pct: 16.64
+  score: adjusted=0.7318 base=0.7806
   candidate: crypto_vwap_reversion_us_core__15m_us__exit_trend
   variant: 15m_us
   realized: pnl=155.49 pf=8.88 closed=4 dd=0.02%
@@ -27,19 +39,19 @@ ETH (symbol::eth)
 
 JP225 (symbol::jp225)
   asset_class: indices bucket=indices
-  weight_pct: 16.31
-  score: adjusted=0.7160 base=0.7230
+  weight_pct: 15.50
+  score: adjusted=0.6820 base=0.7229
   candidate: jp225_volatility_short_breakdown_core_hours
   variant: default
-  realized: pnl=317.72 pf=4.43 closed=13 dd=0.01%
-  validation: pnl=122.10 pf=999.00 closed=2
-  test: pnl=55.17 pf=2.72 closed=3
+  realized: pnl=317.51 pf=4.42 closed=13 dd=0.01%
+  validation: pnl=122.06 pf=999.00 closed=2
+  test: pnl=55.12 pf=2.72 closed=3
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=46.15% combo_score=0.00
 
 EURUSD (symbol::eurusd)
   asset_class: forex bucket=majors_fx
-  weight_pct: 10.26
+  weight_pct: 9.31
   score: adjusted=0.4501 base=0.6099
   candidate: forex_breakout_momentum__30m_overlap__exit_trend
   variant: 30m_overlap
@@ -49,33 +61,21 @@ EURUSD (symbol::eurusd)
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=33.33% combo_score=0.00
 
-XAUUSD (symbol::xauusd)
-  asset_class: metals bucket=gold
-  weight_pct: 9.57
-  score: adjusted=0.4202 base=0.4540
-  candidate: volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up
-  variant: 15m_overlap|trend_up
-  realized: pnl=902.40 pf=3.22 closed=5 dd=0.36%
-  validation: pnl=432.68 pf=47.44 closed=2
-  test: pnl=0.00 pf=0.00 closed=0
-  walk_forward: pass_rate=0.00% windows=2
-  regime_stability: dominant_share=80.00% combo_score=0.00
-
-US500 (symbol::us500)
-  asset_class: indices bucket=us_indices
-  weight_pct: 8.82
-  score: adjusted=0.3873 base=0.4501
-  candidate: us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat
-  variant: default|trend_flat
-  realized: pnl=1.04 pf=4.88 closed=6 dd=0.00%
-  validation: pnl=0.28 pf=999.00 closed=1
-  test: pnl=0.81 pf=999.00 closed=1
-  walk_forward: pass_rate=0.00% windows=2
-  regime_stability: dominant_share=50.00% combo_score=0.00
+GBPUSD (symbol::gbpusd)
+  asset_class: forex bucket=majors_fx
+  weight_pct: 5.28
+  score: adjusted=0.2553 base=0.4687
+  candidate: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_dense__trend_down
+  variant: default
+  realized: pnl=65.21 pf=1.07 closed=113 dd=0.15%
+  validation: pnl=30.43 pf=1.18 closed=27
+  test: pnl=41.26 pf=1.12 closed=33
+  walk_forward: pass_rate=50.00% windows=2
+  regime_stability: dominant_share=58.41% combo_score=-108.50
 
 BTC (symbol::btc)
   asset_class: crypto bucket=crypto_beta
-  weight_pct: 7.57
+  weight_pct: 7.55
   score: adjusted=0.3322 base=0.4501
   candidate: crypto_short_breakdown__15m_europe__exit_fastfail
   variant: 15m_europe
@@ -85,26 +85,26 @@ BTC (symbol::btc)
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=77.78% combo_score=0.00
 
-SX5E (symbol::sx5e)
-  asset_class: indices bucket=eu_indices
-  weight_pct: 7.78
-  score: adjusted=0.3416 base=0.4483
-  candidate: trend__near_miss_patient__trend_up
-  variant: default|trend_up
-  realized: pnl=0.94 pf=1.09 closed=16 dd=0.01%
-  validation: pnl=1.27 pf=999.00 closed=1
-  test: pnl=1.20 pf=2.03 closed=3
-  walk_forward: pass_rate=0.00% windows=2
-  regime_stability: dominant_share=68.75% combo_score=0.00
-
 US100 (symbol::us100)
   asset_class: indices bucket=us_indices
-  weight_pct: 4.19
-  score: adjusted=0.1839 base=0.3077
-  candidate: opening_range_short_breakdown__exit_trend
+  weight_pct: 5.79
+  score: adjusted=0.2546 base=0.3076
+  candidate: us100_opening_range_short_breakdown_trend
   variant: default
-  realized: pnl=1.52 pf=1.55 closed=18 dd=0.00%
-  validation: pnl=2.92 pf=9.01 closed=4
+  realized: pnl=1.19 pf=1.39 closed=18 dd=0.00%
+  validation: pnl=2.84 pf=8.35 closed=4
   test: pnl=0.00 pf=0.00 closed=0
   walk_forward: pass_rate=0.00% windows=2
   regime_stability: dominant_share=50.00% combo_score=0.00
+
+US500 (symbol::us500)
+  asset_class: indices bucket=us_indices
+  weight_pct: 4.52
+  score: adjusted=0.1989 base=0.2995
+  candidate: momentum__exit_trend__near_miss_patient
+  variant: default
+  realized: pnl=0.77 pf=1.74 closed=9 dd=0.00%
+  validation: pnl=-0.52 pf=0.00 closed=2
+  test: pnl=1.39 pf=4.66 closed=3
+  walk_forward: pass_rate=0.00% windows=2
+  regime_stability: dominant_share=33.33% combo_score=0.00

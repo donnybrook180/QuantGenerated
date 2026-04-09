@@ -1,0 +1,104 @@
+One-Year Live Account Expectation
+Date: 2026-04-09
+Account size: EUR 100,000
+
+Purpose
+This is a practical scenario note for the current live stack after the switch from symbol-level portfolio budgeting to agent-first live sizing.
+It is not a promise.
+
+Current live universe
+- BTC
+- ETH
+- EURUSD
+- GBPUSD
+- JP225
+- US100
+- US500
+- USDJPY
+- XAUUSD
+
+Important change versus the previous estimate
+The previous estimate assumed symbol-level portfolio weights that heavily diluted position sizes as more symbols were added.
+That is no longer how live sizing works.
+
+Current live sizing logic
+- Each live strategy now effectively starts at full portfolio weight in the live loop.
+- Reduced-risk behavior now comes mainly from the strategy itself:
+  - base_allocation_weight
+  - max_risk_multiplier
+  - regime gating
+  - symbol-level side allocation when multiple strategies compete inside one symbol
+
+What this means
+- More symbols no longer automatically make every other symbol tiny.
+- Activity and gross exposure can now be materially higher than in the old estimate.
+- This raises both upside and downside.
+
+Key evidence used
+1. Portfolio forward allocator backtest
+   Source: artifacts/system/reports/portfolio_allocator_forward_backtest.txt
+   The historical forward allocator test is still essentially flat.
+   However, it is now less representative because live is no longer using symbol-level portfolio dilution in the same way.
+
+2. Fill-aware allocator backtest
+   Source: artifacts/system/reports/portfolio_allocator_fill_backtest.txt
+   Still no MT5 fills were available, so there is still no hard broker-executed performance history for the current live stack.
+
+3. Current deployment quality
+   Stronger / broader:
+   - USDJPY
+   - BTC
+   - ETH
+   - EURUSD
+   - XAUUSD
+
+   Narrow / fragile / reduced-risk:
+   - US100
+   - US500
+   - GBPUSD
+   - JP225
+
+Interpretation
+The system is now closer to the intended design:
+- treat strategies as separate opportunities
+- only reduce risk when the specific strategy or regime calls for it
+
+That is a better match for your stated goal.
+But it also means the old near-flat estimate is too conservative on activity, and too narrow on risk.
+
+Scenario estimate for 1 year
+Pessimistic but realistic:
+- Ending equity: EUR 70,000 to EUR 90,000
+- Meaning: higher activity reveals that some current reduced-risk or fragile deployments still have weak equity paths after costs and slippage.
+
+Base case:
+- Ending equity: EUR 90,000 to EUR 115,000
+- Meaning: stronger symbols contribute enough to keep the book around flat to moderately positive, but weaker sets still create drag.
+
+Optimistic but still defensible:
+- Ending equity: EUR 120,000 to EUR 145,000
+- Meaning: the stronger regime-aware strategies carry the book, reduced-risk strategies stay contained, and live execution quality is decent.
+
+Point estimate
+- EUR 106,000
+
+Why the range is now wider
+- The bot can actually do more now; it is no longer being flattened by symbol-level portfolio weights.
+- That increases the chance of both meaningful gains and meaningful losses.
+- There is still no fill-based proof for the current live sizing regime.
+
+What would make this estimate move up materially
+- Real MT5 fills accumulate and the fill-aware backtest becomes clearly positive.
+- USDJPY, BTC, ETH, EURUSD, and XAUUSD continue to show clean realized live PnL.
+- Reduced-risk symbols either improve or stay small enough not to drag the book.
+
+What would make this estimate move down
+- Execution/slippage is materially worse than research assumes.
+- Reduced-risk symbols still fire often enough to hurt but not often enough to help.
+- Correlated strategies across symbols all underperform in the same period.
+
+Bottom line
+Under the new live sizing logic, expecting "almost nothing happens" is no longer the right model.
+The current best estimate is now:
+- not a guaranteed strong profit
+- but a real chance of moderate upside, with clearly higher downside risk than the old estimate implied.

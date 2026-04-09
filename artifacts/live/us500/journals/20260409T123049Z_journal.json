@@ -1,0 +1,45 @@
+{
+  "symbol": "US500",
+  "broker_symbol": "US500.cash",
+  "deployment_path": "artifacts\\deploy\\us500\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T15:30:00+00:00",
+    "symbol": "US500",
+    "regime_label": "calm_range",
+    "volatility_label": "normal",
+    "structure_label": "trend",
+    "realized_vol_20": 0.004676695375202711,
+    "realized_vol_100": 0.004681502324222,
+    "vol_ratio": 0.9989732037524753,
+    "vol_percentile": 0.5206611570247934,
+    "atr_percent": 0.0004910780576276504,
+    "trend_strength": 0.0006261274608163614,
+    "range_efficiency": 0.47368421052631193,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "momentum__exit_trend__near_miss_patient",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2767351,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.5206611570247934,
+      "risk_multiplier": 0.35,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0
+    }
+  ]
+}

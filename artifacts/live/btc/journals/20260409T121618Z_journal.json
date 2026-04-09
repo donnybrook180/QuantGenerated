@@ -1,0 +1,60 @@
+{
+  "symbol": "BTC",
+  "broker_symbol": "BTCUSD",
+  "deployment_path": "artifacts\\deploy\\btc\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.0755070841335883,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T15:15:00+00:00",
+    "symbol": "BTC",
+    "regime_label": "calm_range",
+    "volatility_label": "normal",
+    "structure_label": "trend",
+    "realized_vol_20": 0.026938764454646897,
+    "realized_vol_100": 0.035408637448734584,
+    "vol_ratio": 0.7607964156669242,
+    "vol_percentile": 0.48760330578512395,
+    "atr_percent": 0.0022753890468508934,
+    "trend_strength": 0.0014634370040962352,
+    "range_efficiency": 0.12062436443718544,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2951434,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.48760330578512395,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.5,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.0755070841335883
+    },
+    {
+      "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2777415,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.38016528925619836,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.5,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.0755070841335883
+    }
+  ]
+}

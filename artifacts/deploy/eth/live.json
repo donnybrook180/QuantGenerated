@@ -21,7 +21,7 @@
         "stale_breakout_bars": 8,
         "structure_exit_bars": 0
       },
-      "allocation_weight": 0.5,
+      "allocation_weight": 1.0,
       "allowed_regimes": [
         "trend_flat_vol_high"
       ],
@@ -45,7 +45,7 @@
         "stale_breakout_bars": 4,
         "structure_exit_bars": 2
       },
-      "allocation_weight": 0.5,
+      "allocation_weight": 1.0,
       "allowed_regimes": [
         "trend_down_vol_high"
       ],

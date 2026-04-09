@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
-from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights
+from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.artifacts import ensure_dir
 from quant_system.live.journal import LIVE_ARTIFACTS_DIR, write_live_incident, write_live_run_journal
@@ -86,13 +86,19 @@ def main() -> int:
         cycle_started = datetime.now(UTC).isoformat()
         print(f"Cycle started: {cycle_started}")
         portfolio_weights = resolve_live_portfolio_weights(paths)
+        strategy_weights = resolve_live_strategy_weights(paths)
         for path in paths:
             deployment = load_symbol_deployment(path)
             if not deployment.strategies:
                 print(f"{deployment.symbol}: no active live strategies in {path}")
                 continue
             portfolio_weight = portfolio_weights.get(deployment.symbol.upper(), 0.0)
-            executor = MT5LiveExecutor(deployment, config, portfolio_weight=portfolio_weight)
+            executor = MT5LiveExecutor(
+                deployment,
+                config,
+                portfolio_weight=portfolio_weight,
+                strategy_portfolio_weights=strategy_weights.get(deployment.symbol.upper(), {}),
+            )
             try:
                 result = executor.run_once(
                     should_skip_duplicate=lambda action, symbol=deployment.symbol: _should_skip_duplicate(state, symbol, action)

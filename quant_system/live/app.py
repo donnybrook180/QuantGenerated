@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from quant_system.allocator import build_portfolio_allocation
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
 from quant_system.live.deploy import DEPLOY_DIR, deployment_path_for_symbol, load_symbol_deployment
@@ -26,31 +25,41 @@ def resolve_live_deployment_paths(args: list[str]) -> list[Path]:
 
 
 def resolve_live_portfolio_weights(paths: list[Path]) -> dict[str, float]:
-    if not paths:
-        return {}
-    symbols: list[str] = []
+    weights: dict[str, float] = {}
     for path in paths:
         deployment = load_symbol_deployment(path)
-        symbols.append(deployment.symbol)
-    allocations, _ = build_portfolio_allocation(symbols)
-    by_symbol = {row.symbol.upper(): row.weight_pct / 100.0 for row in allocations}
-    if by_symbol:
-        return by_symbol
-    even_weight = 1.0 / len(symbols)
-    return {symbol.upper(): even_weight for symbol in symbols}
+        weights[deployment.symbol.upper()] = 1.0
+    return weights
+
+
+def resolve_live_strategy_weights(paths: list[Path]) -> dict[str, dict[str, float]]:
+    weights: dict[str, dict[str, float]] = {}
+    for path in paths:
+        deployment = load_symbol_deployment(path)
+        weights[deployment.symbol.upper()] = {
+            strategy.candidate_name: 1.0
+            for strategy in deployment.strategies
+        }
+    return weights
 
 
 def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> list[str]:
     config = config or SystemConfig()
     lines: list[str] = []
     portfolio_weights = resolve_live_portfolio_weights(paths)
+    strategy_weights = resolve_live_strategy_weights(paths)
     for path in paths:
         deployment = load_symbol_deployment(path)
         if not deployment.strategies:
             lines.append(f"{deployment.symbol}: no active live strategies in {path}")
             continue
         portfolio_weight = portfolio_weights.get(deployment.symbol.upper(), 0.0)
-        executor = MT5LiveExecutor(deployment, config, portfolio_weight=portfolio_weight)
+        executor = MT5LiveExecutor(
+            deployment,
+            config,
+            portfolio_weight=portfolio_weight,
+            strategy_portfolio_weights=strategy_weights.get(deployment.symbol.upper(), {}),
+        )
         try:
             result = executor.run_once()
         except MT5Error as exc:

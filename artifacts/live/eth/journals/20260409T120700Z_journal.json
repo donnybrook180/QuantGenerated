@@ -1,0 +1,60 @@
+{
+  "symbol": "ETH",
+  "broker_symbol": "ETHUSD",
+  "deployment_path": "artifacts\\deploy\\eth\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.16635446167790385,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T15:00:00+00:00",
+    "symbol": "ETH",
+    "regime_label": "calm_trend",
+    "volatility_label": "low",
+    "structure_label": "trend",
+    "realized_vol_20": 0.029021330441101643,
+    "realized_vol_100": 0.044278934140225934,
+    "vol_ratio": 0.6554207097486733,
+    "vol_percentile": 0.1652892561983471,
+    "atr_percent": 0.002778151022965836,
+    "trend_strength": 0.0014154174656741958,
+    "range_efficiency": 0.006606810096558891,
+    "risk_multiplier": 1.0,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 3051813,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1652892561983471,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.5,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.16635446167790385
+    },
+    {
+      "candidate_name": "crypto_short_reversion_late_europe__15m_europe__exit_fastfail",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2877354,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1652892561983471,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.5,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.16635446167790385
+    }
+  ]
+}

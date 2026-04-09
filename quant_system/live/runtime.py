@@ -171,10 +171,20 @@ class EvaluatedStrategy:
 
 
 class MT5LiveExecutor:
-    def __init__(self, deployment: SymbolDeployment, config: SystemConfig, portfolio_weight: float = 1.0) -> None:
+    def __init__(
+        self,
+        deployment: SymbolDeployment,
+        config: SystemConfig,
+        portfolio_weight: float = 1.0,
+        strategy_portfolio_weights: dict[str, float] | None = None,
+    ) -> None:
         self.deployment = deployment
         self.config = config
         self.portfolio_weight = max(portfolio_weight, 0.0)
+        self.strategy_portfolio_weights = {str(key): max(float(value), 0.0) for key, value in (strategy_portfolio_weights or {}).items()}
+
+    def _strategy_portfolio_weight(self, strategy: DeploymentStrategy) -> float:
+        return self.strategy_portfolio_weights.get(strategy.candidate_name, self.portfolio_weight)
 
     def _build_strategy_config(self, strategy: DeploymentStrategy) -> SystemConfig:
         from quant_system.live_support import configure_symbol_execution
@@ -282,7 +292,7 @@ class MT5LiveExecutor:
             risk_multiplier=_effective_risk_multiplier(snapshot, strategy),
             allocation_fraction=allocation_fraction,
             allocator_score=allocator_score,
-            portfolio_weight=self.portfolio_weight,
+            portfolio_weight=self._strategy_portfolio_weight(strategy),
         )
         if signal_side == Side.FLAT:
             return candidate_action
@@ -293,7 +303,7 @@ class MT5LiveExecutor:
 
         order_size = (
             self._build_strategy_config(strategy).execution.order_size
-            * self.portfolio_weight
+            * candidate_action.portfolio_weight
             * allocation_fraction
             * candidate_action.risk_multiplier
         )

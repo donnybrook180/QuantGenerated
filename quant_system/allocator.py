@@ -1,21 +1,33 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
+import math
 
 from quant_system.ai.storage import ExperimentStore
 from quant_system.artifacts import system_reports_dir
 from quant_system.config import SystemConfig
-from quant_system.symbol_research import _symbol_slug
-from quant_system.symbols import resolve_symbol_request
+from quant_system.data.market_data import DuckDBMarketDataStore
+from quant_system.symbols import (
+    is_crypto_symbol,
+    is_forex_symbol,
+    is_index_symbol,
+    is_metal_symbol,
+    is_stock_symbol,
+    resolve_symbol_request,
+)
 
 
 @dataclass(slots=True)
 class AllocationRow:
     profile_name: str
     symbol: str
+    asset_class: str
+    correlation_bucket: str
     candidate_name: str
     variant_label: str
     regime_filter_label: str
+    base_score: float
     score: float
     weight_pct: float
     realized_pnl: float
@@ -34,6 +46,13 @@ class AllocationRow:
     dominant_regime_share_pct: float
 
 
+@dataclass(slots=True)
+class AllocationInput:
+    profile_name: str
+    symbol: str
+    candidate_row: dict[str, object]
+
+
 def _safe_div(numerator: float, denominator: float) -> float:
     if denominator == 0.0:
         return 0.0
@@ -42,6 +61,10 @@ def _safe_div(numerator: float, denominator: float) -> float:
 
 def _clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:
     return max(minimum, min(maximum, value))
+
+
+def _symbol_slug(value: str) -> str:
+    return "".join(ch.lower() if ch.isalnum() else "_" for ch in value).strip("_")
 
 
 def _candidate_score(row: dict[str, object]) -> float:
@@ -71,13 +94,221 @@ def _candidate_score(row: dict[str, object]) -> float:
     return max(score, 0.0)
 
 
-def _row_to_allocation(profile_name: str, symbol: str, row: dict[str, object], score: float, weight_pct: float) -> AllocationRow:
+def _asset_class(symbol: str) -> str:
+    if is_crypto_symbol(symbol):
+        return "crypto"
+    if is_metal_symbol(symbol):
+        return "metals"
+    if is_forex_symbol(symbol):
+        return "forex"
+    if is_index_symbol(symbol):
+        return "indices"
+    if is_stock_symbol(symbol):
+        return "stocks"
+    return "other"
+
+
+def _correlation_bucket(symbol: str) -> str:
+    upper = symbol.upper()
+    if upper in {"US500", "US100", "US30"}:
+        return "us_indices"
+    if upper in {"GER40", "SX5E"}:
+        return "eu_indices"
+    if upper in {"BTC", "ETH"}:
+        return "crypto_beta"
+    if upper in {"XAUUSD"}:
+        return "gold"
+    if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
+        return "majors_fx"
+    return _asset_class(symbol)
+
+
+def _asset_class_caps() -> dict[str, float]:
+    return {
+        "crypto": 0.25,
+        "metals": 0.20,
+        "forex": 0.30,
+        "indices": 0.45,
+        "stocks": 0.40,
+        "other": 0.20,
+    }
+
+
+def _sample_correlation(xs: list[float], ys: list[float]) -> float:
+    if len(xs) != len(ys) or len(xs) < 3:
+        return 0.0
+    mean_x = sum(xs) / len(xs)
+    mean_y = sum(ys) / len(ys)
+    cov = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
+    var_x = sum((x - mean_x) ** 2 for x in xs)
+    var_y = sum((y - mean_y) ** 2 for y in ys)
+    if var_x <= 0.0 or var_y <= 0.0:
+        return 0.0
+    return cov / math.sqrt(var_x * var_y)
+
+
+def _rolling_close_returns(store: DuckDBMarketDataStore, symbol: str, history_limit: int = 96) -> list[float]:
+    resolved = resolve_symbol_request(symbol)
+    timeframe_candidates = [
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_15_minute",
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_5_minute",
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_30_minute",
+    ]
+    try:
+        for timeframe in timeframe_candidates:
+            bars = store.load_bars(resolved.data_symbol, timeframe, history_limit + 1)
+            if len(bars) >= 12:
+                returns: list[float] = []
+                previous_close: float | None = None
+                for bar in bars:
+                    if previous_close is not None and previous_close > 0.0 and bar.close > 0.0:
+                        returns.append(math.log(bar.close / previous_close))
+                    previous_close = bar.close
+                if len(returns) >= 10:
+                    return returns[-history_limit:]
+    except Exception:
+        return []
+    return []
+
+
+def _rolling_close_returns_before(
+    store: DuckDBMarketDataStore, symbol: str, end_ts: datetime, history_limit: int = 96
+) -> list[float]:
+    resolved = resolve_symbol_request(symbol)
+    timeframe_candidates = [
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_15_minute",
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_5_minute",
+        f"symbol_research_{_symbol_slug(resolved.data_symbol)}_30_minute",
+    ]
+    try:
+        for timeframe in timeframe_candidates:
+            bars = store.load_bars_before(resolved.data_symbol, timeframe, end_ts, history_limit + 1)
+            if len(bars) >= 12:
+                returns: list[float] = []
+                previous_close: float | None = None
+                for bar in bars:
+                    if previous_close is not None and previous_close > 0.0 and bar.close > 0.0:
+                        returns.append(math.log(bar.close / previous_close))
+                    previous_close = bar.close
+                if len(returns) >= 10:
+                    return returns[-history_limit:]
+    except Exception:
+        return []
+    return []
+
+
+def load_symbol_returns_before(
+    store: DuckDBMarketDataStore, symbol: str, end_ts: datetime, history_limit: int = 96
+) -> list[float]:
+    return _rolling_close_returns_before(store, symbol, end_ts, history_limit)
+
+
+def _pairwise_correlation_penalty(
+    current_symbol: str,
+    selected_symbols: list[str],
+    returns_by_symbol: dict[str, list[float]],
+    fallback_bucket_penalty: float,
+) -> float:
+    current_returns = returns_by_symbol.get(current_symbol, [])
+    if not current_returns or not selected_symbols:
+        return fallback_bucket_penalty
+    max_corr = 0.0
+    for selected_symbol in selected_symbols:
+        other_returns = returns_by_symbol.get(selected_symbol, [])
+        if not other_returns:
+            continue
+        overlap = min(len(current_returns), len(other_returns), 96)
+        if overlap < 10:
+            continue
+        corr = abs(_sample_correlation(current_returns[-overlap:], other_returns[-overlap:]))
+        if corr > max_corr:
+            max_corr = corr
+    if max_corr <= 0.0:
+        return fallback_bucket_penalty
+    return min(fallback_bucket_penalty, 1.0 - 0.35 * max_corr)
+
+
+def _apply_diversification_penalty(
+    rows: list[tuple[str, str, dict[str, object], float]], returns_by_symbol: dict[str, list[float]]
+) -> list[tuple[str, str, dict[str, object], float, float]]:
+    bucket_counts: dict[str, int] = {}
+    class_counts: dict[str, int] = {}
+    selected_symbols: list[str] = []
+    adjusted_rows: list[tuple[str, str, dict[str, object], float, float]] = []
+    for profile_name, symbol, row, base_score in sorted(rows, key=lambda item: item[3], reverse=True):
+        asset = _asset_class(symbol)
+        bucket = _correlation_bucket(symbol)
+        bucket_penalty = 0.82 ** bucket_counts.get(bucket, 0)
+        correlation_penalty = _pairwise_correlation_penalty(symbol, selected_symbols, returns_by_symbol, bucket_penalty)
+        class_penalty = 0.90 ** class_counts.get(asset, 0)
+        adjusted_score = base_score * correlation_penalty * class_penalty
+        adjusted_rows.append((profile_name, symbol, row, base_score, adjusted_score))
+        bucket_counts[bucket] = bucket_counts.get(bucket, 0) + 1
+        class_counts[asset] = class_counts.get(asset, 0) + 1
+        selected_symbols.append(symbol)
+    return adjusted_rows
+
+
+def _capped_weights(rows: list[tuple[str, str, dict[str, object], float, float]]) -> list[float]:
+    if not rows:
+        return []
+    caps = _asset_class_caps()
+    raw_total = sum(adjusted for _, _, _, _, adjusted in rows)
+    if raw_total <= 0.0:
+        return [0.0 for _ in rows]
+    raw_weights = [adjusted / raw_total for _, symbol, _, _, adjusted in rows]
+    final_weights = raw_weights[:]
+    classes = [_asset_class(symbol) for _, symbol, _, _, _ in rows]
+
+    # Iterative capping: clip overweight asset classes, then redistribute residual to uncapped names.
+    for _ in range(4):
+        class_totals: dict[str, float] = {}
+        for weight, asset in zip(final_weights, classes):
+            class_totals[asset] = class_totals.get(asset, 0.0) + weight
+        capped_assets = {asset for asset, total in class_totals.items() if total > caps.get(asset, 1.0)}
+        if not capped_assets:
+            break
+        residual = 0.0
+        free_indices: list[int] = []
+        free_total = 0.0
+        for index, asset in enumerate(classes):
+            class_total = class_totals[asset]
+            cap = caps.get(asset, 1.0)
+            if asset in capped_assets and class_total > 0.0:
+                capped_weight = final_weights[index] * (cap / class_total)
+                residual += final_weights[index] - capped_weight
+                final_weights[index] = capped_weight
+            else:
+                free_indices.append(index)
+                free_total += final_weights[index]
+        if residual <= 0.0 or free_total <= 0.0:
+            continue
+        for index in free_indices:
+            final_weights[index] += residual * (final_weights[index] / free_total)
+
+    total = sum(final_weights)
+    return [weight / total if total > 0.0 else 0.0 for weight in final_weights]
+
+
+def _equal_weights(count: int) -> list[float]:
+    if count <= 0:
+        return []
+    weight = 1.0 / float(count)
+    return [weight for _ in range(count)]
+
+
+def _row_to_allocation(
+    profile_name: str, symbol: str, row: dict[str, object], base_score: float, score: float, weight_pct: float
+) -> AllocationRow:
     return AllocationRow(
         profile_name=profile_name,
         symbol=symbol,
+        asset_class=_asset_class(symbol),
+        correlation_bucket=_correlation_bucket(symbol),
         candidate_name=str(row.get("candidate_name", "")),
         variant_label=str(row.get("variant_label", "") or ""),
         regime_filter_label=str(row.get("regime_filter_label", "") or ""),
+        base_score=base_score,
         score=score,
         weight_pct=weight_pct,
         realized_pnl=float(row.get("realized_pnl", 0.0)),
@@ -107,9 +338,48 @@ def _resolve_profile_symbol(symbol_or_profile: str) -> tuple[str, str]:
     return f"symbol::{_symbol_slug(resolved.profile_symbol)}", resolved.profile_symbol
 
 
+def _prepare_scored_rows(inputs: list[AllocationInput]) -> list[tuple[str, str, dict[str, object], float]]:
+    scored_rows: list[tuple[str, str, dict[str, object], float]] = []
+    for item in inputs:
+        score = _candidate_score(item.candidate_row)
+        if score <= 0.0:
+            continue
+        scored_rows.append((item.profile_name, item.symbol, item.candidate_row, score))
+    return scored_rows
+
+
+def allocate_portfolio_candidates(
+    inputs: list[AllocationInput],
+    *,
+    method: str = "correlation_aware",
+    returns_by_symbol: dict[str, list[float]] | None = None,
+) -> list[AllocationRow]:
+    scored_rows = _prepare_scored_rows(inputs)
+    if not scored_rows:
+        return []
+    normalized_method = method.strip().lower()
+    if normalized_method == "naive":
+        weights = _equal_weights(len(scored_rows))
+        return [
+            _row_to_allocation(profile_name, symbol, row, base_score, base_score, weight * 100.0)
+            for (profile_name, symbol, row, base_score), weight in zip(scored_rows, weights)
+        ]
+
+    diversification_returns = returns_by_symbol or {}
+    if normalized_method == "bucket":
+        diversification_returns = {}
+    adjusted_rows = _apply_diversification_penalty(scored_rows, diversification_returns)
+    weights = _capped_weights(adjusted_rows)
+    return [
+        _row_to_allocation(profile_name, symbol, row, base_score, adjusted_score, weight * 100.0)
+        for (profile_name, symbol, row, base_score, adjusted_score), weight in zip(adjusted_rows, weights)
+    ]
+
+
 def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> tuple[list[AllocationRow], Path]:
     config = SystemConfig()
     store = ExperimentStore(config.ai.experiment_database_path)
+    market_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     requested_profiles: list[tuple[str, str]]
     if symbols_or_profiles:
         requested_profiles = [_resolve_profile_symbol(item) for item in symbols_or_profiles]
@@ -119,7 +389,7 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
             if profile_name.startswith("symbol::"):
                 requested_profiles.append((profile_name, profile_name.split("::", 1)[1].upper()))
 
-    scored_rows: list[tuple[str, str, dict[str, object], float]] = []
+    inputs: list[AllocationInput] = []
     for profile_name, symbol in requested_profiles:
         latest_run = store.get_latest_symbol_research_run(profile_name)
         if latest_run is None:
@@ -134,16 +404,10 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         candidate_row = candidate_rows.get(str(lead_item["candidate_name"]))
         if candidate_row is None:
             continue
-        score = _candidate_score(candidate_row)
-        if score <= 0.0:
-            continue
-        scored_rows.append((profile_name, symbol, candidate_row, score))
+        inputs.append(AllocationInput(profile_name=profile_name, symbol=symbol, candidate_row=candidate_row))
 
-    total_score = sum(score for _, _, _, score in scored_rows)
-    allocations: list[AllocationRow] = []
-    for profile_name, symbol, row, score in sorted(scored_rows, key=lambda item: item[3], reverse=True):
-        weight_pct = 0.0 if total_score <= 0.0 else (score / total_score) * 100.0
-        allocations.append(_row_to_allocation(profile_name, symbol, row, score, weight_pct))
+    returns_by_symbol = {item.symbol: _rolling_close_returns(market_store, item.symbol) for item in inputs}
+    allocations = allocate_portfolio_candidates(inputs, method="correlation_aware", returns_by_symbol=returns_by_symbol)
 
     report_path = system_reports_dir() / "portfolio_allocator.txt"
     if not allocations:
@@ -153,7 +417,12 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         )
         return allocations, report_path
 
-    lines = ["Portfolio allocator", ""]
+    data_ready_symbols = sum(1 for values in returns_by_symbol.values() if len(values) >= 10)
+    lines = [
+        "Portfolio allocator",
+        f"Correlation data coverage: {data_ready_symbols}/{len(returns_by_symbol)} symbols",
+        "",
+    ]
     for row in allocations:
         variant = row.variant_label or "default"
         if row.regime_filter_label:
@@ -161,8 +430,9 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
         lines.extend(
             [
                 f"{row.symbol} ({row.profile_name})",
+                f"  asset_class: {row.asset_class} bucket={row.correlation_bucket}",
                 f"  weight_pct: {row.weight_pct:.2f}",
-                f"  score: {row.score:.4f}",
+                f"  score: adjusted={row.score:.4f} base={row.base_score:.4f}",
                 f"  candidate: {row.candidate_name}",
                 f"  variant: {variant}",
                 f"  realized: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} closed={row.closed_trades} dd={row.max_drawdown_pct:.2f}%",

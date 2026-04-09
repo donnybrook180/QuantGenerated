@@ -116,3 +116,34 @@ class DuckDBMarketDataStore:
             for row in rows
             if row[4] > 0 and row[2] >= row[3]
         ]
+
+    def load_bars_before(self, symbol: str, timeframe: str, end_ts: datetime, limit: int) -> list[MarketBar]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT ts, open, high, low, close, volume
+                FROM market_bars
+                WHERE symbol = ? AND timeframe = ? AND ts <= ?
+                ORDER BY ts DESC
+                LIMIT ?
+                """,
+                [symbol, timeframe, end_ts.replace(tzinfo=None), limit],
+            ).fetchall()
+        rows = list(reversed(rows))
+        return [
+            MarketBar(
+                timestamp=row[0].replace(tzinfo=UTC),
+                symbol=symbol,
+                open=row[1],
+                high=row[2],
+                low=row[3],
+                close=row[4],
+                volume=row[5],
+            )
+            for row in rows
+            if row[4] > 0 and row[2] >= row[3]
+        ]
+
+    def load_last_bar_before(self, symbol: str, timeframe: str, ts: datetime) -> MarketBar | None:
+        bars = self.load_bars_before(symbol, timeframe, ts, 1)
+        return bars[-1] if bars else None

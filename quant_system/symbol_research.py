@@ -4,6 +4,7 @@ import asyncio
 import csv
 import itertools
 import copy
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -141,6 +142,12 @@ class CandidateResult:
     worst_regime: str = ""
     worst_regime_pnl: float = 0.0
     dominant_regime_share_pct: float = 0.0
+    regime_trade_count_by_label: str = "{}"
+    regime_pnl_by_label: str = "{}"
+    regime_pf_by_label: str = "{}"
+    regime_win_rate_by_label: str = "{}"
+    regime_stability_score: float = 0.0
+    regime_loss_ratio: float = 0.0
     regime_filter_label: str = ""
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
@@ -309,6 +316,14 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     combo_trade_overlap_pct = float(
         row.combo_trade_overlap_pct if isinstance(row, CandidateResult) else row.get("combo_trade_overlap_pct", 0.0)
     )
+    best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "")
+    best_regime_pnl = float(row.best_regime_pnl if isinstance(row, CandidateResult) else row.get("best_regime_pnl", 0.0))
+    regime_stability_score = float(
+        row.regime_stability_score if isinstance(row, CandidateResult) else row.get("regime_stability_score", 0.0)
+    )
+    regime_loss_ratio = float(
+        row.regime_loss_ratio if isinstance(row, CandidateResult) else row.get("regime_loss_ratio", 999.0)
+    )
     sparse_strategy = _is_sparse_candidate(row, symbol)
     sparse_combined_closed_trades = validation_closed_trades + test_closed_trades
     sparse_pass_rate_threshold = (
@@ -345,6 +360,10 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
         and walk_forward_pass_requirement_met
         and walk_forward_avg_validation_pnl > 0.0
         and walk_forward_avg_test_pnl > 0.0
+        and bool(best_regime)
+        and best_regime_pnl > 0.0
+        and regime_stability_score >= 0.50
+        and regime_loss_ratio <= 1.25
         and (
             component_count <= 1
             or (combo_outperformance_score >= 0.0 and combo_trade_overlap_pct <= 80.0)
@@ -2852,11 +2871,40 @@ def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVect
     worst_regime = min(regime_pnls, key=lambda key: sum(regime_pnls[key]))
     dominant_regime = max(regime_pnls, key=lambda key: len(regime_pnls[key]))
     total_trades = sum(len(values) for values in regime_pnls.values())
+    regime_trade_count_by_label = {label: len(values) for label, values in regime_pnls.items()}
+    regime_pnl_by_label = {label: float(sum(values)) for label, values in regime_pnls.items()}
+    regime_pf_by_label: dict[str, float] = {}
+    regime_win_rate_by_label: dict[str, float] = {}
+    positive_pnl_total = 0.0
+    negative_pnl_total = 0.0
+    for label, values in regime_pnls.items():
+        wins = [value for value in values if value > 0.0]
+        losses = [value for value in values if value < 0.0]
+        gross_profit = sum(wins)
+        gross_loss = abs(sum(losses))
+        regime_pf_by_label[label] = (gross_profit / gross_loss) if gross_loss > 0.0 else (999.0 if gross_profit > 0.0 else 0.0)
+        regime_win_rate_by_label[label] = (len(wins) / len(values) * 100.0) if values else 0.0
+        pnl_total = regime_pnl_by_label[label]
+        if pnl_total > 0.0:
+            positive_pnl_total += pnl_total
+        elif pnl_total < 0.0:
+            negative_pnl_total += abs(pnl_total)
     result.best_regime = best_regime
     result.best_regime_pnl = sum(regime_pnls[best_regime])
     result.worst_regime = worst_regime
     result.worst_regime_pnl = sum(regime_pnls[worst_regime])
     result.dominant_regime_share_pct = (len(regime_pnls[dominant_regime]) / total_trades * 100.0) if total_trades else 0.0
+    result.regime_trade_count_by_label = json.dumps(regime_trade_count_by_label, sort_keys=True)
+    result.regime_pnl_by_label = json.dumps(regime_pnl_by_label, sort_keys=True)
+    result.regime_pf_by_label = json.dumps(regime_pf_by_label, sort_keys=True)
+    result.regime_win_rate_by_label = json.dumps(regime_win_rate_by_label, sort_keys=True)
+    total_directional = positive_pnl_total + negative_pnl_total
+    result.regime_stability_score = (positive_pnl_total / total_directional) if total_directional > 0.0 else 0.0
+    result.regime_loss_ratio = (
+        abs(min(result.worst_regime_pnl, 0.0)) / result.best_regime_pnl
+        if result.best_regime_pnl > 0.0
+        else 999.0
+    )
 
 
 def _annotate_combo_results(results: list[CandidateResult]) -> None:
@@ -2885,11 +2933,71 @@ def _annotate_combo_results(results: list[CandidateResult]) -> None:
         )
 
 
+def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, object]) -> dict[str, object]:
+    best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "")
+    worst_regime = str(row.worst_regime if isinstance(row, CandidateResult) else row.get("worst_regime", "") or "")
+    regime_stability_score = float(
+        row.regime_stability_score if isinstance(row, CandidateResult) else row.get("regime_stability_score", 0.0)
+    )
+    regime_loss_ratio = float(
+        row.regime_loss_ratio if isinstance(row, CandidateResult) else row.get("regime_loss_ratio", 999.0)
+    )
+    component_count = int(row.component_count if isinstance(row, CandidateResult) else row.get("component_count", 1))
+    allowed_regimes = (best_regime,) if best_regime else ()
+    blocked_regimes = tuple(
+        item for item in (worst_regime,) if item and item not in allowed_regimes
+    )
+
+    vol_suffix = best_regime.split("_")[-1] if best_regime else ""
+    min_vol_percentile = 0.0
+    max_vol_percentile = 1.0
+    if vol_suffix == "low":
+        min_vol_percentile = 0.0
+        max_vol_percentile = 0.45
+    elif vol_suffix == "mid":
+        min_vol_percentile = 0.20
+        max_vol_percentile = 0.80
+    elif vol_suffix == "high":
+        min_vol_percentile = 0.55
+        max_vol_percentile = 0.97
+
+    base_allocation_weight = max(0.35, min(1.15, 0.45 + regime_stability_score * 0.70))
+    if component_count > 1:
+        base_allocation_weight *= 0.85
+    if regime_loss_ratio > 0.75:
+        base_allocation_weight *= 0.85
+
+    max_risk_multiplier = max(0.35, min(1.0, 0.55 + regime_stability_score * 0.45))
+    if vol_suffix == "high":
+        max_risk_multiplier = min(max_risk_multiplier, 0.60)
+    min_risk_multiplier = 0.0
+    policy_summary = (
+        f"activate in {best_regime or 'no preferred regime'}"
+        f"; avoid {worst_regime or 'no explicit blocked regime'}"
+        f"; vol_pct in [{min_vol_percentile:.2f}, {max_vol_percentile:.2f}]"
+        f"; base_weight={base_allocation_weight:.2f}"
+        f"; risk_cap={max_risk_multiplier:.2f}"
+        f"; stability={regime_stability_score:.2f}"
+        f"; loss_ratio={regime_loss_ratio:.2f}"
+    )
+
+    return {
+        "allowed_regimes": allowed_regimes,
+        "blocked_regimes": blocked_regimes,
+        "min_vol_percentile": min_vol_percentile,
+        "max_vol_percentile": max_vol_percentile,
+        "base_allocation_weight": base_allocation_weight,
+        "max_risk_multiplier": max_risk_multiplier,
+        "min_risk_multiplier": min_risk_multiplier,
+        "policy_summary": policy_summary,
+    }
+
+
 def _regime_improvement_specs(specs: list[CandidateSpec], results: list[CandidateResult]) -> list[CandidateSpec]:
     lookup = {spec.name: spec for spec in specs}
     ranked = sorted(
         [row for row in results if row.best_regime and row.best_regime_pnl > 0.0 and row.worst_regime_pnl < 0.0],
-        key=lambda item: (item.best_regime_pnl - abs(item.worst_regime_pnl), item.profit_factor, item.closed_trades),
+        key=lambda item: (item.regime_stability_score, -(item.regime_loss_ratio), item.best_regime_pnl, item.profit_factor, item.closed_trades),
         reverse=True,
     )
     generated: list[CandidateSpec] = []
@@ -3382,6 +3490,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         viable_rows,
         key=lambda row: (
             bool(row.get("recommended")),
+            float(row.get("regime_stability_score", 0.0)),
+            -float(row.get("regime_loss_ratio", 999.0)),
             float(row.get("combo_outperformance_score", 0.0)),
             max(float(row.get("walk_forward_pass_rate_pct", 0.0)), float(row.get("walk_forward_soft_pass_rate_pct", 0.0))),
             float(row.get("walk_forward_avg_test_pnl", 0.0)),
@@ -3538,6 +3648,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "worst_regime",
                 "worst_regime_pnl",
                 "dominant_regime_share_pct",
+                "regime_stability_score",
+                "regime_loss_ratio",
+                "regime_trade_count_by_label",
+                "regime_pnl_by_label",
+                "regime_pf_by_label",
+                "regime_win_rate_by_label",
                 "regime_filter_label",
                 "walk_forward_windows",
                 "walk_forward_pass_rate_pct",
@@ -3583,6 +3699,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     row.worst_regime,
                     f"{row.worst_regime_pnl:.5f}",
                     f"{row.dominant_regime_share_pct:.5f}",
+                    f"{row.regime_stability_score:.5f}",
+                    f"{row.regime_loss_ratio:.5f}",
+                    row.regime_trade_count_by_label,
+                    row.regime_pnl_by_label,
+                    row.regime_pf_by_label,
+                    row.regime_win_rate_by_label,
                     row.regime_filter_label,
                     row.walk_forward_windows,
                     f"{row.walk_forward_pass_rate_pct:.5f}",
@@ -3625,8 +3747,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         lines.append(
             f"  regimes: best={row.best_regime or 'none'} pnl={row.best_regime_pnl:.2f} "
             f"worst={row.worst_regime or 'none'} pnl={row.worst_regime_pnl:.2f} "
-            f"dominant_share={row.dominant_regime_share_pct:.2f}%"
+            f"dominant_share={row.dominant_regime_share_pct:.2f}% "
+            f"stability={row.regime_stability_score:.2f} loss_ratio={row.regime_loss_ratio:.2f}"
         )
+        lines.append(f"  regime_trade_counts: {row.regime_trade_count_by_label}")
+        lines.append(f"  regime_pnls: {row.regime_pnl_by_label}")
+        lines.append(f"  live_policy: {build_execution_policy_from_candidate_row(row)['policy_summary']}")
         if row.regime_filter_label:
             lines.append(f"  regime_filter: {row.regime_filter_label}")
         lines.append(
@@ -3704,6 +3830,14 @@ def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
         reasons.append(f"walk-forward avg validation pnl <= 0 ({row.walk_forward_avg_validation_pnl:.2f})")
     if row.walk_forward_avg_test_pnl <= 0.0:
         reasons.append(f"walk-forward avg test pnl <= 0 ({row.walk_forward_avg_test_pnl:.2f})")
+    if not row.best_regime:
+        reasons.append("no regime edge identified")
+    if row.best_regime_pnl <= 0.0:
+        reasons.append(f"best regime pnl <= 0 ({row.best_regime_pnl:.2f})")
+    if row.regime_stability_score < 0.50:
+        reasons.append(f"regime stability too low ({row.regime_stability_score:.2f} < 0.50)")
+    if row.regime_loss_ratio > 1.25:
+        reasons.append(f"regime loss ratio too high ({row.regime_loss_ratio:.2f} > 1.25)")
     if row.component_count > 1 and row.combo_outperformance_score < 0.0:
         reasons.append(f"combo underperformed components ({row.combo_outperformance_score:.2f})")
     if row.component_count > 1 and row.combo_trade_overlap_pct > 80.0:
@@ -3946,6 +4080,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         results,
         key=lambda item: (
             _meets_viability(item, resolved.profile_symbol),
+            item.regime_stability_score,
+            -item.regime_loss_ratio,
             item.combo_outperformance_score,
             item.walk_forward_pass_rate_pct,
             item.walk_forward_avg_test_pnl,
@@ -3968,7 +4104,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
 
     execution_candidate_rows = [
-        {
+        (
+            {
             "candidate_name": row.name,
             "symbol": resolved.profile_symbol,
             "code_path": row.code_path,
@@ -3991,6 +4128,13 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             "component_count": row.component_count,
             "combo_outperformance_score": row.combo_outperformance_score,
             "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
+            "best_regime": row.best_regime,
+            "best_regime_pnl": row.best_regime_pnl,
+            "worst_regime": row.worst_regime,
+            "worst_regime_pnl": row.worst_regime_pnl,
+            "dominant_regime_share_pct": row.dominant_regime_share_pct,
+            "regime_stability_score": row.regime_stability_score,
+            "regime_loss_ratio": row.regime_loss_ratio,
             "recommended": row.name in recommended,
             "variant_label": row.variant_label,
             "session_label": row.session_label,
@@ -3998,6 +4142,8 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             "execution_overrides": row.execution_overrides or {},
             "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
         }
+        | build_execution_policy_from_candidate_row(row)
+        )
         for row in results
     ]
     candidate_sets: list[tuple[str, list[dict[str, object]]]] = []

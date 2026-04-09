@@ -6,6 +6,7 @@ from quant_system.symbol_research import (
     _configure_symbol_execution,
     _run_candidate_bundle,
     _symbol_slug,
+    build_execution_policy_from_candidate_row,
     run_symbol_research,
     select_execution_candidates,
 )
@@ -52,6 +53,7 @@ def run_symbol_execute_app(requested_symbol: str) -> list[str]:
     for row in selected_candidates:
         merged = dict(row)
         merged.update(candidate_rows.get(str(row["candidate_name"]), {}))
+        merged.update(build_execution_policy_from_candidate_row(merged))
         enriched_candidates.append(merged)
     if not enriched_candidates:
         return [f"No executable candidates selected for {profile_name}."]

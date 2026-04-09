@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
-from quant_system.live.app import resolve_live_deployment_paths
+from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.artifacts import ensure_dir
 from quant_system.live.journal import LIVE_ARTIFACTS_DIR, write_live_incident, write_live_run_journal
@@ -85,12 +85,14 @@ def main() -> int:
     while True:
         cycle_started = datetime.now(UTC).isoformat()
         print(f"Cycle started: {cycle_started}")
+        portfolio_weights = resolve_live_portfolio_weights(paths)
         for path in paths:
             deployment = load_symbol_deployment(path)
             if not deployment.strategies:
                 print(f"{deployment.symbol}: no active live strategies in {path}")
                 continue
-            executor = MT5LiveExecutor(deployment, config)
+            portfolio_weight = portfolio_weights.get(deployment.symbol.upper(), 0.0)
+            executor = MT5LiveExecutor(deployment, config, portfolio_weight=portfolio_weight)
             try:
                 result = executor.run_once(
                     should_skip_duplicate=lambda action, symbol=deployment.symbol: _should_skip_duplicate(state, symbol, action)
@@ -112,12 +114,28 @@ def main() -> int:
             print(f"Broker symbol: {result.broker_symbol}")
             print(f"Account mode: {result.account_mode_label}")
             print(f"Strategy isolation supported: {'yes' if result.strategy_isolation_supported else 'no'}")
+            print(f"Portfolio weight: {result.portfolio_weight:.2f}")
+            if result.regime_snapshot is not None:
+                print(
+                    f"Regime: {result.regime_snapshot.regime_label} "
+                    f"vol_pct={result.regime_snapshot.vol_percentile:.2f} "
+                    f"risk={result.regime_snapshot.risk_multiplier:.2f}"
+                )
             print(f"Journal: {journal_path}")
             for action in filtered_actions:
+                strategy = next((item for item in deployment.strategies if item.candidate_name == action["candidate_name"]), None)
                 print(
                     f"- {action['candidate_name']}: signal={action['signal_side']} "
-                    f"ts={action['signal_timestamp']} action={action['intended_action']}"
+                    f"ts={action['signal_timestamp']} action={action['intended_action']} "
+                    f"regime={action.get('regime_label', '')} "
+                    f"vol_pct={action.get('vol_percentile', 0.0):.2f} "
+                    f"risk={action.get('risk_multiplier', 0.0):.2f} "
+                    f"alloc={action.get('allocation_fraction', 0.0):.2f} "
+                    f"portfolio={action.get('portfolio_weight', 0.0):.2f} "
+                    f"score={action.get('allocator_score', 0.0):.2f}"
                 )
+                if strategy is not None and strategy.policy_summary:
+                    print(f"  policy: {strategy.policy_summary}")
             print("")
         time.sleep(max(config.mt5.poll_seconds, 5))
 

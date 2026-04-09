@@ -13,7 +13,7 @@ from quant_system.execution.engine import AgentCoordinator
 from quant_system.integrations.mt5 import MT5AccountModeInfo, MT5Client, MT5Error, MT5PositionInfo
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.models import OrderRequest, Side
-from quant_system.symbol_research import _build_features_with_events, _configure_symbol_execution
+from quant_system.regime import RegimeSnapshot, classify_regime, regime_allows_strategy
 
 
 LOGGER = logging.getLogger(__name__)
@@ -96,6 +96,41 @@ def _strategy_magic(base_magic: int, symbol: str, candidate_name: str) -> int:
     return base_magic * 10 + suffix
 
 
+def _effective_risk_multiplier(snapshot: RegimeSnapshot, strategy: DeploymentStrategy) -> float:
+    multiplier = snapshot.risk_multiplier
+    if multiplier < strategy.min_risk_multiplier:
+        multiplier = strategy.min_risk_multiplier
+    if multiplier > strategy.max_risk_multiplier:
+        multiplier = strategy.max_risk_multiplier
+    return multiplier
+
+
+def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: DeploymentStrategy, snapshot: RegimeSnapshot) -> bool:
+    return (
+        (deployment.block_new_entries_in_event_risk and snapshot.regime_label == "event_risk")
+        or snapshot.block_new_entries
+        or snapshot.vol_percentile > deployment.max_symbol_vol_percentile
+        or not regime_allows_strategy(
+            snapshot,
+            allowed_regimes=strategy.allowed_regimes,
+            blocked_regimes=strategy.blocked_regimes,
+            min_vol_percentile=strategy.min_vol_percentile,
+            max_vol_percentile=strategy.max_vol_percentile,
+        )
+    )
+
+
+def _allocator_score(strategy: DeploymentStrategy, signal_side: Side, confidence: float, snapshot: RegimeSnapshot) -> float:
+    if signal_side == Side.FLAT:
+        return 0.0
+    raw = confidence * max(_effective_risk_multiplier(snapshot, strategy), 0.0) * max(strategy.base_allocation_weight, 0.0)
+    if strategy.allowed_regimes and snapshot.regime_label in strategy.allowed_regimes:
+        raw *= 1.15
+    if strategy.regime_filter_label and strategy.regime_filter_label == snapshot.regime_label:
+        raw *= 1.10
+    return max(raw, 0.0)
+
+
 @dataclass(slots=True)
 class StrategyAction:
     candidate_name: str
@@ -105,6 +140,12 @@ class StrategyAction:
     current_quantity: float
     intended_action: str
     magic_number: int
+    regime_label: str = ""
+    vol_percentile: float = 0.0
+    risk_multiplier: float = 0.0
+    allocation_fraction: float = 0.0
+    allocator_score: float = 0.0
+    portfolio_weight: float = 1.0
 
 
 @dataclass(slots=True)
@@ -114,14 +155,30 @@ class LiveRunResult:
     account_mode_label: str
     strategy_isolation_supported: bool
     actions: list[StrategyAction]
+    regime_snapshot: RegimeSnapshot | None = None
+    portfolio_weight: float = 1.0
+
+
+@dataclass(slots=True)
+class EvaluatedStrategy:
+    strategy: DeploymentStrategy
+    signal_side: Side
+    signal_timestamp: datetime | None
+    confidence: float
+    snapshot: RegimeSnapshot
+    allocator_score: float
+    allocation_fraction: float = 0.0
 
 
 class MT5LiveExecutor:
-    def __init__(self, deployment: SymbolDeployment, config: SystemConfig) -> None:
+    def __init__(self, deployment: SymbolDeployment, config: SystemConfig, portfolio_weight: float = 1.0) -> None:
         self.deployment = deployment
         self.config = config
+        self.portfolio_weight = max(portfolio_weight, 0.0)
 
     def _build_strategy_config(self, strategy: DeploymentStrategy) -> SystemConfig:
+        from quant_system.symbol_research import _configure_symbol_execution
+
         strategy_config = copy.deepcopy(self.config)
         strategy_config.mt5.symbol = self.deployment.broker_symbol
         strategy_config.mt5.timeframe = _mt5_timeframe_from_variant(strategy.variant_label, strategy_config.mt5.timeframe)
@@ -130,10 +187,16 @@ class MT5LiveExecutor:
             setattr(strategy_config.execution, key, value)
         return strategy_config
 
-    def _evaluate_strategy(self, client: MT5Client, strategy: DeploymentStrategy) -> tuple[Side, float, datetime | None]:
+    def _evaluate_strategy(
+        self, client: MT5Client, strategy: DeploymentStrategy
+    ) -> tuple[Side, float, datetime | None, RegimeSnapshot]:
+        from quant_system.symbol_research import _build_features_with_events
+
         strategy_config = self._build_strategy_config(strategy)
         bars = client.fetch_bars(bar_count=strategy_config.mt5.history_bars)
         features = _build_features_with_events(strategy_config, self.deployment.symbol, bars)
+        latest_feature = features[-1] if features else None
+        snapshot = classify_regime(self.deployment.symbol, bars, latest_feature)
         session_name = _session_name_from_variant(strategy.variant_label)
         agents = build_agents_from_catalog_paths([strategy.code_path], strategy_config)
         coordinator = AgentCoordinator(agents, consensus_min_confidence=strategy_config.agents.consensus_min_confidence)
@@ -151,7 +214,36 @@ class MT5LiveExecutor:
             last_side = context.side
             last_confidence = context.confidence
             last_timestamp = feature.timestamp
-        return last_side, last_confidence, last_timestamp
+        return last_side, last_confidence, last_timestamp, snapshot
+
+    def _allocate_symbol_exposure(self, evaluated: list[EvaluatedStrategy]) -> None:
+        buy_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.BUY)
+        sell_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.SELL)
+        dominant_side = Side.FLAT
+        dominant_total = 0.0
+        opposing_total = 0.0
+        if buy_total > 0.0 or sell_total > 0.0:
+            if buy_total >= sell_total:
+                dominant_side = Side.BUY
+                dominant_total = buy_total
+                opposing_total = sell_total
+            else:
+                dominant_side = Side.SELL
+                dominant_total = sell_total
+                opposing_total = buy_total
+
+        for item in evaluated:
+            item.allocation_fraction = 0.0
+            if item.signal_side == Side.FLAT or item.allocator_score <= 0.0:
+                continue
+            if dominant_side == Side.FLAT or dominant_total <= 0.0:
+                continue
+            if item.signal_side != dominant_side:
+                continue
+            # If both sides are active, require the dominant side to clearly win.
+            if opposing_total > 0.0 and dominant_total < opposing_total * 1.10:
+                continue
+            item.allocation_fraction = item.allocator_score / dominant_total
 
     @staticmethod
     def _net_quantity(positions: list[MT5PositionInfo]) -> float:
@@ -167,6 +259,9 @@ class MT5LiveExecutor:
         signal_side: Side,
         signal_timestamp: datetime | None,
         confidence: float,
+        snapshot: RegimeSnapshot,
+        allocation_fraction: float,
+        allocator_score: float,
         should_skip_duplicate: Callable[[StrategyAction], bool] | None = None,
     ) -> StrategyAction:
         magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
@@ -174,11 +269,34 @@ class MT5LiveExecutor:
         current_quantity = self._net_quantity(positions)
         comment = strategy.candidate_name[:31]
 
-        candidate_action = StrategyAction(strategy.candidate_name, signal_side, signal_timestamp, confidence, current_quantity, "hold", magic_number)
+        candidate_action = StrategyAction(
+            strategy.candidate_name,
+            signal_side,
+            signal_timestamp,
+            confidence,
+            current_quantity,
+            "hold",
+            magic_number,
+            regime_label=snapshot.regime_label,
+            vol_percentile=snapshot.vol_percentile,
+            risk_multiplier=_effective_risk_multiplier(snapshot, strategy),
+            allocation_fraction=allocation_fraction,
+            allocator_score=allocator_score,
+            portfolio_weight=self.portfolio_weight,
+        )
         if signal_side == Side.FLAT:
             return candidate_action
 
-        order_size = self._build_strategy_config(strategy).execution.order_size * strategy.allocation_weight
+        if current_quantity == 0.0 and _is_strategy_regime_blocked(self.deployment, strategy, snapshot):
+            candidate_action.intended_action = f"regime_blocked::{snapshot.regime_label}"
+            return candidate_action
+
+        order_size = (
+            self._build_strategy_config(strategy).execution.order_size
+            * self.portfolio_weight
+            * allocation_fraction
+            * candidate_action.risk_multiplier
+        )
         if order_size <= 0.0:
             candidate_action.intended_action = "skip_zero_size"
             return candidate_action
@@ -235,6 +353,8 @@ class MT5LiveExecutor:
     def run_once(self, should_skip_duplicate: Callable[[StrategyAction], bool] | None = None) -> LiveRunResult:
         actions: list[StrategyAction] = []
         account_mode_info: MT5AccountModeInfo | None = None
+        regime_snapshot: RegimeSnapshot | None = None
+        evaluated: list[EvaluatedStrategy] = []
 
         bootstrap_config = self._build_strategy_config(self.deployment.strategies[0])
         bootstrap_client = MT5Client(bootstrap_config.mt5)
@@ -261,6 +381,12 @@ class MT5LiveExecutor:
                         current_quantity=0.0,
                         intended_action="netting_blocked_multi_strategy",
                         magic_number=magic_number,
+                        regime_label="",
+                        vol_percentile=0.0,
+                        risk_multiplier=0.0,
+                        allocation_fraction=0.0,
+                        allocator_score=0.0,
+                        portfolio_weight=self.portfolio_weight,
                     )
                 )
             return LiveRunResult(
@@ -269,6 +395,8 @@ class MT5LiveExecutor:
                 account_mode_label=account_mode_info.margin_mode_label,
                 strategy_isolation_supported=account_mode_info.strategy_isolation_supported,
                 actions=actions,
+                regime_snapshot=regime_snapshot,
+                portfolio_weight=self.portfolio_weight,
             )
 
         for strategy in self.deployment.strategies:
@@ -276,8 +404,66 @@ class MT5LiveExecutor:
             client = MT5Client(strategy_config.mt5)
             try:
                 client.initialize()
-                signal_side, confidence, signal_timestamp = self._evaluate_strategy(client, strategy)
-                actions.append(self._reconcile_strategy(client, strategy, signal_side, signal_timestamp, confidence, should_skip_duplicate))
+                signal_side, confidence, signal_timestamp, snapshot = self._evaluate_strategy(client, strategy)
+                if regime_snapshot is None:
+                    regime_snapshot = snapshot
+                score = 0.0 if _is_strategy_regime_blocked(self.deployment, strategy, snapshot) else _allocator_score(
+                    strategy, signal_side, confidence, snapshot
+                )
+                evaluated.append(
+                    EvaluatedStrategy(
+                        strategy=strategy,
+                        signal_side=signal_side,
+                        signal_timestamp=signal_timestamp,
+                        confidence=confidence,
+                        snapshot=snapshot,
+                        allocator_score=score,
+                    )
+                )
+            finally:
+                client.shutdown()
+
+        self._allocate_symbol_exposure(evaluated)
+
+        for item in evaluated:
+            strategy_config = self._build_strategy_config(item.strategy)
+            client = MT5Client(strategy_config.mt5)
+            try:
+                client.initialize()
+                if item.signal_side != Side.FLAT and item.allocator_score > 0.0 and item.allocation_fraction <= 0.0:
+                    magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, item.strategy.candidate_name)
+                    current_quantity = self._net_quantity(client.list_positions(magic_number=magic_number))
+                    actions.append(
+                        StrategyAction(
+                            candidate_name=item.strategy.candidate_name,
+                            signal_side=item.signal_side,
+                            signal_timestamp=item.signal_timestamp,
+                            confidence=item.confidence,
+                            current_quantity=current_quantity,
+                            intended_action="allocator_blocked_opposing_side",
+                            magic_number=magic_number,
+                            regime_label=item.snapshot.regime_label,
+                            vol_percentile=item.snapshot.vol_percentile,
+                            risk_multiplier=_effective_risk_multiplier(item.snapshot, item.strategy),
+                            allocation_fraction=0.0,
+                            allocator_score=item.allocator_score,
+                            portfolio_weight=self.portfolio_weight,
+                        )
+                    )
+                    continue
+                actions.append(
+                    self._reconcile_strategy(
+                        client,
+                        item.strategy,
+                        item.signal_side,
+                        item.signal_timestamp,
+                        item.confidence,
+                        item.snapshot,
+                        item.allocation_fraction if item.allocation_fraction > 0.0 else item.strategy.allocation_weight,
+                        item.allocator_score,
+                        should_skip_duplicate,
+                    )
+                )
             finally:
                 client.shutdown()
         return LiveRunResult(
@@ -286,6 +472,8 @@ class MT5LiveExecutor:
             account_mode_label=account_mode_info.margin_mode_label if account_mode_info is not None else "unknown",
             strategy_isolation_supported=account_mode_info.strategy_isolation_supported if account_mode_info is not None else False,
             actions=actions,
+            regime_snapshot=regime_snapshot,
+            portfolio_weight=self.portfolio_weight,
         )
 
 

@@ -4,6 +4,8 @@ import json
 from datetime import datetime
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
+import shutil
+import tempfile
 
 import duckdb
 from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, ExperimentSnapshot
@@ -17,7 +19,25 @@ class ExperimentStore:
             self._initialize_schema()
 
     def _connect(self):
-        return duckdb.connect(self.database_path, read_only=self.read_only)
+        try:
+            return duckdb.connect(self.database_path, read_only=self.read_only)
+        except duckdb.IOException:
+            if not self.read_only:
+                raise
+            snapshot_path = self._create_snapshot_copy()
+            return duckdb.connect(snapshot_path, read_only=True)
+
+    def _create_snapshot_copy(self) -> str:
+        source = Path(self.database_path)
+        suffix = source.suffix or ".duckdb"
+        with tempfile.NamedTemporaryFile(prefix=f"{source.stem}_snapshot_", suffix=suffix, delete=False) as handle:
+            snapshot_path = handle.name
+        shutil.copy2(source, snapshot_path)
+        wal_path = source.with_suffix(source.suffix + ".wal")
+        if wal_path.exists():
+            snapshot_wal = Path(snapshot_path + ".wal")
+            shutil.copy2(wal_path, snapshot_wal)
+        return snapshot_path
 
     def _initialize_schema(self) -> None:
         with self._connect() as connection:
@@ -212,6 +232,12 @@ class ExperimentStore:
                     worst_regime VARCHAR,
                     worst_regime_pnl DOUBLE,
                     dominant_regime_share_pct DOUBLE,
+                    regime_stability_score DOUBLE,
+                    regime_loss_ratio DOUBLE,
+                    regime_trade_count_by_label TEXT,
+                    regime_pnl_by_label TEXT,
+                    regime_pf_by_label TEXT,
+                    regime_win_rate_by_label TEXT,
                     variant_label VARCHAR,
                     timeframe_label VARCHAR,
                     session_label VARCHAR,
@@ -249,6 +275,12 @@ class ExperimentStore:
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS worst_regime VARCHAR")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS worst_regime_pnl DOUBLE")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS dominant_regime_share_pct DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_stability_score DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_loss_ratio DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_trade_count_by_label TEXT")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_pnl_by_label TEXT")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_pf_by_label TEXT")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_win_rate_by_label TEXT")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS session_label VARCHAR")
@@ -275,13 +307,17 @@ class ExperimentStore:
                     profile_name VARCHAR,
                     candidate_name VARCHAR,
                     code_path TEXT,
+                    policy_summary TEXT,
                     regime_filter_label VARCHAR,
+                    execution_policy_json TEXT,
                     execution_overrides_json TEXT,
                     selection_rank INTEGER
                 )
                 """
             )
+            connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS policy_summary TEXT")
             connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS regime_filter_label VARCHAR")
+            connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS execution_policy_json TEXT")
             connection.execute("ALTER TABLE symbol_execution_set_items ADD COLUMN IF NOT EXISTS execution_overrides_json TEXT")
             connection.execute(
                 """
@@ -842,6 +878,208 @@ class ExperimentStore:
             ).fetchall()
         return [str(row[0]) for row in rows]
 
+    def list_symbol_research_runs(self, profile_name: str | None = None) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            if profile_name:
+                rows = connection.execute(
+                    """
+                    SELECT id, profile_name, data_symbol, broker_symbol, data_source, recommended_names_json, created_at
+                    FROM symbol_research_runs
+                    WHERE profile_name = ?
+                    ORDER BY id ASC
+                    """,
+                    [profile_name],
+                ).fetchall()
+            else:
+                rows = connection.execute(
+                    """
+                    SELECT id, profile_name, data_symbol, broker_symbol, data_source, recommended_names_json, created_at
+                    FROM symbol_research_runs
+                    ORDER BY id ASC
+                    """
+                ).fetchall()
+        return [
+            {
+                "id": int(row[0]),
+                "profile_name": row[1],
+                "data_symbol": row[2],
+                "broker_symbol": row[3],
+                "data_source": row[4],
+                "recommended_names": json.loads(row[5] or "[]"),
+                "created_at": row[6],
+            }
+            for row in rows
+        ]
+
+    def get_symbol_execution_set_for_run(self, profile_name: str, symbol_research_run_id: int) -> dict[str, object] | None:
+        with self._connect() as connection:
+            header = connection.execute(
+                """
+                SELECT id, profile_name, symbol_research_run_id, selection_method, created_at
+                FROM symbol_execution_sets
+                WHERE profile_name = ? AND symbol_research_run_id = ?
+                ORDER BY id DESC
+                LIMIT 1
+                """,
+                [profile_name, symbol_research_run_id],
+            ).fetchone()
+            if header is None:
+                return None
+            rows = connection.execute(
+                """
+                SELECT
+                    candidate_name,
+                    code_path,
+                    policy_summary,
+                    regime_filter_label,
+                    execution_policy_json,
+                    execution_overrides_json,
+                    selection_rank
+                FROM symbol_execution_set_items
+                WHERE execution_set_id = ?
+                ORDER BY selection_rank ASC, candidate_name ASC
+                """,
+                [header[0]],
+            ).fetchall()
+        return {
+            "id": int(header[0]),
+            "profile_name": header[1],
+            "symbol_research_run_id": int(header[2]),
+            "selection_method": header[3],
+            "created_at": header[4],
+            "items": [
+                {
+                    "candidate_name": row[0],
+                    "code_path": row[1],
+                    "policy_summary": row[2] or "",
+                    "regime_filter_label": row[3] or "",
+                    **json.loads(row[4] or "{}"),
+                    "execution_overrides": json.loads(row[5] or "{}"),
+                    "selection_rank": int(row[6] or 0),
+                }
+                for row in rows
+            ],
+        }
+
+    def list_symbol_research_candidates_for_run(self, run_id: int) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT
+                    candidate_name,
+                    description,
+                    archetype,
+                    code_path,
+                    realized_pnl,
+                    closed_trades,
+                    win_rate_pct,
+                    profit_factor,
+                    max_drawdown_pct,
+                    total_costs,
+                    train_pnl,
+                    validation_pnl,
+                    validation_profit_factor,
+                    validation_closed_trades,
+                    test_pnl,
+                    test_profit_factor,
+                    test_closed_trades,
+                    expectancy,
+                    avg_win,
+                    avg_loss,
+                    payoff_ratio,
+                    avg_hold_bars,
+                    dominant_exit,
+                    dominant_exit_share_pct,
+                    walk_forward_windows,
+                    walk_forward_pass_rate_pct,
+                    walk_forward_avg_validation_pnl,
+                    walk_forward_avg_test_pnl,
+                    walk_forward_avg_validation_pf,
+                    walk_forward_avg_test_pf,
+                    component_count,
+                    combo_outperformance_score,
+                    combo_trade_overlap_pct,
+                    best_regime,
+                    best_regime_pnl,
+                    worst_regime,
+                    worst_regime_pnl,
+                    dominant_regime_share_pct,
+                    regime_stability_score,
+                    regime_loss_ratio,
+                    regime_trade_count_by_label,
+                    regime_pnl_by_label,
+                    regime_pf_by_label,
+                    regime_win_rate_by_label,
+                    variant_label,
+                    timeframe_label,
+                    session_label,
+                    regime_filter_label,
+                    execution_overrides_json,
+                    recommended,
+                    profile_name
+                FROM symbol_research_candidates
+                WHERE symbol_research_run_id = ?
+                ORDER BY recommended DESC, realized_pnl DESC, profit_factor DESC, closed_trades DESC
+                """,
+                [run_id],
+            ).fetchall()
+        return [
+            {
+                "candidate_name": row[0],
+                "description": row[1],
+                "archetype": row[2],
+                "code_path": row[3],
+                "realized_pnl": float(row[4] or 0.0),
+                "closed_trades": int(row[5] or 0),
+                "win_rate_pct": float(row[6] or 0.0),
+                "profit_factor": float(row[7] or 0.0),
+                "max_drawdown_pct": float(row[8] or 0.0),
+                "total_costs": float(row[9] or 0.0),
+                "train_pnl": float(row[10] or 0.0),
+                "validation_pnl": float(row[11] or 0.0),
+                "validation_profit_factor": float(row[12] or 0.0),
+                "validation_closed_trades": int(row[13] or 0),
+                "test_pnl": float(row[14] or 0.0),
+                "test_profit_factor": float(row[15] or 0.0),
+                "test_closed_trades": int(row[16] or 0),
+                "expectancy": float(row[17] or 0.0),
+                "avg_win": float(row[18] or 0.0),
+                "avg_loss": float(row[19] or 0.0),
+                "payoff_ratio": float(row[20] or 0.0),
+                "avg_hold_bars": float(row[21] or 0.0),
+                "dominant_exit": row[22] or "",
+                "dominant_exit_share_pct": float(row[23] or 0.0),
+                "walk_forward_windows": int(row[24] or 0),
+                "walk_forward_pass_rate_pct": float(row[25] or 0.0),
+                "walk_forward_avg_validation_pnl": float(row[26] or 0.0),
+                "walk_forward_avg_test_pnl": float(row[27] or 0.0),
+                "walk_forward_avg_validation_pf": float(row[28] or 0.0),
+                "walk_forward_avg_test_pf": float(row[29] or 0.0),
+                "component_count": int(row[30] or 1),
+                "combo_outperformance_score": float(row[31] or 0.0),
+                "combo_trade_overlap_pct": float(row[32] or 0.0),
+                "best_regime": row[33] or "",
+                "best_regime_pnl": float(row[34] or 0.0),
+                "worst_regime": row[35] or "",
+                "worst_regime_pnl": float(row[36] or 0.0),
+                "dominant_regime_share_pct": float(row[37] or 0.0),
+                "regime_stability_score": float(row[38] or 0.0),
+                "regime_loss_ratio": float(row[39] or 0.0),
+                "regime_trade_count_by_label": row[40] or "{}",
+                "regime_pnl_by_label": row[41] or "{}",
+                "regime_pf_by_label": row[42] or "{}",
+                "regime_win_rate_by_label": row[43] or "{}",
+                "variant_label": row[44] or "",
+                "timeframe_label": row[45] or "",
+                "session_label": row[46] or "",
+                "regime_filter_label": row[47] or "",
+                "execution_overrides": json.loads(row[48] or "{}"),
+                "recommended": bool(row[49]),
+                "profile_name": row[50],
+            }
+            for row in rows
+        ]
+
     def list_latest_symbol_research_candidates(self, profile_name: str) -> list[dict[str, object]]:
         latest = self.get_latest_symbol_research_run(profile_name)
         if latest is None:
@@ -888,6 +1126,12 @@ class ExperimentStore:
                     worst_regime,
                     worst_regime_pnl,
                     dominant_regime_share_pct,
+                    regime_stability_score,
+                    regime_loss_ratio,
+                    regime_trade_count_by_label,
+                    regime_pnl_by_label,
+                    regime_pf_by_label,
+                    regime_win_rate_by_label,
                     variant_label,
                     timeframe_label,
                     session_label,
@@ -940,12 +1184,18 @@ class ExperimentStore:
                 "worst_regime": row[35] or "",
                 "worst_regime_pnl": float(row[36] or 0.0),
                 "dominant_regime_share_pct": float(row[37] or 0.0),
-                "variant_label": row[38] or "",
-                "timeframe_label": row[39] or "",
-                "session_label": row[40] or "",
-                "regime_filter_label": row[41] or "",
-                "execution_overrides": json.loads(row[42] or "{}"),
-                "recommended": bool(row[43]),
+                "regime_stability_score": float(row[38] or 0.0),
+                "regime_loss_ratio": float(row[39] or 0.0),
+                "regime_trade_count_by_label": row[40] or "{}",
+                "regime_pnl_by_label": row[41] or "{}",
+                "regime_pf_by_label": row[42] or "{}",
+                "regime_win_rate_by_label": row[43] or "{}",
+                "variant_label": row[44] or "",
+                "timeframe_label": row[45] or "",
+                "session_label": row[46] or "",
+                "regime_filter_label": row[47] or "",
+                "execution_overrides": json.loads(row[48] or "{}"),
+                "recommended": bool(row[49]),
             }
             for row in rows
         ]
@@ -982,18 +1232,32 @@ class ExperimentStore:
                         profile_name,
                         candidate_name,
                         code_path,
+                        policy_summary,
                         regime_filter_label,
+                        execution_policy_json,
                         execution_overrides_json,
                         selection_rank
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         execution_set_id,
                         profile_name,
                         str(row["candidate_name"]),
                         str(row["code_path"]),
+                        str(row.get("policy_summary", "")),
                         str(row.get("regime_filter_label", "")),
+                        json.dumps(
+                            {
+                                "allowed_regimes": list(row.get("allowed_regimes", ()) or ()),
+                                "blocked_regimes": list(row.get("blocked_regimes", ()) or ()),
+                                "min_vol_percentile": float(row.get("min_vol_percentile", 0.0) or 0.0),
+                                "max_vol_percentile": float(row.get("max_vol_percentile", 1.0) or 1.0),
+                                "base_allocation_weight": float(row.get("base_allocation_weight", 1.0) or 1.0),
+                                "max_risk_multiplier": float(row.get("max_risk_multiplier", 1.0) or 1.0),
+                                "min_risk_multiplier": float(row.get("min_risk_multiplier", 0.0) or 0.0),
+                            }
+                        ),
                         json.dumps(row.get("execution_overrides", {})),
                         index,
                     ],
@@ -1143,6 +1407,92 @@ class ExperimentStore:
             "avg_slippage_bps": float(row[4] or 0.0),
         }
 
+    def list_mt5_fill_events(self, broker_symbol: str | None = None) -> list[dict[str, object]]:
+        with self._connect() as connection:
+            if broker_symbol:
+                rows = connection.execute(
+                    """
+                    SELECT
+                        id,
+                        event_timestamp,
+                        broker_symbol,
+                        requested_symbol,
+                        side,
+                        quantity,
+                        requested_price,
+                        fill_price,
+                        bid,
+                        ask,
+                        spread_points,
+                        slippage_points,
+                        slippage_bps,
+                        costs,
+                        reason,
+                        confidence,
+                        metadata_json,
+                        magic_number,
+                        comment,
+                        position_ticket
+                    FROM mt5_fill_events
+                    WHERE broker_symbol = ?
+                    ORDER BY event_timestamp ASC, id ASC
+                    """,
+                    [broker_symbol],
+                ).fetchall()
+            else:
+                rows = connection.execute(
+                    """
+                    SELECT
+                        id,
+                        event_timestamp,
+                        broker_symbol,
+                        requested_symbol,
+                        side,
+                        quantity,
+                        requested_price,
+                        fill_price,
+                        bid,
+                        ask,
+                        spread_points,
+                        slippage_points,
+                        slippage_bps,
+                        costs,
+                        reason,
+                        confidence,
+                        metadata_json,
+                        magic_number,
+                        comment,
+                        position_ticket
+                    FROM mt5_fill_events
+                    ORDER BY event_timestamp ASC, id ASC
+                    """
+                ).fetchall()
+        return [
+            {
+                "id": int(row[0]),
+                "event_timestamp": row[1],
+                "broker_symbol": row[2] or "",
+                "requested_symbol": row[3] or "",
+                "side": row[4] or "",
+                "quantity": float(row[5] or 0.0),
+                "requested_price": float(row[6] or 0.0),
+                "fill_price": float(row[7] or 0.0),
+                "bid": float(row[8] or 0.0),
+                "ask": float(row[9] or 0.0),
+                "spread_points": float(row[10] or 0.0),
+                "slippage_points": float(row[11] or 0.0),
+                "slippage_bps": float(row[12] or 0.0),
+                "costs": float(row[13] or 0.0),
+                "reason": row[14] or "",
+                "confidence": float(row[15] or 0.0),
+                "metadata": json.loads(row[16] or "{}"),
+                "magic_number": int(row[17] or 0),
+                "comment": row[18] or "",
+                "position_ticket": int(row[19] or 0),
+            }
+            for row in rows
+        ]
+
     def get_latest_symbol_execution_set(self, profile_name: str) -> dict[str, object] | None:
         with self._connect() as connection:
             header = connection.execute(
@@ -1159,7 +1509,7 @@ class ExperimentStore:
                 return None
             rows = connection.execute(
                 """
-                SELECT candidate_name, code_path, regime_filter_label, execution_overrides_json, selection_rank
+                SELECT candidate_name, code_path, policy_summary, regime_filter_label, execution_policy_json, execution_overrides_json, selection_rank
                 FROM symbol_execution_set_items
                 WHERE execution_set_id = ?
                 ORDER BY selection_rank ASC
@@ -1176,9 +1526,11 @@ class ExperimentStore:
                 {
                     "candidate_name": row[0],
                     "code_path": row[1],
-                    "regime_filter_label": row[2] or "",
-                    "execution_overrides": json.loads(row[3] or "{}"),
-                    "selection_rank": int(row[4] or 0),
+                    "policy_summary": row[2] or "",
+                    "regime_filter_label": row[3] or "",
+                    **json.loads(row[4] or "{}"),
+                    "execution_overrides": json.loads(row[5] or "{}"),
+                    "selection_rank": int(row[6] or 0),
                 }
                 for row in rows
             ],
@@ -1265,6 +1617,12 @@ class ExperimentStore:
                         worst_regime,
                         worst_regime_pnl,
                         dominant_regime_share_pct,
+                        regime_stability_score,
+                        regime_loss_ratio,
+                        regime_trade_count_by_label,
+                        regime_pnl_by_label,
+                        regime_pf_by_label,
+                        regime_win_rate_by_label,
                         variant_label,
                         timeframe_label,
                         session_label,
@@ -1272,7 +1630,7 @@ class ExperimentStore:
                         execution_overrides_json,
                         recommended
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     [
                         run_id,
@@ -1315,6 +1673,12 @@ class ExperimentStore:
                         candidate.worst_regime,
                         candidate.worst_regime_pnl,
                         candidate.dominant_regime_share_pct,
+                        candidate.regime_stability_score,
+                        candidate.regime_loss_ratio,
+                        candidate.regime_trade_count_by_label,
+                        candidate.regime_pnl_by_label,
+                        candidate.regime_pf_by_label,
+                        candidate.regime_win_rate_by_label,
                         candidate.variant_label,
                         candidate.timeframe_label,
                         candidate.session_label,

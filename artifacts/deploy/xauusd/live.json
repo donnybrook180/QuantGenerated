@@ -3,87 +3,89 @@
   "symbol": "XAUUSD",
   "data_symbol": "C:XAUUSD",
   "broker_symbol": "XAUUSD",
-  "research_run_id": 202,
-  "execution_set_id": 99,
-  "execution_validation_summary": "selection=standard variant=volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up@15m_overlap|trend_up, volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up, xauusd_volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up@15m_us|trend_up data_source=duckdb_cache pnl=3525.98 pf=8.87 closed=12 -> accepted",
+  "research_run_id": 255,
+  "execution_set_id": 134,
+  "execution_validation_summary": "selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk",
   "strategies": [
     {
-      "candidate_name": "volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up",
-      "code_path": "quant_system.agents.strategies.VolatilityBreakoutAgent",
-      "policy_summary": "activate in trend_up_vol_high; avoid trend_up_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
-      "variant_label": "15m_overlap",
-      "regime_filter_label": "trend_up",
+      "candidate_name": "trend__5m_us__exit_trend",
+      "code_path": "quant_system.agents.trend.TrendAgent",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_up_vol_high; avoid trend_up_vol_low; vol_pct in [0.55, 0.97]; base_weight=1.03; risk_cap=0.60; stability=0.83; loss_ratio=0.28",
+      "variant_label": "5m_us",
+      "regime_filter_label": "",
       "execution_overrides": {
         "max_holding_bars": 0,
         "take_profit_atr_multiple": 3.2,
         "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 9,
-        "structure_exit_bars": 0,
-        "min_bars_between_trades": 7
+        "stale_breakout_bars": 8,
+        "structure_exit_bars": 0
       },
       "allocation_weight": 0.3333333333333333,
       "allowed_regimes": [
         "trend_up_vol_high"
       ],
       "blocked_regimes": [
-        "trend_up_vol_mid"
+        "trend_up_vol_low"
       ],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.15,
+      "base_allocation_weight": 1.033837473357218,
       "max_risk_multiplier": 0.6,
       "min_risk_multiplier": 0.0
     },
     {
-      "candidate_name": "volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up",
-      "code_path": "quant_system.agents.strategies.VolatilityBreakoutAgent",
-      "policy_summary": "activate in trend_up_vol_high; avoid trend_up_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+      "candidate_name": "momentum__15m_us__exit_fastfail",
+      "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid trend_up_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.09; risk_cap=0.60; stability=0.92; loss_ratio=0.10",
       "variant_label": "15m_us",
-      "regime_filter_label": "trend_up",
+      "regime_filter_label": "",
       "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 9,
-        "structure_exit_bars": 0,
-        "min_bars_between_trades": 7
+        "max_holding_bars": 14,
+        "take_profit_atr_multiple": 1.8,
+        "stale_breakout_bars": 4,
+        "structure_exit_bars": 2
       },
       "allocation_weight": 0.3333333333333333,
       "allowed_regimes": [
-        "trend_up_vol_high"
+        "trend_flat_vol_high"
       ],
       "blocked_regimes": [
         "trend_up_vol_mid"
       ],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.15,
+      "base_allocation_weight": 1.0940439021791077,
       "max_risk_multiplier": 0.6,
       "min_risk_multiplier": 0.0
     },
     {
-      "candidate_name": "xauusd_volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up",
-      "code_path": "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
-      "policy_summary": "activate in trend_up_vol_mid; avoid no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=1.15; risk_cap=1.00; stability=1.00; loss_ratio=0.00",
-      "variant_label": "15m_us",
-      "regime_filter_label": "trend_up",
+      "candidate_name": "xauusd_generic_breakout_selective__near_miss_patient__trend_flat",
+      "code_path": "quant_system.agents.strategies.VolatilityBreakoutAgent",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00",
+      "variant_label": "",
+      "regime_filter_label": "trend_flat",
       "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 9,
         "structure_exit_bars": 0,
-        "min_bars_between_trades": 7
+        "stale_breakout_bars": 9,
+        "take_profit_atr_multiple": 3.0,
+        "trailing_stop_atr_multiple": 0.9,
+        "max_holding_bars": 0,
+        "break_even_atr_multiple": 0.4
       },
       "allocation_weight": 0.3333333333333333,
       "allowed_regimes": [
-        "trend_up_vol_mid"
+        "trend_flat_vol_high"
       ],
-      "blocked_regimes": [],
-      "min_vol_percentile": 0.2,
-      "max_vol_percentile": 0.8,
-      "base_allocation_weight": 1.15,
-      "max_risk_multiplier": 1.0,
+      "blocked_regimes": [
+        "trend_flat_vol_mid"
+      ],
+      "min_vol_percentile": 0.55,
+      "max_vol_percentile": 0.97,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
       "min_risk_multiplier": 0.0
     }
   ],

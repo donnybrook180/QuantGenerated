@@ -1,0 +1,14 @@
+Artifact: xauusd_generic_breakout_selective__near_miss_protective__trend_flat_symbol_candidate
+Closed trades: 3
+Realized pnl: 857.19
+
+By entry hour
+13: trades=2 pnl=285.17 avg=142.58 win_rate=100.00%
+14: trades=1 pnl=572.02 avg=572.02 win_rate=100.00%
+
+By entry setup
+volatility_breakout: trades=3 pnl=857.19 avg=285.73 win_rate=100.00%
+
+By exit reason
+trailing_stop: trades=1 pnl=244.56 avg=244.56 win_rate=100.00%
+signal_exit: trades=2 pnl=612.62 avg=306.31 win_rate=100.00%

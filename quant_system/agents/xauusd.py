@@ -147,3 +147,61 @@ class XAUUSDShortBreakdownAgent(Agent):
                 directional_metadata(Side.BUY, short_exit=True, trend_flip=1.0),
             )
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class XAUUSDVWAPReclaimAgent(Agent):
+    name = "xauusd_vwap_reclaim"
+
+    def __init__(self) -> None:
+        self.in_position = False
+        self.allowed_hours = {13, 14, 15, 16}
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        hour = int(feature.values.get("hour_of_day", 0))
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        z_score_20 = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        atr_proxy = feature.values.get("atr_proxy", 0.0)
+
+        if hour not in self.allowed_hours:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+        if (
+            not self.in_position
+            and atr_proxy > 0.0004
+            and relative_volume >= 0.9
+            and z_score_20 <= -0.75
+            and vwap_distance <= -0.0005
+            and trend_strength > -0.0006
+            and momentum_20 > -0.0005
+            and momentum_5 > -0.0003
+        ):
+            self.in_position = True
+            confidence = scaled_confidence(
+                0.28,
+                (max(-z_score_20 - 0.75, 0.0), 0.18),
+                (max(-vwap_distance - 0.0005, 0.0), 300),
+            )
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                confidence,
+                {"vwap_distance": vwap_distance, "z_score_20": z_score_20, "reclaim_setup": 1.0},
+            )
+
+        if self.in_position and (
+            z_score_20 >= 0.1
+            or vwap_distance >= -0.00005
+            or trend_strength < -0.0008
+            or momentum_20 < -0.0008
+        ):
+            self.in_position = False
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.68, {"mean_reverted": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})

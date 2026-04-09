@@ -80,7 +80,7 @@ from quant_system.agents.us500 import (
     US500ShortVWAPRejectAgent,
 )
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
-from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVolatilityBreakoutAgent
+from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVWAPReclaimAgent, XAUUSDVolatilityBreakoutAgent
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
@@ -1561,6 +1561,14 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="XAUUSD short breakdown continuation",
                 agents=[XAUUSDShortBreakdownAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
                 code_path="quant_system.agents.xauusd.XAUUSDShortBreakdownAgent",
+            )
+        )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_vwap_reclaim",
+                description="XAUUSD VWAP reclaim after oversold washout",
+                agents=[XAUUSDVWAPReclaimAgent(), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDVWAPReclaimAgent",
             )
         )
         return specs
@@ -4776,8 +4784,8 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
     used_components: set[str] = set()
     core_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "core"]
     specialist_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "specialist"]
-    allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol)
-    allow_forex_specialist_third = symbol_is_forex(symbol) or _is_crypto_symbol(symbol)
+    allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
+    allow_forex_specialist_third = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     used_regimes: set[str] = set()
     used_variants: set[str] = set()
     used_code_paths: set[str] = set()

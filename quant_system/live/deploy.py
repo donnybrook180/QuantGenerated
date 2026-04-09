@@ -65,6 +65,16 @@ def export_symbol_deployment(deployment: SymbolDeployment) -> Path:
 def load_symbol_deployment(path: Path) -> SymbolDeployment:
     payload = json.loads(path.read_text(encoding="utf-8"))
     strategies = [DeploymentStrategy(**row) for row in payload.pop("strategies", [])]
+    execution_validation = str(payload.get("execution_validation_summary", "") or "")
+    stored_status = str(payload.get("symbol_status", "") or "")
+    inferred_status = "research_only"
+    if strategies:
+        if "accepted_with_reduced_risk" in execution_validation or {strategy.promotion_tier for strategy in strategies} <= {"specialist"}:
+            inferred_status = "reduced_risk_only"
+        else:
+            inferred_status = "live_ready"
+    if not stored_status or (stored_status == "research_only" and strategies):
+        payload["symbol_status"] = inferred_status
     return SymbolDeployment(strategies=strategies, **payload)
 
 

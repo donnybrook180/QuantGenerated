@@ -28,6 +28,8 @@ from quant_system.agents.forex import (
     EURUSDLondonRangeReclaimAgent,
     EURUSDNYOverlapContinuationAgent,
     EURUSDPostNewsReclaimAgent,
+    ForexLondonRangeReentryAgent,
+    ForexOverlapRangeReentryAgent,
     GBPUSDLondonBreakoutReclaimAgent,
     GBPUSDLondonRangeFadeAgent,
     GBPUSDOverlapImpulseAgent,
@@ -84,6 +86,7 @@ from quant_system.agents.macro import MacroEventRiskSentinelAgent
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
 from quant_system.agents.xauusd import (
     XAUUSDShortBreakdownAgent,
+    XAUUSDUSOpenRangeReclaimAgent,
     XAUUSDVWAPReclaimAgent,
     XAUUSDVolatilityBreakoutAgent,
 )
@@ -127,6 +130,7 @@ class CandidateSpec:
     timeframe_label: str = ""
     session_label: str = ""
     regime_filter_label: str = ""
+    reference_filter_label: str = ""
     allowed_variants: tuple[str, ...] = ()
 
 
@@ -187,6 +191,7 @@ class CandidateResult:
     regime_stability_score: float = 0.0
     regime_loss_ratio: float = 0.0
     regime_filter_label: str = ""
+    reference_filter_label: str = ""
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
 
@@ -1259,6 +1264,27 @@ def _filter_features_by_session(features: list[FeatureVector], session_name: str
     return [feature for feature in features if int(feature.values.get("hour_of_day", feature.timestamp.hour)) in allowed_hours]
 
 
+def _filter_features_by_reference(features: list[FeatureVector], reference_label: str) -> list[FeatureVector]:
+    if not reference_label:
+        return features
+    label = reference_label.strip().lower()
+    if label == "london_reentry":
+        return [feature for feature in features if feature.values.get("reentered_london_range", 0.0) > 0.0]
+    if label == "overlap_reentry":
+        return [feature for feature in features if feature.values.get("reentered_overlap_range", 0.0) > 0.0]
+    if label == "us_reentry":
+        return [feature for feature in features if feature.values.get("reentered_us_range", 0.0) > 0.0]
+    if label == "london_break_up":
+        return [feature for feature in features if feature.values.get("broke_london_range_up", 0.0) > 0.0]
+    if label == "london_break_down":
+        return [feature for feature in features if feature.values.get("broke_london_range_down", 0.0) > 0.0]
+    return features
+
+
+def _apply_reference_filter(features: list[FeatureVector], spec: CandidateSpec) -> list[FeatureVector]:
+    return _filter_features_by_reference(features, spec.reference_filter_label)
+
+
 def _filter_features_by_regime(features: list[FeatureVector], regime_label: str) -> list[FeatureVector]:
     if not regime_label:
         return features
@@ -1334,9 +1360,11 @@ def load_execution_features_for_variant(
     data_symbol: str,
     variant_label: str,
     regime_filter_label: str = "",
+    reference_filter_label: str = "",
 ) -> tuple[list[FeatureVector], str]:
     if not variant_label or variant_label == "default":
         features, data_source = _load_symbol_features(config, data_symbol)
+        features = _filter_features_by_reference(features, reference_filter_label)
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     timeframe_label, _, session_label = variant_label.partition("_")
@@ -1345,6 +1373,7 @@ def load_execution_features_for_variant(
         timespan = "minute"
     else:
         features, data_source = _load_symbol_features(config, data_symbol)
+        features = _filter_features_by_reference(features, reference_filter_label)
         return _filter_features_by_regime(features, regime_filter_label), data_source
 
     features, data_source = _load_symbol_features_variant(
@@ -1359,6 +1388,7 @@ def load_execution_features_for_variant(
         features = _filter_weekday_features(features)
     if not _uses_continuous_session_stream(profile_symbol):
         features = _filter_features_by_session(features, session_label or "all")
+    features = _filter_features_by_reference(features, reference_filter_label)
     return _filter_features_by_regime(features, regime_filter_label), data_source
 
 
@@ -1421,10 +1451,27 @@ def _execution_path_metrics(result: ExecutionResult) -> dict[str, float]:
     }
 
 
+def _reference_filter_rank_bonus(row: dict[str, object]) -> float:
+    symbol = str(row.get("symbol", "") or "").upper()
+    reference_label = str(row.get("reference_filter_label", "") or "").strip()
+    if symbol not in {"GBPUSD", "XAUUSD"} or not reference_label:
+        return 0.0
+    if float(row.get("equity_quality_score", 0.0)) < 0.5:
+        return 0.0
+    if float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)) <= 0.0:
+        return 0.0
+    return 12.0 if symbol == "XAUUSD" else 6.0
+
+
+def _reference_filter_quality_bonus(row: dict[str, object]) -> float:
+    return 0.03 if _reference_filter_rank_bonus(row) > 0.0 else 0.0
+
+
 def _execution_result_score(result: ExecutionResult, candidate_set: list[dict[str, object]]) -> tuple[float, float, float, float, int]:
     metrics = _execution_path_metrics(result)
     distinct_regimes = len({str(row.get("best_regime", "") or "") for row in candidate_set if str(row.get("best_regime", "") or "")})
     specialist_count = sum(1 for row in candidate_set if str(row.get("promotion_tier", "")) == "specialist")
+    reference_bonus = sum(_reference_filter_rank_bonus(row) for row in candidate_set)
     score = (
         result.realized_pnl * 1.0
         + max(result.profit_factor - 1.0, 0.0) * 250.0
@@ -1435,6 +1482,7 @@ def _execution_result_score(result: ExecutionResult, candidate_set: list[dict[st
         - metrics["max_consecutive_losses"] * 15.0
         + distinct_regimes * 40.0
         - specialist_count * 10.0
+        + reference_bonus
     )
     return (
         score,
@@ -1495,12 +1543,14 @@ def _run_candidate_bundle(
         variant_label = str(row.get("variant_label", "") or "")
         session_label = str(row.get("session_label", "") or "")
         regime_filter_label = str(row.get("regime_filter_label", "") or "")
+        reference_filter_label = str(row.get("reference_filter_label", "") or "")
         features, data_source = load_execution_features_for_variant(
             candidate_config,
             profile_symbol,
             data_symbol,
             variant_label,
             regime_filter_label,
+            reference_filter_label,
         )
         prebuilt_agents = row.get("agents")
         if isinstance(prebuilt_agents, list) and prebuilt_agents:
@@ -1515,6 +1565,8 @@ def _run_candidate_bundle(
         label = variant_label or "default"
         if regime_filter_label:
             label = f"{label}|{regime_filter_label}"
+        if reference_filter_label:
+            label = f"{label}|{reference_filter_label}"
         variant_labels.append(f"{row['candidate_name']}@{label}")
     data_source_label = ",".join(sorted(set(data_sources))) if data_sources else "unknown"
     variant_label = ", ".join(variant_labels) if variant_labels else "default"
@@ -1860,6 +1912,33 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.xauusd.XAUUSDVWAPReclaimAgent",
             )
         )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_us_open_range_reclaim",
+                description="XAUUSD US open range reclaim using session reference levels",
+                agents=[XAUUSDUSOpenRangeReclaimAgent(), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDUSOpenRangeReclaimAgent",
+                allowed_variants=("5m_us", "15m_us"),
+                regime_filter_label="trend_flat_vol_high",
+                execution_overrides={
+                    "structure_exit_bars": 1,
+                    "stale_breakout_bars": 4,
+                    "max_holding_bars": 12,
+                    "take_profit_atr_multiple": 1.45,
+                    "trailing_stop_atr_multiple": 0.5,
+                },
+            )
+        )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_volatility_breakout_us_reentry",
+                description="XAUUSD-tuned volatility breakout filtered to US range reentry bars",
+                agents=[XAUUSDVolatilityBreakoutAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
+                allowed_variants=("5m_us", "15m_us"),
+                reference_filter_label="us_reentry",
+            )
+        )
         return _with_macro_risk(specs)
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         if upper == "EURUSD":
@@ -1981,6 +2060,56 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "take_profit_atr_multiple": 1.25,
                         "trailing_stop_atr_multiple": 0.45,
                     },
+                ),
+                CandidateSpec(
+                    name="eurusd_london_range_reentry",
+                    description="EURUSD London range reentry using session reference levels",
+                    agents=[
+                        ForexLondonRangeReentryAgent(
+                            max_abs_trend_strength=0.00095,
+                            min_relative_volume=0.62,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexLondonRangeReentryAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_europe", "15m_overlap"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.35,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_overlap_range_reentry",
+                    description="EURUSD overlap range reentry after failed overlap extension",
+                    agents=[
+                        ForexOverlapRangeReentryAgent(
+                            min_relative_volume=0.66,
+                            min_trend_strength=0.00008,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexOverlapRangeReentryAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_overlap",),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.2,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
+                    name="forex_breakout_momentum_overlap_reentry",
+                    description="EURUSD breakout momentum baseline filtered to overlap range reentry bars",
+                    agents=[ForexBreakoutMomentumAgent(), risk],
+                    code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+                    allowed_variants=("30m_overlap",),
+                    reference_filter_label="overlap_reentry",
                 ),
             ]
         if upper == "GBPUSD":
@@ -2131,6 +2260,69 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "max_holding_bars": 12,
                         "take_profit_atr_multiple": 1.4,
                         "trailing_stop_atr_multiple": 0.52,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_london_range_reentry",
+                    description="GBPUSD London range reentry using session reference levels",
+                    agents=[
+                        ForexLondonRangeReentryAgent(
+                            max_abs_trend_strength=0.00105,
+                            min_relative_volume=0.64,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexLondonRangeReentryAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_europe", "15m_overlap"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.35,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_overlap_range_reentry",
+                    description="GBPUSD overlap range reentry after failed overlap extension",
+                    agents=[
+                        ForexOverlapRangeReentryAgent(
+                            min_relative_volume=0.68,
+                            min_trend_strength=0.0001,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexOverlapRangeReentryAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    allowed_variants=("15m_overlap", "30m_overlap"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.2,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
+                    name="gbpusd_overlap_impulse_overlap_reentry",
+                    description="GBPUSD overlap impulse filtered to overlap range reentry bars",
+                    agents=[
+                        GBPUSDOverlapImpulseAgent(
+                            min_trend_strength=0.00014,
+                            min_relative_volume=0.64,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.GBPUSDOverlapImpulseAgent",
+                    allowed_variants=("15m_overlap",),
+                    reference_filter_label="overlap_reentry",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.7,
+                        "trailing_stop_atr_multiple": 0.65,
                     },
                 ),
             ])
@@ -2532,6 +2724,7 @@ def _run_candidate(
     scored.timeframe_label = spec.timeframe_label
     scored.session_label = spec.session_label
     scored.regime_filter_label = spec.regime_filter_label
+    scored.reference_filter_label = spec.reference_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     _annotate_regime_metrics(scored, features, result.closed_trades)
     return scored
@@ -4089,6 +4282,7 @@ def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec
         variant_label=variant_label,
         timeframe_label=timeframe_label,
         session_label=session_label,
+        reference_filter_label=spec.reference_filter_label,
         allowed_variants=spec.allowed_variants,
     )
 
@@ -4877,6 +5071,7 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "variant_label": row.variant_label,
         "session_label": row.session_label,
         "regime_filter_label": row.regime_filter_label,
+        "reference_filter_label": row.reference_filter_label,
         "execution_overrides": row.execution_overrides or {},
         "best_regime": row.best_regime,
         "best_regime_pnl": row.best_regime_pnl,
@@ -4909,12 +5104,12 @@ def _selection_component_keys(row: dict[str, object]) -> set[str]:
 
 def _candidate_selection_score(row: dict[str, object]) -> tuple[float, ...]:
     return (
-        float(row.get("equity_quality_score", 0.0)),
+        float(row.get("equity_quality_score", 0.0)) + _reference_filter_quality_bonus(row),
         float(row.get("regime_stability_score", 0.0)),
         -float(row.get("best_trade_share_pct", 100.0)),
         float(row.get("equity_new_high_share_pct", 0.0)),
         -float(row.get("regime_loss_ratio", 999.0)),
-        float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+        float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)) + _reference_filter_rank_bonus(row),
         float(row.get("test_pnl", 0.0)),
         float(row.get("validation_pnl", 0.0)),
         float(row.get("realized_pnl", 0.0)),
@@ -5137,6 +5332,7 @@ def _near_miss_local_optimizer(
                 timeframe_label=base_spec.timeframe_label,
                 session_label=base_spec.session_label,
                 regime_filter_label=base_spec.regime_filter_label,
+                reference_filter_label=base_spec.reference_filter_label,
             )
             features, _ = load_execution_features_for_variant(
                 config,
@@ -5144,6 +5340,7 @@ def _near_miss_local_optimizer(
                 data_symbol,
                 candidate_spec.variant_label,
                 candidate_spec.regime_filter_label,
+                candidate_spec.reference_filter_label,
             )
             if not features:
                 continue
@@ -5186,6 +5383,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         viable_rows,
         key=lambda row: (
             bool(row.get("recommended")),
+            float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)) + _reference_filter_rank_bonus(row),
+            float(row.get("equity_quality_score", 0.0)) + _reference_filter_quality_bonus(row),
             float(row.get("regime_stability_score", 0.0)),
             -float(row.get("regime_loss_ratio", 999.0)),
             float(row.get("combo_outperformance_score", 0.0)),
@@ -5279,6 +5478,10 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
     used_components: set[str] = set()
     core_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "core"]
     specialist_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "specialist"]
+    if core_rows:
+        singleton_specialists = [row for row in specialist_rows if int(row.get("component_count", 1)) <= 1]
+        if singleton_specialists:
+            specialist_rows = singleton_specialists
     allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     allow_forex_specialist_third = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     used_regimes: set[str] = set()
@@ -5288,7 +5491,8 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
     core_ranked = sorted(
         core_rows,
         key=lambda row: (
-            float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+            float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)) + _reference_filter_rank_bonus(row),
+            float(row.get("equity_quality_score", 0.0)) + _reference_filter_quality_bonus(row),
             float(row.get("test_pnl", 0.0)),
             float(row.get("validation_pnl", 0.0)),
             float(row.get("regime_stability_score", 0.0)),
@@ -5806,32 +6010,40 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
         variant_specs = [spec for base_spec in singles if (spec := _with_variant_name(base_spec, variant_label)) is not None]
         exit_family_specs = _exit_family_specs(config, resolved.profile_symbol, variant_specs)
         explored_entry_exit_specs.extend(variant_specs + exit_family_specs)
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                features,
-                spec,
-                "single" if "__exit_" not in spec.name else "entry_exit_family",
-                f"{symbol_slug}_{spec.name}_{variant_label}_symbol_candidate",
+        for spec in (variant_specs + exit_family_specs):
+            filtered_features = _apply_reference_filter(features, spec)
+            if not filtered_features:
+                continue
+            results.append(
+                _run_candidate_with_splits(
+                    config,
+                    filtered_features,
+                    spec,
+                    "single" if "__exit_" not in spec.name else "entry_exit_family",
+                    f"{symbol_slug}_{spec.name}_{variant_label}_symbol_candidate",
+                )
             )
-            for spec in (variant_specs + exit_family_specs)
-        )
     sweep_specs = _parameter_sweep_specs(config, resolved.profile_symbol)
     if sweep_specs:
         for variant_label, features in feature_variants.items():
             if not features:
                 continue
-            results.extend(
-                _run_candidate_with_splits(
-                    config,
-                    features,
-                    materialized_spec,
-                    "parameter_sweep",
-                    f"{symbol_slug}_{materialized_spec.name}_{variant_label}_symbol_candidate",
+            for base_spec in sweep_specs:
+                materialized_spec = _with_variant_name(base_spec, variant_label)
+                if materialized_spec is None:
+                    continue
+                filtered_features = _apply_reference_filter(features, materialized_spec)
+                if not filtered_features:
+                    continue
+                results.append(
+                    _run_candidate_with_splits(
+                        config,
+                        filtered_features,
+                        materialized_spec,
+                        "parameter_sweep",
+                        f"{symbol_slug}_{materialized_spec.name}_{variant_label}_symbol_candidate",
+                    )
                 )
-                for base_spec in sweep_specs
-                if (materialized_spec := _with_variant_name(base_spec, variant_label)) is not None
-            )
     improvement_specs = _auto_improvement_specs(config, resolved.profile_symbol, results)
     if improvement_specs:
         results.extend(
@@ -5867,6 +6079,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.reference_filter_label,
                 )[0],
                 spec,
                 "regime_improved",
@@ -5890,6 +6103,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.reference_filter_label,
                 )[0],
                 spec,
                 "autopsy_improved",
@@ -5912,6 +6126,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
                     resolved.data_symbol,
                     spec.variant_label,
                     spec.regime_filter_label,
+                    spec.reference_filter_label,
                 )[0],
                 spec,
                 "near_miss_optimized",
@@ -6030,6 +6245,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
             "variant_label": row.variant_label,
             "session_label": row.session_label,
             "regime_filter_label": row.regime_filter_label,
+            "reference_filter_label": row.reference_filter_label,
             "execution_overrides": row.execution_overrides or {},
             "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
         }

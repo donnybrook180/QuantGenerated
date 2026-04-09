@@ -52,6 +52,18 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
     current_overnight_open = 0.0
     saw_regular_bar_today = False
     saw_overnight_bar_today = False
+    session_reference_labels: tuple[str, ...] = ()
+    if is_forex_symbol(symbol) or is_metal_symbol(symbol):
+        session_reference_labels = ("london", "us", "overlap")
+    session_reference_windows = {
+        "london": (8 * 60, 13 * 60),
+        "us": (13 * 60, 17 * 60),
+        "overlap": (13 * 60, 16 * 60),
+    }
+    session_reference_state: dict[str, dict[str, float | bool]] = {
+        label: {"open": 0.0, "high": 0.0, "low": 0.0, "ready": False}
+        for label in session_reference_labels
+    }
 
     for index, bar in enumerate(bars):
         lookback = closes[max(0, index - 14) : index + 1]
@@ -95,6 +107,10 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
             current_overnight_open = 0.0
             saw_regular_bar_today = False
             saw_overnight_bar_today = False
+            session_reference_state = {
+                label: {"open": 0.0, "high": 0.0, "low": 0.0, "ready": False}
+                for label in session_reference_labels
+            }
 
         if not is_twenty_four_hour_asset and session_minutes < regular_open:
             if not saw_overnight_bar_today:
@@ -121,6 +137,19 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
                 current_regular_high = max(current_regular_high, bar.high)
                 current_regular_low = min(current_regular_low, bar.low)
             current_regular_close = bar.close
+
+        for label in session_reference_labels:
+            window_open, window_close = session_reference_windows[label]
+            state = session_reference_state[label]
+            if window_open <= session_minutes < window_close:
+                if not state["ready"]:
+                    state["open"] = bar.open
+                    state["high"] = bar.high
+                    state["low"] = bar.low
+                    state["ready"] = True
+                else:
+                    state["high"] = max(float(state["high"]), bar.high)
+                    state["low"] = min(float(state["low"]), bar.low)
 
         session_vwap = (cumulative_session_pv / cumulative_session_volume) if cumulative_session_volume > 0 else bar.close
         vwap_distance = ((bar.close / session_vwap) - 1.0) if session_vwap else 0.0
@@ -152,6 +181,36 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
         midday_session = 1.0 if in_regular_session and 90 <= minutes_from_open < 180 else 0.0
         afternoon_session = 1.0 if in_regular_session and 180 <= minutes_from_open < 330 else 0.0
         event_flags = (daily_event_flags or {}).get(bar.timestamp.date(), DailyEventFlags())
+        session_reference_values: dict[str, float] = {}
+        for label in session_reference_labels:
+            state = session_reference_state[label]
+            ready = bool(state["ready"])
+            ref_high = float(state["high"]) if ready else 0.0
+            ref_low = float(state["low"]) if ready else 0.0
+            ref_open = float(state["open"]) if ready else 0.0
+            ref_range = max(ref_high - ref_low, bar.close * 0.0005) if ready else 0.0
+            distance_high = ((bar.close / ref_high) - 1.0) if ready and ref_high else 0.0
+            distance_low = ((bar.close / ref_low) - 1.0) if ready and ref_low else 0.0
+            reclaimed_high = 1.0 if ready and bar.low <= ref_high <= bar.close else 0.0
+            reclaimed_low = 1.0 if ready and bar.high >= ref_low >= bar.close else 0.0
+            broke_above = 1.0 if ready and bar.close > ref_high else 0.0
+            broke_below = 1.0 if ready and bar.close < ref_low else 0.0
+            reentered = 1.0 if ready and ref_low <= bar.close <= ref_high else 0.0
+            session_reference_values.update(
+                {
+                    f"{label}_open": ref_open,
+                    f"{label}_high": ref_high,
+                    f"{label}_low": ref_low,
+                    f"{label}_range_pct": (ref_range / bar.close) if ready and bar.close else 0.0,
+                    f"distance_to_{label}_high": distance_high,
+                    f"distance_to_{label}_low": distance_low,
+                    f"reclaimed_{label}_high": reclaimed_high,
+                    f"reclaimed_{label}_low": reclaimed_low,
+                    f"broke_{label}_range_up": broke_above,
+                    f"broke_{label}_range_down": broke_below,
+                    f"reentered_{label}_range": reentered,
+                }
+            )
         features.append(
             FeatureVector(
                 timestamp=bar.timestamp,
@@ -204,6 +263,7 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
                     "high_impact_event_day": 1.0 if event_flags.high_impact_count > 0 else 0.0,
                     "earnings_event_day": 1.0 if event_flags.earnings_like_count > 0 else 0.0,
                     "event_blackout": 1.0 if event_flags.event_blackout else 0.0,
+                    **session_reference_values,
                 },
             )
         )

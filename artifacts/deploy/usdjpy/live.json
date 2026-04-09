@@ -3,86 +3,75 @@
   "symbol": "USDJPY",
   "data_symbol": "C:USDJPY",
   "broker_symbol": "USDJPY",
-  "research_run_id": 196,
-  "execution_set_id": 93,
-  "execution_validation_summary": "selection=standard variant=forex_breakout_momentum__30m_us__exit_trend@30m_us, forex_breakout_momentum__5m_overlap__exit_trend@5m_overlap, forex_short_breakdown_momentum__30m_europe__exit_trend@30m_europe data_source=duckdb_cache,duckdb_cache_aggregated pnl=396247.22 pf=35.25 closed=21 -> accepted",
+  "research_run_id": 260,
+  "execution_set_id": 139,
+  "execution_validation_summary": "selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk",
   "strategies": [
     {
-      "candidate_name": "forex_breakout_momentum__30m_us__exit_trend",
-      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
-      "policy_summary": "activate in trend_flat_vol_high; avoid trend_flat_vol_low; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+      "candidate_name": "forex_short_breakdown_momentum__30m_us",
+      "code_path": "quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_flat_vol_low; avoid trend_down_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.82; risk_cap=0.79; stability=0.54; loss_ratio=0.65",
       "variant_label": "30m_us",
       "regime_filter_label": "",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
-      },
+      "execution_overrides": {},
       "allocation_weight": 0.3333333333333333,
       "allowed_regimes": [
-        "trend_flat_vol_high"
-      ],
-      "blocked_regimes": [
         "trend_flat_vol_low"
       ],
-      "min_vol_percentile": 0.55,
-      "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.15,
-      "max_risk_multiplier": 0.6,
+      "blocked_regimes": [
+        "trend_down_vol_mid"
+      ],
+      "min_vol_percentile": 0.0,
+      "max_vol_percentile": 0.45,
+      "base_allocation_weight": 0.8246560675227741,
+      "max_risk_multiplier": 0.7908503291217834,
       "min_risk_multiplier": 0.0
     },
     {
-      "candidate_name": "forex_breakout_momentum__5m_overlap__exit_trend",
-      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
-      "policy_summary": "activate in trend_flat_vol_high; avoid trend_flat_vol_low; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
-      "variant_label": "5m_overlap",
-      "regime_filter_label": "",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
-        "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
-      },
-      "allocation_weight": 0.3333333333333333,
-      "allowed_regimes": [
-        "trend_flat_vol_high"
-      ],
-      "blocked_regimes": [
-        "trend_flat_vol_low"
-      ],
-      "min_vol_percentile": 0.55,
-      "max_vol_percentile": 0.97,
-      "base_allocation_weight": 1.1499234646690124,
-      "max_risk_multiplier": 0.6,
-      "min_risk_multiplier": 0.0
-    },
-    {
-      "candidate_name": "forex_short_breakdown_momentum__30m_europe__exit_trend",
+      "candidate_name": "forex_short_breakdown_momentum__30m_overlap",
       "code_path": "quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
-      "policy_summary": "activate in trend_down_vol_low; avoid trend_flat_vol_mid; vol_pct in [0.00, 0.45]; base_weight=1.11; risk_cap=0.97; stability=0.94; loss_ratio=0.05",
-      "variant_label": "30m_europe",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in trend_down_vol_mid; avoid trend_flat_vol_high; vol_pct in [0.20, 0.80]; base_weight=1.06; risk_cap=0.94; stability=0.87; loss_ratio=0.13",
+      "variant_label": "30m_overlap",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 0.3333333333333333,
+      "allowed_regimes": [
+        "trend_down_vol_mid"
+      ],
+      "blocked_regimes": [
+        "trend_flat_vol_high"
+      ],
+      "min_vol_percentile": 0.2,
+      "max_vol_percentile": 0.8,
+      "base_allocation_weight": 1.0593999802267242,
+      "max_risk_multiplier": 0.9417571301457514,
+      "min_risk_multiplier": 0.0
+    },
+    {
+      "candidate_name": "forex_breakout_momentum_patient",
+      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in trend_flat_vol_low; avoid trend_flat_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00",
+      "variant_label": "",
       "regime_filter_label": "",
       "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 1.2,
+        "structure_exit_bars": 0,
         "stale_breakout_bars": 8,
-        "structure_exit_bars": 0
+        "max_holding_bars": 32
       },
       "allocation_weight": 0.3333333333333333,
       "allowed_regimes": [
-        "trend_down_vol_low"
+        "trend_flat_vol_low"
       ],
       "blocked_regimes": [
         "trend_flat_vol_mid"
       ],
       "min_vol_percentile": 0.0,
       "max_vol_percentile": 0.45,
-      "base_allocation_weight": 1.106884797040946,
-      "max_risk_multiplier": 0.9722830838120368,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
       "min_risk_multiplier": 0.0
     }
   ],

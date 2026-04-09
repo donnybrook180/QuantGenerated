@@ -3,15 +3,15 @@
   "symbol": "US500",
   "data_symbol": "SPY",
   "broker_symbol": "US500.cash",
-  "research_run_id": 261,
-  "execution_set_id": 140,
-  "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.77 pf=1.74 closed=9 quality=0.39 underwater=66.7% -> accepted",
+  "research_run_id": 268,
+  "execution_set_id": 145,
+  "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
   "strategies": [
     {
       "candidate_name": "momentum__exit_trend__near_miss_patient",
       "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
       "promotion_tier": "specialist",
-      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.75; loss_ratio=0.55",
+      "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.76; loss_ratio=0.54",
       "variant_label": "",
       "regime_filter_label": "",
       "execution_overrides": {

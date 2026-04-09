@@ -1,31 +1,31 @@
 Viability autopsy: US100
-Execution validation summary: selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.19 pf=1.39 closed=18 quality=0.39 underwater=88.9% -> accepted_with_reduced_risk
-Tier counts: core=5 specialist=0 reject=41
+Execution validation summary: selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.83 pf=1.70 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk
+Tier counts: core=5 specialist=3 reject=38
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 36
-- regime loss ratio too high (999.00 > 1.25): 30
-- test PF < 1.0 (0.00): 21
+- regime stability too low (0.00 < 0.50): 32
+- regime loss ratio too high (999.00 > 1.25): 27
+- test PF < 1.0 (0.00): 15
 - validation PF < 1.0 (0.00): 11
-- test pnl <= 0 (0.00): 10
-- equity quality too low (0.25 < 0.45): 7
-- test PF < 1.0 (0.01): 5
+- test pnl <= 0 (0.00): 6
+- equity quality too low (0.25 < 0.45): 5
 - validation trades too low (0 < 3): 4
+- validation pnl <= 0 (0.00): 4
 
 Top near-misses
-- opening_range_short_breakdown [core]: pnl=0.80 pf=1.27 val=1.94/6.02/4 test=0.00/0.00/0 wf=0.00%
+- us100_opening_range_short_breakdown_trend__plus__opening_range_short_breakdown__exit_trend [specialist]: pnl=1.27 pf=1.49 val=1.99/6.70/4 test=0.00/0.00/0 wf=0.00%
+  reasons: combo underperformed components (-1.00), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- us100_opening_range_short_breakdown_trend__plus__opening_range_short_breakdown [specialist]: pnl=1.27 pf=1.49 val=1.99/6.70/4 test=0.00/0.00/0 wf=0.00%
+  reasons: combo underperformed components (-1.00), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown [specialist]: pnl=1.27 pf=1.49 val=1.99/6.70/4 test=0.00/0.00/0 wf=0.00%
+  reasons: combo underperformed components (-1.00), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- opening_range_short_breakdown__exit_fastfail [core]: pnl=0.78 pf=1.30 val=1.56/5.46/4 test=0.00/0.00/0 wf=0.00%
   reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00)
-- us100_opening_range_short_breakdown_trend__plus__opening_range_short_breakdown__exit_trend [reject]: pnl=0.80 pf=1.27 val=1.94/6.02/4 test=0.00/0.00/0 wf=0.00%
-  reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00), combo underperformed components (-0.91), combo overlap too high (100.00% > 80%)
-- us100_opening_range_short_breakdown_trend__plus__opening_range_short_breakdown [reject]: pnl=0.80 pf=1.27 val=1.94/6.02/4 test=0.00/0.00/0 wf=0.00%
-  reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00), combo underperformed components (-0.90), combo overlap too high (100.00% > 80%)
-- opening_range_short_breakdown__exit_trend__plus__opening_range_short_breakdown [reject]: pnl=0.80 pf=1.27 val=1.94/6.02/4 test=0.00/0.00/0 wf=0.00%
-  reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00), combo underperformed components (-0.91), combo overlap too high (100.00% > 80%)
-- us100_opening_range_short_breakdown_fast [core]: pnl=0.09 pf=1.03 val=1.33/4.44/4 test=0.00/0.00/0 wf=0.00%
+- us100_opening_range_short_breakdown_fast [core]: pnl=0.70 pf=1.27 val=1.47/5.22/4 test=0.00/0.00/0 wf=0.00%
   reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00)
-- opening_range_short_breakdown__exit_fastfail [core]: pnl=0.00 pf=1.00 val=1.41/4.66/4 test=0.00/0.00/0 wf=0.00%
-  reasons: test pnl <= 0 (0.00), test PF < 1.0 (0.00)
+- us100_opening_range_short_breakdown_trend__regime_trend_down_vol_high [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (0 < 3), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
 - opening_range_short_breakdown__exit_trend__regime_trend_down_vol_high [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: validation trades too low (0 < 3), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- us100_opening_range_short_breakdown_trend__regime_trend_down_vol_high [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- opening_range_short_breakdown__regime_trend_down_vol_high [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: validation trades too low (0 < 3), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)

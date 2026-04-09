@@ -1,20 +1,20 @@
 Artifact: forex_short_trend_continuation__5m_us_5m_us_symbol_candidate
 Closed trades: 10
-Realized pnl: -1196.39
+Realized pnl: -1440.63
 
 By entry hour
-17: trades=2 pnl=-1139.54 avg=-569.77 win_rate=0.00%
-16: trades=1 pnl=-735.45 avg=-735.45 win_rate=0.00%
-19: trades=1 pnl=-673.96 avg=-673.96 win_rate=0.00%
-15: trades=2 pnl=93.10 avg=46.55 win_rate=50.00%
-14: trades=2 pnl=245.08 avg=122.54 win_rate=50.00%
-18: trades=2 pnl=1014.39 avg=507.20 win_rate=50.00%
+17: trades=2 pnl=-1187.91 avg=-593.95 win_rate=0.00%
+16: trades=1 pnl=-759.72 avg=-759.72 win_rate=0.00%
+19: trades=1 pnl=-698.03 avg=-698.03 win_rate=0.00%
+15: trades=2 pnl=43.78 avg=21.89 win_rate=50.00%
+14: trades=2 pnl=196.01 avg=98.01 win_rate=50.00%
+18: trades=2 pnl=965.24 avg=482.62 win_rate=50.00%
 
 By entry setup
-forex_short_trend_continuation: trades=10 pnl=-1196.39 avg=-119.64 win_rate=30.00%
+forex_short_trend_continuation: trades=10 pnl=-1440.63 avg=-144.06 win_rate=30.00%
 
 By exit reason
-signal_exit: trades=3 pnl=-2083.79 avg=-694.60 win_rate=0.00%
-stop_loss: trades=2 pnl=-1552.49 avg=-776.25 win_rate=0.00%
-trailing_stop: trades=4 pnl=809.73 avg=202.43 win_rate=50.00%
-take_profit: trades=1 pnl=1630.18 avg=1630.18 win_rate=100.00%
+signal_exit: trades=3 pnl=-2156.27 avg=-718.76 win_rate=0.00%
+stop_loss: trades=2 pnl=-1601.24 avg=-800.62 win_rate=0.00%
+trailing_stop: trades=4 pnl=711.55 avg=177.89 win_rate=50.00%
+take_profit: trades=1 pnl=1605.34 avg=1605.34 win_rate=100.00%

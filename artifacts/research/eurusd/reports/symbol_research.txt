@@ -218,6 +218,19 @@ forex_breakout_momentum__30m_overlap__exit_fastfail [entry_exit_family|core]: pn
   splits: train_pnl=93.81 val_pnl=14.22 val_pf=999.00 val_closed=1 test_pnl=39.02 test_pf=999.00 test_closed=1
   trades: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_fastfail_30m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_fastfail_30m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail [entry_exit_family|core]: pnl=128.06 closed=7 pf=8.92 win_rate=71.43% dd=0.02%
+  tier: core
+  trade_metrics: expectancy=18.29 avg_win=28.84 avg_loss=-8.08 payoff=3.57 avg_hold=20.3
+  exits: dominant=take_profit share=28.57%
+  regimes: best=trend_up_vol_mid pnl=56.52 worst=trend_flat_vol_low pnl=-12.08 dominant_share=28.57% stability=0.92 loss_ratio=0.21
+  regime_trade_counts: {"trend_down_vol_high": 1, "trend_flat_vol_high": 2, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 2, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_down_vol_high": 14.221547500000655, "trend_flat_vol_high": 17.541782499998938, "trend_flat_vol_low": -12.077730000000841, "trend_flat_vol_mid": 51.850284999999005, "trend_up_vol_mid": 56.519670000000296}
+  live_policy: tier=core; activate in trend_up_vol_mid; avoid no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=1.09; risk_cap=0.96; stability=0.92; loss_ratio=0.21
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=25.03 avg_test_pnl=39.02 avg_val_pf=999.00 avg_test_pf=999.00
+  sparse_strategy: soft_pass_rate=100.00%
+  splits: train_pnl=93.81 val_pnl=14.22 val_pf=999.00 val_closed=1 test_pnl=39.02 test_pf=999.00 test_closed=1
+  trades: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail_30m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail_30m_overlap_symbol_candidate_analysis.txt
 forex_breakout_momentum__30m_us__exit_fastfail [entry_exit_family|core]: pnl=126.35 closed=7 pf=8.07 win_rate=71.43% dd=0.02%
   tier: core
   trade_metrics: expectancy=18.05 avg_win=28.84 avg_loss=-8.93 payoff=3.23 avg_hold=18.3
@@ -244,6 +257,19 @@ forex_breakout_momentum__30m_overlap__exit_trend [entry_exit_family|core]: pnl=1
   splits: train_pnl=80.91 val_pnl=14.22 val_pf=999.00 val_closed=1 test_pnl=65.92 test_pf=999.00 test_closed=1
   trades: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_trend_30m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_trend_30m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum_overlap_reentry__30m_overlap__exit_trend [entry_exit_family|core]: pnl=111.03 closed=6 pf=10.19 win_rate=83.33% dd=0.01%
+  tier: core
+  trade_metrics: expectancy=18.51 avg_win=24.62 avg_loss=-12.08 payoff=2.04 avg_hold=33.2
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_flat_vol_mid pnl=68.05 worst=trend_flat_vol_low pnl=-12.08 dominant_share=33.33% stability=0.91 loss_ratio=0.18
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 2, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_flat_vol_high": 7.0420449999985, "trend_flat_vol_low": -12.077730000000841, "trend_flat_vol_mid": 68.04987999999835, "trend_up_vol_mid": 48.019882499999945}
+  live_policy: tier=core; activate in trend_flat_vol_mid; avoid no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=1.09; risk_cap=0.96; stability=0.91; loss_ratio=0.18
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=9.52 avg_test_pnl=65.92 avg_val_pf=999.00 avg_test_pf=999.00
+  sparse_strategy: soft_pass_rate=100.00%
+  splits: train_pnl=80.91 val_pnl=14.22 val_pf=999.00 val_closed=1 test_pnl=65.92 test_pf=999.00 test_closed=1
+  trades: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_trend_30m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_trend_30m_overlap_symbol_candidate_analysis.txt
 forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_dense__trend_flat [near_miss_optimized|specialist]: pnl=95.39 closed=9 pf=1.72 win_rate=44.44% dd=0.01%
   tier: specialist
   trade_metrics: expectancy=10.60 avg_win=57.02 avg_loss=-26.54 payoff=2.15 avg_hold=7.2
@@ -487,6 +513,19 @@ forex_breakout_momentum__15m_overlap__exit_fastfail [entry_exit_family|reject]: 
   splits: train_pnl=51.88 val_pnl=-58.12 val_pf=0.58 val_closed=15 test_pnl=9.85 test_pf=1.08 test_closed=13
   trades: artifacts\research\eurusd\candidates\forex_breakout_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+forex_breakout_momentum_overlap_reentry__30m_overlap [single|reject]: pnl=24.74 closed=2 pf=10.98 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=12.37 avg_win=27.22 avg_loss=-2.48 payoff=10.98 avg_hold=6.0
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_flat_vol_low pnl=27.22 worst=trend_up_vol_low pnl=-2.48 dominant_share=50.00% stability=0.92 loss_ratio=0.09
+  regime_trade_counts: {"trend_flat_vol_low": 1, "trend_up_vol_low": 1}
+  regime_pnls: {"trend_flat_vol_low": 27.223732500000153, "trend_up_vol_low": -2.479815000001661}
+  live_policy: tier=reject; activate in trend_flat_vol_low; avoid no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.92; loss_ratio=0.09
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=-1.24 avg_val_pf=0.00 avg_test_pf=0.00
+  sparse_strategy: soft_pass_rate=0.00%
+  splits: train_pnl=27.22 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap_30m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap_30m_overlap_symbol_candidate_analysis.txt
 forex_breakout_momentum__15m_us__exit_fastfail [entry_exit_family|reject]: pnl=21.48 closed=80 pf=1.04 win_rate=36.25% dd=0.09%
   tier: reject
   trade_metrics: expectancy=0.27 avg_win=20.14 avg_loss=-11.03 payoff=1.83 avg_hold=11.0
@@ -910,6 +949,18 @@ eurusd_post_news_reclaim__15m_europe [single|reject]: pnl=0.00 closed=0 pf=0.00 
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_europe_15m_europe_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_europe_15m_europe_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_europe [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe_15m_europe_symbol_candidate_analysis.txt
 eurusd_london_false_break_reversal__15m_europe__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
@@ -958,6 +1009,30 @@ eurusd_post_news_reclaim__15m_europe__exit_fastfail [entry_exit_family|reject]: 
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_europe__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_europe__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
 eurusd_london_range_reclaim__15m_us [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
@@ -1102,6 +1177,30 @@ eurusd_post_news_reclaim__15m_overlap [single|reject]: pnl=0.00 closed=0 pf=0.00
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_overlap_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_overlap [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
+eurusd_overlap_range_reentry__15m_overlap [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap_15m_overlap_symbol_candidate_analysis.txt
 eurusd_london_range_reclaim__15m_overlap__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
@@ -1174,6 +1273,54 @@ eurusd_post_news_reclaim__15m_overlap__exit_fastfail [entry_exit_family|reject]:
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\eurusd_post_news_reclaim__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_overlap__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+eurusd_london_range_reentry__15m_overlap__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_london_range_reentry__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
+eurusd_overlap_range_reentry__15m_overlap__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap__exit_trend_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap__exit_trend_15m_overlap_symbol_candidate_analysis.txt
+eurusd_overlap_range_reentry__15m_overlap__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\eurusd_overlap_range_reentry__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate_analysis.txt
 eurusd_london_range_reclaim__30m_europe [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
@@ -1537,6 +1684,19 @@ forex_breakout_momentum__30m_overlap__exit_fastfail__regime_trend_up_vol_mid [re
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_fastfail__regime_trend_up_vol_mid_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_fastfail__regime_trend_up_vol_mid_symbol_candidate_analysis.txt
+forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail__regime_trend_up_vol_mid [regime_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  regime_filter: trend_up_vol_mid
+  walk_forward: windows=1 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail__regime_trend_up_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum_overlap_reentry__30m_overlap__exit_fastfail__regime_trend_up_vol_mid_symbol_candidate_analysis.txt
 forex_breakout_momentum__30m_europe [single|reject]: pnl=-0.38 closed=6 pf=0.99 win_rate=66.67% dd=0.04%
   tier: reject
   trade_metrics: expectancy=-0.06 avg_win=8.35 avg_loss=-16.88 payoff=0.49 avg_hold=14.7
@@ -1693,19 +1853,6 @@ eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient [n
   splits: train_pnl=10.62 val_pnl=-72.92 val_pf=0.62 val_closed=26 test_pnl=-63.49 test_pf=0.78 test_closed=38
   trades: artifacts\research\eurusd\candidates\eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient_symbol_candidate_trades.csv
   analysis: artifacts\research\eurusd\candidates\eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient_symbol_candidate_analysis.txt
-forex_breakout_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid [regime_improved|reject]: pnl=-23.88 closed=1 pf=0.00 win_rate=0.00% dd=0.03%
-  tier: reject
-  trade_metrics: expectancy=-23.88 avg_win=0.00 avg_loss=-23.88 payoff=0.00 avg_hold=10.0
-  exits: dominant=stale_breakout share=100.00%
-  regimes: best=trend_flat_vol_mid pnl=-23.88 worst=trend_flat_vol_mid pnl=-23.88 dominant_share=100.00% stability=0.00 loss_ratio=999.00
-  regime_trade_counts: {"trend_flat_vol_mid": 1}
-  regime_pnls: {"trend_flat_vol_mid": -23.879440000002027}
-  live_policy: tier=reject; activate in trend_flat_vol_mid; avoid no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
-  regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-11.94 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
-  splits: train_pnl=0.00 val_pnl=-23.88 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\research\eurusd\candidates\forex_breakout_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
 forex_short_breakdown_momentum__15m_overlap [single|reject]: pnl=-24.05 closed=121 pf=0.97 win_rate=38.02% dd=0.06%
   tier: reject
   trade_metrics: expectancy=-0.20 avg_win=17.37 avg_loss=-10.98 payoff=1.58 avg_hold=8.4

@@ -1,0 +1,18 @@
+Artifact: gbpusd_overlap_impulse_overlap_reentry__15m_overlap__exit_fastfail__near_miss_patient__trend_up_symbol_candida
+Closed trades: 17
+Realized pnl: 30.61
+
+By entry hour
+13: trades=3 pnl=-17.21 avg=-5.74 win_rate=33.33%
+15: trades=3 pnl=0.67 avg=0.22 win_rate=66.67%
+12: trades=4 pnl=7.81 avg=1.95 win_rate=50.00%
+14: trades=4 pnl=12.63 avg=3.16 win_rate=50.00%
+16: trades=3 pnl=26.70 avg=8.90 win_rate=66.67%
+
+By entry setup
+gbpusd_overlap_impulse: trades=17 pnl=30.61 avg=1.80 win_rate=52.94%
+
+By exit reason
+stop_loss: trades=7 pnl=-288.96 avg=-41.28 win_rate=0.00%
+trailing_stop: trades=2 pnl=-5.35 avg=-2.68 win_rate=50.00%
+take_profit: trades=8 pnl=324.92 avg=40.62 win_rate=100.00%

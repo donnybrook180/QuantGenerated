@@ -1,22 +1,22 @@
 Artifact: forex_short_breakdown_momentum__30m_overlap_30m_overlap_symbol_candidate
 Closed trades: 35
-Realized pnl: 50030.95
+Realized pnl: 49177.82
 
 By entry hour
-15: trades=8 pnl=-5495.77 avg=-686.97 win_rate=25.00%
-16: trades=6 pnl=-1467.16 avg=-244.53 win_rate=50.00%
-12: trades=6 pnl=2815.02 avg=469.17 win_rate=50.00%
-13: trades=4 pnl=4988.27 avg=1247.07 win_rate=50.00%
-14: trades=11 pnl=49190.60 avg=4471.87 win_rate=27.27%
+15: trades=8 pnl=-5691.52 avg=-711.44 win_rate=25.00%
+16: trades=6 pnl=-1613.36 avg=-268.89 win_rate=33.33%
+12: trades=6 pnl=2669.11 avg=444.85 win_rate=50.00%
+13: trades=4 pnl=4891.20 avg=1222.80 win_rate=50.00%
+14: trades=11 pnl=48922.39 avg=4447.49 win_rate=27.27%
 
 By entry setup
-forex_short_breakdown_momentum: trades=35 pnl=50030.95 avg=1429.46 win_rate=37.14%
+forex_short_breakdown_momentum: trades=35 pnl=49177.82 avg=1405.08 win_rate=34.29%
 
 By exit reason
-stop_loss: trades=8 pnl=-21787.27 avg=-2723.41 win_rate=0.00%
-structure_exit: trades=6 pnl=-11996.51 avg=-1999.42 win_rate=0.00%
-stale_breakout: trades=3 pnl=-5618.69 avg=-1872.90 win_rate=0.00%
-signal_exit: trades=1 pnl=-1706.88 avg=-1706.88 win_rate=0.00%
-trailing_stop: trades=9 pnl=448.37 avg=49.82 win_rate=55.56%
-take_profit: trades=7 pnl=32600.94 avg=4657.28 win_rate=100.00%
-end_of_run: trades=1 pnl=58090.98 avg=58090.98 win_rate=100.00%
+stop_loss: trades=8 pnl=-21981.90 avg=-2747.74 win_rate=0.00%
+structure_exit: trades=6 pnl=-12142.62 avg=-2023.77 win_rate=0.00%
+stale_breakout: trades=3 pnl=-5691.80 avg=-1897.27 win_rate=0.00%
+signal_exit: trades=1 pnl=-1731.33 avg=-1731.33 win_rate=0.00%
+trailing_stop: trades=9 pnl=228.30 avg=25.37 win_rate=44.44%
+take_profit: trades=7 pnl=32430.94 avg=4632.99 win_rate=100.00%
+end_of_run: trades=1 pnl=58066.24 avg=58066.24 win_rate=100.00%

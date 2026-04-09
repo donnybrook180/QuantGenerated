@@ -152,6 +152,14 @@ class PolygonConfig:
 
 
 @dataclass(slots=True)
+class MacroCalendarConfig:
+    enabled: bool = field(default_factory=lambda: os.getenv("MACRO_EVENT_CALENDAR_ENABLED", "true").lower() == "true")
+    calendar_path: str = field(default_factory=lambda: os.getenv("MACRO_EVENT_CALENDAR_PATH", "artifacts/system/data/macro_calendar.csv"))
+    pre_event_minutes: int = field(default_factory=lambda: int(os.getenv("MACRO_PRE_EVENT_MINUTES", "60")))
+    post_event_minutes: int = field(default_factory=lambda: int(os.getenv("MACRO_POST_EVENT_MINUTES", "120")))
+
+
+@dataclass(slots=True)
 class FTMOEvaluationConfig:
     profit_target_pct: float = field(default_factory=lambda: float(os.getenv("FTMO_PROFIT_TARGET_PCT", "0.10")))
     min_win_rate_pct: float = field(default_factory=lambda: float(os.getenv("FTMO_MIN_WIN_RATE_PCT", "35.0")))
@@ -243,6 +251,7 @@ class SystemConfig:
     optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
     mt5: MT5Config = field(default_factory=MT5Config)
     polygon: PolygonConfig = field(default_factory=PolygonConfig)
+    macro_calendar: MacroCalendarConfig = field(default_factory=MacroCalendarConfig)
     instrument: InstrumentConfig = field(default_factory=InstrumentConfig)
     symbol_research: SymbolResearchConfig = field(default_factory=SymbolResearchConfig)
     ftmo: FTMOEvaluationConfig = field(default_factory=FTMOEvaluationConfig)

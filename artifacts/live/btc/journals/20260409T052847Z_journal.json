@@ -1,0 +1,75 @@
+{
+  "symbol": "BTC",
+  "broker_symbol": "BTCUSD",
+  "deployment_path": "artifacts\\deploy\\btc\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.07568305469099586,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T08:15:00+00:00",
+    "symbol": "BTC",
+    "regime_label": "calm_range",
+    "volatility_label": "low",
+    "structure_label": "range",
+    "realized_vol_20": 0.02215316212418906,
+    "realized_vol_100": 0.03418024368615313,
+    "vol_ratio": 0.6481276824004504,
+    "vol_percentile": 0.2066115702479339,
+    "atr_percent": 0.002366973183830241,
+    "trend_strength": -0.0007318507850203604,
+    "range_efficiency": 0.11671150813110268,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2951434,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.2066115702479339,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.07568305469099586
+    },
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 3015661,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.2066115702479339,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.07568305469099586
+    },
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_trend",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2868496,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.2066115702479339,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.07568305469099586
+    }
+  ]
+}

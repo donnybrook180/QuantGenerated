@@ -1,13 +1,13 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:GBPUSD,2025-10-16T10:30:00+00:00,2025-10-16T13:15:00+00:00,10,13,forex_breakout_momentum,trailing_stop,1.34368,1.34339,0.10000,-3.40091,0.50000,4,1.00000,{'breakout_high': 1.34246}
-C:GBPUSD,2025-11-10T08:15:00+00:00,2025-11-11T07:00:00+00:00,8,7,forex_breakout_momentum,stop_loss,1.31763,1.31276,0.10000,-49.17979,0.50000,2,1.00000,{'breakout_high': 1.31379}
-C:GBPUSD,2025-11-25T09:30:00+00:00,2025-11-26T01:30:00+00:00,9,1,forex_breakout_momentum,take_profit,1.31389,1.31816,0.10000,42.21959,0.50000,7,1.00000,{'breakout_high': 1.31282}
-C:GBPUSD,2025-12-01T12:45:00+00:00,2025-12-01T16:00:00+00:00,12,16,forex_breakout_momentum,stop_loss,1.32683,1.32353,0.10000,-33.48723,0.50000,2,1.00000,{'breakout_high': 1.32547}
-C:GBPUSD,2025-12-03T09:30:00+00:00,2025-12-04T08:15:00+00:00,9,8,forex_breakout_momentum,take_profit,1.32822,1.33554,0.10000,72.70778,0.50000,1,1.00000,{'breakout_high': 1.327}
-C:GBPUSD,2025-12-23T08:00:00+00:00,2025-12-23T15:00:00+00:00,8,15,forex_breakout_momentum,structure_exit,1.35103,1.34926,0.10000,-18.20583,0.50000,4,1.00000,{'breakout_high': 1.3464}
-C:GBPUSD,2026-01-06T08:00:00+00:00,2026-01-06T15:00:00+00:00,8,15,forex_breakout_momentum,stop_loss,1.35617,1.35081,0.10000,-54.10832,0.50000,2,1.00000,{'breakout_high': 1.3513}
-C:GBPUSD,2026-01-20T07:30:00+00:00,2026-01-20T22:30:00+00:00,7,22,forex_breakout_momentum,structure_exit,1.34778,1.34459,0.10000,-32.40288,0.50000,6,1.00000,{'breakout_high': 1.34723}
-C:GBPUSD,2026-01-29T08:00:00+00:00,2026-01-29T09:45:00+00:00,8,9,forex_breakout_momentum,stop_loss,1.38463,1.38021,0.10000,-44.72987,0.50000,2,1.00000,{'breakout_high': 1.38012}
-C:GBPUSD,2026-02-04T08:00:00+00:00,2026-02-04T14:00:00+00:00,8,14,forex_breakout_momentum,stop_loss,1.37296,1.36920,0.10000,-38.12143,0.50000,2,1.00000,{'breakout_high': 1.37062}
-C:GBPUSD,2026-02-09T11:30:00+00:00,2026-02-09T22:15:00+00:00,11,22,forex_breakout_momentum,take_profit,1.36346,1.36909,0.10000,55.78215,0.50000,1,1.00000,{'breakout_high': 1.36285}
-C:GBPUSD,2026-03-04T07:15:00+00:00,2026-03-04T15:00:00+00:00,7,15,forex_breakout_momentum,structure_exit,1.33582,1.33570,0.10000,-1.69511,0.50000,5,1.00000,{'breakout_high': 1.33404}
+C:GBPUSD,2025-10-16T10:30:00+00:00,2025-10-16T13:15:00+00:00,10,13,forex_breakout_momentum,trailing_stop,1.34366,1.34341,0.10000,-3.07177,0.50000,4,1.00000,{'breakout_high': 1.34246}
+C:GBPUSD,2025-11-10T08:15:00+00:00,2025-11-11T07:00:00+00:00,8,7,forex_breakout_momentum,stop_loss,1.31761,1.31278,0.10000,-48.85760,0.50000,2,1.00000,{'breakout_high': 1.31379}
+C:GBPUSD,2025-11-25T09:30:00+00:00,2025-11-26T01:30:00+00:00,9,1,forex_breakout_momentum,take_profit,1.31387,1.31818,0.10000,42.54199,0.50000,7,1.00000,{'breakout_high': 1.31282}
+C:GBPUSD,2025-12-01T12:45:00+00:00,2025-12-01T16:00:00+00:00,12,16,forex_breakout_momentum,stop_loss,1.32681,1.32355,0.10000,-33.16259,0.50000,2,1.00000,{'breakout_high': 1.32547}
+C:GBPUSD,2025-12-03T09:30:00+00:00,2025-12-04T08:15:00+00:00,9,8,forex_breakout_momentum,take_profit,1.32820,1.33556,0.10000,73.03406,0.50000,1,1.00000,{'breakout_high': 1.327}
+C:GBPUSD,2025-12-23T08:00:00+00:00,2025-12-23T15:00:00+00:00,8,15,forex_breakout_momentum,structure_exit,1.35101,1.34928,0.10000,-17.87507,0.50000,4,1.00000,{'breakout_high': 1.3464}
+C:GBPUSD,2026-01-06T08:00:00+00:00,2026-01-06T15:00:00+00:00,8,15,forex_breakout_momentum,stop_loss,1.35615,1.35083,0.10000,-53.77674,0.50000,2,1.00000,{'breakout_high': 1.3513}
+C:GBPUSD,2026-01-20T07:30:00+00:00,2026-01-20T22:30:00+00:00,7,22,forex_breakout_momentum,structure_exit,1.34776,1.34461,0.10000,-32.07309,0.50000,6,1.00000,{'breakout_high': 1.34723}
+C:GBPUSD,2026-01-29T08:00:00+00:00,2026-01-29T09:45:00+00:00,8,9,forex_breakout_momentum,stop_loss,1.38461,1.38023,0.10000,-44.39121,0.50000,2,1.00000,{'breakout_high': 1.38012}
+C:GBPUSD,2026-02-04T08:00:00+00:00,2026-02-04T14:00:00+00:00,8,14,forex_breakout_momentum,stop_loss,1.37294,1.36922,0.10000,-37.78554,0.50000,2,1.00000,{'breakout_high': 1.37062}
+C:GBPUSD,2026-02-09T11:30:00+00:00,2026-02-09T22:15:00+00:00,11,22,forex_breakout_momentum,take_profit,1.36344,1.36911,0.10000,56.11686,0.50000,1,1.00000,{'breakout_high': 1.36285}
+C:GBPUSD,2026-03-04T07:15:00+00:00,2026-03-04T17:00:00+00:00,7,17,forex_breakout_momentum,structure_exit,1.33580,1.33541,0.10000,-4.46780,0.50000,9,1.00000,{'breakout_high': 1.33404}

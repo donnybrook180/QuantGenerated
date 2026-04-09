@@ -1,0 +1,19 @@
+Artifact: forex_range_reversion__5m_overlap_5m_overlap_symbol_candidate
+Closed trades: 6
+Realized pnl: 110621.08
+
+By entry hour
+15: trades=1 pnl=-3454.63 avg=-3454.63 win_rate=0.00%
+13: trades=1 pnl=-594.31 avg=-594.31 win_rate=0.00%
+12: trades=1 pnl=-384.21 avg=-384.21 win_rate=0.00%
+14: trades=2 pnl=471.87 avg=235.93 win_rate=50.00%
+16: trades=1 pnl=114582.36 avg=114582.36 win_rate=100.00%
+
+By entry setup
+forex_range_reversion: trades=6 pnl=110621.08 avg=18436.85 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=1 pnl=-3454.63 avg=-3454.63 win_rate=0.00%
+structure_exit: trades=1 pnl=-384.21 avg=-384.21 win_rate=0.00%
+signal_exit: trades=3 pnl=-122.44 avg=-40.81 win_rate=33.33%
+end_of_run: trades=1 pnl=114582.36 avg=114582.36 win_rate=100.00%

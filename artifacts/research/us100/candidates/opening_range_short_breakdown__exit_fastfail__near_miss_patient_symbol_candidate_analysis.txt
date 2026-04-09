@@ -1,14 +1,14 @@
-Artifact: us100_opening_range_short_breakdown__exit_fastfail__near_miss_patient_symbol_candidate
+Artifact: opening_range_short_breakdown__exit_fastfail__near_miss_patient_symbol_candidate
 Closed trades: 18
-Realized pnl: 0.02
+Realized pnl: -0.08
 
 By entry hour
-14: trades=18 pnl=0.02 avg=0.00 win_rate=44.44%
+14: trades=18 pnl=-0.08 avg=-0.00 win_rate=44.44%
 
 By entry setup
-opening_range_short_breakdown: trades=18 pnl=0.02 avg=0.00 win_rate=44.44%
+opening_range_short_breakdown: trades=18 pnl=-0.08 avg=-0.00 win_rate=44.44%
 
 By exit reason
-stop_loss: trades=7 pnl=-2.12 avg=-0.30 win_rate=0.00%
-trailing_stop: trades=4 pnl=-0.04 avg=-0.01 win_rate=25.00%
-take_profit: trades=7 pnl=2.18 avg=0.31 win_rate=100.00%
+stop_loss: trades=7 pnl=-2.16 avg=-0.31 win_rate=0.00%
+trailing_stop: trades=4 pnl=-0.06 avg=-0.02 win_rate=25.00%
+take_profit: trades=7 pnl=2.15 avg=0.31 win_rate=100.00%

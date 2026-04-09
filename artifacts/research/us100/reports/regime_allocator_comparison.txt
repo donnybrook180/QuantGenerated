@@ -1,0 +1,52 @@
+US100 Regime/Allocator Comparison
+
+Comparison basis
+- Pre-regime baseline run: 103 (2026-04-06 21:39:11.472876)
+- Current regime-aware run: 197 (2026-04-09 07:38:38.848650)
+
+Pre-regime baseline run 103
+- Recommended set:
+  - opening_range_short_breakdown__exit_trend
+  - opening_range_breakout__regime_trend_flat_vol_mid
+- Aggregate realized_pnl: 3.39
+- Aggregate closed_trades: 22
+- Average profit_factor: 2.24
+- Aggregate test_pnl: 0.00
+- Average regime_stability_score: 0.00
+- Notes:
+  - Higher raw research pnl
+  - No meaningful regime stability gating in the selected set
+  - Second candidate was tied to trend_flat_vol_mid, but without the newer live policy stack
+
+Current regime-aware run 197
+- Recommended set:
+  - opening_range_short_breakdown__exit_trend
+  - opening_range_short_breakdown
+- Aggregate realized_pnl: 2.88
+- Aggregate closed_trades: 36
+- Average profit_factor: 1.54
+- Aggregate test_pnl: 0.00
+- Average regime_stability_score: 0.72
+- Notes:
+  - Lower raw research pnl and lower average PF than run 103
+  - Much stronger regime structure in the selected set
+  - Both recommended candidates explicitly concentrate on trend_down_vol_high and now carry live deployment policy
+
+Candidate detail
+- Run 103 / opening_range_short_breakdown__exit_trend:
+  realized_pnl=2.91 pf=2.55 closed=17 val_pnl=3.19 val_pf=11.76 test_pnl=0.00 best_regime=trend_down_vol_high worst_regime=trend_flat_vol_mid stability=0.00 loss_ratio=0.00
+- Run 103 / opening_range_breakout__regime_trend_flat_vol_mid:
+  realized_pnl=0.48 pf=1.92 closed=5 val_pnl=0.18 val_pf=2.69 test_pnl=0.00 best_regime=trend_flat_vol_mid worst_regime=trend_flat_vol_mid stability=0.00 loss_ratio=0.00
+- Run 197 / opening_range_short_breakdown__exit_trend:
+  realized_pnl=1.70 pf=1.64 closed=18 val_pnl=2.96 val_pf=9.36 test_pnl=0.00 best_regime=trend_down_vol_high worst_regime=trend_flat_vol_mid stability=0.74 loss_ratio=0.17
+- Run 197 / opening_range_short_breakdown:
+  realized_pnl=1.18 pf=1.45 closed=18 val_pnl=1.97 val_pf=6.55 test_pnl=0.00 best_regime=trend_down_vol_high worst_regime=trend_flat_vol_high stability=0.70 loss_ratio=0.23
+
+Interpretation
+- If the goal is maximum raw in-sample research pnl, run 103 looked better.
+- If the goal is live robustness under the new architecture, run 197 is stronger because the recommended set now has explicit regime concentration and usable regime stability metrics.
+- The allocator changes are not visible in these research numbers directly; allocator impact appears during live selection and forward evaluation, not in standalone symbol research pnl.
+
+Bottom line
+- Better on raw backtest-style research performance: no.
+- Better on regime-awareness and live deployment quality: yes.

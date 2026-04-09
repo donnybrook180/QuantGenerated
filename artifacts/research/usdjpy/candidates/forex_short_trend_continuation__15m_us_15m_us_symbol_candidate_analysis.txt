@@ -1,0 +1,19 @@
+Artifact: forex_short_trend_continuation__15m_us_15m_us_symbol_candidate
+Closed trades: 8
+Realized pnl: -630.64
+
+By entry hour
+13: trades=3 pnl=-3517.64 avg=-1172.55 win_rate=0.00%
+20: trades=1 pnl=-1109.70 avg=-1109.70 win_rate=0.00%
+19: trades=1 pnl=-387.66 avg=-387.66 win_rate=0.00%
+15: trades=1 pnl=622.92 avg=622.92 win_rate=100.00%
+17: trades=2 pnl=3761.44 avg=1880.72 win_rate=50.00%
+
+By entry setup
+forex_short_trend_continuation: trades=8 pnl=-630.64 avg=-78.83 win_rate=25.00%
+
+By exit reason
+stop_loss: trades=2 pnl=-3158.84 avg=-1579.42 win_rate=0.00%
+structure_exit: trades=4 pnl=-2425.07 avg=-606.27 win_rate=0.00%
+signal_exit: trades=1 pnl=622.92 avg=622.92 win_rate=100.00%
+take_profit: trades=1 pnl=4330.35 avg=4330.35 win_rate=100.00%

@@ -1,4 +1,4 @@
-Artifact: us500_momentum__exit_trend__near_miss_dense__trend_flat_symbol_candidate
+Artifact: momentum__exit_trend__near_miss_dense__trend_flat_symbol_candidate
 Closed trades: 6
 Realized pnl: 0.21
 
@@ -10,7 +10,7 @@ By entry hour
 16: trades=1 pnl=1.23 avg=1.23 win_rate=100.00%
 
 By entry setup
-momentum_confirmation: trades=6 pnl=0.21 avg=0.03 win_rate=33.33%
+momentum_confirmation: trades=6 pnl=0.21 avg=0.04 win_rate=33.33%
 
 By exit reason
 stop_loss: trades=3 pnl=-1.07 avg=-0.36 win_rate=0.00%

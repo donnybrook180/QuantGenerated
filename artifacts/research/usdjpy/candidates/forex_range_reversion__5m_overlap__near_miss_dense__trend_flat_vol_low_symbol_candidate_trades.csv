@@ -1,0 +1,7 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:USDJPY,2025-07-24T14:45:00+00:00,2025-07-24T14:55:00+00:00,14,14,forex_range_reversion,signal_exit,146.49666,146.47134,0.10000,-253.74200,0.50000,2,0.83657,{'mean_level': 146.57784999999998}
+C:USDJPY,2025-07-25T14:00:00+00:00,2025-07-25T14:05:00+00:00,14,14,forex_range_reversion,signal_exit,147.74869,147.77231,0.10000,235.61975,0.50000,1,0.78850,{'mean_level': 147.61245}
+C:USDJPY,2025-08-06T13:40:00+00:00,2025-08-06T13:45:00+00:00,13,13,forex_range_reversion,signal_exit,147.64669,147.58731,0.10000,-594.30850,0.50000,1,0.71075,{'mean_level': 147.74645}
+C:USDJPY,2025-08-12T15:25:00+00:00,2025-08-12T15:40:00+00:00,15,15,forex_range_reversion,stop_loss,148.43171,148.07530,0.10000,-3564.62675,0.50000,1,0.81934,{'mean_level': 148.46265}
+C:USDJPY,2025-08-20T12:35:00+00:00,2025-08-20T13:10:00+00:00,12,13,forex_range_reversion,structure_exit,147.44269,147.40431,0.10000,-384.21175,0.50000,7,0.77223,{'mean_level': 147.54605}
+C:USDJPY,2025-08-22T16:35:00+00:00,2026-04-07T18:05:00+00:00,16,18,forex_range_reversion,end_of_run,148.54571,160.00400,0.10000,114582.36250,0.50000,41669,0.70669,{'mean_level': 148.6284}

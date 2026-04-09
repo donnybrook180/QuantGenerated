@@ -3,72 +3,96 @@ Broker symbol: GBPUSD
 Data source: duckdb_cache
 
 Ranked candidates
-forex_trend_continuation_looser [auto_improved]: pnl=-26.18 closed=8 pf=0.42 win_rate=25.00% dd=0.03%
-  trade_metrics: expectancy=-3.27 avg_win=9.66 avg_loss=-7.58 payoff=1.27 avg_hold=3.8
+forex_trend_continuation_looser [auto_improved]: pnl=-23.56 closed=8 pf=0.46 win_rate=25.00% dd=0.03%
+  trade_metrics: expectancy=-2.94 avg_win=9.98 avg_loss=-7.25 payoff=1.38 avg_hold=3.8
   exits: dominant=signal_exit share=62.50%
-  regimes: best=trend_flat_vol_low pnl=-26.18 worst=trend_flat_vol_low pnl=-26.18 dominant_share=100.00%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.55 avg_test_pnl=-16.84 avg_val_pf=0.00 avg_test_pf=0.06
-  splits: train_pnl=-21.10 val_pnl=-4.90 val_pf=0.00 val_closed=1 test_pnl=-16.98 test_pf=0.13 test_closed=4
-  trades: artifacts\gbpusd_forex_trend_continuation_looser_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_trend_continuation_looser_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid [regime_improved]: pnl=-104.62 closed=12 pf=0.62 win_rate=25.00% dd=0.16%
-  trade_metrics: expectancy=-8.72 avg_win=56.90 avg_loss=-30.59 payoff=1.86 avg_hold=3.2
+  regimes: best=trend_flat_vol_low pnl=-23.56 worst=trend_flat_vol_low pnl=-23.56 dominant_share=100.00% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_flat_vol_low": 8}
+  regime_pnls: {"trend_flat_vol_low": -23.556844999988336}
+  live_policy: activate in trend_flat_vol_low; avoid trend_flat_vol_low; vol_pct in [0.00, 0.45]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-7.22 avg_test_pnl=-15.86 avg_val_pf=0.00 avg_test_pf=0.08
+  splits: train_pnl=-20.44 val_pnl=-4.57 val_pf=0.00 val_closed=1 test_pnl=-15.67 test_pf=0.15 test_closed=4
+  trades: artifacts\research\gbpusd\candidates\forex_trend_continuation_looser_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_trend_continuation_looser_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid [regime_improved]: pnl=-103.77 closed=12 pf=0.62 win_rate=25.00% dd=0.16%
+  trade_metrics: expectancy=-8.65 avg_win=57.23 avg_loss=-30.61 payoff=1.87 avg_hold=3.5
   exits: dominant=stop_loss share=41.67%
-  regimes: best=trend_flat_vol_mid pnl=-104.62 worst=trend_flat_vol_mid pnl=-104.62 dominant_share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-103.77 worst=trend_flat_vol_mid pnl=-103.77 dominant_share=100.00% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_flat_vol_mid": 12}
+  regime_pnls: {"trend_flat_vol_mid": -103.76850749998235}
+  live_policy: activate in trend_flat_vol_mid; avoid trend_flat_vol_mid; vol_pct in [0.20, 0.80]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=7.98 avg_test_pnl=-0.85 avg_val_pf=0.73 avg_test_pf=0.00
-  splits: train_pnl=-99.53 val_pnl=-1.70 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid [regime_improved]: pnl=-179.52 closed=12 pf=0.45 win_rate=25.00% dd=0.22%
-  trade_metrics: expectancy=-14.96 avg_win=48.50 avg_loss=-36.11 payoff=1.34 avg_hold=4.2
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=6.93 avg_test_pnl=-2.23 avg_val_pf=0.74 avg_test_pf=0.00
+  splits: train_pnl=-96.23 val_pnl=-4.47 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid [regime_improved]: pnl=-175.57 closed=12 pf=0.45 win_rate=25.00% dd=0.21%
+  trade_metrics: expectancy=-14.63 avg_win=48.83 avg_loss=-35.78 payoff=1.36 avg_hold=4.2
   exits: dominant=stop_loss share=50.00%
-  regimes: best=trend_flat_vol_mid pnl=-179.52 worst=trend_flat_vol_mid pnl=-179.52 dominant_share=100.00%
+  regimes: best=trend_flat_vol_mid pnl=-175.57 worst=trend_flat_vol_mid pnl=-175.57 dominant_share=100.00% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_flat_vol_mid": 12}
+  regime_pnls: {"trend_flat_vol_mid": -175.5667124999867}
+  live_policy: activate in trend_flat_vol_mid; avoid trend_flat_vol_mid; vol_pct in [0.20, 0.80]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_mid
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.72 avg_test_pnl=-2.40 avg_val_pf=0.54 avg_test_pf=0.00
-  splits: train_pnl=-171.32 val_pnl=-4.79 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=-277.46 closed=59 pf=0.62 win_rate=23.73% dd=0.39%
-  trade_metrics: expectancy=-4.70 avg_win=32.60 avg_loss=-16.31 payoff=2.00 avg_hold=14.0
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.22 avg_test_pnl=-2.23 avg_val_pf=0.55 avg_test_pf=0.00
+  splits: train_pnl=-168.03 val_pnl=-4.47 val_pf=0.00 val_closed=1 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_trend__regime_trend_flat_vol_mid_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_trend [entry_exit_family]: pnl=-258.14 closed=59 pf=0.64 win_rate=23.73% dd=0.38%
+  trade_metrics: expectancy=-4.38 avg_win=32.93 avg_loss=-15.98 payoff=2.06 avg_hold=14.0
   exits: dominant=stop_loss share=28.81%
-  regimes: best=trend_flat_vol_mid pnl=88.11 worst=trend_flat_vol_low pnl=-205.13 dominant_share=54.24%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-13.30 avg_test_pnl=-20.02 avg_val_pf=0.90 avg_test_pf=0.87
-  splits: train_pnl=-206.50 val_pnl=-14.56 val_pf=0.89 val_closed=10 test_pnl=19.28 test_pf=1.11 test_closed=14
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe [single]: pnl=-292.96 closed=59 pf=0.57 win_rate=30.51% dd=0.39%
-  trade_metrics: expectancy=-4.97 avg_win=21.52 avg_loss=-16.59 payoff=1.30 avg_hold=11.1
+  regimes: best=trend_flat_vol_mid pnl=94.69 worst=trend_flat_vol_low pnl=-194.66 dominant_share=54.24% stability=0.21 loss_ratio=2.06
+  regime_trade_counts: {"trend_down_vol_low": 1, "trend_down_vol_mid": 1, "trend_flat_vol_high": 5, "trend_flat_vol_low": 32, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_low": -24.766259999998763, "trend_down_vol_mid": -19.86600749999906, "trend_flat_vol_high": -113.53012249999101, "trend_flat_vol_low": -194.66234749993606, "trend_flat_vol_mid": 94.68652250002819}
+  live_policy: activate in trend_flat_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=0.51; risk_cap=0.65; stability=0.21; loss_ratio=2.06
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-10.12 avg_test_pnl=-15.59 avg_val_pf=0.92 avg_test_pf=0.90
+  splits: train_pnl=-196.40 val_pnl=-11.22 val_pf=0.92 val_closed=10 test_pnl=23.86 test_pf=1.14 test_closed=14
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe [single]: pnl=-274.84 closed=59 pf=0.59 win_rate=30.51% dd=0.38%
+  trade_metrics: expectancy=-4.66 avg_win=21.78 avg_loss=-16.27 payoff=1.34 avg_hold=11.0
   exits: dominant=trailing_stop share=25.42%
-  regimes: best=trend_flat_vol_mid pnl=40.12 worst=trend_flat_vol_low pnl=-194.23 dominant_share=54.24%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-62.00 avg_test_pnl=-33.12 avg_val_pf=0.53 avg_test_pf=0.79
-  splits: train_pnl=-171.00 val_pnl=-62.26 val_pf=0.53 val_closed=10 test_pnl=1.69 test_pf=1.01 test_closed=14
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=-410.66 closed=59 pf=0.38 win_rate=27.12% dd=0.42%
-  trade_metrics: expectancy=-6.96 avg_win=15.44 avg_loss=-15.29 payoff=1.01 avg_hold=10.2
+  regimes: best=trend_flat_vol_mid pnl=46.69 worst=trend_flat_vol_low pnl=-184.96 dominant_share=54.24% stability=0.13 loss_ratio=3.96
+  regime_trade_counts: {"trend_down_vol_low": 1, "trend_down_vol_mid": 1, "trend_flat_vol_high": 5, "trend_flat_vol_low": 32, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_low": -24.766259999998763, "trend_down_vol_mid": -19.86600749999906, "trend_flat_vol_high": -91.93066249999188, "trend_flat_vol_low": -184.96258999993697, "trend_flat_vol_mid": 46.68772250003063}
+  live_policy: activate in trend_flat_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=0.46; risk_cap=0.61; stability=0.13; loss_ratio=3.96
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-58.82 avg_test_pnl=-28.69 avg_val_pf=0.55 avg_test_pf=0.81
+  splits: train_pnl=-162.10 val_pnl=-58.92 val_pf=0.55 val_closed=10 test_pnl=6.26 test_pf=1.04 test_closed=14
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum__15m_europe__exit_fastfail [entry_exit_family]: pnl=-391.33 closed=59 pf=0.39 win_rate=27.12% dd=0.40%
+  trade_metrics: expectancy=-6.63 avg_win=15.76 avg_loss=-14.97 payoff=1.05 avg_hold=10.2
   exits: dominant=structure_exit share=30.51%
-  regimes: best=trend_down_vol_mid pnl=-20.19 worst=trend_flat_vol_low pnl=-163.53 dominant_share=54.24%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-132.99 avg_test_pnl=-83.87 avg_val_pf=0.03 avg_test_pf=0.50
-  splits: train_pnl=-130.40 val_pnl=-133.26 val_pf=0.03 val_closed=10 test_pnl=-85.61 test_pf=0.53 test_closed=14
-  trades: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
-forex_breakout_momentum_patient [auto_improved]: pnl=-1098.18 closed=183 pf=0.44 win_rate=26.78% dd=1.12%
-  trade_metrics: expectancy=-6.00 avg_win=17.86 avg_loss=-14.72 payoff=1.21 avg_hold=10.6
-  exits: dominant=stop_loss share=27.87%
-  regimes: best=trend_up_vol_low pnl=-2.00 worst=trend_flat_vol_low pnl=-673.16 dominant_share=66.67%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-213.81 avg_test_pnl=-220.26 avg_val_pf=0.46 avg_test_pf=0.56
-  splits: train_pnl=-506.94 val_pnl=-216.96 val_pf=0.51 val_closed=38 test_pnl=-162.38 test_pf=0.67 test_closed=38
-  trades: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum_patient_symbol_candidate_analysis.txt
-forex_breakout_momentum_exit_relaxed [auto_second_pass]: pnl=-1154.08 closed=183 pf=0.42 win_rate=26.78% dd=1.18%
-  trade_metrics: expectancy=-6.31 avg_win=17.37 avg_loss=-14.96 payoff=1.16 avg_hold=10.3
-  exits: dominant=stop_loss share=28.96%
-  regimes: best=trend_up_vol_low pnl=-2.00 worst=trend_flat_vol_low pnl=-671.47 dominant_share=65.57%
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-211.21 avg_test_pnl=-261.46 avg_val_pf=0.47 avg_test_pf=0.52
-  splits: train_pnl=-494.34 val_pnl=-216.96 val_pf=0.51 val_closed=38 test_pnl=-203.58 test_pf=0.62 test_closed=39
-  trades: artifacts\gbpusd_forex_breakout_momentum_exit_relaxed_symbol_candidate_trades.csv
-  analysis: artifacts\gbpusd_forex_breakout_momentum_exit_relaxed_symbol_candidate_analysis.txt
+  regimes: best=trend_down_vol_mid pnl=-19.87 worst=trend_flat_vol_low pnl=-153.06 dominant_share=54.24% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_down_vol_low": 1, "trend_down_vol_mid": 1, "trend_flat_vol_high": 5, "trend_flat_vol_low": 32, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_low": -24.766259999998763, "trend_down_vol_mid": -19.86600749999906, "trend_flat_vol_high": -91.93066249999188, "trend_flat_vol_low": -153.06338749993608, "trend_flat_vol_mid": -101.70856749997292}
+  live_policy: activate in trend_down_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-129.82 avg_test_pnl=-79.44 avg_val_pf=0.04 avg_test_pf=0.52
+  splits: train_pnl=-120.30 val_pnl=-129.92 val_pf=0.04 val_closed=10 test_pnl=-81.04 test_pf=0.55 test_closed=14
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate_analysis.txt
+forex_breakout_momentum_patient [auto_improved]: pnl=-1063.50 closed=182 pf=0.45 win_rate=26.92% dd=1.09%
+  trade_metrics: expectancy=-5.84 avg_win=17.98 avg_loss=-14.62 payoff=1.23 avg_hold=10.6
+  exits: dominant=stop_loss share=28.02%
+  regimes: best=trend_up_vol_low pnl=-0.68 worst=trend_flat_vol_low pnl=-658.48 dominant_share=66.48% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_down_vol_low": 1, "trend_down_vol_mid": 1, "trend_flat_vol_high": 10, "trend_flat_vol_low": 121, "trend_flat_vol_mid": 44, "trend_up_vol_low": 4, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_down_vol_low": -24.766259999998763, "trend_down_vol_mid": -19.86600749999906, "trend_flat_vol_high": -135.76946749998044, "trend_flat_vol_low": -658.4769149998004, "trend_flat_vol_mid": -205.86726999993775, "trend_up_vol_low": -0.6819149999894822, "trend_up_vol_mid": -18.069727499999743}
+  live_policy: activate in trend_up_vol_low; avoid trend_flat_vol_low; vol_pct in [0.00, 0.45]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-211.48 avg_test_pnl=-216.62 avg_val_pf=0.47 avg_test_pf=0.56
+  splits: train_pnl=-484.58 val_pnl=-223.60 val_pf=0.49 val_closed=37 test_pnl=-149.96 test_pf=0.69 test_closed=38
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum_patient_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum_patient_symbol_candidate_analysis.txt
+forex_breakout_momentum_exit_relaxed [auto_second_pass]: pnl=-1119.40 closed=182 pf=0.43 win_rate=26.92% dd=1.15%
+  trade_metrics: expectancy=-6.15 avg_win=17.49 avg_loss=-14.86 payoff=1.18 avg_hold=10.3
+  exits: dominant=stop_loss share=29.12%
+  regimes: best=trend_up_vol_low pnl=-0.68 worst=trend_flat_vol_low pnl=-657.44 dominant_share=65.38% stability=0.00 loss_ratio=999.00
+  regime_trade_counts: {"trend_down_vol_low": 1, "trend_down_vol_mid": 1, "trend_flat_vol_high": 10, "trend_flat_vol_low": 119, "trend_flat_vol_mid": 46, "trend_up_vol_low": 4, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_down_vol_low": -24.766259999998763, "trend_down_vol_mid": -19.86600749999906, "trend_flat_vol_high": -135.76946749998044, "trend_flat_vol_low": -657.437222499798, "trend_flat_vol_mid": -262.8067199999354, "trend_up_vol_low": -0.6819149999894822, "trend_up_vol_mid": -18.069727499999743}
+  live_policy: activate in trend_up_vol_low; avoid trend_flat_vol_low; vol_pct in [0.00, 0.45]; base_weight=0.38; risk_cap=0.55; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-208.88 avg_test_pnl=-257.49 avg_val_pf=0.47 avg_test_pf=0.52
+  splits: train_pnl=-471.98 val_pnl=-223.60 val_pf=0.49 val_closed=37 test_pnl=-190.83 test_pf=0.63 test_closed=39
+  trades: artifacts\research\gbpusd\candidates\forex_breakout_momentum_exit_relaxed_symbol_candidate_trades.csv
+  analysis: artifacts\research\gbpusd\candidates\forex_breakout_momentum_exit_relaxed_symbol_candidate_analysis.txt
 
 Recommended active agents
 No candidate met the positive-PnL and PF>=1.0 threshold.

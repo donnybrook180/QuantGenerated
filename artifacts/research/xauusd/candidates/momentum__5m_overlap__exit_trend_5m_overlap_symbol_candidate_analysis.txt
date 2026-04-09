@@ -1,18 +1,18 @@
-Artifact: xauusd_momentum__5m_overlap__exit_trend_5m_overlap_symbol_candidate
+Artifact: momentum__5m_overlap__exit_trend_5m_overlap_symbol_candidate
 Closed trades: 13
-Realized pnl: -263.20
+Realized pnl: -270.02
 
 By entry hour
-14: trades=7 pnl=-236.41 avg=-33.77 win_rate=42.86%
-13: trades=2 pnl=-148.33 avg=-74.16 win_rate=0.00%
-15: trades=1 pnl=-133.38 avg=-133.38 win_rate=0.00%
-12: trades=3 pnl=254.92 avg=84.97 win_rate=33.33%
+14: trades=7 pnl=-240.08 avg=-34.30 win_rate=42.86%
+13: trades=2 pnl=-149.38 avg=-74.69 win_rate=0.00%
+15: trades=1 pnl=-133.91 avg=-133.91 win_rate=0.00%
+12: trades=3 pnl=253.35 avg=84.45 win_rate=33.33%
 
 By entry setup
-momentum_confirmation: trades=13 pnl=-263.20 avg=-20.25 win_rate=30.77%
+momentum_confirmation: trades=13 pnl=-270.02 avg=-20.77 win_rate=30.77%
 
 By exit reason
-stop_loss: trades=4 pnl=-852.84 avg=-213.21 win_rate=0.00%
-stale_breakout: trades=3 pnl=-565.13 avg=-188.38 win_rate=0.00%
-take_profit: trades=1 pnl=489.14 avg=489.14 win_rate=100.00%
-trailing_stop: trades=5 pnl=665.64 avg=133.13 win_rate=60.00%
+stop_loss: trades=4 pnl=-854.94 avg=-213.74 win_rate=0.00%
+stale_breakout: trades=3 pnl=-566.71 avg=-188.90 win_rate=0.00%
+take_profit: trades=1 pnl=488.62 avg=488.62 win_rate=100.00%
+trailing_stop: trades=5 pnl=663.01 avg=132.60 win_rate=60.00%

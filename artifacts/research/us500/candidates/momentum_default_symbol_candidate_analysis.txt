@@ -1,6 +1,6 @@
-Artifact: us500_momentum_default_symbol_candidate
+Artifact: momentum_default_symbol_candidate
 Closed trades: 9
-Realized pnl: 0.56
+Realized pnl: 0.57
 
 By entry hour
 13: trades=3 pnl=-0.66 avg=-0.22 win_rate=0.00%
@@ -10,11 +10,11 @@ By entry hour
 16: trades=1 pnl=0.79 avg=0.79 win_rate=100.00%
 
 By entry setup
-momentum_confirmation: trades=9 pnl=0.56 avg=0.06 win_rate=33.33%
+momentum_confirmation: trades=9 pnl=0.57 avg=0.06 win_rate=33.33%
 
 By exit reason
 stop_loss: trades=2 pnl=-0.52 avg=-0.26 win_rate=0.00%
-structure_exit: trades=2 pnl=-0.42 avg=-0.21 win_rate=0.00%
+structure_exit: trades=2 pnl=-0.41 avg=-0.21 win_rate=0.00%
 stale_breakout: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
 trailing_stop: trades=2 pnl=0.04 avg=0.02 win_rate=50.00%
 take_profit: trades=2 pnl=1.47 avg=0.73 win_rate=100.00%

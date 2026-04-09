@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 import logging
+from typing import ClassVar
 
 import MetaTrader5 as mt5
 
@@ -60,6 +61,18 @@ class MT5MarketSnapshot:
 class MT5Client:
     config: MT5Config
     resolved_symbol: str | None = field(default=None, init=False)
+    _session_signature: tuple[str | None, int | None, str | None, str | None] | None = field(default=None, init=False)
+
+    _GLOBAL_SESSION_SIGNATURE: ClassVar[tuple[str | None, int | None, str | None, str | None] | None] = None
+    _GLOBAL_SESSION_REFS: ClassVar[int] = 0
+
+    def _connection_signature(self) -> tuple[str | None, int | None, str | None, str | None]:
+        return (
+            self.config.terminal_path,
+            self.config.login,
+            self.config.server,
+            self.config.password,
+        )
 
     def initialize(self) -> None:
         kwargs: dict[str, object] = {}
@@ -72,14 +85,29 @@ class MT5Client:
         if self.config.server:
             kwargs["server"] = self.config.server
 
-        if not mt5.initialize(**kwargs):
-            raise MT5Error(f"MT5 initialize failed: {mt5.last_error()}")
+        signature = self._connection_signature()
+        if MT5Client._GLOBAL_SESSION_REFS > 0 and MT5Client._GLOBAL_SESSION_SIGNATURE != signature:
+            raise MT5Error("MT5 session already initialized with a different terminal/login configuration.")
+        if MT5Client._GLOBAL_SESSION_REFS == 0:
+            if not mt5.initialize(**kwargs):
+                raise MT5Error(f"MT5 initialize failed: {mt5.last_error()}")
+            MT5Client._GLOBAL_SESSION_SIGNATURE = signature
+        MT5Client._GLOBAL_SESSION_REFS += 1
+        self._session_signature = signature
         self.resolved_symbol = self._resolve_symbol(self.config.symbol)
         if not mt5.symbol_select(self.resolved_symbol, True):
             raise MT5Error(f"Unable to select symbol {self.resolved_symbol}: {mt5.last_error()}")
 
     def shutdown(self) -> None:
-        mt5.shutdown()
+        if self._session_signature is None:
+            return
+        if MT5Client._GLOBAL_SESSION_REFS > 0:
+            MT5Client._GLOBAL_SESSION_REFS -= 1
+        if MT5Client._GLOBAL_SESSION_REFS <= 0:
+            mt5.shutdown()
+            MT5Client._GLOBAL_SESSION_REFS = 0
+            MT5Client._GLOBAL_SESSION_SIGNATURE = None
+        self._session_signature = None
 
     def _resolve_symbol(self, requested_symbol: str) -> str:
         if mt5.symbol_info(requested_symbol) is not None:

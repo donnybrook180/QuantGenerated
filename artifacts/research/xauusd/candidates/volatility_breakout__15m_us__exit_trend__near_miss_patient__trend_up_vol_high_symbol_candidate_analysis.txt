@@ -1,15 +1,15 @@
-Artifact: xauusd_volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up_vol_high_symbol_candidate
+Artifact: volatility_breakout__15m_us__exit_trend__near_miss_patient__trend_up_vol_high_symbol_candidate
 Closed trades: 4
-Realized pnl: 639.46
+Realized pnl: 637.36
 
 By entry hour
-14: trades=1 pnl=-170.61 avg=-170.61 win_rate=0.00%
-13: trades=2 pnl=-49.52 avg=-24.76 win_rate=0.00%
-20: trades=1 pnl=859.59 avg=859.59 win_rate=100.00%
+14: trades=1 pnl=-171.13 avg=-171.13 win_rate=0.00%
+13: trades=2 pnl=-50.57 avg=-25.29 win_rate=0.00%
+20: trades=1 pnl=859.07 avg=859.07 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=4 pnl=639.46 avg=159.87 win_rate=25.00%
+volatility_breakout: trades=4 pnl=637.36 avg=159.34 win_rate=25.00%
 
 By exit reason
-trailing_stop: trades=3 pnl=-220.13 avg=-73.38 win_rate=0.00%
-take_profit: trades=1 pnl=859.59 avg=859.59 win_rate=100.00%
+trailing_stop: trades=3 pnl=-221.70 avg=-73.90 win_rate=0.00%
+take_profit: trades=1 pnl=859.07 avg=859.07 win_rate=100.00%

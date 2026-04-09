@@ -1,0 +1,75 @@
+{
+  "symbol": "US500",
+  "broker_symbol": "US500.cash",
+  "deployment_path": "artifacts\\deploy\\us500\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.08824548290872186,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T08:25:00+00:00",
+    "symbol": "US500",
+    "regime_label": "calm_range",
+    "volatility_label": "low",
+    "structure_label": "range",
+    "realized_vol_20": 0.003279425325695574,
+    "realized_vol_100": 0.004417933528262917,
+    "vol_ratio": 0.7422984761350649,
+    "vol_percentile": 0.24793388429752067,
+    "atr_percent": 0.00031383351737911195,
+    "trend_strength": 6.55475001458683e-05,
+    "range_efficiency": 0.12340036563072457,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-07T17:05:00+00:00",
+      "confidence": 0.7727075268730498,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 2692798,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.24793388429752067,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.6181660214984399,
+      "portfolio_weight": 0.08824548290872186
+    },
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_protective__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-07T17:05:00+00:00",
+      "confidence": 0.7727075268730498,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 2678880,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.24793388429752067,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.6181660214984399,
+      "portfolio_weight": 0.08824548290872186
+    },
+    {
+      "candidate_name": "us500_short_vwap_reject__regime_trend_flat_vol_high__near_miss_dense__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-07T17:05:00+00:00",
+      "confidence": 0.7727075268730498,
+      "current_quantity": 0.0,
+      "intended_action": "duplicate_skipped::open_long",
+      "magic_number": 2961215,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.24793388429752067,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.6181660214984399,
+      "portfolio_weight": 0.08824548290872186
+    }
+  ]
+}

@@ -1,16 +1,16 @@
-Artifact: xauusd_mean_reversion__5m_overlap__exit_quick_5m_overlap_symbol_candidate
+Artifact: mean_reversion__5m_overlap__exit_quick_5m_overlap_symbol_candidate
 Closed trades: 10
-Realized pnl: -1002.73
+Realized pnl: -1007.98
 
 By entry hour
-13: trades=3 pnl=-448.15 avg=-149.38 win_rate=0.00%
-12: trades=3 pnl=-310.19 avg=-103.40 win_rate=0.00%
-15: trades=3 pnl=-153.46 avg=-51.15 win_rate=33.33%
-16: trades=1 pnl=-90.92 avg=-90.92 win_rate=0.00%
+13: trades=3 pnl=-449.73 avg=-149.91 win_rate=0.00%
+12: trades=3 pnl=-311.77 avg=-103.92 win_rate=0.00%
+15: trades=3 pnl=-155.04 avg=-51.68 win_rate=33.33%
+16: trades=1 pnl=-91.45 avg=-91.45 win_rate=0.00%
 
 By entry setup
-mean_reversion: trades=10 pnl=-1002.73 avg=-100.27 win_rate=10.00%
+mean_reversion: trades=10 pnl=-1007.98 avg=-100.80 win_rate=10.00%
 
 By exit reason
-structure_exit: trades=9 pnl=-1209.27 avg=-134.36 win_rate=0.00%
-take_profit: trades=1 pnl=206.54 avg=206.54 win_rate=100.00%
+structure_exit: trades=9 pnl=-1213.99 avg=-134.89 win_rate=0.00%
+take_profit: trades=1 pnl=206.01 avg=206.01 win_rate=100.00%

@@ -1,19 +1,19 @@
-Artifact: us500_momentum__exit_trend__near_miss_protective_symbol_candidate
+Artifact: momentum__exit_trend__near_miss_protective_symbol_candidate
 Closed trades: 9
-Realized pnl: 0.03
+Realized pnl: 0.04
 
 By entry hour
 13: trades=3 pnl=-0.66 avg=-0.22 win_rate=0.00%
 18: trades=1 pnl=-0.23 avg=-0.23 win_rate=0.00%
 16: trades=1 pnl=0.09 avg=0.09 win_rate=100.00%
-19: trades=2 pnl=0.17 avg=0.08 win_rate=50.00%
+19: trades=2 pnl=0.17 avg=0.09 win_rate=50.00%
 14: trades=2 pnl=0.67 avg=0.33 win_rate=50.00%
 
 By entry setup
-momentum_confirmation: trades=9 pnl=0.03 avg=0.00 win_rate=33.33%
+momentum_confirmation: trades=9 pnl=0.04 avg=0.00 win_rate=33.33%
 
 By exit reason
-stop_loss: trades=2 pnl=-0.48 avg=-0.24 win_rate=0.00%
-stale_breakout: trades=2 pnl=-0.42 avg=-0.21 win_rate=0.00%
+stop_loss: trades=2 pnl=-0.47 avg=-0.24 win_rate=0.00%
+stale_breakout: trades=2 pnl=-0.41 avg=-0.21 win_rate=0.00%
 trailing_stop: trades=4 pnl=0.25 avg=0.06 win_rate=50.00%
 take_profit: trades=1 pnl=0.68 avg=0.68 win_rate=100.00%

@@ -1,19 +1,19 @@
-Artifact: xauusd_trend__15m_europe_15m_europe_symbol_candidate
+Artifact: trend__15m_europe_15m_europe_symbol_candidate
 Closed trades: 9
-Realized pnl: -786.03
+Realized pnl: -790.76
 
 By entry hour
-11: trades=1 pnl=-361.40 avg=-361.40 win_rate=0.00%
-7: trades=6 pnl=-206.68 avg=-34.45 win_rate=33.33%
-12: trades=1 pnl=-187.67 avg=-187.67 win_rate=0.00%
-8: trades=1 pnl=-30.29 avg=-30.29 win_rate=0.00%
+11: trades=1 pnl=-361.92 avg=-361.92 win_rate=0.00%
+7: trades=6 pnl=-209.83 avg=-34.97 win_rate=33.33%
+12: trades=1 pnl=-188.19 avg=-188.19 win_rate=0.00%
+8: trades=1 pnl=-30.81 avg=-30.81 win_rate=0.00%
 
 By entry setup
-trend: trades=9 pnl=-786.03 avg=-87.34 win_rate=22.22%
+trend: trades=9 pnl=-790.76 avg=-87.86 win_rate=22.22%
 
 By exit reason
-time_stop: trades=1 pnl=-361.40 avg=-361.40 win_rate=0.00%
-stop_loss: trades=2 pnl=-311.51 avg=-155.75 win_rate=0.00%
-structure_exit: trades=1 pnl=-224.41 avg=-224.41 win_rate=0.00%
-trailing_stop: trades=4 pnl=-191.73 avg=-47.93 win_rate=25.00%
-take_profit: trades=1 pnl=303.01 avg=303.01 win_rate=100.00%
+time_stop: trades=1 pnl=-361.92 avg=-361.92 win_rate=0.00%
+stop_loss: trades=2 pnl=-312.56 avg=-156.28 win_rate=0.00%
+structure_exit: trades=1 pnl=-224.93 avg=-224.93 win_rate=0.00%
+trailing_stop: trades=4 pnl=-193.83 avg=-48.46 win_rate=25.00%
+take_profit: trades=1 pnl=302.48 avg=302.48 win_rate=100.00%

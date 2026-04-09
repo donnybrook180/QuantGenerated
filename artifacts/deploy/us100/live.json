@@ -3,13 +3,14 @@
   "symbol": "US100",
   "data_symbol": "QQQ",
   "broker_symbol": "US100.cash",
-  "research_run_id": 189,
-  "execution_set_id": 87,
-  "execution_validation_summary": "selection=standard variant=opening_range_short_breakdown__exit_trend@default, opening_range_short_breakdown@default data_source=duckdb_cache pnl=3.03 pf=1.58 closed=36 -> accepted",
+  "research_run_id": 197,
+  "execution_set_id": 94,
+  "execution_validation_summary": "selection=standard variant=opening_range_short_breakdown__exit_trend@default, opening_range_short_breakdown@default data_source=duckdb_cache pnl=2.88 pf=1.54 closed=36 -> accepted",
   "strategies": [
     {
       "candidate_name": "opening_range_short_breakdown__exit_trend",
       "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+      "policy_summary": "activate in trend_down_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.97; risk_cap=0.60; stability=0.74; loss_ratio=0.17",
       "variant_label": "",
       "regime_filter_label": "",
       "execution_overrides": {
@@ -19,15 +20,41 @@
         "stale_breakout_bars": 8,
         "structure_exit_bars": 0
       },
-      "allocation_weight": 0.5
+      "allocation_weight": 0.5,
+      "allowed_regimes": [
+        "trend_down_vol_high"
+      ],
+      "blocked_regimes": [
+        "trend_flat_vol_mid"
+      ],
+      "min_vol_percentile": 0.55,
+      "max_vol_percentile": 0.97,
+      "base_allocation_weight": 0.9714840118939554,
+      "max_risk_multiplier": 0.6,
+      "min_risk_multiplier": 0.0
     },
     {
       "candidate_name": "opening_range_short_breakdown",
       "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
+      "policy_summary": "activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.94; risk_cap=0.60; stability=0.70; loss_ratio=0.23",
       "variant_label": "",
       "regime_filter_label": "",
       "execution_overrides": {},
-      "allocation_weight": 0.5
+      "allocation_weight": 0.5,
+      "allowed_regimes": [
+        "trend_down_vol_high"
+      ],
+      "blocked_regimes": [
+        "trend_flat_vol_high"
+      ],
+      "min_vol_percentile": 0.55,
+      "max_vol_percentile": 0.97,
+      "base_allocation_weight": 0.937591346932497,
+      "max_risk_multiplier": 0.6,
+      "min_risk_multiplier": 0.0
     }
-  ]
+  ],
+  "target_volatility": 0.0,
+  "max_symbol_vol_percentile": 0.98,
+  "block_new_entries_in_event_risk": true
 }

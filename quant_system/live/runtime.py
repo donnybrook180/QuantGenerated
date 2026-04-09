@@ -177,12 +177,12 @@ class MT5LiveExecutor:
         self.portfolio_weight = max(portfolio_weight, 0.0)
 
     def _build_strategy_config(self, strategy: DeploymentStrategy) -> SystemConfig:
-        from quant_system.symbol_research import _configure_symbol_execution
+        from quant_system.live_support import configure_symbol_execution
 
         strategy_config = copy.deepcopy(self.config)
         strategy_config.mt5.symbol = self.deployment.broker_symbol
         strategy_config.mt5.timeframe = _mt5_timeframe_from_variant(strategy.variant_label, strategy_config.mt5.timeframe)
-        _configure_symbol_execution(strategy_config, self.deployment.symbol)
+        configure_symbol_execution(strategy_config, self.deployment.symbol)
         for key, value in strategy.execution_overrides.items():
             setattr(strategy_config.execution, key, value)
         return strategy_config
@@ -190,11 +190,11 @@ class MT5LiveExecutor:
     def _evaluate_strategy(
         self, client: MT5Client, strategy: DeploymentStrategy
     ) -> tuple[Side, float, datetime | None, RegimeSnapshot]:
-        from quant_system.symbol_research import _build_features_with_events
+        from quant_system.live_support import build_features_with_events
 
         strategy_config = self._build_strategy_config(strategy)
         bars = client.fetch_bars(bar_count=strategy_config.mt5.history_bars)
-        features = _build_features_with_events(strategy_config, self.deployment.symbol, bars)
+        features = build_features_with_events(strategy_config, self.deployment.symbol, bars)
         latest_feature = features[-1] if features else None
         snapshot = classify_regime(self.deployment.symbol, bars, latest_feature)
         session_name = _session_name_from_variant(strategy.variant_label)
@@ -355,55 +355,58 @@ class MT5LiveExecutor:
         account_mode_info: MT5AccountModeInfo | None = None
         regime_snapshot: RegimeSnapshot | None = None
         evaluated: list[EvaluatedStrategy] = []
+        client_cache: dict[str, MT5Client] = {}
 
-        bootstrap_config = self._build_strategy_config(self.deployment.strategies[0])
-        bootstrap_client = MT5Client(bootstrap_config.mt5)
-        try:
-            bootstrap_client.initialize()
-            account_mode_info = bootstrap_client.account_mode_info()
-        finally:
-            bootstrap_client.shutdown()
-
-        if (
-            account_mode_info is not None
-            and not account_mode_info.strategy_isolation_supported
-            and len(self.deployment.strategies) > 1
-            and not self.config.mt5.allow_netting_multi_strategy
-        ):
-            for strategy in self.deployment.strategies:
-                magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
-                actions.append(
-                    StrategyAction(
-                        candidate_name=strategy.candidate_name,
-                        signal_side=Side.FLAT,
-                        signal_timestamp=None,
-                        confidence=0.0,
-                        current_quantity=0.0,
-                        intended_action="netting_blocked_multi_strategy",
-                        magic_number=magic_number,
-                        regime_label="",
-                        vol_percentile=0.0,
-                        risk_multiplier=0.0,
-                        allocation_fraction=0.0,
-                        allocator_score=0.0,
-                        portfolio_weight=self.portfolio_weight,
-                    )
-                )
-            return LiveRunResult(
-                symbol=self.deployment.symbol,
-                broker_symbol=self.deployment.broker_symbol,
-                account_mode_label=account_mode_info.margin_mode_label,
-                strategy_isolation_supported=account_mode_info.strategy_isolation_supported,
-                actions=actions,
-                regime_snapshot=regime_snapshot,
-                portfolio_weight=self.portfolio_weight,
-            )
-
-        for strategy in self.deployment.strategies:
+        def _client_for_strategy(strategy: DeploymentStrategy) -> MT5Client:
             strategy_config = self._build_strategy_config(strategy)
-            client = MT5Client(strategy_config.mt5)
-            try:
+            cache_key = f"{strategy_config.mt5.symbol}|{strategy_config.mt5.timeframe}"
+            client = client_cache.get(cache_key)
+            if client is None:
+                client = MT5Client(strategy_config.mt5)
                 client.initialize()
+                client_cache[cache_key] = client
+            return client
+
+        try:
+            bootstrap_client = _client_for_strategy(self.deployment.strategies[0])
+            account_mode_info = bootstrap_client.account_mode_info()
+            if (
+                account_mode_info is not None
+                and not account_mode_info.strategy_isolation_supported
+                and len(self.deployment.strategies) > 1
+                and not self.config.mt5.allow_netting_multi_strategy
+            ):
+                for strategy in self.deployment.strategies:
+                    magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
+                    actions.append(
+                        StrategyAction(
+                            candidate_name=strategy.candidate_name,
+                            signal_side=Side.FLAT,
+                            signal_timestamp=None,
+                            confidence=0.0,
+                            current_quantity=0.0,
+                            intended_action="netting_blocked_multi_strategy",
+                            magic_number=magic_number,
+                            regime_label="",
+                            vol_percentile=0.0,
+                            risk_multiplier=0.0,
+                            allocation_fraction=0.0,
+                            allocator_score=0.0,
+                            portfolio_weight=self.portfolio_weight,
+                        )
+                    )
+                return LiveRunResult(
+                    symbol=self.deployment.symbol,
+                    broker_symbol=self.deployment.broker_symbol,
+                    account_mode_label=account_mode_info.margin_mode_label,
+                    strategy_isolation_supported=account_mode_info.strategy_isolation_supported,
+                    actions=actions,
+                    regime_snapshot=regime_snapshot,
+                    portfolio_weight=self.portfolio_weight,
+                )
+
+            for strategy in self.deployment.strategies:
+                client = _client_for_strategy(strategy)
                 signal_side, confidence, signal_timestamp, snapshot = self._evaluate_strategy(client, strategy)
                 if regime_snapshot is None:
                     regime_snapshot = snapshot
@@ -420,16 +423,11 @@ class MT5LiveExecutor:
                         allocator_score=score,
                     )
                 )
-            finally:
-                client.shutdown()
 
-        self._allocate_symbol_exposure(evaluated)
+            self._allocate_symbol_exposure(evaluated)
 
-        for item in evaluated:
-            strategy_config = self._build_strategy_config(item.strategy)
-            client = MT5Client(strategy_config.mt5)
-            try:
-                client.initialize()
+            for item in evaluated:
+                client = _client_for_strategy(item.strategy)
                 if item.signal_side != Side.FLAT and item.allocator_score > 0.0 and item.allocation_fraction <= 0.0:
                     magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, item.strategy.candidate_name)
                     current_quantity = self._net_quantity(client.list_positions(magic_number=magic_number))
@@ -464,17 +462,21 @@ class MT5LiveExecutor:
                         should_skip_duplicate,
                     )
                 )
-            finally:
-                client.shutdown()
-        return LiveRunResult(
-            symbol=self.deployment.symbol,
-            broker_symbol=self.deployment.broker_symbol,
-            account_mode_label=account_mode_info.margin_mode_label if account_mode_info is not None else "unknown",
-            strategy_isolation_supported=account_mode_info.strategy_isolation_supported if account_mode_info is not None else False,
-            actions=actions,
-            regime_snapshot=regime_snapshot,
-            portfolio_weight=self.portfolio_weight,
-        )
+            return LiveRunResult(
+                symbol=self.deployment.symbol,
+                broker_symbol=self.deployment.broker_symbol,
+                account_mode_label=account_mode_info.margin_mode_label if account_mode_info is not None else "unknown",
+                strategy_isolation_supported=account_mode_info.strategy_isolation_supported if account_mode_info is not None else False,
+                actions=actions,
+                regime_snapshot=regime_snapshot,
+                portfolio_weight=self.portfolio_weight,
+            )
+        finally:
+            for client in client_cache.values():
+                try:
+                    client.shutdown()
+                except Exception:
+                    pass
 
 
 def bars_timestamp_now():

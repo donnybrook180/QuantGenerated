@@ -1,0 +1,19 @@
+Artifact: forex_breakout_momentum_patient__near_miss_patient__trend_flat_symbol_candidate
+Closed trades: 5
+Realized pnl: 129777.42
+
+By entry hour
+8: trades=1 pnl=-3023.99 avg=-3023.99 win_rate=0.00%
+1: trades=1 pnl=-1333.84 avg=-1333.84 win_rate=0.00%
+15: trades=1 pnl=-533.72 avg=-533.72 win_rate=0.00%
+5: trades=1 pnl=186.11 avg=186.11 win_rate=100.00%
+18: trades=1 pnl=134482.86 avg=134482.86 win_rate=100.00%
+
+By entry setup
+forex_breakout_momentum: trades=5 pnl=129777.42 avg=25955.48 win_rate=40.00%
+
+By exit reason
+stale_breakout: trades=1 pnl=-3023.99 avg=-3023.99 win_rate=0.00%
+stop_loss: trades=1 pnl=-1333.84 avg=-1333.84 win_rate=0.00%
+trailing_stop: trades=2 pnl=-347.62 avg=-173.81 win_rate=50.00%
+end_of_run: trades=1 pnl=134482.86 avg=134482.86 win_rate=100.00%

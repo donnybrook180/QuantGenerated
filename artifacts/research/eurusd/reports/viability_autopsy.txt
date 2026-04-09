@@ -1,30 +1,30 @@
 Viability autopsy: EURUSD
-Execution validation summary: selection=standard variant=forex_breakout_momentum__30m_overlap__exit_trend@30m_overlap, forex_breakout_momentum__30m_overlap@30m_overlap, forex_breakout_momentum__30m_overlap__exit_fastfail@30m_overlap data_source=duckdb_cache_aggregated pnl=373.45 pf=10.26 closed=20 -> accepted
+Execution validation summary: selection=standard variant=forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_protective__trend_flat@30m_europe|trend_flat, forex_breakout_momentum__30m_us__exit_trend__near_miss_patient__trend_flat@30m_us|trend_flat, forex_breakout_momentum__30m_us__exit_fastfail@30m_us data_source=duckdb_cache_aggregated pnl=429.50 pf=7.68 closed=19 -> accepted
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 120
-- validation PF < 1.0 (0.00): 66
-- walk-forward avg validation pnl <= 0 (0.00): 59
-- test PF < 1.0 (0.00): 53
-- walk-forward avg test pnl <= 0 (0.00): 48
-- validation trades too low (0 < 3): 39
-- validation pnl <= 0 (0.00): 39
-- test trades too low (0 < 2): 39
+- walk-forward pass rate too low (0.00% < 50%): 128
+- regime stability too low (0.00 < 0.50): 77
+- validation PF < 1.0 (0.00): 73
+- test PF < 1.0 (0.00): 58
+- walk-forward avg validation pnl <= 0 (0.00): 51
+- regime loss ratio too high (999.00 > 1.25): 50
+- walk-forward avg test pnl <= 0 (0.00): 47
+- test trades too low (0 < 2): 45
 
 Top near-misses
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid__near_miss_protective: pnl=181.37 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat_vol_mid: pnl=181.37 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.34)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid__near_miss_protective__trend_flat_vol_mid: pnl=181.37 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_dense__trend_flat_vol_mid__local_opt_consistency: pnl=181.37 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.34)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid__local_opt_consistency: pnl=181.37 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.34)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid: pnl=175.67 pf=28.55 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_dense__trend_flat_vol_mid: pnl=175.67 pf=28.55 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-3.19)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid__near_miss_dense: pnl=175.67 pf=28.55 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-3.19)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__regime_trend_flat_vol_mid__near_miss_dense__trend_flat_vol_mid: pnl=175.67 pf=28.55 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-3.19)
-- forex_short_breakdown_momentum__30m_europe__exit_trend__regime_trend_flat_vol_mid: pnl=174.59 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_patient__trend_flat_vol_mid: pnl=174.59 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- forex_short_breakdown_momentum__30m_europe__exit_trend__regime_trend_flat_vol_mid__near_miss_patient: pnl=174.59 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_protective__trend_flat_vol_mid: pnl=174.59 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
+- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_dense__trend_flat_vol_mid: pnl=174.59 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
+- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_patient__trend_flat_vol_mid: pnl=131.27 pf=21.58 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-3.19)
+- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_dense__trend_flat: pnl=95.39 pf=1.72 val=-107.53/0.00/3 test=27.12/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-80.41), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-56.93)

@@ -1,0 +1,19 @@
+Artifact: forex_short_breakdown_momentum__30m_us_30m_us_symbol_candidate
+Closed trades: 6
+Realized pnl: 874.65
+
+By entry hour
+17: trades=1 pnl=-3604.08 avg=-3604.08 win_rate=0.00%
+16: trades=1 pnl=-1634.16 avg=-1634.16 win_rate=0.00%
+15: trades=1 pnl=-984.54 avg=-984.54 win_rate=0.00%
+14: trades=2 pnl=452.18 avg=226.09 win_rate=50.00%
+13: trades=1 pnl=6645.25 avg=6645.25 win_rate=100.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=6 pnl=874.65 avg=145.77 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=2 pnl=-7927.79 avg=-3963.89 win_rate=0.00%
+signal_exit: trades=1 pnl=-1634.16 avg=-1634.16 win_rate=0.00%
+stale_breakout: trades=1 pnl=-984.54 avg=-984.54 win_rate=0.00%
+take_profit: trades=2 pnl=11421.13 avg=5710.56 win_rate=100.00%

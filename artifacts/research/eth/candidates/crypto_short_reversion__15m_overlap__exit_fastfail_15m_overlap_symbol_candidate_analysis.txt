@@ -1,0 +1,14 @@
+Artifact: crypto_short_reversion__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
+Closed trades: 3
+Realized pnl: -41.03
+
+By entry hour
+12: trades=2 pnl=-28.86 avg=-14.43 win_rate=0.00%
+13: trades=1 pnl=-12.17 avg=-12.17 win_rate=0.00%
+
+By entry setup
+crypto_short_reversion: trades=3 pnl=-41.03 avg=-13.68 win_rate=0.00%
+
+By exit reason
+signal_exit: trades=2 pnl=-28.86 avg=-14.43 win_rate=0.00%
+structure_exit: trades=1 pnl=-12.17 avg=-12.17 win_rate=0.00%

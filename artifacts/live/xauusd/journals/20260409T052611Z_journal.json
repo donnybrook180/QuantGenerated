@@ -1,0 +1,75 @@
+{
+  "symbol": "XAUUSD",
+  "broker_symbol": "XAUUSD",
+  "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 0.09573632370920716,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T08:15:00+00:00",
+    "symbol": "XAUUSD",
+    "regime_label": "calm_range",
+    "volatility_label": "normal",
+    "structure_label": "range",
+    "realized_vol_20": 0.030212954383383107,
+    "realized_vol_100": 0.02773445719980126,
+    "vol_ratio": 1.0893652673901837,
+    "vol_percentile": 0.5702479338842975,
+    "atr_percent": 0.0018221764425438043,
+    "trend_strength": 0.00020173768672049341,
+    "range_efficiency": 0.03154528274458646,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2807800,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.5702479338842975,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.09573632370920716
+    },
+    {
+      "candidate_name": "volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up",
+      "signal_side": "sell",
+      "signal_timestamp": "2026-04-06T14:45:00+00:00",
+      "confidence": 0.7,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_range",
+      "magic_number": 2698491,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.5702479338842975,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.09573632370920716
+    },
+    {
+      "candidate_name": "xauusd_volatility_breakout__15m_us__exit_trend__near_miss_dense__trend_up",
+      "signal_side": "sell",
+      "signal_timestamp": "2026-04-06T14:45:00+00:00",
+      "confidence": 0.7,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_range",
+      "magic_number": 2972460,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.5702479338842975,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 0.3333333333333333,
+      "allocator_score": 0.0,
+      "portfolio_weight": 0.09573632370920716
+    }
+  ]
+}

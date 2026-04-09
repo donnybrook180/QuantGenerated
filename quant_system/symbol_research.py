@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
 
-from quant_system.app import export_closed_trade_artifacts
 from quant_system.ai.models import AgentDescriptor
 from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.base import Agent
@@ -65,8 +64,6 @@ from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, E
 from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
 from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
 from quant_system.integrations.mt5 import MT5Client, MT5Error
-from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
-from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
@@ -80,6 +77,10 @@ from quant_system.symbols import (
     is_stock_symbol as symbol_is_stock,
     resolve_symbol_request,
 )
+
+
+class PolygonUnavailableError(RuntimeError):
+    pass
 
 
 @dataclass(slots=True)
@@ -561,6 +562,8 @@ def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
 
 
 def _load_crypto_network_bars(config: SystemConfig, data_symbol: str, multiplier: int, timespan: str) -> tuple[list[MarketBar], str]:
+    from quant_system.integrations.polygon_data import PolygonError
+
     errors: list[str] = []
     try:
         bars = BinanceKlineClient(
@@ -688,6 +691,15 @@ def _load_symbol_features_variant(
     broker_symbol: str | None = None,
     profile_symbol: str | None = None,
 ) -> tuple[list[FeatureVector], str]:
+    try:
+        from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
+    except ModuleNotFoundError as exc:
+        PolygonDataClient = None  # type: ignore[assignment]
+        PolygonError = PolygonUnavailableError  # type: ignore[assignment]
+        polygon_import_error = exc
+    else:
+        polygon_import_error = None
+
     config.polygon.symbol = data_symbol
     cache_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe = f"{multiplier}_{timespan}"
@@ -752,6 +764,8 @@ def _load_symbol_features_variant(
         if _is_crypto_symbol(data_symbol):
             bars, source = _load_crypto_network_bars(config, data_symbol, multiplier, timespan)
         else:
+            if PolygonDataClient is None:
+                raise PolygonUnavailableError(f"Polygon client unavailable: {polygon_import_error}")
             variant_config = copy.deepcopy(config.polygon)
             variant_config.symbol = data_symbol
             variant_config.multiplier = multiplier
@@ -770,7 +784,7 @@ def _load_symbol_features_variant(
         if persisted:
             return _build_features_with_events(config, data_symbol, persisted), source
         return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
-    except PolygonError:
+    except (PolygonError, PolygonUnavailableError):
         if source_preference not in {"broker_only", "external_only"} and broker_symbol:
             try:
                 mt5_result = _try_mt5_fetch()
@@ -801,6 +815,8 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
     if not _is_stock_symbol(data_symbol):
         return build_feature_library(bars)
     try:
+        from quant_system.integrations.polygon_events import fetch_stock_event_flags
+
         event_flags = fetch_stock_event_flags(
             config.polygon.api_key,
             data_symbol,
@@ -1450,6 +1466,8 @@ def _run_candidate(
     archetype: str,
     artifact_prefix: str,
 ) -> CandidateResult:
+    from quant_system.research_artifacts import export_closed_trade_artifacts
+
     candidate_config = _with_execution_overrides(config, spec.execution_overrides)
     symbol = features[0].symbol if features else ""
     agents = _with_session_gate(copy.deepcopy(spec.agents), spec.session_label, symbol)
@@ -2947,6 +2965,7 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
     blocked_regimes = tuple(
         item for item in (worst_regime,) if item and item not in allowed_regimes
     )
+    blocked_summary = blocked_regimes[0] if blocked_regimes else "no explicit blocked regime"
 
     vol_suffix = best_regime.split("_")[-1] if best_regime else ""
     min_vol_percentile = 0.0
@@ -2973,7 +2992,7 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
     min_risk_multiplier = 0.0
     policy_summary = (
         f"activate in {best_regime or 'no preferred regime'}"
-        f"; avoid {worst_regime or 'no explicit blocked regime'}"
+        f"; avoid {blocked_summary}"
         f"; vol_pct in [{min_vol_percentile:.2f}, {max_vol_percentile:.2f}]"
         f"; base_weight={base_allocation_weight:.2f}"
         f"; risk_cap={max_risk_multiplier:.2f}"

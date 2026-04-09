@@ -1,0 +1,15 @@
+Artifact: forex_trend_continuation__30m_us_30m_us_symbol_candidate
+Closed trades: 3
+Realized pnl: -4354.84
+
+By entry hour
+15: trades=1 pnl=-3476.54 avg=-3476.54 win_rate=0.00%
+17: trades=1 pnl=-559.78 avg=-559.78 win_rate=0.00%
+18: trades=1 pnl=-318.52 avg=-318.52 win_rate=0.00%
+
+By entry setup
+forex_trend_continuation: trades=3 pnl=-4354.84 avg=-1451.61 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-3476.54 avg=-3476.54 win_rate=0.00%
+signal_exit: trades=2 pnl=-878.30 avg=-439.15 win_rate=0.00%

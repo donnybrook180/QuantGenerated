@@ -1,0 +1,15 @@
+Artifact: us100_short_trend_rejection_flat_high_dense__regime_trend_flat_vol_high__near_miss_dense__trend_f_987c78ab9c73
+Closed trades: 16
+Realized pnl: -1.32
+
+By entry hour
+16: trades=16 pnl=-1.32 avg=-0.08 win_rate=31.25%
+
+By entry setup
+us500_short_trend_rejection: trades=16 pnl=-1.32 avg=-0.08 win_rate=31.25%
+
+By exit reason
+stop_loss: trades=7 pnl=-2.56 avg=-0.37 win_rate=0.00%
+stale_breakout: trades=3 pnl=-0.45 avg=-0.15 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.09 avg=-0.09 win_rate=0.00%
+take_profit: trades=5 pnl=1.77 avg=0.35 win_rate=100.00%

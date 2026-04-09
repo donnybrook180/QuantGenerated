@@ -1,19 +1,17 @@
-Artifact: jp225_momentum__exit_trend_default_symbol_candidate
-Closed trades: 10
-Realized pnl: -56.14
+Artifact: momentum__exit_trend_default_symbol_candidate
+Closed trades: 12
+Realized pnl: -6.85
 
 By entry hour
-14: trades=2 pnl=-62.15 avg=-31.07 win_rate=0.00%
-18: trades=2 pnl=-47.50 avg=-23.75 win_rate=0.00%
-17: trades=2 pnl=-15.95 avg=-7.97 win_rate=0.00%
-16: trades=3 pnl=11.58 avg=3.86 win_rate=33.33%
-19: trades=1 pnl=57.88 avg=57.88 win_rate=100.00%
+3: trades=7 pnl=-102.00 avg=-14.57 win_rate=0.00%
+5: trades=3 pnl=41.08 avg=13.69 win_rate=66.67%
+4: trades=2 pnl=54.07 avg=27.03 win_rate=50.00%
 
 By entry setup
-momentum_confirmation: trades=10 pnl=-56.14 avg=-5.61 win_rate=20.00%
+momentum_confirmation: trades=12 pnl=-6.85 avg=-0.57 win_rate=25.00%
 
 By exit reason
-stale_breakout: trades=3 pnl=-93.65 avg=-31.22 win_rate=0.00%
-stop_loss: trades=2 pnl=-71.95 avg=-35.98 win_rate=0.00%
-trailing_stop: trades=4 pnl=37.94 avg=9.49 win_rate=25.00%
-take_profit: trades=1 pnl=71.52 avg=71.52 win_rate=100.00%
+stop_loss: trades=5 pnl=-114.02 avg=-22.80 win_rate=0.00%
+trailing_stop: trades=2 pnl=-14.30 avg=-7.15 win_rate=0.00%
+stale_breakout: trades=2 pnl=-11.09 avg=-5.54 win_rate=0.00%
+take_profit: trades=3 pnl=132.56 avg=44.19 win_rate=100.00%

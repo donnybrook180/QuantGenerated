@@ -1,17 +1,18 @@
-Artifact: jp225_mean_reversion__exit_quick_default_symbol_candidate
+Artifact: mean_reversion__exit_quick_default_symbol_candidate
 Closed trades: 7
-Realized pnl: 11.85
+Realized pnl: -17.85
 
 By entry hour
-17: trades=2 pnl=-7.74 avg=-3.87 win_rate=50.00%
-16: trades=1 pnl=-3.68 avg=-3.68 win_rate=0.00%
-18: trades=2 pnl=-2.58 avg=-1.29 win_rate=50.00%
-15: trades=2 pnl=25.84 avg=12.92 win_rate=50.00%
+2: trades=1 pnl=-34.49 avg=-34.49 win_rate=0.00%
+5: trades=1 pnl=-16.51 avg=-16.51 win_rate=0.00%
+4: trades=1 pnl=-11.50 avg=-11.50 win_rate=0.00%
+1: trades=1 pnl=-6.95 avg=-6.95 win_rate=0.00%
+3: trades=3 pnl=51.61 avg=17.20 win_rate=33.33%
 
 By entry setup
-mean_reversion: trades=7 pnl=11.85 avg=1.69 win_rate=42.86%
+mean_reversion: trades=7 pnl=-17.85 avg=-2.55 win_rate=14.29%
 
 By exit reason
-structure_exit: trades=4 pnl=-35.68 avg=-8.92 win_rate=0.00%
-stale_breakout: trades=1 pnl=0.52 avg=0.52 win_rate=100.00%
-take_profit: trades=2 pnl=47.01 avg=23.51 win_rate=100.00%
+structure_exit: trades=5 pnl=-66.71 avg=-13.34 win_rate=0.00%
+stop_loss: trades=1 pnl=-16.51 avg=-16.51 win_rate=0.00%
+take_profit: trades=1 pnl=65.37 avg=65.37 win_rate=100.00%

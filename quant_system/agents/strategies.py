@@ -442,3 +442,213 @@ class FailedBounceShortAgent(Agent):
                 session_position=session_position,
             ),
         )
+
+
+class FailedBreakdownReclaimLongAgent(Agent):
+    name = "failed_breakdown_reclaim_long"
+
+    def __init__(
+        self,
+        lookback: int = 6,
+        allowed_hours: set[int] | None = None,
+        min_relative_volume: float = 0.75,
+        min_negative_extension: float = 0.00025,
+        max_negative_trend: float = 0.0015,
+    ) -> None:
+        self.state = RollingCloseState(lookback)
+        self.allowed_hours = allowed_hours or {0, 1, 2, 8, 9, 10}
+        self.min_relative_volume = min_relative_volume
+        self.min_negative_extension = min_negative_extension
+        self.max_negative_trend = max_negative_trend
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        self.state.append(close)
+        if not self.state.ready:
+            return None
+
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+
+        recent_low = self.state.recent_low(4)
+        recent_mean = self.state.mean()
+        reclaiming = close > recent_low * 1.0008 and close >= recent_mean
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or hour not in self.allowed_hours
+            or relative_volume < self.min_relative_volume
+        ):
+            side = Side.FLAT
+        elif (
+            reclaiming
+            and trend_strength >= -self.max_negative_trend
+            and momentum_20 > -self.min_negative_extension
+            and momentum_5 > -0.0002
+            and z_score <= -0.20
+            and vwap_distance <= -0.00015
+            and session_position <= 0.75
+        ):
+            side = Side.BUY
+        elif trend_strength < -0.0018 or momentum_20 < -0.0008 or vwap_distance < -0.0009:
+            side = Side.SELL
+        else:
+            side = Side.FLAT
+
+        confidence = scaled_confidence(
+            0.18,
+            (max(recent_mean - recent_low, 0.0), 140),
+            (max(-z_score - 0.20, 0.0), 0.18),
+            (max(close - recent_low, 0.0), 180),
+        )
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            confidence if side != Side.FLAT else 0.0,
+            directional_metadata(
+                side,
+                trend_strength=trend_strength,
+                z_score_20=z_score,
+                vwap_distance=vwap_distance,
+                recent_low=recent_low,
+                recent_mean=recent_mean,
+                session_position=session_position,
+            ),
+        )
+
+
+class JP225OpenDriveMeanReversionLongAgent(Agent):
+    name = "jp225_open_drive_mean_reversion_long"
+
+    def __init__(self) -> None:
+        self.range_state = SessionRangeState()
+        self.in_position = False
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        high = feature.values.get("high", feature.values["close"])
+        low = feature.values.get("low", feature.values["close"])
+        close = feature.values["close"]
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        minutes_from_open = feature.values.get("minutes_from_open", -1.0)
+
+        if self.range_state.ensure_day(feature.timestamp):
+            self.in_position = False
+
+        if in_regular_session >= 1.0 and 0 <= minutes_from_open < 25:
+            self.range_state.update(high, low)
+            return None
+
+        if not self.range_state.ready:
+            return None
+
+        if in_regular_session < 1.0 or not (25 <= minutes_from_open <= 120):
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+        range_span = max(self.range_state.range_high - self.range_state.range_low, close * 0.0006)
+        reclaim_level = self.range_state.range_low + (range_span * 0.18)
+        invalidate_level = self.range_state.range_low - (range_span * 0.08)
+
+        if (
+            not self.in_position
+            and low <= self.range_state.range_low * 1.0002
+            and close >= reclaim_level
+            and relative_volume >= 0.75
+            and trend_strength > -0.0008
+            and momentum_20 > -0.0012
+            and momentum_5 > -0.0006
+            and vwap_distance > -0.0018
+        ):
+            self.in_position = True
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                scaled_confidence(0.24, (max(close - reclaim_level, 0.0), 160)),
+                {"range_low": self.range_state.range_low, "reclaim_level": reclaim_level, "open_drive_fade": 1.0},
+            )
+
+        if self.in_position and (close <= invalidate_level or momentum_20 < -0.0018 or vwap_distance < -0.0022):
+            self.in_position = False
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.65, {"failed_reclaim": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
+class JP225AsiaContinuationLongAgent(Agent):
+    name = "jp225_asia_continuation_long"
+
+    def __init__(self, lookback: int = 8) -> None:
+        self.range_state = RollingHighLowState(lookback)
+        self.in_position = False
+        self.entry_anchor: float | None = None
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        high = feature.values.get("high", feature.values["close"])
+        low = feature.values.get("low", feature.values["close"])
+        close = feature.values["close"]
+        atr_proxy = feature.values.get("atr_proxy", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        minutes_from_open = feature.values.get("minutes_from_open", -1.0)
+
+        self.range_state.append(high, low)
+        if not self.range_state.ready:
+            return None
+
+        if in_regular_session < 1.0 or not (45 <= minutes_from_open <= 240):
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+        breakout_high = self.range_state.breakout_high()
+
+        if (
+            not self.in_position
+            and close >= breakout_high * 1.00015
+            and atr_proxy >= 0.0
+            and relative_volume >= 0.8
+            and trend_strength > 0.0002
+            and momentum_20 > 0.00005
+            and momentum_5 > -0.00015
+        ):
+            self.in_position = True
+            self.entry_anchor = breakout_high
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                scaled_confidence(0.24, (max(close - breakout_high, 0.0), 170), (max(trend_strength, 0.0), 120)),
+                {"breakout_high": breakout_high, "asia_continuation": 1.0},
+            )
+
+        if self.in_position and (
+            (self.entry_anchor is not None and close < self.entry_anchor * 0.9993)
+            or momentum_20 < -0.00035
+            or trend_strength < -0.00025
+        ):
+            self.in_position = False
+            self.entry_anchor = None
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.SELL, 0.65, {"trend_flip": 1.0})
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})

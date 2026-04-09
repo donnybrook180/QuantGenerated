@@ -61,7 +61,10 @@ from quant_system.agents.stocks import (
 from quant_system.agents.us100 import PriorDayFailedBounceShortAgent
 from quant_system.agents.strategies import (
     AfternoonDownsideContinuationAgent,
+    FailedBreakdownReclaimLongAgent,
     FailedBounceShortAgent,
+    JP225AsiaContinuationLongAgent,
+    JP225OpenDriveMeanReversionLongAgent,
     OpeningRangeBreakoutAgent,
     OpeningRangeShortBreakdownAgent,
     VolatilityBreakoutAgent,
@@ -1869,6 +1872,58 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     if upper == "JP225":
         specs.extend(
             [
+                CandidateSpec(
+                    name="jp225_open_drive_mean_reversion_long",
+                    description="JP225 open-drive mean reversion long after failed downside extension",
+                    agents=[JP225OpenDriveMeanReversionLongAgent(), risk],
+                    code_path="quant_system.agents.strategies.JP225OpenDriveMeanReversionLongAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_asia_continuation_long",
+                    description="JP225 Asia-session continuation long after controlled upside expansion",
+                    agents=[JP225AsiaContinuationLongAgent(), risk],
+                    code_path="quant_system.agents.strategies.JP225AsiaContinuationLongAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_failed_breakdown_reclaim_core_hours",
+                    description="JP225 failed breakdown reclaim long limited to the strongest upside reversal hours",
+                    agents=[
+                        FailedBreakdownReclaimLongAgent(),
+                        SessionEntryFilterAgent({0, 1, 2, 8, 9, 10}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_failed_breakdown_reclaim_asia_hours",
+                    description="JP225 failed breakdown reclaim long focused on Asia-hours reversal windows",
+                    agents=[
+                        FailedBreakdownReclaimLongAgent(),
+                        SessionEntryFilterAgent({0, 1, 2, 8}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_volatility_breakout_core_hours",
+                    description="JP225 long volatility breakout limited to the strongest historical upside entry hours",
+                    agents=[
+                        VolatilityBreakoutAgent(lookback=max(8, config.agents.mean_reversion_window)),
+                        SessionEntryFilterAgent({0, 1, 2, 8, 10, 11}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_volatility_breakout_asia_hours",
+                    description="JP225 long volatility breakout focused on the strongest Asia-hours upside continuation windows",
+                    agents=[
+                        VolatilityBreakoutAgent(lookback=max(8, config.agents.mean_reversion_window)),
+                        SessionEntryFilterAgent({0, 1, 2, 8}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
+                ),
                 CandidateSpec(
                     name="jp225_volatility_short_breakdown_core_hours",
                     description="JP225 short volatility breakdown limited to the strongest historical entry hours",

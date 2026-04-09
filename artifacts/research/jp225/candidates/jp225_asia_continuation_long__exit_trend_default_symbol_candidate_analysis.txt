@@ -1,0 +1,17 @@
+Artifact: jp225_asia_continuation_long__exit_trend_default_symbol_candidate
+Closed trades: 10
+Realized pnl: -86.88
+
+By entry hour
+2: trades=6 pnl=-64.49 avg=-10.75 win_rate=0.00%
+3: trades=3 pnl=-18.02 avg=-6.01 win_rate=33.33%
+1: trades=1 pnl=-4.37 avg=-4.37 win_rate=0.00%
+
+By entry setup
+jp225_asia_continuation_long: trades=10 pnl=-86.88 avg=-8.69 win_rate=10.00%
+
+By exit reason
+stop_loss: trades=3 pnl=-42.64 avg=-14.21 win_rate=0.00%
+signal_exit: trades=2 pnl=-23.39 avg=-11.69 win_rate=0.00%
+trailing_stop: trades=4 pnl=-15.85 avg=-3.96 win_rate=25.00%
+stale_breakout: trades=1 pnl=-5.01 avg=-5.01 win_rate=0.00%

@@ -3,6 +3,8 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+import _bootstrap  # noqa: F401
+
 from quant_system.artifacts import (
     ARTIFACTS_DIR,
     DEPLOY_DIR,

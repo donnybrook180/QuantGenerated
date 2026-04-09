@@ -4,6 +4,8 @@ import copy
 import statistics
 import sys
 
+import _bootstrap  # noqa: F401
+
 from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.integrations.binance_data import BinanceKlineClient

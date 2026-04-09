@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import sys
 
+import _bootstrap  # noqa: F401
+
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile

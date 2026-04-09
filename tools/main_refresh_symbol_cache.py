@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import sys
 
+import _bootstrap  # noqa: F401
+
 from quant_system.config import SystemConfig
 from quant_system.symbol_research import _load_symbol_features_variant, _research_variant_plan, _symbol_research_history_days
 from quant_system.symbols import resolve_symbol_request

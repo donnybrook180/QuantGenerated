@@ -1,0 +1,21 @@
+Artifact: forex_short_breakdown_momentum__5m_europe__exit_trend__near_miss_patient_symbol_candidate
+Closed trades: 49
+Realized pnl: 38.65
+
+By entry hour
+9: trades=10 pnl=-19.69 avg=-1.97 win_rate=10.00%
+10: trades=15 pnl=1.53 avg=0.10 win_rate=26.67%
+12: trades=7 pnl=8.97 avg=1.28 win_rate=28.57%
+8: trades=5 pnl=9.62 avg=1.92 win_rate=60.00%
+7: trades=4 pnl=11.36 avg=2.84 win_rate=25.00%
+11: trades=8 pnl=26.86 avg=3.36 win_rate=37.50%
+
+By entry setup
+forex_short_breakdown_momentum: trades=49 pnl=38.65 avg=0.79 win_rate=28.57%
+
+By exit reason
+time_stop: trades=27 pnl=-112.83 avg=-4.18 win_rate=0.00%
+stop_loss: trades=5 pnl=-35.89 avg=-7.18 win_rate=0.00%
+signal_exit: trades=1 pnl=-12.57 avg=-12.57 win_rate=0.00%
+trailing_stop: trades=8 pnl=29.49 avg=3.69 win_rate=75.00%
+take_profit: trades=8 pnl=170.46 avg=21.31 win_rate=100.00%

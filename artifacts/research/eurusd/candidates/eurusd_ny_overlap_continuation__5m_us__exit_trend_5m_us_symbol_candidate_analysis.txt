@@ -1,0 +1,22 @@
+Artifact: eurusd_ny_overlap_continuation__5m_us__exit_trend_5m_us_symbol_candidate
+Closed trades: 60
+Realized pnl: -228.74
+
+By entry hour
+13: trades=16 pnl=-149.08 avg=-9.32 win_rate=25.00%
+15: trades=12 pnl=-51.08 avg=-4.26 win_rate=25.00%
+17: trades=3 pnl=-9.34 avg=-3.11 win_rate=33.33%
+18: trades=2 pnl=-8.96 avg=-4.48 win_rate=50.00%
+16: trades=13 pnl=-6.66 avg=-0.51 win_rate=46.15%
+14: trades=12 pnl=-2.36 avg=-0.20 win_rate=33.33%
+19: trades=2 pnl=-1.25 avg=-0.63 win_rate=50.00%
+
+By entry setup
+eurusd_ny_overlap_continuation: trades=60 pnl=-228.74 avg=-3.81 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=23 pnl=-235.96 avg=-10.26 win_rate=0.00%
+stale_breakout: trades=7 pnl=-137.44 avg=-19.63 win_rate=0.00%
+signal_exit: trades=2 pnl=-16.38 avg=-8.19 win_rate=0.00%
+trailing_stop: trades=21 pnl=18.81 avg=0.90 win_rate=61.90%
+take_profit: trades=7 pnl=142.23 avg=20.32 win_rate=100.00%

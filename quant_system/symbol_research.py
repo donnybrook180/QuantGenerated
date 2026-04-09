@@ -24,6 +24,10 @@ from quant_system.agents.crypto import (
     CryptoVolatilityExpansionAgent,
 )
 from quant_system.agents.forex import (
+    EURUSDLondonFalseBreakReversalAgent,
+    EURUSDLondonRangeReclaimAgent,
+    EURUSDNYOverlapContinuationAgent,
+    EURUSDPostNewsReclaimAgent,
     ForexBreakoutMomentumAgent,
     ForexRangeReversionAgent,
     ForexShortBreakdownMomentumAgent,
@@ -245,6 +249,21 @@ def _research_thresholds(symbol: str) -> dict[str, float | int]:
             "core_use_combined_splits": 1,
             "core_combined_closed_trades": 4,
             "core_allow_positive_validation_only": 1,
+        }
+    if symbol.upper() == "EURUSD":
+        return {
+            "validation_closed_trades": 1,
+            "test_closed_trades": 1,
+            "min_profit_factor": 1.0,
+            "walk_forward_min_windows": 1,
+            "walk_forward_min_pass_rate_pct": 0.0,
+            "sparse_max_closed_trades": 18,
+            "sparse_min_payoff_ratio": 1.5,
+            "sparse_combined_closed_trades": 2,
+            "sparse_walk_forward_min_pass_rate_pct": 0.0,
+            "core_use_combined_splits": 1,
+            "core_combined_closed_trades": 2,
+            "core_allow_positive_validation_only": 0,
         }
     if symbol.upper() == "US500":
         return {
@@ -1393,6 +1412,127 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         )
         return specs
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
+        if upper == "EURUSD":
+            return [
+                CandidateSpec(
+                    name="forex_breakout_momentum",
+                    description="EURUSD breakout momentum baseline",
+                    agents=[ForexBreakoutMomentumAgent(), risk],
+                    code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+                ),
+                CandidateSpec(
+                    name="forex_short_breakdown_momentum",
+                    description="EURUSD short breakdown momentum baseline",
+                    agents=[ForexShortBreakdownMomentumAgent(), risk],
+                    code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+                ),
+                CandidateSpec(
+                    name="eurusd_london_range_reclaim",
+                    description="EURUSD London range reclaim",
+                    agents=[
+                        EURUSDLondonRangeReclaimAgent(
+                            max_abs_trend_strength=0.00075,
+                            min_distance_to_vwap=0.00016,
+                            min_relative_volume=0.62,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDLondonRangeReclaimAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 5,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.3,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_london_false_break_reversal",
+                    description="EURUSD London false-break reversal around prior-day and overnight levels",
+                    agents=[
+                        EURUSDLondonFalseBreakReversalAgent(
+                            breakout_margin=0.00014,
+                            reclaim_margin=0.00004,
+                            max_abs_trend_strength=0.00095,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDLondonFalseBreakReversalAgent",
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.45,
+                        "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_ny_overlap_continuation",
+                    description="EURUSD NY-overlap trend continuation",
+                    agents=[
+                        EURUSDNYOverlapContinuationAgent(
+                            min_trend_strength=0.0002,
+                            min_momentum_20=0.00016,
+                            min_relative_volume=0.72,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDNYOverlapContinuationAgent",
+                    allowed_variants=("15m_overlap",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 2,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 18,
+                        "take_profit_atr_multiple": 1.8,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_ny_overlap_continuation_selective",
+                    description="EURUSD NY-overlap trend continuation selective",
+                    agents=[
+                        EURUSDNYOverlapContinuationAgent(
+                            min_trend_strength=0.00024,
+                            min_momentum_20=0.00018,
+                            min_relative_volume=0.78,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDNYOverlapContinuationAgent",
+                    allowed_variants=("15m_overlap",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 2,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.65,
+                        "trailing_stop_atr_multiple": 0.65,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_post_news_reclaim",
+                    description="EURUSD post-news VWAP reclaim",
+                    agents=[
+                        EURUSDPostNewsReclaimAgent(
+                            min_relative_volume=0.78,
+                            max_abs_trend_strength=0.0013,
+                            reclaim_margin=0.00005,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDPostNewsReclaimAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.25,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+            ]
         if upper == "GBPUSD":
             return [
                 CandidateSpec(
@@ -4144,23 +4284,65 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     return selected
 
 
-def _tiered_fallback_candidates(rows: list[dict[str, object]], max_candidates: int = 3) -> list[dict[str, object]]:
+def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_candidates: int = 3) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     core_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "core"]
     specialist_rows = [row for row in rows if str(row.get("promotion_tier", "reject")) == "specialist"]
+    allow_multi_core = symbol_is_forex(symbol)
+    allow_forex_specialist_third = symbol_is_forex(symbol)
+    used_regimes: set[str] = set()
+    used_variants: set[str] = set()
+    used_code_paths: set[str] = set()
 
-    if core_rows:
-        lead = max(
-            core_rows,
-            key=lambda row: (
-                float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
-                float(row.get("realized_pnl", 0.0)),
-                float(row.get("regime_stability_score", 0.0)),
-            ),
-        )
+    core_ranked = sorted(
+        core_rows,
+        key=lambda row: (
+            float(row.get("validation_pnl", 0.0)) + float(row.get("test_pnl", 0.0)),
+            float(row.get("test_pnl", 0.0)),
+            float(row.get("validation_pnl", 0.0)),
+            float(row.get("regime_stability_score", 0.0)),
+            float(row.get("realized_pnl", 0.0)),
+        ),
+        reverse=True,
+    )
+
+    if core_ranked:
+        lead = core_ranked[0]
         selected.append(lead)
         used_components.update(_selection_component_keys(lead))
+        lead_regime = str(lead.get("best_regime", "") or "")
+        lead_variant = str(lead.get("variant_label", "") or "").strip()
+        if lead_regime:
+            used_regimes.add(lead_regime)
+        if lead_variant:
+            used_variants.add(lead_variant)
+        lead_code_path = str(lead.get("code_path", "") or "").strip()
+        if lead_code_path:
+            used_code_paths.add(lead_code_path)
+
+    if allow_multi_core and selected:
+        for row in core_ranked[1:]:
+            if len(selected) >= max_candidates:
+                break
+            components = _selection_component_keys(row)
+            if components & used_components:
+                continue
+            candidate_regime = str(row.get("best_regime", "") or "")
+            candidate_variant = str(row.get("variant_label", "") or "").strip()
+            if candidate_regime and candidate_regime in used_regimes:
+                continue
+            if candidate_variant and candidate_variant in used_variants:
+                continue
+            selected.append(row)
+            used_components.update(components)
+            if candidate_regime:
+                used_regimes.add(candidate_regime)
+            if candidate_variant:
+                used_variants.add(candidate_variant)
+            candidate_code_path = str(row.get("code_path", "") or "").strip()
+            if candidate_code_path:
+                used_code_paths.add(candidate_code_path)
 
     specialist_ranked = sorted(
         specialist_rows,
@@ -4177,10 +4359,23 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], max_candidates: i
         components = _selection_component_keys(row)
         if components & used_components:
             continue
-        if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
+        candidate_regime = str(row.get("best_regime", "") or "")
+        candidate_code_path = str(row.get("code_path", "") or "").strip()
+        same_regime = bool(candidate_regime and candidate_regime in used_regimes)
+        if lead_regime and candidate_regime == lead_regime and not allow_forex_specialist_third:
+            continue
+        if same_regime and not allow_forex_specialist_third:
+            continue
+        if same_regime and allow_forex_specialist_third and len(selected) < 2:
+            continue
+        if candidate_code_path and candidate_code_path in used_code_paths:
             continue
         selected.append(row)
         used_components.update(components)
+        if candidate_regime:
+            used_regimes.add(candidate_regime)
+        if candidate_code_path:
+            used_code_paths.add(candidate_code_path)
         if len(selected) >= max_candidates:
             break
 
@@ -4460,7 +4655,7 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         for row in ranked
         if _meets_viability(row, symbol)
     ]
-    lines.extend(["", "Recommended active agents"])
+    lines.extend(["", "Top candidate-level winners"])
     if winners:
         for row in winners[:3]:
             tier = _promotion_tier_for_row(row, symbol)
@@ -4900,7 +5095,12 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     if best_execution_choice is not None:
         _, selected_execution_candidates, execution_validation_summary = best_execution_choice
     else:
-        tiered_fallback = _tiered_fallback_candidates(execution_candidate_rows, max_candidates=2)
+        fallback_limit = 3 if symbol_is_forex(resolved.profile_symbol) else 2
+        tiered_fallback = _tiered_fallback_candidates(
+            execution_candidate_rows,
+            resolved.profile_symbol,
+            max_candidates=fallback_limit,
+        )
         selection_diagnostics += f" tiered_fallback={len(tiered_fallback)}"
         if tiered_fallback:
             selected_execution_candidates = tiered_fallback

@@ -144,6 +144,33 @@ Plots komen in:
 - `artifacts/research/<symbol>/plots/regimes.png`
 - `artifacts/research/<symbol>/plots/best_candidate_equity.png`
 
+Voor forex en gold kun je nu ook een lokale macro-event kalender meegeven via:
+
+```powershell
+MACRO_EVENT_CALENDAR_ENABLED=true
+MACRO_EVENT_CALENDAR_PATH=artifacts/system/data/macro_calendar.csv
+MACRO_PRE_EVENT_MINUTES=60
+MACRO_POST_EVENT_MINUTES=120
+```
+
+Het CSV-formaat is:
+
+```csv
+timestamp_utc,importance,currencies,event_code,description,symbols
+2026-04-10T12:30:00Z,high,USD,CPI,US CPI,
+2026-04-11T08:00:00Z,high,EUR,ECB_RATE,ECB rate decision,
+2026-04-12T18:00:00Z,high,USD,FOMC_MINUTES,FOMC minutes,XAUUSD
+```
+
+Deze kalender voedt featurevelden zoals:
+
+- `macro_event_count_1d`
+- `macro_high_impact_event_day`
+- `macro_pre_event_window`
+- `macro_post_event_window`
+- `macro_event_blackout`
+- `macro_minutes_to_next_event`
+
 Symbol research bepaalt nu zelf het symbooltype en kiest automatisch de horizon:
 
 - crypto: minimaal `365` dagen

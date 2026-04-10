@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:EURUSD,2026-03-17T13:00:00+00:00,2026-03-18T13:30:00+00:00,13,13,forex_breakout_momentum,take_profit,1.15115,1.15392,0.10000,27.22373,0.50000,8,1.00000,{'breakout_high': 1.15002}
+C:EURUSD,2026-04-01T13:00:00+00:00,2026-04-01T15:00:00+00:00,13,15,forex_breakout_momentum,trailing_stop,1.15973,1.15953,0.10000,-2.47982,0.50000,4,1.00000,{'breakout_high': 1.15206}

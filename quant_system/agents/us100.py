@@ -510,3 +510,70 @@ class PriorDayFailedBounceShortAgent(Agent):
                 "vwap_distance": vwap_distance,
             },
         )
+
+
+class OpeningDriveBreakRejectShortAgent(Agent):
+    name = "opening_drive_break_reject_short"
+
+    def __init__(self, min_negative_trend: float = 0.00055) -> None:
+        self.min_negative_trend = min_negative_trend
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        in_regular_session = feature.values.get("in_regular_session", 0.0)
+        opening_window = feature.values.get("opening_window", 0.0)
+        closing_window = feature.values.get("closing_window", 0.0)
+        hour = int(feature.values.get("hour_of_day", 0.0))
+        break_above = feature.values.get("opening_drive_break_above_1m", 0.0)
+        distance_to_open_high = feature.values.get("distance_to_opening_drive_high_1m", 0.0)
+        drive_range_pct = feature.values.get("opening_drive_range_pct_1m", 0.0)
+        vwap_distance_1m = feature.values.get("vwap_distance_1m", 0.0)
+
+        if (
+            in_regular_session < 1.0
+            or opening_window > 0.0
+            or closing_window > 0.0
+            or not (15 <= hour <= 18)
+            or relative_volume < 0.85
+        ):
+            side = Side.FLAT
+        elif (
+            break_above > 0.0
+            and drive_range_pct > 0.0008
+            and distance_to_open_high <= 0.0004
+            and trend_strength <= -self.min_negative_trend
+            and momentum_20 <= 0.0001
+            and momentum_5 <= 0.0004
+            and z_score >= -0.1
+            and vwap_distance_1m <= 0.0008
+        ):
+            side = Side.SELL
+        elif trend_strength > 0.00035 or momentum_20 > 0.0003 or z_score <= -1.0:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+
+        confidence = min(
+            0.18
+            + break_above * 0.16
+            + max(-trend_strength, 0.0) * 170
+            + max(z_score, 0.0) * 0.12,
+            1.0,
+        )
+        return SignalEvent(
+            timestamp=feature.timestamp,
+            agent_name=self.name,
+            symbol=feature.symbol,
+            side=side,
+            confidence=confidence if side != Side.FLAT else 0.0,
+            metadata={
+                "opening_drive_break_above_1m": break_above,
+                "distance_to_opening_drive_high_1m": distance_to_open_high,
+                "opening_drive_range_pct_1m": drive_range_pct,
+                "vwap_distance_1m": vwap_distance_1m,
+            },
+        )

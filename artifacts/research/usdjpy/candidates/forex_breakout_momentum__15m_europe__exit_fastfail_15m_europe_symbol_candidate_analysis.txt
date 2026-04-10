@@ -1,24 +1,24 @@
 Artifact: forex_breakout_momentum__15m_europe__exit_fastfail_15m_europe_symbol_candidate
 Closed trades: 35
-Realized pnl: 53908.66
+Realized pnl: 53437.39
 
 By entry hour
-12: trades=4 pnl=-4681.42 avg=-1170.36 win_rate=25.00%
-9: trades=5 pnl=-3770.19 avg=-754.04 win_rate=20.00%
-8: trades=6 pnl=-3016.73 avg=-502.79 win_rate=16.67%
-10: trades=4 pnl=2628.99 avg=657.25 win_rate=50.00%
-11: trades=2 pnl=7426.94 avg=3713.47 win_rate=50.00%
-7: trades=14 pnl=55321.07 avg=3951.50 win_rate=35.71%
+12: trades=4 pnl=-4779.76 avg=-1194.94 win_rate=25.00%
+9: trades=5 pnl=-3893.23 avg=-778.65 win_rate=20.00%
+8: trades=6 pnl=-2774.18 avg=-462.36 win_rate=16.67%
+10: trades=4 pnl=2530.71 avg=632.68 win_rate=50.00%
+11: trades=2 pnl=7378.11 avg=3689.06 win_rate=50.00%
+7: trades=14 pnl=54975.73 avg=3926.84 win_rate=35.71%
 
 By entry setup
-forex_breakout_momentum: trades=35 pnl=53908.66 avg=1540.25 win_rate=31.43%
+forex_breakout_momentum: trades=35 pnl=53437.39 avg=1526.78 win_rate=31.43%
 
 By exit reason
-structure_exit: trades=9 pnl=-13153.99 avg=-1461.55 win_rate=0.00%
-stop_loss: trades=3 pnl=-4805.44 avg=-1601.81 win_rate=0.00%
-signal_exit: trades=2 pnl=-3694.08 avg=-1847.04 win_rate=0.00%
-time_stop: trades=4 pnl=-3481.38 avg=-870.35 win_rate=0.00%
-stale_breakout: trades=1 pnl=-778.86 avg=-778.86 win_rate=0.00%
-trailing_stop: trades=11 pnl=2372.02 avg=215.64 win_rate=54.55%
-take_profit: trades=4 pnl=16099.18 avg=4024.80 win_rate=100.00%
-end_of_run: trades=1 pnl=61351.20 avg=61351.20 win_rate=100.00%
+structure_exit: trades=9 pnl=-13375.67 avg=-1486.19 win_rate=0.00%
+stop_loss: trades=3 pnl=-4879.43 avg=-1626.48 win_rate=0.00%
+signal_exit: trades=2 pnl=-3743.03 avg=-1871.52 win_rate=0.00%
+time_stop: trades=4 pnl=-3579.71 avg=-894.93 win_rate=0.00%
+stale_breakout: trades=1 pnl=-803.57 avg=-803.57 win_rate=0.00%
+trailing_stop: trades=11 pnl=2491.38 avg=226.49 win_rate=54.55%
+take_profit: trades=4 pnl=16000.93 avg=4000.23 win_rate=100.00%
+end_of_run: trades=1 pnl=61326.50 avg=61326.50 win_rate=100.00%

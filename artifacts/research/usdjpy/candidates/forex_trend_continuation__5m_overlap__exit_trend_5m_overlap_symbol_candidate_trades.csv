@@ -1,6 +1,6 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-10-08T13:50:00+00:00,2025-10-08T13:55:00+00:00,13,13,forex_trend_continuation,stop_loss,152.90082,152.71618,0.10000,-1846.90425,0.50000,1,1.00000,{'pullback_floor': 152.864}
-C:USDJPY,2025-10-30T12:50:00+00:00,2025-10-30T14:40:00+00:00,12,14,forex_trend_continuation,take_profit,153.75184,154.02515,0.10000,2732.55575,0.50000,22,0.63407,{'pullback_floor': 153.651}
-C:USDJPY,2025-12-19T13:50:00+00:00,2025-12-19T14:15:00+00:00,13,14,forex_trend_continuation,signal_exit,157.32693,157.29607,0.10000,-309.15575,0.50000,5,0.86777,{'pullback_floor': 157.254}
-C:USDJPY,2026-02-11T16:40:00+00:00,2026-02-11T16:50:00+00:00,16,16,forex_trend_continuation,stop_loss,153.74384,153.42316,0.10000,-3207.29175,0.50000,2,0.98171,{'pullback_floor': 153.644}
-C:USDJPY,2026-03-06T12:50:00+00:00,2026-03-06T14:00:00+00:00,12,14,forex_trend_continuation,take_profit,157.84595,157.96605,0.10000,1200.54700,0.50000,14,0.66895,{'pullback_floor': 157.838}
+C:USDJPY,2025-10-08T13:50:00+00:00,2025-10-08T13:55:00+00:00,13,13,forex_trend_continuation,stop_loss,152.90205,152.71496,0.10000,-1871.36366,0.50000,1,1.00000,{'pullback_floor': 152.864}
+C:USDJPY,2025-10-30T12:50:00+00:00,2025-10-30T14:40:00+00:00,12,14,forex_trend_continuation,take_profit,153.75307,154.02392,0.10000,2708.02595,0.50000,22,0.63407,{'pullback_floor': 153.651}
+C:USDJPY,2025-12-19T13:50:00+00:00,2025-12-19T14:15:00+00:00,13,14,forex_trend_continuation,signal_exit,157.32817,157.29483,0.10000,-333.90865,0.50000,5,0.86777,{'pullback_floor': 157.254}
+C:USDJPY,2026-02-11T16:40:00+00:00,2026-02-11T16:50:00+00:00,16,16,forex_trend_continuation,stop_loss,153.74507,153.42194,0.10000,-3231.80167,0.50000,2,0.98171,{'pullback_floor': 153.644}
+C:USDJPY,2026-03-06T12:50:00+00:00,2026-03-06T13:10:00+00:00,12,13,forex_trend_continuation,trailing_stop,157.84719,157.83681,0.10000,-104.20847,0.50000,4,0.66895,{'pullback_floor': 157.838}

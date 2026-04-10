@@ -1,0 +1,18 @@
+Artifact: us500_failed_upside_reject_short_flat_high_symbol_candidate
+Closed trades: 22
+Realized pnl: -0.51
+
+By entry hour
+15: trades=10 pnl=-0.57 avg=-0.06 win_rate=30.00%
+16: trades=4 pnl=0.02 avg=0.00 win_rate=50.00%
+14: trades=8 pnl=0.04 avg=0.01 win_rate=25.00%
+
+By entry setup
+us500_failed_upside_reject_short: trades=22 pnl=-0.51 avg=-0.02 win_rate=31.82%
+
+By exit reason
+stale_breakout: trades=12 pnl=-1.22 avg=-0.10 win_rate=0.00%
+stop_loss: trades=2 pnl=-0.24 avg=-0.12 win_rate=0.00%
+trailing_stop: trades=3 pnl=0.03 avg=0.01 win_rate=66.67%
+signal_exit: trades=1 pnl=0.04 avg=0.04 win_rate=100.00%
+take_profit: trades=4 pnl=0.87 avg=0.22 win_rate=100.00%

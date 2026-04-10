@@ -149,6 +149,7 @@ class StrategyAction:
     promotion_tier: str = "core"
     base_allocation_weight: float = 1.0
     effective_size_factor: float = 0.0
+    veto_reason: str = ""
 
 
 @dataclass(slots=True)
@@ -171,6 +172,7 @@ class EvaluatedStrategy:
     snapshot: RegimeSnapshot
     allocator_score: float
     allocation_fraction: float = 0.0
+    veto_reason: str = ""
 
 
 class MT5LiveExecutor:
@@ -202,7 +204,7 @@ class MT5LiveExecutor:
 
     def _evaluate_strategy(
         self, client: MT5Client, strategy: DeploymentStrategy
-    ) -> tuple[Side, float, datetime | None, RegimeSnapshot]:
+    ) -> tuple[Side, float, datetime | None, RegimeSnapshot, str]:
         from quant_system.live_support import build_features_with_events
 
         strategy_config = self._build_strategy_config(strategy)
@@ -216,6 +218,7 @@ class MT5LiveExecutor:
         last_side = Side.FLAT
         last_confidence = 0.0
         last_timestamp: datetime | None = None
+        last_veto_reason = ""
         for feature in features:
             if not _matches_session(feature, session_name):
                 continue
@@ -223,11 +226,14 @@ class MT5LiveExecutor:
                 continue
             context = coordinator.evaluate(feature)
             if context is None:
+                if coordinator.last_veto_reason:
+                    last_veto_reason = coordinator.last_veto_reason
                 continue
             last_side = context.side
             last_confidence = context.confidence
             last_timestamp = feature.timestamp
-        return last_side, last_confidence, last_timestamp, snapshot
+            last_veto_reason = ""
+        return last_side, last_confidence, last_timestamp, snapshot, last_veto_reason
 
     def _allocate_symbol_exposure(self, evaluated: list[EvaluatedStrategy]) -> None:
         buy_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.BUY)
@@ -298,6 +304,7 @@ class MT5LiveExecutor:
             portfolio_weight=self._strategy_portfolio_weight(strategy),
             promotion_tier=strategy.promotion_tier,
             base_allocation_weight=strategy.base_allocation_weight,
+            veto_reason="",
         )
         if signal_side == Side.FLAT:
             return candidate_action
@@ -427,7 +434,7 @@ class MT5LiveExecutor:
 
             for strategy in self.deployment.strategies:
                 client = _client_for_strategy(strategy)
-                signal_side, confidence, signal_timestamp, snapshot = self._evaluate_strategy(client, strategy)
+                signal_side, confidence, signal_timestamp, snapshot, veto_reason = self._evaluate_strategy(client, strategy)
                 if regime_snapshot is None:
                     regime_snapshot = snapshot
                 score = 0.0 if _is_strategy_regime_blocked(self.deployment, strategy, snapshot) else _allocator_score(
@@ -441,6 +448,7 @@ class MT5LiveExecutor:
                         confidence=confidence,
                         snapshot=snapshot,
                         allocator_score=score,
+                        veto_reason=veto_reason,
                     )
                 )
 
@@ -469,22 +477,23 @@ class MT5LiveExecutor:
                             promotion_tier=item.strategy.promotion_tier,
                             base_allocation_weight=item.strategy.base_allocation_weight,
                             effective_size_factor=0.0,
+                            veto_reason=item.veto_reason,
                         )
                     )
                     continue
-                actions.append(
-                    self._reconcile_strategy(
-                        client,
-                        item.strategy,
-                        item.signal_side,
-                        item.signal_timestamp,
-                        item.confidence,
-                        item.snapshot,
-                        item.allocation_fraction if item.allocation_fraction > 0.0 else item.strategy.allocation_weight,
-                        item.allocator_score,
-                        should_skip_duplicate,
-                    )
+                action = self._reconcile_strategy(
+                    client,
+                    item.strategy,
+                    item.signal_side,
+                    item.signal_timestamp,
+                    item.confidence,
+                    item.snapshot,
+                    item.allocation_fraction if item.allocation_fraction > 0.0 else item.strategy.allocation_weight,
+                    item.allocator_score,
+                    should_skip_duplicate,
                 )
+                action.veto_reason = item.veto_reason
+                actions.append(action)
             return LiveRunResult(
                 symbol=self.deployment.symbol,
                 broker_symbol=self.deployment.broker_symbol,

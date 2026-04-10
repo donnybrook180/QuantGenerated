@@ -1,0 +1,6 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+AMD,2022-12-15T18:35:00+00:00,2022-12-15T19:05:00+00:00,18,19,stock_power_hour_continuation,stop_loss,66.87061,66.44945,0.10000,-0.54345,0.50133,1,0.62514,{'hour_of_day': 18.0}
+AMD,2024-07-05T19:30:00+00:00,2024-07-09T18:45:00+00:00,19,18,stock_power_hour_continuation,take_profit,172.58175,175.36766,0.10000,-0.22489,0.50348,1,1.00000,{'hour_of_day': 19.0}
+AMD,2024-09-06T19:20:00+00:00,2024-09-10T18:00:00+00:00,19,18,stock_power_hour_continuation,take_profit,134.16407,137.50523,0.10000,-0.16860,0.50272,1,1.00000,{'hour_of_day': 19.0}
+AMD,2025-07-07T19:15:00+00:00,2025-07-08T19:20:00+00:00,19,19,stock_power_hour_continuation,take_profit,135.50434,138.08512,0.10000,-0.24466,0.50274,1,1.00000,{'hour_of_day': 19.0}
+AMD,2026-04-07T19:20:00+00:00,2026-04-07T19:20:00+00:00,19,19,stock_power_hour_continuation,end_of_run,219.16106,218.97894,0.10000,-0.52259,0.50438,0,1.00000,{'hour_of_day': 19.0}

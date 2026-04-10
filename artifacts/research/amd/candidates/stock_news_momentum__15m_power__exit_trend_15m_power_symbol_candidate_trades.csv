@@ -1,0 +1,7 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+AMD,2025-01-22T18:00:00+00:00,2025-01-23T18:00:00+00:00,18,18,stock_news_momentum,stale_breakout,124.83220,123.19810,0.10000,-0.66589,0.50248,8,1.00000,"{'news_count_1d': 4.0, 'earnings_event_day': 0.0}"
+AMD,2025-02-11T18:00:00+00:00,2025-02-11T19:00:00+00:00,18,19,stock_news_momentum,stop_loss,112.64977,111.22049,0.10000,-0.64517,0.50224,4,1.00000,"{'news_count_1d': 4.0, 'earnings_event_day': 1.0}"
+AMD,2025-03-12T18:15:00+00:00,2025-03-13T18:00:00+00:00,18,18,stock_news_momentum,trailing_stop,99.54715,98.31307,0.10000,-0.62539,0.50198,7,1.00000,"{'news_count_1d': 6.0, 'earnings_event_day': 1.0}"
+AMD,2025-05-13T18:00:00+00:00,2025-05-14T18:00:00+00:00,18,18,stock_news_momentum,take_profit,111.63956,118.06912,0.10000,0.14066,0.50230,8,1.00000,"{'news_count_1d': 4.0, 'earnings_event_day': 1.0}"
+AMD,2025-09-12T18:00:00+00:00,2025-09-17T18:45:00+00:00,18,18,stock_news_momentum,trailing_stop,157.57875,158.84097,0.10000,-0.37694,0.50316,27,1.00000,"{'news_count_1d': 3.0, 'earnings_event_day': 1.0}"
+AMD,2025-10-27T18:00:00+00:00,2025-10-31T19:00:00+00:00,18,19,stock_news_momentum,stale_breakout,255.99843,256.58141,0.10000,-0.44683,0.50513,36,1.00000,"{'news_count_1d': 7.0, 'earnings_event_day': 1.0}"

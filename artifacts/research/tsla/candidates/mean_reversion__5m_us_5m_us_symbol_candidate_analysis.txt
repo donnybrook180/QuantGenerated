@@ -1,14 +1,14 @@
-Artifact: tsla_mean_reversion__5m_us_5m_us_symbol_candidate
+Artifact: mean_reversion__5m_us_5m_us_symbol_candidate
 Closed trades: 2
-Realized pnl: 0.18
+Realized pnl: 0.08
 
 By entry hour
-14: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%
-17: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%
+14: trades=1 pnl=0.02 avg=0.02 win_rate=100.00%
+17: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%
 
 By entry setup
-mean_reversion: trades=2 pnl=0.18 avg=0.09 win_rate=100.00%
+mean_reversion: trades=2 pnl=0.08 avg=0.04 win_rate=100.00%
 
 By exit reason
-signal_exit: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%
-take_profit: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%
+signal_exit: trades=1 pnl=0.02 avg=0.02 win_rate=100.00%
+take_profit: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%

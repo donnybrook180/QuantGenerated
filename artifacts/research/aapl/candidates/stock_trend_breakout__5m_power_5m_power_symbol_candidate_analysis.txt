@@ -1,0 +1,18 @@
+Artifact: stock_trend_breakout__5m_power_5m_power_symbol_candidate
+Closed trades: 95
+Realized pnl: -47.85
+
+By entry hour
+18: trades=60 pnl=-30.77 avg=-0.51 win_rate=3.33%
+19: trades=35 pnl=-17.07 avg=-0.49 win_rate=11.43%
+
+By entry setup
+stock_trend_breakout: trades=95 pnl=-47.85 avg=-0.50 win_rate=6.32%
+
+By exit reason
+structure_exit: trades=30 pnl=-19.21 avg=-0.64 win_rate=0.00%
+stop_loss: trades=19 pnl=-14.39 avg=-0.76 win_rate=0.00%
+trailing_stop: trades=19 pnl=-9.06 avg=-0.48 win_rate=0.00%
+take_profit: trades=22 pnl=-2.46 avg=-0.11 win_rate=27.27%
+time_stop: trades=4 pnl=-2.22 avg=-0.56 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.51 avg=-0.51 win_rate=0.00%

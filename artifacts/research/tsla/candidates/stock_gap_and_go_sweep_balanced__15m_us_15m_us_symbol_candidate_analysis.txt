@@ -1,17 +1,17 @@
-Artifact: tsla_stock_gap_and_go_sweep_balanced__15m_us_15m_us_symbol_candidate
+Artifact: stock_gap_and_go_sweep_balanced__15m_us_15m_us_symbol_candidate
 Closed trades: 11
-Realized pnl: -3.20
+Realized pnl: -4.29
 
 By entry hour
-14: trades=7 pnl=-1.19 avg=-0.17 win_rate=28.57%
-13: trades=3 pnl=-1.05 avg=-0.35 win_rate=33.33%
-15: trades=1 pnl=-0.96 avg=-0.96 win_rate=0.00%
+14: trades=7 pnl=-2.11 avg=-0.30 win_rate=14.29%
+13: trades=3 pnl=-1.18 avg=-0.39 win_rate=33.33%
+15: trades=1 pnl=-1.01 avg=-1.01 win_rate=0.00%
 
 By entry setup
-stock_gap_and_go: trades=11 pnl=-3.20 avg=-0.29 win_rate=27.27%
+stock_gap_and_go: trades=11 pnl=-4.29 avg=-0.39 win_rate=18.18%
 
 By exit reason
-stale_breakout: trades=3 pnl=-3.25 avg=-1.08 win_rate=0.00%
-trailing_stop: trades=4 pnl=-1.71 avg=-0.43 win_rate=0.00%
-stop_loss: trades=1 pnl=-1.04 avg=-1.04 win_rate=0.00%
-take_profit: trades=3 pnl=2.79 avg=0.93 win_rate=100.00%
+stale_breakout: trades=3 pnl=-3.37 avg=-1.12 win_rate=0.00%
+trailing_stop: trades=5 pnl=-2.04 avg=-0.41 win_rate=0.00%
+stop_loss: trades=1 pnl=-1.08 avg=-1.08 win_rate=0.00%
+take_profit: trades=2 pnl=2.20 avg=1.10 win_rate=100.00%

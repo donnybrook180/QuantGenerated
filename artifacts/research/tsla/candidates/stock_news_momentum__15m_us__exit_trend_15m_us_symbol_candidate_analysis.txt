@@ -1,22 +1,22 @@
-Artifact: tsla_stock_news_momentum__15m_us__exit_trend_15m_us_symbol_candidate
-Closed trades: 107
-Realized pnl: -48.43
+Artifact: stock_news_momentum__15m_us__exit_trend_15m_us_symbol_candidate
+Closed trades: 106
+Realized pnl: -50.51
 
 By entry hour
-13: trades=51 pnl=-22.38 avg=-0.44 win_rate=23.53%
-19: trades=24 pnl=-12.41 avg=-0.52 win_rate=16.67%
-14: trades=21 pnl=-9.25 avg=-0.44 win_rate=23.81%
-15: trades=5 pnl=-1.86 avg=-0.37 win_rate=20.00%
-18: trades=4 pnl=-1.73 avg=-0.43 win_rate=25.00%
-17: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
-16: trades=1 pnl=-0.31 avg=-0.31 win_rate=0.00%
+13: trades=52 pnl=-20.17 avg=-0.39 win_rate=25.00%
+19: trades=22 pnl=-15.01 avg=-0.68 win_rate=13.64%
+14: trades=21 pnl=-10.40 avg=-0.50 win_rate=19.05%
+15: trades=5 pnl=-2.11 avg=-0.42 win_rate=20.00%
+18: trades=4 pnl=-1.92 avg=-0.48 win_rate=25.00%
+17: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
+16: trades=1 pnl=-0.36 avg=-0.36 win_rate=0.00%
 
 By entry setup
-stock_news_momentum: trades=107 pnl=-48.43 avg=-0.45 win_rate=21.50%
+stock_news_momentum: trades=106 pnl=-50.51 avg=-0.48 win_rate=20.75%
 
 By exit reason
-stale_breakout: trades=38 pnl=-29.85 avg=-0.79 win_rate=0.00%
-stop_loss: trades=18 pnl=-20.59 avg=-1.14 win_rate=0.00%
-trailing_stop: trades=27 pnl=-7.38 avg=-0.27 win_rate=14.81%
-signal_exit: trades=12 pnl=-0.62 avg=-0.05 win_rate=58.33%
-take_profit: trades=12 pnl=10.01 avg=0.83 win_rate=100.00%
+stale_breakout: trades=37 pnl=-30.61 avg=-0.83 win_rate=0.00%
+stop_loss: trades=19 pnl=-22.11 avg=-1.16 win_rate=0.00%
+trailing_stop: trades=27 pnl=-8.08 avg=-0.30 win_rate=14.81%
+signal_exit: trades=12 pnl=-1.19 avg=-0.10 win_rate=58.33%
+take_profit: trades=11 pnl=11.47 avg=1.04 win_rate=100.00%

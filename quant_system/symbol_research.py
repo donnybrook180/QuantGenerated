@@ -5,6 +5,7 @@ import csv
 import itertools
 import copy
 import json
+import duckdb
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -1151,7 +1152,14 @@ def _build_symbol_feature_variants(
         data_sources: list[str] = []
         timeframe_specs, session_names, weekday_only = _research_variant_plan(profile_symbol, mode)
         for timeframe_label, multiplier, timespan in timeframe_specs:
-            timeframe_features, data_source = _load_symbol_features_variant(config, data_symbol, multiplier, timespan)
+            timeframe_features, data_source = _load_symbol_features_variant(
+                config,
+                data_symbol,
+                multiplier,
+                timespan,
+                config.symbol_research.broker_symbol.strip() or None,
+                profile_symbol,
+            )
             if weekday_only:
                 timeframe_features = _filter_weekday_features(timeframe_features)
             data_sources.append(data_source)

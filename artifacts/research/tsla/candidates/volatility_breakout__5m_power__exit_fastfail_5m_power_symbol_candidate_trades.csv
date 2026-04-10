@@ -1,4 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-10-08T19:50:00+00:00,2025-10-08T19:55:00+00:00,19,19,volatility_breakout,signal_exit,440.00798,438.51228,0.10000,-0.65836,0.50879,1,1.00000,{'breakout_high': 438.9}
-TSLA,2025-10-09T18:45:00+00:00,2025-10-09T19:20:00+00:00,18,19,volatility_breakout,take_profit,433.35665,435.34291,0.10000,-0.31006,0.50869,7,0.92662,{'breakout_high': 432.61}
-TSLA,2025-12-09T18:00:00+00:00,2025-12-09T18:10:00+00:00,18,18,volatility_breakout,stop_loss,452.16041,450.79982,0.10000,-0.64509,0.50903,2,1.00000,{'breakout_high': 438.41}
+TSLA,2025-10-08T19:50:00+00:00,2025-10-08T19:55:00+00:00,19,19,volatility_breakout,signal_exit,440.25683,438.26373,0.10000,-0.70809,0.50879,1,1.00000,{'breakout_high': 438.9}
+TSLA,2025-10-09T18:45:00+00:00,2025-10-09T19:20:00+00:00,18,19,volatility_breakout,take_profit,433.60404,435.09506,0.10000,-0.35958,0.50869,7,0.92662,{'breakout_high': 432.61}
+TSLA,2025-12-09T18:00:00+00:00,2025-12-09T18:10:00+00:00,18,18,volatility_breakout,stop_loss,452.41192,450.54857,0.10000,-0.69536,0.50903,2,1.00000,{'breakout_high': 438.41}

@@ -94,45 +94,49 @@ def fetch_stock_event_flags(
 
     flags: dict[date, DailyEventFlags] = {}
     blackout_days: set[date] = set()
-    current_url = (
-        "https://api.polygon.io/v2/reference/news?"
-        + urlencode(
-            {
-                "ticker": symbol.upper(),
-                "published_utc.gte": f"{start_day.isoformat()}T00:00:00Z",
-                "published_utc.lte": f"{end_day.isoformat()}T23:59:59Z",
-                "limit": 1000,
-                "sort": "published_utc",
-                "order": "asc",
-                "apiKey": api_key,
-            }
-        )
-    )
-    pages = 0
-    while current_url and pages < 20:
-        payload = _request_json(current_url, max_retries=max_retries, backoff_seconds=backoff_seconds)
-        pages += 1
-        for item in payload.get("results") or []:
-            if not isinstance(item, dict):
-                continue
-            item_day = _news_day(item)
-            if item_day is None or item_day < start_day or item_day > end_day:
-                continue
-            previous = flags.get(item_day, DailyEventFlags())
-            high_impact = _contains_keywords(item, _HIGH_IMPACT_KEYWORDS)
-            earnings_like = _contains_keywords(item, _EARNINGS_KEYWORDS)
-            flags[item_day] = DailyEventFlags(
-                news_count=previous.news_count + 1,
-                high_impact_count=previous.high_impact_count + (1 if high_impact else 0),
-                earnings_like_count=previous.earnings_like_count + (1 if earnings_like else 0),
-                event_blackout=previous.event_blackout,
+    try:
+        current_url = (
+            "https://api.polygon.io/v2/reference/news?"
+            + urlencode(
+                {
+                    "ticker": symbol.upper(),
+                    "published_utc.gte": f"{start_day.isoformat()}T00:00:00Z",
+                    "published_utc.lte": f"{end_day.isoformat()}T23:59:59Z",
+                    "limit": 1000,
+                    "sort": "published_utc",
+                    "order": "asc",
+                    "apiKey": api_key,
+                }
             )
-            if earnings_like:
-                blackout_days.update({item_day - timedelta(days=1), item_day, item_day + timedelta(days=1)})
-            elif high_impact:
-                blackout_days.add(item_day)
-        next_url = payload.get("next_url")
-        current_url = _append_api_key(str(next_url), api_key) if next_url else ""
+        )
+        pages = 0
+        while current_url and pages < 20:
+            payload = _request_json(current_url, max_retries=max_retries, backoff_seconds=backoff_seconds)
+            pages += 1
+            for item in payload.get("results") or []:
+                if not isinstance(item, dict):
+                    continue
+                item_day = _news_day(item)
+                if item_day is None or item_day < start_day or item_day > end_day:
+                    continue
+                previous = flags.get(item_day, DailyEventFlags())
+                high_impact = _contains_keywords(item, _HIGH_IMPACT_KEYWORDS)
+                earnings_like = _contains_keywords(item, _EARNINGS_KEYWORDS)
+                flags[item_day] = DailyEventFlags(
+                    news_count=previous.news_count + 1,
+                    high_impact_count=previous.high_impact_count + (1 if high_impact else 0),
+                    earnings_like_count=previous.earnings_like_count + (1 if earnings_like else 0),
+                    event_blackout=previous.event_blackout,
+                )
+                if earnings_like:
+                    blackout_days.update({item_day - timedelta(days=1), item_day, item_day + timedelta(days=1)})
+                elif high_impact:
+                    blackout_days.add(item_day)
+            next_url = payload.get("next_url")
+            current_url = _append_api_key(str(next_url), api_key) if next_url else ""
+    except RuntimeError as exc:
+        LOGGER.warning("Stock event flags unavailable for %s; continuing without event flags: %s", symbol.upper(), exc)
+        return {}
 
     for day in list(flags):
         if day in blackout_days:

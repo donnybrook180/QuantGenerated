@@ -1,0 +1,25 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+AMD,2022-12-13T19:15:00+00:00,2022-12-14T18:00:00+00:00,19,18,stock_power_hour_continuation,stop_loss,71.94163,70.91855,0.10000,-0.60374,0.50143,3,1.00000,{'hour_of_day': 19.0}
+AMD,2023-01-20T18:00:00+00:00,2023-01-20T18:45:00+00:00,18,18,stock_power_hour_continuation,trailing_stop,68.57095,68.59902,0.10000,-0.49857,0.50137,3,1.00000,{'hour_of_day': 18.0}
+AMD,2023-02-27T18:45:00+00:00,2023-02-28T18:00:00+00:00,18,18,stock_power_hour_continuation,stale_breakout,79.43312,79.01693,0.10000,-0.54320,0.50158,5,1.00000,{'hour_of_day': 18.0}
+AMD,2023-03-13T19:00:00+00:00,2023-03-14T18:00:00+00:00,19,18,stock_power_hour_continuation,take_profit,83.25389,87.40526,0.10000,-0.08657,0.50171,4,1.00000,{'hour_of_day': 19.0}
+AMD,2023-06-08T18:00:00+00:00,2023-06-08T19:30:00+00:00,18,19,stock_power_hour_continuation,stop_loss,121.58155,120.25868,0.10000,-0.63471,0.50242,6,1.00000,{'hour_of_day': 18.0}
+AMD,2023-07-13T18:00:00+00:00,2023-07-14T18:00:00+00:00,18,18,stock_power_hour_continuation,take_profit,115.06025,119.40885,0.10000,-0.06748,0.50234,8,1.00000,{'hour_of_day': 18.0}
+AMD,2023-09-12T18:00:00+00:00,2023-09-12T19:15:00+00:00,18,19,stock_power_hour_continuation,take_profit,105.46833,106.18150,0.10000,-0.43080,0.50212,5,1.00000,{'hour_of_day': 18.0}
+AMD,2023-09-18T18:45:00+00:00,2023-09-19T18:00:00+00:00,18,18,stock_power_hour_continuation,stale_breakout,102.61776,101.29248,0.10000,-0.63457,0.50204,5,1.00000,{'hour_of_day': 18.0}
+AMD,2023-09-25T19:00:00+00:00,2023-09-26T18:00:00+00:00,19,18,stock_power_hour_continuation,stale_breakout,96.93662,96.07352,0.10000,-0.58824,0.50193,4,1.00000,{'hour_of_day': 19.0}
+AMD,2023-10-06T18:00:00+00:00,2023-10-09T18:00:00+00:00,18,18,stock_power_hour_continuation,stale_breakout,106.53854,105.54163,0.10000,-0.60181,0.50212,8,1.00000,{'hour_of_day': 18.0}
+AMD,2024-07-05T19:00:00+00:00,2024-07-08T18:00:00+00:00,19,18,stock_power_hour_continuation,take_profit,172.17167,174.85776,0.10000,-0.23486,0.50347,4,1.00000,{'hour_of_day': 19.0}
+AMD,2024-09-09T18:00:00+00:00,2024-09-09T19:30:00+00:00,18,19,stock_power_hour_continuation,trailing_stop,137.05465,136.94535,0.10000,-0.51367,0.50274,6,1.00000,{'hour_of_day': 18.0}
+AMD,2024-09-23T18:15:00+00:00,2024-09-24T18:00:00+00:00,18,18,stock_power_hour_continuation,take_profit,156.37851,159.20089,0.10000,-0.22092,0.50316,7,1.00000,{'hour_of_day': 18.0}
+AMD,2024-10-03T18:00:00+00:00,2024-10-03T18:45:00+00:00,18,18,stock_power_hour_continuation,stop_loss,164.06005,162.20029,0.10000,-0.68924,0.50326,3,1.00000,{'hour_of_day': 18.0}
+AMD,2024-10-04T19:15:00+00:00,2024-10-08T18:00:00+00:00,19,18,stock_power_hour_continuation,trailing_stop,170.21128,170.84856,0.10000,-0.43968,0.50341,11,1.00000,{'hour_of_day': 19.0}
+AMD,2024-10-25T18:00:00+00:00,2024-10-25T19:00:00+00:00,18,19,stock_power_hour_continuation,trailing_stop,157.67877,157.62121,0.10000,-0.50891,0.50315,4,1.00000,{'hour_of_day': 18.0}
+AMD,2024-11-06T18:00:00+00:00,2024-11-06T18:15:00+00:00,18,18,stock_power_hour_continuation,stop_loss,144.37611,143.64401,0.10000,-0.57609,0.50288,1,1.00000,{'hour_of_day': 18.0}
+AMD,2024-11-22T18:45:00+00:00,2024-11-25T18:00:00+00:00,18,18,stock_power_hour_continuation,take_profit,138.22488,141.14451,0.10000,-0.21083,0.50279,5,1.00000,{'hour_of_day': 18.0}
+AMD,2024-12-12T18:15:00+00:00,2024-12-12T19:45:00+00:00,18,19,stock_power_hour_continuation,stale_breakout,130.05325,129.87676,0.10000,-0.52025,0.50260,6,0.83728,{'hour_of_day': 18.0}
+AMD,2024-12-23T18:45:00+00:00,2024-12-24T18:30:00+00:00,18,18,stock_power_hour_continuation,trailing_stop,125.25229,125.79758,0.10000,-0.44798,0.50251,7,1.00000,{'hour_of_day': 18.0}
+AMD,2025-02-18T18:15:00+00:00,2025-02-19T19:00:00+00:00,18,19,stock_power_hour_continuation,trailing_stop,114.29009,114.72979,0.10000,-0.45832,0.50229,11,1.00000,{'hour_of_day': 18.0}
+AMD,2025-03-19T18:15:00+00:00,2025-03-20T18:00:00+00:00,18,18,stock_power_hour_continuation,take_profit,104.56815,107.59122,0.10000,-0.19981,0.50212,7,1.00000,{'hour_of_day': 18.0}
+AMD,2025-07-08T18:00:00+00:00,2025-07-08T18:15:00+00:00,18,18,stock_power_hour_continuation,stop_loss,138.97503,137.44525,0.10000,-0.65574,0.50276,1,1.00000,{'hour_of_day': 18.0}
+AMD,2026-04-09T18:30:00+00:00,2026-04-09T19:45:00+00:00,18,19,stock_power_hour_continuation,end_of_run,235.41431,234.17590,0.10000,-0.62854,0.50470,5,1.00000,{'hour_of_day': 18.0}

@@ -1,14 +1,14 @@
-Artifact: tsla_stock_gap_and_go__15m_midday__exit_trend_15m_midday_symbol_candidate
+Artifact: stock_gap_and_go__15m_midday__exit_trend_15m_midday_symbol_candidate
 Closed trades: 4
-Realized pnl: -0.50
+Realized pnl: -0.96
 
 By entry hour
-15: trades=4 pnl=-0.50 avg=-0.12 win_rate=25.00%
+15: trades=4 pnl=-0.96 avg=-0.24 win_rate=25.00%
 
 By entry setup
-stock_gap_and_go: trades=4 pnl=-0.50 avg=-0.12 win_rate=25.00%
+stock_gap_and_go: trades=4 pnl=-0.96 avg=-0.24 win_rate=25.00%
 
 By exit reason
-trailing_stop: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%
-stop_loss: trades=1 pnl=-0.90 avg=-0.90 win_rate=0.00%
-take_profit: trades=1 pnl=1.36 avg=1.36 win_rate=100.00%
+stop_loss: trades=2 pnl=-1.81 avg=-0.91 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.46 avg=-0.46 win_rate=0.00%
+take_profit: trades=1 pnl=1.31 avg=1.31 win_rate=100.00%

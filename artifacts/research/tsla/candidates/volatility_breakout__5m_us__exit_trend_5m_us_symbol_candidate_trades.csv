@@ -1,7 +1,7 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-10-08T16:35:00+00:00,2025-10-08T16:45:00+00:00,16,16,volatility_breakout,signal_exit,435.40706,434.66635,0.10000,-0.58277,0.50870,2,0.63697,{'breakout_high': 435.089}
-TSLA,2025-10-08T17:45:00+00:00,2025-10-08T17:50:00+00:00,17,17,volatility_breakout,signal_exit,437.29754,436.26773,0.10000,-0.61172,0.50874,1,0.66278,{'breakout_high': 437.0}
-TSLA,2025-10-08T19:50:00+00:00,2025-10-08T19:55:00+00:00,19,19,volatility_breakout,signal_exit,440.00798,438.51228,0.10000,-0.65836,0.50879,1,1.00000,{'breakout_high': 438.9}
-TSLA,2025-10-09T16:30:00+00:00,2025-10-09T16:55:00+00:00,16,16,volatility_breakout,signal_exit,432.84485,431.72954,0.10000,-0.62018,0.50865,5,1.00000,{'breakout_high': 431.91}
-TSLA,2025-10-09T18:45:00+00:00,2025-10-10T13:05:00+00:00,18,13,volatility_breakout,take_profit,433.35665,436.80262,0.10000,-0.16410,0.50870,28,0.92662,{'breakout_high': 432.61}
-TSLA,2025-12-09T14:35:00+00:00,2025-12-09T18:40:00+00:00,14,18,volatility_breakout,signal_exit,440.61811,448.78323,0.10000,0.30762,0.50889,49,1.00000,{'breakout_high': 439.27}
+TSLA,2025-10-08T16:35:00+00:00,2025-10-08T16:45:00+00:00,16,16,volatility_breakout,signal_exit,435.65490,434.41864,0.10000,-0.63233,0.50870,2,0.63697,{'breakout_high': 435.089}
+TSLA,2025-10-08T17:45:00+00:00,2025-10-08T17:50:00+00:00,17,17,volatility_breakout,signal_exit,437.54579,436.01967,0.10000,-0.66135,0.50874,1,0.66278,{'breakout_high': 437.0}
+TSLA,2025-10-08T19:50:00+00:00,2025-10-08T19:55:00+00:00,19,19,volatility_breakout,signal_exit,440.25683,438.26373,0.10000,-0.70809,0.50879,1,1.00000,{'breakout_high': 438.9}
+TSLA,2025-10-09T16:30:00+00:00,2025-10-09T16:55:00+00:00,16,16,volatility_breakout,signal_exit,433.09212,431.48247,0.10000,-0.66961,0.50865,5,1.00000,{'breakout_high': 431.91}
+TSLA,2025-10-09T18:45:00+00:00,2025-10-10T13:05:00+00:00,18,13,volatility_breakout,take_profit,433.60404,436.55445,0.10000,-0.21366,0.50870,28,0.92662,{'breakout_high': 432.61}
+TSLA,2025-12-09T14:35:00+00:00,2025-12-09T18:40:00+00:00,14,18,volatility_breakout,signal_exit,440.86708,448.53242,0.10000,0.25764,0.50889,49,1.00000,{'breakout_high': 439.27}

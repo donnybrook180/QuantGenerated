@@ -1,13 +1,13 @@
-Artifact: msft_stock_trend_breakout_sweep_dense__5m_open_5m_open_symbol_candidate
+Artifact: stock_trend_breakout_sweep_dense__5m_open_5m_open_symbol_candidate
 Closed trades: 2
-Realized pnl: 0.01
+Realized pnl: -0.12
 
 By entry hour
-13: trades=2 pnl=0.01 avg=0.01 win_rate=50.00%
+13: trades=2 pnl=-0.12 avg=-0.06 win_rate=50.00%
 
 By entry setup
-stock_trend_breakout: trades=2 pnl=0.01 avg=0.01 win_rate=50.00%
+stock_trend_breakout: trades=2 pnl=-0.12 avg=-0.06 win_rate=50.00%
 
 By exit reason
-stale_breakout: trades=1 pnl=-0.46 avg=-0.46 win_rate=0.00%
-take_profit: trades=1 pnl=0.47 avg=0.47 win_rate=100.00%
+stale_breakout: trades=1 pnl=-0.53 avg=-0.53 win_rate=0.00%
+take_profit: trades=1 pnl=0.41 avg=0.41 win_rate=100.00%

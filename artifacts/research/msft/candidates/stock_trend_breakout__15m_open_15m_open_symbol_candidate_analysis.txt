@@ -1,14 +1,14 @@
-Artifact: msft_stock_trend_breakout__15m_open_15m_open_symbol_candidate
+Artifact: stock_trend_breakout__15m_open_15m_open_symbol_candidate
 Closed trades: 3
-Realized pnl: -0.43
+Realized pnl: -0.64
 
 By entry hour
-13: trades=1 pnl=-0.80 avg=-0.80 win_rate=0.00%
-14: trades=2 pnl=0.37 avg=0.18 win_rate=100.00%
+13: trades=1 pnl=-0.87 avg=-0.87 win_rate=0.00%
+14: trades=2 pnl=0.23 avg=0.11 win_rate=100.00%
 
 By entry setup
-stock_trend_breakout: trades=3 pnl=-0.43 avg=-0.14 win_rate=66.67%
+stock_trend_breakout: trades=3 pnl=-0.64 avg=-0.21 win_rate=66.67%
 
 By exit reason
-structure_exit: trades=1 pnl=-0.80 avg=-0.80 win_rate=0.00%
-take_profit: trades=2 pnl=0.37 avg=0.18 win_rate=100.00%
+structure_exit: trades=1 pnl=-0.87 avg=-0.87 win_rate=0.00%
+take_profit: trades=2 pnl=0.23 avg=0.11 win_rate=100.00%

@@ -1,5 +1,5 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-04-23T17:20:00+00:00,2025-04-23T17:45:00+00:00,17,17,stock_power_hour_continuation,stop_loss,377.30545,376.03478,0.10000,-0.63460,0.50753,5,1.00000,{'hour_of_day': 17.0}
-MSFT,2025-05-19T17:05:00+00:00,2025-05-19T17:25:00+00:00,17,17,stock_power_hour_continuation,trailing_stop,459.06179,458.64825,0.10000,-0.55053,0.50918,4,1.00000,{'hour_of_day': 17.0}
-MSFT,2025-06-17T19:25:00+00:00,2025-06-17T19:50:00+00:00,19,19,stock_power_hour_continuation,take_profit,477.66051,478.23433,0.10000,-0.45218,0.50956,5,1.00000,{'hour_of_day': 19.0}
-MSFT,2025-06-23T17:00:00+00:00,2025-06-23T17:35:00+00:00,17,17,stock_power_hour_continuation,take_profit,482.36525,487.05247,0.10000,-0.04097,0.50969,7,1.00000,{'hour_of_day': 17.0}
+MSFT,2025-04-23T17:20:00+00:00,2025-04-23T17:35:00+00:00,17,17,stock_power_hour_continuation,stop_loss,377.63187,376.04854,0.10000,-0.66587,0.50754,3,1.00000,{'hour_of_day': 17.0}
+MSFT,2025-05-19T17:05:00+00:00,2025-05-19T17:25:00+00:00,17,17,stock_power_hour_continuation,stop_loss,459.41458,458.29554,0.10000,-0.62108,0.50918,4,1.00000,{'hour_of_day': 17.0}
+MSFT,2025-06-17T19:25:00+00:00,2025-06-17T19:30:00+00:00,19,19,stock_power_hour_continuation,stop_loss,478.01930,477.00576,0.10000,-0.61090,0.50955,1,1.00000,{'hour_of_day': 19.0}
+MSFT,2025-06-23T17:00:00+00:00,2025-06-23T19:05:00+00:00,17,19,stock_power_hour_continuation,trailing_stop,482.72556,485.01157,0.10000,-0.28108,0.50968,25,1.00000,{'hour_of_day': 17.0}

@@ -1,24 +1,9 @@
 Artifact: nvda_stock_news_momentum_patient_symbol_candidate
-Closed trades: 207
-Realized pnl: -106.85
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-13: trades=70 pnl=-35.67 avg=-0.51 win_rate=0.00%
-14: trades=41 pnl=-20.89 avg=-0.51 win_rate=4.88%
-19: trades=37 pnl=-18.45 avg=-0.50 win_rate=5.41%
-16: trades=19 pnl=-9.39 avg=-0.49 win_rate=5.26%
-15: trades=14 pnl=-8.25 avg=-0.59 win_rate=0.00%
-18: trades=14 pnl=-7.30 avg=-0.52 win_rate=0.00%
-17: trades=12 pnl=-6.90 avg=-0.58 win_rate=0.00%
 
 By entry setup
-stock_news_momentum: trades=207 pnl=-106.85 avg=-0.52 win_rate=2.42%
 
 By exit reason
-stale_breakout: trades=67 pnl=-40.07 avg=-0.60 win_rate=0.00%
-trailing_stop: trades=57 pnl=-27.14 avg=-0.48 win_rate=0.00%
-stop_loss: trades=39 pnl=-25.72 avg=-0.66 win_rate=0.00%
-signal_exit: trades=10 pnl=-5.26 avg=-0.53 win_rate=0.00%
-time_stop: trades=8 pnl=-4.30 avg=-0.54 win_rate=0.00%
-take_profit: trades=25 pnl=-4.18 avg=-0.17 win_rate=20.00%
-end_of_run: trades=1 pnl=-0.17 avg=-0.17 win_rate=0.00%

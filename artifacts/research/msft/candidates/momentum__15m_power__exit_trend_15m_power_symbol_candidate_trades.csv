@@ -1,3 +1,3 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-06-17T19:45:00+00:00,2025-06-18T18:45:00+00:00,19,18,momentum_confirmation,trailing_stop,478.13561,478.36681,0.10000,-0.48645,0.50957,4,1.00000,"{'momentum_5': 0.003400361025985399, 'momentum_20': 0.0045917348772210875}"
-MSFT,2025-06-23T18:00:00+00:00,2025-06-24T18:00:00+00:00,18,18,momentum_confirmation,take_profit,487.10740,491.20674,0.10000,-0.09985,0.50978,8,1.00000,"{'momentum_5': 0.01245270466924464, 'momentum_20': 0.020601689972720827}"
+MSFT,2025-06-17T19:45:00+00:00,2025-06-18T18:45:00+00:00,19,18,momentum_confirmation,trailing_stop,478.49455,478.00773,0.10000,-0.55825,0.50957,4,1.00000,"{'momentum_5': 0.003400361025985399, 'momentum_20': 0.0045917348772210875}"
+MSFT,2025-06-23T18:00:00+00:00,2025-06-23T19:00:00+00:00,18,19,momentum_confirmation,stop_loss,487.46923,485.39637,0.10000,-0.71702,0.50973,4,1.00000,"{'momentum_5': 0.01245270466924464, 'momentum_20': 0.020601689972720827}"

@@ -1,9 +1,19 @@
 Artifact: momentum__15m_power__exit_fastfail_15m_power_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 53
+Realized pnl: -29.08
 
 By entry hour
+18: trades=33 pnl=-18.64 avg=-0.56 win_rate=0.00%
+19: trades=20 pnl=-10.44 avg=-0.52 win_rate=15.00%
 
 By entry setup
+momentum_confirmation: trades=53 pnl=-29.08 avg=-0.55 win_rate=5.66%
 
 By exit reason
+stop_loss: trades=23 pnl=-16.20 avg=-0.70 win_rate=0.00%
+structure_exit: trades=12 pnl=-7.98 avg=-0.66 win_rate=0.00%
+take_profit: trades=14 pnl=-2.94 avg=-0.21 win_rate=21.43%
+trailing_stop: trades=1 pnl=-0.52 avg=-0.52 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.52 avg=-0.52 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.50 avg=-0.50 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.42 avg=-0.42 win_rate=0.00%

@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-06-23T16:10:00+00:00,2025-06-23T17:25:00+00:00,16,17,stock_trend_breakout,take_profit,481.17622,485.84281,0.10000,-0.04301,0.50967,15,1.00000,"{'atr_proxy': 0.003185748732019627, 'momentum_20': 0.011586096683979141}"
+MSFT,2025-06-23T16:10:00+00:00,2025-06-23T16:30:00+00:00,16,16,stock_trend_breakout,stop_loss,481.53614,479.15403,0.10000,-0.74782,0.50961,4,1.00000,"{'atr_proxy': 0.003185748732019627, 'momentum_20': 0.011586096683979141}"

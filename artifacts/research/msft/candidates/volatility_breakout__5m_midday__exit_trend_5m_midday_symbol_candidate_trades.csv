@@ -1,5 +1,5 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-04-23T15:00:00+00:00,2025-04-23T15:25:00+00:00,15,15,volatility_breakout,stop_loss,379.61341,376.76463,0.10000,-0.79244,0.50756,5,1.00000,{'breakout_high': 365.41}
-MSFT,2025-05-19T16:25:00+00:00,2025-05-19T17:50:00+00:00,16,17,volatility_breakout,trailing_stop,458.16161,458.35831,0.10000,-0.48950,0.50917,17,0.82532,{'breakout_high': 457.44}
-MSFT,2025-06-17T15:35:00+00:00,2025-06-17T16:45:00+00:00,15,16,volatility_breakout,trailing_stop,477.38546,477.42450,0.10000,-0.50564,0.50955,14,0.59927,{'breakout_high': 477.16}
-MSFT,2025-06-23T17:00:00+00:00,2025-06-24T15:00:00+00:00,17,15,volatility_breakout,take_profit,482.36525,489.86701,0.10000,0.24045,0.50972,12,0.90243,{'breakout_high': 481.8599}
+MSFT,2025-04-23T15:00:00+00:00,2025-04-23T15:20:00+00:00,15,15,volatility_breakout,stop_loss,379.94057,377.29789,0.10000,-0.77184,0.50757,4,1.00000,{'breakout_high': 365.41}
+MSFT,2025-05-19T16:25:00+00:00,2025-05-19T17:50:00+00:00,16,17,volatility_breakout,trailing_stop,458.51411,458.00569,0.10000,-0.56001,0.50917,17,0.82532,{'breakout_high': 457.44}
+MSFT,2025-06-17T15:35:00+00:00,2025-06-17T16:45:00+00:00,15,16,volatility_breakout,trailing_stop,477.74415,477.06573,0.10000,-0.57739,0.50955,14,0.59927,{'breakout_high': 477.16}
+MSFT,2025-06-23T17:00:00+00:00,2025-06-24T15:00:00+00:00,17,15,volatility_breakout,take_profit,482.72556,489.50422,0.10000,0.16814,0.50972,12,0.90243,{'breakout_high': 481.8599}

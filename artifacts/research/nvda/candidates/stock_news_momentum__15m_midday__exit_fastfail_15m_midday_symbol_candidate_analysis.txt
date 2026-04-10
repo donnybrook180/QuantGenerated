@@ -1,19 +1,9 @@
 Artifact: stock_news_momentum__15m_midday__exit_fastfail_15m_midday_symbol_candidate
-Closed trades: 37
-Realized pnl: -19.23
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-15: trades=30 pnl=-16.66 avg=-0.56 win_rate=3.33%
-16: trades=5 pnl=-1.41 avg=-0.28 win_rate=20.00%
-17: trades=2 pnl=-1.17 avg=-0.58 win_rate=0.00%
 
 By entry setup
-stock_news_momentum: trades=37 pnl=-19.23 avg=-0.52 win_rate=5.41%
 
 By exit reason
-structure_exit: trades=12 pnl=-9.25 avg=-0.77 win_rate=0.00%
-stop_loss: trades=5 pnl=-3.51 avg=-0.70 win_rate=0.00%
-trailing_stop: trades=5 pnl=-2.78 avg=-0.56 win_rate=0.00%
-take_profit: trades=12 pnl=-2.23 avg=-0.19 win_rate=16.67%
-time_stop: trades=2 pnl=-1.24 avg=-0.62 win_rate=0.00%
-end_of_run: trades=1 pnl=-0.21 avg=-0.21 win_rate=0.00%

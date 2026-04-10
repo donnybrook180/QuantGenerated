@@ -1,5 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
 MSFT,2025-04-23T13:45:00+00:00,2025-04-23T15:30:00+00:00,13,15,stock_gap_and_go,stale_breakout,379.45282,375.60877,0.10000,-0.89196,0.50755,7,1.00000,{'minutes_from_open': 15.0}
-MSFT,2025-05-19T13:45:00+00:00,2025-05-20T13:15:00+00:00,13,13,stock_gap_and_go,time_stop,456.58310,454.88732,0.10000,-0.67869,0.50911,30,1.00000,{'minutes_from_open': 15.0}
-MSFT,2025-06-17T15:00:00+00:00,2025-06-18T13:30:00+00:00,15,13,stock_gap_and_go,time_stop,477.33394,476.94579,0.10000,-0.54836,0.50954,26,1.00000,{'minutes_from_open': 90.0}
-MSFT,2025-06-23T15:45:00+00:00,2025-06-23T17:15:00+00:00,15,17,stock_gap_and_go,take_profit,480.54562,485.48133,0.10000,-0.01609,0.50966,6,1.00000,{'minutes_from_open': 135.0}

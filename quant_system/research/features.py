@@ -50,6 +50,10 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
     current_overnight_high = 0.0
     current_overnight_low = 0.0
     current_overnight_open = 0.0
+    current_opening_drive_high = 0.0
+    current_opening_drive_low = 0.0
+    current_opening_drive_close = 0.0
+    saw_opening_drive_bar_today = False
     saw_regular_bar_today = False
     saw_overnight_bar_today = False
     session_reference_labels: tuple[str, ...] = ()
@@ -105,6 +109,10 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
             current_overnight_high = 0.0
             current_overnight_low = 0.0
             current_overnight_open = 0.0
+            current_opening_drive_high = 0.0
+            current_opening_drive_low = 0.0
+            current_opening_drive_close = 0.0
+            saw_opening_drive_bar_today = False
             saw_regular_bar_today = False
             saw_overnight_bar_today = False
             session_reference_state = {
@@ -137,6 +145,16 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
                 current_regular_high = max(current_regular_high, bar.high)
                 current_regular_low = min(current_regular_low, bar.low)
             current_regular_close = bar.close
+            if 0 <= minutes_from_open < 30:
+                if not saw_opening_drive_bar_today:
+                    current_opening_drive_high = bar.high
+                    current_opening_drive_low = bar.low
+                    current_opening_drive_close = bar.close
+                    saw_opening_drive_bar_today = True
+                else:
+                    current_opening_drive_high = max(current_opening_drive_high, bar.high)
+                    current_opening_drive_low = min(current_opening_drive_low, bar.low)
+                    current_opening_drive_close = bar.close
 
         for label in session_reference_labels:
             window_open, window_close = session_reference_windows[label]
@@ -176,6 +194,50 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
             ((bar.close - current_overnight_low) / overnight_range)
             if overnight_range > 0.0 and saw_overnight_bar_today
             else 0.5
+        )
+        premarket_high = current_overnight_high if not is_twenty_four_hour_asset else 0.0
+        premarket_low = current_overnight_low if not is_twenty_four_hour_asset else 0.0
+        premarket_open = current_overnight_open if not is_twenty_four_hour_asset else 0.0
+        premarket_range = max(premarket_high - premarket_low, bar.close * 0.0005) if premarket_high and premarket_low else 0.0
+        distance_to_premarket_high = ((bar.close / premarket_high) - 1.0) if premarket_high else 0.0
+        distance_to_premarket_low = ((bar.close / premarket_low) - 1.0) if premarket_low else 0.0
+        reclaimed_premarket_high = 1.0 if premarket_high and bar.low <= premarket_high <= bar.close else 0.0
+        reclaimed_premarket_low = 1.0 if premarket_low and bar.high >= premarket_low >= bar.close else 0.0
+        broke_premarket_high = 1.0 if premarket_high and bar.close > premarket_high else 0.0
+        broke_premarket_low = 1.0 if premarket_low and bar.close < premarket_low else 0.0
+        opening_drive_high = current_opening_drive_high if saw_opening_drive_bar_today else 0.0
+        opening_drive_low = current_opening_drive_low if saw_opening_drive_bar_today else 0.0
+        opening_drive_range = (
+            max(opening_drive_high - opening_drive_low, bar.close * 0.0005)
+            if opening_drive_high and opening_drive_low
+            else 0.0
+        )
+        opening_drive_return_pct = (
+            ((current_opening_drive_close / current_regular_open) - 1.0)
+            if saw_opening_drive_bar_today and current_regular_open
+            else 0.0
+        )
+        distance_to_opening_drive_high = ((bar.close / opening_drive_high) - 1.0) if opening_drive_high else 0.0
+        distance_to_opening_drive_low = ((bar.close / opening_drive_low) - 1.0) if opening_drive_low else 0.0
+        opening_drive_break_up = 1.0 if opening_drive_high and bar.close > opening_drive_high else 0.0
+        opening_drive_break_down = 1.0 if opening_drive_low and bar.close < opening_drive_low else 0.0
+        first_pullback_long = (
+            1.0
+            if in_regular_session
+            and minutes_from_open >= 30
+            and opening_drive_return_pct > 0.0
+            and bar.low <= session_vwap <= bar.close
+            and bar.close > current_regular_open
+            else 0.0
+        )
+        first_pullback_short = (
+            1.0
+            if in_regular_session
+            and minutes_from_open >= 30
+            and opening_drive_return_pct < 0.0
+            and bar.high >= session_vwap >= bar.close
+            and bar.close < current_regular_open
+            else 0.0
         )
         morning_session = 1.0 if in_regular_session and 0 <= minutes_from_open < 90 else 0.0
         midday_session = 1.0 if in_regular_session and 90 <= minutes_from_open < 180 else 0.0
@@ -253,7 +315,29 @@ def build_feature_library(bars: list[MarketBar], daily_event_flags: dict[date, D
                     "distance_to_overnight_high": distance_to_overnight_high,
                     "distance_to_overnight_low": distance_to_overnight_low,
                     "overnight_position": overnight_position,
+                    "premarket_high": premarket_high,
+                    "premarket_low": premarket_low,
+                    "premarket_open": premarket_open,
+                    "premarket_range_pct": (premarket_range / bar.close) if premarket_range and bar.close else 0.0,
+                    "distance_to_premarket_high": distance_to_premarket_high,
+                    "distance_to_premarket_low": distance_to_premarket_low,
+                    "reclaimed_premarket_high": reclaimed_premarket_high,
+                    "reclaimed_premarket_low": reclaimed_premarket_low,
+                    "broke_premarket_high": broke_premarket_high,
+                    "broke_premarket_low": broke_premarket_low,
+                    "open_vs_premarket_high_pct": ((current_regular_open / premarket_high) - 1.0) if current_regular_open and premarket_high else 0.0,
+                    "open_vs_premarket_low_pct": ((current_regular_open / premarket_low) - 1.0) if current_regular_open and premarket_low else 0.0,
                     "opening_gap_pct": opening_gap_pct,
+                    "opening_drive_high": opening_drive_high,
+                    "opening_drive_low": opening_drive_low,
+                    "opening_drive_range_pct": (opening_drive_range / bar.close) if opening_drive_range and bar.close else 0.0,
+                    "opening_drive_return_pct": opening_drive_return_pct,
+                    "distance_to_opening_drive_high": distance_to_opening_drive_high,
+                    "distance_to_opening_drive_low": distance_to_opening_drive_low,
+                    "opening_drive_break_up": opening_drive_break_up,
+                    "opening_drive_break_down": opening_drive_break_down,
+                    "first_pullback_long": first_pullback_long,
+                    "first_pullback_short": first_pullback_short,
                     "morning_session": morning_session,
                     "midday_session": midday_session,
                     "afternoon_session": afternoon_session,

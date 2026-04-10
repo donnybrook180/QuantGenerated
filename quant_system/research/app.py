@@ -13,8 +13,12 @@ from quant_system.symbol_research import (
 from quant_system.symbols import resolve_symbol_request
 
 
-def run_symbol_research_app(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
-    return run_symbol_research(data_symbol, broker_symbol)
+def run_symbol_research_app(
+    data_symbol: str,
+    broker_symbol: str | None = None,
+    candidate_name_prefixes: tuple[str, ...] | None = None,
+) -> list[str]:
+    return run_symbol_research(data_symbol, broker_symbol, candidate_name_prefixes=candidate_name_prefixes)
 
 
 def run_symbol_execute_app(requested_symbol: str) -> list[str]:

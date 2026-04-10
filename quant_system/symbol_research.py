@@ -53,9 +53,12 @@ from quant_system.agents.eu50 import EU50OpenReclaimLongAgent
 from quant_system.agents.session import SessionEntryFilterAgent
 from quant_system.agents.stocks import (
     EventAwareRiskSentinelAgent,
+    StockEventOpenDriveContinuationAgent,
     StockGapFadeAgent,
     StockGapAndGoAgent,
+    StockGapOpenReclaimAgent,
     StockNewsMomentumAgent,
+    StockPremarketSweepReversalAgent,
     StockPostEarningsDriftAgent,
     StockPowerHourContinuationAgent,
     StockTrendBreakoutAgent,
@@ -2259,6 +2262,12 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
             ),
             CandidateSpec(
+                name="stock_event_open_drive_continuation",
+                description="Stock event-day continuation anchored to premarket and opening-drive structure",
+                agents=[StockEventOpenDriveContinuationAgent(), stock_event_risk, risk],
+                code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
+            ),
+            CandidateSpec(
                 name="stock_post_earnings_drift",
                 description="Stock post-earnings drift continuation after the open",
                 agents=[StockPostEarningsDriftAgent(), stock_event_risk, risk],
@@ -2275,6 +2284,18 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="Stock gap-and-go continuation after the open",
                 agents=[StockGapAndGoAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockGapAndGoAgent",
+            ),
+            CandidateSpec(
+                name="stock_gap_open_reclaim",
+                description="Stock gap continuation after reclaiming premarket structure",
+                agents=[StockGapOpenReclaimAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
+            ),
+            CandidateSpec(
+                name="stock_premarket_sweep_reversal",
+                description="Stock premarket sweep reversal after failed opening extension",
+                agents=[StockPremarketSweepReversalAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
             ),
             CandidateSpec(
                 name="stock_power_hour_continuation",
@@ -2786,18 +2807,39 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
                 ),
                 CandidateSpec(
+                    name=f"{upper.lower()}_stock_event_open_drive_patient",
+                    description=f"{upper} event-day opening-drive continuation with patient exits",
+                    agents=[StockEventOpenDriveContinuationAgent(min_relative_volume=1.2, min_atr_proxy=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
+                    code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
+                ),
+                CandidateSpec(
                     name=f"{upper.lower()}_stock_gap_fade_selective",
                     description=f"{upper} selective gap fade with stricter extension filter",
-                    agents=[StockGapFadeAgent(min_gap_proxy=0.005, min_relative_volume=1.1), EventAwareRiskSentinelAgent(False), risk],
+                    agents=[StockGapFadeAgent(min_gap_proxy=0.0038, min_relative_volume=1.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapFadeAgent",
-                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 4, "max_holding_bars": 16},
+                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_gap_and_go_selective",
                     description=f"{upper} selective gap-and-go continuation with stricter opening filter",
-                    agents=[StockGapAndGoAgent(min_relative_volume=1.3, min_atr_proxy=0.004), EventAwareRiskSentinelAgent(False), risk],
+                    agents=[StockGapAndGoAgent(min_relative_volume=1.1, min_atr_proxy=0.0032, max_minutes_from_open=120.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapAndGoAgent",
-                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 5, "max_holding_bars": 18},
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_gap_open_reclaim_selective",
+                    description=f"{upper} selective gap reclaim continuation after premarket retake",
+                    agents=[StockGapOpenReclaimAgent(min_relative_volume=1.0, min_gap_pct=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_premarket_sweep_reversal",
+                    description=f"{upper} premarket sweep reversal after failed gap extension",
+                    agents=[StockPremarketSweepReversalAgent(min_relative_volume=1.0, min_gap_pct=0.003), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
+                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_patient",
@@ -5695,7 +5737,12 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
     return path
 
 
-def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
+def run_symbol_research(
+    data_symbol: str,
+    broker_symbol: str | None = None,
+    *,
+    candidate_name_prefixes: tuple[str, ...] | None = None,
+) -> list[str]:
     config = SystemConfig()
     resolved = resolve_symbol_request(data_symbol, broker_symbol)
     config.symbol_research.broker_symbol = resolved.broker_symbol
@@ -5722,6 +5769,12 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     if not default_features:
         raise RuntimeError(f"No usable feature variants were generated for {resolved.profile_symbol}.")
     singles = _candidate_specs(config, resolved.profile_symbol)
+    if candidate_name_prefixes:
+        singles = [
+            spec
+            for spec in singles
+            if any(spec.name.startswith(prefix) for prefix in candidate_name_prefixes)
+        ]
     symbol_slug = _symbol_slug(resolved.profile_symbol)
     results: list[CandidateResult] = []
     explored_entry_exit_specs: list[CandidateSpec] = []

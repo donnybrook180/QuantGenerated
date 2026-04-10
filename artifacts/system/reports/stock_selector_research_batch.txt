@@ -4,22 +4,24 @@ Selector report: artifacts\system\reports\stock_selector_today.txt
 Selector CSV: artifacts\system\reports\stock_selector_today.csv
 
 ## NVDA
+Playbook: event
+Reasons: gap=2.05%, earnings_day, adv=$17,154,116,000, playbook=event
 Requested symbol: NVDA
 Symbol: NVDA
 Data symbol: NVDA
 Broker symbol: NVDA
 Catalog profile: symbol::nvda
 Data source: duckdb_cache
-Candidates tested: 302
+Candidates tested: 226
 Research CSV: artifacts\research\nvda\reports\symbol_research.csv
 Research report: artifacts\research\nvda\reports\symbol_research.txt
 Viability autopsy: artifacts\research\nvda\reports\viability_autopsy.txt
-Plots: artifacts\research\nvda\plots\candidate_ranking.png, artifacts\research\nvda\plots\validation_test_scatter.png, artifacts\research\nvda\plots\regimes.png
+Plots: artifacts\research\nvda\plots\candidate_ranking.png, artifacts\research\nvda\plots\validation_test_scatter.png, artifacts\research\nvda\plots\regimes.png, artifacts\research\nvda\plots\best_candidate_equity.png
 Best candidate: none
 No viable candidate met the symbol-specific viability rules (validation/test robustness, walk-forward robustness, and execution consistency).
 Recommended active agents: none
 Symbol status: research_only
-Tier counts: core=0 specialist=0 reject=302
+Tier counts: core=0 specialist=0 reject=226
 Execution set: none
 Execution set id: none
 Execution validation: not_run
@@ -27,15 +29,18 @@ Research history days: 730
 Research mode: full
 Research mode selection: full because all required timeframe caches were found.
 Split ratio: train 50% / validation 25% / test 25% ; walk-forward windows use 42% / 22% / 22%
+Playbook-allowed candidates: momentum__5m_midday__near_miss_protective__trend_up, momentum__5m_midday__near_miss_patient__trend_up, momentum__5m_midday__near_miss_dense, momentum__5m_midday__near_miss_dense__trend_up_vol_high, momentum__5m_midday__near_miss_dense__trend_up, momentum__5m_midday__exit_trend__near_miss_patient, momentum__5m_midday__exit_trend, momentum__5m_midday__exit_fastfail, momentum__5m_midday__exit_trend__near_miss_patient__trend_up_vol_high, momentum__5m_midday__exit_trend__near_miss_patient__trend_up, momentum__5m_midday, momentum__5m_midday__exit_trend__near_miss_protective__trend_up_vol_high, momentum__5m_midday__exit_trend__near_miss_protective__trend_up, momentum__5m_midday__exit_trend__near_miss_dense, momentum__5m_midday__exit_trend__near_miss_dense__trend_up_vol_high
 
 ## MSFT
+Playbook: gap
+Reasons: gap=2.54%, mom20=-0.0111, adv=$4,509,814,993, playbook=gap
 Requested symbol: MSFT
 Symbol: MSFT
 Data symbol: MSFT
 Broker symbol: MSFT
 Catalog profile: symbol::msft
 Data source: duckdb_cache
-Candidates tested: 344
+Candidates tested: 282
 Research CSV: artifacts\research\msft\reports\symbol_research.csv
 Research report: artifacts\research\msft\reports\symbol_research.txt
 Viability autopsy: artifacts\research\msft\reports\viability_autopsy.txt
@@ -44,7 +49,7 @@ Best candidate: none
 No viable candidate met the symbol-specific viability rules (validation/test robustness, walk-forward robustness, and execution consistency).
 Recommended active agents: none
 Symbol status: research_only
-Tier counts: core=0 specialist=0 reject=344
+Tier counts: core=0 specialist=0 reject=282
 Execution set: none
 Execution set id: none
 Execution validation: not_run
@@ -52,15 +57,18 @@ Research history days: 730
 Research mode: full
 Research mode selection: full because all required timeframe caches were found.
 Split ratio: train 50% / validation 25% / test 25% ; walk-forward windows use 42% / 22% / 22%
+Playbook-allowed candidates: stock_gap_open_reclaim__15m_open__exit_trend__near_miss_protective__trend_up_vol_high, stock_gap_open_reclaim__15m_open__exit_trend__near_miss_dense__trend_up_vol_high, stock_gap_and_go__15m_open__exit_trend__near_miss_patient__trend_up_vol_high, stock_gap_and_go__15m_open__exit_trend__near_miss_protective__trend_up_vol_high, stock_gap_and_go__15m_open__exit_trend__near_miss_dense__trend_up_vol_high, stock_gap_open_reclaim__15m_open__exit_trend__near_miss_patient__trend_up_vol_high, stock_gap_and_go__15m_open__exit_trend__near_miss_dense__trend_up, stock_gap_and_go__15m_open__exit_trend__near_miss_protective__trend_up, stock_gap_open_reclaim__15m_open__exit_trend__near_miss_protective__trend_up, stock_gap_and_go__15m_open__exit_trend__near_miss_patient__trend_up, stock_gap_open_reclaim__15m_open__exit_trend__near_miss_patient__trend_up, stock_gap_open_reclaim__15m_open__exit_trend__near_miss_dense__trend_up, stock_trend_breakout__15m_midday__exit_trend__near_miss_patient__trend_flat, stock_trend_breakout__15m_midday__exit_trend__near_miss_dense__trend_flat, stock_trend_breakout__15m_midday__exit_trend__near_miss_protective__trend_flat
 
 ## TSLA
+Playbook: power_hour
+Reasons: mom20=-0.0185, adv=$17,163,945,644, atr_proxy=0.0035, playbook=power_hour
 Requested symbol: TSLA
 Symbol: TSLA
 Data symbol: TSLA
 Broker symbol: TSLA
 Catalog profile: symbol::tsla
 Data source: duckdb_cache
-Candidates tested: 344
+Candidates tested: 201
 Research CSV: artifacts\research\tsla\reports\symbol_research.csv
 Research report: artifacts\research\tsla\reports\symbol_research.txt
 Viability autopsy: artifacts\research\tsla\reports\viability_autopsy.txt
@@ -69,7 +77,7 @@ Best candidate: none
 No viable candidate met the symbol-specific viability rules (validation/test robustness, walk-forward robustness, and execution consistency).
 Recommended active agents: none
 Symbol status: research_only
-Tier counts: core=0 specialist=0 reject=344
+Tier counts: core=0 specialist=0 reject=201
 Execution set: none
 Execution set id: none
 Execution validation: not_run
@@ -77,3 +85,4 @@ Research history days: 730
 Research mode: full
 Research mode selection: full because all required timeframe caches were found.
 Split ratio: train 50% / validation 25% / test 25% ; walk-forward windows use 42% / 22% / 22%
+Playbook-allowed candidates: stock_trend_breakout__15m_open__regime_trend_up_vol_high, stock_trend_breakout__15m_open__exit_fastfail__regime_trend_up_vol_high, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_patient, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_patient__trend_up, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_protective, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_protective__trend_up_vol_high, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_protective__trend_up, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_dense, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_dense__trend_up_vol_high, stock_trend_breakout__15m_open__regime_trend_up_vol_high__near_miss_dense__trend_up, stock_trend_breakout__15m_open__exit_fastfail__regime_trend_up_vol_high__near_miss_patient, stock_trend_breakout__15m_open__exit_fastfail__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high, stock_trend_breakout__15m_open__exit_fastfail__regime_trend_up_vol_high__near_miss_patient__trend_up, stock_trend_breakout__15m_open__exit_fastfail__regime_trend_up_vol_high__near_miss_protective

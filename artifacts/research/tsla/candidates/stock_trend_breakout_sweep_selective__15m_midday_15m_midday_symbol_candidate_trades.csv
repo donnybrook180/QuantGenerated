@@ -1,5 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-04-16T15:15:00+00:00,2025-04-16T16:30:00+00:00,15,16,stock_trend_breakout,stale_breakout,251.05738,246.04441,0.10000,-1.00627,0.50497,5,1.00000,"{'atr_proxy': 0.012679430892915056, 'momentum_20': 0.006581714560924823}"
 TSLA,2025-05-13T15:00:00+00:00,2025-05-14T15:00:00+00:00,15,15,stock_trend_breakout,take_profit,322.64750,340.83462,0.10000,1.31208,0.50663,12,1.00000,"{'atr_proxy': 0.015936530586921575, 'momentum_20': 0.023462551989078317}"
 TSLA,2025-05-20T16:30:00+00:00,2025-05-21T15:00:00+00:00,16,15,stock_trend_breakout,stale_breakout,350.60753,344.57665,0.10000,-1.11004,0.50695,6,1.00000,"{'atr_proxy': 0.003621666971636196, 'momentum_20': 0.011165858445906895}"
 TSLA,2025-06-12T15:00:00+00:00,2025-06-12T16:45:00+00:00,15,16,stock_trend_breakout,stop_loss,328.20913,323.85255,0.10000,-0.94218,0.50652,7,1.00000,"{'atr_proxy': 0.008111751885296245, 'momentum_20': 0.020061903132485126}"

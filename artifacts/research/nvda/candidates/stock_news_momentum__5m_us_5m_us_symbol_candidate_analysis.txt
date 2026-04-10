@@ -1,9 +1,24 @@
 Artifact: stock_news_momentum__5m_us_5m_us_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 110
+Realized pnl: -54.95
 
 By entry hour
+13: trades=44 pnl=-21.89 avg=-0.50 win_rate=0.00%
+14: trades=32 pnl=-16.55 avg=-0.52 win_rate=3.12%
+19: trades=12 pnl=-5.85 avg=-0.49 win_rate=0.00%
+16: trades=7 pnl=-3.14 avg=-0.45 win_rate=14.29%
+15: trades=6 pnl=-3.00 avg=-0.50 win_rate=0.00%
+18: trades=5 pnl=-2.37 avg=-0.47 win_rate=0.00%
+17: trades=4 pnl=-2.15 avg=-0.54 win_rate=0.00%
 
 By entry setup
+stock_news_momentum: trades=110 pnl=-54.95 avg=-0.50 win_rate=1.82%
 
 By exit reason
+time_stop: trades=27 pnl=-15.41 avg=-0.57 win_rate=0.00%
+trailing_stop: trades=30 pnl=-13.50 avg=-0.45 win_rate=0.00%
+structure_exit: trades=17 pnl=-11.33 avg=-0.67 win_rate=0.00%
+stop_loss: trades=15 pnl=-10.03 avg=-0.67 win_rate=0.00%
+take_profit: trades=17 pnl=-3.00 avg=-0.18 win_rate=11.76%
+stale_breakout: trades=3 pnl=-1.51 avg=-0.50 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.17 avg=-0.17 win_rate=0.00%

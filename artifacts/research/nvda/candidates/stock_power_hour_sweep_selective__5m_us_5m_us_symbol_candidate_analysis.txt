@@ -1,17 +1,12 @@
 Artifact: stock_power_hour_sweep_selective__5m_us_5m_us_symbol_candidate
-Closed trades: 143
-Realized pnl: -74.90
+Closed trades: 1
+Realized pnl: -0.68
 
 By entry hour
-18: trades=90 pnl=-48.02 avg=-0.53 win_rate=0.00%
-19: trades=53 pnl=-26.88 avg=-0.51 win_rate=1.89%
+18: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%
 
 By entry setup
-stock_power_hour_continuation: trades=143 pnl=-74.90 avg=-0.52 win_rate=0.70%
+stock_power_hour_continuation: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=54 pnl=-30.94 avg=-0.57 win_rate=0.00%
-trailing_stop: trades=33 pnl=-16.32 avg=-0.49 win_rate=0.00%
-stale_breakout: trades=23 pnl=-13.26 avg=-0.58 win_rate=0.00%
-take_profit: trades=20 pnl=-7.23 avg=-0.36 win_rate=5.00%
-time_stop: trades=13 pnl=-7.16 avg=-0.55 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.68 avg=-0.68 win_rate=0.00%

@@ -1,6 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-04-09T17:00:00+00:00,2025-04-09T17:15:00+00:00,17,17,stock_news_momentum,take_profit,367.20642,378.65717,0.10000,0.63762,0.50746,1,1.00000,"{'news_count_1d': 5.0, 'earnings_event_day': 0.0}"
-MSFT,2025-04-11T17:30:00+00:00,2025-04-14T15:15:00+00:00,17,15,stock_news_momentum,structure_exit,389.32277,388.27215,0.10000,-0.61284,0.50778,3,1.00000,"{'news_count_1d': 4.0, 'earnings_event_day': 0.0}"
 MSFT,2025-04-25T17:00:00+00:00,2025-04-28T15:00:00+00:00,17,15,stock_news_momentum,structure_exit,390.47858,389.72139,0.10000,-0.58352,0.50780,4,1.00000,"{'news_count_1d': 5.0, 'earnings_event_day': 1.0}"
 MSFT,2025-05-08T15:15:00+00:00,2025-05-09T15:00:00+00:00,15,15,stock_news_momentum,structure_exit,440.32461,437.00667,0.10000,-0.84057,0.50877,11,1.00000,"{'news_count_1d': 5.0, 'earnings_event_day': 1.0}"
 MSFT,2025-10-06T17:30:00+00:00,2025-10-07T15:00:00+00:00,17,15,stock_news_momentum,trailing_stop,526.66010,524.73081,0.10000,-0.70344,0.51051,2,1.00000,"{'news_count_1d': 11.0, 'earnings_event_day': 1.0}"
@@ -12,7 +10,6 @@ MSFT,2025-12-11T15:00:00+00:00,2025-12-12T15:00:00+00:00,15,15,stock_news_moment
 MSFT,2025-12-18T15:00:00+00:00,2025-12-18T17:00:00+00:00,15,17,stock_news_momentum,trailing_stop,484.17751,484.71673,0.10000,-0.45577,0.50969,8,1.00000,"{'news_count_1d': 2.0, 'earnings_event_day': 1.0}"
 MSFT,2026-01-07T15:30:00+00:00,2026-01-08T15:00:00+00:00,15,15,stock_news_momentum,structure_exit,486.84391,477.95526,0.10000,-1.39851,0.50965,10,1.00000,"{'news_count_1d': 12.0, 'earnings_event_day': 1.0}"
 MSFT,2026-01-23T15:00:00+00:00,2026-01-27T15:00:00+00:00,15,15,stock_news_momentum,take_profit,461.78582,476.57598,0.10000,0.96963,0.50938,24,1.00000,"{'news_count_1d': 11.0, 'earnings_event_day': 1.0}"
-MSFT,2026-01-30T15:00:00+00:00,2026-01-30T15:15:00+00:00,15,15,stock_news_momentum,stop_loss,436.93284,432.44405,0.10000,-0.95757,0.50869,1,1.00000,"{'news_count_1d': 12.0, 'earnings_event_day': 1.0}"
 MSFT,2026-02-02T15:00:00+00:00,2026-02-02T15:15:00+00:00,15,15,stock_news_momentum,stop_loss,430.45586,427.33173,0.10000,-0.82099,0.50858,1,1.00000,"{'news_count_1d': 13.0, 'earnings_event_day': 1.0}"
 MSFT,2026-02-04T15:30:00+00:00,2026-02-04T17:15:00+00:00,15,17,stock_news_momentum,stop_loss,416.71228,412.87928,0.10000,-0.89160,0.50830,7,1.00000,"{'news_count_1d': 21.0, 'earnings_event_day': 1.0}"
 MSFT,2026-02-09T15:00:00+00:00,2026-02-10T15:00:00+00:00,15,15,stock_news_momentum,take_profit,410.73966,420.71519,0.10000,0.48924,0.50831,12,1.00000,"{'news_count_1d': 15.0, 'earnings_event_day': 1.0}"

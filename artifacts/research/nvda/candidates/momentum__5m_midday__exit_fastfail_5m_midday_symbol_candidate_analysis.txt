@@ -1,20 +1,12 @@
 Artifact: momentum__5m_midday__exit_fastfail_5m_midday_symbol_candidate
-Closed trades: 178
-Realized pnl: -89.17
+Closed trades: 1
+Realized pnl: 0.21
 
 By entry hour
-15: trades=75 pnl=-39.87 avg=-0.53 win_rate=0.00%
-16: trades=50 pnl=-25.17 avg=-0.50 win_rate=6.00%
-17: trades=53 pnl=-24.13 avg=-0.46 win_rate=9.43%
+17: trades=1 pnl=0.21 avg=0.21 win_rate=100.00%
 
 By entry setup
-momentum_confirmation: trades=178 pnl=-89.17 avg=-0.50 win_rate=4.49%
+momentum_confirmation: trades=1 pnl=0.21 avg=0.21 win_rate=100.00%
 
 By exit reason
-stop_loss: trades=66 pnl=-38.70 avg=-0.59 win_rate=0.00%
-structure_exit: trades=37 pnl=-23.88 avg=-0.65 win_rate=0.00%
-trailing_stop: trades=21 pnl=-10.88 avg=-0.52 win_rate=0.00%
-take_profit: trades=42 pnl=-8.38 avg=-0.20 win_rate=19.05%
-time_stop: trades=9 pnl=-5.89 avg=-0.65 win_rate=0.00%
-stale_breakout: trades=2 pnl=-1.02 avg=-0.51 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.42 avg=-0.42 win_rate=0.00%
+take_profit: trades=1 pnl=0.21 avg=0.21 win_rate=100.00%

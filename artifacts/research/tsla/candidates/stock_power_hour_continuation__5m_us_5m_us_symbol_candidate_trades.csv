@@ -1,4 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
 TSLA,2025-10-08T18:15:00+00:00,2025-10-08T19:45:00+00:00,18,19,stock_power_hour_continuation,time_stop,439.77162,437.85390,0.10000,-0.70055,0.50878,18,1.00000,{'hour_of_day': 18.0}
-TSLA,2025-10-09T18:40:00+00:00,2025-10-09T19:35:00+00:00,18,19,stock_power_hour_continuation,take_profit,432.84202,435.27498,0.10000,-0.26538,0.50868,11,1.00000,{'hour_of_day': 18.0}
+TSLA,2025-10-09T18:45:00+00:00,2025-10-10T13:00:00+00:00,18,13,stock_power_hour_continuation,take_profit,433.60404,436.18860,0.10000,-0.25024,0.50870,27,1.00000,{'hour_of_day': 18.0}
 TSLA,2025-12-09T18:00:00+00:00,2025-12-09T18:10:00+00:00,18,18,stock_power_hour_continuation,stop_loss,452.41192,450.54857,0.10000,-0.69536,0.50903,2,1.00000,{'hour_of_day': 18.0}

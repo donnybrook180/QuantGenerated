@@ -12,8 +12,8 @@ Stock Selector Today
    event_day=no earnings_day=no
    reasons: gap=2.54%, mom20=-0.0111, adv=$4,509,814,993
 
-3. TSLA score=4.39 source=duckdb_cache
+3. TSLA score=3.14 source=duckdb_cache
    broker=TSLA ts=2025-10-22T14:40:00+00:00
    adv=$17,163,945,644 gap=0.21% rel_vol=0.72 atr=0.0035 mom20=-0.0185
-   event_day=yes earnings_day=yes
-   reasons: mom20=-0.0185, earnings_day, adv=$17,163,945,644
+   event_day=no earnings_day=no
+   reasons: mom20=-0.0185, adv=$17,163,945,644, atr_proxy=0.0035

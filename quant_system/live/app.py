@@ -28,6 +28,8 @@ def resolve_live_portfolio_weights(paths: list[Path]) -> dict[str, float]:
     weights: dict[str, float] = {}
     for path in paths:
         deployment = load_symbol_deployment(path)
+        if deployment.symbol_status == "research_only":
+            continue
         weights[deployment.symbol.upper()] = 1.0
     return weights
 
@@ -36,6 +38,8 @@ def resolve_live_strategy_weights(paths: list[Path]) -> dict[str, dict[str, floa
     weights: dict[str, dict[str, float]] = {}
     for path in paths:
         deployment = load_symbol_deployment(path)
+        if deployment.symbol_status == "research_only":
+            continue
         weights[deployment.symbol.upper()] = {
             strategy.candidate_name: 1.0
             for strategy in deployment.strategies
@@ -50,6 +54,9 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
     strategy_weights = resolve_live_strategy_weights(paths)
     for path in paths:
         deployment = load_symbol_deployment(path)
+        if deployment.symbol_status == "research_only":
+            lines.append(f"{deployment.symbol}: skipped ({deployment.symbol_status})")
+            continue
         if not deployment.strategies:
             lines.append(f"{deployment.symbol}: no active live strategies in {path}")
             continue
@@ -73,6 +80,7 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
                 f"Symbol: {result.symbol}",
                 f"Broker symbol: {result.broker_symbol}",
                 f"Deployment: {path}",
+                f"Symbol status: {deployment.symbol_status}",
                 f"Account mode: {result.account_mode_label}",
                 f"Strategy isolation supported: {'yes' if result.strategy_isolation_supported else 'no'}",
                 f"Portfolio weight: {result.portfolio_weight:.2f}",

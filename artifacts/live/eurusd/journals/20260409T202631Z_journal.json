@@ -1,0 +1,48 @@
+{
+  "symbol": "EURUSD",
+  "broker_symbol": "EURUSD",
+  "deployment_path": "artifacts\\deploy\\eurusd\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-09T23:00:00+00:00",
+    "symbol": "EURUSD",
+    "regime_label": "calm_range",
+    "volatility_label": "normal",
+    "structure_label": "trend",
+    "realized_vol_20": 0.009122270726599815,
+    "realized_vol_100": 0.01174661332510185,
+    "vol_ratio": 0.7765873000268118,
+    "vol_percentile": 0.5950413223140496,
+    "atr_percent": 0.0009297709968644088,
+    "trend_strength": 0.0017499527213260535,
+    "range_efficiency": 0.2495344506517712,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "forex_breakout_momentum__30m_overlap",
+      "signal_side": "sell",
+      "signal_timestamp": "2026-04-09T12:00:00+00:00",
+      "confidence": 0.7,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_range",
+      "magic_number": 3095145,
+      "regime_label": "calm_range",
+      "vol_percentile": 0.5950413223140496,
+      "risk_multiplier": 0.8,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 1.0966635211408111,
+      "effective_size_factor": 0.0
+    }
+  ]
+}

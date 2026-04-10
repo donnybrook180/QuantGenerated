@@ -1,16 +1,16 @@
 Artifact: xauusd_volatility_breakout_exit_relaxed__near_miss_protective__trend_flat__plus__xauusd_volatility_breakout_ex
 Closed trades: 8
-Realized pnl: 105.03
+Realized pnl: 105.87
 
 By entry hour
-16: trades=1 pnl=-157.05 avg=-157.05 win_rate=0.00%
-14: trades=2 pnl=98.08 avg=49.04 win_rate=100.00%
-13: trades=5 pnl=163.99 avg=32.80 win_rate=40.00%
+16: trades=1 pnl=-156.94 avg=-156.94 win_rate=0.00%
+14: trades=2 pnl=98.29 avg=49.15 win_rate=100.00%
+13: trades=5 pnl=164.52 avg=32.90 win_rate=40.00%
 
 By entry setup
-volatility_breakout: trades=8 pnl=105.03 avg=13.13 win_rate=50.00%
+volatility_breakout: trades=8 pnl=105.87 avg=13.23 win_rate=50.00%
 
 By exit reason
-structure_exit: trades=1 pnl=-157.05 avg=-157.05 win_rate=0.00%
-signal_exit: trades=1 pnl=-90.90 avg=-90.90 win_rate=0.00%
-trailing_stop: trades=6 pnl=352.97 avg=58.83 win_rate=66.67%
+structure_exit: trades=1 pnl=-156.94 avg=-156.94 win_rate=0.00%
+signal_exit: trades=1 pnl=-90.79 avg=-90.79 win_rate=0.00%
+trailing_stop: trades=6 pnl=353.60 avg=58.93 win_rate=66.67%

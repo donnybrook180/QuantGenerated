@@ -89,6 +89,9 @@ def main() -> int:
         strategy_weights = resolve_live_strategy_weights(paths)
         for path in paths:
             deployment = load_symbol_deployment(path)
+            if deployment.symbol_status == "research_only":
+                print(f"{deployment.symbol}: skipped ({deployment.symbol_status})")
+                continue
             if not deployment.strategies:
                 print(f"{deployment.symbol}: no active live strategies in {path}")
                 continue
@@ -118,6 +121,7 @@ def main() -> int:
             journal_path = write_live_run_journal(result, str(path))
             print(f"Symbol: {result.symbol}")
             print(f"Broker symbol: {result.broker_symbol}")
+            print(f"Symbol status: {deployment.symbol_status}")
             print(f"Account mode: {result.account_mode_label}")
             print(f"Strategy isolation supported: {'yes' if result.strategy_isolation_supported else 'no'}")
             print(f"Portfolio weight: {result.portfolio_weight:.2f}")

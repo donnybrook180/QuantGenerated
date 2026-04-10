@@ -1,16 +1,16 @@
 Viability autopsy: EURUSD
 Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=134.36 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
-Tier counts: core=9 specialist=15 reject=171
+Tier counts: core=7 specialist=15 reject=161
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 113
-- validation PF < 1.0 (0.00): 104
-- walk-forward avg validation pnl <= 0 (0.00): 99
-- test PF < 1.0 (0.00): 99
-- validation trades too low (0 < 1): 98
-- validation pnl <= 0 (0.00): 98
-- walk-forward avg test pnl <= 0 (0.00): 97
-- equity quality too low (0.25 < 0.45): 95
+- regime stability too low (0.00 < 0.50): 106
+- validation PF < 1.0 (0.00): 95
+- test PF < 1.0 (0.00): 90
+- walk-forward avg validation pnl <= 0 (0.00): 88
+- walk-forward avg test pnl <= 0 (0.00): 88
+- validation trades too low (0 < 1): 88
+- validation pnl <= 0 (0.00): 88
+- equity quality too low (0.25 < 0.45): 86
 
 Top near-misses
 - eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat__local_opt_consistency [specialist]: pnl=220.24 pf=1.26 val=-42.94/0.76/22 test=175.22/1.92/34 wf=0.00%

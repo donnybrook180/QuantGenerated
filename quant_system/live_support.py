@@ -4,9 +4,9 @@ import logging
 
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
-from quant_system.integrations.macro_events import apply_macro_event_context
 from quant_system.integrations.polygon_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
+from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
 from quant_system.symbols import is_stock_symbol
 
@@ -74,13 +74,14 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
         return []
     if not is_stock_symbol(data_symbol):
         features = build_feature_library(bars)
-        if config.macro_calendar.enabled:
-            features = apply_macro_event_context(
+        if supports_cross_asset_context(data_symbol):
+            multiplier, timespan = _infer_bars_timeframe(bars)
+            features = apply_cross_asset_context(
                 features,
+                config.mt5.database_path,
                 data_symbol,
-                config.macro_calendar.calendar_path,
-                pre_event_minutes=config.macro_calendar.pre_event_minutes,
-                post_event_minutes=config.macro_calendar.post_event_minutes,
+                multiplier,
+                timespan,
             )
         return features
     try:
@@ -97,12 +98,22 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
         features = build_feature_library(bars)
     else:
         features = build_feature_library(bars, event_flags)
-    if config.macro_calendar.enabled:
-        features = apply_macro_event_context(
+    if supports_cross_asset_context(data_symbol):
+        multiplier, timespan = _infer_bars_timeframe(bars)
+        features = apply_cross_asset_context(
             features,
+            config.mt5.database_path,
             data_symbol,
-            config.macro_calendar.calendar_path,
-            pre_event_minutes=config.macro_calendar.pre_event_minutes,
-            post_event_minutes=config.macro_calendar.post_event_minutes,
+            multiplier,
+            timespan,
         )
     return features
+
+
+def _infer_bars_timeframe(bars: list[MarketBar]) -> tuple[int, str]:
+    if len(bars) < 2:
+        return 5, "minute"
+    delta_seconds = int((bars[1].timestamp - bars[0].timestamp).total_seconds())
+    if delta_seconds <= 0:
+        return 5, "minute"
+    return max(delta_seconds // 60, 1), "minute"

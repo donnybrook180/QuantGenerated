@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+NVDA,2025-09-09T19:15:00+00:00,2025-09-10T19:00:00+00:00,19,19,stock_news_momentum,take_profit,170.34865,175.94961,0.10000,0.05663,0.50346,1,1.00000,"{'news_count_1d': 15.0, 'earnings_event_day': 1.0}"
+NVDA,2025-10-27T19:45:00+00:00,2025-10-30T19:00:00+00:00,19,19,stock_news_momentum,take_profit,191.54499,202.56155,0.10000,0.59771,0.50394,1,1.00000,"{'news_count_1d': 18.0, 'earnings_event_day': 1.0}"
+NVDA,2026-03-10T19:45:00+00:00,2026-03-12T19:45:00+00:00,19,19,stock_news_momentum,signal_exit,184.87299,182.89753,0.10000,-0.70122,0.50368,5,1.00000,"{'news_count_1d': 18.0, 'earnings_event_day': 1.0}"

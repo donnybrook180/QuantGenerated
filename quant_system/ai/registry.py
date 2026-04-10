@@ -47,7 +47,7 @@ def build_agent_registry_records(profile_name: str, artifacts: ProfileArtifacts)
     records: list[AgentRegistryRecord] = []
 
     grouped_trade_pnls: dict[str, list[float]] = defaultdict(list)
-    trade_data_sources: dict[str, str] = defaultdict(lambda: "polygon")
+    trade_data_sources: dict[str, str] = defaultdict(lambda: "duckdb_cache")
     for row in trade_rows:
         agent_name = row.get("entry_reason", "unknown")
         pnl = float(row.get("pnl", "0") or 0.0)

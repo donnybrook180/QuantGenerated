@@ -1,14 +1,17 @@
-Artifact: msft_momentum__15m_power_15m_power_symbol_candidate
-Closed trades: 2
-Realized pnl: -0.59
+Artifact: momentum__15m_power_15m_power_symbol_candidate
+Closed trades: 147
+Realized pnl: -85.81
 
 By entry hour
-19: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
-18: trades=1 pnl=-0.10 avg=-0.10 win_rate=0.00%
+18: trades=95 pnl=-54.80 avg=-0.58 win_rate=7.37%
+19: trades=52 pnl=-31.01 avg=-0.60 win_rate=17.31%
 
 By entry setup
-momentum_confirmation: trades=2 pnl=-0.59 avg=-0.29 win_rate=0.00%
+momentum_confirmation: trades=147 pnl=-85.81 avg=-0.58 win_rate=10.88%
 
 By exit reason
-trailing_stop: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
-take_profit: trades=1 pnl=-0.10 avg=-0.10 win_rate=0.00%
+structure_exit: trades=54 pnl=-46.37 avg=-0.86 win_rate=0.00%
+stop_loss: trades=41 pnl=-33.49 avg=-0.82 win_rate=0.00%
+trailing_stop: trades=13 pnl=-6.13 avg=-0.47 win_rate=0.00%
+stale_breakout: trades=2 pnl=-1.09 avg=-0.54 win_rate=0.00%
+take_profit: trades=37 pnl=1.27 avg=0.03 win_rate=43.24%

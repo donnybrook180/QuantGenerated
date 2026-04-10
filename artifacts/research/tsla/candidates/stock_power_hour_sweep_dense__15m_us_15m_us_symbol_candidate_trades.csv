@@ -1,11 +1,8 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
 TSLA,2025-04-09T17:00:00+00:00,2025-04-09T17:15:00+00:00,17,17,stock_power_hour_continuation,take_profit,235.30087,246.11438,0.10000,0.57654,0.50481,1,1.00000,{'hour_of_day': 17.0}
-TSLA,2025-05-05T18:45:00+00:00,2025-05-05T20:00:00+00:00,18,20,stock_power_hour_continuation,stop_loss,281.67532,278.54077,0.10000,-0.81906,0.50560,5,1.00000,{'hour_of_day': 18.0}
 TSLA,2025-05-13T17:00:00+00:00,2025-05-13T17:45:00+00:00,17,17,stock_power_hour_continuation,take_profit,326.99432,334.61723,0.10000,0.25567,0.50662,3,1.00000,{'hour_of_day': 17.0}
-TSLA,2025-05-19T17:00:00+00:00,2025-05-20T13:15:00+00:00,17,13,stock_power_hour_continuation,take_profit,341.95060,347.70174,0.10000,0.06822,0.50690,17,1.00000,{'hour_of_day': 17.0}
 TSLA,2025-05-20T17:00:00+00:00,2025-05-20T18:15:00+00:00,17,18,stock_power_hour_continuation,trailing_stop,351.44958,349.59095,0.10000,-0.69287,0.50701,5,1.00000,{'hour_of_day': 17.0}
 TSLA,2025-05-22T17:15:00+00:00,2025-05-22T19:30:00+00:00,17,19,stock_power_hour_continuation,trailing_stop,345.07691,343.41354,0.10000,-0.67322,0.50688,9,1.00000,{'hour_of_day': 17.0}
-TSLA,2025-05-23T17:30:00+00:00,2025-05-23T19:45:00+00:00,17,19,stock_power_hour_continuation,stop_loss,342.13898,339.09535,0.10000,-0.81117,0.50681,9,1.00000,{'hour_of_day': 17.0}
 TSLA,2025-06-13T17:00:00+00:00,2025-06-13T18:15:00+00:00,17,18,stock_power_hour_continuation,stop_loss,330.89816,326.58061,0.10000,-0.93833,0.50657,5,1.00000,{'hour_of_day': 17.0}
 TSLA,2025-06-18T18:00:00+00:00,2025-06-18T18:45:00+00:00,18,18,stock_power_hour_continuation,stop_loss,324.65534,320.86720,0.10000,-0.88527,0.50646,3,1.00000,{'hour_of_day': 18.0}
 TSLA,2025-10-09T18:45:00+00:00,2025-10-10T13:30:00+00:00,18,13,stock_power_hour_continuation,take_profit,434.16427,439.62816,0.10000,0.03765,0.50874,11,1.00000,{'hour_of_day': 18.0}

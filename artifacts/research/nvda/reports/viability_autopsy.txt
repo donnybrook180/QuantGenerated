@@ -1,16 +1,16 @@
 Viability autopsy: NVDA
 Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=341
+Tier counts: core=0 specialist=0 reject=280
 
 Top blockers
-- walk-forward avg validation pnl <= 0 (0.00): 316
-- walk-forward avg test pnl <= 0 (0.00): 316
-- walk-forward pass rate too low (0.00% < 20%): 289
-- regime stability too low (0.00 < 0.50): 289
-- test PF < 1.0 (0.00): 280
-- validation PF < 1.0 (0.00): 270
-- equity quality too low (0.25 < 0.45): 266
-- validation trades too low (0 < 1): 264
+- walk-forward avg validation pnl <= 0 (0.00): 279
+- walk-forward avg test pnl <= 0 (0.00): 279
+- validation PF < 1.0 (0.00): 231
+- walk-forward pass rate too low (0.00% < 20%): 231
+- regime stability too low (0.00 < 0.50): 231
+- validation trades too low (0 < 1): 230
+- test trades too low (0 < 1): 230
+- validation pnl <= 0 (0.00): 230
 
 Top near-misses
 - momentum__5m_midday [reject]: pnl=0.21 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%

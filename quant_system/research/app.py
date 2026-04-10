@@ -13,8 +13,12 @@ from quant_system.symbol_research import (
 from quant_system.symbols import resolve_symbol_request
 
 
-def run_symbol_research_app(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
-    return run_symbol_research(data_symbol, broker_symbol)
+def run_symbol_research_app(
+    data_symbol: str,
+    broker_symbol: str | None = None,
+    candidate_name_prefixes: tuple[str, ...] | None = None,
+) -> list[str]:
+    return run_symbol_research(data_symbol, broker_symbol, candidate_name_prefixes=candidate_name_prefixes)
 
 
 def run_symbol_execute_app(requested_symbol: str) -> list[str]:
@@ -59,7 +63,7 @@ def run_symbol_execute_app(requested_symbol: str) -> list[str]:
         return [f"No executable candidates selected for {profile_name}."]
 
     _configure_symbol_execution(config, resolved.profile_symbol)
-    config.polygon.symbol = str(research_run["data_symbol"])
+    config.market_data.symbol = str(research_run["data_symbol"])
     config.mt5.symbol = str(research_run["broker_symbol"])
     result, data_source, execution_variant_label = _run_candidate_bundle(
         config,

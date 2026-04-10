@@ -1,13 +1,19 @@
-Artifact: msft_momentum__5m_open__exit_fastfail_5m_open_symbol_candidate
-Closed trades: 2
-Realized pnl: -0.96
+Artifact: momentum__5m_open__exit_fastfail_5m_open_symbol_candidate
+Closed trades: 43
+Realized pnl: -28.49
 
 By entry hour
-13: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%
+13: trades=26 pnl=-17.51 avg=-0.67 win_rate=3.85%
+14: trades=17 pnl=-10.98 avg=-0.65 win_rate=5.88%
 
 By entry setup
-momentum_confirmation: trades=2 pnl=-0.96 avg=-0.48 win_rate=0.00%
+momentum_confirmation: trades=43 pnl=-28.49 avg=-0.66 win_rate=4.65%
 
 By exit reason
-trailing_stop: trades=1 pnl=-0.51 avg=-0.51 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.46 avg=-0.46 win_rate=0.00%
+structure_exit: trades=13 pnl=-11.69 avg=-0.90 win_rate=0.00%
+stop_loss: trades=12 pnl=-9.08 avg=-0.76 win_rate=0.00%
+time_stop: trades=5 pnl=-4.61 avg=-0.92 win_rate=0.00%
+trailing_stop: trades=5 pnl=-2.53 avg=-0.51 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.53 avg=-0.53 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.10 avg=-0.10 win_rate=0.00%
+take_profit: trades=6 pnl=0.06 avg=0.01 win_rate=33.33%

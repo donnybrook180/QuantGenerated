@@ -1,13 +1,15 @@
-Artifact: msft_stock_gap_and_go_sweep_selective__15m_open_15m_open_symbol_candidate
-Closed trades: 2
-Realized pnl: -0.31
+Artifact: stock_gap_and_go_sweep_selective__15m_open_15m_open_symbol_candidate
+Closed trades: 8
+Realized pnl: -5.01
 
 By entry hour
-13: trades=2 pnl=-0.31 avg=-0.15 win_rate=50.00%
+13: trades=7 pnl=-4.07 avg=-0.58 win_rate=14.29%
+14: trades=1 pnl=-0.94 avg=-0.94 win_rate=0.00%
 
 By entry setup
-stock_gap_and_go: trades=2 pnl=-0.31 avg=-0.15 win_rate=50.00%
+stock_gap_and_go: trades=8 pnl=-5.01 avg=-0.63 win_rate=12.50%
 
 By exit reason
-stale_breakout: trades=1 pnl=-0.58 avg=-0.58 win_rate=0.00%
-take_profit: trades=1 pnl=0.27 avg=0.27 win_rate=100.00%
+stale_breakout: trades=5 pnl=-3.40 avg=-0.68 win_rate=0.00%
+stop_loss: trades=2 pnl=-1.81 avg=-0.91 win_rate=0.00%
+take_profit: trades=1 pnl=0.21 avg=0.21 win_rate=100.00%

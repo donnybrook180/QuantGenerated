@@ -53,9 +53,12 @@ from quant_system.agents.eu50 import EU50OpenReclaimLongAgent
 from quant_system.agents.session import SessionEntryFilterAgent
 from quant_system.agents.stocks import (
     EventAwareRiskSentinelAgent,
+    StockEventOpenDriveContinuationAgent,
     StockGapFadeAgent,
     StockGapAndGoAgent,
+    StockGapOpenReclaimAgent,
     StockNewsMomentumAgent,
+    StockPremarketSweepReversalAgent,
     StockPostEarningsDriftAgent,
     StockPowerHourContinuationAgent,
     StockTrendBreakoutAgent,
@@ -108,7 +111,7 @@ from quant_system.symbols import (
 )
 
 
-class PolygonUnavailableError(RuntimeError):
+class ExternalMarketDataUnavailableError(RuntimeError):
     pass
 
 
@@ -243,7 +246,7 @@ def _with_session_gate(agents: list[Agent], session_label: str, symbol: str) -> 
 
 
 def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
-    base_history = max(config.symbol_research.history_days, config.polygon.history_days)
+    base_history = max(config.symbol_research.history_days, config.market_data.history_days)
     if symbol.upper() == "ETH":
         return max(base_history, 1460)
     if _is_crypto_symbol(symbol):
@@ -671,7 +674,7 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol
 
 def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[FeatureVector], str]:
     broker_symbol = config.symbol_research.broker_symbol.strip() or None
-    return _load_symbol_features_variant(config, data_symbol, config.polygon.multiplier, config.polygon.timespan, broker_symbol)
+    return _load_symbol_features_variant(config, data_symbol, config.market_data.multiplier, config.market_data.timespan, broker_symbol)
 
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
@@ -768,15 +771,13 @@ def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
 
 
 def _load_crypto_network_bars(config: SystemConfig, data_symbol: str, multiplier: int, timespan: str) -> tuple[list[MarketBar], str]:
-    from quant_system.integrations.polygon_data import PolygonError
-
     errors: list[str] = []
     try:
         bars = BinanceKlineClient(
             symbol=data_symbol,
             multiplier=multiplier,
             timespan=timespan,
-            history_days=config.polygon.history_days,
+            history_days=config.market_data.history_days,
         ).fetch_bars()
         return bars, "binance"
     except BinanceError as exc:
@@ -787,18 +788,18 @@ def _load_crypto_network_bars(config: SystemConfig, data_symbol: str, multiplier
             symbol=data_symbol,
             multiplier=multiplier,
             timespan=timespan,
-            history_days=config.polygon.history_days,
+            history_days=config.market_data.history_days,
         ).fetch_bars()
         return bars, "kraken"
     except KrakenError as exc:
         errors.append(str(exc))
 
-    raise PolygonError("; ".join(errors))
+    raise RuntimeError("; ".join(errors))
 
 
 def _cache_bar_limit(config: SystemConfig, multiplier: int, timespan: str) -> int:
     if timespan == "minute":
-        minutes = max(config.polygon.history_days * 24 * 60, multiplier)
+        minutes = max(config.market_data.history_days * 24 * 60, multiplier)
         return max(50_000, int(minutes / max(multiplier, 1)) + 512)
     return 50_000
 
@@ -807,7 +808,7 @@ def _mt5_bar_limit(config: SystemConfig, symbol: str, multiplier: int, timespan:
     if timespan != "minute":
         return 0
     trading_minutes_per_day = 24 * 60 if _uses_continuous_session_stream(symbol) else 8 * 60
-    estimated = int((config.polygon.history_days * trading_minutes_per_day) / max(multiplier, 1))
+    estimated = int((config.market_data.history_days * trading_minutes_per_day) / max(multiplier, 1))
     return max(2_500, estimated + 512)
 
 
@@ -897,16 +898,6 @@ def _load_symbol_features_variant(
     broker_symbol: str | None = None,
     profile_symbol: str | None = None,
 ) -> tuple[list[FeatureVector], str]:
-    try:
-        from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
-    except ModuleNotFoundError as exc:
-        PolygonDataClient = None  # type: ignore[assignment]
-        PolygonError = PolygonUnavailableError  # type: ignore[assignment]
-        polygon_import_error = exc
-    else:
-        polygon_import_error = None
-
-    config.polygon.symbol = data_symbol
     cache_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe = f"{multiplier}_{timespan}"
     scoped_timeframe = f"symbol_research_{_symbol_slug(data_symbol)}_{timeframe}"
@@ -937,7 +928,7 @@ def _load_symbol_features_variant(
             return _build_features_with_events(config, data_symbol, persisted), source
         return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
 
-    if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
+    if config.market_data.fetch_policy in {"cache_first", "cache_only"}:
         for cache_symbol in _cache_symbol_candidates(data_symbol):
             cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
@@ -950,7 +941,7 @@ def _load_symbol_features_variant(
                     aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                     if aggregated:
                         return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
-        if config.polygon.fetch_policy == "cache_only":
+        if config.market_data.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
 
     mt5_errors: list[str] = []
@@ -970,16 +961,10 @@ def _load_symbol_features_variant(
         if _is_crypto_symbol(data_symbol):
             bars, source = _load_crypto_network_bars(config, data_symbol, multiplier, timespan)
         else:
-            if PolygonDataClient is None:
-                raise PolygonUnavailableError(f"Polygon client unavailable: {polygon_import_error}")
-            variant_config = copy.deepcopy(config.polygon)
-            variant_config.symbol = data_symbol
-            variant_config.multiplier = multiplier
-            variant_config.timespan = timespan
-            variant_config.history_days = config.polygon.history_days
-            client = PolygonDataClient(variant_config)
-            bars = client.fetch_bars()
-            source = "polygon"
+            mt5_result = _try_mt5_fetch()
+            if mt5_result is None:
+                raise ExternalMarketDataUnavailableError(f"No MT5 broker fetch path available for {broker_symbol or data_symbol}")
+            return mt5_result
         if not _has_plausible_price_scale(data_symbol, bars):
             raise RuntimeError(f"Fetched implausible price scale for {data_symbol}; refusing to persist suspect bars.")
         try:
@@ -990,7 +975,7 @@ def _load_symbol_features_variant(
         if persisted:
             return _build_features_with_events(config, data_symbol, persisted), source
         return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
-    except (PolygonError, PolygonUnavailableError):
+    except (MT5Error, ExternalMarketDataUnavailableError):
         if source_preference not in {"broker_only", "external_only"} and broker_symbol:
             try:
                 mt5_result = _try_mt5_fetch()
@@ -1031,15 +1016,12 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
             )
         return features
     try:
-        from quant_system.integrations.polygon_events import fetch_stock_event_flags
+        from quant_system.integrations.stock_events import fetch_stock_event_flags
 
         event_flags = fetch_stock_event_flags(
-            config.polygon.api_key,
             data_symbol,
             start_day=bars[0].timestamp.date(),
             end_day=bars[-1].timestamp.date(),
-            max_retries=config.polygon.max_retries,
-            backoff_seconds=config.polygon.retry_backoff_seconds,
         )
     except RuntimeError as exc:
         _ = exc
@@ -1168,7 +1150,7 @@ def _build_symbol_feature_variants(
                 if len(filtered) < 50:
                     continue
                 variants[f"{timeframe_label}_{session_name}"] = filtered
-        resolved_source = "polygon" if "polygon" in data_sources else (data_sources[0] if data_sources else "unknown")
+        resolved_source = "mt5" if "mt5" in data_sources else ("duckdb_cache" if "duckdb_cache" in data_sources else (data_sources[0] if data_sources else "unknown"))
         return variants or {"default": []}, resolved_source, mode
 
     variants: dict[str, list[FeatureVector]] = {}
@@ -1193,7 +1175,7 @@ def _build_symbol_feature_variants(
                 continue
             variants[f"{timeframe_label}_{session_name}"] = filtered
 
-    resolved_source = "polygon" if "polygon" in data_sources else (data_sources[0] if data_sources else "unknown")
+    resolved_source = "mt5" if "mt5" in data_sources else ("duckdb_cache" if "duckdb_cache" in data_sources else (data_sources[0] if data_sources else "unknown"))
     return variants or {"default": []}, resolved_source, mode
 
 
@@ -2259,6 +2241,12 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
             ),
             CandidateSpec(
+                name="stock_event_open_drive_continuation",
+                description="Stock event-day continuation anchored to premarket and opening-drive structure",
+                agents=[StockEventOpenDriveContinuationAgent(), stock_event_risk, risk],
+                code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
+            ),
+            CandidateSpec(
                 name="stock_post_earnings_drift",
                 description="Stock post-earnings drift continuation after the open",
                 agents=[StockPostEarningsDriftAgent(), stock_event_risk, risk],
@@ -2275,6 +2263,18 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="Stock gap-and-go continuation after the open",
                 agents=[StockGapAndGoAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockGapAndGoAgent",
+            ),
+            CandidateSpec(
+                name="stock_gap_open_reclaim",
+                description="Stock gap continuation after reclaiming premarket structure",
+                agents=[StockGapOpenReclaimAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
+            ),
+            CandidateSpec(
+                name="stock_premarket_sweep_reversal",
+                description="Stock premarket sweep reversal after failed opening extension",
+                agents=[StockPremarketSweepReversalAgent(), stock_risk, risk],
+                code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
             ),
             CandidateSpec(
                 name="stock_power_hour_continuation",
@@ -2786,18 +2786,39 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
                 ),
                 CandidateSpec(
+                    name=f"{upper.lower()}_stock_event_open_drive_patient",
+                    description=f"{upper} event-day opening-drive continuation with patient exits",
+                    agents=[StockEventOpenDriveContinuationAgent(min_relative_volume=1.2, min_atr_proxy=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
+                    code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
+                ),
+                CandidateSpec(
                     name=f"{upper.lower()}_stock_gap_fade_selective",
                     description=f"{upper} selective gap fade with stricter extension filter",
-                    agents=[StockGapFadeAgent(min_gap_proxy=0.005, min_relative_volume=1.1), EventAwareRiskSentinelAgent(False), risk],
+                    agents=[StockGapFadeAgent(min_gap_proxy=0.0038, min_relative_volume=1.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapFadeAgent",
-                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 4, "max_holding_bars": 16},
+                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_gap_and_go_selective",
                     description=f"{upper} selective gap-and-go continuation with stricter opening filter",
-                    agents=[StockGapAndGoAgent(min_relative_volume=1.3, min_atr_proxy=0.004), EventAwareRiskSentinelAgent(False), risk],
+                    agents=[StockGapAndGoAgent(min_relative_volume=1.1, min_atr_proxy=0.0032, max_minutes_from_open=120.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapAndGoAgent",
-                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 5, "max_holding_bars": 18},
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_gap_open_reclaim_selective",
+                    description=f"{upper} selective gap reclaim continuation after premarket retake",
+                    agents=[StockGapOpenReclaimAgent(min_relative_volume=1.0, min_gap_pct=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
+                    execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
+                ),
+                CandidateSpec(
+                    name=f"{upper.lower()}_stock_premarket_sweep_reversal",
+                    description=f"{upper} premarket sweep reversal after failed gap extension",
+                    agents=[StockPremarketSweepReversalAgent(min_relative_volume=1.0, min_gap_pct=0.003), EventAwareRiskSentinelAgent(False), risk],
+                    code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
+                    execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
                 CandidateSpec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_patient",
@@ -5695,11 +5716,16 @@ def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], executio
     return path
 
 
-def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> list[str]:
+def run_symbol_research(
+    data_symbol: str,
+    broker_symbol: str | None = None,
+    *,
+    candidate_name_prefixes: tuple[str, ...] | None = None,
+) -> list[str]:
     config = SystemConfig()
     resolved = resolve_symbol_request(data_symbol, broker_symbol)
     config.symbol_research.broker_symbol = resolved.broker_symbol
-    config.polygon.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
+    config.market_data.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
     _configure_symbol_execution(config, resolved.profile_symbol, resolved.broker_symbol)
     feature_variants, data_source, effective_mode = _build_symbol_feature_variants(
         config,
@@ -5722,6 +5748,12 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     if not default_features:
         raise RuntimeError(f"No usable feature variants were generated for {resolved.profile_symbol}.")
     singles = _candidate_specs(config, resolved.profile_symbol)
+    if candidate_name_prefixes:
+        singles = [
+            spec
+            for spec in singles
+            if any(spec.name.startswith(prefix) for prefix in candidate_name_prefixes)
+        ]
     symbol_slug = _symbol_slug(resolved.profile_symbol)
     results: list[CandidateResult] = []
     explored_entry_exit_specs: list[CandidateSpec] = []
@@ -6195,7 +6227,7 @@ def run_symbol_research(data_symbol: str, broker_symbol: str | None = None) -> l
     lines.append(f"Execution validation: {execution_validation_summary}")
     if deployment_path is not None:
         lines.append(f"Live deployment: {deployment_path}")
-    lines.append(f"Research history days: {config.polygon.history_days}")
+    lines.append(f"Research history days: {config.market_data.history_days}")
     lines.append(f"Research mode: {effective_mode}")
     if config.symbol_research.mode == "auto":
         lines.append(

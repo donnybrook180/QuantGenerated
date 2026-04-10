@@ -1,24 +1,23 @@
-Artifact: msft_stock_news_momentum__15m_us__exit_fastfail_15m_us_symbol_candidate
-Closed trades: 97
-Realized pnl: -52.53
+Artifact: stock_news_momentum__15m_us__exit_fastfail_15m_us_symbol_candidate
+Closed trades: 73
+Realized pnl: -48.65
 
 By entry hour
-13: trades=44 pnl=-25.37 avg=-0.58 win_rate=9.09%
-14: trades=35 pnl=-18.97 avg=-0.54 win_rate=14.29%
-15: trades=6 pnl=-2.77 avg=-0.46 win_rate=33.33%
-19: trades=8 pnl=-2.65 avg=-0.33 win_rate=12.50%
-18: trades=2 pnl=-1.73 avg=-0.86 win_rate=0.00%
-17: trades=2 pnl=-1.04 avg=-0.52 win_rate=0.00%
+13: trades=27 pnl=-19.62 avg=-0.73 win_rate=0.00%
+14: trades=32 pnl=-19.01 avg=-0.59 win_rate=15.62%
+15: trades=6 pnl=-4.35 avg=-0.73 win_rate=16.67%
+19: trades=4 pnl=-2.66 avg=-0.67 win_rate=0.00%
+18: trades=3 pnl=-2.45 avg=-0.82 win_rate=0.00%
+17: trades=1 pnl=-0.56 avg=-0.56 win_rate=0.00%
 
 By entry setup
-stock_news_momentum: trades=97 pnl=-52.53 avg=-0.54 win_rate=12.37%
+stock_news_momentum: trades=73 pnl=-48.65 avg=-0.67 win_rate=8.22%
 
 By exit reason
-structure_exit: trades=41 pnl=-33.76 avg=-0.82 win_rate=0.00%
-time_stop: trades=19 pnl=-11.92 avg=-0.63 win_rate=0.00%
-stop_loss: trades=5 pnl=-4.80 avg=-0.96 win_rate=0.00%
-trailing_stop: trades=11 pnl=-4.61 avg=-0.42 win_rate=0.00%
-stale_breakout: trades=4 pnl=-2.01 avg=-0.50 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.70 avg=-0.70 win_rate=0.00%
-end_of_run: trades=1 pnl=-0.11 avg=-0.11 win_rate=0.00%
-take_profit: trades=15 pnl=5.39 avg=0.36 win_rate=80.00%
+structure_exit: trades=29 pnl=-25.60 avg=-0.88 win_rate=0.00%
+time_stop: trades=17 pnl=-11.14 avg=-0.66 win_rate=0.00%
+stop_loss: trades=9 pnl=-8.44 avg=-0.94 win_rate=0.00%
+trailing_stop: trades=9 pnl=-3.88 avg=-0.43 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.53 avg=-0.53 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.18 avg=-0.18 win_rate=0.00%
+take_profit: trades=7 pnl=1.12 avg=0.16 win_rate=85.71%

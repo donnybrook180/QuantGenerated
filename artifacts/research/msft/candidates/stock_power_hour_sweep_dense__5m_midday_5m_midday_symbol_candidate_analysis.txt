@@ -1,14 +1,16 @@
-Artifact: msft_stock_power_hour_sweep_dense__5m_midday_5m_midday_symbol_candidate
-Closed trades: 3
-Realized pnl: -1.23
+Artifact: stock_power_hour_sweep_dense__5m_midday_5m_midday_symbol_candidate
+Closed trades: 204
+Realized pnl: -120.80
 
 By entry hour
-17: trades=3 pnl=-1.23 avg=-0.41 win_rate=0.00%
+17: trades=204 pnl=-120.80 avg=-0.59 win_rate=2.45%
 
 By entry setup
-stock_power_hour_continuation: trades=3 pnl=-1.23 avg=-0.41 win_rate=0.00%
+stock_power_hour_continuation: trades=204 pnl=-120.80 avg=-0.59 win_rate=2.45%
 
 By exit reason
-stop_loss: trades=1 pnl=-0.63 avg=-0.63 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.55 avg=-0.55 win_rate=0.00%
-take_profit: trades=1 pnl=-0.04 avg=-0.04 win_rate=0.00%
+stop_loss: trades=73 pnl=-53.65 avg=-0.73 win_rate=0.00%
+stale_breakout: trades=47 pnl=-36.67 avg=-0.78 win_rate=0.00%
+trailing_stop: trades=37 pnl=-18.66 avg=-0.50 win_rate=0.00%
+take_profit: trades=45 pnl=-9.20 avg=-0.20 win_rate=11.11%
+time_stop: trades=2 pnl=-2.62 avg=-1.31 win_rate=0.00%

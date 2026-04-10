@@ -1,0 +1,50 @@
+{
+  "symbol": "US500",
+  "broker_symbol": "US500.cash",
+  "deployment_path": "artifacts\\deploy\\us500\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-10T12:25:00+00:00",
+    "symbol": "US500",
+    "regime_label": "event_risk",
+    "volatility_label": "event_risk",
+    "structure_label": "range",
+    "realized_vol_20": 0.009431383902743149,
+    "realized_vol_100": 0.004884907796386057,
+    "vol_ratio": 1.9307189195506735,
+    "vol_percentile": 1.0,
+    "atr_percent": 0.0005474522323971876,
+    "trend_strength": -0.0003228530176565547,
+    "range_efficiency": 0.1280991735537138,
+    "risk_multiplier": 0.0,
+    "block_new_entries": true,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "momentum__exit_trend__near_miss_patient",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-09T19:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::event_risk",
+      "magic_number": 2767351,
+      "regime_label": "event_risk",
+      "vol_percentile": 1.0,
+      "risk_multiplier": 0.0,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "specialist",
+      "base_allocation_weight": 0.35,
+      "effective_size_factor": 0.0,
+      "risk_budget_cash": 0.0,
+      "veto_reason": "regime"
+    }
+  ]
+}

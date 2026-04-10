@@ -1,6 +1,6 @@
 # QuantGenerated
 
-Personal multi-agent quant research trading system scaffold built around three isolated environments, now wired for Polygon historical data, DuckDB storage, Optuna optimization, and MT5 execution for FTMO-style workflows:
+Personal multi-agent quant research trading system scaffold built around three isolated environments, now wired for DuckDB storage, Optuna optimization, and MT5 execution for FTMO-style workflows:
 
 - `research`: feature engineering and alpha discovery
 - `optimization`: walk-forward validation and parameter search
@@ -73,17 +73,17 @@ Minder vaak gebruikte utility scripts staan in `tools/`, zodat de repo-root scho
 .\.venv\Scripts\python.exe main.py
 ```
 
-This fetches historical bars from Polygon, persists them in DuckDB, runs Optuna walk-forward tuning, and then runs a local paper-trading style execution simulation on the stored dataset.
+This loads historical bars from DuckDB cache or MT5, persists them in DuckDB, runs Optuna walk-forward tuning, and then runs a local paper-trading style execution simulation on the stored dataset.
 
-Batch runs now also add a small pause between profiles and retry Polygon requests with exponential backoff, so a single rate-limit event is less likely to kill the whole run.
+Batch runs add a small pause between profiles so multi-profile research remains stable.
 
 You can also control how research data is loaded:
 
-- `POLYGON_FETCH_POLICY=network_first`: default, try Polygon first and fall back to DuckDB cache on rate limits
-- `POLYGON_FETCH_POLICY=cache_first`: use DuckDB cache first, only hit Polygon if cache is missing
-- `POLYGON_FETCH_POLICY=cache_only`: never hit Polygon, fail if the cache is missing
+- `MARKET_DATA_FETCH_POLICY=network_first`: default, try MT5/broker fetch and fall back to DuckDB cache
+- `MARKET_DATA_FETCH_POLICY=cache_first`: use DuckDB cache first, only hit MT5 if cache is missing
+- `MARKET_DATA_FETCH_POLICY=cache_only`: never hit MT5, fail if the cache is missing
 
-For multi-symbol research on a rate-limited Polygon plan, `cache_first` is usually the right mode after you have seeded each symbol once.
+For multi-symbol research, `cache_first` is usually the right mode after you have seeded each symbol once.
 
 After each run, the app now also:
 
@@ -120,7 +120,7 @@ Daarna:
 .\.venv\Scripts\python.exe main_symbol_research.py
 ```
 
-Voor symbol research kun je nu ook generieke aliassen gebruiken. De app mappt die automatisch naar een bruikbare Polygon-proxy en broker-symbol:
+Voor symbol research kun je nu ook generieke aliassen gebruiken. De app mappt die automatisch naar een bruikbare data-symbol en broker-symbol:
 
 - `US500` -> data `SPY`, broker `US500.cash`
 - `US100` -> data `QQQ`, broker `US100.cash`
@@ -208,10 +208,10 @@ SYMBOL_RESEARCH_MODE=full
 Voor zware research blijft dit nuttig:
 
 ```powershell
-POLYGON_FETCH_POLICY=cache_first
+MARKET_DATA_FETCH_POLICY=cache_first
 ```
 
-zodat de volledige research zo veel mogelijk uit DuckDB-cache draait in plaats van Polygon opnieuw zwaar te belasten.
+zodat de volledige research zo veel mogelijk uit DuckDB-cache draait in plaats van opnieuw zwaar te belasten.
 
 Na zo'n research-run kun je de gepromote winnaars direct uitvoeren als symbol-level active set:
 
@@ -432,11 +432,10 @@ Of voor een specifiek profiel:
 Vul je keys en brokergegevens in in `.env`. De echte `.env` staat in `.gitignore`, dus je secrets blijven lokaal. Gebruik `.env.example` als referentie.
 
 ```powershell
-POLYGON_API_KEY=your_polygon_api_key_here
-POLYGON_DATA_SYMBOL=SPY
-POLYGON_TIMESPAN=minute
-POLYGON_MULTIPLIER=5
-POLYGON_HISTORY_DAYS=30
+MARKET_DATA_SYMBOL=SPY
+MARKET_DATA_TIMESPAN=minute
+MARKET_DATA_MULTIPLIER=5
+MARKET_DATA_HISTORY_DAYS=30
 ```
 
 ## Broker setup
@@ -457,7 +456,7 @@ Live order placement is disabled by default. Enable it only after paper validati
 
 Je configureert nu drie lagen expliciet in `.env`:
 
-- `POLYGON_DATA_SYMBOL` voor research/backtest data
+- `MARKET_DATA_SYMBOL` voor research/backtest data
 - `MT5_BROKER_SYMBOL` voor je echte FTMO/MT5 order routing
 - kosten- en drawdownparameters zoals `EXECUTION_COMMISSION_PER_UNIT`, `EXECUTION_SLIPPAGE_BPS`, `RISK_MAX_DAILY_LOSS_PCT` en `RISK_MAX_TOTAL_DRAWDOWN_PCT`
 
@@ -478,7 +477,7 @@ Er zijn nu drie profielstrategieën ingebouwd:
 - `xauusd_volatility`: `C:XAUUSD` data, `XAUUSD` broker, volatility breakout
 
 De actieve set kies je met `ACTIVE_STRATEGY_PROFILES` in `.env`.
-Als Polygon voor een profiel geen data teruggeeft, kun je het dataticker per profiel overriden met:
+Als een profiel geen bruikbare data teruggeeft, kun je het dataticker per profiel overriden met:
 
 - `US500_TREND_DATA_SYMBOL`
 - `US100_TREND_DATA_SYMBOL`

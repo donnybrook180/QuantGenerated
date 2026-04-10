@@ -1,3 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-04-23T18:10:00+00:00,2025-04-23T18:25:00+00:00,18,18,stock_power_hour_continuation,stop_loss,377.45548,375.95979,0.10000,-0.65710,0.50753,3,1.00000,{'hour_of_day': 18.0}
-MSFT,2025-06-17T19:40:00+00:00,2025-06-18T13:00:00+00:00,19,13,stock_power_hour_continuation,stale_breakout,477.96557,477.72444,0.10000,-0.53367,0.50956,16,1.00000,{'hour_of_day': 19.0}
+MSFT,2025-06-17T19:40:00+00:00,2025-06-17T20:10:00+00:00,19,20,stock_power_hour_continuation,stop_loss,478.32446,477.24563,0.10000,-0.61744,0.50956,6,1.00000,{'hour_of_day': 19.0}

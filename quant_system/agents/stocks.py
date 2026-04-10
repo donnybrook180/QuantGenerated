@@ -60,11 +60,16 @@ class StockTrendBreakoutAgent(Agent):
         momentum_5 = feature.values.get("momentum_5", 0.0)
         momentum_20 = feature.values.get("momentum_20", 0.0)
         atr_proxy = feature.values.get("atr_proxy", 0.0)
+        broke_premarket_high = feature.values.get("broke_premarket_high", 0.0) > 0.0
+        broke_premarket_low = feature.values.get("broke_premarket_low", 0.0) > 0.0
+        opening_drive_break_up = feature.values.get("opening_drive_break_up", 0.0) > 0.0
+        opening_drive_break_down = feature.values.get("opening_drive_break_down", 0.0) > 0.0
         if (
             fast > slow
             and momentum_5 >= self.min_momentum_5
             and momentum_20 >= self.min_momentum_20
             and atr_proxy >= self.min_atr_proxy
+            and (broke_premarket_high or opening_drive_break_up)
         ):
             return SignalEvent(
                 feature.timestamp,
@@ -79,6 +84,7 @@ class StockTrendBreakoutAgent(Agent):
             and momentum_5 <= -self.min_momentum_5
             and momentum_20 <= -self.min_momentum_20
             and atr_proxy >= self.min_atr_proxy
+            and (broke_premarket_low or opening_drive_break_down)
         ):
             return SignalEvent(
                 feature.timestamp,
@@ -109,11 +115,29 @@ class StockNewsMomentumAgent(Agent):
         atr_proxy = feature.values.get("atr_proxy", 0.0)
         momentum_5 = feature.values.get("momentum_5", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
+        first_pullback_long = feature.values.get("first_pullback_long", 0.0) > 0.0
+        first_pullback_short = feature.values.get("first_pullback_short", 0.0) > 0.0
+        open_vs_premarket_high_pct = feature.values.get("open_vs_premarket_high_pct", 0.0)
+        open_vs_premarket_low_pct = feature.values.get("open_vs_premarket_low_pct", 0.0)
+        broke_premarket_high = feature.values.get("broke_premarket_high", 0.0) > 0.0
+        broke_premarket_low = feature.values.get("broke_premarket_low", 0.0) > 0.0
+        opening_drive_break_up = feature.values.get("opening_drive_break_up", 0.0) > 0.0
+        opening_drive_break_down = feature.values.get("opening_drive_break_down", 0.0) > 0.0
         if rel_vol < self.min_relative_volume or atr_proxy < self.min_atr_proxy:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
-        if momentum_5 > 0 and trend_strength > 0:
+        if (
+            momentum_5 > 0
+            and trend_strength > 0
+            and (broke_premarket_high or opening_drive_break_up or first_pullback_long)
+            and open_vs_premarket_high_pct >= -0.01
+        ):
             side = Side.BUY
-        elif momentum_5 < 0 and trend_strength < 0:
+        elif (
+            momentum_5 < 0
+            and trend_strength < 0
+            and (broke_premarket_low or opening_drive_break_down or first_pullback_short)
+            and open_vs_premarket_low_pct <= 0.01
+        ):
             side = Side.SELL
         else:
             side = Side.FLAT
@@ -151,11 +175,24 @@ class StockPostEarningsDriftAgent(Agent):
         atr_proxy = feature.values.get("atr_proxy", 0.0)
         momentum_5 = feature.values.get("momentum_5", 0.0)
         momentum_20 = feature.values.get("momentum_20", 0.0)
+        first_pullback_long = feature.values.get("first_pullback_long", 0.0) > 0.0
+        first_pullback_short = feature.values.get("first_pullback_short", 0.0) > 0.0
+        opening_drive_return_pct = feature.values.get("opening_drive_return_pct", 0.0)
+        reclaimed_premarket_high = feature.values.get("reclaimed_premarket_high", 0.0) > 0.0
+        reclaimed_premarket_low = feature.values.get("reclaimed_premarket_low", 0.0) > 0.0
         if rel_vol < self.min_relative_volume or atr_proxy < 0.003:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
-        if momentum_5 > 0 and momentum_20 > 0:
+        if (
+            momentum_5 > 0
+            and momentum_20 > 0
+            and (first_pullback_long or reclaimed_premarket_high or opening_drive_return_pct > 0)
+        ):
             side = Side.BUY
-        elif momentum_5 < 0 and momentum_20 < 0:
+        elif (
+            momentum_5 < 0
+            and momentum_20 < 0
+            and (first_pullback_short or reclaimed_premarket_low or opening_drive_return_pct < 0)
+        ):
             side = Side.SELL
         else:
             side = Side.FLAT
@@ -188,11 +225,26 @@ class StockGapFadeAgent(Agent):
         z_score = feature.values.get("z_score_20", 0.0)
         momentum_5 = feature.values.get("momentum_5", 0.0)
         atr_proxy = feature.values.get("atr_proxy", 0.0)
+        opening_gap_pct = feature.values.get("opening_gap_pct", 0.0)
+        reclaimed_premarket_high = feature.values.get("reclaimed_premarket_high", 0.0) > 0.0
+        reclaimed_premarket_low = feature.values.get("reclaimed_premarket_low", 0.0) > 0.0
+        distance_to_opening_drive_high = feature.values.get("distance_to_opening_drive_high", 0.0)
+        distance_to_opening_drive_low = feature.values.get("distance_to_opening_drive_low", 0.0)
         if rel_vol < self.min_relative_volume or atr_proxy < self.min_gap_proxy:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
-        if z_score >= 2.0 and momentum_5 < 0:
+        if (
+            opening_gap_pct > 0.004
+            and z_score >= 1.5
+            and momentum_5 < 0
+            and (reclaimed_premarket_high or distance_to_opening_drive_high <= 0.003)
+        ):
             side = Side.SELL
-        elif z_score <= -2.0 and momentum_5 > 0:
+        elif (
+            opening_gap_pct < -0.004
+            and z_score <= -1.5
+            and momentum_5 > 0
+            and (reclaimed_premarket_low or distance_to_opening_drive_low >= -0.003)
+        ):
             side = Side.BUY
         else:
             side = Side.FLAT
@@ -236,11 +288,31 @@ class StockGapAndGoAgent(Agent):
         momentum_20 = feature.values.get("momentum_20", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
         atr_proxy = feature.values.get("atr_proxy", 0.0)
+        opening_gap_pct = feature.values.get("opening_gap_pct", 0.0)
+        premarket_range_pct = feature.values.get("premarket_range_pct", 0.0)
+        broke_premarket_high = feature.values.get("broke_premarket_high", 0.0) > 0.0
+        broke_premarket_low = feature.values.get("broke_premarket_low", 0.0) > 0.0
+        opening_drive_break_up = feature.values.get("opening_drive_break_up", 0.0) > 0.0
+        opening_drive_break_down = feature.values.get("opening_drive_break_down", 0.0) > 0.0
         if rel_vol < self.min_relative_volume or atr_proxy < self.min_atr_proxy:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
-        if momentum_5 >= self.min_momentum_5 and momentum_20 >= self.min_momentum_20 and trend_strength > 0:
+        if (
+            opening_gap_pct > 0.003
+            and premarket_range_pct >= 0.002
+            and momentum_5 >= self.min_momentum_5
+            and momentum_20 >= self.min_momentum_20
+            and trend_strength > 0
+            and (broke_premarket_high or opening_drive_break_up)
+        ):
             side = Side.BUY
-        elif momentum_5 <= -self.min_momentum_5 and momentum_20 <= -self.min_momentum_20 and trend_strength < 0:
+        elif (
+            opening_gap_pct < -0.003
+            and premarket_range_pct >= 0.002
+            and momentum_5 <= -self.min_momentum_5
+            and momentum_20 <= -self.min_momentum_20
+            and trend_strength < 0
+            and (broke_premarket_low or opening_drive_break_down)
+        ):
             side = Side.SELL
         else:
             side = Side.FLAT
@@ -279,11 +351,29 @@ class StockPowerHourContinuationAgent(Agent):
         momentum_5 = feature.values.get("momentum_5", 0.0)
         momentum_20 = feature.values.get("momentum_20", 0.0)
         trend_strength = feature.values.get("trend_strength", 0.0)
+        session_position = feature.values.get("session_position", 0.5)
+        vwap_distance = feature.values.get("vwap_distance", 0.0)
+        distance_to_premarket_high = feature.values.get("distance_to_premarket_high", 0.0)
+        distance_to_premarket_low = feature.values.get("distance_to_premarket_low", 0.0)
         if rel_vol < self.min_relative_volume:
             return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
-        if momentum_5 >= self.min_momentum_5 and momentum_20 >= self.min_momentum_20 and trend_strength > 0:
+        if (
+            momentum_5 >= self.min_momentum_5
+            and momentum_20 >= self.min_momentum_20
+            and trend_strength > 0
+            and session_position >= 0.6
+            and vwap_distance >= 0.0
+            and distance_to_premarket_high >= -0.01
+        ):
             side = Side.BUY
-        elif momentum_5 <= -self.min_momentum_5 and momentum_20 <= -self.min_momentum_20 and trend_strength < 0:
+        elif (
+            momentum_5 <= -self.min_momentum_5
+            and momentum_20 <= -self.min_momentum_20
+            and trend_strength < 0
+            and session_position <= 0.4
+            and vwap_distance <= 0.0
+            and distance_to_premarket_low <= 0.01
+        ):
             side = Side.SELL
         else:
             side = Side.FLAT
@@ -294,4 +384,165 @@ class StockPowerHourContinuationAgent(Agent):
             side,
             scaled_confidence(0.0, (abs(momentum_5), 140), (abs(momentum_20), 120), (rel_vol - 1.0, 50)),
             {"hour_of_day": float(hour)},
+        )
+
+
+class StockEventOpenDriveContinuationAgent(Agent):
+    name = "stock_event_open_drive_continuation"
+
+    def __init__(
+        self,
+        min_relative_volume: float = 1.3,
+        min_atr_proxy: float = 0.004,
+        max_minutes_from_open: float = 105.0,
+    ) -> None:
+        self.min_relative_volume = min_relative_volume
+        self.min_atr_proxy = min_atr_proxy
+        self.max_minutes_from_open = max_minutes_from_open
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        if feature.values.get("in_regular_session", 0.0) < 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        minutes_from_open = feature.values.get("minutes_from_open", -1.0)
+        if minutes_from_open < 5.0 or minutes_from_open > self.max_minutes_from_open:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if feature.values.get("event_blackout", 0.0) >= 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if (
+            feature.values.get("high_impact_event_day", 0.0) < 1.0
+            and feature.values.get("earnings_event_day", 0.0) < 1.0
+        ):
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        rel_vol = feature.values.get("relative_volume", 1.0)
+        atr_proxy = feature.values.get("atr_proxy", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        opening_drive_return_pct = feature.values.get("opening_drive_return_pct", 0.0)
+        first_pullback_long = feature.values.get("first_pullback_long", 0.0) > 0.0
+        first_pullback_short = feature.values.get("first_pullback_short", 0.0) > 0.0
+        reclaimed_premarket_high = feature.values.get("reclaimed_premarket_high", 0.0) > 0.0
+        reclaimed_premarket_low = feature.values.get("reclaimed_premarket_low", 0.0) > 0.0
+        opening_drive_break_up = feature.values.get("opening_drive_break_up", 0.0) > 0.0
+        opening_drive_break_down = feature.values.get("opening_drive_break_down", 0.0) > 0.0
+        if rel_vol < self.min_relative_volume or atr_proxy < self.min_atr_proxy:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if (
+            momentum_5 > 0
+            and momentum_20 > 0
+            and trend_strength > 0
+            and opening_drive_return_pct > 0
+            and (opening_drive_break_up or first_pullback_long or reclaimed_premarket_high)
+        ):
+            side = Side.BUY
+        elif (
+            momentum_5 < 0
+            and momentum_20 < 0
+            and trend_strength < 0
+            and opening_drive_return_pct < 0
+            and (opening_drive_break_down or first_pullback_short or reclaimed_premarket_low)
+        ):
+            side = Side.SELL
+        else:
+            side = Side.FLAT
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            scaled_confidence(0.0, (abs(momentum_5), 150), (abs(momentum_20), 140), (rel_vol - 1.0, 70)),
+            {"minutes_from_open": minutes_from_open},
+        )
+
+
+class StockGapOpenReclaimAgent(Agent):
+    name = "stock_gap_open_reclaim"
+
+    def __init__(
+        self,
+        min_relative_volume: float = 1.1,
+        min_gap_pct: float = 0.004,
+        max_minutes_from_open: float = 120.0,
+    ) -> None:
+        self.min_relative_volume = min_relative_volume
+        self.min_gap_pct = min_gap_pct
+        self.max_minutes_from_open = max_minutes_from_open
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        if feature.values.get("in_regular_session", 0.0) < 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        minutes_from_open = feature.values.get("minutes_from_open", -1.0)
+        if minutes_from_open < 5.0 or minutes_from_open > self.max_minutes_from_open:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if feature.values.get("event_blackout", 0.0) >= 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        rel_vol = feature.values.get("relative_volume", 1.0)
+        opening_gap_pct = feature.values.get("opening_gap_pct", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        premarket_range_pct = feature.values.get("premarket_range_pct", 0.0)
+        first_pullback_long = feature.values.get("first_pullback_long", 0.0) > 0.0
+        first_pullback_short = feature.values.get("first_pullback_short", 0.0) > 0.0
+        reclaimed_premarket_high = feature.values.get("reclaimed_premarket_high", 0.0) > 0.0
+        reclaimed_premarket_low = feature.values.get("reclaimed_premarket_low", 0.0) > 0.0
+        if rel_vol < self.min_relative_volume or abs(opening_gap_pct) < self.min_gap_pct or premarket_range_pct < 0.0015:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if opening_gap_pct > 0 and momentum_5 > 0 and trend_strength > 0 and (reclaimed_premarket_high or first_pullback_long):
+            side = Side.BUY
+        elif opening_gap_pct < 0 and momentum_5 < 0 and trend_strength < 0 and (reclaimed_premarket_low or first_pullback_short):
+            side = Side.SELL
+        else:
+            side = Side.FLAT
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            scaled_confidence(0.0, (abs(opening_gap_pct), 220), (rel_vol - 1.0, 65), (premarket_range_pct, 150)),
+            {"minutes_from_open": minutes_from_open},
+        )
+
+
+class StockPremarketSweepReversalAgent(Agent):
+    name = "stock_premarket_sweep_reversal"
+
+    def __init__(
+        self,
+        min_relative_volume: float = 1.05,
+        min_gap_pct: float = 0.0035,
+        max_minutes_from_open: float = 90.0,
+    ) -> None:
+        self.min_relative_volume = min_relative_volume
+        self.min_gap_pct = min_gap_pct
+        self.max_minutes_from_open = max_minutes_from_open
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        if feature.values.get("in_regular_session", 0.0) < 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        minutes_from_open = feature.values.get("minutes_from_open", -1.0)
+        if minutes_from_open < 10.0 or minutes_from_open > self.max_minutes_from_open:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if feature.values.get("event_blackout", 0.0) >= 1.0:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        rel_vol = feature.values.get("relative_volume", 1.0)
+        opening_gap_pct = feature.values.get("opening_gap_pct", 0.0)
+        z_score = feature.values.get("z_score_20", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        reclaimed_premarket_high = feature.values.get("reclaimed_premarket_high", 0.0) > 0.0
+        reclaimed_premarket_low = feature.values.get("reclaimed_premarket_low", 0.0) > 0.0
+        if rel_vol < self.min_relative_volume or abs(opening_gap_pct) < self.min_gap_pct:
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+        if opening_gap_pct > 0 and z_score >= 1.2 and momentum_5 < 0 and reclaimed_premarket_high:
+            side = Side.SELL
+        elif opening_gap_pct < 0 and z_score <= -1.2 and momentum_5 > 0 and reclaimed_premarket_low:
+            side = Side.BUY
+        else:
+            side = Side.FLAT
+        return SignalEvent(
+            feature.timestamp,
+            self.name,
+            feature.symbol,
+            side,
+            scaled_confidence(0.0, (abs(z_score), 40), (abs(opening_gap_pct), 220), (rel_vol - 1.0, 60)),
+            {"minutes_from_open": minutes_from_open},
         )

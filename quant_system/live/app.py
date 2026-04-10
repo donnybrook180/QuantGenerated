@@ -96,6 +96,7 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
                 f"portfolio={action.portfolio_weight:.2f} "
                 f"base_alloc={action.base_allocation_weight:.2f} "
                 f"size_factor={action.effective_size_factor:.3f} "
+                f"risk_budget={action.risk_budget_cash:.2f} "
                 f"tier={action.promotion_tier} "
                 f"score={action.allocator_score:.2f} magic={action.magic_number}"
             )

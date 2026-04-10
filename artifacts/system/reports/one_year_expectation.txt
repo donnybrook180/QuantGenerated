@@ -1,9 +1,12 @@
 One-Year Live Account Expectation
-Date: 2026-04-09
+Date: 2026-04-10
 Account size: EUR 100,000
 
 Purpose
-This is a practical scenario note for the current live stack after the switch from symbol-level portfolio budgeting to agent-first live sizing.
+This is a practical scenario note for the current live stack after:
+- risk-based live sizing
+- and removing USDJPY, US100, and US500 from live trading
+
 It is not a promise.
 
 Current live universe
@@ -12,93 +15,97 @@ Current live universe
 - EURUSD
 - GBPUSD
 - JP225
-- US100
-- US500
-- USDJPY
 - XAUUSD
 
-Important change versus the previous estimate
-The previous estimate assumed symbol-level portfolio weights that heavily diluted position sizes as more symbols were added.
-That is no longer how live sizing works.
+Current live sizing assumption
+- Base risk per trade is 1.5% of account equity when effective strategy weight = 1.0.
+- At effective strategy weight 0.5, risk per trade is 0.75%.
+- MT5 order size is derived from:
+  - account equity
+  - strategy effective weight
+  - ATR-based stop distance
 
-Current live sizing logic
-- Each live strategy now effectively starts at full portfolio weight in the live loop.
-- Reduced-risk behavior now comes mainly from the strategy itself:
-  - base_allocation_weight
-  - max_risk_multiplier
-  - regime gating
-  - symbol-level side allocation when multiple strategies compete inside one symbol
+What changed versus the previous estimate
+The previous estimate still included three symbols you did not trust:
+- USDJPY
+- US100
+- US500
 
-What this means
-- More symbols no longer automatically make every other symbol tiny.
-- Activity and gross exposure can now be materially higher than in the old estimate.
-- This raises both upside and downside.
+Those are now out of live.
 
-Key evidence used
+This improves the live book in two ways:
+- less weak or long-underwater exposure
+- lower correlation and lower chance that fragile reduced-risk sets still drag the account
+
+Current deployment quality snapshot
+Stronger / cleaner:
+- EURUSD
+- XAUUSD
+- BTC
+- ETH
+
+Still more cautious:
+- GBPUSD
+- JP225
+
+Interpretation
+The live book is now smaller, but cleaner.
+That should reduce some downside tail risk from weak symbols, while still leaving enough activity through forex, metals, and crypto.
+
+The trade-off is:
+- less diversification by count
+- but better average quality per live symbol
+
+Evidence used
 1. Portfolio forward allocator backtest
    Source: artifacts/system/reports/portfolio_allocator_forward_backtest.txt
-   The historical forward allocator test is still essentially flat.
-   However, it is now less representative because live is no longer using symbol-level portfolio dilution in the same way.
+   Historical forward evidence is still essentially flat, so confidence remains limited.
 
 2. Fill-aware allocator backtest
    Source: artifacts/system/reports/portfolio_allocator_fill_backtest.txt
-   Still no MT5 fills were available, so there is still no hard broker-executed performance history for the current live stack.
+   Still no meaningful MT5 fill history for the current live configuration.
 
 3. Current deployment quality
-   Stronger / broader:
-   - USDJPY
-   - BTC
-   - ETH
-   - EURUSD
-   - XAUUSD
-
-   Narrow / fragile / reduced-risk:
-   - US100
-   - US500
-   - GBPUSD
-   - JP225
-
-Interpretation
-The system is now closer to the intended design:
-- treat strategies as separate opportunities
-- only reduce risk when the specific strategy or regime calls for it
-
-That is a better match for your stated goal.
-But it also means the old near-flat estimate is too conservative on activity, and too narrow on risk.
+   The weakest discretionary exclusions are now removed from the live book.
 
 Scenario estimate for 1 year
 Pessimistic but realistic:
-- Ending equity: EUR 70,000 to EUR 90,000
-- Meaning: higher activity reveals that some current reduced-risk or fragile deployments still have weak equity paths after costs and slippage.
+- Ending equity: EUR 65,000 to EUR 88,000
+- Meaning: even the cleaner live set underperforms, and 1.5% sizing still makes drawdowns meaningful.
 
 Base case:
-- Ending equity: EUR 90,000 to EUR 115,000
-- Meaning: stronger symbols contribute enough to keep the book around flat to moderately positive, but weaker sets still create drag.
+- Ending equity: EUR 90,000 to EUR 125,000
+- Meaning: stronger symbols do enough to keep the book around flat to moderately profitable, while the remaining weaker names stay contained.
 
 Optimistic but still defensible:
-- Ending equity: EUR 120,000 to EUR 145,000
-- Meaning: the stronger regime-aware strategies carry the book, reduced-risk strategies stay contained, and live execution quality is decent.
+- Ending equity: EUR 130,000 to EUR 175,000
+- Meaning: EURUSD, XAUUSD, BTC, and ETH carry the account, and the smaller remaining names do not materially hurt.
 
 Point estimate
-- EUR 106,000
+- EUR 108,000
 
-Why the range is now wider
-- The bot can actually do more now; it is no longer being flattened by symbol-level portfolio weights.
-- That increases the chance of both meaningful gains and meaningful losses.
-- There is still no fill-based proof for the current live sizing regime.
+Why this is better than the previous estimate
+- You removed symbols you already judged as not good enough.
+- That is usually better than hoping sizing or reduced-risk logic will save weak edges.
 
-What would make this estimate move up materially
-- Real MT5 fills accumulate and the fill-aware backtest becomes clearly positive.
-- USDJPY, BTC, ETH, EURUSD, and XAUUSD continue to show clean realized live PnL.
-- Reduced-risk symbols either improve or stay small enough not to drag the book.
+Why this is still not a high-confidence bullish forecast
+- The live sizing is still meaningful at 1.5% risk per full-weight trade.
+- Fill-based truth is still missing.
+- GBPUSD and JP225 are not in the same quality tier as EURUSD or XAUUSD.
 
-What would make this estimate move down
-- Execution/slippage is materially worse than research assumes.
-- Reduced-risk symbols still fire often enough to hurt but not often enough to help.
-- Correlated strategies across symbols all underperform in the same period.
+What would move this estimate up
+- Real MT5 fills show that EURUSD, XAUUSD, BTC, and ETH hold up in practice.
+- GBPUSD and JP225 remain small contributors or improve.
+- Slippage remains contained.
+
+What would move this estimate down
+- Crypto contributes more volatility than expected.
+- Live execution quality is worse than research assumes.
+- The smaller live universe turns out to be more correlated than expected in stress periods.
 
 Bottom line
-Under the new live sizing logic, expecting "almost nothing happens" is no longer the right model.
-The current best estimate is now:
-- not a guaranteed strong profit
-- but a real chance of moderate upside, with clearly higher downside risk than the old estimate implied.
+Removing USDJPY, US100, and US500 improves the quality of the live book.
+It does not remove risk, but it does make the one-year outlook cleaner:
+- still real downside
+- still no proof yet
+- but a slightly better expected outcome than before

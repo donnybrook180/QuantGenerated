@@ -105,6 +105,16 @@ def _effective_risk_multiplier(snapshot: RegimeSnapshot, strategy: DeploymentStr
     return multiplier
 
 
+def _estimated_stop_distance(strategy_config: SystemConfig, latest_feature, reference_price: float) -> float:
+    if latest_feature is None:
+        return 0.0
+    atr_proxy = float(latest_feature.values.get("atr_proxy", 0.0) or 0.0)
+    stop_multiple = float(strategy_config.execution.stop_loss_atr_multiple or 0.0)
+    if atr_proxy <= 0.0 or stop_multiple <= 0.0 or reference_price <= 0.0:
+        return 0.0
+    return reference_price * atr_proxy * stop_multiple
+
+
 def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: DeploymentStrategy, snapshot: RegimeSnapshot) -> bool:
     return (
         (deployment.block_new_entries_in_event_risk and snapshot.regime_label == "event_risk")
@@ -149,6 +159,7 @@ class StrategyAction:
     promotion_tier: str = "core"
     base_allocation_weight: float = 1.0
     effective_size_factor: float = 0.0
+    risk_budget_cash: float = 0.0
     veto_reason: str = ""
 
 
@@ -173,6 +184,7 @@ class EvaluatedStrategy:
     allocator_score: float
     allocation_fraction: float = 0.0
     veto_reason: str = ""
+    latest_feature: object | None = None
 
 
 class MT5LiveExecutor:
@@ -204,7 +216,7 @@ class MT5LiveExecutor:
 
     def _evaluate_strategy(
         self, client: MT5Client, strategy: DeploymentStrategy
-    ) -> tuple[Side, float, datetime | None, RegimeSnapshot, str]:
+    ) -> tuple[Side, float, datetime | None, RegimeSnapshot, str, object | None]:
         from quant_system.live_support import build_features_with_events
 
         strategy_config = self._build_strategy_config(strategy)
@@ -233,7 +245,7 @@ class MT5LiveExecutor:
             last_confidence = context.confidence
             last_timestamp = feature.timestamp
             last_veto_reason = ""
-        return last_side, last_confidence, last_timestamp, snapshot, last_veto_reason
+        return last_side, last_confidence, last_timestamp, snapshot, last_veto_reason, latest_feature
 
     def _allocate_symbol_exposure(self, evaluated: list[EvaluatedStrategy]) -> None:
         buy_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.BUY)
@@ -281,6 +293,8 @@ class MT5LiveExecutor:
         snapshot: RegimeSnapshot,
         allocation_fraction: float,
         allocator_score: float,
+        account_equity: float,
+        latest_feature,
         should_skip_duplicate: Callable[[StrategyAction], bool] | None = None,
     ) -> StrategyAction:
         magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
@@ -304,6 +318,7 @@ class MT5LiveExecutor:
             portfolio_weight=self._strategy_portfolio_weight(strategy),
             promotion_tier=strategy.promotion_tier,
             base_allocation_weight=strategy.base_allocation_weight,
+            risk_budget_cash=0.0,
             veto_reason="",
         )
         if signal_side == Side.FLAT:
@@ -313,17 +328,28 @@ class MT5LiveExecutor:
             candidate_action.intended_action = f"regime_blocked::{snapshot.regime_label}"
             return candidate_action
 
-        order_size = (
-            self._build_strategy_config(strategy).execution.order_size
-            * candidate_action.portfolio_weight
-            * allocation_fraction
-            * candidate_action.risk_multiplier
-        )
         candidate_action.effective_size_factor = (
             candidate_action.portfolio_weight
             * allocation_fraction
             * candidate_action.risk_multiplier
         )
+        strategy_config = self._build_strategy_config(strategy)
+        candidate_action.risk_budget_cash = (
+            account_equity
+            * max(strategy_config.execution.risk_per_trade_pct, 0.0)
+            * candidate_action.effective_size_factor
+        )
+        market_snapshot = client.market_snapshot()
+        reference_price = market_snapshot.ask if desired_side == Side.BUY else market_snapshot.bid
+        stop_distance = _estimated_stop_distance(strategy_config, latest_feature, reference_price)
+        order_size = 0.0
+        if candidate_action.risk_budget_cash > 0.0 and stop_distance > 0.0 and strategy_config.execution.contract_size > 0.0:
+            order_size = candidate_action.risk_budget_cash / (stop_distance * strategy_config.execution.contract_size)
+        else:
+            order_size = (
+                strategy_config.execution.order_size
+                * candidate_action.effective_size_factor
+            )
         if order_size <= 0.0:
             candidate_action.intended_action = "skip_zero_size"
             return candidate_action
@@ -397,6 +423,7 @@ class MT5LiveExecutor:
         try:
             bootstrap_client = _client_for_strategy(self.deployment.strategies[0])
             account_mode_info = bootstrap_client.account_mode_info()
+            account_snapshot = bootstrap_client.account_snapshot()
             if (
                 account_mode_info is not None
                 and not account_mode_info.strategy_isolation_supported
@@ -434,7 +461,7 @@ class MT5LiveExecutor:
 
             for strategy in self.deployment.strategies:
                 client = _client_for_strategy(strategy)
-                signal_side, confidence, signal_timestamp, snapshot, veto_reason = self._evaluate_strategy(client, strategy)
+                signal_side, confidence, signal_timestamp, snapshot, veto_reason, latest_feature = self._evaluate_strategy(client, strategy)
                 if regime_snapshot is None:
                     regime_snapshot = snapshot
                 score = 0.0 if _is_strategy_regime_blocked(self.deployment, strategy, snapshot) else _allocator_score(
@@ -449,6 +476,7 @@ class MT5LiveExecutor:
                         snapshot=snapshot,
                         allocator_score=score,
                         veto_reason=veto_reason,
+                        latest_feature=latest_feature,
                     )
                 )
 
@@ -477,6 +505,7 @@ class MT5LiveExecutor:
                             promotion_tier=item.strategy.promotion_tier,
                             base_allocation_weight=item.strategy.base_allocation_weight,
                             effective_size_factor=0.0,
+                            risk_budget_cash=0.0,
                             veto_reason=item.veto_reason,
                         )
                     )
@@ -490,6 +519,8 @@ class MT5LiveExecutor:
                     item.snapshot,
                     item.allocation_fraction if item.allocation_fraction > 0.0 else item.strategy.allocation_weight,
                     item.allocator_score,
+                    account_snapshot.equity,
+                    item.latest_feature,
                     should_skip_duplicate,
                 )
                 action.veto_reason = item.veto_reason

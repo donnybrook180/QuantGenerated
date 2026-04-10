@@ -57,6 +57,7 @@ class ExecutionConfig:
     overnight_cost_per_lot_day: float = field(default_factory=lambda: float(os.getenv("EXECUTION_OVERNIGHT_COST_PER_LOT_DAY", "0.0")))
     live_trading_enabled: bool = field(default_factory=lambda: os.getenv("LIVE_TRADING_ENABLED", "false").lower() == "true")
     order_size: float = field(default_factory=lambda: float(os.getenv("EXECUTION_ORDER_SIZE", "0.1")))
+    risk_per_trade_pct: float = field(default_factory=lambda: float(os.getenv("EXECUTION_RISK_PER_TRADE_PCT", "0.015")))
     min_bars_between_trades: int = field(default_factory=lambda: int(os.getenv("EXECUTION_MIN_BARS_BETWEEN_TRADES", "8")))
     max_holding_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_MAX_HOLDING_BARS", "24")))
     stop_loss_atr_multiple: float = field(default_factory=lambda: float(os.getenv("EXECUTION_STOP_LOSS_ATR_MULTIPLE", "1.2")))

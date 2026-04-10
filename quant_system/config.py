@@ -43,7 +43,7 @@ class HeartbeatConfig:
 
 @dataclass(slots=True)
 class ExecutionConfig:
-    symbol: str = field(default_factory=lambda: os.getenv("POLYGON_DATA_SYMBOL", "SPY"))
+    symbol: str = field(default_factory=lambda: os.getenv("MARKET_DATA_SYMBOL", "SPY"))
     initial_cash: float = field(default_factory=lambda: float(os.getenv("ACCOUNT_INITIAL_CASH", "100000")))
     bar_interval_seconds: float = 0.0
     fee_bps: float = field(default_factory=lambda: float(os.getenv("EXECUTION_FEE_BPS", "1.0")))
@@ -117,9 +117,9 @@ class MT5Config:
 @dataclass(slots=True)
 class InstrumentConfig:
     profile_name: str = field(default_factory=lambda: os.getenv("INSTRUMENT_PROFILE", "ftmo_us_equities"))
-    data_symbol: str = field(default_factory=lambda: os.getenv("POLYGON_DATA_SYMBOL", "SPY"))
+    data_symbol: str = field(default_factory=lambda: os.getenv("MARKET_DATA_SYMBOL", "SPY"))
     broker_symbol: str = field(default_factory=lambda: os.getenv("MT5_BROKER_SYMBOL", "SPY"))
-    timeframe_label: str = field(default_factory=lambda: f"{os.getenv('POLYGON_MULTIPLIER', '5')}_{os.getenv('POLYGON_TIMESPAN', 'minute')}")
+    timeframe_label: str = field(default_factory=lambda: f"{os.getenv('MARKET_DATA_MULTIPLIER', '5')}_{os.getenv('MARKET_DATA_TIMESPAN', 'minute')}")
     active_profiles: tuple[str, ...] = field(
         default_factory=lambda: tuple(
             part.strip() for part in os.getenv("ACTIVE_STRATEGY_PROFILES", "eurusd").split(",") if part.strip()
@@ -130,7 +130,7 @@ class InstrumentConfig:
 @dataclass(slots=True)
 class SymbolResearchConfig:
     symbol: str = field(
-        default_factory=lambda: os.getenv("SYMBOL_RESEARCH_SYMBOL") or os.getenv("POLYGON_DATA_SYMBOL", "SPY")
+        default_factory=lambda: os.getenv("SYMBOL_RESEARCH_SYMBOL") or os.getenv("MARKET_DATA_SYMBOL", "SPY")
     )
     broker_symbol: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_BROKER_SYMBOL", ""))
     history_days: int = field(default_factory=lambda: int(os.getenv("SYMBOL_RESEARCH_HISTORY_DAYS", "180")))
@@ -139,16 +139,15 @@ class SymbolResearchConfig:
 
 
 @dataclass(slots=True)
-class PolygonConfig:
-    api_key: str | None = field(default_factory=lambda: os.getenv("POLYGON_API_KEY"))
-    symbol: str = field(default_factory=lambda: os.getenv("POLYGON_DATA_SYMBOL", "SPY"))
-    timespan: str = field(default_factory=lambda: os.getenv("POLYGON_TIMESPAN", "minute"))
-    multiplier: int = field(default_factory=lambda: int(os.getenv("POLYGON_MULTIPLIER", "5")))
-    history_days: int = field(default_factory=lambda: int(os.getenv("POLYGON_HISTORY_DAYS", "30")))
-    adjusted: bool = field(default_factory=lambda: os.getenv("POLYGON_ADJUSTED", "true").lower() == "true")
-    fetch_policy: str = field(default_factory=lambda: os.getenv("POLYGON_FETCH_POLICY", "network_first").lower())
-    max_retries: int = field(default_factory=lambda: int(os.getenv("POLYGON_MAX_RETRIES", "4")))
-    retry_backoff_seconds: float = field(default_factory=lambda: float(os.getenv("POLYGON_RETRY_BACKOFF_SECONDS", "2.0")))
+class MarketDataConfig:
+    symbol: str = field(default_factory=lambda: os.getenv("MARKET_DATA_SYMBOL", "SPY"))
+    timespan: str = field(default_factory=lambda: os.getenv("MARKET_DATA_TIMESPAN", "minute"))
+    multiplier: int = field(default_factory=lambda: int(os.getenv("MARKET_DATA_MULTIPLIER", "5")))
+    history_days: int = field(default_factory=lambda: int(os.getenv("MARKET_DATA_HISTORY_DAYS", "30")))
+    adjusted: bool = field(default_factory=lambda: os.getenv("MARKET_DATA_ADJUSTED", "true").lower() == "true")
+    fetch_policy: str = field(default_factory=lambda: os.getenv("MARKET_DATA_FETCH_POLICY", "network_first").lower())
+    max_retries: int = field(default_factory=lambda: int(os.getenv("MARKET_DATA_MAX_RETRIES", "4")))
+    retry_backoff_seconds: float = field(default_factory=lambda: float(os.getenv("MARKET_DATA_RETRY_BACKOFF_SECONDS", "2.0")))
     profile_pause_seconds: float = field(default_factory=lambda: float(os.getenv("PROFILE_PAUSE_SECONDS", "1.5")))
 
 
@@ -251,7 +250,7 @@ class SystemConfig:
     agents: AgentConfig = field(default_factory=AgentConfig)
     optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
     mt5: MT5Config = field(default_factory=MT5Config)
-    polygon: PolygonConfig = field(default_factory=PolygonConfig)
+    market_data: MarketDataConfig = field(default_factory=MarketDataConfig)
     macro_calendar: MacroCalendarConfig = field(default_factory=MacroCalendarConfig)
     instrument: InstrumentConfig = field(default_factory=InstrumentConfig)
     symbol_research: SymbolResearchConfig = field(default_factory=SymbolResearchConfig)

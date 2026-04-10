@@ -23,7 +23,7 @@ def main() -> int:
 
     resolved = resolve_symbol_request(requested_symbol, broker_symbol)
     config.symbol_research.broker_symbol = resolved.broker_symbol
-    config.polygon.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
+    config.market_data.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
     timeframe_specs, _, _ = _research_variant_plan(resolved.profile_symbol, "full")
     lines = [
         f"Requested symbol: {resolved.requested_symbol}",

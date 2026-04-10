@@ -4,7 +4,7 @@ from collections import deque
 from datetime import date
 import math
 
-from quant_system.integrations.polygon_events import DailyEventFlags
+from quant_system.integrations.stock_events import DailyEventFlags
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.symbols import is_crypto_symbol, is_forex_symbol, is_index_symbol, is_metal_symbol
 

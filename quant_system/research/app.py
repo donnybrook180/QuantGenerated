@@ -63,7 +63,7 @@ def run_symbol_execute_app(requested_symbol: str) -> list[str]:
         return [f"No executable candidates selected for {profile_name}."]
 
     _configure_symbol_execution(config, resolved.profile_symbol)
-    config.polygon.symbol = str(research_run["data_symbol"])
+    config.market_data.symbol = str(research_run["data_symbol"])
     config.mt5.symbol = str(research_run["broker_symbol"])
     result, data_source, execution_variant_label = _run_candidate_bundle(
         config,

@@ -1,2 +1,13 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+MSFT,2025-04-08T14:00:00+00:00,2025-04-08T14:45:00+00:00,14,14,stock_gap_open_reclaim,stop_loss,373.31962,369.01222,0.10000,-0.93816,0.50742,3,1.00000,{'minutes_from_open': 30.0}
+MSFT,2025-04-22T14:45:00+00:00,2025-04-22T16:30:00+00:00,14,16,stock_gap_open_reclaim,stop_loss,365.04530,360.16684,0.10000,-0.99510,0.50725,7,1.00000,{'minutes_from_open': 75.0}
 MSFT,2025-04-23T13:45:00+00:00,2025-04-23T15:30:00+00:00,13,15,stock_gap_open_reclaim,stop_loss,379.45282,375.60877,0.10000,-0.89196,0.50755,7,1.00000,{'minutes_from_open': 15.0}
+MSFT,2025-05-08T15:15:00+00:00,2025-05-08T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,440.32461,438.06611,0.10000,-0.73463,0.50878,5,1.00000,{'minutes_from_open': 105.0}
+MSFT,2025-05-13T14:00:00+00:00,2025-05-13T14:30:00+00:00,14,14,stock_gap_open_reclaim,stop_loss,450.45990,446.59166,0.10000,-0.89580,0.50897,2,1.00000,{'minutes_from_open': 30.0}
+MSFT,2025-05-27T13:45:00+00:00,2025-05-28T13:00:00+00:00,13,13,stock_gap_open_reclaim,take_profit,457.80374,461.80091,0.10000,-0.10948,0.50920,29,1.00000,{'minutes_from_open': 15.0}
+MSFT,2025-06-06T13:45:00+00:00,2025-06-06T16:15:00+00:00,13,16,stock_gap_open_reclaim,stop_loss,472.61147,469.71957,0.10000,-0.79861,0.50942,10,1.00000,{'minutes_from_open': 15.0}
+MSFT,2025-06-26T13:45:00+00:00,2025-06-26T15:15:00+00:00,13,15,stock_gap_open_reclaim,stop_loss,496.43392,492.78251,0.10000,-0.87503,0.50989,6,1.00000,{'minutes_from_open': 15.0}
+MSFT,2025-07-03T14:00:00+00:00,2025-07-03T16:30:00+00:00,14,16,stock_gap_open_reclaim,stop_loss,498.75623,493.82696,0.10000,-1.00285,0.50993,10,1.00000,{'minutes_from_open': 30.0}
+MSFT,2025-07-09T14:00:00+00:00,2025-07-09T15:00:00+00:00,14,15,stock_gap_open_reclaim,stop_loss,505.28354,500.75334,0.10000,-0.96308,0.51006,4,1.00000,{'minutes_from_open': 30.0}
+MSFT,2025-07-24T14:15:00+00:00,2025-07-24T16:30:00+00:00,14,16,stock_gap_open_reclaim,stop_loss,509.32065,506.88014,0.10000,-0.75421,0.51016,9,1.00000,{'minutes_from_open': 45.0}
+MSFT,2025-09-03T14:30:00+00:00,2025-09-03T18:30:00+00:00,14,18,stock_gap_open_reclaim,stale_breakout,506.56421,504.51138,0.10000,-0.71539,0.51011,16,1.00000,{'minutes_from_open': 60.0}

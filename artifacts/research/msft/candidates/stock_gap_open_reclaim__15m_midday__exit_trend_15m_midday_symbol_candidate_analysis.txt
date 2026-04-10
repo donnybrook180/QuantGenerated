@@ -1,9 +1,13 @@
 Artifact: stock_gap_open_reclaim__15m_midday__exit_trend_15m_midday_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 2
+Realized pnl: -1.42
 
 By entry hour
+15: trades=2 pnl=-1.42 avg=-0.71 win_rate=0.00%
 
 By entry setup
+stock_gap_open_reclaim: trades=2 pnl=-1.42 avg=-0.71 win_rate=0.00%
 
 By exit reason
+trailing_stop: trades=1 pnl=-0.73 avg=-0.73 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.69 avg=-0.69 win_rate=0.00%

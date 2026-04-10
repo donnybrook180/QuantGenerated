@@ -23,7 +23,6 @@ from quant_system.evaluation.report import build_ftmo_report
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine
 from quant_system.integrations.mt5 import MT5Broker, MT5Client
-from quant_system.integrations.polygon_data import PolygonDataClient, PolygonError
 from quant_system.logging_utils import configure_logging
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.optimization.walk_forward import SimpleParameterOptimizer
@@ -40,13 +39,48 @@ def _safe_artifact_stem(name: str, max_length: int = 140) -> str:
     trimmed = name[: max_length - 13].rstrip("_")
     return f"{trimmed}_{digest}"
 
-
-def _is_polygon_rate_limit(exc: Exception) -> bool:
-    return isinstance(exc, PolygonError) and "429" in str(exc)
-
-
 def _load_cached_bars(store: DuckDBMarketDataStore, symbol: str, timeframe: str) -> list[MarketBar]:
     return store.load_bars(symbol, timeframe, 50_000)
+
+
+def _timeframe_to_mt5_label(multiplier: int, timespan: str) -> str:
+    if timespan != "minute":
+        return "M5"
+    return {1: "M1", 5: "M5", 15: "M15", 30: "M30"}.get(multiplier, "M5")
+
+
+def _history_bar_count(history_days: int, multiplier: int, symbol: str) -> int:
+    if symbol.upper() in {"SPY", "QQQ", "AAPL", "AMD", "META", "MSFT", "NVDA", "TSLA"}:
+        trading_minutes_per_day = 390
+    else:
+        trading_minutes_per_day = 24 * 60
+    return max(int((history_days * trading_minutes_per_day) / max(multiplier, 1)), 500)
+
+
+def _load_mt5_bars(
+    config: SystemConfig,
+    data_symbol: str,
+    broker_symbol: str,
+    multiplier: int,
+    timespan: str,
+    scoped_timeframe: str,
+) -> tuple[list[MarketBar], str]:
+    mt5_config = copy.deepcopy(config.mt5)
+    mt5_config.symbol = broker_symbol
+    mt5_config.timeframe = _timeframe_to_mt5_label(multiplier, timespan)
+    mt5_config.history_bars = _history_bar_count(config.market_data.history_days, multiplier, data_symbol)
+    client = MT5Client(mt5_config)
+    client.initialize()
+    try:
+        bars = client.fetch_bars()
+    finally:
+        client.shutdown()
+    if not bars:
+        raise RuntimeError(f"No MT5 bars loaded for {broker_symbol}/{scoped_timeframe}.")
+    store = DuckDBMarketDataStore(config.mt5.database_path)
+    store.upsert_bars(bars, timeframe=scoped_timeframe, source="mt5")
+    persisted = store.load_bars(data_symbol, scoped_timeframe, len(bars))
+    return (persisted or bars), "mt5"
 
 
 def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) -> None:
@@ -119,51 +153,43 @@ def configure_profile_optimization(config: SystemConfig, profile: StrategyProfil
 
 
 def load_features(config: SystemConfig, profile: StrategyProfile) -> tuple[list[FeatureVector], str]:
-    config.polygon.symbol = profile.data_symbol
+    config.market_data.symbol = profile.data_symbol
     if profile.name == "ger40_orb":
-        config.polygon.history_days = max(config.polygon.history_days, 365)
+        config.market_data.history_days = max(config.market_data.history_days, 365)
     elif profile.name == "us500_trend":
-        config.polygon.history_days = max(config.polygon.history_days, 365)
+        config.market_data.history_days = max(config.market_data.history_days, 365)
     config.mt5.symbol = profile.broker_symbol
     store = DuckDBMarketDataStore(config.mt5.database_path)
-    timeframe = f"{config.polygon.multiplier}_{config.polygon.timespan}"
+    timeframe = f"{config.market_data.multiplier}_{config.market_data.timespan}"
     scoped_timeframe = f"{profile.name}_{timeframe}"
     persisted_bars: list[MarketBar] = []
-    data_source = "polygon"
-    if config.polygon.fetch_policy in {"cache_first", "cache_only"}:
-        persisted_bars = _load_cached_bars(store, config.polygon.symbol, scoped_timeframe)
+    data_source = "mt5"
+    if config.market_data.fetch_policy in {"cache_first", "cache_only"}:
+        persisted_bars = _load_cached_bars(store, config.market_data.symbol, scoped_timeframe)
         if persisted_bars:
             config.instrument.profile_name = profile.name
-            config.instrument.data_symbol = config.polygon.symbol
+            config.instrument.data_symbol = config.market_data.symbol
             config.instrument.broker_symbol = config.mt5.symbol
-            config.execution.symbol = config.polygon.symbol
+            config.execution.symbol = config.market_data.symbol
             return build_feature_library(persisted_bars), "duckdb_cache"
-        if config.polygon.fetch_policy == "cache_only":
-            raise RuntimeError(f"No cached DuckDB bars available for {config.polygon.symbol}/{scoped_timeframe}.")
-    try:
-        client = PolygonDataClient(config.polygon)
-        bars = client.fetch_bars()
-        if profile.name == "ger40_orb":
-            bars = scale_proxy_bars(bars, multiplier=500.0)
-        store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
-        persisted_bars = store.load_bars(config.polygon.symbol, scoped_timeframe, len(bars))
-    except PolygonError as exc:
-        if not _is_polygon_rate_limit(exc):
-            raise
-        LOGGER.warning(
-            "profile=%s hit Polygon rate limit; falling back to cached DuckDB bars for %s/%s",
-            profile.name,
-            config.polygon.symbol,
-            scoped_timeframe,
-        )
-        persisted_bars = store.load_bars(config.polygon.symbol, scoped_timeframe, 50_000)
-        data_source = "duckdb_cache"
+        if config.market_data.fetch_policy == "cache_only":
+            raise RuntimeError(f"No cached DuckDB bars available for {config.market_data.symbol}/{scoped_timeframe}.")
+    persisted_bars, data_source = _load_mt5_bars(
+        config,
+        profile.data_symbol,
+        profile.broker_symbol,
+        config.market_data.multiplier,
+        config.market_data.timespan,
+        scoped_timeframe,
+    )
+    if profile.name == "ger40_orb":
+        persisted_bars = scale_proxy_bars(persisted_bars, multiplier=500.0)
     if not persisted_bars:
-        raise RuntimeError("No Polygon bars were loaded into DuckDB.")
+        raise RuntimeError("No market data bars were loaded into DuckDB.")
     config.instrument.profile_name = profile.name
-    config.instrument.data_symbol = config.polygon.symbol
+    config.instrument.data_symbol = config.market_data.symbol
     config.instrument.broker_symbol = config.mt5.symbol
-    config.execution.symbol = config.polygon.symbol
+    config.execution.symbol = config.market_data.symbol
     return build_feature_library(persisted_bars), data_source
 
 
@@ -187,40 +213,32 @@ def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> tupl
         return load_features(config, profile)
 
     shadow_config = copy.deepcopy(config)
-    shadow_config.polygon.symbol = profile.data_symbol
-    shadow_config.polygon.timespan = "minute"
-    shadow_config.polygon.multiplier = 1
-    shadow_config.polygon.history_days = max(config.polygon.history_days, 45)
+    shadow_config.market_data.symbol = profile.data_symbol
+    shadow_config.market_data.timespan = "minute"
+    shadow_config.market_data.multiplier = 1
+    shadow_config.market_data.history_days = max(config.market_data.history_days, 45)
     shadow_config.mt5.symbol = profile.broker_symbol
     store = DuckDBMarketDataStore(shadow_config.mt5.database_path)
-    timeframe = f"{shadow_config.polygon.multiplier}_{shadow_config.polygon.timespan}"
+    timeframe = f"{shadow_config.market_data.multiplier}_{shadow_config.market_data.timespan}"
     scoped_timeframe = f"{profile.name}_shadow_{timeframe}"
     persisted_bars: list[MarketBar] = []
-    data_source = "polygon"
-    if shadow_config.polygon.fetch_policy in {"cache_first", "cache_only"}:
-        persisted_bars = _load_cached_bars(store, shadow_config.polygon.symbol, scoped_timeframe)
+    data_source = "mt5"
+    if shadow_config.market_data.fetch_policy in {"cache_first", "cache_only"}:
+        persisted_bars = _load_cached_bars(store, shadow_config.market_data.symbol, scoped_timeframe)
         if persisted_bars:
             return build_feature_library(persisted_bars), "duckdb_cache"
-        if shadow_config.polygon.fetch_policy == "cache_only":
-            raise RuntimeError(f"No cached DuckDB bars available for {shadow_config.polygon.symbol}/{scoped_timeframe}.")
-    try:
-        client = PolygonDataClient(shadow_config.polygon)
-        bars = client.fetch_bars()
-        store.upsert_bars(bars, timeframe=scoped_timeframe, source="polygon")
-        persisted_bars = store.load_bars(shadow_config.polygon.symbol, scoped_timeframe, len(bars))
-    except PolygonError as exc:
-        if not _is_polygon_rate_limit(exc):
-            raise
-        LOGGER.warning(
-            "profile=%s shadow load hit Polygon rate limit; falling back to cached DuckDB bars for %s/%s",
-            profile.name,
-            shadow_config.polygon.symbol,
-            scoped_timeframe,
-        )
-        persisted_bars = store.load_bars(shadow_config.polygon.symbol, scoped_timeframe, 50_000)
-        data_source = "duckdb_cache"
+        if shadow_config.market_data.fetch_policy == "cache_only":
+            raise RuntimeError(f"No cached DuckDB bars available for {shadow_config.market_data.symbol}/{scoped_timeframe}.")
+    persisted_bars, data_source = _load_mt5_bars(
+        shadow_config,
+        profile.data_symbol,
+        profile.broker_symbol,
+        shadow_config.market_data.multiplier,
+        shadow_config.market_data.timespan,
+        scoped_timeframe,
+    )
     if not persisted_bars:
-        raise RuntimeError("No shadow Polygon bars were loaded into DuckDB.")
+        raise RuntimeError("No shadow market data bars were loaded into DuckDB.")
     return build_feature_library(persisted_bars), data_source
 
 
@@ -745,8 +763,6 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Kill-switch triggered: {result.locked}",
         ]
     except Exception as exc:
-        if _is_polygon_rate_limit(exc):
-            LOGGER.error("profile=%s failed due to Polygon rate limit", profile.name)
         LOGGER.exception("profile=%s failed", profile.name)
         return [
             f"Profile: {profile.name}",
@@ -766,7 +782,7 @@ def main() -> int:
     for index, profile in enumerate(profiles):
         report_lines.append("")
         report_lines.extend(run_profile(config, profile))
-        if index < len(profiles) - 1 and config.polygon.profile_pause_seconds > 0:
-            time.sleep(config.polygon.profile_pause_seconds)
+        if index < len(profiles) - 1 and config.market_data.profile_pause_seconds > 0:
+            time.sleep(config.market_data.profile_pause_seconds)
     print("\n".join(report_lines))
     return 0

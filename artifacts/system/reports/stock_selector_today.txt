@@ -1,16 +1,16 @@
 Stock Selector Today
 
-1. NVDA score=5.55 source=duckdb_cache
-   broker=NVDA ts=2025-04-22T14:35:00+00:00
-   adv=$17,154,116,000 gap=2.05% rel_vol=0.87 atr=0.0030 mom20=0.0063
-   event_day=yes earnings_day=yes
-   reasons: gap=2.05%, earnings_day, adv=$17,154,116,000
-
-2. MSFT score=5.28 source=duckdb_cache
+1. MSFT score=5.03 source=duckdb_cache
    broker=MSFT ts=2025-04-23T15:45:00+00:00
    adv=$4,509,814,993 gap=2.54% rel_vol=0.79 atr=0.0043 mom20=-0.0111
    event_day=no earnings_day=no
    reasons: gap=2.54%, mom20=-0.0111, adv=$4,509,814,993
+
+2. NVDA score=4.30 source=duckdb_cache
+   broker=NVDA ts=2025-04-22T14:35:00+00:00
+   adv=$17,154,116,000 gap=2.05% rel_vol=0.87 atr=0.0030 mom20=0.0063
+   event_day=no earnings_day=no
+   reasons: gap=2.05%, adv=$17,154,116,000, mom20=0.0063
 
 3. TSLA score=3.14 source=duckdb_cache
    broker=TSLA ts=2025-10-22T14:40:00+00:00

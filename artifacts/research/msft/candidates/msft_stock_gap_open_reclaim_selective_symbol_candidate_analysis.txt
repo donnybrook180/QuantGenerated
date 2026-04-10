@@ -1,12 +1,17 @@
 Artifact: msft_stock_gap_open_reclaim_selective_symbol_candidate
-Closed trades: 1
-Realized pnl: -0.57
+Closed trades: 17
+Realized pnl: -11.05
 
 By entry hour
-13: trades=1 pnl=-0.57 avg=-0.57 win_rate=0.00%
+13: trades=12 pnl=-7.08 avg=-0.59 win_rate=0.00%
+15: trades=4 pnl=-3.28 avg=-0.82 win_rate=0.00%
+14: trades=1 pnl=-0.70 avg=-0.70 win_rate=0.00%
 
 By entry setup
-stock_gap_open_reclaim: trades=1 pnl=-0.57 avg=-0.57 win_rate=0.00%
+stock_gap_open_reclaim: trades=17 pnl=-11.05 avg=-0.65 win_rate=0.00%
 
 By exit reason
-trailing_stop: trades=1 pnl=-0.57 avg=-0.57 win_rate=0.00%
+stop_loss: trades=5 pnl=-3.63 avg=-0.73 win_rate=0.00%
+stale_breakout: trades=4 pnl=-3.62 avg=-0.90 win_rate=0.00%
+trailing_stop: trades=6 pnl=-3.22 avg=-0.54 win_rate=0.00%
+take_profit: trades=2 pnl=-0.58 avg=-0.29 win_rate=0.00%

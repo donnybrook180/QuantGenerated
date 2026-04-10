@@ -4,7 +4,7 @@ import logging
 
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_ftmo_cost_profile
-from quant_system.integrations.polygon_events import fetch_stock_event_flags
+from quant_system.integrations.stock_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
@@ -86,18 +86,14 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
         return features
     try:
         event_flags = fetch_stock_event_flags(
-            config.polygon.api_key,
             data_symbol,
             start_day=bars[0].timestamp.date(),
             end_day=bars[-1].timestamp.date(),
-            max_retries=config.polygon.max_retries,
-            backoff_seconds=config.polygon.retry_backoff_seconds,
         )
+        features = build_feature_library(bars, event_flags)
     except RuntimeError as exc:
         LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
         features = build_feature_library(bars)
-    else:
-        features = build_feature_library(bars, event_flags)
     if supports_cross_asset_context(data_symbol):
         multiplier, timespan = _infer_bars_timeframe(bars)
         features = apply_cross_asset_context(

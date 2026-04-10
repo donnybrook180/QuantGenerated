@@ -67,7 +67,7 @@ Bovenaan in de repo staan nu alleen de scripts die je normaal zelf direct aanroe
 - `main_live_mt5.py`
 - `main_live_loop.py`
 
-Minder vaak gebruikte utility scripts staan nu in `tools/`.
+Minder vaak gebruikte utility scripts staan in `tools/`, zodat de repo-root schoon blijft.
 
 ```powershell
 .\.venv\Scripts\python.exe main.py

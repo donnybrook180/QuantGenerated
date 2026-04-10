@@ -632,6 +632,18 @@ us500_opening_range_short_breakdown_trend [auto_improved|reject]: pnl=0.00 close
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us500\candidates\us500_opening_range_short_breakdown_trend_symbol_candidate_trades.csv
   analysis: artifacts\research\us500\candidates\us500_opening_range_short_breakdown_trend_symbol_candidate_analysis.txt
+us500_opening_range_short_breakdown_trend_cross_risk_off [auto_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\us500\candidates\us500_opening_range_short_breakdown_trend_cross_risk_off_symbol_candidate_trades.csv
+  analysis: artifacts\research\us500\candidates\us500_opening_range_short_breakdown_trend_cross_risk_off_symbol_candidate_analysis.txt
 us500_opening_range_short_breakdown_fast [auto_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
@@ -669,6 +681,19 @@ us500_momentum_impulse_high_vol [auto_improved|reject]: pnl=0.00 closed=0 pf=0.0
   splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us500\candidates\us500_momentum_impulse_high_vol_symbol_candidate_trades.csv
   analysis: artifacts\research\us500\candidates\us500_momentum_impulse_high_vol_symbol_candidate_analysis.txt
+us500_momentum_impulse_high_vol_us100_breakout_confirm [auto_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  regime_trade_counts: {}
+  regime_pnls: {}
+  live_policy: tier=reject; activate in no preferred regime; avoid no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  regime_filter: trend_up_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\us500\candidates\us500_momentum_impulse_high_vol_us100_breakout_confirm_symbol_candidate_trades.csv
+  analysis: artifacts\research\us500\candidates\us500_momentum_impulse_high_vol_us100_breakout_confirm_symbol_candidate_analysis.txt
 us500_flat_tape_mean_reversion [auto_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
   trade_metrics: expectancy=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0

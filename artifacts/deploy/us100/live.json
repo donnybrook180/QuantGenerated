@@ -3,9 +3,10 @@
   "symbol": "US100",
   "data_symbol": "QQQ",
   "broker_symbol": "US100.cash",
-  "research_run_id": 269,
-  "execution_set_id": 146,
+  "research_run_id": 271,
+  "execution_set_id": 148,
   "execution_validation_summary": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.83 pf=1.70 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk",
+  "symbol_status": "reduced_risk_only",
   "strategies": [
     {
       "candidate_name": "us100_opening_range_short_breakdown_trend",

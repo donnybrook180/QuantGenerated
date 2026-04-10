@@ -3,9 +3,10 @@
   "symbol": "US500",
   "data_symbol": "SPY",
   "broker_symbol": "US500.cash",
-  "research_run_id": 268,
-  "execution_set_id": 145,
+  "research_run_id": 270,
+  "execution_set_id": 147,
   "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
+  "symbol_status": "reduced_risk_only",
   "strategies": [
     {
       "candidate_name": "momentum__exit_trend__near_miss_patient",

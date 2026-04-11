@@ -9,6 +9,7 @@ from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.live.adaptation import adapt_deployment_for_execution, summarize_execution_adaptation
 from quant_system.live.deploy import load_symbol_deployment
+from quant_system.live.tca_adaptation_impact import generate_tca_adaptation_impact_report
 from quant_system.live.tca_impact import build_tca_impact_rows, generate_tca_impact_report
 from quant_system.tca import generate_tca_report, summarize_tca_overview
 
@@ -26,6 +27,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
     tca_report = generate_tca_report(config)
     impact_rows = build_tca_impact_rows(config)
     impact_report = generate_tca_impact_report(config)
+    adaptation_impact_report = generate_tca_adaptation_impact_report(config)
     timestamp = datetime.now(UTC).isoformat()
     statuses = {"live_ready": 0, "reduced_risk_only": 0, "research_only": 0}
     incident_count = 0
@@ -90,6 +92,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
         f"TCA overview: {summarize_tca_overview(tca_report)}",
         f"TCA report: {tca_report.report_path}",
         f"TCA impact report: {impact_report}",
+        f"TCA adaptation impact report: {adaptation_impact_report}",
         f"TCA worst edge retention: {impact_rows[0].symbol}/{impact_rows[0].candidate_name}={impact_rows[0].edge_retention_pct:.1f}%"
         if impact_rows
         else "TCA worst edge retention: none",

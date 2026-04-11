@@ -1,0 +1,139 @@
+TCA impact report
+generated_at: 2026-04-11T07:45:55.256932+00:00
+
+Metric: estimated research edge vs live execution drag.
+Interpretation: drag_share_pct shows how much of expected edge execution is consuming.
+
+symbol   strategy                 livefills edge_ret%    drag%  short_bps  cost_bps label                 
+----------------------------------------------------------------------------------------------------------
+BTC      btc_trend_pullback_high_         0     100.0      0.0      0.000     0.000 insufficient_live_data
+BTC      crypto_short_breakdown__         0     100.0      0.0      0.000     0.000 insufficient_live_data
+ETH      crypto_short_reversion_l         0     100.0      0.0      0.000     0.000 insufficient_live_data
+ETH      crypto_vwap_reversion_us         0     100.0      0.0      0.000     0.000 insufficient_live_data
+EURUSD   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
+JP225    jp225_volatility_short_b         0     100.0      0.0      0.000     0.000 insufficient_live_data
+USDJPY   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
+USDJPY   forex_short_breakdown_mo         0     100.0      0.0      0.000     0.000 insufficient_live_data
+USDJPY   forex_short_breakdown_mo         0     100.0      0.0      0.000     0.000 insufficient_live_data
+XAUUSD   xauusd_volatility_breako         0     100.0      0.0      0.000     0.000 insufficient_live_data
+
+Details
+BTC | btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up
+  broker_symbol: BTCUSD
+  research_expectancy: 26.9739
+  research_closed_trades: 8
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+BTC | crypto_short_breakdown__15m_europe__exit_fastfail
+  broker_symbol: BTCUSD
+  research_expectancy: 13.1972
+  research_closed_trades: 9
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+ETH | crypto_short_reversion_late_europe__15m_europe__exit_fastfail
+  broker_symbol: ETHUSD
+  research_expectancy: 10.1358
+  research_closed_trades: 7
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
+  broker_symbol: ETHUSD
+  research_expectancy: 38.8736
+  research_closed_trades: 4
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+EURUSD | forex_breakout_momentum__30m_overlap
+  broker_symbol: EURUSD
+  research_expectancy: 19.1936
+  research_closed_trades: 7
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+JP225 | jp225_volatility_short_breakdown_core_hours
+  broker_symbol: JP225.cash
+  research_expectancy: 24.4239
+  research_closed_trades: 13
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+USDJPY | forex_breakout_momentum_patient
+  broker_symbol: USDJPY
+  research_expectancy: 1568.6389
+  research_closed_trades: 81
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+USDJPY | forex_short_breakdown_momentum__30m_overlap
+  broker_symbol: USDJPY
+  research_expectancy: 1429.4557
+  research_closed_trades: 35
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+USDJPY | forex_short_breakdown_momentum__30m_us
+  broker_symbol: USDJPY
+  research_expectancy: 145.7743
+  research_closed_trades: 6
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+XAUUSD | xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat
+  broker_symbol: XAUUSD
+  research_expectancy: 548.8261
+  research_closed_trades: 3
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data

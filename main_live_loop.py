@@ -15,6 +15,7 @@ from quant_system.artifacts import ensure_dir
 from quant_system.live.health import generate_live_health_report
 from quant_system.live.journal import LIVE_ARTIFACTS_DIR, write_live_incident, write_live_run_journal
 from quant_system.live.runtime import MT5LiveExecutor
+from quant_system.live.tca_impact import generate_tca_impact_report
 from quant_system.tca import generate_tca_report, summarize_tca_overview
 
 
@@ -173,9 +174,11 @@ def main() -> int:
             print("")
         tca_report = generate_tca_report(config)
         adaptation_report = generate_execution_adaptation_report(config)
+        impact_report = generate_tca_impact_report(config)
         health_report = generate_live_health_report(config)
         print(f"TCA: {summarize_tca_overview(tca_report)}")
         print(f"TCA report: {tca_report.report_path}")
+        print(f"TCA impact report: {impact_report}")
         print(f"Execution adaptation report: {adaptation_report}")
         print(f"Health report: {health_report}")
         print("")

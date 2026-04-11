@@ -71,6 +71,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
                 f"  tiers: {', '.join(sorted({strategy.promotion_tier for strategy in deployment.strategies})) or 'none'}",
                 f"  execution_validation: {deployment.execution_validation_summary}",
                 f"  execution_adaptation: {summarize_execution_adaptation(adaptation)}",
+                f"  execution_guardrail: {adaptation.guardrail_reason}",
                 f"  deployment: {path}",
                 f"  latest_journal: {latest_journal if latest_journal is not None else 'none'}",
                 f"  latest_incident: {latest_incident if latest_incident is not None else 'none'}",

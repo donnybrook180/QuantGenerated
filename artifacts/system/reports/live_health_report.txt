@@ -1,9 +1,12 @@
-Live health report generated at: 2026-04-11T07:45:55.257370+00:00
+Live health report generated at: 2026-04-11T09:34:06.113889+00:00
 Deployments scanned: 9
 Summary: live_ready=2 reduced_risk_only=7 research_only=0 symbols_with_incidents=9 total_fills=0
 TCA overview: none
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
+TCA adaptation impact report: artifacts\system\reports\tca_adaptation_impact_report.txt
+Live research queue: artifacts\system\reports\live_research_queue.txt
+Live research triggers: 0
 TCA worst edge retention: BTC/btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up=100.0%
 Tradeable now: none
 Blocked now: BTC, ETH, EURUSD, GBPUSD, JP225, US100, US500, USDJPY, XAUUSD

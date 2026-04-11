@@ -1,9 +1,9 @@
-Live health report generated at: 2026-04-09T18:57:40.418121+00:00
+Live health report generated at: 2026-04-10T10:49:18.748578+00:00
 Deployments scanned: 9
 Summary: live_ready=2 reduced_risk_only=7 research_only=0 symbols_with_incidents=9 total_fills=0
 Tradeable now: none
 Blocked now: EURUSD, GBPUSD, JP225, US500, USDJPY, XAUUSD
-Recent incidents: BTC (20260409T052552Z_incident.txt), ETH (20260409T052552Z_incident.txt), EURUSD (20260409T052552Z_incident.txt), GBPUSD (20260409T052552Z_incident.txt), JP225 (20260409T052847Z_incident.txt)
+Recent incidents: BTC (20260409T210135Z_incident.txt), ETH (20260409T210135Z_incident.txt), EURUSD (20260409T210135Z_incident.txt), GBPUSD (20260409T210135Z_incident.txt), JP225 (20260409T210135Z_incident.txt)
 
 Symbol: BTC
   status: reduced_risk_only
@@ -12,8 +12,8 @@ Symbol: BTC
   tiers: core
   execution_validation: selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk
   deployment: artifacts\deploy\btc\live.json
-  latest_journal: artifacts\live\btc\journals\20260409T183902Z_journal.json
-  latest_incident: artifacts\live\btc\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\btc\journals\20260410T045648Z_journal.json
+  latest_incident: artifacts\live\btc\incidents\20260409T210135Z_incident.txt
   fills: none
   latest_actions: crypto_short_breakdown__15m_europe__exit_fastfail:hold[core]; btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up:hold[core]
 
@@ -24,8 +24,8 @@ Symbol: ETH
   tiers: core
   execution_validation: selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260409T183902Z_journal.json
-  latest_incident: artifacts\live\eth\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\eth\journals\20260410T045648Z_journal.json
+  latest_incident: artifacts\live\eth\incidents\20260409T210135Z_incident.txt
   fills: none
   latest_actions: crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core]; crypto_short_reversion_late_europe__15m_europe__exit_fastfail:hold[core]
 
@@ -36,10 +36,10 @@ Symbol: EURUSD
   tiers: core
   execution_validation: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=134.36 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260409T183902Z_journal.json
-  latest_incident: artifacts\live\eurusd\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\eurusd\journals\20260410T045648Z_journal.json
+  latest_incident: artifacts\live\eurusd\incidents\20260409T210135Z_incident.txt
   fills: none
-  latest_actions: forex_breakout_momentum__30m_overlap__exit_trend:regime_blocked::calm_range[core]; forex_breakout_momentum__30m_us__exit_fastfail:regime_blocked::calm_range[core]; forex_short_breakdown_momentum__30m_europe__exit_trend:hold[specialist]
+  latest_actions: forex_breakout_momentum__30m_overlap:regime_blocked::calm_range[core]
 
 Symbol: GBPUSD
   status: reduced_risk_only
@@ -48,10 +48,10 @@ Symbol: GBPUSD
   tiers: specialist
   execution_validation: selection=tiered_fallback core=0 specialist=1 -> accepted_with_reduced_risk
   deployment: artifacts\deploy\gbpusd\live.json
-  latest_journal: artifacts\live\gbpusd\journals\20260409T183902Z_journal.json
-  latest_incident: artifacts\live\gbpusd\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\gbpusd\journals\20260410T045648Z_journal.json
+  latest_incident: artifacts\live\gbpusd\incidents\20260409T210135Z_incident.txt
   fills: none
-  latest_actions: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_dense__trend_down:regime_blocked::calm_range[specialist]
+  latest_actions: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient:regime_blocked::calm_range[specialist]
 
 Symbol: JP225
   status: reduced_risk_only
@@ -60,8 +60,8 @@ Symbol: JP225
   tiers: core
   execution_validation: selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk
   deployment: artifacts\deploy\jp225\live.json
-  latest_journal: artifacts\live\jp225\journals\20260409T183902Z_journal.json
-  latest_incident: artifacts\live\jp225\incidents\20260409T052847Z_incident.txt
+  latest_journal: artifacts\live\jp225\journals\20260410T045649Z_journal.json
+  latest_incident: artifacts\live\jp225\incidents\20260409T210135Z_incident.txt
   fills: none
   latest_actions: jp225_volatility_short_breakdown_core_hours:regime_blocked::calm_range[core]
 
@@ -72,8 +72,8 @@ Symbol: US100
   tiers: core
   execution_validation: selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.83 pf=1.70 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk
   deployment: artifacts\deploy\us100\live.json
-  latest_journal: artifacts\live\us100\journals\20260409T183903Z_journal.json
-  latest_incident: artifacts\live\us100\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\us100\journals\20260410T045649Z_journal.json
+  latest_incident: artifacts\live\us100\incidents\20260409T210135Z_incident.txt
   fills: none
   latest_actions: us100_opening_range_short_breakdown_trend:hold[core]
 
@@ -84,10 +84,10 @@ Symbol: US500
   tiers: specialist
   execution_validation: selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted
   deployment: artifacts\deploy\us500\live.json
-  latest_journal: artifacts\live\us500\journals\20260409T183903Z_journal.json
-  latest_incident: artifacts\live\us500\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\us500\journals\20260410T045650Z_journal.json
+  latest_incident: artifacts\live\us500\incidents\20260409T210135Z_incident.txt
   fills: none
-  latest_actions: momentum__exit_trend__near_miss_patient:regime_blocked::volatile_chop[specialist]
+  latest_actions: momentum__exit_trend__near_miss_patient:regime_blocked::calm_range[specialist]
 
 Symbol: USDJPY
   status: reduced_risk_only
@@ -96,10 +96,10 @@ Symbol: USDJPY
   tiers: core, specialist
   execution_validation: selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260409T183903Z_journal.json
-  latest_incident: artifacts\live\usdjpy\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\usdjpy\journals\20260410T045650Z_journal.json
+  latest_incident: artifacts\live\usdjpy\incidents\20260409T210135Z_incident.txt
   fills: none
-  latest_actions: forex_short_breakdown_momentum__30m_us:regime_blocked::volatile_chop[core]; forex_short_breakdown_momentum__30m_overlap:regime_blocked::volatile_chop[core]; forex_breakout_momentum_patient:regime_blocked::calm_range[specialist]
+  latest_actions: forex_short_breakdown_momentum__30m_us:regime_blocked::calm_range[core]; forex_short_breakdown_momentum__30m_overlap:regime_blocked::calm_range[core]; forex_breakout_momentum_patient:regime_blocked::calm_range[specialist]
 
 Symbol: XAUUSD
   status: live_ready
@@ -108,7 +108,7 @@ Symbol: XAUUSD
   tiers: core
   execution_validation: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1646.48 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260409T183903Z_journal.json
-  latest_incident: artifacts\live\xauusd\incidents\20260409T052552Z_incident.txt
+  latest_journal: artifacts\live\xauusd\journals\20260410T045650Z_journal.json
+  latest_incident: artifacts\live\xauusd\incidents\20260409T210135Z_incident.txt
   fills: none
   latest_actions: xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat:regime_blocked::calm_range[core]

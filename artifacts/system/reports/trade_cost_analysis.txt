@@ -1,0 +1,8 @@
+Trade Cost Analysis
+Generated at: 2026-04-11 06:41:59Z
+Database: quant_data.duckdb
+Broker symbol filter: all
+
+No MT5 fills found in mt5_fill_events.
+
+TCA needs real fills. The current project already records requested price, fill price, bid/ask, spread, slippage, strategy comment and magic number.

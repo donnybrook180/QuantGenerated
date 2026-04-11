@@ -80,6 +80,19 @@ def main() -> int:
 
     print(f"Starting live loop. Poll seconds: {config.mt5.poll_seconds}")
     print(f"Live trading enabled: {'yes' if config.execution.live_trading_enabled else 'no (dry-run)'}")
+    print("Loaded live deployments:")
+    for path in paths:
+        deployment = load_symbol_deployment(path)
+        active_strategy_names = [strategy.candidate_name for strategy in deployment.strategies]
+        if active_strategy_names:
+            strategies_label = ", ".join(active_strategy_names)
+        else:
+            strategies_label = "none"
+        print(
+            f"- {deployment.symbol}: status={deployment.symbol_status} "
+            f"broker={deployment.broker_symbol} strategies={strategies_label}"
+        )
+    print("")
     state = _load_state()
 
     while True:

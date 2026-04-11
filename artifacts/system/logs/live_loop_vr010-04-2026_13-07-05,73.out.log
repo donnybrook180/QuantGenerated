@@ -1,0 +1,134 @@
+Starting live loop. Poll seconds: 60
+Live trading enabled: yes
+Loaded live deployments:
+- BTC: status=reduced_risk_only broker=BTCUSD strategies=crypto_short_breakdown__15m_europe__exit_fastfail, btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up
+- ETH: status=reduced_risk_only broker=ETHUSD strategies=crypto_vwap_reversion_us_core__15m_us__exit_trend, crypto_short_reversion_late_europe__15m_europe__exit_fastfail
+- EURUSD: status=live_ready broker=EURUSD strategies=forex_breakout_momentum__30m_overlap
+- GBPUSD: status=reduced_risk_only broker=GBPUSD strategies=gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient
+- JP225: status=reduced_risk_only broker=JP225.cash strategies=jp225_volatility_short_breakdown_core_hours
+- US100: status=reduced_risk_only broker=US100.cash strategies=us100_opening_range_short_breakdown_trend
+- US500: status=reduced_risk_only broker=US500.cash strategies=momentum__exit_trend__near_miss_patient
+- USDJPY: status=reduced_risk_only broker=USDJPY strategies=forex_short_breakdown_momentum__30m_us, forex_short_breakdown_momentum__30m_overlap, forex_breakout_momentum_patient
+- XAUUSD: status=live_ready broker=XAUUSD strategies=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat
+
+Cycle started: 2026-04-10T11:07:06.077638+00:00
+Symbol: BTC
+Broker symbol: BTCUSD
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.12 risk=0.80
+Journal: artifacts\live\btc\journals\20260410T110706Z_journal.json
+- crypto_short_breakdown__15m_europe__exit_fastfail: signal=Side.FLAT ts=None action=hold regime=calm_range vol_pct=0.12 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=1.02 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_flat_vol_high; avoid trend_down_vol_high; vol_pct in [0.55, 0.97]; base_weight=1.02; risk_cap=0.60; stability=0.82; loss_ratio=0.17
+- btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up: signal=Side.FLAT ts=None action=hold regime=calm_trend vol_pct=0.02 risk=0.98 alloc=1.00 portfolio=1.00 base_alloc=1.12 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_up_vol_mid; avoid trend_up_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.12; risk_cap=0.98; stability=0.96; loss_ratio=0.09
+
+Symbol: ETH
+Broker symbol: ETHUSD
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_trend vol_pct=0.07 risk=1.00
+Journal: artifacts\live\eth\journals\20260410T110706Z_journal.json
+- crypto_vwap_reversion_us_core__15m_us__exit_trend: signal=Side.FLAT ts=None action=hold regime=calm_trend vol_pct=0.07 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=1.15 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_flat_vol_high; avoid no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
+- crypto_short_reversion_late_europe__15m_europe__exit_fastfail: signal=Side.FLAT ts=None action=hold regime=calm_trend vol_pct=0.07 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=0.96 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.96; risk_cap=0.60; stability=0.73; loss_ratio=0.29
+
+Symbol: EURUSD
+Broker symbol: EURUSD
+Symbol status: live_ready
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.33 risk=0.80
+Journal: artifacts\live\eurusd\journals\20260410T110706Z_journal.json
+- forex_breakout_momentum__30m_overlap: signal=Side.SELL ts=2026-04-09 12:00:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.33 risk=0.80 alloc=1.00 portfolio=1.00 base_alloc=1.10 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_up_vol_mid; avoid trend_flat_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.97; stability=0.92; loss_ratio=0.21
+
+Symbol: GBPUSD
+Broker symbol: GBPUSD
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.55 risk=0.80
+Journal: artifacts\live\gbpusd\journals\20260410T110706Z_journal.json
+- gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient: signal=Side.BUY ts=2026-04-10 13:40:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.55 risk=0.35 alloc=1.00 portfolio=1.00 base_alloc=0.35 size_factor=0.000 risk_budget=0.00 tier=specialist score=0.00
+  veto: regime
+  policy: tier=specialist; activate in trend_up_vol_mid, trend_up_vol_low; avoid trend_flat_vol_mid, trend_flat_vol_high; vol_pct in [0.00, 0.80]; base_weight=0.35; risk_cap=0.35; stability=0.65; loss_ratio=0.60
+
+Symbol: JP225
+Broker symbol: JP225.cash
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_trend vol_pct=0.23 risk=1.00
+Journal: artifacts\live\jp225\journals\20260410T110706Z_journal.json
+- jp225_volatility_short_breakdown_core_hours: signal=Side.BUY ts=2026-04-10 06:40:00+00:00 action=regime_blocked::calm_trend regime=calm_trend vol_pct=0.23 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=1.15 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_down_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
+
+Symbol: US100
+Broker symbol: US100.cash
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.67 risk=0.80
+Journal: artifacts\live\us100\journals\20260410T110706Z_journal.json
+- us100_opening_range_short_breakdown_trend: signal=Side.FLAT ts=None action=hold regime=calm_range vol_pct=0.67 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=0.98 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.98; risk_cap=0.60; stability=0.75; loss_ratio=0.17
+
+Symbol: US500
+Broker symbol: US500.cash
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: volatile_trend vol_pct=0.78 risk=0.50
+Journal: artifacts\live\us500\journals\20260410T110707Z_journal.json
+- momentum__exit_trend__near_miss_patient: signal=Side.BUY ts=2026-04-09 19:00:00+00:00 action=regime_blocked::volatile_trend regime=volatile_trend vol_pct=0.78 risk=0.35 alloc=1.00 portfolio=1.00 base_alloc=0.35 size_factor=0.000 risk_budget=0.00 tier=specialist score=0.00
+  veto: regime
+  policy: tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.76; loss_ratio=0.54
+
+Symbol: USDJPY
+Broker symbol: USDJPY
+Symbol status: reduced_risk_only
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.06 risk=0.80
+Journal: artifacts\live\usdjpy\journals\20260410T110707Z_journal.json
+- forex_short_breakdown_momentum__30m_us: signal=Side.BUY ts=2026-04-08 18:00:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.06 risk=0.79 alloc=1.00 portfolio=1.00 base_alloc=0.82 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_flat_vol_low; avoid trend_down_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.82; risk_cap=0.79; stability=0.54; loss_ratio=0.65
+- forex_short_breakdown_momentum__30m_overlap: signal=Side.BUY ts=2026-04-09 12:00:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.06 risk=0.80 alloc=1.00 portfolio=1.00 base_alloc=1.06 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_down_vol_mid; avoid trend_flat_vol_high; vol_pct in [0.20, 0.80]; base_weight=1.06; risk_cap=0.94; stability=0.87; loss_ratio=0.13
+- forex_breakout_momentum_patient: signal=Side.SELL ts=2026-04-10 04:30:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.19 risk=0.35 alloc=1.00 portfolio=1.00 base_alloc=0.35 size_factor=0.000 risk_budget=0.00 tier=specialist score=0.00
+  veto: regime
+  policy: tier=specialist; activate in trend_flat_vol_low; avoid trend_flat_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00
+
+Symbol: XAUUSD
+Broker symbol: XAUUSD
+Symbol status: live_ready
+Account mode: hedging
+Strategy isolation supported: yes
+Portfolio weight: 1.00
+Regime: calm_range vol_pct=0.32 risk=0.80
+Journal: artifacts\live\xauusd\journals\20260410T110707Z_journal.json
+- xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat: signal=Side.BUY ts=2026-04-09 13:20:00+00:00 action=regime_blocked::calm_range regime=calm_range vol_pct=0.32 risk=0.60 alloc=1.00 portfolio=1.00 base_alloc=1.15 size_factor=0.000 risk_budget=0.00 tier=core score=0.00
+  veto: regime
+  policy: tier=core; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
+

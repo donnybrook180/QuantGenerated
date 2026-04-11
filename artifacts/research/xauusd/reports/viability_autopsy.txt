@@ -1,31 +1,31 @@
 Viability autopsy: XAUUSD
-Execution validation summary: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1646.48 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
+Execution validation summary: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=163.99 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
 Tier counts: core=36 specialist=11 reject=158
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 129
-- validation PF < 1.0 (0.00): 106
+- walk-forward pass rate too low (0.00% < 50%): 134
+- validation PF < 1.0 (0.00): 111
 - regime stability too low (0.00 < 0.50): 89
-- test PF < 1.0 (0.00): 80
-- equity quality too low (0.25 < 0.45): 67
+- test PF < 1.0 (0.00): 81
+- equity quality too low (0.25 < 0.45): 69
 - validation trades too low (0 < 3): 64
 - validation pnl <= 0 (0.00): 64
-- test trades too low (0 < 2): 59
+- test trades too low (0 < 2): 60
 
 Top near-misses
-- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high [reject]: pnl=911.23 pf=5.33 val=100.92/999.00/1 test=-83.53/0.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-34.63), equity quality too low (0.42 < 0.45), best trade concentration too high (100.00% > 70%)
-- xauusd_generic_breakout_selective__near_miss_patient__trend_flat [specialist]: pnl=801.85 pf=999.00 val=19.19/999.00/1 test=41.03/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.39% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_generic_breakout_selective__near_miss_dense__trend_flat [specialist]: pnl=801.85 pf=999.00 val=19.19/999.00/1 test=41.03/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.39% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_generic_breakout_selective__near_miss_patient__trend_flat__local_opt_density [specialist]: pnl=801.85 pf=999.00 val=19.19/999.00/1 test=41.03/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.39% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_volatility_breakout_exit_relaxed [specialist]: pnl=753.05 pf=5.03 val=663.53/999.00/1 test=38.63/1.65/3 wf=0.00%
-  reasons: best trade concentration too high (70.59% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_volatility_breakout_exit_relaxed__near_miss_patient [specialist]: pnl=753.05 pf=5.03 val=663.53/999.00/1 test=38.63/1.65/3 wf=0.00%
-  reasons: best trade concentration too high (70.59% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_overlap__near_miss_patient [specialist]: pnl=714.02 pf=4.98 val=608.08/11.97/2 test=38.63/1.65/3 wf=0.00%
-  reasons: best trade concentration too high (74.27% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_overlap [specialist]: pnl=673.82 pf=4.76 val=608.08/11.97/2 test=38.63/1.65/3 wf=0.00%
-  reasons: best trade concentration too high (77.77% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high [reject]: pnl=90.46 pf=5.21 val=9.87/999.00/1 test=-8.57/0.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-3.68), equity quality too low (0.42 < 0.45), best trade concentration too high (100.00% > 70%)
+- xauusd_generic_breakout_selective__near_miss_patient__trend_flat [specialist]: pnl=79.52 pf=999.00 val=1.70/999.00/1 test=3.88/999.00/1 wf=0.00%
+  reasons: best trade concentration too high (71.71% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- xauusd_generic_breakout_selective__near_miss_dense__trend_flat [specialist]: pnl=79.52 pf=999.00 val=1.70/999.00/1 test=3.88/999.00/1 wf=0.00%
+  reasons: best trade concentration too high (71.71% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- xauusd_generic_breakout_selective__near_miss_patient__trend_flat__local_opt_density [specialist]: pnl=79.52 pf=999.00 val=1.70/999.00/1 test=3.88/999.00/1 wf=0.00%
+  reasons: best trade concentration too high (71.71% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- xauusd_volatility_breakout_exit_relaxed [specialist]: pnl=73.54 pf=4.80 val=66.13/999.00/1 test=3.20/1.52/3 wf=0.00%
+  reasons: best trade concentration too high (71.19% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- xauusd_volatility_breakout_exit_relaxed__near_miss_patient [specialist]: pnl=73.54 pf=4.80 val=66.13/999.00/1 test=3.20/1.52/3 wf=0.00%
+  reasons: best trade concentration too high (71.19% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_overlap__near_miss_patient [specialist]: pnl=69.64 pf=4.74 val=60.37/11.47/2 test=3.20/1.52/3 wf=0.00%
+  reasons: best trade concentration too high (74.95% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_overlap [specialist]: pnl=65.62 pf=4.53 val=60.37/11.47/2 test=3.20/1.52/3 wf=0.00%
+  reasons: best trade concentration too high (78.52% > 70%), broad viability failed, but candidate qualifies as a regime specialist

@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
 from quant_system.live.adaptation import adapt_deployment_for_execution, generate_execution_adaptation_report, summarize_execution_adaptation
+from quant_system.live.activity import generate_improvement_activity_report
 from quant_system.live.autopsy import generate_live_research_queue, maybe_run_auto_research
 from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.deploy import load_symbol_deployment
@@ -179,6 +180,7 @@ def main() -> int:
         impact_report = generate_tca_impact_report(config)
         adaptation_impact_report = generate_tca_adaptation_impact_report(config)
         research_queue_report = generate_live_research_queue(config)
+        improvement_activity_report = generate_improvement_activity_report()
         health_report = generate_live_health_report(config)
         auto_research_lines = maybe_run_auto_research(config)
         print(f"TCA: {summarize_tca_overview(tca_report)}")
@@ -187,6 +189,7 @@ def main() -> int:
         print(f"TCA adaptation impact report: {adaptation_impact_report}")
         print(f"Execution adaptation report: {adaptation_report}")
         print(f"Live research queue: {research_queue_report}")
+        print(f"Live improvement activity report: {improvement_activity_report}")
         for line in auto_research_lines:
             print(line)
         print(f"Health report: {health_report}")

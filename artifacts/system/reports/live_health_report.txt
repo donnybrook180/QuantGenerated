@@ -1,4 +1,4 @@
-Live health report generated at: 2026-04-11T09:55:50.842165+00:00
+Live health report generated at: 2026-04-11T10:26:57.928617+00:00
 Deployments scanned: 9
 Summary: live_ready=2 reduced_risk_only=7 research_only=0 symbols_with_incidents=9 total_fills=0
 TCA overview: none
@@ -6,6 +6,7 @@ TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
 TCA adaptation impact report: artifacts\system\reports\tca_adaptation_impact_report.txt
 Live research queue: artifacts\system\reports\live_research_queue.txt
+Live improvement activity report: artifacts\system\reports\live_improvement_activity_report.txt
 Live research triggers: 0
 TCA worst edge retention: BTC/btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up=100.0%
 Tradeable now: none
@@ -137,7 +138,7 @@ Symbol: XAUUSD
   broker_symbol: XAUUSD
   strategies: 1
   tiers: core
-  execution_validation: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1646.48 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
+  execution_validation: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=163.99 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json

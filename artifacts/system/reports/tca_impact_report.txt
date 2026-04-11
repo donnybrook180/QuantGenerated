@@ -1,5 +1,5 @@
 TCA impact report
-generated_at: 2026-04-11T09:55:49.380311+00:00
+generated_at: 2026-04-11T10:26:56.061670+00:00
 
 Metric: estimated research edge vs live execution drag.
 Interpretation: drag_share_pct shows how much of expected edge execution is consuming.
@@ -128,7 +128,7 @@ USDJPY | forex_short_breakdown_momentum__30m_us
 
 XAUUSD | xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat
   broker_symbol: XAUUSD
-  research_expectancy: 548.8261
+  research_expectancy: 54.6621
   research_closed_trades: 3
   live_fill_count: 0
   execution_drag_bps: 0.0000

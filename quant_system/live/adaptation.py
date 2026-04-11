@@ -9,6 +9,7 @@ from pathlib import Path
 
 from quant_system.artifacts import live_symbol_dir, system_reports_dir
 from quant_system.config import SystemConfig
+from quant_system.live.activity import record_adaptation_result
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.tca import TCAAggregate, generate_tca_report
 
@@ -389,6 +390,7 @@ def generate_execution_adaptation_report(config: SystemConfig | None = None) -> 
         deployment = load_symbol_deployment(path)
         adapted, result = adapt_deployment_for_execution(deployment, config)
         del adapted
+        record_adaptation_result(result)
         lines.append(f"{deployment.symbol}: {summarize_execution_adaptation(result)}")
         lines.append(f"  reason: {result.reason}")
         lines.append(f"  guardrail: {result.guardrail_reason}")

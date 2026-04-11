@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
+from quant_system.live.adaptation import adapt_deployment_for_execution, generate_execution_adaptation_report, summarize_execution_adaptation
 from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.artifacts import ensure_dir
@@ -107,6 +108,7 @@ def main() -> int:
             if deployment.symbol_status == "research_only":
                 print(f"{deployment.symbol}: skipped ({deployment.symbol_status})")
                 continue
+            deployment, adaptation = adapt_deployment_for_execution(deployment, config)
             if not deployment.strategies:
                 print(f"{deployment.symbol}: no active live strategies in {path}")
                 continue
@@ -137,6 +139,7 @@ def main() -> int:
             print(f"Symbol: {result.symbol}")
             print(f"Broker symbol: {result.broker_symbol}")
             print(f"Symbol status: {deployment.symbol_status}")
+            print(f"Execution adaptation: {summarize_execution_adaptation(adaptation)}")
             print(f"Account mode: {result.account_mode_label}")
             print(f"Strategy isolation supported: {'yes' if result.strategy_isolation_supported else 'no'}")
             print(f"Portfolio weight: {result.portfolio_weight:.2f}")
@@ -169,9 +172,11 @@ def main() -> int:
                     print(f"  policy: {strategy.policy_summary}")
             print("")
         tca_report = generate_tca_report(config)
+        adaptation_report = generate_execution_adaptation_report(config)
         health_report = generate_live_health_report(config)
         print(f"TCA: {summarize_tca_overview(tca_report)}")
         print(f"TCA report: {tca_report.report_path}")
+        print(f"Execution adaptation report: {adaptation_report}")
         print(f"Health report: {health_report}")
         print("")
         time.sleep(max(config.mt5.poll_seconds, 5))

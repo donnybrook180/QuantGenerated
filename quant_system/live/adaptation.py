@@ -1,0 +1,261 @@
+from __future__ import annotations
+
+import copy
+import json
+import os
+from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
+from pathlib import Path
+
+from quant_system.artifacts import live_symbol_dir, system_reports_dir
+from quant_system.config import SystemConfig
+from quant_system.live.models import DeploymentStrategy, SymbolDeployment
+from quant_system.tca import TCAAggregate, generate_tca_report
+
+
+def _env_float(name: str, default: float) -> float:
+    return float(os.getenv(name, str(default)))
+
+
+def _env_int(name: str, default: int) -> int:
+    return int(os.getenv(name, str(default)))
+
+
+@dataclass(slots=True)
+class StrategyAdaptation:
+    candidate_name: str
+    fill_count: int
+    action: str
+    base_weight_scale: float
+    risk_scale: float
+    min_bars_between_trades: int
+    reason: str
+
+
+@dataclass(slots=True)
+class ExecutionAdaptationResult:
+    symbol: str
+    broker_symbol: str
+    action: str
+    adapted: bool
+    reason: str
+    fill_count: int
+    weighted_shortfall_bps: float
+    weighted_cost_bps: float
+    adverse_fill_rate_pct: float
+    strategy_actions: list[StrategyAdaptation]
+    report_path: Path
+
+
+def _severity(row: TCAAggregate | None, *, min_fills: int, moderate_shortfall_bps: float, severe_shortfall_bps: float, moderate_cost_bps: float, severe_cost_bps: float, moderate_adverse_fill_rate_pct: float, severe_adverse_fill_rate_pct: float) -> str:
+    if row is None or row.fill_count < min_fills:
+        return "insufficient"
+    severe_hits = 0
+    moderate_hits = 0
+    if row.weighted_shortfall_bps >= severe_shortfall_bps:
+        severe_hits += 1
+    elif row.weighted_shortfall_bps >= moderate_shortfall_bps:
+        moderate_hits += 1
+    if row.weighted_cost_bps >= severe_cost_bps:
+        severe_hits += 1
+    elif row.weighted_cost_bps >= moderate_cost_bps:
+        moderate_hits += 1
+    if row.adverse_touch_fill_rate_pct >= severe_adverse_fill_rate_pct:
+        severe_hits += 1
+    elif row.adverse_touch_fill_rate_pct >= moderate_adverse_fill_rate_pct:
+        moderate_hits += 1
+    if severe_hits > 0:
+        return "severe"
+    if moderate_hits > 0:
+        return "moderate"
+    return "healthy"
+
+
+def _find_strategy_row(rows: list[TCAAggregate], strategy: DeploymentStrategy) -> TCAAggregate | None:
+    target = strategy.candidate_name.strip().lower()
+    truncated = target[:31]
+    for row in rows:
+        label = row.label.strip().lower()
+        if label == target or label == truncated:
+            return row
+        if target.startswith(label) or label.startswith(truncated):
+            return row
+    return None
+
+
+def _apply_strategy_adjustment(strategy: DeploymentStrategy, severity: str) -> StrategyAdaptation:
+    if severity == "severe":
+        base_weight_scale = 0.55
+        risk_scale = 0.60
+        min_bars_increment = 4
+        action = "de_risk_severe"
+    elif severity == "moderate":
+        base_weight_scale = 0.80
+        risk_scale = 0.80
+        min_bars_increment = 2
+        action = "de_risk_moderate"
+    else:
+        return StrategyAdaptation(
+            candidate_name=strategy.candidate_name,
+            fill_count=0,
+            action="unchanged",
+            base_weight_scale=1.0,
+            risk_scale=1.0,
+            min_bars_between_trades=int(strategy.execution_overrides.get("min_bars_between_trades", 0) or 0),
+            reason="healthy_or_insufficient_data",
+        )
+
+    strategy.base_allocation_weight = max(0.10, strategy.base_allocation_weight * base_weight_scale)
+    strategy.max_risk_multiplier = max(0.10, strategy.max_risk_multiplier * risk_scale)
+    current_risk_pct = float(strategy.execution_overrides.get("risk_per_trade_pct", 0.015) or 0.015)
+    current_min_bars = int(strategy.execution_overrides.get("min_bars_between_trades", 8) or 8)
+    strategy.execution_overrides["risk_per_trade_pct"] = max(0.001, current_risk_pct * risk_scale)
+    strategy.execution_overrides["min_bars_between_trades"] = current_min_bars + min_bars_increment
+    return StrategyAdaptation(
+        candidate_name=strategy.candidate_name,
+        fill_count=0,
+        action=action,
+        base_weight_scale=base_weight_scale,
+        risk_scale=risk_scale,
+        min_bars_between_trades=int(strategy.execution_overrides["min_bars_between_trades"]),
+        reason=f"{severity}_execution_tca",
+    )
+
+
+def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemConfig | None = None) -> tuple[SymbolDeployment, ExecutionAdaptationResult]:
+    config = config or SystemConfig()
+    min_symbol_fills = _env_int("EXEC_ADAPTATION_MIN_SYMBOL_FILLS", 12)
+    min_strategy_fills = _env_int("EXEC_ADAPTATION_MIN_STRATEGY_FILLS", 4)
+    moderate_shortfall_bps = _env_float("EXEC_ADAPTATION_MODERATE_SHORTFALL_BPS", 3.0)
+    severe_shortfall_bps = _env_float("EXEC_ADAPTATION_SEVERE_SHORTFALL_BPS", 6.0)
+    moderate_cost_bps = _env_float("EXEC_ADAPTATION_MODERATE_COST_BPS", 1.5)
+    severe_cost_bps = _env_float("EXEC_ADAPTATION_SEVERE_COST_BPS", 3.0)
+    moderate_adverse_fill_rate_pct = _env_float("EXEC_ADAPTATION_MODERATE_ADVERSE_FILL_RATE_PCT", 65.0)
+    severe_adverse_fill_rate_pct = _env_float("EXEC_ADAPTATION_SEVERE_ADVERSE_FILL_RATE_PCT", 80.0)
+
+    adapted = copy.deepcopy(deployment)
+    tca_report = generate_tca_report(config, broker_symbol=deployment.broker_symbol)
+    overview = tca_report.overview
+    symbol_severity = _severity(
+        overview,
+        min_fills=min_symbol_fills,
+        moderate_shortfall_bps=moderate_shortfall_bps,
+        severe_shortfall_bps=severe_shortfall_bps,
+        moderate_cost_bps=moderate_cost_bps,
+        severe_cost_bps=severe_cost_bps,
+        moderate_adverse_fill_rate_pct=moderate_adverse_fill_rate_pct,
+        severe_adverse_fill_rate_pct=severe_adverse_fill_rate_pct,
+    )
+    strategy_actions: list[StrategyAdaptation] = []
+
+    if symbol_severity == "severe":
+        adapted.symbol_status = "reduced_risk_only"
+        adapted.max_symbol_vol_percentile = min(adapted.max_symbol_vol_percentile, 0.92)
+        action = "symbol_de_risk_severe"
+        reason = "symbol execution too expensive or too adverse"
+    elif symbol_severity == "moderate":
+        adapted.max_symbol_vol_percentile = min(adapted.max_symbol_vol_percentile, 0.95)
+        action = "symbol_de_risk_moderate"
+        reason = "symbol execution degraded"
+    elif symbol_severity == "healthy":
+        action = "healthy"
+        reason = "execution within thresholds"
+    else:
+        action = "insufficient_data"
+        reason = "not enough local fills for adaptation"
+
+    for strategy in adapted.strategies:
+        row = _find_strategy_row(tca_report.by_strategy, strategy)
+        severity = _severity(
+            row,
+            min_fills=min_strategy_fills,
+            moderate_shortfall_bps=moderate_shortfall_bps,
+            severe_shortfall_bps=severe_shortfall_bps,
+            moderate_cost_bps=moderate_cost_bps,
+            severe_cost_bps=severe_cost_bps,
+            moderate_adverse_fill_rate_pct=moderate_adverse_fill_rate_pct,
+            severe_adverse_fill_rate_pct=severe_adverse_fill_rate_pct,
+        )
+        strategy_action = _apply_strategy_adjustment(strategy, severity if severity in {"moderate", "severe"} else "healthy")
+        if row is not None:
+            strategy_action.fill_count = row.fill_count
+            if severity in {"moderate", "severe"}:
+                strategy_action.reason = (
+                    f"{severity}: shortfall={row.weighted_shortfall_bps:.3f}bps "
+                    f"cost={row.weighted_cost_bps:.3f}bps adverse={row.adverse_touch_fill_rate_pct:.1f}%"
+                )
+        strategy_actions.append(strategy_action)
+
+    result = ExecutionAdaptationResult(
+        symbol=adapted.symbol,
+        broker_symbol=adapted.broker_symbol,
+        action=action,
+        adapted=action not in {"healthy", "insufficient_data"},
+        reason=reason,
+        fill_count=overview.fill_count if overview is not None else 0,
+        weighted_shortfall_bps=overview.weighted_shortfall_bps if overview is not None else 0.0,
+        weighted_cost_bps=overview.weighted_cost_bps if overview is not None else 0.0,
+        adverse_fill_rate_pct=overview.adverse_touch_fill_rate_pct if overview is not None else 0.0,
+        strategy_actions=strategy_actions,
+        report_path=_write_adaptation_artifact(adapted, action, reason, overview, strategy_actions),
+    )
+    return adapted, result
+
+
+def summarize_execution_adaptation(result: ExecutionAdaptationResult) -> str:
+    return (
+        f"{result.action} fills={result.fill_count} "
+        f"w_shortfall_bps={result.weighted_shortfall_bps:.3f} "
+        f"w_cost_bps={result.weighted_cost_bps:.3f} "
+        f"adverse_fill_rate_pct={result.adverse_fill_rate_pct:.1f}"
+    )
+
+
+def _write_adaptation_artifact(
+    deployment: SymbolDeployment,
+    action: str,
+    reason: str,
+    overview: TCAAggregate | None,
+    strategy_actions: list[StrategyAdaptation],
+) -> Path:
+    path = live_symbol_dir(deployment.symbol) / "execution_adaptation.json"
+    payload = {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "symbol": deployment.symbol,
+        "broker_symbol": deployment.broker_symbol,
+        "action": action,
+        "reason": reason,
+        "overview": asdict(overview) if overview is not None else None,
+        "strategy_actions": [asdict(item) for item in strategy_actions],
+        "adapted_deployment": asdict(deployment),
+    }
+    path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    return path
+
+
+def generate_execution_adaptation_report(config: SystemConfig | None = None) -> Path:
+    from quant_system.artifacts import DEPLOY_DIR
+    from quant_system.live.deploy import load_symbol_deployment
+
+    config = config or SystemConfig()
+    lines = [
+        "Execution adaptation report",
+        f"generated_at: {datetime.now(UTC).isoformat()}",
+        "",
+    ]
+    for path in sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []:
+        deployment = load_symbol_deployment(path)
+        adapted, result = adapt_deployment_for_execution(deployment, config)
+        del adapted
+        lines.append(f"{deployment.symbol}: {summarize_execution_adaptation(result)}")
+        lines.append(f"  reason: {result.reason}")
+        lines.append(f"  artifact: {result.report_path}")
+        for item in result.strategy_actions:
+            lines.append(
+                f"  strategy {item.candidate_name}: {item.action} fills={item.fill_count} "
+                f"scale={item.base_weight_scale:.2f}/{item.risk_scale:.2f} min_bars={item.min_bars_between_trades}"
+            )
+        lines.append("")
+    report_path = system_reports_dir() / "execution_adaptation_report.txt"
+    report_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    return report_path

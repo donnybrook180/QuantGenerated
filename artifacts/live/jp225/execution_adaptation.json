@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-04-11T07:22:07.548900+00:00",
+  "symbol": "JP225",
+  "broker_symbol": "JP225.cash",
+  "action": "insufficient_data",
+  "reason": "not enough local fills for adaptation",
+  "overview": null,
+  "strategy_actions": [
+    {
+      "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+      "fill_count": 0,
+      "action": "unchanged",
+      "base_weight_scale": 1.0,
+      "risk_scale": 1.0,
+      "min_bars_between_trades": 0,
+      "reason": "healthy_or_insufficient_data"
+    }
+  ],
+  "adapted_deployment": {
+    "profile_name": "symbol::jp225",
+    "symbol": "JP225",
+    "data_symbol": "JP225",
+    "broker_symbol": "JP225.cash",
+    "research_run_id": 254,
+    "execution_set_id": 133,
+    "execution_validation_summary": "selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk",
+    "symbol_status": "reduced_risk_only",
+    "strategies": [
+      {
+        "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+        "code_path": "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+        "promotion_tier": "core",
+        "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_down_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+        "variant_label": "",
+        "regime_filter_label": "",
+        "execution_overrides": {},
+        "allocation_weight": 1.0,
+        "allowed_regimes": [
+          "trend_down_vol_high"
+        ],
+        "blocked_regimes": [
+          "trend_down_vol_mid"
+        ],
+        "min_vol_percentile": 0.55,
+        "max_vol_percentile": 0.97,
+        "base_allocation_weight": 1.15,
+        "max_risk_multiplier": 0.6,
+        "min_risk_multiplier": 0.0
+      }
+    ],
+    "target_volatility": 0.0,
+    "max_symbol_vol_percentile": 0.98,
+    "block_new_entries_in_event_risk": true
+  }
+}

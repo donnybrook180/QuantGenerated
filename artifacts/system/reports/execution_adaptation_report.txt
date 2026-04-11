@@ -1,0 +1,51 @@
+Execution adaptation report
+generated_at: 2026-04-11T07:22:06.477266+00:00
+
+BTC: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\btc\execution_adaptation.json
+  strategy crypto_short_breakdown__15m_europe__exit_fastfail: unchanged fills=0 scale=1.00/1.00 min_bars=0
+  strategy btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+ETH: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\eth\execution_adaptation.json
+  strategy crypto_vwap_reversion_us_core__15m_us__exit_trend: unchanged fills=0 scale=1.00/1.00 min_bars=0
+  strategy crypto_short_reversion_late_europe__15m_europe__exit_fastfail: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+EURUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\eurusd\execution_adaptation.json
+  strategy forex_breakout_momentum__30m_overlap: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+GBPUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\gbpusd\execution_adaptation.json
+  strategy gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+JP225: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\jp225\execution_adaptation.json
+  strategy jp225_volatility_short_breakdown_core_hours: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+US100: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\us100\execution_adaptation.json
+  strategy us100_opening_range_short_breakdown_trend: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+US500: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\us500\execution_adaptation.json
+  strategy momentum__exit_trend__near_miss_patient: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+USDJPY: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\usdjpy\execution_adaptation.json
+  strategy forex_short_breakdown_momentum__30m_us: unchanged fills=0 scale=1.00/1.00 min_bars=0
+  strategy forex_short_breakdown_momentum__30m_overlap: unchanged fills=0 scale=1.00/1.00 min_bars=0
+  strategy forex_breakout_momentum_patient: unchanged fills=0 scale=1.00/1.00 min_bars=0
+
+XAUUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  artifact: artifacts\live\xauusd\execution_adaptation.json
+  strategy xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat: unchanged fills=0 scale=1.00/1.00 min_bars=0

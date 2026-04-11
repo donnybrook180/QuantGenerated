@@ -4,6 +4,7 @@ from pathlib import Path
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
+from quant_system.live.adaptation import adapt_deployment_for_execution, summarize_execution_adaptation
 from quant_system.live.deploy import DEPLOY_DIR, deployment_path_for_symbol, load_symbol_deployment
 from quant_system.live.journal import write_live_incident, write_live_run_journal
 from quant_system.live.runtime import MT5LiveExecutor
@@ -57,6 +58,7 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
         if deployment.symbol_status == "research_only":
             lines.append(f"{deployment.symbol}: skipped ({deployment.symbol_status})")
             continue
+        deployment, adaptation = adapt_deployment_for_execution(deployment, config)
         if not deployment.strategies:
             lines.append(f"{deployment.symbol}: no active live strategies in {path}")
             continue
@@ -81,6 +83,7 @@ def run_live_once_app(paths: list[Path], config: SystemConfig | None = None) -> 
                 f"Broker symbol: {result.broker_symbol}",
                 f"Deployment: {path}",
                 f"Symbol status: {deployment.symbol_status}",
+                f"Execution adaptation: {summarize_execution_adaptation(adaptation)}",
                 f"Account mode: {result.account_mode_label}",
                 f"Strategy isolation supported: {'yes' if result.strategy_isolation_supported else 'no'}",
                 f"Portfolio weight: {result.portfolio_weight:.2f}",

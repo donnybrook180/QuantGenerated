@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-04-11T07:22:07.711057+00:00",
+  "symbol": "US500",
+  "broker_symbol": "US500.cash",
+  "action": "insufficient_data",
+  "reason": "not enough local fills for adaptation",
+  "overview": null,
+  "strategy_actions": [
+    {
+      "candidate_name": "momentum__exit_trend__near_miss_patient",
+      "fill_count": 0,
+      "action": "unchanged",
+      "base_weight_scale": 1.0,
+      "risk_scale": 1.0,
+      "min_bars_between_trades": 0,
+      "reason": "healthy_or_insufficient_data"
+    }
+  ],
+  "adapted_deployment": {
+    "profile_name": "symbol::us500",
+    "symbol": "US500",
+    "data_symbol": "SPY",
+    "broker_symbol": "US500.cash",
+    "research_run_id": 268,
+    "execution_set_id": 145,
+    "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
+    "symbol_status": "reduced_risk_only",
+    "strategies": [
+      {
+        "candidate_name": "momentum__exit_trend__near_miss_patient",
+        "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+        "promotion_tier": "specialist",
+        "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.76; loss_ratio=0.54",
+        "variant_label": "",
+        "regime_filter_label": "",
+        "execution_overrides": {
+          "max_holding_bars": 0,
+          "take_profit_atr_multiple": 3.4000000000000004,
+          "trailing_stop_atr_multiple": 1.2,
+          "stale_breakout_bars": 10,
+          "structure_exit_bars": 0,
+          "break_even_atr_multiple": 0.4
+        },
+        "allocation_weight": 1.0,
+        "allowed_regimes": [
+          "trend_flat_vol_high"
+        ],
+        "blocked_regimes": [
+          "trend_flat_vol_mid"
+        ],
+        "min_vol_percentile": 0.55,
+        "max_vol_percentile": 0.97,
+        "base_allocation_weight": 0.35,
+        "max_risk_multiplier": 0.35,
+        "min_risk_multiplier": 0.0
+      }
+    ],
+    "target_volatility": 0.0,
+    "max_symbol_vol_percentile": 0.98,
+    "block_new_entries_in_event_risk": true
+  }
+}

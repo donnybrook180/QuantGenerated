@@ -7,6 +7,7 @@ from pathlib import Path
 from quant_system.ai.storage import ExperimentStore
 from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
 from quant_system.config import SystemConfig
+from quant_system.live.adaptation import adapt_deployment_for_execution, summarize_execution_adaptation
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.tca import generate_tca_report, summarize_tca_overview
 
@@ -33,6 +34,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
 
     for path in deployment_paths:
         deployment = load_symbol_deployment(path)
+        adapted_deployment, adaptation = adapt_deployment_for_execution(deployment, config)
         symbol = deployment.symbol
         live_symbol_dir = Path("artifacts") / "live" / path.parent.name
         latest_journal = _latest_file(live_symbol_dir / "journals", ".json")
@@ -41,12 +43,12 @@ def build_live_health_report_text(config: SystemConfig) -> str:
         symbol_tca = generate_tca_report(config, broker_symbol=deployment.broker_symbol)
         latest_journal_summary = _latest_journal_summary(latest_journal)
         latest_actions = latest_journal_summary["display"]
-        statuses[deployment.symbol_status] = statuses.get(deployment.symbol_status, 0) + 1
+        statuses[adapted_deployment.symbol_status] = statuses.get(adapted_deployment.symbol_status, 0) + 1
         if latest_incident is not None:
             incident_count += 1
             recent_incidents.append(f"{symbol} ({latest_incident.name})")
         total_fills += int(fill_summary.get("fill_count", 0) or 0) if fill_summary else 0
-        if deployment.symbol_status != "research_only":
+        if adapted_deployment.symbol_status != "research_only":
             if latest_journal_summary["tradeable"]:
                 tradeable_now.append(symbol)
             elif latest_journal_summary["blocked"]:
@@ -55,11 +57,12 @@ def build_live_health_report_text(config: SystemConfig) -> str:
         symbol_rows.append(
             [
                 f"Symbol: {symbol}",
-                f"  status: {deployment.symbol_status}",
+                f"  status: {adapted_deployment.symbol_status}",
                 f"  broker_symbol: {deployment.broker_symbol}",
                 f"  strategies: {len(deployment.strategies)}",
                 f"  tiers: {', '.join(sorted({strategy.promotion_tier for strategy in deployment.strategies})) or 'none'}",
                 f"  execution_validation: {deployment.execution_validation_summary}",
+                f"  execution_adaptation: {summarize_execution_adaptation(adaptation)}",
                 f"  deployment: {path}",
                 f"  latest_journal: {latest_journal if latest_journal is not None else 'none'}",
                 f"  latest_incident: {latest_incident if latest_incident is not None else 'none'}",

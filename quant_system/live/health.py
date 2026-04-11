@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -19,11 +20,17 @@ from quant_system.tca import generate_tca_report, summarize_tca_overview
 def generate_live_health_report(config: SystemConfig | None = None) -> Path:
     config = config or SystemConfig()
     report_path = system_reports_dir() / "live_health_report.txt"
-    report_path.write_text(build_live_health_report_text(config), encoding="utf-8")
+    snapshot = build_live_health_snapshot(config)
+    report_path.write_text(snapshot["text"], encoding="utf-8")
+    report_path.with_suffix(".json").write_text(json.dumps(snapshot["json"], indent=2, default=str), encoding="utf-8")
     return report_path
 
 
 def build_live_health_report_text(config: SystemConfig) -> str:
+    return build_live_health_snapshot(config)["text"]
+
+
+def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
     store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
     deployment_paths = sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []
     tca_report = generate_tca_report(config)
@@ -38,6 +45,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
     incident_count = 0
     total_fills = 0
     symbol_rows: list[list[str]] = []
+    symbol_json_rows: list[dict[str, object]] = []
     tradeable_now: list[str] = []
     blocked_now: list[str] = []
     recent_incidents: list[str] = []
@@ -83,6 +91,24 @@ def build_live_health_report_text(config: SystemConfig) -> str:
                 "",
             ]
         )
+        symbol_json_rows.append(
+            {
+                "symbol": symbol,
+                "status": adapted_deployment.symbol_status,
+                "broker_symbol": deployment.broker_symbol,
+                "strategy_count": len(deployment.strategies),
+                "tiers": sorted({strategy.promotion_tier for strategy in deployment.strategies}),
+                "execution_validation": deployment.execution_validation_summary,
+                "execution_adaptation": summarize_execution_adaptation(adaptation),
+                "execution_guardrail": adaptation.guardrail_reason,
+                "deployment_path": str(path),
+                "latest_journal": str(latest_journal) if latest_journal is not None else None,
+                "latest_incident": str(latest_incident) if latest_incident is not None else None,
+                "fill_summary": fill_summary,
+                "tca_overview": asdict(symbol_tca.overview) if symbol_tca.overview is not None else None,
+                "latest_actions": latest_actions or None,
+            }
+        )
 
     lines = [
         f"Live health report generated at: {timestamp}",
@@ -112,11 +138,66 @@ def build_live_health_report_text(config: SystemConfig) -> str:
     ]
     if not deployment_paths:
         lines.append("No deployments found.")
-        return "\n".join(lines)
+        return {
+            "text": "\n".join(lines),
+            "json": {
+                "generated_at": timestamp,
+                "summary": {
+                    "deployments_scanned": 0,
+                    "statuses": statuses,
+                    "symbols_with_incidents": incident_count,
+                    "total_fills": total_fills,
+                    "tradeable_now": tradeable_now,
+                    "blocked_now": blocked_now,
+                    "research_triggers": len(research_directives),
+                },
+                "reports": {
+                    "tca_report": str(tca_report.report_path),
+                    "tca_impact_report": str(impact_report),
+                    "tca_adaptation_impact_report": str(adaptation_impact_report),
+                    "live_research_queue": str(research_queue_report),
+                    "live_improvement_activity_report": str(improvement_activity_report),
+                },
+                "symbols": [],
+            },
+        }
     for row_lines in symbol_rows:
         lines.extend(line for line in row_lines if line != "")
         lines.append("")
-    return "\n".join(lines).rstrip() + "\n"
+    return {
+        "text": "\n".join(lines).rstrip() + "\n",
+        "json": {
+            "generated_at": timestamp,
+            "summary": {
+                "deployments_scanned": len(deployment_paths),
+                "statuses": statuses,
+                "symbols_with_incidents": incident_count,
+                "total_fills": total_fills,
+                "tradeable_now": tradeable_now,
+                "blocked_now": blocked_now,
+                "recent_incidents": recent_incidents[:5],
+                "research_triggers": len(research_directives),
+                "tca_overview": asdict(tca_report.overview) if tca_report.overview is not None else None,
+                "worst_edge_retention": (
+                    {
+                        "symbol": impact_rows[0].symbol,
+                        "candidate_name": impact_rows[0].candidate_name,
+                        "edge_retention_pct": impact_rows[0].edge_retention_pct,
+                    }
+                    if impact_rows
+                    else None
+                ),
+            },
+            "reports": {
+                "tca_report": str(tca_report.report_path),
+                "tca_impact_report": str(impact_report),
+                "tca_adaptation_impact_report": str(adaptation_impact_report),
+                "live_research_queue": str(research_queue_report),
+                "live_improvement_activity_report": str(improvement_activity_report),
+            },
+            "symbols": symbol_json_rows,
+        },
+    }
 
 
 def _latest_file(directory: Path, suffix: str) -> Path | None:

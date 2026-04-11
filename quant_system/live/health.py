@@ -8,6 +8,7 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.live.deploy import load_symbol_deployment
+from quant_system.tca import generate_tca_report, summarize_tca_overview
 
 
 def generate_live_health_report(config: SystemConfig | None = None) -> Path:
@@ -20,6 +21,7 @@ def generate_live_health_report(config: SystemConfig | None = None) -> Path:
 def build_live_health_report_text(config: SystemConfig) -> str:
     store = ExperimentStore(config.ai.experiment_database_path)
     deployment_paths = sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []
+    tca_report = generate_tca_report(config)
     timestamp = datetime.now(UTC).isoformat()
     statuses = {"live_ready": 0, "reduced_risk_only": 0, "research_only": 0}
     incident_count = 0
@@ -36,6 +38,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
         latest_journal = _latest_file(live_symbol_dir / "journals", ".json")
         latest_incident = _latest_file(live_symbol_dir / "incidents", ".txt")
         fill_summary = store.load_mt5_fill_summary(deployment.broker_symbol)
+        symbol_tca = generate_tca_report(config, broker_symbol=deployment.broker_symbol)
         latest_journal_summary = _latest_journal_summary(latest_journal)
         latest_actions = latest_journal_summary["display"]
         statuses[deployment.symbol_status] = statuses.get(deployment.symbol_status, 0) + 1
@@ -61,6 +64,7 @@ def build_live_health_report_text(config: SystemConfig) -> str:
                 f"  latest_journal: {latest_journal if latest_journal is not None else 'none'}",
                 f"  latest_incident: {latest_incident if latest_incident is not None else 'none'}",
                 f"  fills: {_format_fill_summary(fill_summary)}",
+                f"  tca: {summarize_tca_overview(symbol_tca)}",
                 f"  latest_actions: {latest_actions}" if latest_actions else "",
                 "",
             ]
@@ -77,6 +81,8 @@ def build_live_health_report_text(config: SystemConfig) -> str:
             f"symbols_with_incidents={incident_count} "
             f"total_fills={total_fills}"
         ),
+        f"TCA overview: {summarize_tca_overview(tca_report)}",
+        f"TCA report: {tca_report.report_path}",
         f"Tradeable now: {', '.join(tradeable_now) if tradeable_now else 'none'}",
         f"Blocked now: {', '.join(blocked_now) if blocked_now else 'none'}",
         f"Recent incidents: {', '.join(recent_incidents[:5]) if recent_incidents else 'none'}",

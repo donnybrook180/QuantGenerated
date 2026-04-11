@@ -145,6 +145,9 @@ class TCAAggregate:
     median_shortfall_bps: float
     p75_shortfall_bps: float
     weighted_shortfall_bps: float
+    total_costs: float
+    avg_cost_per_fill: float
+    weighted_cost_bps: float
     total_notional: float
 
 
@@ -161,12 +164,26 @@ class TCAReport:
     report_path: Path
 
 
+def summarize_tca_overview(report: TCAReport) -> str:
+    if report.overview is None:
+        return "none"
+    overview = report.overview
+    return (
+        f"fills={overview.fill_count} "
+        f"w_touch_slip_bps={overview.weighted_touch_slippage_bps:.3f} "
+        f"w_shortfall_bps={overview.weighted_shortfall_bps:.3f} "
+        f"w_cost_bps={overview.weighted_cost_bps:.3f} "
+        f"adverse_fill_rate_pct={overview.adverse_touch_fill_rate_pct:.1f}"
+    )
+
+
 def _aggregate(label: str, fills: list[dict[str, object]]) -> TCAAggregate:
     timestamps = [_as_utc(fill["event_timestamp"]) for fill in fills]
     quantities = [abs(float(fill.get("quantity") or 0.0)) for fill in fills]
     spreads = [float(fill.get("spread_points") or 0.0) for fill in fills]
     touch_bps_values: list[float] = []
     shortfall_bps_values: list[float] = []
+    cost_values: list[float] = []
     notionals: list[float] = []
     adverse_count = 0
     for fill in fills:
@@ -180,6 +197,7 @@ def _aggregate(label: str, fills: list[dict[str, object]]) -> TCAAggregate:
             adverse_count += 1
         touch_bps_values.append(touch_bps)
         shortfall_bps_values.append(shortfall_bps)
+        cost_values.append(abs(float(fill.get("costs") or 0.0)))
         notionals.append(price * quantity)
     buy_count = sum(1 for fill in fills if str(fill.get("side") or "").lower() == "buy")
     open_count = sum(1 for fill in fills if _fill_intent(fill) == "open")
@@ -206,6 +224,12 @@ def _aggregate(label: str, fills: list[dict[str, object]]) -> TCAAggregate:
         median_shortfall_bps=median(shortfall_bps_values) if shortfall_bps_values else 0.0,
         p75_shortfall_bps=_quantile(shortfall_bps_values, 0.75),
         weighted_shortfall_bps=_weighted_average(shortfall_bps_values, notionals),
+        total_costs=sum(cost_values),
+        avg_cost_per_fill=_average(cost_values),
+        weighted_cost_bps=_weighted_average(
+            [_bps(cost, notional) for cost, notional in zip(cost_values, notionals)],
+            notionals,
+        ),
         total_notional=total_notional,
     )
 
@@ -294,14 +318,14 @@ def _render_table(title: str, rows: list[TCAAggregate], limit: int) -> list[str]
         lines.append("none")
         lines.append("")
         return lines
-    header = f"{'label':<24} {'fills':>5} {'open':>5} {'close':>5} {'spr_avg':>9} {'slip_w_bps':>11} {'is_w_bps':>9} {'adv%':>7}"
+    header = f"{'label':<24} {'fills':>5} {'open':>5} {'close':>5} {'spr_avg':>9} {'slip_w_bps':>11} {'is_w_bps':>9} {'cost_bps':>9} {'adv%':>7}"
     lines.append(header)
     lines.append("-" * len(header))
     for row in rows[:limit]:
         lines.append(
             f"{row.label[:24]:<24} {row.fill_count:>5} {row.open_count:>5} {row.close_count:>5} "
             f"{_fmt_num(row.avg_spread_points, 4):>9} {_fmt_num(row.weighted_touch_slippage_bps, 3):>11} "
-            f"{_fmt_num(row.weighted_shortfall_bps, 3):>9} {_fmt_num(row.adverse_touch_fill_rate_pct, 1):>7}"
+            f"{_fmt_num(row.weighted_shortfall_bps, 3):>9} {_fmt_num(row.weighted_cost_bps, 3):>9} {_fmt_num(row.adverse_touch_fill_rate_pct, 1):>7}"
         )
     lines.append("")
     return lines
@@ -341,6 +365,9 @@ def render_tca_report_text(
         f"median_implementation_shortfall_bps: {_fmt_num(overview.median_shortfall_bps, 4)}",
         f"p75_implementation_shortfall_bps: {_fmt_num(overview.p75_shortfall_bps, 4)}",
         f"weighted_implementation_shortfall_bps: {_fmt_num(overview.weighted_shortfall_bps, 4)}",
+        f"total_broker_costs: {_fmt_num(overview.total_costs, 4)}",
+        f"avg_cost_per_fill: {_fmt_num(overview.avg_cost_per_fill, 6)}",
+        f"weighted_cost_bps: {_fmt_num(overview.weighted_cost_bps, 4)}",
         f"adverse_touch_fill_rate_pct: {_fmt_num(overview.adverse_touch_fill_rate_pct, 2)}",
         f"total_notional: {_fmt_num(overview.total_notional, 2)}",
         "",
@@ -353,7 +380,7 @@ def render_tca_report_text(
     if not worst_fills:
         lines.append("none")
     else:
-        header = f"{'ts':<20} {'symbol':<14} {'strategy':<24} {'side':<5} {'intent':<5} {'short_bps':>9} {'slip_bps':>9}"
+        header = f"{'ts':<20} {'symbol':<14} {'strategy':<24} {'side':<5} {'intent':<5} {'short_bps':>9} {'slip_bps':>9} {'cost':>9}"
         lines.append(header)
         lines.append("-" * len(header))
         for fill in worst_fills:
@@ -365,7 +392,8 @@ def render_tca_report_text(
                 f"{str(fill.get('side') or '')[:5]:<5} "
                 f"{_fill_intent(fill)[:5]:<5} "
                 f"{_fmt_num(_bps(_implementation_shortfall_points(fill), mid), 3):>9} "
-                f"{_fmt_num(_bps(_signed_touch_slippage_points(fill), float(fill.get('requested_price') or 0.0) or float(fill.get('fill_price') or 0.0)), 3):>9}"
+                f"{_fmt_num(_bps(_signed_touch_slippage_points(fill), float(fill.get('requested_price') or 0.0) or float(fill.get('fill_price') or 0.0)), 3):>9} "
+                f"{_fmt_num(abs(float(fill.get('costs') or 0.0)), 4):>9}"
             )
     lines.append("")
     lines.append("Definitions")

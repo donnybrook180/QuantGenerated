@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 import logging
 from typing import ClassVar
 
@@ -55,6 +55,17 @@ class MT5MarketSnapshot:
     ask: float
     point: float
     spread_points: float
+
+
+@dataclass(slots=True)
+class MT5DealCost:
+    deal_ticket: int
+    order_ticket: int
+    position_id: int
+    commission: float
+    swap: float
+    fee: float
+    total_cost: float
 
 
 @dataclass(slots=True)
@@ -256,6 +267,47 @@ class MT5Client:
             spread_points=spread_points,
         )
 
+    def _lookup_deal_cost(self, result, symbol: str) -> MT5DealCost:
+        deal_ticket = int(getattr(result, "deal", 0) or 0)
+        order_ticket = int(getattr(result, "order", 0) or 0)
+        if deal_ticket <= 0 and order_ticket <= 0:
+            return MT5DealCost(0, 0, 0, 0.0, 0.0, 0.0, 0.0)
+
+        now = datetime.now(UTC)
+        start = now - timedelta(minutes=15)
+        deals = mt5.history_deals_get(start, now)
+        if deals is None:
+            LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
+            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0)
+
+        matched = None
+        for deal in deals:
+            current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
+            current_order_ticket = int(getattr(deal, "order", 0) or 0)
+            current_symbol = str(getattr(deal, "symbol", "") or "")
+            if current_symbol != symbol:
+                continue
+            if deal_ticket > 0 and current_deal_ticket == deal_ticket:
+                matched = deal
+                break
+            if order_ticket > 0 and current_order_ticket == order_ticket:
+                matched = deal
+        if matched is None:
+            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0)
+
+        commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
+        swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
+        fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
+        return MT5DealCost(
+            deal_ticket=int(getattr(matched, "ticket", 0) or 0),
+            order_ticket=int(getattr(matched, "order", 0) or 0),
+            position_id=int(getattr(matched, "position_id", 0) or 0),
+            commission=commission,
+            swap=swap,
+            fee=fee,
+            total_cost=commission + swap + fee,
+        )
+
     def send_market_order(
         self,
         order: OrderRequest,
@@ -297,12 +349,14 @@ class MT5Client:
         fill_price = float(result.price)
         slippage_points = abs(fill_price - price)
         slippage_bps = (slippage_points / price * 10_000.0) if price > 0 else 0.0
+        deal_cost = self._lookup_deal_cost(result, symbol)
         fill = FillEvent(
             timestamp=order.timestamp,
             symbol=order.symbol,
             side=order.side,
             quantity=volume,
             price=fill_price,
+            costs=deal_cost.total_cost,
             metadata={
                 "broker_symbol": symbol,
                 "requested_price": price,
@@ -316,6 +370,13 @@ class MT5Client:
                 "magic_number": int(magic_number if magic_number is not None else self.config.magic_number),
                 "comment": (comment or order.reason)[:31],
                 "position_ticket": int(position_ticket) if position_ticket is not None else 0,
+                "deal_ticket": deal_cost.deal_ticket,
+                "order_ticket": deal_cost.order_ticket,
+                "broker_position_id": deal_cost.position_id,
+                "commission": deal_cost.commission,
+                "swap": deal_cost.swap,
+                "fee": deal_cost.fee,
+                "broker_cost_total": deal_cost.total_cost,
             },
         )
         try:
@@ -332,10 +393,19 @@ class MT5Client:
                 spread_points=snapshot.spread_points,
                 slippage_points=slippage_points,
                 slippage_bps=slippage_bps,
-                costs=0.0,
+                costs=deal_cost.total_cost,
                 reason=order.reason,
                 confidence=order.confidence,
-                metadata=order.metadata,
+                metadata={
+                    **dict(order.metadata),
+                    "deal_ticket": deal_cost.deal_ticket,
+                    "order_ticket": deal_cost.order_ticket,
+                    "broker_position_id": deal_cost.position_id,
+                    "commission": deal_cost.commission,
+                    "swap": deal_cost.swap,
+                    "fee": deal_cost.fee,
+                    "broker_cost_total": deal_cost.total_cost,
+                },
                 magic_number=int(magic_number if magic_number is not None else self.config.magic_number),
                 comment=(comment or order.reason)[:31],
                 position_ticket=int(position_ticket) if position_ticket is not None else None,

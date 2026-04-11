@@ -11,8 +11,10 @@ from quant_system.integrations.mt5 import MT5Error
 from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.artifacts import ensure_dir
+from quant_system.live.health import generate_live_health_report
 from quant_system.live.journal import LIVE_ARTIFACTS_DIR, write_live_incident, write_live_run_journal
 from quant_system.live.runtime import MT5LiveExecutor
+from quant_system.tca import generate_tca_report, summarize_tca_overview
 
 
 STATE_PATH = LIVE_ARTIFACTS_DIR / "state" / "loop_state.json"
@@ -166,6 +168,12 @@ def main() -> int:
                 if strategy is not None and strategy.policy_summary:
                     print(f"  policy: {strategy.policy_summary}")
             print("")
+        tca_report = generate_tca_report(config)
+        health_report = generate_live_health_report(config)
+        print(f"TCA: {summarize_tca_overview(tca_report)}")
+        print(f"TCA report: {tca_report.report_path}")
+        print(f"Health report: {health_report}")
+        print("")
         time.sleep(max(config.mt5.poll_seconds, 5))
 
 

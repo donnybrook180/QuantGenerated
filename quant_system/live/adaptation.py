@@ -29,6 +29,9 @@ class StrategyAdaptation:
     base_weight_scale: float
     risk_scale: float
     min_bars_between_trades: int
+    resulting_base_weight: float
+    resulting_max_risk_multiplier: float
+    local_rank_label: str
     reason: str
 
 
@@ -84,16 +87,41 @@ def _find_strategy_row(rows: list[TCAAggregate], strategy: DeploymentStrategy) -
 
 
 def _apply_strategy_adjustment(strategy: DeploymentStrategy, severity: str) -> StrategyAdaptation:
+    promote_fill_count = _env_int("EXEC_ADAPTATION_PROMOTE_MIN_STRATEGY_FILLS", 10)
+    promote_weight_scale = _env_float("EXEC_ADAPTATION_PROMOTE_BASE_WEIGHT_SCALE", 1.08)
+    promote_risk_scale = _env_float("EXEC_ADAPTATION_PROMOTE_RISK_SCALE", 1.05)
     if severity == "severe":
-        base_weight_scale = 0.55
-        risk_scale = 0.60
-        min_bars_increment = 4
-        action = "de_risk_severe"
+        base_weight_scale = 0.35
+        risk_scale = 0.45
+        min_bars_increment = 6
+        action = "demote_severe"
+        local_rank_label = "blocked_local"
     elif severity == "moderate":
         base_weight_scale = 0.80
         risk_scale = 0.80
         min_bars_increment = 2
-        action = "de_risk_moderate"
+        action = "demote_moderate"
+        local_rank_label = "reduced_local"
+    elif severity == "healthy":
+        if strategy.execution_overrides.get("__tca_fill_count__", 0) >= promote_fill_count:
+            base_weight_scale = promote_weight_scale
+            risk_scale = promote_risk_scale
+            min_bars_increment = 0
+            action = "promote_healthy"
+            local_rank_label = "promoted_local"
+        else:
+            return StrategyAdaptation(
+                candidate_name=strategy.candidate_name,
+                fill_count=0,
+                action="unchanged",
+                base_weight_scale=1.0,
+                risk_scale=1.0,
+                min_bars_between_trades=int(strategy.execution_overrides.get("min_bars_between_trades", 0) or 0),
+                resulting_base_weight=strategy.base_allocation_weight,
+                resulting_max_risk_multiplier=strategy.max_risk_multiplier,
+                local_rank_label="baseline_local",
+                reason="healthy_but_not_enough_strategy_fills_for_promotion",
+            )
     else:
         return StrategyAdaptation(
             candidate_name=strategy.candidate_name,
@@ -102,6 +130,9 @@ def _apply_strategy_adjustment(strategy: DeploymentStrategy, severity: str) -> S
             base_weight_scale=1.0,
             risk_scale=1.0,
             min_bars_between_trades=int(strategy.execution_overrides.get("min_bars_between_trades", 0) or 0),
+            resulting_base_weight=strategy.base_allocation_weight,
+            resulting_max_risk_multiplier=strategy.max_risk_multiplier,
+            local_rank_label="baseline_local",
             reason="healthy_or_insufficient_data",
         )
 
@@ -111,6 +142,10 @@ def _apply_strategy_adjustment(strategy: DeploymentStrategy, severity: str) -> S
     current_min_bars = int(strategy.execution_overrides.get("min_bars_between_trades", 8) or 8)
     strategy.execution_overrides["risk_per_trade_pct"] = max(0.001, current_risk_pct * risk_scale)
     strategy.execution_overrides["min_bars_between_trades"] = current_min_bars + min_bars_increment
+    if severity == "severe":
+        strategy.min_risk_multiplier = 0.0
+        strategy.execution_overrides["risk_per_trade_pct"] = max(0.0005, current_risk_pct * 0.35)
+        strategy.execution_overrides["tca_block_new_entries"] = 1
     return StrategyAdaptation(
         candidate_name=strategy.candidate_name,
         fill_count=0,
@@ -118,6 +153,9 @@ def _apply_strategy_adjustment(strategy: DeploymentStrategy, severity: str) -> S
         base_weight_scale=base_weight_scale,
         risk_scale=risk_scale,
         min_bars_between_trades=int(strategy.execution_overrides["min_bars_between_trades"]),
+        resulting_base_weight=strategy.base_allocation_weight,
+        resulting_max_risk_multiplier=strategy.max_risk_multiplier,
+        local_rank_label=local_rank_label,
         reason=f"{severity}_execution_tca",
     )
 
@@ -166,6 +204,7 @@ def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemC
 
     for strategy in adapted.strategies:
         row = _find_strategy_row(tca_report.by_strategy, strategy)
+        strategy.execution_overrides["__tca_fill_count__"] = row.fill_count if row is not None else 0
         severity = _severity(
             row,
             min_fills=min_strategy_fills,
@@ -176,15 +215,26 @@ def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemC
             moderate_adverse_fill_rate_pct=moderate_adverse_fill_rate_pct,
             severe_adverse_fill_rate_pct=severe_adverse_fill_rate_pct,
         )
-        strategy_action = _apply_strategy_adjustment(strategy, severity if severity in {"moderate", "severe"} else "healthy")
+        strategy_action = _apply_strategy_adjustment(strategy, severity if severity in {"moderate", "severe", "healthy"} else "insufficient")
         if row is not None:
             strategy_action.fill_count = row.fill_count
-            if severity in {"moderate", "severe"}:
+            if severity in {"moderate", "severe", "healthy"}:
                 strategy_action.reason = (
                     f"{severity}: shortfall={row.weighted_shortfall_bps:.3f}bps "
                     f"cost={row.weighted_cost_bps:.3f}bps adverse={row.adverse_touch_fill_rate_pct:.1f}%"
                 )
+        strategy.execution_overrides.pop("__tca_fill_count__", None)
         strategy_actions.append(strategy_action)
+
+    severe_count = sum(1 for item in strategy_actions if item.action == "demote_severe")
+    promoted_count = sum(1 for item in strategy_actions if item.action == "promote_healthy")
+    if severe_count >= max(1, len(strategy_actions)):
+        adapted.symbol_status = "reduced_risk_only"
+        adapted.max_symbol_vol_percentile = min(adapted.max_symbol_vol_percentile, 0.90)
+        action = "all_strategies_demoted"
+        reason = "all local strategies have severe execution drag"
+    elif promoted_count > 0 and action == "healthy":
+        reason = f"execution within thresholds; promoted_strategies={promoted_count}"
 
     result = ExecutionAdaptationResult(
         symbol=adapted.symbol,
@@ -253,7 +303,9 @@ def generate_execution_adaptation_report(config: SystemConfig | None = None) -> 
         for item in result.strategy_actions:
             lines.append(
                 f"  strategy {item.candidate_name}: {item.action} fills={item.fill_count} "
-                f"scale={item.base_weight_scale:.2f}/{item.risk_scale:.2f} min_bars={item.min_bars_between_trades}"
+                f"scale={item.base_weight_scale:.2f}/{item.risk_scale:.2f} "
+                f"base_weight={item.resulting_base_weight:.2f} max_risk={item.resulting_max_risk_multiplier:.2f} "
+                f"min_bars={item.min_bars_between_trades} rank={item.local_rank_label}"
             )
         lines.append("")
     report_path = system_reports_dir() / "execution_adaptation_report.txt"

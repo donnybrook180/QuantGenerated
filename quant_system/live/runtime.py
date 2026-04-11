@@ -117,6 +117,8 @@ def _estimated_stop_distance(strategy_config: SystemConfig, latest_feature, refe
 
 def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: DeploymentStrategy, snapshot: RegimeSnapshot) -> bool:
     return (
+        bool(int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0))
+        or
         (deployment.block_new_entries_in_event_risk and snapshot.regime_label == "event_risk")
         or snapshot.block_new_entries
         or snapshot.vol_percentile > deployment.max_symbol_vol_percentile

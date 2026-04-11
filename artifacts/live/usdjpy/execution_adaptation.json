@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-11T07:22:07.814643+00:00",
+  "generated_at": "2026-04-11T07:39:07.901411+00:00",
   "symbol": "USDJPY",
   "broker_symbol": "USDJPY",
   "action": "insufficient_data",
@@ -13,6 +13,9 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
+      "resulting_base_weight": 0.8246560675227741,
+      "resulting_max_risk_multiplier": 0.7908503291217834,
+      "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     },
     {
@@ -22,6 +25,9 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
+      "resulting_base_weight": 1.0593999802267242,
+      "resulting_max_risk_multiplier": 0.9417571301457514,
+      "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     },
     {
@@ -31,6 +37,9 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
+      "resulting_base_weight": 0.35,
+      "resulting_max_risk_multiplier": 0.35,
+      "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     }
   ],

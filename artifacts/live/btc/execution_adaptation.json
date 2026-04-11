@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-11T07:22:07.182585+00:00",
+  "generated_at": "2026-04-11T07:39:07.776436+00:00",
   "symbol": "BTC",
   "broker_symbol": "BTCUSD",
   "action": "insufficient_data",
@@ -13,6 +13,9 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
+      "resulting_base_weight": 1.021404269810902,
+      "resulting_max_risk_multiplier": 0.6,
+      "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     },
     {
@@ -22,6 +25,9 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
+      "resulting_base_weight": 1.119019762092518,
+      "resulting_max_risk_multiplier": 0.9800841327737616,
+      "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     }
   ],

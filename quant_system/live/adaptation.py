@@ -9,6 +9,7 @@ from pathlib import Path
 
 from quant_system.artifacts import live_symbol_dir, system_reports_dir
 from quant_system.config import SystemConfig
+from quant_system.live.activity import record_adaptation_result
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.tca import TCAAggregate, generate_tca_report
 
@@ -46,8 +47,91 @@ class ExecutionAdaptationResult:
     weighted_shortfall_bps: float
     weighted_cost_bps: float
     adverse_fill_rate_pct: float
+    guardrail_reason: str
     strategy_actions: list[StrategyAdaptation]
     report_path: Path
+
+
+def _apply_live_guardrails(
+    original: SymbolDeployment,
+    adapted: SymbolDeployment,
+    action: str,
+    reason: str,
+    strategy_actions: list[StrategyAdaptation],
+) -> tuple[SymbolDeployment, str, str, str]:
+    min_active_strategies = _env_int("LIVE_GUARDRAIL_MIN_ACTIVE_STRATEGIES_PER_SYMBOL", 1)
+    max_severe_demotions = _env_int("LIVE_GUARDRAIL_MAX_SEVERE_DEMOTIONS_PER_SYMBOL", 1)
+    severe_block_fill_threshold = _env_int("LIVE_GUARDRAIL_MIN_FILLS_TO_BLOCK", 12)
+    guardrail_notes: list[str] = []
+
+    original_map = {item.candidate_name: item for item in original.strategies}
+    active_candidates = set(item.candidate_name for item in adapted.strategies)
+    severe_actions = [item for item in strategy_actions if item.action == "demote_severe"]
+    if len(severe_actions) > max_severe_demotions:
+        for item in severe_actions[max_severe_demotions:]:
+            strategy = next((row for row in adapted.strategies if row.candidate_name == item.candidate_name), None)
+            baseline = original_map.get(item.candidate_name)
+            if strategy is None or baseline is None:
+                continue
+            strategy.base_allocation_weight = baseline.base_allocation_weight
+            strategy.max_risk_multiplier = min(strategy.max_risk_multiplier, max(0.20, baseline.max_risk_multiplier * 0.80))
+            strategy.execution_overrides.pop("tca_block_new_entries", None)
+            strategy.execution_overrides["risk_per_trade_pct"] = max(
+                0.001,
+                float(strategy.execution_overrides.get("risk_per_trade_pct", 0.015) or 0.015),
+            )
+            item.action = "guardrail_capped_severe_demotion"
+            item.local_rank_label = "guardrail_reduced_local"
+            item.reason = "guardrail: capped number of severe demotions"
+            guardrail_notes.append(f"capped severe demotions for {item.candidate_name}")
+
+    blocked_count = 0
+    for item in strategy_actions:
+        strategy = next((row for row in adapted.strategies if row.candidate_name == item.candidate_name), None)
+        if strategy is None:
+            continue
+        if int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0) > 0:
+            if item.fill_count < severe_block_fill_threshold:
+                strategy.execution_overrides.pop("tca_block_new_entries", None)
+                item.action = "guardrail_block_removed"
+                item.local_rank_label = "guardrail_reduced_local"
+                item.reason = "guardrail: not enough fills for full block"
+                guardrail_notes.append(f"removed block for {item.candidate_name} due to low fill count")
+            else:
+                blocked_count += 1
+
+    if len(active_candidates) - blocked_count < min_active_strategies:
+        restored = 0
+        for item in sorted(strategy_actions, key=lambda row: (row.action != "demote_severe", row.fill_count)):
+            strategy = next((row for row in adapted.strategies if row.candidate_name == item.candidate_name), None)
+            baseline = original_map.get(item.candidate_name)
+            if strategy is None or baseline is None:
+                continue
+            if int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0) <= 0:
+                continue
+            strategy.execution_overrides.pop("tca_block_new_entries", None)
+            strategy.base_allocation_weight = max(0.10, baseline.base_allocation_weight * 0.50)
+            strategy.max_risk_multiplier = max(0.10, baseline.max_risk_multiplier * 0.50)
+            strategy.execution_overrides["risk_per_trade_pct"] = max(0.0005, float(baseline.execution_overrides.get("risk_per_trade_pct", 0.015) or 0.015) * 0.50)
+            item.action = "guardrail_kept_one_live"
+            item.local_rank_label = "guardrail_min_coverage"
+            item.reason = "guardrail: preserved minimum live coverage"
+            restored += 1
+            blocked_count -= 1
+            if len(active_candidates) - blocked_count >= min_active_strategies:
+                break
+        if restored > 0:
+            guardrail_notes.append(f"restored {restored} blocked strategies to preserve minimum coverage")
+
+    if all(int(item.execution_overrides.get("tca_block_new_entries", 0) or 0) > 0 for item in adapted.strategies) and adapted.strategies:
+        adapted.symbol_status = original.symbol_status
+        guardrail_notes.append("reverted symbol status change to preserve live presence")
+
+    guardrail_reason = "; ".join(guardrail_notes) if guardrail_notes else "none"
+    if guardrail_notes:
+        reason = f"{reason} | guardrails: {guardrail_reason}"
+        action = f"{action}_guardrailed"
+    return adapted, action, reason, guardrail_reason
 
 
 def _severity(row: TCAAggregate | None, *, min_fills: int, moderate_shortfall_bps: float, severe_shortfall_bps: float, moderate_cost_bps: float, severe_cost_bps: float, moderate_adverse_fill_rate_pct: float, severe_adverse_fill_rate_pct: float) -> str:
@@ -236,6 +320,14 @@ def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemC
     elif promoted_count > 0 and action == "healthy":
         reason = f"execution within thresholds; promoted_strategies={promoted_count}"
 
+    adapted, action, reason, guardrail_reason = _apply_live_guardrails(
+        deployment,
+        adapted,
+        action,
+        reason,
+        strategy_actions,
+    )
+
     result = ExecutionAdaptationResult(
         symbol=adapted.symbol,
         broker_symbol=adapted.broker_symbol,
@@ -246,6 +338,7 @@ def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemC
         weighted_shortfall_bps=overview.weighted_shortfall_bps if overview is not None else 0.0,
         weighted_cost_bps=overview.weighted_cost_bps if overview is not None else 0.0,
         adverse_fill_rate_pct=overview.adverse_touch_fill_rate_pct if overview is not None else 0.0,
+        guardrail_reason=guardrail_reason,
         strategy_actions=strategy_actions,
         report_path=_write_adaptation_artifact(adapted, action, reason, overview, strategy_actions),
     )
@@ -297,8 +390,10 @@ def generate_execution_adaptation_report(config: SystemConfig | None = None) -> 
         deployment = load_symbol_deployment(path)
         adapted, result = adapt_deployment_for_execution(deployment, config)
         del adapted
+        record_adaptation_result(result)
         lines.append(f"{deployment.symbol}: {summarize_execution_adaptation(result)}")
         lines.append(f"  reason: {result.reason}")
+        lines.append(f"  guardrail: {result.guardrail_reason}")
         lines.append(f"  artifact: {result.report_path}")
         for item in result.strategy_actions:
             lines.append(

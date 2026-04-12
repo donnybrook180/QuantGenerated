@@ -1,9 +1,13 @@
-Live health report generated at: 2026-04-11T07:45:55.257370+00:00
+Live health report generated at: 2026-04-11T11:58:55.238301+00:00
 Deployments scanned: 9
 Summary: live_ready=2 reduced_risk_only=7 research_only=0 symbols_with_incidents=9 total_fills=0
 TCA overview: none
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
+TCA adaptation impact report: artifacts\system\reports\tca_adaptation_impact_report.txt
+Live research queue: artifacts\system\reports\live_research_queue.txt
+Live improvement activity report: artifacts\system\reports\live_improvement_activity_report.txt
+Live research triggers: 0
 TCA worst edge retention: BTC/btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up=100.0%
 Tradeable now: none
 Blocked now: BTC, ETH, EURUSD, GBPUSD, JP225, US100, US500, USDJPY, XAUUSD
@@ -16,6 +20,7 @@ Symbol: BTC
   tiers: core
   execution_validation: selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\btc\live.json
   latest_journal: artifacts\live\btc\journals\20260410T142308Z_journal.json
   latest_incident: artifacts\live\btc\incidents\20260409T210135Z_incident.txt
@@ -30,6 +35,7 @@ Symbol: ETH
   tiers: core
   execution_validation: selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
   latest_journal: artifacts\live\eth\journals\20260410T142308Z_journal.json
   latest_incident: artifacts\live\eth\incidents\20260409T210135Z_incident.txt
@@ -44,6 +50,7 @@ Symbol: EURUSD
   tiers: core
   execution_validation: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=134.36 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
   latest_journal: artifacts\live\eurusd\journals\20260410T142308Z_journal.json
   latest_incident: artifacts\live\eurusd\incidents\20260409T210135Z_incident.txt
@@ -58,6 +65,7 @@ Symbol: GBPUSD
   tiers: specialist
   execution_validation: selection=tiered_fallback core=0 specialist=1 -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\gbpusd\live.json
   latest_journal: artifacts\live\gbpusd\journals\20260411T054817Z_journal.json
   latest_incident: artifacts\live\gbpusd\incidents\20260410T210134Z_incident.txt
@@ -72,6 +80,7 @@ Symbol: JP225
   tiers: core
   execution_validation: selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\jp225\live.json
   latest_journal: artifacts\live\jp225\journals\20260410T142309Z_journal.json
   latest_incident: artifacts\live\jp225\incidents\20260409T210135Z_incident.txt
@@ -86,6 +95,7 @@ Symbol: US100
   tiers: core
   execution_validation: selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.83 pf=1.70 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\us100\live.json
   latest_journal: artifacts\live\us100\journals\20260410T142310Z_journal.json
   latest_incident: artifacts\live\us100\incidents\20260409T210135Z_incident.txt
@@ -100,6 +110,7 @@ Symbol: US500
   tiers: specialist
   execution_validation: selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\us500\live.json
   latest_journal: artifacts\live\us500\journals\20260410T142311Z_journal.json
   latest_incident: artifacts\live\us500\incidents\20260409T210135Z_incident.txt
@@ -114,6 +125,7 @@ Symbol: USDJPY
   tiers: core, specialist
   execution_validation: selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
   latest_journal: artifacts\live\usdjpy\journals\20260410T142311Z_journal.json
   latest_incident: artifacts\live\usdjpy\incidents\20260409T210135Z_incident.txt
@@ -126,8 +138,9 @@ Symbol: XAUUSD
   broker_symbol: XAUUSD
   strategies: 1
   tiers: core
-  execution_validation: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=1646.48 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
+  execution_validation: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=163.99 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
   latest_journal: artifacts\live\xauusd\journals\20260410T142312Z_journal.json
   latest_incident: artifacts\live\xauusd\incidents\20260409T210135Z_incident.txt

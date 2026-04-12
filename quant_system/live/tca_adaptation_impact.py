@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -104,6 +105,7 @@ def generate_tca_adaptation_impact_report(config: SystemConfig | None = None) ->
     if not rows:
         lines.append("No rows available.")
         report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        _write_tca_adaptation_impact_json(report_path, rows)
         return report_path
     header = (
         f"{'symbol':<8} {'strategy':<24} {'fills':>6} {'edge_ret%':>9} "
@@ -138,4 +140,14 @@ def generate_tca_adaptation_impact_report(config: SystemConfig | None = None) ->
             ]
         )
     report_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    _write_tca_adaptation_impact_json(report_path, rows)
     return report_path
+
+
+def _write_tca_adaptation_impact_json(report_path: Path, rows: list[TCAAdaptationImpactRow]) -> None:
+    payload = {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "rows": [asdict(row) for row in rows],
+        "report_path": str(report_path),
+    }
+    report_path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")

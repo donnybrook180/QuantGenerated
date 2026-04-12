@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from statistics import median
@@ -164,6 +165,36 @@ class TCAReport:
     report_path: Path
 
 
+def _json_ready(value):
+    if isinstance(value, datetime):
+        return value.astimezone(UTC).isoformat()
+    if isinstance(value, Path):
+        return str(value)
+    if isinstance(value, list):
+        return [_json_ready(item) for item in value]
+    if isinstance(value, dict):
+        return {str(key): _json_ready(item) for key, item in value.items()}
+    return value
+
+
+def _write_tca_json(report: TCAReport, database_path: str) -> Path:
+    json_path = report.report_path.with_suffix(".json")
+    payload = {
+        "generated_at": report.generated_at.astimezone(UTC).isoformat(),
+        "database_path": database_path,
+        "broker_symbol": report.broker_symbol,
+        "overview": _json_ready(asdict(report.overview)) if report.overview is not None else None,
+        "by_symbol": _json_ready([asdict(row) for row in report.by_symbol]),
+        "by_strategy": _json_ready([asdict(row) for row in report.by_strategy]),
+        "by_intent": _json_ready([asdict(row) for row in report.by_intent]),
+        "by_hour": _json_ready([asdict(row) for row in report.by_hour]),
+        "worst_fills": _json_ready(report.worst_fills),
+        "report_path": str(report.report_path),
+    }
+    json_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    return json_path
+
+
 def summarize_tca_overview(report: TCAReport) -> str:
     if report.overview is None:
         return "none"
@@ -280,7 +311,7 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
             + "\n",
             encoding="utf-8",
         )
-        return TCAReport(
+        report = TCAReport(
             generated_at=generated_at,
             broker_symbol=broker_symbol,
             overview=None,
@@ -291,6 +322,8 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
             worst_fills=[],
             report_path=report_path,
         )
+        _write_tca_json(report, config.ai.experiment_database_path)
+        return report
 
     overview = _aggregate("all_fills", fills)
     by_symbol = _group_aggregates(fills, lambda fill: fill.get("broker_symbol") or fill.get("requested_symbol") or "unknown")
@@ -299,7 +332,7 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
     by_hour = _group_aggregates(fills, lambda fill: f"{_as_utc(fill['event_timestamp']).hour:02d}:00")
     worst = _worst_fills(fills)
     report_path.write_text(render_tca_report_text(generated_at, config.ai.experiment_database_path, broker_symbol, overview, by_symbol, by_strategy, by_intent, by_hour, worst), encoding="utf-8")
-    return TCAReport(
+    report = TCAReport(
         generated_at=generated_at,
         broker_symbol=broker_symbol,
         overview=overview,
@@ -310,6 +343,8 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
         worst_fills=worst,
         report_path=report_path,
     )
+    _write_tca_json(report, config.ai.experiment_database_path)
+    return report
 
 
 def _render_table(title: str, rows: list[TCAAggregate], limit: int) -> list[str]:

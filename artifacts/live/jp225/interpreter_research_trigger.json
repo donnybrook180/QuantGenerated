@@ -3,9 +3,11 @@
   "broker_symbol": "JP225.cash",
   "priority": 1,
   "labels": [
-    "no_trade::insufficient_market_data"
+    "compression_regime"
   ],
   "objective": "Improve archetype selection using market interpreter state and execution context.",
-  "suggested_experiments": [],
+  "suggested_experiments": [
+    "compare breakout-only variants against current mixed archetypes"
+  ],
   "report_path": "artifacts\\live\\jp225\\interpreter_research_trigger.json"
 }

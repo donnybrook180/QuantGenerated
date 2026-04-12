@@ -3,9 +3,11 @@
   "broker_symbol": "XAUUSD",
   "priority": 1,
   "labels": [
-    "no_trade::insufficient_market_data"
+    "midday_chop"
   ],
   "objective": "Improve archetype selection using market interpreter state and execution context.",
-  "suggested_experiments": [],
+  "suggested_experiments": [
+    "test midday exclusion filters or mean-reversion-only variants"
+  ],
   "report_path": "artifacts\\live\\xauusd\\interpreter_research_trigger.json"
 }

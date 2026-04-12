@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-12T18:18:44.641616+00:00",
+  "generated_at": "2026-04-12T19:08:34.103529+00:00",
   "report_path": "artifacts\\system\\reports\\market_interpreter_report.txt",
   "states": [
     {
       "symbol": "BTC",
       "broker_symbol": "BTCUSD",
-      "generated_at": "2026-04-12 18:18:44.046239+00:00",
+      "generated_at": "2026-04-12 19:08:33.634078+00:00",
       "legacy_regime_label": "event_risk",
       "unified_regime_label": "event_dislocation",
       "macro_regime": "neutral",
@@ -76,7 +76,7 @@
     {
       "symbol": "GBPUSD",
       "broker_symbol": "GBPUSD",
-      "generated_at": "2026-04-12 18:18:44.278549+00:00",
+      "generated_at": "2026-04-12 19:08:33.818327+00:00",
       "legacy_regime_label": "volatile_chop",
       "unified_regime_label": "dislocated_chop",
       "macro_regime": "neutral",
@@ -147,7 +147,7 @@
     {
       "symbol": "USDJPY",
       "broker_symbol": "USDJPY",
-      "generated_at": "2026-04-12 18:18:44.562831+00:00",
+      "generated_at": "2026-04-12 19:08:34.041272+00:00",
       "legacy_regime_label": "event_risk",
       "unified_regime_label": "event_dislocation",
       "macro_regime": "neutral",
@@ -218,7 +218,7 @@
     {
       "symbol": "ETH",
       "broker_symbol": "ETHUSD",
-      "generated_at": "2026-04-12 18:18:44.129794+00:00",
+      "generated_at": "2026-04-12 19:08:33.698609+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "orderly_range",
       "macro_regime": "neutral",
@@ -291,7 +291,7 @@
     {
       "symbol": "EURUSD",
       "broker_symbol": "EURUSD",
-      "generated_at": "2026-04-12 18:18:44.204294+00:00",
+      "generated_at": "2026-04-12 19:08:33.758054+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "orderly_range",
       "macro_regime": "neutral",
@@ -364,7 +364,7 @@
     {
       "symbol": "JP225",
       "broker_symbol": "JP225.cash",
-      "generated_at": "2026-04-12 18:18:44.352969+00:00",
+      "generated_at": "2026-04-12 19:08:33.874611+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "compressed_range",
       "macro_regime": "neutral",
@@ -437,7 +437,7 @@
     {
       "symbol": "US100",
       "broker_symbol": "US100.cash",
-      "generated_at": "2026-04-12 18:18:44.432683+00:00",
+      "generated_at": "2026-04-12 19:08:33.938415+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "compressed_range",
       "macro_regime": "neutral",
@@ -510,7 +510,7 @@
     {
       "symbol": "US500",
       "broker_symbol": "US500.cash",
-      "generated_at": "2026-04-12 18:18:44.489012+00:00",
+      "generated_at": "2026-04-12 19:08:33.981098+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "compressed_range",
       "macro_regime": "neutral",
@@ -583,7 +583,7 @@
     {
       "symbol": "XAUUSD",
       "broker_symbol": "XAUUSD",
-      "generated_at": "2026-04-12 18:18:44.636181+00:00",
+      "generated_at": "2026-04-12 19:08:34.099273+00:00",
       "legacy_regime_label": "calm_range",
       "unified_regime_label": "orderly_trend",
       "macro_regime": "neutral",

@@ -3,9 +3,11 @@
   "broker_symbol": "EURUSD",
   "priority": 1,
   "labels": [
-    "no_trade::insufficient_market_data"
+    "range_rotation"
   ],
   "objective": "Improve archetype selection using market interpreter state and execution context.",
-  "suggested_experiments": [],
+  "suggested_experiments": [
+    "test mean-reversion-biased variants and avoid trend breakout logic"
+  ],
   "report_path": "artifacts\\live\\eurusd\\interpreter_research_trigger.json"
 }

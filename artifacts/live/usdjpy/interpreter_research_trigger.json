@@ -1,11 +1,14 @@
 {
   "symbol": "USDJPY",
   "broker_symbol": "USDJPY",
-  "priority": 1,
+  "priority": 2,
   "labels": [
-    "no_trade::insufficient_market_data"
+    "midday_chop",
+    "no_trade::regime_block::event_risk"
   ],
   "objective": "Improve archetype selection using market interpreter state and execution context.",
-  "suggested_experiments": [],
+  "suggested_experiments": [
+    "test midday exclusion filters or mean-reversion-only variants"
+  ],
   "report_path": "artifacts\\live\\usdjpy\\interpreter_research_trigger.json"
 }

@@ -26,6 +26,30 @@ class RegimeSnapshot:
     metadata: dict[str, float | str] = field(default_factory=dict)
 
 
+def map_regime_label_to_unified(regime_label: str, volatility_label: str, structure_label: str) -> str:
+    if regime_label == "event_risk":
+        return "event_dislocation"
+    if regime_label == "volatile_trend":
+        return "trend_expansion"
+    if regime_label == "volatile_chop":
+        return "dislocated_chop"
+    if regime_label == "calm_trend":
+        return "orderly_trend"
+    if regime_label == "calm_range":
+        if structure_label == "trend":
+            return "orderly_trend"
+        if volatility_label == "low":
+            return "compressed_range"
+        return "orderly_range"
+    if volatility_label == "high" and structure_label == "trend":
+        return "trend_expansion"
+    if volatility_label == "high":
+        return "dislocated_chop"
+    if structure_label == "trend":
+        return "orderly_trend"
+    return "orderly_range"
+
+
 def _sample_std(values: list[float]) -> float:
     if len(values) <= 1:
         return 0.0
@@ -177,10 +201,15 @@ def regime_allows_strategy(
     min_vol_percentile: float = 0.0,
     max_vol_percentile: float = 1.0,
 ) -> bool:
+    unified_label = map_regime_label_to_unified(
+        snapshot.regime_label,
+        snapshot.volatility_label,
+        snapshot.structure_label,
+    )
     if snapshot.vol_percentile < min_vol_percentile or snapshot.vol_percentile > max_vol_percentile:
         return False
-    if allowed_regimes and snapshot.regime_label not in allowed_regimes:
+    if allowed_regimes and snapshot.regime_label not in allowed_regimes and unified_label not in allowed_regimes:
         return False
-    if blocked_regimes and snapshot.regime_label in blocked_regimes:
+    if blocked_regimes and (snapshot.regime_label in blocked_regimes or unified_label in blocked_regimes):
         return False
     return True

@@ -1,34 +1,33 @@
 Artifact: forex_trend_continuation_looser_symbol_candidate
-Closed trades: 41
-Realized pnl: -6637.37
+Closed trades: 31
+Realized pnl: 1948.97
 
 By entry hour
-13: trades=3 pnl=-3187.12 avg=-1062.37 win_rate=0.00%
-20: trades=3 pnl=-2131.16 avg=-710.39 win_rate=0.00%
-9: trades=2 pnl=-1931.64 avg=-965.82 win_rate=0.00%
-4: trades=3 pnl=-1090.96 avg=-363.65 win_rate=0.00%
-3: trades=1 pnl=-950.25 avg=-950.25 win_rate=0.00%
-5: trades=2 pnl=-492.92 avg=-246.46 win_rate=0.00%
-11: trades=2 pnl=-350.29 avg=-175.14 win_rate=0.00%
-2: trades=1 pnl=-342.13 avg=-342.13 win_rate=0.00%
-0: trades=1 pnl=-308.43 avg=-308.43 win_rate=0.00%
-6: trades=6 pnl=-252.35 avg=-42.06 win_rate=16.67%
-1: trades=1 pnl=-188.05 avg=-188.05 win_rate=0.00%
-17: trades=1 pnl=-85.15 avg=-85.15 win_rate=0.00%
-8: trades=2 pnl=94.03 avg=47.01 win_rate=50.00%
-12: trades=5 pnl=118.93 avg=23.79 win_rate=20.00%
-19: trades=2 pnl=360.17 avg=180.09 win_rate=50.00%
-7: trades=1 pnl=958.60 avg=958.60 win_rate=100.00%
-14: trades=1 pnl=965.79 avg=965.79 win_rate=100.00%
-10: trades=2 pnl=967.53 avg=483.77 win_rate=50.00%
-18: trades=2 pnl=1208.03 avg=604.02 win_rate=50.00%
+13: trades=3 pnl=-348.38 avg=-116.13 win_rate=0.00%
+20: trades=3 pnl=-279.06 avg=-93.02 win_rate=0.00%
+9: trades=2 pnl=-237.23 avg=-118.61 win_rate=0.00%
+4: trades=2 pnl=-131.75 avg=-65.87 win_rate=0.00%
+3: trades=1 pnl=-116.99 avg=-116.99 win_rate=0.00%
+6: trades=4 pnl=-82.27 avg=-20.57 win_rate=25.00%
+5: trades=1 pnl=-64.45 avg=-64.45 win_rate=0.00%
+2: trades=1 pnl=-56.41 avg=-56.41 win_rate=0.00%
+1: trades=1 pnl=-40.50 avg=-40.50 win_rate=0.00%
+0: trades=1 pnl=-37.58 avg=-37.58 win_rate=0.00%
+11: trades=1 pnl=-20.58 avg=-20.58 win_rate=0.00%
+19: trades=2 pnl=-7.83 avg=-3.91 win_rate=50.00%
+8: trades=1 pnl=24.62 avg=24.62 win_rate=100.00%
+12: trades=3 pnl=73.53 avg=24.51 win_rate=33.33%
+7: trades=1 pnl=73.76 avg=73.76 win_rate=100.00%
+18: trades=2 pnl=141.69 avg=70.85 win_rate=50.00%
+10: trades=2 pnl=3058.40 avg=1529.20 win_rate=100.00%
 
 By entry setup
-forex_trend_continuation: trades=41 pnl=-6637.37 avg=-161.89 win_rate=19.51%
+forex_trend_continuation: trades=31 pnl=1948.97 avg=62.87 win_rate=25.81%
 
 By exit reason
-stop_loss: trades=10 pnl=-9189.11 avg=-918.91 win_rate=0.00%
-signal_exit: trades=15 pnl=-4919.26 avg=-327.95 win_rate=6.67%
-stale_breakout: trades=3 pnl=-634.80 avg=-211.60 win_rate=0.00%
-trailing_stop: trades=8 pnl=1003.16 avg=125.40 win_rate=25.00%
-take_profit: trades=5 pnl=7102.63 avg=1420.53 win_rate=100.00%
+stop_loss: trades=10 pnl=-1064.68 avg=-106.47 win_rate=0.00%
+signal_exit: trades=9 pnl=-391.10 avg=-43.46 win_rate=11.11%
+stale_breakout: trades=2 pnl=-44.85 avg=-22.43 win_rate=0.00%
+trailing_stop: trades=6 pnl=52.61 avg=8.77 win_rate=50.00%
+take_profit: trades=3 pnl=511.95 avg=170.65 win_rate=100.00%
+end_of_run: trades=1 pnl=2885.04 avg=2885.04 win_rate=100.00%

@@ -1,0 +1,83 @@
+Market interpreter report
+generated_at: 2026-04-12T19:08:34.099752+00:00
+
+BTC: bias=long confidence=0.56 risk=defensive
+  regimes: legacy=event_risk unified=event_dislocation macro=neutral session=midday_chop structure=clean_breakout vol=event_risk execution=unknown
+  quality: setup=0.60 execution=0.50
+  allowed_archetypes: none
+  blocked_archetypes: mean_reversion
+  no_trade_reason: regime_block::event_risk
+  explanation: event_dislocation / midday_chop with unknown execution; no trade because regime_block::event_risk.
+  artifact: artifacts\live\btc\market_interpreter.json
+
+GBPUSD: bias=short confidence=0.44 risk=defensive
+  regimes: legacy=volatile_chop unified=dislocated_chop macro=neutral session=midday_chop structure=failed_breakout vol=high execution=unknown
+  quality: setup=0.39 execution=0.50
+  allowed_archetypes: none
+  blocked_archetypes: breakout
+  no_trade_reason: regime_block::volatile_chop
+  explanation: dislocated_chop / midday_chop with unknown execution; no trade because regime_block::volatile_chop.
+  artifact: artifacts\live\gbpusd\market_interpreter.json
+
+USDJPY: bias=long confidence=0.53 risk=defensive
+  regimes: legacy=event_risk unified=event_dislocation macro=neutral session=midday_chop structure=clean_breakout vol=event_risk execution=unknown
+  quality: setup=0.54 execution=0.50
+  allowed_archetypes: none
+  blocked_archetypes: mean_reversion
+  no_trade_reason: regime_block::event_risk
+  explanation: event_dislocation / midday_chop with unknown execution; no trade because regime_block::event_risk.
+  artifact: artifacts\live\usdjpy\market_interpreter.json
+
+ETH: bias=long confidence=0.51 risk=normal
+  regimes: legacy=calm_range unified=orderly_range macro=neutral session=us_open_expansion structure=compression vol=normal execution=unknown
+  quality: setup=0.52 execution=0.50
+  allowed_archetypes: breakout
+  blocked_archetypes: mean_reversion
+  no_trade_reason: none
+  explanation: orderly_range with us_open_expansion and compression favors long; execution is unknown; allowed archetypes: breakout.
+  artifact: artifacts\live\eth\market_interpreter.json
+
+EURUSD: bias=long confidence=0.55 risk=normal
+  regimes: legacy=calm_range unified=orderly_range macro=neutral session=us_open_balance structure=range_rotation vol=normal execution=unknown
+  quality: setup=0.58 execution=0.50
+  allowed_archetypes: mean_reversion
+  blocked_archetypes: breakout
+  no_trade_reason: none
+  explanation: orderly_range with us_open_balance and range_rotation favors long; execution is unknown; allowed archetypes: mean_reversion.
+  artifact: artifacts\live\eurusd\market_interpreter.json
+
+JP225: bias=long confidence=0.56 risk=normal
+  regimes: legacy=calm_range unified=compressed_range macro=neutral session=europe_trend structure=compression vol=low execution=unknown
+  quality: setup=0.60 execution=0.50
+  allowed_archetypes: breakout
+  blocked_archetypes: mean_reversion
+  no_trade_reason: none
+  explanation: compressed_range with europe_trend and compression favors long; execution is unknown; allowed archetypes: breakout.
+  artifact: artifacts\live\jp225\market_interpreter.json
+
+US100: bias=long confidence=0.36 risk=normal
+  regimes: legacy=calm_range unified=compressed_range macro=neutral session=midday_chop structure=compression vol=low execution=unknown
+  quality: setup=0.27 execution=0.50
+  allowed_archetypes: breakout
+  blocked_archetypes: mean_reversion
+  no_trade_reason: none
+  explanation: compressed_range with midday_chop and compression favors long; execution is unknown; allowed archetypes: breakout.
+  artifact: artifacts\live\us100\market_interpreter.json
+
+US500: bias=long confidence=0.36 risk=normal
+  regimes: legacy=calm_range unified=compressed_range macro=neutral session=midday_chop structure=compression vol=low execution=unknown
+  quality: setup=0.26 execution=0.50
+  allowed_archetypes: breakout
+  blocked_archetypes: mean_reversion
+  no_trade_reason: none
+  explanation: compressed_range with midday_chop and compression favors long; execution is unknown; allowed archetypes: breakout.
+  artifact: artifacts\live\us500\market_interpreter.json
+
+XAUUSD: bias=short confidence=0.47 risk=normal
+  regimes: legacy=calm_range unified=orderly_trend macro=neutral session=midday_chop structure=failed_breakout vol=normal execution=unknown
+  quality: setup=0.45 execution=0.50
+  allowed_archetypes: none
+  blocked_archetypes: breakout
+  no_trade_reason: none
+  explanation: orderly_trend with midday_chop and failed_breakout favors short; execution is unknown; allowed archetypes: none.
+  artifact: artifacts\live\xauusd\market_interpreter.json

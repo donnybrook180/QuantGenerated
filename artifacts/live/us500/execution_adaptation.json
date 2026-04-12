@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-11T11:58:56.240442+00:00",
+  "generated_at": "2026-04-12T19:08:36.622453+00:00",
   "symbol": "US500",
   "broker_symbol": "US500.cash",
   "action": "insufficient_data",
@@ -24,16 +24,16 @@
     "symbol": "US500",
     "data_symbol": "SPY",
     "broker_symbol": "US500.cash",
-    "research_run_id": 268,
-    "execution_set_id": 145,
-    "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.78 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
+    "research_run_id": 302,
+    "execution_set_id": 150,
+    "execution_validation_summary": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.08 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
     "symbol_status": "reduced_risk_only",
     "strategies": [
       {
         "candidate_name": "momentum__exit_trend__near_miss_patient",
         "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
         "promotion_tier": "specialist",
-        "policy_summary": "tier=specialist; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.76; loss_ratio=0.54",
+        "policy_summary": "tier=specialist; activate in unified_regimes=dislocated_chop; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.76; loss_ratio=0.54",
         "variant_label": "",
         "regime_filter_label": "",
         "execution_overrides": {
@@ -46,10 +46,10 @@
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_flat_vol_high"
+          "dislocated_chop"
         ],
         "blocked_regimes": [
-          "trend_flat_vol_mid"
+          "orderly_range"
         ],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,

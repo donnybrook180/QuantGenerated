@@ -1,58 +1,21 @@
 {
-  "generated_at": "2026-04-11T11:58:55.767737+00:00",
+  "generated_at": "2026-04-12T19:08:36.357556+00:00",
   "symbol": "GBPUSD",
   "broker_symbol": "GBPUSD",
   "action": "insufficient_data",
   "reason": "not enough local fills for adaptation",
   "overview": null,
-  "strategy_actions": [
-    {
-      "candidate_name": "gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient",
-      "fill_count": 0,
-      "action": "unchanged",
-      "base_weight_scale": 1.0,
-      "risk_scale": 1.0,
-      "min_bars_between_trades": 0,
-      "resulting_base_weight": 0.35,
-      "resulting_max_risk_multiplier": 0.35,
-      "local_rank_label": "baseline_local",
-      "reason": "healthy_or_insufficient_data"
-    }
-  ],
+  "strategy_actions": [],
   "adapted_deployment": {
     "profile_name": "symbol::gbpusd",
     "symbol": "GBPUSD",
     "data_symbol": "C:GBPUSD",
     "broker_symbol": "GBPUSD",
-    "research_run_id": 291,
-    "execution_set_id": 166,
-    "execution_validation_summary": "selection=tiered_fallback core=0 specialist=1 -> accepted_with_reduced_risk",
-    "symbol_status": "reduced_risk_only",
-    "strategies": [
-      {
-        "candidate_name": "gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient",
-        "code_path": "quant_system.agents.forex.GBPUSDOverlapImpulseAgent;quant_system.agents.forex.GBPUSDOverlapImpulseAgent",
-        "promotion_tier": "specialist",
-        "policy_summary": "tier=specialist; activate in trend_up_vol_mid, trend_up_vol_low; avoid trend_flat_vol_mid, trend_flat_vol_high; vol_pct in [0.00, 0.80]; base_weight=0.35; risk_cap=0.35; stability=0.65; loss_ratio=0.60",
-        "variant_label": "",
-        "regime_filter_label": "",
-        "execution_overrides": {},
-        "allocation_weight": 1.0,
-        "allowed_regimes": [
-          "trend_up_vol_mid",
-          "trend_up_vol_low"
-        ],
-        "blocked_regimes": [
-          "trend_flat_vol_mid",
-          "trend_flat_vol_high"
-        ],
-        "min_vol_percentile": 0.0,
-        "max_vol_percentile": 0.8,
-        "base_allocation_weight": 0.35,
-        "max_risk_multiplier": 0.35,
-        "min_risk_multiplier": 0.0
-      }
-    ],
+    "research_run_id": 307,
+    "execution_set_id": null,
+    "execution_validation_summary": "not_run",
+    "symbol_status": "research_only",
+    "strategies": [],
     "target_volatility": 0.0,
     "max_symbol_vol_percentile": 0.98,
     "block_new_entries_in_event_risk": true

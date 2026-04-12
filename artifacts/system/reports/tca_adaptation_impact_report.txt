@@ -1,5 +1,5 @@
 TCA adaptation impact report
-generated_at: 2026-04-11T11:58:52.998438+00:00
+generated_at: 2026-04-12T19:08:33.574282+00:00
 
 Metric: estimated result index = edge_retention_pct x base_allocation_weight x max_risk_multiplier.
 Interpretation: this is a before/after estimate of what the execution adaptation layer changes in exposure to retained edge.
@@ -7,17 +7,12 @@ Interpretation: this is a before/after estimate of what the execution adaptation
 symbol   strategy                  fills edge_ret%   base_idx  adapt_idx     chg% action            
 ----------------------------------------------------------------------------------------------------
 BTC      btc_trend_pullback_high_      0     100.0     109.67     109.67      0.0 unchanged         
-BTC      crypto_short_breakdown__      0     100.0      61.28      61.28      0.0 unchanged         
-ETH      crypto_short_reversion_l      0     100.0      57.53      57.53      0.0 unchanged         
 ETH      crypto_vwap_reversion_us      0     100.0      69.00      69.00      0.0 unchanged         
-EURUSD   forex_breakout_momentum_      0     100.0     105.91     105.91      0.0 unchanged         
-GBPUSD   gbpusd_overlap_impulse__      0       0.0       0.00       0.00      0.0 unchanged         
+EURUSD   forex_breakout_momentum_      0     100.0     105.65     105.65      0.0 unchanged         
 JP225    jp225_volatility_short_b      0     100.0      69.00      69.00      0.0 unchanged         
 US100    us100_opening_range_shor      0       0.0       0.00       0.00      0.0 unchanged         
-US500    momentum__exit_trend__ne      0       0.0       0.00       0.00      0.0 unchanged         
+US500    momentum__exit_trend__ne      0     100.0      12.25      12.25      0.0 unchanged         
 USDJPY   forex_breakout_momentum_      0     100.0      12.25      12.25      0.0 unchanged         
-USDJPY   forex_short_breakdown_mo      0     100.0      99.77      99.77      0.0 unchanged         
-USDJPY   forex_short_breakdown_mo      0     100.0      65.22      65.22      0.0 unchanged         
 XAUUSD   xauusd_volatility_breako      0     100.0      69.00      69.00      0.0 unchanged         
 
 Details
@@ -30,32 +25,6 @@ BTC | btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up
   adapted_max_risk: 0.980
   baseline_result_index: 109.6734
   adapted_result_index: 109.6734
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-BTC | crypto_short_breakdown__15m_europe__exit_fastfail
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 1.021
-  adapted_base_weight: 1.021
-  baseline_max_risk: 0.600
-  adapted_max_risk: 0.600
-  baseline_result_index: 61.2843
-  adapted_result_index: 61.2843
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-ETH | crypto_short_reversion_late_europe__15m_europe__exit_fastfail
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 0.959
-  adapted_base_weight: 0.959
-  baseline_max_risk: 0.600
-  adapted_max_risk: 0.600
-  baseline_result_index: 57.5271
-  adapted_result_index: 57.5271
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
@@ -76,30 +45,17 @@ ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
 EURUSD | forex_breakout_momentum__30m_overlap
   live_fill_count: 0
   edge_retention_pct: 100.00
-  baseline_base_weight: 1.097
-  adapted_base_weight: 1.097
-  baseline_max_risk: 0.966
-  adapted_max_risk: 0.966
-  baseline_result_index: 105.9061
-  adapted_result_index: 105.9061
+  baseline_base_weight: 1.095
+  adapted_base_weight: 1.095
+  baseline_max_risk: 0.965
+  adapted_max_risk: 0.965
+  baseline_result_index: 105.6492
+  adapted_result_index: 105.6492
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
 
-GBPUSD | gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient
-  live_fill_count: 0
-  edge_retention_pct: 0.00
-  baseline_base_weight: 0.350
-  adapted_base_weight: 0.350
-  baseline_max_risk: 0.350
-  adapted_max_risk: 0.350
-  baseline_result_index: 0.0000
-  adapted_result_index: 0.0000
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-JP225 | jp225_volatility_short_breakdown_core_hours
+JP225 | jp225_volatility_short_breakdown_core_hours__exit_trend
   live_fill_count: 0
   edge_retention_pct: 100.00
   baseline_base_weight: 1.150
@@ -127,19 +83,6 @@ US100 | us100_opening_range_short_breakdown_trend
 
 US500 | momentum__exit_trend__near_miss_patient
   live_fill_count: 0
-  edge_retention_pct: 0.00
-  baseline_base_weight: 0.350
-  adapted_base_weight: 0.350
-  baseline_max_risk: 0.350
-  adapted_max_risk: 0.350
-  baseline_result_index: 0.0000
-  adapted_result_index: 0.0000
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-USDJPY | forex_breakout_momentum_patient
-  live_fill_count: 0
   edge_retention_pct: 100.00
   baseline_base_weight: 0.350
   adapted_base_weight: 0.350
@@ -151,28 +94,15 @@ USDJPY | forex_breakout_momentum_patient
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
 
-USDJPY | forex_short_breakdown_momentum__30m_overlap
+USDJPY | forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat
   live_fill_count: 0
   edge_retention_pct: 100.00
-  baseline_base_weight: 1.059
-  adapted_base_weight: 1.059
-  baseline_max_risk: 0.942
-  adapted_max_risk: 0.942
-  baseline_result_index: 99.7697
-  adapted_result_index: 99.7697
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-USDJPY | forex_short_breakdown_momentum__30m_us
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 0.825
-  adapted_base_weight: 0.825
-  baseline_max_risk: 0.791
-  adapted_max_risk: 0.791
-  baseline_result_index: 65.2180
-  adapted_result_index: 65.2180
+  baseline_base_weight: 0.350
+  adapted_base_weight: 0.350
+  baseline_max_risk: 0.350
+  adapted_max_risk: 0.350
+  baseline_result_index: 12.2500
+  adapted_result_index: 12.2500
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data

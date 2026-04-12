@@ -1,18 +1,18 @@
 Artifact: mean_reversion__exit_quick_default_symbol_candidate
 Closed trades: 7
-Realized pnl: -17.85
+Realized pnl: -1.77
 
 By entry hour
-2: trades=1 pnl=-34.49 avg=-34.49 win_rate=0.00%
-5: trades=1 pnl=-16.51 avg=-16.51 win_rate=0.00%
-4: trades=1 pnl=-11.50 avg=-11.50 win_rate=0.00%
-1: trades=1 pnl=-6.95 avg=-6.95 win_rate=0.00%
-3: trades=3 pnl=51.61 avg=17.20 win_rate=33.33%
+2: trades=1 pnl=-3.45 avg=-3.45 win_rate=0.00%
+5: trades=1 pnl=-1.65 avg=-1.65 win_rate=0.00%
+4: trades=1 pnl=-1.15 avg=-1.15 win_rate=0.00%
+1: trades=1 pnl=-0.69 avg=-0.69 win_rate=0.00%
+3: trades=3 pnl=5.17 avg=1.72 win_rate=33.33%
 
 By entry setup
-mean_reversion: trades=7 pnl=-17.85 avg=-2.55 win_rate=14.29%
+mean_reversion: trades=7 pnl=-1.77 avg=-0.25 win_rate=14.29%
 
 By exit reason
-structure_exit: trades=5 pnl=-66.71 avg=-13.34 win_rate=0.00%
-stop_loss: trades=1 pnl=-16.51 avg=-16.51 win_rate=0.00%
-take_profit: trades=1 pnl=65.37 avg=65.37 win_rate=100.00%
+structure_exit: trades=5 pnl=-6.66 avg=-1.33 win_rate=0.00%
+stop_loss: trades=1 pnl=-1.65 avg=-1.65 win_rate=0.00%
+take_profit: trades=1 pnl=6.54 avg=6.54 win_rate=100.00%

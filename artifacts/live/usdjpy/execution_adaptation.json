@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-11T11:58:56.434816+00:00",
+  "generated_at": "2026-04-12T19:08:36.727570+00:00",
   "symbol": "USDJPY",
   "broker_symbol": "USDJPY",
   "action": "insufficient_data",
@@ -7,31 +7,7 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "forex_short_breakdown_momentum__30m_us",
-      "fill_count": 0,
-      "action": "unchanged",
-      "base_weight_scale": 1.0,
-      "risk_scale": 1.0,
-      "min_bars_between_trades": 0,
-      "resulting_base_weight": 0.8246560675227741,
-      "resulting_max_risk_multiplier": 0.7908503291217834,
-      "local_rank_label": "baseline_local",
-      "reason": "healthy_or_insufficient_data"
-    },
-    {
-      "candidate_name": "forex_short_breakdown_momentum__30m_overlap",
-      "fill_count": 0,
-      "action": "unchanged",
-      "base_weight_scale": 1.0,
-      "risk_scale": 1.0,
-      "min_bars_between_trades": 0,
-      "resulting_base_weight": 1.0593999802267242,
-      "resulting_max_risk_multiplier": 0.9417571301457514,
-      "local_rank_label": "baseline_local",
-      "reason": "healthy_or_insufficient_data"
-    },
-    {
-      "candidate_name": "forex_breakout_momentum_patient",
+      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
@@ -48,71 +24,33 @@
     "symbol": "USDJPY",
     "data_symbol": "C:USDJPY",
     "broker_symbol": "USDJPY",
-    "research_run_id": 260,
-    "execution_set_id": 139,
-    "execution_validation_summary": "selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk",
+    "research_run_id": 309,
+    "execution_set_id": 155,
+    "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat@30m_overlap|trend_flat data_source=duckdb_cache_aggregated pnl=10514.04 pf=10.68 closed=11 quality=0.54 underwater=54.5% -> accepted",
     "symbol_status": "reduced_risk_only",
     "strategies": [
       {
-        "candidate_name": "forex_short_breakdown_momentum__30m_us",
-        "code_path": "quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
-        "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_flat_vol_low; avoid trend_down_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.82; risk_cap=0.79; stability=0.54; loss_ratio=0.65",
-        "variant_label": "30m_us",
-        "regime_filter_label": "",
-        "execution_overrides": {},
-        "allocation_weight": 1.0,
-        "allowed_regimes": [
-          "trend_flat_vol_low"
-        ],
-        "blocked_regimes": [
-          "trend_down_vol_mid"
-        ],
-        "min_vol_percentile": 0.0,
-        "max_vol_percentile": 0.45,
-        "base_allocation_weight": 0.8246560675227741,
-        "max_risk_multiplier": 0.7908503291217834,
-        "min_risk_multiplier": 0.0
-      },
-      {
-        "candidate_name": "forex_short_breakdown_momentum__30m_overlap",
-        "code_path": "quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
-        "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_down_vol_mid; avoid trend_flat_vol_high; vol_pct in [0.20, 0.80]; base_weight=1.06; risk_cap=0.94; stability=0.87; loss_ratio=0.13",
-        "variant_label": "30m_overlap",
-        "regime_filter_label": "",
-        "execution_overrides": {},
-        "allocation_weight": 1.0,
-        "allowed_regimes": [
-          "trend_down_vol_mid"
-        ],
-        "blocked_regimes": [
-          "trend_flat_vol_high"
-        ],
-        "min_vol_percentile": 0.2,
-        "max_vol_percentile": 0.8,
-        "base_allocation_weight": 1.0593999802267242,
-        "max_risk_multiplier": 0.9417571301457514,
-        "min_risk_multiplier": 0.0
-      },
-      {
-        "candidate_name": "forex_breakout_momentum_patient",
+        "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat",
         "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
         "promotion_tier": "specialist",
-        "policy_summary": "tier=specialist; activate in trend_flat_vol_low; avoid trend_flat_vol_mid; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00",
-        "variant_label": "",
-        "regime_filter_label": "",
+        "policy_summary": "tier=specialist; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=0.99; loss_ratio=0.02",
+        "variant_label": "30m_overlap",
+        "regime_filter_label": "trend_flat",
         "execution_overrides": {
-          "structure_exit_bars": 0,
+          "max_holding_bars": 0,
+          "take_profit_atr_multiple": 3.2,
+          "trailing_stop_atr_multiple": 0.55,
           "stale_breakout_bars": 8,
-          "max_holding_bars": 32
+          "structure_exit_bars": 0,
+          "stop_loss_atr_multiple": 1.0999999999999999,
+          "break_even_atr_multiple": 0.25
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_flat_vol_low"
+          "compressed_range"
         ],
         "blocked_regimes": [
-          "trend_flat_vol_mid"
+          "orderly_range"
         ],
         "min_vol_percentile": 0.0,
         "max_vol_percentile": 0.45,

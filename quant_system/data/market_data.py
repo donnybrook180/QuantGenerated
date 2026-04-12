@@ -96,10 +96,14 @@ class DuckDBMarketDataStore:
             rows = connection.execute(
                 """
                 SELECT ts, open, high, low, close, volume
-                FROM market_bars
-                WHERE symbol = ? AND timeframe = ?
+                FROM (
+                    SELECT ts, open, high, low, close, volume
+                    FROM market_bars
+                    WHERE symbol = ? AND timeframe = ?
+                    ORDER BY ts DESC
+                    LIMIT ?
+                ) recent_bars
                 ORDER BY ts ASC
-                LIMIT ?
                 """,
                 [symbol, timeframe, limit],
             ).fetchall()
@@ -116,6 +120,19 @@ class DuckDBMarketDataStore:
             for row in rows
             if row[4] > 0 and row[2] >= row[3]
         ]
+
+    def list_timeframes(self, symbol: str) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT DISTINCT timeframe
+                FROM market_bars
+                WHERE symbol = ?
+                ORDER BY timeframe ASC
+                """,
+                [symbol],
+            ).fetchall()
+        return [str(row[0]) for row in rows]
 
     def load_bars_before(self, symbol: str, timeframe: str, end_ts: datetime, limit: int) -> list[MarketBar]:
         with self._connect() as connection:

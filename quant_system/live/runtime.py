@@ -11,12 +11,26 @@ from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.execution.engine import AgentCoordinator
 from quant_system.integrations.mt5 import MT5AccountModeInfo, MT5Client, MT5Error, MT5PositionInfo
+from quant_system.interpreter.app import build_market_interpreter_state
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.models import OrderRequest, Side
-from quant_system.regime import RegimeSnapshot, classify_regime, regime_allows_strategy
+from quant_system.regime import RegimeSnapshot, classify_regime, map_regime_label_to_unified, regime_allows_strategy
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _candidate_archetype(strategy: DeploymentStrategy) -> str:
+    name = strategy.candidate_name.lower()
+    if "reclaim" in name:
+        return "reclaim"
+    if "reversion" in name:
+        return "mean_reversion"
+    if "breakout" in name:
+        return "breakout"
+    if "pullback" in name or "trend" in name:
+        return "trend_pullback"
+    return "unknown"
 
 
 def _mt5_timeframe_from_variant(variant_label: str, default_timeframe: str) -> str:
@@ -132,13 +146,29 @@ def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: Deployme
     )
 
 
+def _interpreter_block_reason(strategy: DeploymentStrategy, interpreter_state) -> str:
+    if interpreter_state is None:
+        return ""
+    archetype = _candidate_archetype(strategy)
+    blocked = set(interpreter_state.blocked_archetypes or [])
+    allowed = set(interpreter_state.allowed_archetypes or [])
+    if interpreter_state.risk_posture == "defensive" and not allowed:
+        return f"interpreter_defensive::{interpreter_state.no_trade_reason or interpreter_state.session_regime}"
+    if archetype != "unknown" and archetype in blocked:
+        return f"interpreter_blocked::{archetype}"
+    if allowed and archetype != "unknown" and archetype not in allowed:
+        return f"interpreter_not_allowed::{archetype}"
+    return ""
+
+
 def _allocator_score(strategy: DeploymentStrategy, signal_side: Side, confidence: float, snapshot: RegimeSnapshot) -> float:
     if signal_side == Side.FLAT:
         return 0.0
+    unified_regime = map_regime_label_to_unified(snapshot.regime_label, snapshot.volatility_label, snapshot.structure_label)
     raw = confidence * max(_effective_risk_multiplier(snapshot, strategy), 0.0) * max(strategy.base_allocation_weight, 0.0)
-    if strategy.allowed_regimes and snapshot.regime_label in strategy.allowed_regimes:
+    if strategy.allowed_regimes and (snapshot.regime_label in strategy.allowed_regimes or unified_regime in strategy.allowed_regimes):
         raw *= 1.15
-    if strategy.regime_filter_label and strategy.regime_filter_label == snapshot.regime_label:
+    if strategy.regime_filter_label and strategy.regime_filter_label in {snapshot.regime_label, unified_regime}:
         raw *= 1.10
     return max(raw, 0.0)
 
@@ -163,6 +193,9 @@ class StrategyAction:
     effective_size_factor: float = 0.0
     risk_budget_cash: float = 0.0
     veto_reason: str = ""
+    interpreter_reason: str = ""
+    interpreter_bias: str = ""
+    interpreter_confidence: float = 0.0
 
 
 @dataclass(slots=True)
@@ -174,6 +207,7 @@ class LiveRunResult:
     actions: list[StrategyAction]
     regime_snapshot: RegimeSnapshot | None = None
     portfolio_weight: float = 1.0
+    interpreter_state: object | None = None
 
 
 @dataclass(slots=True)
@@ -201,6 +235,7 @@ class MT5LiveExecutor:
         self.config = config
         self.portfolio_weight = max(portfolio_weight, 0.0)
         self.strategy_portfolio_weights = {str(key): max(float(value), 0.0) for key, value in (strategy_portfolio_weights or {}).items()}
+        self.interpreter_state = build_market_interpreter_state(deployment, config)
 
     def _strategy_portfolio_weight(self, strategy: DeploymentStrategy) -> float:
         return self.strategy_portfolio_weights.get(strategy.candidate_name, self.portfolio_weight)
@@ -322,8 +357,17 @@ class MT5LiveExecutor:
             base_allocation_weight=strategy.base_allocation_weight,
             risk_budget_cash=0.0,
             veto_reason="",
+            interpreter_reason="",
+            interpreter_bias=self.interpreter_state.directional_bias,
+            interpreter_confidence=self.interpreter_state.confidence,
         )
         if signal_side == Side.FLAT:
+            return candidate_action
+
+        interpreter_reason = _interpreter_block_reason(strategy, self.interpreter_state)
+        if current_quantity == 0.0 and interpreter_reason:
+            candidate_action.intended_action = f"policy_blocked::{interpreter_reason}"
+            candidate_action.interpreter_reason = interpreter_reason
             return candidate_action
 
         if current_quantity == 0.0 and _is_strategy_regime_blocked(self.deployment, strategy, snapshot):
@@ -464,9 +508,12 @@ class MT5LiveExecutor:
             for strategy in self.deployment.strategies:
                 client = _client_for_strategy(strategy)
                 signal_side, confidence, signal_timestamp, snapshot, veto_reason, latest_feature = self._evaluate_strategy(client, strategy)
+                if self.interpreter_state.regime_snapshot is not None:
+                    snapshot = self.interpreter_state.regime_snapshot
                 if regime_snapshot is None:
                     regime_snapshot = snapshot
-                score = 0.0 if _is_strategy_regime_blocked(self.deployment, strategy, snapshot) else _allocator_score(
+                interpreter_reason = _interpreter_block_reason(strategy, self.interpreter_state)
+                score = 0.0 if (_is_strategy_regime_blocked(self.deployment, strategy, snapshot) or interpreter_reason) else _allocator_score(
                     strategy, signal_side, confidence, snapshot
                 )
                 evaluated.append(
@@ -477,7 +524,7 @@ class MT5LiveExecutor:
                         confidence=confidence,
                         snapshot=snapshot,
                         allocator_score=score,
-                        veto_reason=veto_reason,
+                        veto_reason=interpreter_reason or veto_reason,
                         latest_feature=latest_feature,
                     )
                 )
@@ -509,6 +556,9 @@ class MT5LiveExecutor:
                             effective_size_factor=0.0,
                             risk_budget_cash=0.0,
                             veto_reason=item.veto_reason,
+                            interpreter_reason=_interpreter_block_reason(item.strategy, self.interpreter_state),
+                            interpreter_bias=self.interpreter_state.directional_bias,
+                            interpreter_confidence=self.interpreter_state.confidence,
                         )
                     )
                     continue
@@ -526,6 +576,10 @@ class MT5LiveExecutor:
                     should_skip_duplicate,
                 )
                 action.veto_reason = item.veto_reason
+                if not action.interpreter_reason:
+                    action.interpreter_reason = _interpreter_block_reason(item.strategy, self.interpreter_state)
+                action.interpreter_bias = self.interpreter_state.directional_bias
+                action.interpreter_confidence = self.interpreter_state.confidence
                 actions.append(action)
             return LiveRunResult(
                 symbol=self.deployment.symbol,
@@ -535,6 +589,7 @@ class MT5LiveExecutor:
                 actions=actions,
                 regime_snapshot=regime_snapshot,
                 portfolio_weight=self.portfolio_weight,
+                interpreter_state=self.interpreter_state,
             )
         finally:
             for client in client_cache.values():

@@ -1,0 +1,22 @@
+Artifact: forex_breakout_momentum__5m_europe__exit_trend__regime_trend_flat_vol_low__near_miss_patient__trend_flat_symbo
+Closed trades: 55
+Realized pnl: 6495.61
+
+By entry hour
+8: trades=11 pnl=-517.30 avg=-47.03 win_rate=9.09%
+12: trades=10 pnl=-511.36 avg=-51.14 win_rate=10.00%
+11: trades=6 pnl=-206.62 avg=-34.44 win_rate=33.33%
+7: trades=4 pnl=-59.40 avg=-14.85 win_rate=25.00%
+10: trades=14 pnl=654.42 avg=46.74 win_rate=21.43%
+9: trades=10 pnl=7135.87 avg=713.59 win_rate=20.00%
+
+By entry setup
+forex_breakout_momentum: trades=55 pnl=6495.61 avg=118.10 win_rate=18.18%
+
+By exit reason
+time_stop: trades=34 pnl=-2093.82 avg=-61.58 win_rate=0.00%
+stop_loss: trades=8 pnl=-959.25 avg=-119.91 win_rate=0.00%
+signal_exit: trades=2 pnl=-222.31 avg=-111.15 win_rate=0.00%
+trailing_stop: trades=4 pnl=238.47 avg=59.62 win_rate=75.00%
+take_profit: trades=6 pnl=2048.18 avg=341.36 win_rate=100.00%
+end_of_run: trades=1 pnl=7484.33 avg=7484.33 win_rate=100.00%

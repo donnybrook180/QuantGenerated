@@ -1,0 +1,11 @@
+{
+  "symbol": "XAUUSD",
+  "broker_symbol": "XAUUSD",
+  "priority": 1,
+  "labels": [
+    "no_trade::insufficient_market_data"
+  ],
+  "objective": "Improve archetype selection using market interpreter state and execution context.",
+  "suggested_experiments": [],
+  "report_path": "artifacts\\live\\xauusd\\interpreter_research_trigger.json"
+}

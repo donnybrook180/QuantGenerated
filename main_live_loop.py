@@ -8,6 +8,8 @@ from datetime import UTC, datetime
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
+from quant_system.interpreter.reporting import generate_market_interpreter_report
+from quant_system.interpreter.research import generate_interpreter_research_report
 from quant_system.live.adaptation import adapt_deployment_for_execution, generate_execution_adaptation_report, summarize_execution_adaptation
 from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.deploy import load_symbol_deployment
@@ -170,6 +172,12 @@ def main() -> int:
                 )
                 if action.get("veto_reason"):
                     print(f"  veto: {action['veto_reason']}")
+                if action.get("interpreter_reason"):
+                    print(
+                        f"  interpreter: reason={action['interpreter_reason']} "
+                        f"bias={action.get('interpreter_bias', '')} "
+                        f"confidence={float(action.get('interpreter_confidence', 0.0) or 0.0):.2f}"
+                    )
                 if strategy is not None and strategy.policy_summary:
                     print(f"  policy: {strategy.policy_summary}")
             print("")
@@ -177,12 +185,16 @@ def main() -> int:
         adaptation_report = generate_execution_adaptation_report(config)
         impact_report = generate_tca_impact_report(config)
         adaptation_impact_report = generate_tca_adaptation_impact_report(config)
+        market_interpreter_report = generate_market_interpreter_report(config)
+        market_interpreter_research_report = generate_interpreter_research_report(config)
         health_report = generate_live_health_report(config)
         print(f"TCA: {summarize_tca_overview(tca_report)}")
         print(f"TCA report: {tca_report.report_path}")
         print(f"TCA impact report: {impact_report}")
         print(f"TCA adaptation impact report: {adaptation_impact_report}")
         print(f"Execution adaptation report: {adaptation_report}")
+        print(f"Market interpreter report: {market_interpreter_report}")
+        print(f"Market interpreter research queue: {market_interpreter_research_report}")
         print(f"Health report: {health_report}")
         print("")
         time.sleep(max(config.mt5.poll_seconds, 5))

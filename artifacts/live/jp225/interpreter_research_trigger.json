@@ -1,0 +1,11 @@
+{
+  "symbol": "JP225",
+  "broker_symbol": "JP225.cash",
+  "priority": 1,
+  "labels": [
+    "no_trade::insufficient_market_data"
+  ],
+  "objective": "Improve archetype selection using market interpreter state and execution context.",
+  "suggested_experiments": [],
+  "report_path": "artifacts\\live\\jp225\\interpreter_research_trigger.json"
+}

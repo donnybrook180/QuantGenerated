@@ -1,9 +1,12 @@
-Live health report generated at: 2026-04-11T07:45:55.257370+00:00
+Live health report generated at: 2026-04-12T17:58:45.466157+00:00
 Deployments scanned: 9
 Summary: live_ready=2 reduced_risk_only=7 research_only=0 symbols_with_incidents=9 total_fills=0
 TCA overview: none
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
+TCA adaptation impact report: artifacts\system\reports\tca_adaptation_impact_report.txt
+Market interpreter report: artifacts\system\reports\market_interpreter_report.txt
+Market interpreter research queue: artifacts\system\reports\market_interpreter_research_queue.txt
 TCA worst edge retention: BTC/btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up=100.0%
 Tradeable now: none
 Blocked now: BTC, ETH, EURUSD, GBPUSD, JP225, US100, US500, USDJPY, XAUUSD
@@ -21,6 +24,7 @@ Symbol: BTC
   latest_incident: artifacts\live\btc\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: crypto_short_breakdown__15m_europe__exit_fastfail:hold[core] veto=regime; btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up:hold[core] veto=regime
 
 Symbol: ETH
@@ -35,6 +39,7 @@ Symbol: ETH
   latest_incident: artifacts\live\eth\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core] veto=regime; crypto_short_reversion_late_europe__15m_europe__exit_fastfail:hold[core] veto=regime
 
 Symbol: EURUSD
@@ -49,6 +54,7 @@ Symbol: EURUSD
   latest_incident: artifacts\live\eurusd\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: forex_breakout_momentum__30m_overlap:regime_blocked::calm_range[core]
 
 Symbol: GBPUSD
@@ -63,6 +69,7 @@ Symbol: GBPUSD
   latest_incident: artifacts\live\gbpusd\incidents\20260410T210134Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient:regime_blocked::calm_range[specialist] veto=regime
 
 Symbol: JP225
@@ -77,6 +84,7 @@ Symbol: JP225
   latest_incident: artifacts\live\jp225\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: jp225_volatility_short_breakdown_core_hours:regime_blocked::calm_range[core] veto=regime
 
 Symbol: US100
@@ -91,6 +99,7 @@ Symbol: US100
   latest_incident: artifacts\live\us100\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: us100_opening_range_short_breakdown_trend:hold[core] veto=regime
 
 Symbol: US500
@@ -105,6 +114,7 @@ Symbol: US500
   latest_incident: artifacts\live\us500\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=calm_range unified_regime=compressed_range bias=long session=midday_chop structure=compression execution=unknown risk=normal confidence=0.40
   latest_actions: momentum__exit_trend__near_miss_patient:regime_blocked::volatile_chop[specialist] veto=regime
 
 Symbol: USDJPY
@@ -119,6 +129,7 @@ Symbol: USDJPY
   latest_incident: artifacts\live\usdjpy\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: forex_short_breakdown_momentum__30m_us:regime_blocked::calm_range[core] veto=regime; forex_short_breakdown_momentum__30m_overlap:regime_blocked::calm_range[core]; forex_breakout_momentum_patient:regime_blocked::volatile_chop[specialist] veto=regime
 
 Symbol: XAUUSD
@@ -133,4 +144,5 @@ Symbol: XAUUSD
   latest_incident: artifacts\live\xauusd\incidents\20260409T210135Z_incident.txt
   fills: none
   tca: none
+  interpreter: legacy_regime=unknown unified_regime=unknown bias=neutral session=unknown structure=unknown execution=unknown risk=defensive confidence=0.00
   latest_actions: xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat:regime_blocked::calm_range[core] veto=regime

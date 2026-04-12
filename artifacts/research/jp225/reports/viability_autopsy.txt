@@ -1,5 +1,5 @@
 Viability autopsy: JP225
-Execution validation summary: selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk
+Execution validation summary: selection=combo_1 variant=jp225_volatility_short_breakdown_core_hours__exit_trend@default data_source=duckdb_cache pnl=30.30 pf=4.53 closed=13 quality=0.69 underwater=53.8% -> accepted
 Tier counts: core=9 specialist=3 reject=47
 
 Top blockers
@@ -13,18 +13,18 @@ Top blockers
 - validation trades too low (0 < 3): 14
 
 Top near-misses
-- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend [specialist]: pnl=313.00 pf=4.37 val=122.06/999.00/2 test=55.12/2.72/3 wf=0.00%
-  reasons: combo underperformed components (-30.15), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
-- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_asia_hours [specialist]: pnl=273.96 pf=4.37 val=93.03/999.00/1 test=62.12/2.94/4 wf=0.00%
-  reasons: combo underperformed components (-29.04), broad viability failed, but candidate qualifies as a regime specialist
-- jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_asia_hours [specialist]: pnl=273.96 pf=4.37 val=93.03/999.00/1 test=62.12/2.94/4 wf=0.00%
-  reasons: combo underperformed components (-23.14), broad viability failed, but candidate qualifies as a regime specialist
-- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [reject]: pnl=36.79 pf=1.27 val=-44.78/0.00/1 test=72.00/999.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-22.39), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
-- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense [reject]: pnl=36.79 pf=1.27 val=-44.78/0.00/1 test=72.00/999.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-22.39), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
-- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [reject]: pnl=36.79 pf=1.27 val=-44.78/0.00/1 test=72.00/999.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-22.39), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
+- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend [specialist]: pnl=31.33 pf=4.38 val=12.21/999.00/2 test=5.52/2.73/3 wf=0.00%
+  reasons: combo underperformed components (-3.01), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_asia_hours [specialist]: pnl=27.42 pf=4.37 val=9.30/999.00/1 test=6.22/2.94/4 wf=0.00%
+  reasons: combo underperformed components (-2.91), broad viability failed, but candidate qualifies as a regime specialist
+- jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_asia_hours [specialist]: pnl=27.42 pf=4.37 val=9.30/999.00/1 test=6.22/2.94/4 wf=0.00%
+  reasons: combo underperformed components (-2.31), broad viability failed, but candidate qualifies as a regime specialist
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [reject]: pnl=3.69 pf=1.27 val=-4.48/0.00/1 test=7.20/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-2.24), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense [reject]: pnl=3.69 pf=1.27 val=-4.48/0.00/1 test=7.20/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-2.24), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [reject]: pnl=3.69 pf=1.27 val=-4.48/0.00/1 test=7.20/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-2.24), equity quality too low (0.40 < 0.45), best trade concentration too high (100.00% > 70%)
 - opening_range_breakout [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
 - jp225_open_drive_mean_reversion_long [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%

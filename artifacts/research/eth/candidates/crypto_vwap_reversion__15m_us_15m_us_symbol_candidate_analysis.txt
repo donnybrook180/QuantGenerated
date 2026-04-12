@@ -1,18 +1,18 @@
 Artifact: crypto_vwap_reversion__15m_us_15m_us_symbol_candidate
 Closed trades: 8
-Realized pnl: 93.31
+Realized pnl: 9.33
 
 By entry hour
-18: trades=2 pnl=-16.15 avg=-8.08 win_rate=0.00%
-15: trades=2 pnl=-14.53 avg=-7.27 win_rate=0.00%
-17: trades=1 pnl=-3.89 avg=-3.89 win_rate=0.00%
-16: trades=2 pnl=55.98 avg=27.99 win_rate=50.00%
-14: trades=1 pnl=71.89 avg=71.89 win_rate=100.00%
+18: trades=2 pnl=-1.62 avg=-0.81 win_rate=0.00%
+15: trades=2 pnl=-1.45 avg=-0.73 win_rate=0.00%
+17: trades=1 pnl=-0.39 avg=-0.39 win_rate=0.00%
+16: trades=2 pnl=5.60 avg=2.80 win_rate=50.00%
+14: trades=1 pnl=7.19 avg=7.19 win_rate=100.00%
 
 By entry setup
-crypto_vwap_reversion: trades=8 pnl=93.31 avg=11.66 win_rate=25.00%
+crypto_vwap_reversion: trades=8 pnl=9.33 avg=1.17 win_rate=25.00%
 
 By exit reason
-structure_exit: trades=5 pnl=-45.62 avg=-9.12 win_rate=0.00%
-trailing_stop: trades=2 pnl=67.04 avg=33.52 win_rate=50.00%
-take_profit: trades=1 pnl=71.89 avg=71.89 win_rate=100.00%
+structure_exit: trades=5 pnl=-4.56 avg=-0.91 win_rate=0.00%
+trailing_stop: trades=2 pnl=6.70 avg=3.35 win_rate=50.00%
+take_profit: trades=1 pnl=7.19 avg=7.19 win_rate=100.00%

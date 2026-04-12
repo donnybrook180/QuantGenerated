@@ -36,6 +36,7 @@ def write_live_run_journal(result: LiveRunResult, deployment_path: str) -> Path:
         "strategy_isolation_supported": result.strategy_isolation_supported,
         "portfolio_weight": result.portfolio_weight,
         "regime_snapshot": _json_safe(asdict(result.regime_snapshot)) if result.regime_snapshot is not None else None,
+        "interpreter_state": _json_safe(asdict(result.interpreter_state)) if result.interpreter_state is not None else None,
         "actions": [_json_safe(asdict(action)) for action in result.actions],
     }
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")

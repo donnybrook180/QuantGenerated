@@ -1,0 +1,73 @@
+{
+  "symbol": "EURUSD",
+  "broker_symbol": "EURUSD",
+  "generated_at": "2026-04-12 18:18:44.204294+00:00",
+  "legacy_regime_label": "calm_range",
+  "unified_regime_label": "orderly_range",
+  "macro_regime": "neutral",
+  "session_regime": "us_open_balance",
+  "structure_regime": "range_rotation",
+  "volatility_regime": "normal",
+  "execution_regime": "unknown",
+  "crowding_regime": "neutral",
+  "directional_bias": "long",
+  "setup_quality": 0.5848896434635054,
+  "execution_quality": 0.5,
+  "confidence": 0.5509337860781032,
+  "risk_posture": "normal",
+  "allowed_archetypes": [
+    "mean_reversion"
+  ],
+  "blocked_archetypes": [
+    "breakout"
+  ],
+  "no_trade_reason": "",
+  "explanation": "orderly_range with us_open_balance and range_rotation favors long; execution is unknown; allowed archetypes: mean_reversion.",
+  "feature_snapshot": {
+    "timeframe": "symbol_research_c_eurusd_15_minute",
+    "bar_count": 320,
+    "latest_close": 1.1564,
+    "latest_volume": 972.0,
+    "fast_trend_return_pct": 0.0181631046800304,
+    "slow_trend_return_pct": 0.16977928692701083,
+    "atr_pct": 0.0007134209616049915,
+    "range_compression_score": 0.4221789883268806,
+    "breakout_distance_atr": -1.3939393939393543,
+    "distance_to_prev_day_high_atr": 1.3939393939393543,
+    "distance_to_prev_day_low_atr": 4.109090909090853,
+    "close_location_in_range": 0.6161616161616328,
+    "wick_asymmetry": 0.024242424242313553,
+    "session_bucket": "us_open",
+    "minutes_since_session_open": 225.0,
+    "minutes_to_session_close": 15.0,
+    "macro_high_impact_day": 0.0,
+    "macro_pre_event_window": 0.0,
+    "macro_post_event_window": 0.0,
+    "macro_minutes_to_next_event": 4065.0,
+    "spread_regime_zscore": 0.0,
+    "shortfall_regime_bps": 0.0,
+    "cost_regime_bps": 0.0,
+    "adverse_fill_rate_pct": 0.0,
+    "execution_fill_count": 0
+  },
+  "regime_snapshot": {
+    "timestamp": "2026-04-07 16:45:00+00:00",
+    "symbol": "EURUSD",
+    "regime_label": "calm_range",
+    "volatility_label": "normal",
+    "structure_label": "range",
+    "realized_vol_20": 0.005438160436523875,
+    "realized_vol_100": 0.006128031253758491,
+    "vol_ratio": 0.887423743667838,
+    "vol_percentile": 0.4793388429752066,
+    "atr_percent": 0.0007131481198522359,
+    "trend_strength": 0.0,
+    "range_efficiency": 0.08333333333332762,
+    "risk_multiplier": 0.8,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "no",
+      "bar_count": 320.0
+    }
+  }
+}

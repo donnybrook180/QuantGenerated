@@ -1,21 +1,21 @@
 Artifact: forex_breakout_momentum__30m_europe__exit_trend_30m_europe_symbol_candidate
 Closed trades: 16
-Realized pnl: 47955.92
+Realized pnl: 4753.36
 
 By entry hour
-8: trades=3 pnl=-7470.97 avg=-2490.32 win_rate=0.00%
-11: trades=3 pnl=-4224.68 avg=-1408.23 win_rate=0.00%
-10: trades=2 pnl=-2178.88 avg=-1089.44 win_rate=0.00%
-12: trades=2 pnl=3409.69 avg=1704.84 win_rate=50.00%
-9: trades=6 pnl=58420.76 avg=9736.79 win_rate=50.00%
+8: trades=3 pnl=-813.02 avg=-271.01 win_rate=0.00%
+11: trades=3 pnl=-487.62 avg=-162.54 win_rate=0.00%
+10: trades=2 pnl=-261.62 avg=-130.81 win_rate=0.00%
+12: trades=2 pnl=521.05 avg=260.52 win_rate=50.00%
+9: trades=6 pnl=5794.56 avg=965.76 win_rate=50.00%
 
 By entry setup
-forex_breakout_momentum: trades=16 pnl=47955.92 avg=2997.25 win_rate=25.00%
+forex_breakout_momentum: trades=16 pnl=4753.36 avg=297.09 win_rate=25.00%
 
 By exit reason
-stop_loss: trades=5 pnl=-14299.94 avg=-2859.99 win_rate=0.00%
-signal_exit: trades=2 pnl=-6218.86 avg=-3109.43 win_rate=0.00%
-stale_breakout: trades=2 pnl=-1459.48 avg=-729.74 win_rate=0.00%
-trailing_stop: trades=4 pnl=356.66 avg=89.16 win_rate=25.00%
-take_profit: trades=2 pnl=12451.33 avg=6225.66 win_rate=100.00%
-end_of_run: trades=1 pnl=57126.22 avg=57126.22 win_rate=100.00%
+stop_loss: trades=6 pnl=-1946.82 avg=-324.47 win_rate=0.00%
+signal_exit: trades=1 pnl=-209.45 avg=-209.45 win_rate=0.00%
+stale_breakout: trades=2 pnl=-189.75 avg=-94.88 win_rate=0.00%
+trailing_stop: trades=4 pnl=-31.26 avg=-7.81 win_rate=25.00%
+take_profit: trades=2 pnl=1440.41 avg=720.21 win_rate=100.00%
+end_of_run: trades=1 pnl=5690.23 avg=5690.23 win_rate=100.00%

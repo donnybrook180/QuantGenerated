@@ -1,17 +1,17 @@
 Artifact: volatility_breakout__5m_europe__exit_trend_5m_europe_symbol_candidate
 Closed trades: 11
-Realized pnl: -53.64
+Realized pnl: -47.28
 
 By entry hour
-11: trades=7 pnl=-30.59 avg=-4.37 win_rate=14.29%
-9: trades=2 pnl=-20.52 avg=-10.26 win_rate=0.00%
-12: trades=1 pnl=-2.83 avg=-2.83 win_rate=0.00%
-7: trades=1 pnl=0.31 avg=0.31 win_rate=100.00%
+11: trades=7 pnl=-24.95 avg=-3.56 win_rate=14.29%
+9: trades=2 pnl=-20.17 avg=-10.08 win_rate=0.00%
+12: trades=1 pnl=-2.65 avg=-2.65 win_rate=0.00%
+7: trades=1 pnl=0.48 avg=0.48 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=11 pnl=-53.64 avg=-4.88 win_rate=18.18%
+volatility_breakout: trades=11 pnl=-47.28 avg=-4.30 win_rate=18.18%
 
 By exit reason
-signal_exit: trades=6 pnl=-66.24 avg=-11.04 win_rate=0.00%
-trailing_stop: trades=3 pnl=-9.48 avg=-3.16 win_rate=33.33%
-stale_breakout: trades=2 pnl=22.07 avg=11.04 win_rate=50.00%
+signal_exit: trades=6 pnl=-65.17 avg=-10.86 win_rate=0.00%
+trailing_stop: trades=3 pnl=-4.54 avg=-1.51 win_rate=33.33%
+stale_breakout: trades=2 pnl=22.43 avg=11.22 win_rate=50.00%

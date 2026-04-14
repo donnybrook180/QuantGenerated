@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T07:15:19.796935+00:00",
+  "generated_at": "2026-04-14T10:05:21.804930+00:00",
   "symbol": "EURUSD",
   "broker_symbol": "EURUSD",
   "action": "insufficient_data",
@@ -13,8 +13,8 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
-      "resulting_base_weight": 1.09512484505052,
-      "resulting_max_risk_multiplier": 0.9647231146753343,
+      "resulting_base_weight": 1.0966635211408111,
+      "resulting_max_risk_multiplier": 0.9657122635905215,
       "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     }
@@ -24,16 +24,16 @@
     "symbol": "EURUSD",
     "data_symbol": "C:EURUSD",
     "broker_symbol": "EURUSD",
-    "research_run_id": 305,
-    "execution_set_id": 153,
-    "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.26 pf=11.76 closed=7 quality=0.84 underwater=14.3% -> accepted",
+    "research_run_id": 313,
+    "execution_set_id": 159,
+    "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
       {
         "candidate_name": "forex_breakout_momentum__30m_overlap",
         "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=compressed_range; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.96; stability=0.92; loss_ratio=0.22",
+        "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=compressed_range; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.97; stability=0.92; loss_ratio=0.21",
         "variant_label": "30m_overlap",
         "regime_filter_label": "",
         "execution_overrides": {},
@@ -46,8 +46,8 @@
         ],
         "min_vol_percentile": 0.2,
         "max_vol_percentile": 0.8,
-        "base_allocation_weight": 1.09512484505052,
-        "max_risk_multiplier": 0.9647231146753343,
+        "base_allocation_weight": 1.0966635211408111,
+        "max_risk_multiplier": 0.9657122635905215,
         "min_risk_multiplier": 0.0
       }
     ],

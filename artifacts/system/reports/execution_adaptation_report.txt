@@ -1,5 +1,5 @@
 Execution adaptation report
-generated_at: 2026-04-14T07:15:13.446288+00:00
+generated_at: 2026-04-14T10:05:12.297132+00:00
 
 BTC: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
@@ -17,7 +17,7 @@ EURUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse
   reason: not enough local fills for adaptation
   guardrail: none
   artifact: artifacts\live\eurusd\execution_adaptation.json
-  strategy forex_breakout_momentum__30m_overlap: unchanged fills=0 scale=1.00/1.00 base_weight=1.10 max_risk=0.96 min_bars=0 rank=baseline_local
+  strategy forex_breakout_momentum__30m_overlap: unchanged fills=0 scale=1.00/1.00 base_weight=1.10 max_risk=0.97 min_bars=0 rank=baseline_local
 
 GBPUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T07:15:19.598039+00:00",
+  "generated_at": "2026-04-14T10:05:21.518056+00:00",
   "symbol": "BTC",
   "broker_symbol": "BTCUSD",
   "action": "insufficient_data",
@@ -24,8 +24,8 @@
     "symbol": "BTC",
     "data_symbol": "X:BTCUSD",
     "broker_symbol": "BTCUSD",
-    "research_run_id": 312,
-    "execution_set_id": 158,
+    "research_run_id": 314,
+    "execution_set_id": 160,
     "execution_validation_summary": "selection=combo_1 variant=btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up@5m_all|trend_up data_source=duckdb_cache pnl=23.00 pf=4.92 closed=8 quality=0.71 underwater=50.0% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [

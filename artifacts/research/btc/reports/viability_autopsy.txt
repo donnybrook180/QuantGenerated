@@ -1,31 +1,31 @@
 Viability autopsy: BTC
-Execution validation summary: selection=combo_1 variant=btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up@5m_all|trend_up data_source=duckdb_cache pnl=21.58 pf=4.68 closed=8 quality=0.71 underwater=50.0% -> accepted
-Tier counts: core=2 specialist=0 reject=338
+Execution validation summary: selection=combo_1 variant=btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up@5m_all|trend_up data_source=duckdb_cache pnl=23.00 pf=4.92 closed=8 quality=0.71 underwater=50.0% -> accepted
+Tier counts: core=9 specialist=0 reject=182
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 40%): 274
-- validation PF < 1.0 (0.00): 224
-- test PF < 1.0 (0.00): 202
-- regime stability too low (0.00 < 0.50): 196
-- walk-forward avg validation pnl <= 0 (0.00): 153
-- validation trades too low (0 < 2): 141
-- validation pnl <= 0 (0.00): 141
-- walk-forward avg test pnl <= 0 (0.00): 135
+- walk-forward pass rate too low (0.00% < 40%): 153
+- validation PF < 1.0 (0.00): 127
+- test PF < 1.0 (0.00): 121
+- regime stability too low (0.00 < 0.50): 119
+- equity quality too low (0.25 < 0.45): 98
+- walk-forward avg test pnl <= 0 (0.00): 80
+- regime loss ratio too high (999.00 > 1.25): 76
+- test trades too low (0 < 1): 73
 
 Top near-misses
-- crypto_short_breakdown__15m_europe__regime_trend_flat_vol_high [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__near_miss_patient [reject]: pnl=24.85 pf=3.26 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__exit_fastfail [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__exit_fastfail__near_miss_patient [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__exit_fastfail__near_miss_protective [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__exit_fastfail__near_miss_dense [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__near_miss_protective [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+- crypto_short_breakdown__1h_europe__near_miss_dense [reject]: pnl=15.77 pf=2.44 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
   reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- crypto_short_breakdown__15m_europe__exit_trend__regime_trend_flat_vol_high__near_miss_dense [reject]: pnl=32.02 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_short_breakdown__1h_europe [reject]: pnl=9.98 pf=1.91 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), equity quality too low (0.41 < 0.45), best trade concentration too high (100.00% > 70%)

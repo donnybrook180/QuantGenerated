@@ -1,31 +1,31 @@
 Viability autopsy: EURUSD
-Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.26 pf=11.76 closed=7 quality=0.84 underwater=14.3% -> accepted
-Tier counts: core=7 specialist=10 reject=164
+Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
+Tier counts: core=7 specialist=15 reject=170
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 108
-- validation PF < 1.0 (0.00): 94
-- test PF < 1.0 (0.00): 94
-- walk-forward avg validation pnl <= 0 (0.00): 89
-- walk-forward avg test pnl <= 0 (0.00): 88
-- validation trades too low (0 < 1): 88
-- validation pnl <= 0 (0.00): 88
-- equity quality too low (0.25 < 0.45): 86
+- regime stability too low (0.00 < 0.50): 115
+- validation PF < 1.0 (0.00): 104
+- test PF < 1.0 (0.00): 99
+- walk-forward avg validation pnl <= 0 (0.00): 97
+- walk-forward avg test pnl <= 0 (0.00): 97
+- validation trades too low (0 < 1): 97
+- validation pnl <= 0 (0.00): 97
+- equity quality too low (0.25 < 0.45): 95
 
 Top near-misses
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat_vol_mid [reject]: pnl=18.06 pf=195.79 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.05)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_dense__trend_flat_vol_mid__local_opt_consistency [reject]: pnl=18.06 pf=195.79 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.05)
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_dense__trend_flat_vol_mid [reject]: pnl=17.49 pf=27.39 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.33)
-- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_patient__trend_flat_vol_mid [reject]: pnl=17.36 pf=6.78 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_protective__trend_flat_vol_mid [reject]: pnl=17.36 pf=6.78 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_dense__trend_flat_vol_mid [reject]: pnl=17.36 pf=6.78 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat [specialist]: pnl=15.46 pf=1.18 val=-3.56/0.79/22 test=11.43/1.57/34 wf=0.00%
-  reasons: validation pnl <= 0 (-3.56), validation PF < 1.0 (0.79), walk-forward avg validation pnl <= 0 (-4.00), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat [specialist]: pnl=15.12 pf=1.17 val=-4.68/0.75/22 test=12.96/1.63/33 wf=0.00%
-  reasons: validation pnl <= 0 (-4.68), validation PF < 1.0 (0.75), walk-forward avg validation pnl <= 0 (-4.70), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat__local_opt_consistency [specialist]: pnl=22.02 pf=1.26 val=-4.29/0.76/22 test=17.52/1.92/34 wf=0.00%
+  reasons: validation pnl <= 0 (-4.29), validation PF < 1.0 (0.76), walk-forward avg validation pnl <= 0 (-6.46), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat [specialist]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
+  reasons: validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat [specialist]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
+  reasons: validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat__local_opt_validation [specialist]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
+  reasons: validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat__local_opt_validation [specialist]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
+  reasons: validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat [specialist]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
+  reasons: validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15), broad viability failed, but candidate qualifies as a regime specialist
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_protective__trend_flat [specialist]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
+  reasons: validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15), broad viability failed, but candidate qualifies as a regime specialist
+- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat_vol_mid [reject]: pnl=18.14 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.03)

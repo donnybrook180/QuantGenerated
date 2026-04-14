@@ -249,6 +249,13 @@ class ExperimentStore:
                     timeframe_label VARCHAR,
                     session_label VARCHAR,
                     regime_filter_label VARCHAR,
+                    mc_simulations INTEGER,
+                    mc_pnl_median DOUBLE,
+                    mc_pnl_p05 DOUBLE,
+                    mc_pnl_p95 DOUBLE,
+                    mc_max_drawdown_pct_median DOUBLE,
+                    mc_max_drawdown_pct_p95 DOUBLE,
+                    mc_loss_probability_pct DOUBLE,
                     execution_overrides_json TEXT,
                     recommended BOOLEAN
                 )
@@ -295,6 +302,13 @@ class ExperimentStore:
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_pnl_by_label TEXT")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_pf_by_label TEXT")
             connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS regime_win_rate_by_label TEXT")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_simulations INTEGER")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_pnl_median DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_pnl_p05 DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_pnl_p95 DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_max_drawdown_pct_median DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_max_drawdown_pct_p95 DOUBLE")
+            connection.execute("ALTER TABLE symbol_research_candidates ADD COLUMN IF NOT EXISTS mc_loss_probability_pct DOUBLE")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS variant_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS timeframe_label VARCHAR")
             connection.execute("ALTER TABLE agent_catalog ADD COLUMN IF NOT EXISTS session_label VARCHAR")
@@ -1035,6 +1049,13 @@ class ExperimentStore:
                     timeframe_label,
                     session_label,
                     regime_filter_label,
+                    mc_simulations,
+                    mc_pnl_median,
+                    mc_pnl_p05,
+                    mc_pnl_p95,
+                    mc_max_drawdown_pct_median,
+                    mc_max_drawdown_pct_p95,
+                    mc_loss_probability_pct,
                     execution_overrides_json,
                     recommended,
                     profile_name
@@ -1101,9 +1122,16 @@ class ExperimentStore:
                 "timeframe_label": row[52] or "",
                 "session_label": row[53] or "",
                 "regime_filter_label": row[54] or "",
-                "execution_overrides": json.loads(row[55] or "{}"),
-                "recommended": bool(row[56]),
-                "profile_name": row[57],
+                "mc_simulations": int(row[55] or 0),
+                "mc_pnl_median": float(row[56] or 0.0),
+                "mc_pnl_p05": float(row[57] or 0.0),
+                "mc_pnl_p95": float(row[58] or 0.0),
+                "mc_max_drawdown_pct_median": float(row[59] or 0.0),
+                "mc_max_drawdown_pct_p95": float(row[60] or 0.0),
+                "mc_loss_probability_pct": float(row[61] or 0.0),
+                "execution_overrides": json.loads(row[62] or "{}"),
+                "recommended": bool(row[63]),
+                "profile_name": row[64],
             }
             for row in rows
         ]
@@ -1171,6 +1199,13 @@ class ExperimentStore:
                     timeframe_label,
                     session_label,
                     regime_filter_label,
+                    mc_simulations,
+                    mc_pnl_median,
+                    mc_pnl_p05,
+                    mc_pnl_p95,
+                    mc_max_drawdown_pct_median,
+                    mc_max_drawdown_pct_p95,
+                    mc_loss_probability_pct,
                     execution_overrides_json,
                     recommended
                 FROM symbol_research_candidates
@@ -1236,8 +1271,15 @@ class ExperimentStore:
                 "timeframe_label": row[52] or "",
                 "session_label": row[53] or "",
                 "regime_filter_label": row[54] or "",
-                "execution_overrides": json.loads(row[55] or "{}"),
-                "recommended": bool(row[56]),
+                "mc_simulations": int(row[55] or 0),
+                "mc_pnl_median": float(row[56] or 0.0),
+                "mc_pnl_p05": float(row[57] or 0.0),
+                "mc_pnl_p95": float(row[58] or 0.0),
+                "mc_max_drawdown_pct_median": float(row[59] or 0.0),
+                "mc_max_drawdown_pct_p95": float(row[60] or 0.0),
+                "mc_loss_probability_pct": float(row[61] or 0.0),
+                "execution_overrides": json.loads(row[62] or "{}"),
+                "recommended": bool(row[63]),
             }
             for row in rows
         ]
@@ -1676,6 +1718,13 @@ class ExperimentStore:
                         timeframe_label,
                         session_label,
                         regime_filter_label,
+                        mc_simulations,
+                        mc_pnl_median,
+                        mc_pnl_p05,
+                        mc_pnl_p95,
+                        mc_max_drawdown_pct_median,
+                        mc_max_drawdown_pct_p95,
+                        mc_loss_probability_pct,
                         execution_overrides_json,
                         recommended
                     )
@@ -1683,7 +1732,7 @@ class ExperimentStore:
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                     )
                     """,
                     [
@@ -1744,6 +1793,13 @@ class ExperimentStore:
                         candidate.timeframe_label,
                         candidate.session_label,
                         candidate.regime_filter_label,
+                        candidate.mc_simulations,
+                        candidate.mc_pnl_median,
+                        candidate.mc_pnl_p05,
+                        candidate.mc_pnl_p95,
+                        candidate.mc_max_drawdown_pct_median,
+                        candidate.mc_max_drawdown_pct_p95,
+                        candidate.mc_loss_probability_pct,
                         json.dumps(candidate.execution_overrides or {}),
                         candidate.name in recommended_names,
                     ],

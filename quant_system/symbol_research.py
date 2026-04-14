@@ -5,6 +5,7 @@ import csv
 import itertools
 import copy
 import json
+import random
 import duckdb
 from dataclasses import dataclass
 from math import isfinite, sqrt
@@ -204,6 +205,13 @@ class CandidateResult:
     broker_swap_short: float = 0.0
     broker_preferred_carry_side: str = ""
     broker_carry_spread: float = 0.0
+    mc_simulations: int = 0
+    mc_pnl_median: float = 0.0
+    mc_pnl_p05: float = 0.0
+    mc_pnl_p95: float = 0.0
+    mc_max_drawdown_pct_median: float = 0.0
+    mc_max_drawdown_pct_p95: float = 0.0
+    mc_loss_probability_pct: float = 0.0
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
 
@@ -1415,6 +1423,69 @@ def _calmar_ratio(realized_pnl: float, max_drawdown: float, initial_cash: float)
     return value if isfinite(value) else 0.0
 
 
+def _percentile(values: list[float], quantile: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return ordered[0]
+    position = min(max(quantile, 0.0), 1.0) * float(len(ordered) - 1)
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    if lower == upper:
+        return ordered[lower]
+    weight = position - lower
+    return ordered[lower] * (1.0 - weight) + ordered[upper] * weight
+
+
+def _max_drawdown_from_pnls(pnls: list[float], initial_cash: float) -> float:
+    if initial_cash <= 0.0:
+        return 0.0
+    equity = initial_cash
+    peak = initial_cash
+    max_drawdown = 0.0
+    for pnl in pnls:
+        equity += pnl
+        peak = max(peak, equity)
+        if peak > 0.0:
+            max_drawdown = max(max_drawdown, (peak - equity) / peak)
+    return max_drawdown
+
+
+def _monte_carlo_summary(pnls: list[float], initial_cash: float, simulations: int = 500) -> dict[str, float]:
+    if not pnls:
+        return {
+            "mc_simulations": 0.0,
+            "mc_pnl_median": 0.0,
+            "mc_pnl_p05": 0.0,
+            "mc_pnl_p95": 0.0,
+            "mc_max_drawdown_pct_median": 0.0,
+            "mc_max_drawdown_pct_p95": 0.0,
+            "mc_loss_probability_pct": 0.0,
+        }
+    rng = random.Random(7)
+    pnl_totals: list[float] = []
+    max_drawdowns_pct: list[float] = []
+    loss_count = 0
+    trade_count = len(pnls)
+    for _ in range(simulations):
+        sampled = [pnls[rng.randrange(trade_count)] for _ in range(trade_count)]
+        total_pnl = float(sum(sampled))
+        pnl_totals.append(total_pnl)
+        max_drawdowns_pct.append(_max_drawdown_from_pnls(sampled, initial_cash) * 100.0)
+        if total_pnl < 0.0:
+            loss_count += 1
+    return {
+        "mc_simulations": float(simulations),
+        "mc_pnl_median": _percentile(pnl_totals, 0.50),
+        "mc_pnl_p05": _percentile(pnl_totals, 0.05),
+        "mc_pnl_p95": _percentile(pnl_totals, 0.95),
+        "mc_max_drawdown_pct_median": _percentile(max_drawdowns_pct, 0.50),
+        "mc_max_drawdown_pct_p95": _percentile(max_drawdowns_pct, 0.95),
+        "mc_loss_probability_pct": (loss_count / float(simulations)) * 100.0,
+    }
+
+
 def _run_candidate_bundle(
     config: SystemConfig,
     profile_symbol: str,
@@ -2461,6 +2532,7 @@ def _score_result(
     sharpe_ratio = _sharpe_ratio(result.closed_trade_pnls)
     sortino_ratio = _sortino_ratio(result.closed_trade_pnls)
     calmar_ratio = _calmar_ratio(result.realized_pnl, result.max_drawdown, initial_cash)
+    monte_carlo = _monte_carlo_summary(result.closed_trade_pnls, initial_cash)
     avg_win = mean(wins) if wins else 0.0
     avg_loss = mean(losses) if losses else 0.0
     payoff_ratio = (avg_win / abs(avg_loss)) if avg_loss < 0 else (999.0 if avg_win > 0 else 0.0)
@@ -2523,6 +2595,13 @@ def _score_result(
         equity_quality_score=equity_quality_score,
         dominant_exit=dominant_exit,
         dominant_exit_share_pct=dominant_exit_share_pct,
+        mc_simulations=int(monte_carlo["mc_simulations"]),
+        mc_pnl_median=monte_carlo["mc_pnl_median"],
+        mc_pnl_p05=monte_carlo["mc_pnl_p05"],
+        mc_pnl_p95=monte_carlo["mc_pnl_p95"],
+        mc_max_drawdown_pct_median=monte_carlo["mc_max_drawdown_pct_median"],
+        mc_max_drawdown_pct_p95=monte_carlo["mc_max_drawdown_pct_p95"],
+        mc_loss_probability_pct=monte_carlo["mc_loss_probability_pct"],
     )
 
 
@@ -5045,6 +5124,13 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "equity_new_high_share_pct": row.equity_new_high_share_pct,
         "max_consecutive_losses": row.max_consecutive_losses,
         "equity_quality_score": row.equity_quality_score,
+        "mc_simulations": row.mc_simulations,
+        "mc_pnl_median": row.mc_pnl_median,
+        "mc_pnl_p05": row.mc_pnl_p05,
+        "mc_pnl_p95": row.mc_pnl_p95,
+        "mc_max_drawdown_pct_median": row.mc_max_drawdown_pct_median,
+        "mc_max_drawdown_pct_p95": row.mc_max_drawdown_pct_p95,
+        "mc_loss_probability_pct": row.mc_loss_probability_pct,
         "sparse_strategy": row.sparse_strategy,
         "component_count": row.component_count,
         "combo_outperformance_score": row.combo_outperformance_score,
@@ -5722,6 +5808,13 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "broker_swap_short",
                 "broker_preferred_carry_side",
                 "broker_carry_spread",
+                "mc_simulations",
+                "mc_pnl_median",
+                "mc_pnl_p05",
+                "mc_pnl_p95",
+                "mc_max_drawdown_pct_median",
+                "mc_max_drawdown_pct_p95",
+                "mc_loss_probability_pct",
                 "walk_forward_windows",
                 "walk_forward_pass_rate_pct",
                 "walk_forward_avg_validation_pnl",
@@ -5783,6 +5876,13 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     f"{row.broker_swap_short:.5f}",
                     row.broker_preferred_carry_side,
                     f"{row.broker_carry_spread:.5f}",
+                    row.mc_simulations,
+                    f"{row.mc_pnl_median:.5f}",
+                    f"{row.mc_pnl_p05:.5f}",
+                    f"{row.mc_pnl_p95:.5f}",
+                    f"{row.mc_max_drawdown_pct_median:.5f}",
+                    f"{row.mc_max_drawdown_pct_p95:.5f}",
+                    f"{row.mc_loss_probability_pct:.5f}",
                     row.walk_forward_windows,
                     f"{row.walk_forward_pass_rate_pct:.5f}",
                     f"{row.walk_forward_avg_validation_pnl:.5f}",
@@ -5842,6 +5942,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
             f"swap_long={row.broker_swap_long:.5f} swap_short={row.broker_swap_short:.5f} "
             f"preferred_side={row.broker_preferred_carry_side or 'none'} "
             f"carry_spread={row.broker_carry_spread:.5f}"
+        )
+        lines.append(
+            f"  monte_carlo: sims={row.mc_simulations} pnl_median={row.mc_pnl_median:.2f} "
+            f"p05={row.mc_pnl_p05:.2f} p95={row.mc_pnl_p95:.2f} "
+            f"dd_median={row.mc_max_drawdown_pct_median:.2f}% dd_p95={row.mc_max_drawdown_pct_p95:.2f}% "
+            f"loss_prob={row.mc_loss_probability_pct:.2f}%"
         )
         lines.append(f"  live_policy: {policy['policy_summary']}")
         if row.regime_filter_label:

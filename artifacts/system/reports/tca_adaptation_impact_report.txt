@@ -1,14 +1,14 @@
 TCA adaptation impact report
-generated_at: 2026-04-14T06:09:29.965516+00:00
+generated_at: 2026-04-14T10:05:17.485635+00:00
 
 Metric: estimated result index = edge_retention_pct x base_allocation_weight x max_risk_multiplier.
 Interpretation: this is a before/after estimate of what the execution adaptation layer changes in exposure to retained edge.
 
 symbol   strategy                  fills edge_ret%   base_idx  adapt_idx     chg% action            
 ----------------------------------------------------------------------------------------------------
-BTC      btc_trend_pullback_high_      0     100.0     109.67     109.67      0.0 unchanged         
+BTC      btc_trend_pullback_high_      0     100.0      67.25      67.25      0.0 unchanged         
 ETH      crypto_vwap_reversion_us      0     100.0      69.00      69.00      0.0 unchanged         
-EURUSD   forex_breakout_momentum_      0     100.0     105.65     105.65      0.0 unchanged         
+EURUSD   forex_breakout_momentum_      0     100.0     105.91     105.91      0.0 unchanged         
 JP225    jp225_volatility_short_b      0     100.0      69.00      69.00      0.0 unchanged         
 US100    us100_opening_range_shor      0       0.0       0.00       0.00      0.0 unchanged         
 US500    momentum__exit_trend__ne      0     100.0      12.25      12.25      0.0 unchanged         
@@ -16,15 +16,15 @@ USDJPY   forex_breakout_momentum_      0     100.0      12.25      12.25      0.
 XAUUSD   xauusd_volatility_breako      0     100.0      69.00      69.00      0.0 unchanged         
 
 Details
-BTC | btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up
+BTC | btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up
   live_fill_count: 0
   edge_retention_pct: 100.00
-  baseline_base_weight: 1.119
-  adapted_base_weight: 1.119
-  baseline_max_risk: 0.980
-  adapted_max_risk: 0.980
-  baseline_result_index: 109.6734
-  adapted_result_index: 109.6734
+  baseline_base_weight: 1.121
+  adapted_base_weight: 1.121
+  baseline_max_risk: 0.600
+  adapted_max_risk: 0.600
+  baseline_result_index: 67.2466
+  adapted_result_index: 67.2466
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
@@ -45,12 +45,12 @@ ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
 EURUSD | forex_breakout_momentum__30m_overlap
   live_fill_count: 0
   edge_retention_pct: 100.00
-  baseline_base_weight: 1.095
-  adapted_base_weight: 1.095
-  baseline_max_risk: 0.965
-  adapted_max_risk: 0.965
-  baseline_result_index: 105.6492
-  adapted_result_index: 105.6492
+  baseline_base_weight: 1.097
+  adapted_base_weight: 1.097
+  baseline_max_risk: 0.966
+  adapted_max_risk: 0.966
+  baseline_result_index: 105.9061
+  adapted_result_index: 105.9061
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data

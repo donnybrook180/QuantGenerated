@@ -67,6 +67,17 @@ class ExecutionConfig:
     stale_breakout_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_STALE_BREAKOUT_BARS", "6")))
     stale_breakout_atr_fraction: float = field(default_factory=lambda: float(os.getenv("EXECUTION_STALE_BREAKOUT_ATR_FRACTION", "0.2")))
     structure_exit_bars: int = field(default_factory=lambda: int(os.getenv("EXECUTION_STRUCTURE_EXIT_BARS", "4")))
+    mini_trades_enabled: bool = field(default_factory=lambda: os.getenv("MINI_TRADES", "false").lower() == "true")
+    mini_trades_order_size: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_ORDER_SIZE", "0.01")))
+    mini_trades_risk_per_trade_pct: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_RISK_PER_TRADE_PCT", "0.0025")))
+    mini_trades_min_bars_between_trades: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_MIN_BARS_BETWEEN_TRADES", "2")))
+    mini_trades_max_holding_bars: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_MAX_HOLDING_BARS", "8")))
+    mini_trades_take_profit_atr_multiple: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_TAKE_PROFIT_ATR_MULTIPLE", "1.1")))
+    mini_trades_break_even_atr_multiple: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_BREAK_EVEN_ATR_MULTIPLE", "0.2")))
+    mini_trades_trailing_stop_atr_multiple: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_TRAILING_STOP_ATR_MULTIPLE", "0.35")))
+    mini_trades_stale_breakout_bars: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_STALE_BREAKOUT_BARS", "2")))
+    mini_trades_stale_breakout_atr_fraction: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_STALE_BREAKOUT_ATR_FRACTION", "0.04")))
+    mini_trades_structure_exit_bars: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_STRUCTURE_EXIT_BARS", "1")))
 
 
 @dataclass(slots=True)

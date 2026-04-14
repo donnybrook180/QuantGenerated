@@ -95,6 +95,7 @@ from quant_system.costs import apply_ftmo_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
+from quant_system.execution_tuning import apply_execution_mode_overrides
 from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
 from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
 from quant_system.integrations.mt5 import MT5Client, MT5Error
@@ -638,6 +639,7 @@ def _with_execution_overrides(config: SystemConfig, overrides: dict[str, float |
     if overrides:
         for key, value in overrides.items():
             setattr(tuned.execution, key, value)
+    apply_execution_mode_overrides(tuned)
     return tuned
 
 
@@ -698,6 +700,7 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol
         config.execution.stale_breakout_atr_fraction = 0.1
         config.execution.structure_exit_bars = 3
     apply_ftmo_cost_profile(config, symbol, broker_symbol)
+    apply_execution_mode_overrides(config)
 
 
 def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[FeatureVector], str]:

@@ -242,6 +242,7 @@ class MT5LiveExecutor:
 
     def _build_strategy_config(self, strategy: DeploymentStrategy) -> SystemConfig:
         from quant_system.live_support import configure_symbol_execution
+        from quant_system.execution_tuning import apply_execution_mode_overrides
 
         strategy_config = copy.deepcopy(self.config)
         strategy_config.mt5.symbol = self.deployment.broker_symbol
@@ -249,6 +250,7 @@ class MT5LiveExecutor:
         configure_symbol_execution(strategy_config, self.deployment.symbol)
         for key, value in strategy.execution_overrides.items():
             setattr(strategy_config.execution, key, value)
+        apply_execution_mode_overrides(strategy_config)
         return strategy_config
 
     def _evaluate_strategy(

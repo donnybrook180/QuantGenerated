@@ -1,4 +1,4 @@
-Live health report generated at: 2026-04-14T10:33:46.517502+00:00
+Live health report generated at: 2026-04-14T10:51:33.877216+00:00
 Deployments scanned: 9
 Summary: live_ready=5 reduced_risk_only=3 research_only=1 symbols_with_incidents=9 total_fills=0
 TCA overview: none
@@ -24,7 +24,7 @@ Symbol: BTC
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\btc\live.json
-  latest_journal: artifacts\live\btc\journals\20260414T103334Z_journal.json
+  latest_journal: artifacts\live\btc\journals\20260414T105126Z_journal.json
   latest_incident: artifacts\live\btc\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -40,7 +40,7 @@ Symbol: ETH
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260414T103334Z_journal.json
+  latest_journal: artifacts\live\eth\journals\20260414T105126Z_journal.json
   latest_incident: artifacts\live\eth\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -56,7 +56,7 @@ Symbol: EURUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260414T103335Z_journal.json
+  latest_journal: artifacts\live\eurusd\journals\20260414T105126Z_journal.json
   latest_incident: artifacts\live\eurusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -88,7 +88,7 @@ Symbol: JP225
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\jp225\live.json
-  latest_journal: artifacts\live\jp225\journals\20260414T103335Z_journal.json
+  latest_journal: artifacts\live\jp225\journals\20260414T105126Z_journal.json
   latest_incident: artifacts\live\jp225\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -104,7 +104,7 @@ Symbol: US100
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\us100\live.json
-  latest_journal: artifacts\live\us100\journals\20260414T103336Z_journal.json
+  latest_journal: artifacts\live\us100\journals\20260414T105127Z_journal.json
   latest_incident: artifacts\live\us100\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -120,7 +120,7 @@ Symbol: US500
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\us500\live.json
-  latest_journal: artifacts\live\us500\journals\20260414T103336Z_journal.json
+  latest_journal: artifacts\live\us500\journals\20260414T105127Z_journal.json
   latest_incident: artifacts\live\us500\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -136,7 +136,7 @@ Symbol: USDJPY
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260414T103336Z_journal.json
+  latest_journal: artifacts\live\usdjpy\journals\20260414T105127Z_journal.json
   latest_incident: artifacts\live\usdjpy\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -152,7 +152,7 @@ Symbol: XAUUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260414T103337Z_journal.json
+  latest_journal: artifacts\live\xauusd\journals\20260414T105127Z_journal.json
   latest_incident: artifacts\live\xauusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none

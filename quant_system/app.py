@@ -22,6 +22,7 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.evaluation.report import build_ftmo_report
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine
+from quant_system.execution_tuning import apply_execution_mode_overrides
 from quant_system.integrations.mt5 import MT5Broker, MT5Client
 from quant_system.logging_utils import configure_logging
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
@@ -128,6 +129,7 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_atr_fraction = 0.2
         config.execution.structure_exit_bars = 4
     apply_ftmo_cost_profile(config, profile.broker_symbol or profile.data_symbol, profile.broker_symbol)
+    apply_execution_mode_overrides(config)
 
 
 def configure_profile_optimization(config: SystemConfig, profile: StrategyProfile) -> None:

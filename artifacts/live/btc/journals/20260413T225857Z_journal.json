@@ -1,0 +1,70 @@
+{
+  "symbol": "BTC",
+  "broker_symbol": "BTCUSD",
+  "deployment_path": "artifacts\\deploy\\btc\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-14T01:45:00+00:00",
+    "symbol": "BTC",
+    "regime_label": "volatile_trend",
+    "volatility_label": "high",
+    "structure_label": "trend",
+    "realized_vol_20": 0.04806190373605118,
+    "realized_vol_100": 0.03886029924563682,
+    "vol_ratio": 1.236786763587455,
+    "vol_percentile": 0.8429752066115702,
+    "atr_percent": 0.004723273137410493,
+    "trend_strength": 0.010647613854169569,
+    "range_efficiency": 0.6307891258566068,
+    "risk_multiplier": 0.5,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2951434,
+      "regime_label": "volatile_trend",
+      "vol_percentile": 0.8429752066115702,
+      "risk_multiplier": 0.5,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 1.021404269810902,
+      "effective_size_factor": 0.0,
+      "risk_budget_cash": 0.0,
+      "veto_reason": "regime"
+    },
+    {
+      "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up",
+      "signal_side": "flat",
+      "signal_timestamp": null,
+      "confidence": 0.0,
+      "current_quantity": 0.0,
+      "intended_action": "hold",
+      "magic_number": 2777415,
+      "regime_label": "volatile_trend",
+      "vol_percentile": 0.8264462809917356,
+      "risk_multiplier": 0.5,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 1.119019762092518,
+      "effective_size_factor": 0.0,
+      "risk_budget_cash": 0.0,
+      "veto_reason": "regime"
+    }
+  ]
+}

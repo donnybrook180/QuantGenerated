@@ -1,0 +1,50 @@
+{
+  "symbol": "GBPUSD",
+  "broker_symbol": "GBPUSD",
+  "deployment_path": "artifacts\\deploy\\gbpusd\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-14T05:30:00+00:00",
+    "symbol": "GBPUSD",
+    "regime_label": "calm_trend",
+    "volatility_label": "low",
+    "structure_label": "trend",
+    "realized_vol_20": 0.002140704892378227,
+    "realized_vol_100": 0.0028467935579472043,
+    "vol_ratio": 0.7519705411733013,
+    "vol_percentile": 0.1487603305785124,
+    "atr_percent": 0.00018297558131859007,
+    "trend_strength": -0.00026154253841337294,
+    "range_efficiency": 0.36603773584910276,
+    "risk_multiplier": 1.0,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-13T12:00:00+00:00",
+      "confidence": 1.0,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_trend",
+      "magic_number": 2693178,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1487603305785124,
+      "risk_multiplier": 0.35,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "specialist",
+      "base_allocation_weight": 0.35,
+      "effective_size_factor": 0.0,
+      "risk_budget_cash": 0.0,
+      "veto_reason": "regime"
+    }
+  ]
+}

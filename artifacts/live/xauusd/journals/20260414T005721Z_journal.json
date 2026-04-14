@@ -1,0 +1,50 @@
+{
+  "symbol": "XAUUSD",
+  "broker_symbol": "XAUUSD",
+  "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
+  "account_mode_label": "hedging",
+  "strategy_isolation_supported": true,
+  "portfolio_weight": 1.0,
+  "regime_snapshot": {
+    "timestamp": "2026-04-14T03:55:00+00:00",
+    "symbol": "XAUUSD",
+    "regime_label": "calm_trend",
+    "volatility_label": "low",
+    "structure_label": "trend",
+    "realized_vol_20": 0.008329009986348748,
+    "realized_vol_100": 0.011339788930074752,
+    "vol_ratio": 0.7344942694884747,
+    "vol_percentile": 0.1652892561983471,
+    "atr_percent": 0.0009631119470696355,
+    "trend_strength": 0.001412758651816226,
+    "range_efficiency": 0.33184232597146895,
+    "risk_multiplier": 1.0,
+    "block_new_entries": false,
+    "metadata": {
+      "strong_trend": "yes",
+      "bar_count": 500.0
+    }
+  },
+  "actions": [
+    {
+      "candidate_name": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat",
+      "signal_side": "buy",
+      "signal_timestamp": "2026-04-13T16:10:00+00:00",
+      "confidence": 0.6670574238200219,
+      "current_quantity": 0.0,
+      "intended_action": "regime_blocked::calm_trend",
+      "magic_number": 2844726,
+      "regime_label": "calm_trend",
+      "vol_percentile": 0.1652892561983471,
+      "risk_multiplier": 0.6,
+      "allocation_fraction": 1.0,
+      "allocator_score": 0.0,
+      "portfolio_weight": 1.0,
+      "promotion_tier": "core",
+      "base_allocation_weight": 1.15,
+      "effective_size_factor": 0.0,
+      "risk_budget_cash": 0.0,
+      "veto_reason": "regime"
+    }
+  ]
+}

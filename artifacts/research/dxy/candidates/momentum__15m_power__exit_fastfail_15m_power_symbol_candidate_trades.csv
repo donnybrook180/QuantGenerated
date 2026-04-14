@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DXY,2025-05-01T18:00:00+00:00,2025-05-01T18:30:00+00:00,18,18,momentum_confirmation,take_profit,100.20253,100.31943,0.01000,-0.04903,0.05020,2,1.00000,"{'momentum_5': 0.003516294166558076, 'momentum_20': 0.00354645454727609}"
+DXY,2025-05-08T18:45:00+00:00,2025-05-09T18:00:00+00:00,18,18,momentum_confirmation,structure_exit,100.45258,100.26044,0.01000,-0.05212,0.05020,5,1.00000,"{'momentum_5': 0.004400792142585708, 'momentum_20': 0.0030965318842897105}"
+DXY,2025-05-16T18:00:00+00:00,2025-05-16T19:00:00+00:00,18,19,momentum_confirmation,take_profit,101.09871,101.17226,0.01000,-0.04947,0.05020,4,1.00000,"{'momentum_5': 0.0035647260920075308, 'momentum_20': 0.002569215050243434}"

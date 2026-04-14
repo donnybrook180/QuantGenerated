@@ -1,0 +1,18 @@
+Artifact: usoil_stock_gap_and_go_selective_symbol_candidate
+Closed trades: 26
+Realized pnl: -1.32
+
+By entry hour
+14: trades=12 pnl=-0.62 avg=-0.05 win_rate=0.00%
+15: trades=11 pnl=-0.55 avg=-0.05 win_rate=0.00%
+13: trades=3 pnl=-0.15 avg=-0.05 win_rate=0.00%
+
+By entry setup
+stock_gap_and_go: trades=26 pnl=-1.32 avg=-0.05 win_rate=0.00%
+
+By exit reason
+trailing_stop: trades=8 pnl=-0.41 avg=-0.05 win_rate=0.00%
+take_profit: trades=6 pnl=-0.26 avg=-0.04 win_rate=0.00%
+time_stop: trades=5 pnl=-0.26 avg=-0.05 win_rate=0.00%
+stop_loss: trades=4 pnl=-0.22 avg=-0.06 win_rate=0.00%
+stale_breakout: trades=3 pnl=-0.16 avg=-0.05 win_rate=0.00%

@@ -1,0 +1,14 @@
+Artifact: stock_trend_breakout__15m_power__exit_trend__near_miss_dense__trend_flat_symbol_candidate
+Closed trades: 3
+Realized pnl: 1.81
+
+By entry hour
+18: trades=2 pnl=0.53 avg=0.26 win_rate=50.00%
+19: trades=1 pnl=1.28 avg=1.28 win_rate=100.00%
+
+By entry setup
+stock_trend_breakout: trades=3 pnl=1.81 avg=0.60 win_rate=66.67%
+
+By exit reason
+trailing_stop: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%
+take_profit: trades=2 pnl=1.86 avg=0.93 win_rate=100.00%

@@ -1,5 +1,5 @@
 TCA adaptation impact report
-generated_at: 2026-04-14T14:56:46.375446+00:00
+generated_at: 2026-04-14T15:34:39.861995+00:00
 
 Metric: estimated result index = edge_retention_pct x base_allocation_weight x max_risk_multiplier.
 Interpretation: this is a before/after estimate of what the execution adaptation layer changes in exposure to retained edge.
@@ -9,6 +9,7 @@ symbol   strategy                  fills edge_ret%   base_idx  adapt_idx     chg
 ETH      crypto_vwap_reversion__3      0     100.0      69.00      69.00      0.0 unchanged         
 EURUSD   forex_breakout_momentum_      0     100.0      64.67      64.67      0.0 unchanged         
 GBPUSD   gbpusd_overlap_impulse__      0     100.0      12.25      12.25      0.0 unchanged         
+UK100    stock_trend_breakout_swe      0     100.0      65.34      65.34      0.0 unchanged         
 USDJPY   forex_breakout_momentum_      0     100.0      12.25      12.25      0.0 unchanged         
 XAUUSD   momentum__15m_us__exit_t      0     100.0      69.00      69.00      0.0 unchanged         
 
@@ -48,6 +49,19 @@ GBPUSD | gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid
   adapted_max_risk: 0.350
   baseline_result_index: 12.2500
   adapted_result_index: 12.2500
+  result_index_change_pct: 0.00
+  adaptation_action: unchanged
+  adaptation_reason: healthy_or_insufficient_data
+
+UK100 | stock_trend_breakout_sweep_selective__15m_power
+  live_fill_count: 0
+  edge_retention_pct: 100.00
+  baseline_base_weight: 1.089
+  adapted_base_weight: 1.089
+  baseline_max_risk: 0.600
+  adapted_max_risk: 0.600
+  baseline_result_index: 65.3371
+  adapted_result_index: 65.3371
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data

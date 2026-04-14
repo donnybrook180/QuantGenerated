@@ -1,12 +1,22 @@
 Artifact: stock_trend_breakout__5m_us__exit_trend_5m_us_symbol_candidate
-Closed trades: 1
-Realized pnl: -0.49
+Closed trades: 313
+Realized pnl: -16.18
 
 By entry hour
-17: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
+14: trades=88 pnl=-4.65 avg=-0.05 win_rate=0.00%
+13: trades=57 pnl=-2.91 avg=-0.05 win_rate=0.00%
+15: trades=45 pnl=-2.37 avg=-0.05 win_rate=0.00%
+16: trades=40 pnl=-2.01 avg=-0.05 win_rate=0.00%
+19: trades=34 pnl=-1.75 avg=-0.05 win_rate=0.00%
+17: trades=28 pnl=-1.40 avg=-0.05 win_rate=0.00%
+18: trades=21 pnl=-1.09 avg=-0.05 win_rate=0.00%
 
 By entry setup
-stock_trend_breakout: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
+stock_trend_breakout: trades=313 pnl=-16.18 avg=-0.05 win_rate=0.00%
 
 By exit reason
-trailing_stop: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
+trailing_stop: trades=97 pnl=-4.95 avg=-0.05 win_rate=0.00%
+time_stop: trades=59 pnl=-3.32 avg=-0.06 win_rate=0.00%
+take_profit: trades=76 pnl=-2.93 avg=-0.04 win_rate=0.00%
+stale_breakout: trades=42 pnl=-2.55 avg=-0.06 win_rate=0.00%
+stop_loss: trades=39 pnl=-2.43 avg=-0.06 win_rate=0.00%

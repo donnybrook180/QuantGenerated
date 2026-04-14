@@ -1,0 +1,13 @@
+Artifact: stock_gap_and_go__15m_midday__exit_fastfail_15m_midday_symbol_candidate
+Closed trades: 2
+Realized pnl: 0.57
+
+By entry hour
+15: trades=2 pnl=0.57 avg=0.28 win_rate=50.00%
+
+By entry setup
+stock_gap_and_go: trades=2 pnl=0.57 avg=0.28 win_rate=50.00%
+
+By exit reason
+trailing_stop: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
+take_profit: trades=1 pnl=0.60 avg=0.60 win_rate=100.00%

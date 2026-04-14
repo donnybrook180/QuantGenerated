@@ -1,0 +1,11 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+UK100,2025-04-08T15:00:00+00:00,2025-04-08T16:00:00+00:00,15,16,stock_gap_open_reclaim,take_profit,7896.97908,7963.10706,0.01000,0.59542,0.06586,4,1.00000,{'minutes_from_open': 90.0}
+UK100,2025-04-11T15:30:00+00:00,2025-04-11T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,7976.39496,7931.21344,0.01000,-0.51772,0.06591,2,1.00000,{'minutes_from_open': 120.0}
+UK100,2025-05-02T15:30:00+00:00,2025-05-02T16:45:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,8586.41694,8577.98406,0.01000,-0.15149,0.06716,5,1.00000,{'minutes_from_open': 120.0}
+UK100,2025-07-24T15:30:00+00:00,2025-07-24T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,9148.22928,9134.97264,0.01000,-0.20085,0.06828,2,1.00000,{'minutes_from_open': 120.0}
+UK100,2025-10-22T15:00:00+00:00,2025-10-22T15:30:00+00:00,15,15,stock_gap_open_reclaim,take_profit,9516.30288,9522.49512,0.01000,-0.00712,0.06904,2,1.00000,{'minutes_from_open': 90.0}
+UK100,2025-12-15T15:30:00+00:00,2025-12-15T16:45:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,9746.34888,9743.15098,0.01000,-0.10147,0.06949,5,1.00000,{'minutes_from_open': 120.0}
+UK100,2026-01-29T15:00:00+00:00,2026-01-29T15:45:00+00:00,15,15,stock_gap_open_reclaim,take_profit,10239.94758,10255.14856,0.01000,0.08151,0.07050,3,1.00000,{'minutes_from_open': 90.0}
+UK100,2026-02-02T15:00:00+00:00,2026-02-02T16:00:00+00:00,15,16,stock_gap_open_reclaim,take_profit,10291.15782,10315.53648,0.01000,0.17318,0.07061,4,1.00000,{'minutes_from_open': 90.0}
+UK100,2026-03-31T15:15:00+00:00,2026-03-31T15:45:00+00:00,15,15,stock_gap_open_reclaim,structure_exit,10229.54550,10205.75844,0.01000,-0.30831,0.07044,2,1.00000,{'minutes_from_open': 105.0}
+UK100,2026-04-08T15:00:00+00:00,2026-04-08T16:00:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,10673.23422,10659.66764,0.01000,-0.20700,0.07133,4,1.00000,{'minutes_from_open': 90.0}

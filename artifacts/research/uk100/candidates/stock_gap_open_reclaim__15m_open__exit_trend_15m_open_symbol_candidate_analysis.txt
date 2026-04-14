@@ -1,0 +1,15 @@
+Artifact: stock_gap_open_reclaim__15m_open__exit_trend_15m_open_symbol_candidate
+Closed trades: 11
+Realized pnl: -4.51
+
+By entry hour
+14: trades=10 pnl=-3.97 avg=-0.40 win_rate=30.00%
+13: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
+
+By entry setup
+stock_gap_open_reclaim: trades=11 pnl=-4.51 avg=-0.41 win_rate=27.27%
+
+By exit reason
+stop_loss: trades=4 pnl=-4.66 avg=-1.16 win_rate=0.00%
+stale_breakout: trades=4 pnl=-2.31 avg=-0.58 win_rate=0.00%
+take_profit: trades=3 pnl=2.46 avg=0.82 win_rate=100.00%

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T14:56:46.376445+00:00",
+  "generated_at": "2026-04-14T15:34:39.862335+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -42,6 +42,21 @@
       "adapted_max_risk": 0.35,
       "baseline_result_index": 12.25,
       "adapted_result_index": 12.25,
+      "result_index_change_pct": 0.0,
+      "adaptation_action": "unchanged",
+      "adaptation_reason": "healthy_or_insufficient_data"
+    },
+    {
+      "symbol": "UK100",
+      "candidate_name": "stock_trend_breakout_sweep_selective__15m_power",
+      "live_fill_count": 0,
+      "edge_retention_pct": 100.0,
+      "baseline_base_weight": 1.0889513597707323,
+      "adapted_base_weight": 1.0889513597707323,
+      "baseline_max_risk": 0.6,
+      "adapted_max_risk": 0.6,
+      "baseline_result_index": 65.33708158624394,
+      "adapted_result_index": 65.33708158624394,
       "result_index_change_pct": 0.0,
       "adaptation_action": "unchanged",
       "adaptation_reason": "healthy_or_insufficient_data"

@@ -13,7 +13,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high [regime_improved
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -30,7 +30,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high [regi
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -47,7 +47,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_patie
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -64,7 +64,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_patie
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -81,7 +81,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_prote
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -98,7 +98,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_prote
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -115,7 +115,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_dense
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -132,7 +132,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_dense
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -149,7 +149,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -166,7 +166,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -183,7 +183,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -200,7 +200,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -217,7 +217,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -234,7 +234,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.07896563999998307}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=0.08 p05=-0.06 p95=0.22 dd_median=0.00% dd_p95=0.00% loss_prob=26.40%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.02 avg_test_pnl=0.04 avg_val_pf=0.00 avg_test_pf=499.50
   sparse_strategy: soft_pass_rate=50.00%
@@ -251,7 +251,7 @@ opening_range_short_breakdown [single|reject]: pnl=-0.18 closed=18 pf=0.40 win_r
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\opening_range_short_breakdown_default_symbol_candidate_trades.csv
@@ -266,7 +266,7 @@ opening_range_short_breakdown__exit_trend [entry_exit_family|reject]: pnl=-0.18 
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\opening_range_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
@@ -281,7 +281,7 @@ opening_range_short_breakdown__exit_fastfail [entry_exit_family|reject]: pnl=-0.
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
@@ -296,7 +296,7 @@ us100_opening_range_short_breakdown_trend [auto_improved|reject]: pnl=-0.18 clos
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\us100_opening_range_short_breakdown_trend_symbol_candidate_trades.csv
@@ -311,7 +311,7 @@ us100_opening_range_short_breakdown_trend_cross_risk_off [auto_improved|reject]:
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\us100_opening_range_short_breakdown_trend_cross_risk_off_symbol_candidate_trades.csv
@@ -326,7 +326,7 @@ us100_opening_range_short_breakdown_fast [auto_improved|reject]: pnl=-0.18 close
   regime_pnls: {"trend_down_vol_high": -0.02514107240003796, "trend_down_vol_mid": -0.04162924120007346, "trend_flat_vol_high": -0.0586990404500159, "trend_flat_vol_low": -0.018424649900007355, "trend_flat_vol_mid": -0.03490425250000954}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.18 p05=-0.32 p95=-0.02 dd_median=0.00% dd_p95=0.00% loss_prob=95.80%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=dislocated_chop; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.01 avg_test_pnl=0.01 avg_val_pf=1.05 avg_test_pf=499.50
   splits: train_pnl=-0.18 val_pnl=0.02 val_pf=1.63 val_closed=4 test_pnl=0.00 test_pf=0.00 test_closed=0
   trades: artifacts\research\us100\candidates\us100_opening_range_short_breakdown_fast_symbol_candidate_trades.csv
@@ -341,7 +341,7 @@ opening_range_breakout [single|reject]: pnl=-0.24 closed=18 pf=0.11 win_rate=16.
   regime_pnls: {"trend_flat_vol_high": -0.03322836000000734, "trend_flat_vol_mid": -0.09592527265005402, "trend_up_vol_high": -0.04385818755003129, "trend_up_vol_low": -0.01718635250000716, "trend_up_vol_mid": -0.04980393500004084}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.24 p05=-0.33 p95=-0.14 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.06 avg_test_pnl=-0.04 avg_val_pf=0.07 avg_test_pf=0.00
   splits: train_pnl=-0.08 val_pnl=-0.05 val_pf=0.00 val_closed=4 test_pnl=-0.07 test_pf=0.00 test_closed=3
   trades: artifacts\research\us100\candidates\opening_range_breakout_default_symbol_candidate_trades.csv
@@ -356,7 +356,7 @@ opening_range_breakout__exit_trend [entry_exit_family|reject]: pnl=-0.24 closed=
   regime_pnls: {"trend_flat_vol_high": -0.03322836000000734, "trend_flat_vol_mid": -0.09592527265005402, "trend_up_vol_high": -0.04385818755003129, "trend_up_vol_low": -0.01718635250000716, "trend_up_vol_mid": -0.04980393500004084}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.24 p05=-0.33 p95=-0.14 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.06 avg_test_pnl=-0.04 avg_val_pf=0.07 avg_test_pf=0.00
   splits: train_pnl=-0.08 val_pnl=-0.05 val_pf=0.00 val_closed=4 test_pnl=-0.07 test_pf=0.00 test_closed=3
   trades: artifacts\research\us100\candidates\opening_range_breakout__exit_trend_default_symbol_candidate_trades.csv
@@ -371,7 +371,7 @@ opening_range_breakout__exit_fastfail [entry_exit_family|reject]: pnl=-0.24 clos
   regime_pnls: {"trend_flat_vol_high": -0.03322836000000734, "trend_flat_vol_mid": -0.09592527265005402, "trend_up_vol_high": -0.04385818755003129, "trend_up_vol_low": -0.01718635250000716, "trend_up_vol_mid": -0.04980393500004084}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.24 p05=-0.33 p95=-0.14 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.06 avg_test_pnl=-0.04 avg_val_pf=0.07 avg_test_pf=0.00
   splits: train_pnl=-0.08 val_pnl=-0.05 val_pf=0.00 val_closed=4 test_pnl=-0.07 test_pf=0.00 test_closed=3
   trades: artifacts\research\us100\candidates\opening_range_breakout__exit_fastfail_default_symbol_candidate_trades.csv
@@ -386,7 +386,7 @@ us100_opening_drive_short_reclaim_selective [auto_improved|reject]: pnl=-0.38 cl
   regime_pnls: {"trend_down_vol_mid": -0.026824768200008293, "trend_flat_vol_high": -0.14927828250003927, "trend_flat_vol_mid": -0.1064822975500465, "trend_up_vol_high": -0.05234600500001761, "trend_up_vol_mid": -0.04159680750001485}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.38 p05=-0.45 p95=-0.30 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=dislocated_chop; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.11 avg_test_pnl=-0.11 avg_val_pf=0.00 avg_test_pf=0.00
   splits: train_pnl=-0.09 val_pnl=-0.15 val_pf=0.00 val_closed=6 test_pnl=-0.12 test_pf=0.00 test_closed=5
   trades: artifacts\research\us100\candidates\us100_opening_drive_short_reclaim_selective_symbol_candidate_trades.csv
@@ -401,7 +401,7 @@ us100_opening_drive_short_reclaim [auto_improved|reject]: pnl=-0.38 closed=17 pf
   regime_pnls: {"trend_down_vol_mid": -0.026824768200008293, "trend_flat_vol_high": -0.14927828250003927, "trend_flat_vol_mid": -0.11374596850005446, "trend_up_vol_high": -0.05234600500001761, "trend_up_vol_mid": -0.04159680750001485}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.38 p05=-0.47 p95=-0.30 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=dislocated_chop; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.11 avg_test_pnl=-0.11 avg_val_pf=0.00 avg_test_pf=0.00
   splits: train_pnl=-0.09 val_pnl=-0.15 val_pf=0.00 val_closed=6 test_pnl=-0.12 test_pf=0.00 test_closed=5
   trades: artifacts\research\us100\candidates\us100_opening_drive_short_reclaim_symbol_candidate_trades.csv
@@ -416,7 +416,7 @@ us100_volatility_short_breakdown_flat_high [auto_improved|reject]: pnl=-0.66 clo
   regime_pnls: {"trend_down_vol_high": -0.03931011755011923, "trend_down_vol_mid": -0.2945539603501277, "trend_flat_vol_high": -0.06444755000001579, "trend_flat_vol_low": -0.01779681770000707, "trend_flat_vol_mid": -0.12878487455006052, "trend_up_vol_high": -0.03552400500000772, "trend_up_vol_low": -0.019746185000008156, "trend_up_vol_mid": -0.05865713750002215}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-0.66 p05=-0.92 p95=-0.43 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_trend; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.17 avg_test_pnl=-0.08 avg_val_pf=0.23 avg_test_pf=0.29
   splits: train_pnl=-0.42 val_pnl=-0.13 val_pf=0.39 val_closed=13 test_pnl=-0.11 test_pf=0.00 test_closed=5
@@ -447,7 +447,7 @@ mean_reversion [single|reject]: pnl=-1.10 closed=52 pf=0.00 win_rate=0.00% dd=0.
   regime_pnls: {"trend_down_vol_high": -0.44887993525014963, "trend_down_vol_mid": -0.12301623750006116, "trend_flat_vol_high": -0.3287280799001303, "trend_flat_vol_mid": -0.11412977750004075, "trend_up_vol_high": -0.04775364500001615, "trend_up_vol_mid": -0.04046661000001563}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.09 p05=-1.24 p95=-0.97 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=trend_expansion; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.27 avg_test_pnl=-0.12 avg_val_pf=0.00 avg_test_pf=0.00
   splits: train_pnl=-0.55 val_pnl=-0.29 val_pf=0.00 val_closed=12 test_pnl=-0.08 test_pf=0.00 test_closed=6
   trades: artifacts\research\us100\candidates\mean_reversion_default_symbol_candidate_trades.csv
@@ -462,7 +462,7 @@ mean_reversion__exit_quick [entry_exit_family|reject]: pnl=-1.10 closed=52 pf=0.
   regime_pnls: {"trend_down_vol_high": -0.44887993525014963, "trend_down_vol_mid": -0.12301623750006116, "trend_flat_vol_high": -0.3287280799001303, "trend_flat_vol_mid": -0.11412977750004075, "trend_up_vol_high": -0.04775364500001615, "trend_up_vol_mid": -0.04046661000001563}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.09 p05=-1.24 p95=-0.97 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=trend_expansion; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.27 avg_test_pnl=-0.12 avg_val_pf=0.00 avg_test_pf=0.00
   splits: train_pnl=-0.55 val_pnl=-0.29 val_pf=0.00 val_closed=12 test_pnl=-0.08 test_pf=0.00 test_closed=6
   trades: artifacts\research\us100\candidates\mean_reversion__exit_quick_default_symbol_candidate_trades.csv
@@ -508,7 +508,7 @@ momentum [single|reject]: pnl=-1.32 closed=95 pf=0.12 win_rate=13.68% dd=0.00%
   regime_pnls: {"trend_flat_vol_high": -0.18810321005012498, "trend_flat_vol_low": -0.01583430240001576, "trend_flat_vol_mid": -0.4661950459502498, "trend_up_vol_high": -0.11564176640012307, "trend_up_vol_low": -0.042271300000016936, "trend_up_vol_mid": -0.4965764653002089}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.33 p05=-1.59 p95=-1.07 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_trend; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.42 avg_test_pnl=-0.38 avg_val_pf=0.13 avg_test_pf=0.16
   splits: train_pnl=-0.38 val_pnl=-0.56 val_pf=0.05 val_closed=27 test_pnl=-0.29 test_pf=0.20 test_closed=25
   trades: artifacts\research\us100\candidates\momentum_default_symbol_candidate_trades.csv
@@ -523,7 +523,7 @@ momentum__exit_fastfail [entry_exit_family|reject]: pnl=-1.32 closed=95 pf=0.12 
   regime_pnls: {"trend_flat_vol_high": -0.18810321005012498, "trend_flat_vol_low": -0.01583430240001576, "trend_flat_vol_mid": -0.4661950459502498, "trend_up_vol_high": -0.11564176640012307, "trend_up_vol_low": -0.042271300000016936, "trend_up_vol_mid": -0.4965764653002089}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.33 p05=-1.59 p95=-1.07 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_trend; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.42 avg_test_pnl=-0.38 avg_val_pf=0.13 avg_test_pf=0.16
   splits: train_pnl=-0.38 val_pnl=-0.56 val_pf=0.05 val_closed=27 test_pnl=-0.29 test_pf=0.20 test_closed=25
   trades: artifacts\research\us100\candidates\momentum__exit_fastfail_default_symbol_candidate_trades.csv
@@ -538,7 +538,7 @@ momentum__exit_trend [entry_exit_family|reject]: pnl=-1.33 closed=95 pf=0.12 win
   regime_pnls: {"trend_flat_vol_high": -0.1922030050501246, "trend_flat_vol_low": -0.01583430240001576, "trend_flat_vol_mid": -0.4661950459502498, "trend_up_vol_high": -0.11564176640012307, "trend_up_vol_low": -0.042271300000016936, "trend_up_vol_mid": -0.4965764653002089}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.33 p05=-1.59 p95=-1.07 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_trend; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.42 avg_test_pnl=-0.38 avg_val_pf=0.13 avg_test_pf=0.16
   splits: train_pnl=-0.38 val_pnl=-0.56 val_pf=0.05 val_closed=27 test_pnl=-0.29 test_pf=0.20 test_closed=25
   trades: artifacts\research\us100\candidates\momentum__exit_trend_default_symbol_candidate_trades.csv
@@ -553,7 +553,7 @@ us100_short_trend_rejection_flat_high_exit_optimized [auto_improved|reject]: pnl
   regime_pnls: {"trend_down_vol_high": -0.18465780755010883, "trend_down_vol_low": -0.14307903080006212, "trend_down_vol_mid": -0.8994007852504353, "trend_flat_vol_high": -0.00924104000001762, "trend_flat_vol_low": -0.0398682075000238, "trend_flat_vol_mid": -0.16800685090008757, "trend_up_vol_mid": -0.01260753995000755}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.45 p05=-1.63 p95=-1.27 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=orderly_trend; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.17 avg_test_pnl=-0.23 avg_val_pf=0.15 avg_test_pf=0.05
   splits: train_pnl=-0.88 val_pnl=-0.18 val_pf=0.17 val_closed=15 test_pnl=-0.26 test_pf=0.04 test_closed=18
@@ -569,7 +569,7 @@ us100_short_trend_rejection_flat_high_dense [auto_improved|reject]: pnl=-1.53 cl
   regime_pnls: {"trend_down_vol_high": -0.19726521755011503, "trend_down_vol_low": -0.1674374858000715, "trend_down_vol_mid": -0.9385280083504506, "trend_flat_vol_high": -0.00924104000001762, "trend_flat_vol_low": -0.0398682075000238, "trend_flat_vol_mid": -0.16800685090008757, "trend_up_vol_mid": -0.01260753995000755}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.54 p05=-1.69 p95=-1.37 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=orderly_trend; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   regime_filter: trend_flat_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.19 avg_test_pnl=-0.24 avg_val_pf=0.14 avg_test_pf=0.05
   splits: train_pnl=-0.94 val_pnl=-0.20 val_pf=0.16 val_closed=16 test_pnl=-0.27 test_pf=0.03 test_closed=18
@@ -585,7 +585,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_prote
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.347282784200677, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.81 p05=-1.95 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=53.74
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=53.74
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.34 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.89 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -601,7 +601,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.347282784200677, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.81 p05=-1.95 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=53.74
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=53.74
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.34 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.89 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -617,7 +617,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_patie
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.3578325467006744, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.82 p05=-1.96 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.33 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.90 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -633,7 +633,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_dense
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.3578325467006744, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.82 p05=-1.96 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.33 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.90 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -649,7 +649,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.3578325467006744, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.82 p05=-1.96 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.33 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.90 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -665,7 +665,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near
   regime_pnls: {"trend_flat_vol_high": 0.025068334999982653, "trend_flat_vol_low": -1.3578325467006744, "trend_flat_vol_mid": -0.4787229826001783}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.82 p05=-1.96 p95=-1.66 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.01; loss_ratio=54.17
   regime_filter: trend_flat
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.30 avg_test_pnl=-0.33 avg_val_pf=0.00 avg_test_pf=0.04
   splits: train_pnl=-0.90 val_pnl=-0.29 val_pf=0.00 val_closed=16 test_pnl=-0.46 test_pf=0.08 test_closed=31
@@ -681,7 +681,7 @@ us100_momentum_selective [auto_improved|reject]: pnl=-1.88 closed=128 pf=0.09 wi
   regime_pnls: {"trend_flat_vol_high": -0.3117250747501828, "trend_flat_vol_low": -0.13455871590007404, "trend_flat_vol_mid": -0.6412037129503335, "trend_up_vol_high": -0.16954472140013763, "trend_up_vol_low": -0.06539485065003191, "trend_up_vol_mid": -0.5527813868502393}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-1.89 p05=-2.18 p95=-1.59 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.48 avg_test_pnl=-0.53 avg_val_pf=0.13 avg_test_pf=0.10
   splits: train_pnl=-0.73 val_pnl=-0.65 val_pf=0.06 val_closed=33 test_pnl=-0.40 test_pf=0.13 test_closed=29
   trades: artifacts\research\us100\candidates\us100_momentum_selective_symbol_candidate_trades.csv
@@ -696,7 +696,7 @@ us100_afternoon_downside_continuation_trend_down [auto_improved|reject]: pnl=-2.
   regime_pnls: {"trend_down_vol_high": -0.26749011545012424, "trend_down_vol_low": -0.024189595000015062, "trend_down_vol_mid": -0.35464664735015733, "trend_flat_vol_high": -0.0774353345500367, "trend_flat_vol_low": -0.3845382245501821, "trend_flat_vol_mid": -0.6467231360003121, "trend_up_vol_high": -0.17035572710007843, "trend_up_vol_low": -0.0818018500500375, "trend_up_vol_mid": -0.5364313019002248}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.54 p05=-2.77 p95=-2.29 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   regime_filter: trend_down_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.49 avg_test_pnl=-0.69 avg_val_pf=0.05 avg_test_pf=0.06
   splits: train_pnl=-1.20 val_pnl=-0.49 val_pf=0.05 val_closed=27 test_pnl=-0.74 test_pf=0.06 test_closed=44
@@ -712,7 +712,7 @@ volatility_breakout [single|reject]: pnl=-2.71 closed=187 pf=0.08 win_rate=8.02%
   regime_pnls: {"trend_flat_vol_high": -0.2584536537001975, "trend_flat_vol_low": -0.5033244392002542, "trend_flat_vol_mid": -0.8754989846503998, "trend_up_vol_high": -0.13918869060012298, "trend_up_vol_low": -0.42891709335021805, "trend_up_vol_mid": -0.5013648898002555}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.70 p05=-2.97 p95=-2.43 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.54 avg_test_pnl=-0.68 avg_val_pf=0.10 avg_test_pf=0.06
   splits: train_pnl=-1.18 val_pnl=-0.56 val_pf=0.07 val_closed=37 test_pnl=-0.72 test_pf=0.06 test_closed=44
   trades: artifacts\research\us100\candidates\volatility_breakout_default_symbol_candidate_trades.csv
@@ -727,7 +727,7 @@ volatility_breakout__exit_trend [entry_exit_family|reject]: pnl=-2.71 closed=187
   regime_pnls: {"trend_flat_vol_high": -0.2584536537001975, "trend_flat_vol_low": -0.5033244392002542, "trend_flat_vol_mid": -0.8754989846503998, "trend_up_vol_high": -0.13918869060012298, "trend_up_vol_low": -0.42891709335021805, "trend_up_vol_mid": -0.5013648898002555}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.70 p05=-2.97 p95=-2.43 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.54 avg_test_pnl=-0.68 avg_val_pf=0.10 avg_test_pf=0.06
   splits: train_pnl=-1.18 val_pnl=-0.56 val_pf=0.07 val_closed=37 test_pnl=-0.72 test_pf=0.06 test_closed=44
   trades: artifacts\research\us100\candidates\volatility_breakout__exit_trend_default_symbol_candidate_trades.csv
@@ -742,7 +742,7 @@ volatility_breakout__exit_fastfail [entry_exit_family|reject]: pnl=-2.71 closed=
   regime_pnls: {"trend_flat_vol_high": -0.2584536537001975, "trend_flat_vol_low": -0.5033244392002542, "trend_flat_vol_mid": -0.8754989846503998, "trend_up_vol_high": -0.13918869060012298, "trend_up_vol_low": -0.42891709335021805, "trend_up_vol_mid": -0.5013648898002555}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.70 p05=-2.97 p95=-2.43 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.54 avg_test_pnl=-0.68 avg_val_pf=0.10 avg_test_pf=0.06
   splits: train_pnl=-1.18 val_pnl=-0.56 val_pf=0.07 val_closed=37 test_pnl=-0.72 test_pf=0.06 test_closed=44
   trades: artifacts\research\us100\candidates\volatility_breakout__exit_fastfail_default_symbol_candidate_trades.csv
@@ -757,7 +757,7 @@ us100_prior_day_failed_bounce_short [auto_improved|reject]: pnl=-2.98 closed=181
   regime_pnls: {"trend_down_vol_high": -0.03163461000000666, "trend_down_vol_low": -0.014842580000007502, "trend_down_vol_mid": -0.15909978325009547, "trend_flat_vol_high": 0.002368470049983671, "trend_flat_vol_low": -1.3332221978506595, "trend_flat_vol_mid": -0.44742429760018015, "trend_up_vol_high": -0.007849597500007804, "trend_up_vol_low": -0.6170657614502989, "trend_up_vol_mid": -0.3696537846501451}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.98 p05=-3.12 p95=-2.85 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=562.90
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=562.90
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.55 avg_test_pnl=-0.61 avg_val_pf=0.00 avg_test_pf=0.01
   splits: train_pnl=-1.52 val_pnl=-0.58 val_pf=0.00 val_closed=37 test_pnl=-0.64 test_pf=0.01 test_closed=37
   trades: artifacts\research\us100\candidates\us100_prior_day_failed_bounce_short_symbol_candidate_trades.csv
@@ -772,7 +772,7 @@ us100_prior_day_failed_bounce_short_trend_down [auto_improved|reject]: pnl=-2.98
   regime_pnls: {"trend_down_vol_high": -0.03163461000000666, "trend_down_vol_low": -0.014842580000007502, "trend_down_vol_mid": -0.15909978325009547, "trend_flat_vol_high": 0.002368470049983671, "trend_flat_vol_low": -1.3332221978506595, "trend_flat_vol_mid": -0.44742429760018015, "trend_up_vol_high": -0.007849597500007804, "trend_up_vol_low": -0.6170657614502989, "trend_up_vol_mid": -0.3696537846501451}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-2.98 p05=-3.12 p95=-2.85 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=562.90
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=562.90
   regime_filter: trend_down_vol_high
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.55 avg_test_pnl=-0.61 avg_val_pf=0.00 avg_test_pf=0.01
   splits: train_pnl=-1.52 val_pnl=-0.58 val_pf=0.00 val_closed=37 test_pnl=-0.64 test_pf=0.01 test_closed=37
@@ -803,7 +803,7 @@ us100_afternoon_downside_continuation [auto_improved|reject]: pnl=-3.71 closed=2
   regime_pnls: {"trend_down_vol_high": -0.26749011545012424, "trend_down_vol_low": -0.04114812750003807, "trend_down_vol_mid": -0.5027094090002356, "trend_flat_vol_high": -0.0774353345500367, "trend_flat_vol_low": -0.9939910069004952, "trend_flat_vol_mid": -0.9272141285504688, "trend_up_vol_high": -0.14732193710007097, "trend_up_vol_low": -0.1467463875000749, "trend_up_vol_mid": -0.6012357221002571}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-3.71 p05=-3.96 p95=-3.42 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=compressed_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.85 avg_test_pnl=-0.97 avg_val_pf=0.04 avg_test_pf=0.05
   splits: train_pnl=-1.63 val_pnl=-0.90 val_pf=0.04 val_closed=55 test_pnl=-0.96 test_pf=0.05 test_closed=59
   trades: artifacts\research\us100\candidates\us100_afternoon_downside_continuation_symbol_candidate_trades.csv
@@ -818,7 +818,7 @@ trend [single|reject]: pnl=-3.75 closed=255 pf=0.07 win_rate=9.80% dd=0.00%
   regime_pnls: {"trend_up_vol_high": -0.1655661980502066, "trend_up_vol_low": -1.3188480148506494, "trend_up_vol_mid": -2.2609831061011323}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-3.72 p05=-4.02 p95=-3.44 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_trend; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.75 avg_test_pnl=-0.86 avg_val_pf=0.06 avg_test_pf=0.10
   splits: train_pnl=-1.60 val_pnl=-0.83 val_pf=0.05 val_closed=55 test_pnl=-0.82 test_pf=0.11 test_closed=57
   trades: artifacts\research\us100\candidates\trend_default_symbol_candidate_trades.csv
@@ -833,7 +833,7 @@ trend__exit_fastfail [entry_exit_family|reject]: pnl=-3.75 closed=255 pf=0.07 wi
   regime_pnls: {"trend_up_vol_high": -0.1655661980502066, "trend_up_vol_low": -1.3188480148506494, "trend_up_vol_mid": -2.2609831061011323}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-3.72 p05=-4.02 p95=-3.44 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_trend; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.75 avg_test_pnl=-0.86 avg_val_pf=0.06 avg_test_pf=0.10
   splits: train_pnl=-1.60 val_pnl=-0.83 val_pf=0.05 val_closed=55 test_pnl=-0.82 test_pf=0.11 test_closed=57
   trades: artifacts\research\us100\candidates\trend__exit_fastfail_default_symbol_candidate_trades.csv
@@ -848,7 +848,7 @@ trend__exit_trend [entry_exit_family|reject]: pnl=-3.76 closed=255 pf=0.07 win_r
   regime_pnls: {"trend_up_vol_high": -0.18281533555020701, "trend_up_vol_low": -1.3188480148506494, "trend_up_vol_mid": -2.2609831061011323}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-3.74 p05=-4.03 p95=-3.46 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=orderly_trend; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.75 avg_test_pnl=-0.86 avg_val_pf=0.06 avg_test_pf=0.10
   splits: train_pnl=-1.62 val_pnl=-0.83 val_pf=0.05 val_closed=55 test_pnl=-0.82 test_pf=0.11 test_closed=57
   trades: artifacts\research\us100\candidates\trend__exit_trend_default_symbol_candidate_trades.csv
@@ -863,7 +863,7 @@ volatility_short_breakdown__exit_trend [entry_exit_family|reject]: pnl=-4.49 clo
   regime_pnls: {"trend_down_vol_high": -0.4737607508002134, "trend_down_vol_low": -0.262708432350131, "trend_down_vol_mid": -0.9930332136004666, "trend_flat_vol_high": -0.37406010045026167, "trend_flat_vol_low": -0.9740617864004639, "trend_flat_vol_mid": -1.4166139683507255}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-4.48 p05=-4.78 p95=-4.15 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.80 avg_test_pnl=-1.17 avg_val_pf=0.07 avg_test_pf=0.04
   splits: train_pnl=-2.08 val_pnl=-0.82 val_pf=0.10 val_closed=60 test_pnl=-1.32 test_pf=0.01 test_closed=73
   trades: artifacts\research\us100\candidates\volatility_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
@@ -878,7 +878,7 @@ volatility_short_breakdown [single|reject]: pnl=-4.50 closed=288 pf=0.06 win_rat
   regime_pnls: {"trend_down_vol_high": -0.4432822748002116, "trend_down_vol_low": -0.262708432350131, "trend_down_vol_mid": -0.9857045800504659, "trend_flat_vol_high": -0.4229286569002625, "trend_flat_vol_low": -0.9612204285004645, "trend_flat_vol_mid": -1.425460526000728}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-4.50 p05=-4.77 p95=-4.14 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.80 avg_test_pnl=-1.14 avg_val_pf=0.06 avg_test_pf=0.04
   splits: train_pnl=-2.12 val_pnl=-0.82 val_pf=0.10 val_closed=60 test_pnl=-1.29 test_pf=0.01 test_closed=73
   trades: artifacts\research\us100\candidates\volatility_short_breakdown_default_symbol_candidate_trades.csv
@@ -893,7 +893,7 @@ volatility_short_breakdown__exit_fastfail [entry_exit_family|reject]: pnl=-4.50 
   regime_pnls: {"trend_down_vol_high": -0.4432822748002116, "trend_down_vol_low": -0.262708432350131, "trend_down_vol_mid": -0.9857045800504659, "trend_flat_vol_high": -0.4229286569002625, "trend_flat_vol_low": -0.9612204285004645, "trend_flat_vol_mid": -1.425460526000728}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-4.50 p05=-4.77 p95=-4.14 dd_median=0.00% dd_p95=0.00% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-0.80 avg_test_pnl=-1.14 avg_val_pf=0.06 avg_test_pf=0.04
   splits: train_pnl=-2.12 val_pnl=-0.82 val_pf=0.10 val_closed=60 test_pnl=-1.29 test_pf=0.01 test_closed=73
   trades: artifacts\research\us100\candidates\volatility_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
@@ -939,7 +939,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__plus__us100_pri
   regime_pnls: {"trend_down_vol_high": -0.03163461000000666, "trend_down_vol_low": -0.06831508500004589, "trend_down_vol_mid": -0.3826172589002056, "trend_flat_vol_high": -0.014167615000033038, "trend_flat_vol_low": -2.410779266651191, "trend_flat_vol_mid": -0.9274060412004349, "trend_up_vol_high": -0.02933842750003123, "trend_up_vol_low": -1.2167275712505887, "trend_up_vol_mid": -0.7561177736003447}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-5.84 p05=-6.02 p95=-5.66 dd_median=0.01% dd_p95=0.01% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.30 avg_test_pnl=-1.05 avg_val_pf=0.01 avg_test_pf=0.02
   combo_validation: components=2 outperformance=-1.25 trade_overlap=100.00%
   splits: train_pnl=-3.12 val_pnl=-1.29 val_pf=0.01 val_closed=80 test_pnl=-0.98 test_pf=0.03 test_closed=64
@@ -955,7 +955,7 @@ us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__plus__us100_pri
   regime_pnls: {"trend_down_vol_high": -0.03163461000000666, "trend_down_vol_low": -0.06831508500004589, "trend_down_vol_mid": -0.3826172589002056, "trend_flat_vol_high": -0.014167615000033038, "trend_flat_vol_low": -2.410779266651191, "trend_flat_vol_mid": -0.9274060412004349, "trend_up_vol_high": -0.02933842750003123, "trend_up_vol_low": -1.2167275712505887, "trend_up_vol_mid": -0.7561177736003447}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-5.84 p05=-6.02 p95=-5.66 dd_median=0.01% dd_p95=0.01% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.30 avg_test_pnl=-1.05 avg_val_pf=0.01 avg_test_pf=0.02
   combo_validation: components=2 outperformance=-1.25 trade_overlap=100.00%
   splits: train_pnl=-3.12 val_pnl=-1.29 val_pf=0.01 val_closed=80 test_pnl=-0.98 test_pf=0.03 test_closed=64
@@ -971,7 +971,7 @@ us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__plus
   regime_pnls: {"trend_down_vol_high": -0.03163461000000666, "trend_down_vol_low": -0.06831508500004589, "trend_down_vol_mid": -0.3826172589002056, "trend_flat_vol_high": -0.014167615000033038, "trend_flat_vol_low": -2.410779266651191, "trend_flat_vol_mid": -0.9274060412004349, "trend_up_vol_high": -0.02933842750003123, "trend_up_vol_low": -1.2167275712505887, "trend_up_vol_mid": -0.7561177736003447}
   funding: available=yes swap_long=-552.11000 swap_short=22.98000 preferred_side=short carry_spread=-575.09000
   monte_carlo: sims=500 pnl_median=-5.84 p05=-6.02 p95=-5.66 dd_median=0.01% dd_p95=0.01% loss_prob=100.00%
-  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
   walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.30 avg_test_pnl=-1.05 avg_val_pf=0.01 avg_test_pf=0.02
   combo_validation: components=2 outperformance=-1.25 trade_overlap=100.00%
   splits: train_pnl=-3.12 val_pnl=-1.29 val_pf=0.01 val_closed=80 test_pnl=-0.98 test_pf=0.03 test_closed=64

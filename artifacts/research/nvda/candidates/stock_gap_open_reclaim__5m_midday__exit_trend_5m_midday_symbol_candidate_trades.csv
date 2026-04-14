@@ -1,1 +1,5 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+NVDA,2025-05-01T15:15:00+00:00,2025-05-01T15:55:00+00:00,15,15,stock_gap_open_reclaim,time_stop,114.80540,113.17002,0.01000,-0.06658,0.05023,8,1.00000,{'minutes_from_open': 105.0}
+NVDA,2025-10-24T15:20:00+00:00,2025-10-24T15:30:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,185.46060,185.16452,0.01000,-0.05333,0.05037,2,1.00000,{'minutes_from_open': 110.0}
+NVDA,2025-12-15T15:05:00+00:00,2025-12-15T15:15:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,177.78331,176.64195,0.01000,-0.06177,0.05035,2,1.00000,{'minutes_from_open': 95.0}
+NVDA,2026-03-11T15:00:00+00:00,2026-03-11T15:15:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,186.71085,185.51442,0.01000,-0.06234,0.05037,3,1.00000,{'minutes_from_open': 90.0}

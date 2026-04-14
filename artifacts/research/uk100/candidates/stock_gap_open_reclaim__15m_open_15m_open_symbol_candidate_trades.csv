@@ -1,0 +1,12 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+UK100,2025-04-08T14:15:00+00:00,2025-04-09T13:30:00+00:00,14,13,stock_gap_open_reclaim,stop_loss,7878.97548,7678.86392,0.01000,-2.06667,0.06556,3,1.00000,{'minutes_from_open': 45.0}
+UK100,2025-07-10T14:30:00+00:00,2025-07-10T14:45:00+00:00,14,14,stock_gap_open_reclaim,stop_loss,8974.19448,8955.60852,0.01000,-0.25379,0.06793,1,1.00000,{'minutes_from_open': 60.0}
+UK100,2025-10-08T13:45:00+00:00,2025-10-09T13:30:00+00:00,13,13,stock_gap_open_reclaim,structure_exit,9556.91100,9510.09760,0.01000,-0.53720,0.06907,5,1.00000,{'minutes_from_open': 15.0}
+UK100,2025-10-22T14:00:00+00:00,2025-10-23T13:30:00+00:00,14,13,stock_gap_open_reclaim,take_profit,9515.00262,9569.58570,0.01000,0.47675,0.06908,4,1.00000,{'minutes_from_open': 30.0}
+UK100,2025-10-23T14:00:00+00:00,2025-10-24T13:30:00+00:00,14,13,stock_gap_open_reclaim,structure_exit,9576.91500,9564.08680,0.01000,-0.19742,0.06914,4,1.00000,{'minutes_from_open': 30.0}
+UK100,2025-12-15T14:30:00+00:00,2025-12-16T13:30:00+00:00,14,13,stock_gap_open_reclaim,structure_exit,9744.14844,9708.05800,0.01000,-0.43036,0.06945,2,1.00000,{'minutes_from_open': 60.0}
+UK100,2026-02-27T14:45:00+00:00,2026-03-02T13:30:00+00:00,14,13,stock_gap_open_reclaim,structure_exit,10905.18060,10800.63944,0.01000,-1.11712,0.07171,1,1.00000,{'minutes_from_open': 75.0}
+UK100,2026-03-25T14:45:00+00:00,2026-03-26T13:30:00+00:00,14,13,stock_gap_open_reclaim,structure_exit,10113.62232,9998.49990,0.01000,-1.22134,0.07011,1,1.00000,{'minutes_from_open': 75.0}
+UK100,2026-03-30T14:15:00+00:00,2026-03-31T13:30:00+00:00,14,13,stock_gap_open_reclaim,take_profit,10071.31386,10159.96760,0.01000,0.81631,0.07023,3,1.00000,{'minutes_from_open': 45.0}
+UK100,2026-03-31T14:30:00+00:00,2026-04-01T13:30:00+00:00,14,13,stock_gap_open_reclaim,take_profit,10229.84556,10353.72884,0.01000,1.16825,0.07058,2,1.00000,{'minutes_from_open': 60.0}
+UK100,2026-04-08T14:30:00+00:00,2026-04-09T13:30:00+00:00,14,13,stock_gap_open_reclaim,structure_exit,10676.23482,10568.98578,0.01000,-1.14374,0.07125,2,1.00000,{'minutes_from_open': 60.0}

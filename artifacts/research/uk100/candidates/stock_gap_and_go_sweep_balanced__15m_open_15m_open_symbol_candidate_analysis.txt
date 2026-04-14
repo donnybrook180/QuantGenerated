@@ -1,0 +1,13 @@
+Artifact: stock_gap_and_go_sweep_balanced__15m_open_15m_open_symbol_candidate
+Closed trades: 4
+Realized pnl: 0.37
+
+By entry hour
+14: trades=4 pnl=0.37 avg=0.09 win_rate=75.00%
+
+By entry setup
+stock_gap_and_go: trades=4 pnl=0.37 avg=0.09 win_rate=75.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-2.07 avg=-2.07 win_rate=0.00%
+take_profit: trades=3 pnl=2.44 avg=0.81 win_rate=100.00%

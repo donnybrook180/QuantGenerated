@@ -1,6 +1,6 @@
-Live health report generated at: 2026-04-14T14:56:51.009418+00:00
-Deployments scanned: 9
-Summary: live_ready=3 reduced_risk_only=2 research_only=4 symbols_with_incidents=9 total_fills=0
+Live health report generated at: 2026-04-14T15:34:46.876768+00:00
+Deployments scanned: 15
+Summary: live_ready=4 reduced_risk_only=2 research_only=9 symbols_with_incidents=9 total_fills=0
 TCA overview: none
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
@@ -12,7 +12,7 @@ Live improvement activity report: artifacts\system\reports\live_improvement_acti
 Live research triggers: 0
 TCA worst edge retention: ETH/crypto_vwap_reversion__30m_us__exit_trend=100.0%
 Tradeable now: none
-Blocked now: ETH, EURUSD, GBPUSD, USDJPY, XAUUSD
+Blocked now: ETH, EURUSD, GBPUSD, UK100, USDJPY, XAUUSD
 Recent incidents: BTC (20260413T210151Z_incident.txt), ETH (20260413T210151Z_incident.txt), EURUSD (20260413T210151Z_incident.txt), GBPUSD (20260413T210151Z_incident.txt), JP225 (20260413T210151Z_incident.txt)
 
 Symbol: BTC
@@ -31,6 +31,21 @@ Symbol: BTC
   interpreter: legacy_regime=event_risk unified_regime=event_dislocation bias=long session=midday_chop structure=clean_breakout execution=unknown risk=defensive confidence=0.56
   latest_actions: crypto_trend_pullback_sweep_dense__30m_europe:hold[specialist] veto=interpreter_defensive::regime_block::event_risk
 
+Symbol: DXY
+  status: research_only
+  broker_symbol: DXY
+  strategies: 0
+  tiers: none
+  execution_validation: not_run
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\dxy\live.json
+  latest_journal: none
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=calm_range unified_regime=orderly_range bias=long session=midday_chop structure=range_rotation execution=unknown risk=normal confidence=0.44
+
 Symbol: ETH
   status: live_ready
   broker_symbol: ETHUSD
@@ -40,7 +55,7 @@ Symbol: ETH
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260414T145636Z_journal.json
+  latest_journal: artifacts\live\eth\journals\20260414T153428Z_journal.json
   latest_incident: artifacts\live\eth\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -56,7 +71,7 @@ Symbol: EURUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260414T145637Z_journal.json
+  latest_journal: artifacts\live\eurusd\journals\20260414T153428Z_journal.json
   latest_incident: artifacts\live\eurusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -72,12 +87,27 @@ Symbol: GBPUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\gbpusd\live.json
-  latest_journal: artifacts\live\gbpusd\journals\20260414T145637Z_journal.json
+  latest_journal: artifacts\live\gbpusd\journals\20260414T153429Z_journal.json
   latest_incident: artifacts\live\gbpusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=volatile_chop unified_regime=dislocated_chop bias=short session=midday_chop structure=failed_breakout execution=unknown risk=defensive confidence=0.44
   latest_actions: gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid:hold[specialist] veto=interpreter_defensive::regime_block::volatile_chop
+
+Symbol: IBM
+  status: research_only
+  broker_symbol: IBM
+  strategies: 0
+  tiers: none
+  execution_validation: not_run
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\ibm\live.json
+  latest_journal: none
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=volatile_chop unified_regime=dislocated_chop bias=short session=midday_chop structure=compression execution=unknown risk=defensive confidence=0.41
 
 Symbol: JP225
   status: research_only
@@ -94,6 +124,52 @@ Symbol: JP225
   tca: none
   interpreter: legacy_regime=calm_range unified_regime=compressed_range bias=long session=europe_trend structure=compression execution=unknown risk=normal confidence=0.56
   latest_actions: jp225_volatility_short_breakdown_core_hours__exit_trend:policy_blocked::interpreter_not_allowed::trend_pullback[core] veto=interpreter_not_allowed::trend_pullback
+
+Symbol: NVDA
+  status: research_only
+  broker_symbol: NVDA
+  strategies: 0
+  tiers: none
+  execution_validation: not_run
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\nvda\live.json
+  latest_journal: none
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=calm_range unified_regime=compressed_range bias=long session=midday_chop structure=compression execution=unknown risk=normal confidence=0.39
+
+Symbol: TSLA
+  status: research_only
+  broker_symbol: TSLA
+  strategies: 0
+  tiers: none
+  execution_validation: not_run
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\tsla\live.json
+  latest_journal: none
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=calm_range unified_regime=compressed_range bias=short session=midday_chop structure=compression execution=unknown risk=normal confidence=0.41
+
+Symbol: UK100
+  status: live_ready
+  broker_symbol: UK100
+  strategies: 1
+  tiers: core
+  execution_validation: selection=combo_1 variant=stock_trend_breakout_sweep_selective__15m_power@15m_power data_source=duckdb_cache_aggregated pnl=1.89 pf=8.88 closed=5 quality=0.64 underwater=40.0% -> accepted
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\uk100\live.json
+  latest_journal: artifacts\live\uk100\journals\20260414T153429Z_journal.json
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=volatile_chop unified_regime=dislocated_chop bias=short session=midday_chop structure=range_rotation execution=unknown risk=defensive confidence=0.42
+  latest_actions: stock_trend_breakout_sweep_selective__15m_power:hold[core] veto=interpreter_defensive::regime_block::volatile_chop
 
 Symbol: US100
   status: research_only
@@ -136,12 +212,27 @@ Symbol: USDJPY
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260414T145638Z_journal.json
+  latest_journal: artifacts\live\usdjpy\journals\20260414T153430Z_journal.json
   latest_incident: artifacts\live\usdjpy\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=event_risk unified_regime=event_dislocation bias=long session=midday_chop structure=clean_breakout execution=unknown risk=defensive confidence=0.53
   latest_actions: forex_breakout_momentum_patient__near_miss_patient__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk
+
+Symbol: USOIL
+  status: research_only
+  broker_symbol: USOIL
+  strategies: 0
+  tiers: none
+  execution_validation: not_run
+  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_guardrail: none
+  deployment: artifacts\deploy\usoil\live.json
+  latest_journal: none
+  latest_incident: none
+  fills: none
+  tca: none
+  interpreter: legacy_regime=event_risk unified_regime=event_dislocation bias=short session=midday_chop structure=trend_pullback execution=unknown risk=defensive confidence=0.56
 
 Symbol: XAUUSD
   status: live_ready
@@ -152,7 +243,7 @@ Symbol: XAUUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260414T145639Z_journal.json
+  latest_journal: artifacts\live\xauusd\journals\20260414T153430Z_journal.json
   latest_incident: artifacts\live\xauusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none

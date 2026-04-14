@@ -1,9 +1,12 @@
 Artifact: stock_gap_fade__5m_open__exit_trend_5m_open_symbol_candidate
-Closed trades: 0
-Realized pnl: 0.00
+Closed trades: 1
+Realized pnl: -0.05
 
 By entry hour
+14: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%
 
 By entry setup
+stock_gap_fade: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%
 
 By exit reason
+stale_breakout: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%

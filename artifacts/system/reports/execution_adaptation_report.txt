@@ -1,10 +1,15 @@
 Execution adaptation report
-generated_at: 2026-04-14T14:56:39.437513+00:00
+generated_at: 2026-04-14T15:34:30.829604+00:00
 
 BTC: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
   guardrail: none
   artifact: artifacts\live\btc\execution_adaptation.json
+
+DXY: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\dxy\execution_adaptation.json
 
 ETH: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
@@ -24,10 +29,31 @@ GBPUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse
   artifact: artifacts\live\gbpusd\execution_adaptation.json
   strategy gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid: unchanged fills=0 scale=1.00/1.00 base_weight=0.35 max_risk=0.35 min_bars=0 rank=baseline_local
 
+IBM: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\ibm\execution_adaptation.json
+
 JP225: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
   guardrail: none
   artifact: artifacts\live\jp225\execution_adaptation.json
+
+NVDA: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\nvda\execution_adaptation.json
+
+TSLA: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\tsla\execution_adaptation.json
+
+UK100: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\uk100\execution_adaptation.json
+  strategy stock_trend_breakout_sweep_selective__15m_power: unchanged fills=0 scale=1.00/1.00 base_weight=1.09 max_risk=0.60 min_bars=0 rank=baseline_local
 
 US100: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
@@ -44,6 +70,11 @@ USDJPY: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse
   guardrail: none
   artifact: artifacts\live\usdjpy\execution_adaptation.json
   strategy forex_breakout_momentum_patient__near_miss_patient__trend_flat: unchanged fills=0 scale=1.00/1.00 base_weight=0.35 max_risk=0.35 min_bars=0 rank=baseline_local
+
+USOIL: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  reason: not enough local fills for adaptation
+  guardrail: none
+  artifact: artifacts\live\usoil\execution_adaptation.json
 
 XAUUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation

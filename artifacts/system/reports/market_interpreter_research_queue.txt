@@ -1,5 +1,25 @@
 Market interpreter research queue
-generated_at: 2026-04-14T14:56:48.480510+00:00
+generated_at: 2026-04-14T15:34:43.374564+00:00
+
+IBM
+  broker_symbol: IBM
+  priority: 3
+  labels: midday_chop, compression_regime, no_trade::regime_block::volatile_chop
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\ibm\interpreter_research_trigger.json
+
+UK100
+  broker_symbol: UK100
+  priority: 3
+  labels: midday_chop, range_rotation, no_trade::regime_block::volatile_chop
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - test mean-reversion-biased variants and avoid trend breakout logic
+  artifact: artifacts\live\uk100\interpreter_research_trigger.json
 
 BTC
   broker_symbol: BTCUSD
@@ -10,6 +30,16 @@ BTC
     - test midday exclusion filters or mean-reversion-only variants
   artifact: artifacts\live\btc\interpreter_research_trigger.json
 
+DXY
+  broker_symbol: DXY
+  priority: 2
+  labels: midday_chop, range_rotation
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - test mean-reversion-biased variants and avoid trend breakout logic
+  artifact: artifacts\live\dxy\interpreter_research_trigger.json
+
 GBPUSD
   broker_symbol: GBPUSD
   priority: 2
@@ -18,6 +48,26 @@ GBPUSD
   suggested_experiments:
     - test midday exclusion filters or mean-reversion-only variants
   artifact: artifacts\live\gbpusd\interpreter_research_trigger.json
+
+NVDA
+  broker_symbol: NVDA
+  priority: 2
+  labels: midday_chop, compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\nvda\interpreter_research_trigger.json
+
+TSLA
+  broker_symbol: TSLA
+  priority: 2
+  labels: midday_chop, compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\tsla\interpreter_research_trigger.json
 
 US100
   broker_symbol: US100.cash
@@ -47,6 +97,15 @@ USDJPY
   suggested_experiments:
     - test midday exclusion filters or mean-reversion-only variants
   artifact: artifacts\live\usdjpy\interpreter_research_trigger.json
+
+USOIL
+  broker_symbol: USOIL
+  priority: 2
+  labels: midday_chop, no_trade::regime_block::event_risk
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+  artifact: artifacts\live\usoil\interpreter_research_trigger.json
 
 ETH
   broker_symbol: ETHUSD

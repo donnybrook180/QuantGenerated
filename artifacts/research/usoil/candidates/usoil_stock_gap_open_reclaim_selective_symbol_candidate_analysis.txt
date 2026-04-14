@@ -1,0 +1,18 @@
+Artifact: usoil_stock_gap_open_reclaim_selective_symbol_candidate
+Closed trades: 87
+Realized pnl: -4.46
+
+By entry hour
+14: trades=40 pnl=-2.06 avg=-0.05 win_rate=0.00%
+15: trades=34 pnl=-1.74 avg=-0.05 win_rate=0.00%
+13: trades=13 pnl=-0.66 avg=-0.05 win_rate=0.00%
+
+By entry setup
+stock_gap_open_reclaim: trades=87 pnl=-4.46 avg=-0.05 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=25 pnl=-1.31 avg=-0.05 win_rate=0.00%
+trailing_stop: trades=19 pnl=-0.96 avg=-0.05 win_rate=0.00%
+stale_breakout: trades=18 pnl=-0.95 avg=-0.05 win_rate=0.00%
+take_profit: trades=13 pnl=-0.63 avg=-0.05 win_rate=0.00%
+time_stop: trades=12 pnl=-0.61 avg=-0.05 win_rate=0.00%

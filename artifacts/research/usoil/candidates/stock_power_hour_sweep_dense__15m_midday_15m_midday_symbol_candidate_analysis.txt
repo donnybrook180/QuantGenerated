@@ -1,0 +1,16 @@
+Artifact: stock_power_hour_sweep_dense__15m_midday_15m_midday_symbol_candidate
+Closed trades: 76
+Realized pnl: -3.97
+
+By entry hour
+17: trades=76 pnl=-3.97 avg=-0.05 win_rate=2.63%
+
+By entry setup
+stock_power_hour_continuation: trades=76 pnl=-3.97 avg=-0.05 win_rate=2.63%
+
+By exit reason
+stale_breakout: trades=25 pnl=-1.72 avg=-0.07 win_rate=0.00%
+take_profit: trades=30 pnl=-1.07 avg=-0.04 win_rate=6.67%
+stop_loss: trades=14 pnl=-0.81 avg=-0.06 win_rate=0.00%
+trailing_stop: trades=6 pnl=-0.31 avg=-0.05 win_rate=0.00%
+time_stop: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%

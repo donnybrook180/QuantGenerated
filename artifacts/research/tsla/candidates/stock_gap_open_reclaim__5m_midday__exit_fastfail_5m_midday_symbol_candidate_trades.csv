@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+TSLA,2026-01-15T15:20:00+00:00,2026-01-15T16:00:00+00:00,15,16,stock_gap_open_reclaim,time_stop,444.43053,443.55958,0.01000,-0.05960,0.05089,8,1.00000,{'minutes_from_open': 110.0}
+TSLA,2026-01-30T15:15:00+00:00,2026-01-30T15:25:00+00:00,15,15,stock_gap_open_reclaim,take_profit,430.88773,433.36669,0.01000,-0.02607,0.05086,2,1.00000,{'minutes_from_open': 105.0}
+TSLA,2026-03-31T15:05:00+00:00,2026-03-31T15:25:00+00:00,15,15,stock_gap_open_reclaim,structure_exit,364.77408,363.98602,0.01000,-0.05861,0.05073,4,1.00000,{'minutes_from_open': 95.0}

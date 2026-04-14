@@ -1,0 +1,31 @@
+Viability autopsy: UK100
+Execution validation summary: selection=combo_1 variant=stock_trend_breakout_sweep_selective__15m_power@15m_power data_source=duckdb_cache_aggregated pnl=1.89 pf=8.88 closed=5 quality=0.64 underwater=40.0% -> accepted
+Tier counts: core=1 specialist=7 reject=407
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 20%): 337
+- walk-forward avg validation pnl <= 0 (0.00): 271
+- regime stability too low (0.00 < 0.50): 248
+- validation PF < 1.0 (0.00): 237
+- validation trades too low (0 < 1): 218
+- validation pnl <= 0 (0.00): 218
+- test PF < 1.0 (0.00): 214
+- walk-forward avg test pnl <= 0 (0.00): 211
+
+Top near-misses
+- stock_trend_breakout_sweep_dense__5m_power [specialist]: pnl=4.73 pf=9.29 val=0.00/0.00/0 test=3.45/8.12/8 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (0.00), broad viability failed, but candidate qualifies as a regime specialist
+- stock_trend_breakout__15m_power__exit_trend__near_miss_patient__trend_flat_vol_high [reject]: pnl=3.56 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward pass rate too low (0.00% < 15%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- stock_trend_breakout__15m_power__exit_trend__near_miss_protective__trend_flat_vol_high [reject]: pnl=3.56 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward pass rate too low (0.00% < 15%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- stock_trend_breakout__15m_power__exit_trend__near_miss_dense__trend_flat_vol_high [reject]: pnl=3.56 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward pass rate too low (0.00% < 15%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- stock_trend_breakout_sweep_balanced__5m_power [reject]: pnl=2.59 pf=55.73 val=0.00/0.00/0 test=1.46/57.66/3 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (0.00)
+- stock_trend_breakout_sweep_balanced__15m_power [reject]: pnl=2.55 pf=2.42 val=0.00/0.00/0 test=0.42/1.30/5 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.87), monte carlo loss probability too high (11.80% > 10.00%), walk-forward avg test pnl <= 0 (-0.65)
+- stock_trend_breakout__5m_midday__near_miss_patient__trend_up [reject]: pnl=2.22 pf=125.95 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.04), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 15%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- stock_trend_breakout__5m_midday__near_miss_protective__trend_up [reject]: pnl=2.22 pf=125.95 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.04), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward pass rate too low (0.00% < 15%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)

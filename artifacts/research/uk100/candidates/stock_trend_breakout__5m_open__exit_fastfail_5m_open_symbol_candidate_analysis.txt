@@ -1,0 +1,13 @@
+Artifact: stock_trend_breakout__5m_open__exit_fastfail_5m_open_symbol_candidate
+Closed trades: 4
+Realized pnl: 0.15
+
+By entry hour
+14: trades=4 pnl=0.15 avg=0.04 win_rate=75.00%
+
+By entry setup
+stock_trend_breakout: trades=4 pnl=0.15 avg=0.04 win_rate=75.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-2.52 avg=-2.52 win_rate=0.00%
+take_profit: trades=3 pnl=2.66 avg=0.89 win_rate=100.00%

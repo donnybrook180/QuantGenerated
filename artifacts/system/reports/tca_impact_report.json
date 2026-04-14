@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T14:56:45.266848+00:00",
+  "generated_at": "2026-04-14T15:34:38.759556+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -35,6 +35,20 @@
       "candidate_name": "gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid",
       "research_expectancy": 3.177172305555717,
       "research_closed_trades": 9,
+      "live_fill_count": 0,
+      "execution_drag_bps": 0.0,
+      "cost_bps": 0.0,
+      "total_drag_bps": 0.0,
+      "drag_share_pct": 0.0,
+      "edge_retention_pct": 100.0,
+      "fragility_label": "insufficient_live_data"
+    },
+    {
+      "symbol": "UK100",
+      "broker_symbol": "UK100",
+      "candidate_name": "stock_trend_breakout_sweep_selective__15m_power",
+      "research_expectancy": 0.39182551000000904,
+      "research_closed_trades": 6,
       "live_fill_count": 0,
       "execution_drag_bps": 0.0,
       "cost_bps": 0.0,

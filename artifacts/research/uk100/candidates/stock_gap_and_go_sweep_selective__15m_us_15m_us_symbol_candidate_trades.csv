@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+UK100,2025-04-08T15:00:00+00:00,2025-04-08T16:00:00+00:00,15,16,stock_gap_and_go,take_profit,7896.97908,7963.10706,0.01000,0.59542,0.06586,4,1.00000,{'minutes_from_open': 90.0}
+UK100,2026-03-30T14:15:00+00:00,2026-03-30T17:45:00+00:00,14,17,stock_gap_and_go,take_profit,10071.31386,10121.57528,0.01000,0.43242,0.07019,14,1.00000,{'minutes_from_open': 45.0}
+UK100,2026-03-31T14:00:00+00:00,2026-03-31T15:45:00+00:00,14,15,stock_gap_and_go,stale_breakout,10216.54290,10205.75844,0.01000,-0.17827,0.07042,7,1.00000,{'minutes_from_open': 30.0}

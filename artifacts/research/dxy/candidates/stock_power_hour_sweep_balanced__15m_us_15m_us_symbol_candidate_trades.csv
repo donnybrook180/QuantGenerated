@@ -1,0 +1,22 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DXY,2025-03-10T18:45:00+00:00,2025-03-10T20:00:00+00:00,18,20,stock_power_hour_continuation,trailing_stop,103.89427,103.85172,0.01000,-0.05063,0.05021,5,1.00000,{'hour_of_day': 18.0}
+DXY,2025-03-18T18:00:00+00:00,2025-03-18T18:30:00+00:00,18,18,stock_power_hour_continuation,stop_loss,103.60321,103.32783,0.01000,-0.05296,0.05021,2,1.00000,{'hour_of_day': 18.0}
+DXY,2025-03-21T18:45:00+00:00,2025-03-21T20:45:00+00:00,18,20,stock_power_hour_continuation,time_stop,104.23734,104.06068,0.01000,-0.05197,0.05021,8,1.00000,{'hour_of_day': 18.0}
+DXY,2025-03-24T19:30:00+00:00,2025-03-24T20:00:00+00:00,19,20,stock_power_hour_continuation,stale_breakout,104.46639,104.38762,0.01000,-0.05100,0.05021,2,0.57215,{'hour_of_day': 19.0}
+DXY,2025-04-04T18:30:00+00:00,2025-04-04T20:00:00+00:00,18,20,stock_power_hour_continuation,take_profit,102.54900,103.04688,0.01000,-0.04523,0.05021,6,1.00000,{'hour_of_day': 18.0}
+DXY,2025-04-07T18:00:00+00:00,2025-04-07T19:15:00+00:00,18,19,stock_power_hour_continuation,trailing_stop,103.35416,103.35982,0.01000,-0.05015,0.05021,5,1.00000,{'hour_of_day': 18.0}
+DXY,2025-04-22T19:15:00+00:00,2025-04-22T20:15:00+00:00,19,20,stock_power_hour_continuation,trailing_stop,98.71324,98.71275,0.01000,-0.05020,0.05020,4,1.00000,{'hour_of_day': 19.0}
+DXY,2025-05-08T18:30:00+00:00,2025-05-08T19:00:00+00:00,18,19,stock_power_hour_continuation,take_profit,100.33256,100.56638,0.01000,-0.04786,0.05020,2,1.00000,{'hour_of_day': 18.0}
+DXY,2025-05-14T18:00:00+00:00,2025-05-14T19:30:00+00:00,18,19,stock_power_hour_continuation,take_profit,100.83366,100.94031,0.01000,-0.04914,0.05020,6,1.00000,{'hour_of_day': 18.0}
+DXY,2025-05-16T18:00:00+00:00,2025-05-16T19:00:00+00:00,18,19,stock_power_hour_continuation,take_profit,101.09871,101.17226,0.01000,-0.04947,0.05020,4,1.00000,{'hour_of_day': 18.0}
+DXY,2025-06-17T19:45:00+00:00,2025-06-18T13:00:00+00:00,19,13,stock_power_hour_continuation,trailing_stop,98.61822,98.60677,0.01000,-0.05031,0.05020,5,1.00000,{'hour_of_day': 19.0}
+DXY,2025-07-07T19:45:00+00:00,2025-07-08T13:00:00+00:00,19,13,stock_power_hour_continuation,stale_breakout,97.64502,97.36902,0.01000,-0.05296,0.05020,5,1.00000,{'hour_of_day': 19.0}
+DXY,2025-07-08T18:00:00+00:00,2025-07-08T20:00:00+00:00,18,20,stock_power_hour_continuation,time_stop,97.71604,97.51799,0.01000,-0.05218,0.05020,8,1.00000,{'hour_of_day': 18.0}
+DXY,2025-07-14T18:45:00+00:00,2025-07-15T13:00:00+00:00,18,13,stock_power_hour_continuation,time_stop,98.09011,97.94491,0.01000,-0.05165,0.05020,9,1.00000,{'hour_of_day': 18.0}
+DXY,2025-07-29T18:00:00+00:00,2025-07-29T19:15:00+00:00,18,19,stock_power_hour_continuation,stop_loss,99.03330,98.89871,0.01000,-0.05154,0.05020,5,1.00000,{'hour_of_day': 18.0}
+DXY,2025-08-21T18:15:00+00:00,2025-08-21T19:45:00+00:00,18,19,stock_power_hour_continuation,trailing_stop,98.55821,98.55878,0.01000,-0.05019,0.05020,6,1.00000,{'hour_of_day': 18.0}
+DXY,2025-11-19T18:00:00+00:00,2025-11-19T18:30:00+00:00,18,18,stock_power_hour_continuation,trailing_stop,100.03550,100.01449,0.01000,-0.05041,0.05020,2,1.00000,{'hour_of_day': 18.0}
+DXY,2026-03-02T18:30:00+00:00,2026-03-02T19:45:00+00:00,18,19,stock_power_hour_continuation,stale_breakout,98.64022,98.41481,0.01000,-0.05245,0.05020,5,1.00000,{'hour_of_day': 18.0}
+DXY,2026-03-05T18:00:00+00:00,2026-03-05T18:30:00+00:00,18,18,stock_power_hour_continuation,trailing_stop,99.31836,99.21265,0.01000,-0.05126,0.05020,2,0.98227,{'hour_of_day': 18.0}
+DXY,2026-03-12T18:00:00+00:00,2026-03-12T20:00:00+00:00,18,20,stock_power_hour_continuation,time_stop,99.72444,99.61157,0.01000,-0.05133,0.05020,8,1.00000,{'hour_of_day': 18.0}
+DXY,2026-03-25T19:15:00+00:00,2026-03-26T13:45:00+00:00,19,13,stock_power_hour_continuation,take_profit,99.53840,99.66556,0.01000,-0.04893,0.05020,10,1.00000,{'hour_of_day': 19.0}

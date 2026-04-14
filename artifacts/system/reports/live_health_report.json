@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-14T14:56:51.009418+00:00",
+  "generated_at": "2026-04-14T15:34:46.876768+00:00",
   "summary": {
-    "deployments_scanned": 9,
+    "deployments_scanned": 15,
     "statuses": {
-      "live_ready": 3,
+      "live_ready": 4,
       "reduced_risk_only": 2,
-      "research_only": 4
+      "research_only": 9
     },
     "symbols_with_incidents": 9,
     "total_fills": 0,
@@ -14,6 +14,7 @@
       "ETH",
       "EURUSD",
       "GBPUSD",
+      "UK100",
       "USDJPY",
       "XAUUSD"
     ],
@@ -59,6 +60,22 @@
       "latest_actions": "crypto_trend_pullback_sweep_dense__30m_europe:hold[specialist] veto=interpreter_defensive::regime_block::event_risk"
     },
     {
+      "symbol": "DXY",
+      "status": "research_only",
+      "broker_symbol": "DXY",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\dxy\\live.json",
+      "latest_journal": null,
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": null
+    },
+    {
       "symbol": "ETH",
       "status": "live_ready",
       "broker_symbol": "ETHUSD",
@@ -70,7 +87,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eth\\live.json",
-      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T145636Z_journal.json",
+      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T153428Z_journal.json",
       "latest_incident": "artifacts\\live\\eth\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -88,7 +105,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eurusd\\live.json",
-      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T145637Z_journal.json",
+      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T153428Z_journal.json",
       "latest_incident": "artifacts\\live\\eurusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -106,11 +123,27 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\gbpusd\\live.json",
-      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T145637Z_journal.json",
+      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T153429Z_journal.json",
       "latest_incident": "artifacts\\live\\gbpusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
       "latest_actions": "gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid:hold[specialist] veto=interpreter_defensive::regime_block::volatile_chop"
+    },
+    {
+      "symbol": "IBM",
+      "status": "research_only",
+      "broker_symbol": "IBM",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\ibm\\live.json",
+      "latest_journal": null,
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": null
     },
     {
       "symbol": "JP225",
@@ -127,6 +160,56 @@
       "fill_summary": null,
       "tca_overview": null,
       "latest_actions": "jp225_volatility_short_breakdown_core_hours__exit_trend:policy_blocked::interpreter_not_allowed::trend_pullback[core] veto=interpreter_not_allowed::trend_pullback"
+    },
+    {
+      "symbol": "NVDA",
+      "status": "research_only",
+      "broker_symbol": "NVDA",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\nvda\\live.json",
+      "latest_journal": null,
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": null
+    },
+    {
+      "symbol": "TSLA",
+      "status": "research_only",
+      "broker_symbol": "TSLA",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\tsla\\live.json",
+      "latest_journal": null,
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": null
+    },
+    {
+      "symbol": "UK100",
+      "status": "live_ready",
+      "broker_symbol": "UK100",
+      "strategy_count": 1,
+      "tiers": [
+        "core"
+      ],
+      "execution_validation": "selection=combo_1 variant=stock_trend_breakout_sweep_selective__15m_power@15m_power data_source=duckdb_cache_aggregated pnl=1.89 pf=8.88 closed=5 quality=0.64 underwater=40.0% -> accepted",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\uk100\\live.json",
+      "latest_journal": "artifacts\\live\\uk100\\journals\\20260414T153429Z_journal.json",
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": "stock_trend_breakout_sweep_selective__15m_power:hold[core] veto=interpreter_defensive::regime_block::volatile_chop"
     },
     {
       "symbol": "US100",
@@ -172,11 +255,27 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\usdjpy\\live.json",
-      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T145638Z_journal.json",
+      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T153430Z_journal.json",
       "latest_incident": "artifacts\\live\\usdjpy\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
       "latest_actions": "forex_breakout_momentum_patient__near_miss_patient__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk"
+    },
+    {
+      "symbol": "USOIL",
+      "status": "research_only",
+      "broker_symbol": "USOIL",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\usoil\\live.json",
+      "latest_journal": null,
+      "latest_incident": null,
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": null
     },
     {
       "symbol": "XAUUSD",
@@ -190,7 +289,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
-      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T145639Z_journal.json",
+      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T153430Z_journal.json",
       "latest_incident": "artifacts\\live\\xauusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,

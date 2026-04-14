@@ -1,16 +1,18 @@
 Artifact: stock_trend_breakout_sweep_balanced__15m_midday_15m_midday_symbol_candidate
-Closed trades: 4
-Realized pnl: -1.60
+Closed trades: 80
+Realized pnl: -3.94
 
 By entry hour
-16: trades=1 pnl=-1.11 avg=-1.11 win_rate=0.00%
-17: trades=1 pnl=-0.86 avg=-0.86 win_rate=0.00%
-15: trades=2 pnl=0.37 avg=0.18 win_rate=50.00%
+15: trades=45 pnl=-2.54 avg=-0.06 win_rate=6.67%
+17: trades=20 pnl=-0.89 avg=-0.04 win_rate=20.00%
+16: trades=15 pnl=-0.51 avg=-0.03 win_rate=20.00%
 
 By entry setup
-stock_trend_breakout: trades=4 pnl=-1.60 avg=-0.40 win_rate=25.00%
+stock_trend_breakout: trades=80 pnl=-3.94 avg=-0.05 win_rate=12.50%
 
 By exit reason
-stale_breakout: trades=2 pnl=-1.97 avg=-0.98 win_rate=0.00%
-stop_loss: trades=1 pnl=-0.94 avg=-0.94 win_rate=0.00%
-take_profit: trades=1 pnl=1.31 avg=1.31 win_rate=100.00%
+stale_breakout: trades=16 pnl=-1.48 avg=-0.09 win_rate=0.00%
+trailing_stop: trades=23 pnl=-1.22 avg=-0.05 win_rate=0.00%
+time_stop: trades=11 pnl=-0.92 avg=-0.08 win_rate=0.00%
+stop_loss: trades=7 pnl=-0.63 avg=-0.09 win_rate=0.00%
+take_profit: trades=23 pnl=0.30 avg=0.01 win_rate=43.48%

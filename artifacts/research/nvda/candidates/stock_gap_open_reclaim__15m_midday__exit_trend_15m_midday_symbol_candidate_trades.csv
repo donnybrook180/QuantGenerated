@@ -1,1 +1,16 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+NVDA,2025-04-22T15:00:00+00:00,2025-04-22T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,99.16595,99.14401,0.01000,-0.05042,0.05020,6,1.00000,{'minutes_from_open': 90.0}
+NVDA,2025-11-03T15:00:00+00:00,2025-11-03T17:30:00+00:00,15,17,stock_gap_open_reclaim,take_profit,208.19016,209.88249,0.01000,-0.03349,0.05042,10,1.00000,{'minutes_from_open': 90.0}
+NVDA,2025-11-10T15:00:00+00:00,2025-11-10T15:30:00+00:00,15,15,stock_gap_open_reclaim,trailing_stop,195.59338,196.09141,0.01000,-0.04541,0.05039,2,1.00000,{'minutes_from_open': 90.0}
+NVDA,2025-12-15T15:00:00+00:00,2025-12-15T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,177.43321,177.36174,0.01000,-0.05107,0.05035,6,1.00000,{'minutes_from_open': 90.0}
+NVDA,2025-12-18T15:15:00+00:00,2025-12-18T17:00:00+00:00,15,17,stock_gap_open_reclaim,trailing_stop,175.14756,174.16256,0.01000,-0.06020,0.05035,7,1.00000,{'minutes_from_open': 105.0}
+NVDA,2025-12-26T15:15:00+00:00,2025-12-26T17:15:00+00:00,15,17,stock_gap_open_reclaim,time_stop,191.69227,190.66766,0.01000,-0.06063,0.05038,8,1.00000,{'minutes_from_open': 105.0}
+NVDA,2026-01-02T15:15:00+00:00,2026-01-02T15:45:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,190.70099,188.84848,0.01000,-0.06890,0.05038,2,1.00000,{'minutes_from_open': 105.0}
+NVDA,2026-01-06T15:00:00+00:00,2026-01-06T15:45:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,191.55223,189.00843,0.01000,-0.07582,0.05038,3,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-01-15T15:00:00+00:00,2026-01-15T15:30:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,188.77644,187.37399,0.01000,-0.06440,0.05038,2,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-01-27T15:00:00+00:00,2026-01-28T15:00:00+00:00,15,15,stock_gap_open_reclaim,take_profit,189.15155,191.33787,0.01000,-0.02852,0.05038,12,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-02-06T15:15:00+00:00,2026-02-09T15:00:00+00:00,15,15,stock_gap_open_reclaim,take_profit,182.75973,191.92760,0.01000,0.04130,0.05037,11,1.00000,{'minutes_from_open': 105.0}
+NVDA,2026-02-18T15:00:00+00:00,2026-02-18T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,189.55166,189.38332,0.01000,-0.05206,0.05038,6,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-03-04T15:15:00+00:00,2026-03-04T16:00:00+00:00,15,16,stock_gap_open_reclaim,stale_breakout,183.57996,181.86046,0.01000,-0.06756,0.05037,3,1.00000,{'minutes_from_open': 105.0}
+NVDA,2026-03-16T15:00:00+00:00,2026-03-16T17:15:00+00:00,15,17,stock_gap_open_reclaim,time_stop,184.79031,184.64977,0.01000,-0.05177,0.05037,9,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-03-25T15:15:00+00:00,2026-03-25T17:15:00+00:00,15,17,stock_gap_open_reclaim,time_stop,180.10898,178.82133,0.01000,-0.06324,0.05036,8,1.00000,{'minutes_from_open': 105.0}

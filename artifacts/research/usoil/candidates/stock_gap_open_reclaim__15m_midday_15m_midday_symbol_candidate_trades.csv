@@ -1,0 +1,25 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+USOIL,2025-04-14T15:00:00+00:00,2025-04-14T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,62.46845,62.06267,0.01000,-0.05418,0.05012,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-04-17T15:00:00+00:00,2025-04-17T16:15:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,63.17176,63.01525,0.01000,-0.05169,0.05013,5,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-04-24T15:30:00+00:00,2025-04-24T16:00:00+00:00,15,16,stock_gap_open_reclaim,structure_exit,63.56293,63.06622,0.01000,-0.05509,0.05013,2,1.00000,{'minutes_from_open': 120.0}
+USOIL,2025-05-08T15:00:00+00:00,2025-05-08T15:45:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,59.30206,58.91405,0.01000,-0.05400,0.05012,3,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-05-12T15:00:00+00:00,2025-05-12T15:45:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,63.53892,63.30712,0.01000,-0.05244,0.05013,3,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-05-28T15:15:00+00:00,2025-05-28T16:15:00+00:00,15,16,stock_gap_open_reclaim,take_profit,61.94422,62.17562,0.01000,-0.04781,0.05012,4,1.00000,{'minutes_from_open': 105.0}
+USOIL,2025-06-05T15:30:00+00:00,2025-06-05T15:45:00+00:00,15,15,stock_gap_open_reclaim,take_profit,63.38886,63.74193,0.01000,-0.04660,0.05013,1,1.00000,{'minutes_from_open': 120.0}
+USOIL,2025-06-11T15:00:00+00:00,2025-06-11T16:15:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,66.15607,66.19185,0.01000,-0.04977,0.05013,5,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-07-03T15:15:00+00:00,2025-07-03T16:00:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,68.06891,67.83513,0.01000,-0.05247,0.05014,3,1.00000,{'minutes_from_open': 105.0}
+USOIL,2025-07-07T15:30:00+00:00,2025-07-07T17:00:00+00:00,15,17,stock_gap_open_reclaim,trailing_stop,67.80679,67.72118,0.01000,-0.05099,0.05014,6,1.00000,{'minutes_from_open': 120.0}
+USOIL,2025-07-18T15:00:00+00:00,2025-07-18T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,68.54412,67.98806,0.01000,-0.05570,0.05014,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-09-01T15:00:00+00:00,2025-09-01T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,65.36272,65.04935,0.01000,-0.05326,0.05013,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-09-08T15:00:00+00:00,2025-09-08T15:30:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,63.53392,63.28613,0.01000,-0.05260,0.05013,2,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-09-10T15:30:00+00:00,2025-09-10T16:15:00+00:00,15,16,stock_gap_open_reclaim,structure_exit,63.57994,63.23215,0.01000,-0.05360,0.05013,3,1.00000,{'minutes_from_open': 120.0}
+USOIL,2025-10-08T15:00:00+00:00,2025-10-08T16:00:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,62.96967,62.37453,0.01000,-0.05608,0.05013,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-12-22T15:00:00+00:00,2025-12-22T16:00:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,57.95147,57.82753,0.01000,-0.05136,0.05012,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2025-12-29T15:00:00+00:00,2025-12-29T17:00:00+00:00,15,17,stock_gap_open_reclaim,time_stop,58.29762,58.10540,0.01000,-0.05204,0.05012,8,1.00000,{'minutes_from_open': 90.0}
+USOIL,2026-01-08T15:15:00+00:00,2026-01-08T15:30:00+00:00,15,15,stock_gap_open_reclaim,take_profit,56.96904,57.06786,0.01000,-0.04913,0.05011,1,1.00000,{'minutes_from_open': 105.0}
+USOIL,2026-01-20T15:00:00+00:00,2026-01-20T15:30:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,60.02238,59.68371,0.01000,-0.05351,0.05012,2,1.00000,{'minutes_from_open': 90.0}
+USOIL,2026-01-23T15:00:00+00:00,2026-01-23T15:45:00+00:00,15,15,stock_gap_open_reclaim,take_profit,60.68667,61.02712,0.01000,-0.04672,0.05012,3,1.00000,{'minutes_from_open': 90.0}
+USOIL,2026-01-28T15:15:00+00:00,2026-01-28T16:15:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,63.24979,63.03824,0.01000,-0.05224,0.05013,4,1.00000,{'minutes_from_open': 105.0}
+USOIL,2026-01-29T15:00:00+00:00,2026-01-29T16:00:00+00:00,15,16,stock_gap_open_reclaim,take_profit,65.16163,66.08790,0.01000,-0.04087,0.05013,4,1.00000,{'minutes_from_open': 90.0}
+USOIL,2026-02-18T15:00:00+00:00,2026-02-18T17:15:00+00:00,15,17,stock_gap_open_reclaim,trailing_stop,64.15919,64.21172,0.01000,-0.04960,0.05013,9,1.00000,{'minutes_from_open': 90.0}
+USOIL,2026-03-06T15:15:00+00:00,2026-03-06T16:15:00+00:00,15,16,stock_gap_open_reclaim,take_profit,86.46598,88.02926,0.01000,-0.03454,0.05017,4,1.00000,{'minutes_from_open': 105.0}

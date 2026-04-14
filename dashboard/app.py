@@ -14,6 +14,187 @@ from quant_system.config import SystemConfig
 REPORTS_DIR = system_reports_dir()
 
 
+def _metric_heat(value: object, *, good_high: float | None = None, good_low: float | None = None, warn_low: float | None = None, warn_high: float | None = None) -> str:
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if good_high is not None and numeric >= good_high:
+        return "background-color: #d8f3dc; color: #1b4332;"
+    if good_low is not None and numeric <= good_low:
+        return "background-color: #d8f3dc; color: #1b4332;"
+    if warn_low is not None and numeric <= warn_low:
+        return "background-color: #ffd6d6; color: #7f1d1d;"
+    if warn_high is not None and numeric >= warn_high:
+        return "background-color: #ffd6d6; color: #7f1d1d;"
+    return "background-color: #fff3bf; color: #6b4f00;"
+
+
+def _recommended_style(value: object) -> str:
+    return "background-color: #95d5b2; color: #081c15; font-weight: 700;" if bool(value) else ""
+
+
+def _status_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if normalized in {"live_ready", "accepted", "healthy"}:
+        return "background-color: #d8f3dc; color: #1b4332; font-weight: 700;"
+    if normalized in {"reduced_risk_only", "degraded", "warning"}:
+        return "background-color: #fff3bf; color: #6b4f00; font-weight: 700;"
+    if normalized in {"research_only", "reject", "failed", "blocked"}:
+        return "background-color: #ffd6d6; color: #7f1d1d; font-weight: 700;"
+    return ""
+
+
+def _bias_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if "long" in normalized or "bull" in normalized:
+        return "background-color: #d8f3dc; color: #1b4332;"
+    if "short" in normalized or "bear" in normalized:
+        return "background-color: #ffd6d6; color: #7f1d1d;"
+    return "background-color: #fff3bf; color: #6b4f00;"
+
+
+def _posture_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if "aggressive" in normalized or "risk_on" in normalized:
+        return "background-color: #d8f3dc; color: #1b4332;"
+    if "defensive" in normalized or "risk_off" in normalized:
+        return "background-color: #ffd6d6; color: #7f1d1d;"
+    return "background-color: #fff3bf; color: #6b4f00;"
+
+
+def _style_symbols(frame: pd.DataFrame):
+    style = frame.style.map(_status_style, subset=["status"])
+    if "strategy_count" in frame.columns:
+        style = style.map(lambda value: _metric_heat(value, good_high=1.0, warn_low=0.0), subset=["strategy_count"])
+    return style
+
+
+def _style_interpreter_states(frame: pd.DataFrame):
+    return (
+        frame.style
+        .map(_bias_style, subset=["directional_bias"])
+        .map(_posture_style, subset=["risk_posture"])
+        .map(lambda value: _metric_heat(value, good_high=0.7, warn_low=0.35), subset=["confidence"])
+        .format({"confidence": "{:.2f}"})
+    )
+
+
+def _priority_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if normalized in {"high", "urgent", "critical"}:
+        return "background-color: #ffd6d6; color: #7f1d1d; font-weight: 700;"
+    if normalized in {"medium", "normal"}:
+        return "background-color: #fff3bf; color: #6b4f00; font-weight: 700;"
+    if normalized in {"low"}:
+        return "background-color: #d8f3dc; color: #1b4332; font-weight: 700;"
+    return ""
+
+
+def _action_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if any(token in normalized for token in ("block", "veto", "stop", "no_trade")):
+        return "background-color: #ffd6d6; color: #7f1d1d;"
+    if any(token in normalized for token in ("allow", "buy", "long", "go")):
+        return "background-color: #d8f3dc; color: #1b4332;"
+    return "background-color: #fff3bf; color: #6b4f00;"
+
+
+def _style_interpreter_bridge(frame: pd.DataFrame):
+    style = frame.style
+    if "priority" in frame.columns:
+        style = style.map(_priority_style, subset=["priority"])
+    return style
+
+
+def _style_journal_actions(frame: pd.DataFrame):
+    style = frame.style
+    if "intended_action" in frame.columns:
+        style = style.map(_action_style, subset=["intended_action"])
+    if "interpreter_bias" in frame.columns:
+        style = style.map(_bias_style, subset=["interpreter_bias"])
+    if "interpreter_confidence" in frame.columns:
+        style = style.map(lambda value: _metric_heat(value, good_high=0.7, warn_low=0.35), subset=["interpreter_confidence"])
+        style = style.format({"interpreter_confidence": "{:.2f}"})
+    if "veto_reason" in frame.columns:
+        style = style.map(lambda value: "background-color: #ffd6d6; color: #7f1d1d;" if str(value or "").strip() else "", subset=["veto_reason"])
+    return style
+
+
+def _style_execution_frame(frame: pd.DataFrame):
+    style = frame.style
+    for column in [name for name in ("weighted_shortfall_bps", "shortfall_bps", "weighted_touch_slippage_bps", "touch_slippage_bps", "cost_bps", "execution_drag_bps", "spread_bps", "slippage_bps") if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_low=2.0, warn_high=8.0), subset=[column])
+    for column in [name for name in ("adverse_touch_fill_rate_pct", "drag_share_pct") if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_low=25.0, warn_high=50.0), subset=[column])
+    for column in [name for name in ("edge_retention_pct",) if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_high=70.0, warn_low=40.0), subset=[column])
+    return style
+
+
+def _fragility_style(value: object) -> str:
+    normalized = str(value or "").strip().lower()
+    if normalized in {"robust", "healthy", "stable"}:
+        return "background-color: #d8f3dc; color: #1b4332; font-weight: 700;"
+    if normalized in {"watch", "fragile", "warning"}:
+        return "background-color: #fff3bf; color: #6b4f00; font-weight: 700;"
+    if normalized in {"broken", "critical", "degraded"}:
+        return "background-color: #ffd6d6; color: #7f1d1d; font-weight: 700;"
+    return ""
+
+
+def _style_agents_frame(frame: pd.DataFrame):
+    style = frame.style
+    for column in [name for name in ("live_fill_count",) if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_high=20.0, warn_low=5.0), subset=[column])
+    for column in [name for name in ("edge_retention_pct",) if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_high=70.0, warn_low=40.0), subset=[column])
+    if "drag_share_pct" in frame.columns:
+        style = style.map(lambda value: _metric_heat(value, good_low=20.0, warn_high=50.0), subset=["drag_share_pct"])
+    for column in [name for name in ("execution_drag_bps", "cost_bps") if name in frame.columns]:
+        style = style.map(lambda value: _metric_heat(value, good_low=2.0, warn_high=8.0), subset=[column])
+    if "fragility_label" in frame.columns:
+        style = style.map(_fragility_style, subset=["fragility_label"])
+    if "result_index_change_pct" in frame.columns:
+        style = style.map(lambda value: _metric_heat(value, good_high=0.0, warn_low=0.0), subset=["result_index_change_pct"])
+        style = style.format({"result_index_change_pct": "{:.2f}"})
+    return style
+
+
+def _style_research_metrics(frame: pd.DataFrame):
+    return (
+        frame.style
+        .map(_recommended_style, subset=["recommended"])
+        .map(lambda value: _metric_heat(value, good_high=0.0, warn_low=0.0), subset=["realized_pnl", "expectancy", "mc_pnl_median", "mc_pnl_p05"])
+        .map(lambda value: _metric_heat(value, good_high=1.2, warn_low=1.0), subset=["profit_factor", "validation_profit_factor", "test_profit_factor"])
+        .map(lambda value: _metric_heat(value, good_high=0.3, warn_low=0.0), subset=["sharpe_ratio", "sortino_ratio", "calmar_ratio"])
+        .map(lambda value: _metric_heat(value, good_high=70.0, warn_low=40.0), subset=["walk_forward_pass_rate_pct"])
+        .map(lambda value: _metric_heat(value, good_high=10.0, warn_low=1.0), subset=["closed_trades", "mc_simulations"])
+        .map(lambda value: _metric_heat(value, good_low=5.0, warn_high=15.0), subset=["max_drawdown_pct", "mc_max_drawdown_pct_median", "mc_max_drawdown_pct_p95"])
+        .map(lambda value: _metric_heat(value, good_low=10.0, warn_high=25.0), subset=["mc_loss_probability_pct"])
+        .format(
+            {
+                "realized_pnl": "{:.2f}",
+                "profit_factor": "{:.2f}",
+                "max_drawdown_pct": "{:.2f}",
+                "expectancy": "{:.2f}",
+                "sharpe_ratio": "{:.2f}",
+                "sortino_ratio": "{:.2f}",
+                "calmar_ratio": "{:.2f}",
+                "mc_pnl_median": "{:.2f}",
+                "mc_pnl_p05": "{:.2f}",
+                "mc_pnl_p95": "{:.2f}",
+                "mc_max_drawdown_pct_median": "{:.2f}",
+                "mc_max_drawdown_pct_p95": "{:.2f}",
+                "mc_loss_probability_pct": "{:.1f}",
+                "validation_profit_factor": "{:.2f}",
+                "test_profit_factor": "{:.2f}",
+                "walk_forward_pass_rate_pct": "{:.1f}",
+            }
+        )
+    )
+
+
 def _load_json(path: Path) -> dict:
     if not path.exists():
         return {}
@@ -175,7 +356,7 @@ def render_overview(
             "execution_guardrail",
             "latest_incident",
         ]
-        st.dataframe(symbols[columns], width="stretch", hide_index=True)
+        st.dataframe(_style_symbols(symbols[columns]), width="stretch", hide_index=True)
     else:
         st.info("No symbol snapshot available.")
 
@@ -190,11 +371,8 @@ def render_overview(
     st.subheader("Interpreter Coverage")
     states = _frame(interpreter.get("states", []))
     if not states.empty:
-        st.dataframe(
-            states[["symbol", "unified_regime_label", "directional_bias", "risk_posture", "confidence"]],
-            width="stretch",
-            hide_index=True,
-        )
+        state_view = states[["symbol", "unified_regime_label", "directional_bias", "risk_posture", "confidence"]]
+        st.dataframe(_style_interpreter_states(state_view), width="stretch", hide_index=True)
     else:
         st.info("No interpreter states available.")
 
@@ -222,7 +400,7 @@ def render_execution(tca: dict) -> None:
         if frame.empty:
             st.info("No data.")
         else:
-            st.dataframe(frame, width="stretch", hide_index=True)
+            st.dataframe(_style_execution_frame(frame), width="stretch", hide_index=True)
 
 
 def render_agents(impact: dict, adaptation_impact: dict) -> None:
@@ -242,24 +420,21 @@ def render_agents(impact: dict, adaptation_impact: dict) -> None:
         merged = impact_frame
 
     st.subheader("Agent Health")
-    st.dataframe(
-        merged[
-            [
-                "symbol",
-                "candidate_name",
-                "live_fill_count",
-                "edge_retention_pct",
-                "drag_share_pct",
-                "execution_drag_bps",
-                "cost_bps",
-                "fragility_label",
-                "adaptation_action",
-                "result_index_change_pct",
-            ]
-        ],
-        width="stretch",
-        hide_index=True,
-    )
+    agent_view = merged[
+        [
+            "symbol",
+            "candidate_name",
+            "live_fill_count",
+            "edge_retention_pct",
+            "drag_share_pct",
+            "execution_drag_bps",
+            "cost_bps",
+            "fragility_label",
+            "adaptation_action",
+            "result_index_change_pct",
+        ]
+    ]
+    st.dataframe(_style_agents_frame(agent_view), width="stretch", hide_index=True)
 
     st.subheader("Agent Distribution")
     counts = merged["fragility_label"].value_counts().rename_axis("label").reset_index(name="count")
@@ -272,32 +447,46 @@ def render_research(queue: dict, activity_rows: list[dict]) -> None:
     if research_metrics.empty:
         st.info("No symbol research candidates available.")
     else:
+        search_term = st.text_input("Filter research", value="", placeholder="BTC, EURUSD, JP225...")
+        if search_term.strip():
+            needle = search_term.strip().lower()
+            mask = research_metrics.apply(
+                lambda row: any(needle in str(value).lower() for value in row.values),
+                axis=1,
+            )
+            research_metrics = research_metrics[mask]
+
+        if research_metrics.empty:
+            st.info("No research candidates match the current filter.")
+            return
+
+        research_view = research_metrics[
+            [
+                "symbol",
+                "candidate_name",
+                "recommended",
+                "realized_pnl",
+                "closed_trades",
+                "profit_factor",
+                "max_drawdown_pct",
+                "expectancy",
+                "sharpe_ratio",
+                "sortino_ratio",
+                "calmar_ratio",
+                "mc_simulations",
+                "mc_pnl_median",
+                "mc_pnl_p05",
+                "mc_pnl_p95",
+                "mc_max_drawdown_pct_median",
+                "mc_max_drawdown_pct_p95",
+                "mc_loss_probability_pct",
+                "validation_profit_factor",
+                "test_profit_factor",
+                "walk_forward_pass_rate_pct",
+            ]
+        ]
         st.dataframe(
-            research_metrics[
-                [
-                    "symbol",
-                    "candidate_name",
-                    "recommended",
-                    "realized_pnl",
-                    "closed_trades",
-                    "profit_factor",
-                    "max_drawdown_pct",
-                    "expectancy",
-                    "sharpe_ratio",
-                    "sortino_ratio",
-                    "calmar_ratio",
-                    "mc_simulations",
-                    "mc_pnl_median",
-                    "mc_pnl_p05",
-                    "mc_pnl_p95",
-                    "mc_max_drawdown_pct_median",
-                    "mc_max_drawdown_pct_p95",
-                    "mc_loss_probability_pct",
-                    "validation_profit_factor",
-                    "test_profit_factor",
-                    "walk_forward_pass_rate_pct",
-                ]
-            ],
+            _style_research_metrics(research_view),
             width="stretch",
             hide_index=True,
         )
@@ -342,27 +531,24 @@ def render_interpreter(interpreter: dict, research_bridge: dict) -> None:
     if states.empty:
         st.info("No interpreter states.")
     else:
-        st.dataframe(
-            states[
-                [
-                    "symbol",
-                    "legacy_regime_label",
-                    "unified_regime_label",
-                    "directional_bias",
-                    "session_regime",
-                    "structure_regime",
-                    "execution_regime",
-                    "risk_posture",
-                    "confidence",
-                    "allowed_archetypes",
-                    "blocked_archetypes",
-                    "no_trade_reason",
-                    "explanation",
-                ]
-            ],
-            width="stretch",
-            hide_index=True,
-        )
+        state_view = states[
+            [
+                "symbol",
+                "legacy_regime_label",
+                "unified_regime_label",
+                "directional_bias",
+                "session_regime",
+                "structure_regime",
+                "execution_regime",
+                "risk_posture",
+                "confidence",
+                "allowed_archetypes",
+                "blocked_archetypes",
+                "no_trade_reason",
+                "explanation",
+            ]
+        ]
+        st.dataframe(_style_interpreter_states(state_view), width="stretch", hide_index=True)
 
     st.subheader("Interpreter Research Bridge")
     queue = _frame(research_bridge.get("items", []))
@@ -370,29 +556,26 @@ def render_interpreter(interpreter: dict, research_bridge: dict) -> None:
         st.info("No interpreter-driven research directives.")
     else:
         columns = [column for column in ["symbol", "priority", "labels", "suggested_experiments"] if column in queue.columns]
-        st.dataframe(queue[columns], width="stretch", hide_index=True)
+        st.dataframe(_style_interpreter_bridge(queue[columns]), width="stretch", hide_index=True)
 
     st.subheader("Latest Journal Actions")
     journal_actions = _frame(_load_latest_journal_actions())
     if journal_actions.empty:
         st.info("No live journals found.")
     else:
-        st.dataframe(
-            journal_actions[
-                [
-                    "symbol",
-                    "candidate_name",
-                    "intended_action",
-                    "interpreter_reason",
-                    "interpreter_bias",
-                    "interpreter_confidence",
-                    "veto_reason",
-                    "journal",
-                ]
-            ],
-            width="stretch",
-            hide_index=True,
-        )
+        journal_view = journal_actions[
+            [
+                "symbol",
+                "candidate_name",
+                "intended_action",
+                "interpreter_reason",
+                "interpreter_bias",
+                "interpreter_confidence",
+                "veto_reason",
+                "journal",
+            ]
+        ]
+        st.dataframe(_style_journal_actions(journal_view), width="stretch", hide_index=True)
 
 
 def main() -> None:

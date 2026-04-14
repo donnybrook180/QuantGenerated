@@ -1,0 +1,18 @@
+Artifact: trend__5m_power_5m_power_symbol_candidate
+Closed trades: 33
+Realized pnl: -0.46
+
+By entry hour
+18: trades=25 pnl=-0.40 avg=-0.02 win_rate=0.00%
+19: trades=8 pnl=-0.06 avg=-0.01 win_rate=12.50%
+
+By entry setup
+trend: trades=33 pnl=-0.46 avg=-0.01 win_rate=3.03%
+
+By exit reason
+stop_loss: trades=20 pnl=-0.35 avg=-0.02 win_rate=0.00%
+structure_exit: trades=4 pnl=-0.08 avg=-0.02 win_rate=0.00%
+stale_breakout: trades=4 pnl=-0.06 avg=-0.02 win_rate=0.00%
+time_stop: trades=2 pnl=-0.02 avg=-0.01 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
+take_profit: trades=2 pnl=0.05 avg=0.03 win_rate=50.00%

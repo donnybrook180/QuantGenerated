@@ -1,0 +1,2 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DAX,2026-01-21T15:00:00+00:00,2026-01-21T16:30:00+00:00,15,16,volatility_short_breakdown,stop_loss,44.56796,46.65203,0.01000,-0.02084,0.00000,1,1.00000,"{'breakout_low': 45.82, 'rebound_high': 46.09, 'position_intent': 'short_entry'}"

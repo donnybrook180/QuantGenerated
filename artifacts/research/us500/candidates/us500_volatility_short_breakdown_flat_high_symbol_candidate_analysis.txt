@@ -1,18 +1,9 @@
 Artifact: us500_volatility_short_breakdown_flat_high_symbol_candidate
-Closed trades: 7
-Realized pnl: -0.07
+Closed trades: 0
+Realized pnl: 0.00
 
 By entry hour
-16: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
-15: trades=4 pnl=-0.02 avg=-0.01 win_rate=50.00%
-17: trades=2 pnl=-0.02 avg=-0.01 win_rate=0.00%
 
 By entry setup
-volatility_short_breakdown: trades=7 pnl=-0.07 avg=-0.01 win_rate=28.57%
 
 By exit reason
-stale_breakout: trades=2 pnl=-0.03 avg=-0.02 win_rate=0.00%
-stop_loss: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
-time_stop: trades=2 pnl=-0.01 avg=-0.01 win_rate=0.00%
-trailing_stop: trades=1 pnl=0.00 avg=0.00 win_rate=100.00%
-take_profit: trades=1 pnl=0.00 avg=0.00 win_rate=100.00%

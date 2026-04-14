@@ -1,0 +1,5 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+JP225,2026-03-20T11:00:00+00:00,2026-03-20T12:00:00+00:00,11,12,volatility_breakout,structure_exit,53541.32327,53276.69766,0.01000,-2.64626,0.00000,2,0.84224,{'breakout_high': 53526.5}
+JP225,2026-03-25T11:00:00+00:00,2026-03-25T11:30:00+00:00,11,11,volatility_breakout,signal_exit,54215.38085,53883.64580,0.01000,-3.31735,0.00000,1,1.00000,{'breakout_high': 53915.5}
+JP225,2026-03-30T11:00:00+00:00,2026-03-30T12:00:00+00:00,11,12,volatility_breakout,trailing_stop,52017.19307,51792.82444,0.01000,-2.24369,0.00000,2,0.98154,{'breakout_high': 51990.5}
+JP225,2026-04-01T09:00:00+00:00,2026-04-01T10:30:00+00:00,9,10,volatility_breakout,trailing_stop,53785.57414,53758.65648,0.01000,-0.26918,0.00000,3,1.00000,{'breakout_high': 53626.0}

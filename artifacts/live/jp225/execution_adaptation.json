@@ -1,21 +1,56 @@
 {
-  "generated_at": "2026-04-14T15:34:47.824510+00:00",
+  "generated_at": "2026-04-14T16:01:52.342824+00:00",
   "symbol": "JP225",
   "broker_symbol": "JP225.cash",
   "action": "insufficient_data",
   "reason": "not enough local fills for adaptation",
   "overview": null,
-  "strategy_actions": [],
+  "strategy_actions": [
+    {
+      "candidate_name": "volatility_short_breakdown__30m_all",
+      "fill_count": 0,
+      "action": "unchanged",
+      "base_weight_scale": 1.0,
+      "risk_scale": 1.0,
+      "min_bars_between_trades": 0,
+      "resulting_base_weight": 0.9774999999999999,
+      "resulting_max_risk_multiplier": 0.6,
+      "local_rank_label": "baseline_local",
+      "reason": "healthy_or_insufficient_data"
+    }
+  ],
   "adapted_deployment": {
     "profile_name": "symbol::jp225",
     "symbol": "JP225",
     "data_symbol": "JP225",
     "broker_symbol": "JP225.cash",
-    "research_run_id": 327,
-    "execution_set_id": null,
-    "execution_validation_summary": "not_run",
-    "symbol_status": "research_only",
-    "strategies": [],
+    "research_run_id": 354,
+    "execution_set_id": 178,
+    "execution_validation_summary": "selection=combo_1 variant=volatility_short_breakdown__30m_all@30m_all data_source=duckdb_cache_aggregated pnl=30.14 pf=4.58 closed=10 quality=0.69 underwater=50.0% -> accepted",
+    "symbol_status": "live_ready",
+    "strategies": [
+      {
+        "candidate_name": "volatility_short_breakdown__30m_all",
+        "code_path": "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+        "promotion_tier": "core",
+        "policy_summary": "tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=dislocated_chop; vol_pct in [0.55, 0.97]; base_weight=0.98; risk_cap=0.60; stability=1.00; loss_ratio=999.00",
+        "variant_label": "30m_all",
+        "regime_filter_label": "",
+        "execution_overrides": {},
+        "allocation_weight": 1.0,
+        "allowed_regimes": [
+          "trend_expansion"
+        ],
+        "blocked_regimes": [
+          "dislocated_chop"
+        ],
+        "min_vol_percentile": 0.55,
+        "max_vol_percentile": 0.97,
+        "base_allocation_weight": 0.9774999999999999,
+        "max_risk_multiplier": 0.6,
+        "min_risk_multiplier": 0.0
+      }
+    ],
     "target_volatility": 0.0,
     "max_symbol_vol_percentile": 0.98,
     "block_new_entries_in_event_risk": true

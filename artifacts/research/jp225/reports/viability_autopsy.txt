@@ -1,31 +1,31 @@
 Viability autopsy: JP225
-Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=86
+Execution validation summary: selection=combo_1 variant=volatility_short_breakdown__30m_all@30m_all data_source=duckdb_cache_aggregated pnl=30.14 pf=4.58 closed=10 quality=0.69 underwater=50.0% -> accepted
+Tier counts: core=2 specialist=4 reject=424
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 53
-- regime stability too low (0.00 < 0.50): 32
-- test PF < 1.0 (0.00): 28
-- validation PF < 1.0 (0.00): 25
-- monte carlo loss probability too high (13.20% > 10.00%): 18
-- regime loss ratio too high (999.00 > 1.25): 18
-- monte carlo p05 pnl <= 0 (-6.13): 15
-- validation trades too low (2 < 3): 15
+- walk-forward pass rate too low (0.00% < 50%): 366
+- test PF < 1.0 (0.00): 323
+- validation PF < 1.0 (0.00): 303
+- regime stability too low (0.00 < 0.50): 303
+- test trades too low (0 < 2): 287
+- test pnl <= 0 (0.00): 287
+- equity quality too low (0.25 < 0.45): 283
+- walk-forward avg test pnl <= 0 (0.00): 280
 
 Top near-misses
-- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
-- jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- volatility_short_breakdown__30m_all__exit_trend [specialist]: pnl=29.49 pf=4.25 val=-8.38/0.00/2 test=11.12/999.00/2 wf=50.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.51), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_short_breakdown__30m_all__exit_trend__near_miss_patient [specialist]: pnl=29.49 pf=4.25 val=-8.38/0.00/2 test=11.12/999.00/2 wf=50.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.51), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_short_breakdown__30m_all__exit_trend__near_miss_protective [specialist]: pnl=29.49 pf=4.25 val=-8.38/0.00/2 test=11.12/999.00/2 wf=50.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.51), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_short_breakdown__30m_all__exit_trend__near_miss_dense [specialist]: pnl=29.49 pf=4.25 val=-8.38/0.00/2 test=11.12/999.00/2 wf=50.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.51), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_short_breakdown__5m_europe__exit_trend__near_miss_protective [reject]: pnl=22.64 pf=3.91 val=-0.68/0.37/3 test=-0.20/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-4.96), monte carlo loss probability too high (14.60% > 10.00%), combined validation/test pnl <= 0 (-0.87), combined validation/test PF too low (0.37 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.56), walk-forward avg test pnl <= 0 (-0.92)
+- volatility_short_breakdown__5m_europe__near_miss_protective [reject]: pnl=22.64 pf=3.91 val=-0.68/0.37/3 test=-0.20/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-4.96), monte carlo loss probability too high (14.60% > 10.00%), combined validation/test pnl <= 0 (-0.87), combined validation/test PF too low (0.37 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.56), walk-forward avg test pnl <= 0 (-0.92)
+- volatility_short_breakdown__5m_europe__exit_fastfail__near_miss_protective [reject]: pnl=22.64 pf=3.91 val=-0.68/0.37/3 test=-0.20/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-4.96), monte carlo loss probability too high (14.60% > 10.00%), combined validation/test pnl <= 0 (-0.87), combined validation/test PF too low (0.37 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.56), walk-forward avg test pnl <= 0 (-0.92)
+- volatility_short_breakdown__5m_europe__exit_trend [reject]: pnl=22.11 pf=3.66 val=-0.68/0.37/3 test=-0.20/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-5.66), monte carlo loss probability too high (14.60% > 10.00%), combined validation/test pnl <= 0 (-0.87), combined validation/test PF too low (0.37 < 1.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.56), walk-forward avg test pnl <= 0 (-0.92)

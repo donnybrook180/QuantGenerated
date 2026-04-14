@@ -1,0 +1,22 @@
+Artifact: trend__15m_us_15m_us_symbol_candidate
+Closed trades: 191
+Realized pnl: -29.28
+
+By entry hour
+14: trades=54 pnl=-8.52 avg=-0.16 win_rate=11.11%
+18: trades=38 pnl=-5.90 avg=-0.16 win_rate=26.32%
+17: trades=34 pnl=-5.55 avg=-0.16 win_rate=17.65%
+16: trades=33 pnl=-5.40 avg=-0.16 win_rate=27.27%
+15: trades=27 pnl=-2.75 avg=-0.10 win_rate=33.33%
+19: trades=5 pnl=-1.16 avg=-0.23 win_rate=0.00%
+
+By entry setup
+trend: trades=191 pnl=-29.28 avg=-0.15 win_rate=20.94%
+
+By exit reason
+stop_loss: trades=53 pnl=-16.53 avg=-0.31 win_rate=0.00%
+time_stop: trades=23 pnl=-5.83 avg=-0.25 win_rate=0.00%
+structure_exit: trades=19 pnl=-5.04 avg=-0.27 win_rate=0.00%
+trailing_stop: trades=45 pnl=-4.63 avg=-0.10 win_rate=2.22%
+stale_breakout: trades=8 pnl=-1.23 avg=-0.15 win_rate=0.00%
+take_profit: trades=43 pnl=3.99 avg=0.09 win_rate=90.70%

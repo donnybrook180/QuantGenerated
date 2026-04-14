@@ -1,0 +1,21 @@
+Artifact: volatility_short_breakdown__5m_europe__exit_trend__near_miss_patient_symbol_candidate
+Closed trades: 18
+Realized pnl: 22.11
+
+By entry hour
+10: trades=2 pnl=-1.83 avg=-0.92 win_rate=50.00%
+8: trades=6 pnl=-1.66 avg=-0.28 win_rate=33.33%
+7: trades=3 pnl=0.07 avg=0.02 win_rate=66.67%
+9: trades=3 pnl=2.75 avg=0.92 win_rate=33.33%
+12: trades=4 pnl=22.77 avg=5.69 win_rate=50.00%
+
+By entry setup
+volatility_short_breakdown: trades=18 pnl=22.11 avg=1.23 win_rate=44.44%
+
+By exit reason
+stop_loss: trades=4 pnl=-6.30 avg=-1.58 win_rate=0.00%
+time_stop: trades=1 pnl=-1.03 avg=-1.03 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.22 avg=-0.22 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.17 avg=-0.17 win_rate=0.00%
+trailing_stop: trades=6 pnl=-0.06 avg=-0.01 win_rate=50.00%
+take_profit: trades=5 pnl=29.89 avg=5.98 win_rate=100.00%

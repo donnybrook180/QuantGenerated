@@ -1,0 +1,13 @@
+Artifact: volatility_breakout__30m_europe__exit_fastfail_30m_europe_symbol_candidate
+Closed trades: 2
+Realized pnl: 0.69
+
+By entry hour
+8: trades=2 pnl=0.69 avg=0.35 win_rate=50.00%
+
+By entry setup
+volatility_breakout: trades=2 pnl=0.69 avg=0.35 win_rate=50.00%
+
+By exit reason
+stale_breakout: trades=1 pnl=-0.07 avg=-0.07 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.76 avg=0.76 win_rate=100.00%

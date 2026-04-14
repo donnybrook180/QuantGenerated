@@ -1,31 +1,31 @@
 Viability autopsy: US100
 Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=63
+Tier counts: core=0 specialist=0 reject=383
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 43
-- monte carlo loss probability too high (100.00% > 10.00%): 43
-- regime loss ratio too high (999.00 > 1.25): 41
-- test PF < 1.0 (0.00): 15
-- validation PF < 1.0 (0.00): 15
-- monte carlo p05 pnl <= 0 (-0.06): 14
-- monte carlo loss probability too high (26.40% > 10.00%): 14
-- combined validation/test trades too low (2 < 3): 14
+- regime stability too low (0.00 < 0.50): 240
+- test PF < 1.0 (0.00): 183
+- validation PF < 1.0 (0.00): 176
+- regime loss ratio too high (999.00 > 1.25): 160
+- monte carlo loss probability too high (100.00% > 10.00%): 131
+- test pnl <= 0 (0.00): 116
+- validation trades too low (0 < 3): 107
+- validation pnl <= 0 (0.00): 107
 
 Top near-misses
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_patient [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_protective [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_dense [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
-- us100_prior_day_failed_bounce_short__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [reject]: pnl=0.08 pf=3.57 val=-0.03/0.00/1 test=0.11/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.06), monte carlo loss probability too high (26.40% > 10.00%), combined validation/test trades too low (2 < 3), walk-forward avg validation pnl <= 0 (-0.02), best trade concentration too high (100.00% > 70%)
+- mean_reversion__30m_power__near_miss_patient [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__near_miss_protective [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__exit_quick__near_miss_patient [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__exit_quick__near_miss_protective [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__exit_quick [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__near_miss_dense [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- mean_reversion__30m_power__exit_quick__near_miss_dense [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)

@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+HK50,2026-03-20T13:00:00+00:00,2026-03-23T16:00:00+00:00,13,16,volatility_short_breakdown,take_profit,25052.70797,24901.82392,0.01000,1.50884,0.00000,1,0.88421,"{'breakout_low': 25098.08, 'rebound_high': 25275.08, 'position_intent': 'short_entry'}"
+HK50,2026-03-31T06:00:00+00:00,2026-03-31T14:00:00+00:00,6,14,volatility_short_breakdown,stop_loss,24630.84841,24815.00943,0.01000,-1.84161,0.00000,1,0.68704,"{'breakout_low': 24661.88, 'rebound_high': 25091.18, 'position_intent': 'short_entry'}"

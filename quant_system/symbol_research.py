@@ -111,6 +111,7 @@ from quant_system.risk.limits import RiskManager
 from quant_system.symbols import (
     is_crypto_symbol as symbol_is_crypto,
     is_forex_symbol as symbol_is_forex,
+    is_index_symbol as symbol_is_index,
     is_metal_symbol as symbol_is_metal,
     is_stock_symbol as symbol_is_stock,
     resolve_symbol_request,
@@ -237,6 +238,10 @@ def _is_stock_symbol(symbol: str) -> bool:
     return symbol_is_stock(symbol)
 
 
+def _is_index_symbol(symbol: str) -> bool:
+    return symbol_is_index(symbol)
+
+
 def _uses_continuous_session_stream(symbol: str) -> bool:
     return _is_crypto_symbol(symbol) or _is_metal_symbol(symbol) or _is_forex_symbol(symbol)
 
@@ -273,6 +278,8 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     if symbol.upper() == "ETH":
         return max(base_history, 1460)
     if _is_crypto_symbol(symbol):
+        return max(base_history, 365)
+    if _is_index_symbol(symbol):
         return max(base_history, 365)
     if symbol.upper() == "US500":
         return max(base_history, 365)
@@ -767,24 +774,32 @@ def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[
 
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
+    upper = profile_symbol.upper()
     if profile_symbol.upper() in {"TSLA", "NVDA"}:
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "power"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
-    if profile_symbol.upper() == "GBPUSD":
+    if upper == "GBPUSD":
         return [("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap"), True
-    if profile_symbol.upper() == "GER40":
-        if mode == "seed":
-            return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe", "midday"), True
-    if profile_symbol.upper() == "BTC":
+    if upper == "GER40":
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        return timeframes, ("open", "europe", "midday"), True
+    if upper == "BTC":
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
-    if profile_symbol.upper() == "ETH":
+    if upper == "ETH":
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
+    if _is_index_symbol(profile_symbol):
+        full_timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        seed_timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        if upper in {"GER40", "EU50"}:
+            return (seed_timeframes if mode == "seed" else full_timeframes), ("open", "europe", "midday"), True
+        if upper in {"JP225", "HK50"}:
+            return (seed_timeframes if mode == "seed" else full_timeframes), ("all", "open", "europe"), True
+        return (seed_timeframes if mode == "seed" else full_timeframes), ("open", "us", "power", "midday"), True
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute"), ("1h", 60, "minute")], ("all", "europe"), True
@@ -863,9 +878,11 @@ def _load_cached_variant_bars(
     timespan: str,
     cache_limit: int,
     base_cache_limit: int,
+    write_store: DuckDBMarketDataStore | None = None,
 ) -> tuple[list[MarketBar], str] | None:
     for cache_symbol in _cache_symbol_candidates(data_symbol):
-        cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+        target_timeframe = _variant_timeframe_key(cache_symbol, multiplier, timespan)
+        cached = store.load_bars(cache_symbol, target_timeframe, cache_limit)
         if cached and _has_plausible_price_scale(data_symbol, cached):
             return cached, "duckdb_cache"
         if timespan == "minute" and multiplier in {15, 30, 60}:
@@ -877,6 +894,11 @@ def _load_cached_variant_bars(
             if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
                 aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
                 if aggregated:
+                    if write_store is not None and not write_store.read_only:
+                        try:
+                            write_store.upsert_bars(aggregated, timeframe=target_timeframe, source="duckdb_cache_aggregated")
+                        except RuntimeError:
+                            pass
                     return aggregated, "duckdb_cache_aggregated"
     return None
 
@@ -897,6 +919,14 @@ def _cache_has_variant_bars(
         base_cache_limit=50_000,
     )
     return bool(cached and len(cached[0]) >= minimum_bars)
+
+
+def _full_mode_minimum_bars(profile_symbol: str, multiplier: int, timespan: str) -> int:
+    if _is_index_symbol(profile_symbol):
+        if timespan == "minute" and multiplier >= 60:
+            return 200
+        return 300
+    return 500
 
 
 def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
@@ -1008,14 +1038,26 @@ def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol
     requested_mode = config.symbol_research.mode
     if requested_mode in {"seed", "full"}:
         return requested_mode
-    symbol_specific = _is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol)
+    symbol_specific = (
+        _is_crypto_symbol(profile_symbol)
+        or _is_metal_symbol(profile_symbol)
+        or _is_forex_symbol(profile_symbol)
+        or _is_stock_symbol(profile_symbol)
+        or _is_index_symbol(profile_symbol)
+    )
     if not symbol_specific:
         return "full"
 
     store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe_specs, _, _ = _research_variant_plan(profile_symbol, "full")
     for _, multiplier, timespan in timeframe_specs:
-        if not _cache_has_variant_bars(store, data_symbol, multiplier, timespan, minimum_bars=500):
+        if not _cache_has_variant_bars(
+            store,
+            data_symbol,
+            multiplier,
+            timespan,
+            minimum_bars=_full_mode_minimum_bars(profile_symbol, multiplier, timespan),
+        ):
             return "seed"
     return "full"
 
@@ -1029,6 +1071,10 @@ def _load_symbol_features_variant(
     profile_symbol: str | None = None,
 ) -> tuple[list[FeatureVector], str]:
     cache_store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
+    try:
+        write_store: DuckDBMarketDataStore | None = DuckDBMarketDataStore(config.mt5.database_path)
+    except duckdb.IOException:
+        write_store = None
     timeframe = f"{multiplier}_{timespan}"
     scoped_timeframe = f"symbol_research_{_symbol_slug(data_symbol)}_{timeframe}"
     cache_limit = _cache_bar_limit(config, multiplier, timespan)
@@ -1066,6 +1112,7 @@ def _load_symbol_features_variant(
             timespan,
             cache_limit=cache_limit,
             base_cache_limit=base_cache_limit,
+            write_store=write_store,
         )
         if cached_result is not None:
             cached_bars, cached_source = cached_result
@@ -1119,6 +1166,7 @@ def _load_symbol_features_variant(
             timespan,
             cache_limit=cache_limit,
             base_cache_limit=base_cache_limit,
+            write_store=write_store,
         )
         if cached_result is not None:
             cached_bars, cached_source = cached_result
@@ -1257,7 +1305,13 @@ def _build_symbol_feature_variants(
     data_symbol: str,
 ) -> tuple[dict[str, list[FeatureVector]], str, str]:
     mode = _detect_research_mode(config, profile_symbol, data_symbol)
-    if not (_is_crypto_symbol(profile_symbol) or _is_metal_symbol(profile_symbol) or _is_forex_symbol(profile_symbol) or _is_stock_symbol(profile_symbol)):
+    if not (
+        _is_crypto_symbol(profile_symbol)
+        or _is_metal_symbol(profile_symbol)
+        or _is_forex_symbol(profile_symbol)
+        or _is_stock_symbol(profile_symbol)
+        or _is_index_symbol(profile_symbol)
+    ):
         features, data_source = _load_symbol_features(config, data_symbol)
         return {"default": features}, data_source, mode
     if _is_stock_symbol(profile_symbol):

@@ -1,0 +1,16 @@
+Artifact: volatility_short_breakdown__30m_europe__exit_trend_30m_europe_symbol_candidate
+Closed trades: 4
+Realized pnl: 0.34
+
+By entry hour
+11: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
+10: trades=1 pnl=0.27 avg=0.27 win_rate=100.00%
+9: trades=1 pnl=0.28 avg=0.28 win_rate=100.00%
+12: trades=1 pnl=0.29 avg=0.29 win_rate=100.00%
+
+By entry setup
+volatility_short_breakdown: trades=4 pnl=0.34 avg=0.08 win_rate=75.00%
+
+By exit reason
+stop_loss: trades=1 pnl=-0.49 avg=-0.49 win_rate=0.00%
+take_profit: trades=3 pnl=0.83 avg=0.28 win_rate=100.00%

@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+QQQ,2025-11-17T18:30:00+00:00,2025-11-17T19:30:00+00:00,18,19,mean_reversion,stale_breakout,604.60144,599.66783,0.01000,-0.04934,0.00000,2,1.00000,"{'mean': 608.33625, 'z_score_20': -2.2685630848908103}"
+QQQ,2025-11-20T18:00:00+00:00,2025-11-20T19:00:00+00:00,18,19,mean_reversion,stale_breakout,595.28097,589.98921,0.01000,-0.05292,0.00000,2,1.00000,"{'mean': 601.1161500000001, 'z_score_20': -1.8112392644418844}"
+QQQ,2026-03-30T19:00:00+00:00,2026-03-30T19:30:00+00:00,19,19,mean_reversion,end_of_run,556.67904,557.50084,0.01000,0.00822,0.00000,1,1.00000,"{'mean': 572.8625, 'z_score_20': -2.231076030253928}"

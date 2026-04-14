@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T15:34:43.389991+00:00",
+  "generated_at": "2026-04-14T16:01:46.607058+00:00",
   "items": [
     {
       "symbol": "IBM",
@@ -19,7 +19,7 @@
     },
     {
       "symbol": "UK100",
-      "broker_symbol": "UK100",
+      "broker_symbol": "UK100.cash",
       "priority": 3,
       "labels": [
         "midday_chop",
@@ -77,6 +77,35 @@
       "report_path": "artifacts\\live\\gbpusd\\interpreter_research_trigger.json"
     },
     {
+      "symbol": "GER40",
+      "broker_symbol": "GER40.cash",
+      "priority": 2,
+      "labels": [
+        "midday_chop",
+        "compression_regime"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants",
+        "compare breakout-only variants against current mixed archetypes"
+      ],
+      "report_path": "artifacts\\live\\ger40\\interpreter_research_trigger.json"
+    },
+    {
+      "symbol": "HK50",
+      "broker_symbol": "HK50.cash",
+      "priority": 2,
+      "labels": [
+        "midday_chop",
+        "no_trade::regime_block::volatile_chop"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants"
+      ],
+      "report_path": "artifacts\\live\\hk50\\interpreter_research_trigger.json"
+    },
+    {
       "symbol": "NVDA",
       "broker_symbol": "NVDA",
       "priority": 2,
@@ -120,6 +149,21 @@
         "compare breakout-only variants against current mixed archetypes"
       ],
       "report_path": "artifacts\\live\\us100\\interpreter_research_trigger.json"
+    },
+    {
+      "symbol": "US30",
+      "broker_symbol": "US30.cash",
+      "priority": 2,
+      "labels": [
+        "midday_chop",
+        "compression_regime"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants",
+        "compare breakout-only variants against current mixed archetypes"
+      ],
+      "report_path": "artifacts\\live\\us30\\interpreter_research_trigger.json"
     },
     {
       "symbol": "US500",
@@ -176,6 +220,19 @@
         "compare breakout-only variants against current mixed archetypes"
       ],
       "report_path": "artifacts\\live\\eth\\interpreter_research_trigger.json"
+    },
+    {
+      "symbol": "EU50",
+      "broker_symbol": "EU50.cash",
+      "priority": 1,
+      "labels": [
+        "midday_chop"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants"
+      ],
+      "report_path": "artifacts\\live\\eu50\\interpreter_research_trigger.json"
     },
     {
       "symbol": "EURUSD",

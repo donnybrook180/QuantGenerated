@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T15:34:39.862335+00:00",
+  "generated_at": "2026-04-14T16:01:42.176924+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -47,16 +47,31 @@
       "adaptation_reason": "healthy_or_insufficient_data"
     },
     {
-      "symbol": "UK100",
-      "candidate_name": "stock_trend_breakout_sweep_selective__15m_power",
+      "symbol": "JP225",
+      "candidate_name": "volatility_short_breakdown__30m_all",
       "live_fill_count": 0,
       "edge_retention_pct": 100.0,
-      "baseline_base_weight": 1.0889513597707323,
-      "adapted_base_weight": 1.0889513597707323,
+      "baseline_base_weight": 0.9774999999999999,
+      "adapted_base_weight": 0.9774999999999999,
       "baseline_max_risk": 0.6,
       "adapted_max_risk": 0.6,
-      "baseline_result_index": 65.33708158624394,
-      "adapted_result_index": 65.33708158624394,
+      "baseline_result_index": 58.64999999999999,
+      "adapted_result_index": 58.64999999999999,
+      "result_index_change_pct": 0.0,
+      "adaptation_action": "unchanged",
+      "adaptation_reason": "healthy_or_insufficient_data"
+    },
+    {
+      "symbol": "UK100",
+      "candidate_name": "momentum__30m_power__near_miss_patient__trend_up",
+      "live_fill_count": 0,
+      "edge_retention_pct": 100.0,
+      "baseline_base_weight": 0.9774999999999999,
+      "adapted_base_weight": 0.9774999999999999,
+      "baseline_max_risk": 0.6,
+      "adapted_max_risk": 0.6,
+      "baseline_result_index": 58.64999999999999,
+      "adapted_result_index": 58.64999999999999,
       "result_index_change_pct": 0.0,
       "adaptation_action": "unchanged",
       "adaptation_reason": "healthy_or_insufficient_data"

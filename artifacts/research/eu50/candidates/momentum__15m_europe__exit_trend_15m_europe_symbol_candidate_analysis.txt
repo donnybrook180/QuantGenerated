@@ -1,0 +1,19 @@
+Artifact: momentum__15m_europe__exit_trend_15m_europe_symbol_candidate
+Closed trades: 9
+Realized pnl: -1.55
+
+By entry hour
+12: trades=1 pnl=-0.66 avg=-0.66 win_rate=0.00%
+11: trades=5 pnl=-0.46 avg=-0.09 win_rate=40.00%
+9: trades=1 pnl=-0.26 avg=-0.26 win_rate=0.00%
+10: trades=2 pnl=-0.17 avg=-0.08 win_rate=0.00%
+
+By entry setup
+momentum_confirmation: trades=9 pnl=-1.55 avg=-0.17 win_rate=22.22%
+
+By exit reason
+stop_loss: trades=3 pnl=-0.88 avg=-0.29 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.66 avg=-0.66 win_rate=0.00%
+trailing_stop: trades=3 pnl=-0.13 avg=-0.04 win_rate=33.33%
+time_stop: trades=1 pnl=-0.09 avg=-0.09 win_rate=0.00%
+end_of_run: trades=1 pnl=0.22 avg=0.22 win_rate=100.00%

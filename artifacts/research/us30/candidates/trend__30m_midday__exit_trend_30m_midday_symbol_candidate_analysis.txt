@@ -1,0 +1,18 @@
+Artifact: trend__30m_midday__exit_trend_30m_midday_symbol_candidate
+Closed trades: 33
+Realized pnl: -2.44
+
+By entry hour
+15: trades=22 pnl=-1.62 avg=-0.07 win_rate=0.00%
+16: trades=7 pnl=-0.50 avg=-0.07 win_rate=0.00%
+17: trades=4 pnl=-0.32 avg=-0.08 win_rate=0.00%
+
+By entry setup
+trend: trades=33 pnl=-2.44 avg=-0.07 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=18 pnl=-1.45 avg=-0.08 win_rate=0.00%
+stale_breakout: trades=6 pnl=-0.53 avg=-0.09 win_rate=0.00%
+take_profit: trades=5 pnl=-0.20 avg=-0.04 win_rate=0.00%
+time_stop: trades=2 pnl=-0.13 avg=-0.07 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.13 avg=-0.07 win_rate=0.00%

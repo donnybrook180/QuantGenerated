@@ -1,0 +1,17 @@
+Artifact: trend__5m_open__exit_fastfail_5m_open_symbol_candidate
+Closed trades: 39
+Realized pnl: -14.27
+
+By entry hour
+14: trades=39 pnl=-14.27 avg=-0.37 win_rate=10.26%
+
+By entry setup
+trend: trades=39 pnl=-14.27 avg=-0.37 win_rate=10.26%
+
+By exit reason
+structure_exit: trades=8 pnl=-10.86 avg=-1.36 win_rate=0.00%
+stop_loss: trades=9 pnl=-2.68 avg=-0.30 win_rate=0.00%
+trailing_stop: trades=9 pnl=-1.10 avg=-0.12 win_rate=0.00%
+stale_breakout: trades=6 pnl=-0.89 avg=-0.15 win_rate=0.00%
+time_stop: trades=1 pnl=-0.15 avg=-0.15 win_rate=0.00%
+take_profit: trades=6 pnl=1.40 avg=0.23 win_rate=66.67%

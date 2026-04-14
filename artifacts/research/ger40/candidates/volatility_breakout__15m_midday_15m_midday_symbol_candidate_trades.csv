@@ -1,0 +1,6 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DAX,2025-11-25T15:15:00+00:00,2025-11-25T15:45:00+00:00,15,15,volatility_breakout,stop_loss,44.30191,42.01809,0.01000,-0.02284,0.00000,1,1.00000,{'breakout_high': 42.595}
+DAX,2025-12-24T15:15:00+00:00,2025-12-26T16:00:00+00:00,15,16,volatility_breakout,stop_loss,46.79203,44.62796,0.01000,-0.02164,0.00000,1,1.00000,{'breakout_high': 45.5799}
+DAX,2026-01-06T17:45:00+00:00,2026-01-07T15:00:00+00:00,17,15,volatility_breakout,stop_loss,47.49117,45.38792,0.01000,-0.02103,0.00000,1,1.00000,{'breakout_high': 46.3299}
+DAX,2026-01-12T15:15:00+00:00,2026-01-12T15:30:00+00:00,15,15,volatility_breakout,stop_loss,48.21340,45.94789,0.01000,-0.02266,0.00000,1,1.00000,{'breakout_high': 46.6969}
+DAX,2026-01-26T15:15:00+00:00,2026-01-26T17:45:00+00:00,15,17,volatility_breakout,stop_loss,48.21060,45.95789,0.01000,-0.02253,0.00000,1,1.00000,{'breakout_high': 46.5998}

@@ -1,31 +1,31 @@
 Viability autopsy: GER40
 Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=31
+Tier counts: core=0 specialist=0 reject=90
 
 Top blockers
-- validation PF < 1.0 (0.00): 31
-- test PF < 1.0 (0.00): 31
-- walk-forward pass rate too low (0.00% < 50%): 31
-- regime stability too low (0.00 < 0.50): 31
-- equity quality too low (0.25 < 0.45): 31
-- regime loss ratio too high (999.00 > 1.25): 17
-- validation trades too low (0 < 3): 16
-- validation pnl <= 0 (0.00): 16
+- validation PF < 1.0 (0.00): 90
+- test PF < 1.0 (0.00): 90
+- walk-forward pass rate too low (0.00% < 50%): 90
+- regime stability too low (0.00 < 0.50): 90
+- equity quality too low (0.25 < 0.45): 90
+- test trades too low (0 < 2): 66
+- test pnl <= 0 (0.00): 66
+- walk-forward avg test pnl <= 0 (0.00): 66
 
 Top near-misses
-- opening_range_breakout [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- opening_range_short_breakdown [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- opening_range_breakout__exit_trend [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- opening_range_breakout__exit_fastfail [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- opening_range_short_breakdown__exit_trend [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- opening_range_short_breakdown__exit_fastfail [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- ger40_orb_patient [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
-- ger40_range_reject_short [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- opening_range_breakout__5m_europe [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- volatility_short_breakdown__5m_europe [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- opening_range_short_breakdown__5m_europe [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- opening_range_breakout__5m_europe__exit_trend [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- opening_range_breakout__5m_europe__exit_fastfail [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- volatility_short_breakdown__5m_europe__exit_trend [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- volatility_short_breakdown__5m_europe__exit_fastfail [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- opening_range_short_breakdown__5m_europe__exit_trend [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo missing (no simulations recorded), validation trades too low (0 < 3), test trades too low (0 < 2), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)

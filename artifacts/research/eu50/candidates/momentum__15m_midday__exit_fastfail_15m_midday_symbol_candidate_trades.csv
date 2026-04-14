@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+SX5E,2026-03-16T15:30:00+00:00,2026-03-16T15:45:00+00:00,15,15,momentum_confirmation,stop_loss,5749.33704,5738.40394,0.01000,-0.10933,0.00000,1,1.00000,"{'momentum_5': 0.004895216150017312, 'momentum_20': 0.0032639981009465746}"
+SX5E,2026-03-17T15:15:00+00:00,2026-03-17T16:00:00+00:00,15,16,momentum_confirmation,take_profit,5777.64049,5788.29785,0.01000,0.10657,0.00000,3,1.00000,"{'momentum_5': 0.004696330078950428, 'momentum_20': 0.010319791085449559}"

@@ -1,21 +1,16 @@
 Artifact: us100_trend_density_symbol_candidate
-Closed trades: 337
-Realized pnl: -5.20
+Closed trades: 51
+Realized pnl: -1.11
 
 By entry hour
-14: trades=68 pnl=-1.18 avg=-0.02 win_rate=10.29%
-15: trades=71 pnl=-1.13 avg=-0.02 win_rate=7.04%
-17: trades=58 pnl=-0.97 avg=-0.02 win_rate=3.45%
-16: trades=70 pnl=-0.93 avg=-0.01 win_rate=8.57%
-18: trades=48 pnl=-0.70 avg=-0.01 win_rate=6.25%
-19: trades=22 pnl=-0.30 avg=-0.01 win_rate=9.09%
+14: trades=51 pnl=-1.11 avg=-0.02 win_rate=17.65%
 
 By entry setup
-trend: trades=337 pnl=-5.20 avg=-0.02 win_rate=7.42%
+trend: trades=51 pnl=-1.11 avg=-0.02 win_rate=17.65%
 
 By exit reason
-stop_loss: trades=183 pnl=-3.82 avg=-0.02 win_rate=0.00%
-stale_breakout: trades=52 pnl=-0.91 avg=-0.02 win_rate=0.00%
-time_stop: trades=42 pnl=-0.47 avg=-0.01 win_rate=0.00%
-trailing_stop: trades=34 pnl=-0.30 avg=-0.01 win_rate=2.94%
-take_profit: trades=26 pnl=0.29 avg=0.01 win_rate=92.31%
+stop_loss: trades=28 pnl=-1.06 avg=-0.04 win_rate=0.00%
+stale_breakout: trades=9 pnl=-0.36 avg=-0.04 win_rate=0.00%
+trailing_stop: trades=4 pnl=-0.04 avg=-0.01 win_rate=0.00%
+time_stop: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
+take_profit: trades=9 pnl=0.35 avg=0.04 win_rate=100.00%

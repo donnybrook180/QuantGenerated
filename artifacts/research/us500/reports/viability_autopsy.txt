@@ -1,31 +1,31 @@
 Viability autopsy: US500
 Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=97
+Tier counts: core=0 specialist=0 reject=357
 
 Top blockers
-- validation PF < 1.0 (0.00): 47
-- regime stability too low (0.00 < 0.50): 40
-- validation trades too low (1 < 2): 30
-- regime loss ratio too high (999.00 > 1.25): 26
-- walk-forward avg validation pnl <= 0 (0.00): 24
-- monte carlo loss probability too high (100.00% > 10.00%): 22
-- test PF < 1.0 (0.00): 20
-- monte carlo p05 pnl <= 0 (-0.27): 19
+- validation PF < 1.0 (0.00): 260
+- walk-forward avg validation pnl <= 0 (0.00): 227
+- test PF < 1.0 (0.00): 220
+- validation trades too low (0 < 2): 213
+- validation pnl <= 0 (0.00): 213
+- regime stability too low (0.00 < 0.50): 201
+- walk-forward avg test pnl <= 0 (0.00): 191
+- test trades too low (0 < 1): 181
 
 Top near-misses
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_protective [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_dense [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient__trend_flat [reject]: pnl=0.05 pf=999.00 val=0.00/0.00/0 test=0.05/999.00/1 wf=0.00%
-  reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_short_breakdown__30m_power [reject]: pnl=0.13 pf=6.49 val=0.10/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.01), combined validation/test trades too low (1 < 2), walk-forward avg test pnl <= 0 (0.00)
+- volatility_short_breakdown__30m_power__exit_fastfail [reject]: pnl=0.13 pf=6.49 val=0.10/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.01), combined validation/test trades too low (1 < 2), walk-forward avg test pnl <= 0 (0.00)
+- volatility_short_breakdown__30m_power__near_miss_dense [reject]: pnl=0.13 pf=6.49 val=0.10/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.01), combined validation/test trades too low (1 < 2), walk-forward avg test pnl <= 0 (0.00)
+- volatility_short_breakdown__30m_power__exit_fastfail__near_miss_dense [reject]: pnl=0.13 pf=6.49 val=0.10/999.00/1 test=0.00/0.00/0 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.01), combined validation/test trades too low (1 < 2), walk-forward avg test pnl <= 0 (0.00)
+- momentum__30m_midday__near_miss_patient__trend_up_vol_high [reject]: pnl=0.11 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- momentum__30m_midday__near_miss_protective__trend_up_vol_high [reject]: pnl=0.11 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- momentum__30m_midday__near_miss_dense__trend_up_vol_high [reject]: pnl=0.11 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- momentum__30m_midday__exit_trend__near_miss_patient__trend_up_vol_high [reject]: pnl=0.11 pf=999.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), no walk-forward windows, walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)

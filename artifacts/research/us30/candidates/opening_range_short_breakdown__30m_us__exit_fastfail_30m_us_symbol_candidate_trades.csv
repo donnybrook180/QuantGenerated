@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+DIA,2026-03-12T14:00:00+00:00,2026-03-12T14:30:00+00:00,14,14,opening_range_short_breakdown,signal_exit,466.94638,470.22382,0.01000,-0.08371,0.05094,1,0.58970,"{'breakout_low': 468.6, 'rebound_high': 470.43, 'position_intent': 'short_entry'}"
+DIA,2026-03-18T14:00:00+00:00,2026-03-18T18:00:00+00:00,14,18,opening_range_short_breakdown,time_stop,465.36670,467.44326,0.01000,-0.07170,0.05093,8,1.00000,"{'breakout_low': 468.09, 'rebound_high': 469.75, 'position_intent': 'short_entry'}"
+DIA,2026-03-20T14:00:00+00:00,2026-03-20T18:00:00+00:00,14,18,opening_range_short_breakdown,time_stop,455.94858,457.14120,0.01000,-0.06284,0.05091,8,0.96607,"{'breakout_low': 458.37, 'rebound_high': 460.57, 'position_intent': 'short_entry'}"

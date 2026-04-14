@@ -1,0 +1,9 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+SX5E,2026-03-09T17:30:00+00:00,2026-03-10T15:00:00+00:00,17,15,volatility_breakout,take_profit,5652.42523,5786.89803,0.01000,1.34473,0.00000,2,1.00000,{'breakout_high': 5644.97}
+SX5E,2026-03-13T15:45:00+00:00,2026-03-13T16:45:00+00:00,15,16,volatility_breakout,trailing_stop,5771.43973,5774.86949,0.01000,0.03430,0.00000,4,0.95254,{'breakout_high': 5766.34}
+SX5E,2026-03-16T16:30:00+00:00,2026-03-16T17:15:00+00:00,16,17,volatility_breakout,trailing_stop,5757.33801,5756.40174,0.01000,-0.00936,0.00000,3,0.91877,{'breakout_high': 5752.87}
+SX5E,2026-03-17T15:15:00+00:00,2026-03-17T15:30:00+00:00,15,15,volatility_breakout,signal_exit,5777.64049,5771.39991,0.01000,-0.06241,0.00000,1,0.63977,{'breakout_high': 5773.67}
+SX5E,2026-03-17T16:00:00+00:00,2026-03-18T15:00:00+00:00,16,15,volatility_breakout,time_stop,5791.24215,5788.39784,0.01000,-0.02844,0.00000,8,1.00000,{'breakout_high': 5779.67}
+SX5E,2026-03-25T15:00:00+00:00,2026-03-25T15:15:00+00:00,15,15,volatility_breakout,stop_loss,5675.82808,5642.91558,0.01000,-0.32913,0.00000,1,1.00000,{'breakout_high': 5586.87}
+SX5E,2026-03-31T15:00:00+00:00,2026-03-31T15:45:00+00:00,15,15,volatility_breakout,trailing_stop,5567.61489,5576.72364,0.01000,0.09109,0.00000,3,1.00000,{'breakout_high': 5540.77}
+SX5E,2026-04-01T15:30:00+00:00,2026-04-01T15:45:00+00:00,15,15,volatility_breakout,signal_exit,5729.53463,5697.10897,0.01000,-0.32426,0.00000,1,0.75979,{'breakout_high': 5725.57}

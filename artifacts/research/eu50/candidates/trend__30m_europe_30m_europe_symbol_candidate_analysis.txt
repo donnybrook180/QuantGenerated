@@ -1,0 +1,17 @@
+Artifact: trend__30m_europe_30m_europe_symbol_candidate
+Closed trades: 5
+Realized pnl: -2.34
+
+By entry hour
+12: trades=2 pnl=-1.81 avg=-0.91 win_rate=0.00%
+11: trades=1 pnl=-0.81 avg=-0.81 win_rate=0.00%
+10: trades=2 pnl=0.28 avg=0.14 win_rate=50.00%
+
+By entry setup
+trend: trades=5 pnl=-2.34 avg=-0.47 win_rate=20.00%
+
+By exit reason
+structure_exit: trades=2 pnl=-2.57 avg=-1.29 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.25 avg=-0.25 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.05 avg=-0.05 win_rate=0.00%
+take_profit: trades=1 pnl=0.53 avg=0.53 win_rate=100.00%

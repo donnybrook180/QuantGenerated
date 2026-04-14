@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+SPY,2026-03-31T19:15:00+00:00,2026-04-01T18:00:00+00:00,19,18,trend,take_profit,649.72322,655.58345,0.01000,0.05860,0.00000,3,1.00000,"{'fast': 641.2552000000001, 'slow': 639.8120333333334, 'trend_strength': 0.007123441608681835}"
+SPY,2026-04-01T18:30:00+00:00,2026-04-01T19:45:00+00:00,18,19,trend,structure_exit,655.18149,654.84849,0.01000,-0.00333,0.00000,5,1.00000,"{'fast': 650.8195, 'slow': 640.8434666666667, 'trend_strength': 0.0015463921402789627}"
+SPY,2026-04-02T18:30:00+00:00,2026-04-02T19:30:00+00:00,18,19,trend,structure_exit,654.66147,654.06753,0.01000,-0.00594,0.00000,4,1.00000,"{'fast': 654.7855, 'slow': 644.9861333333333, 'trend_strength': 0.004573894957943692}"

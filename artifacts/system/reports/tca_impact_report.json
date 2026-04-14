@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T15:34:38.759556+00:00",
+  "generated_at": "2026-04-14T16:01:41.041966+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -44,11 +44,25 @@
       "fragility_label": "insufficient_live_data"
     },
     {
+      "symbol": "JP225",
+      "broker_symbol": "JP225.cash",
+      "candidate_name": "volatility_short_breakdown__30m_all",
+      "research_expectancy": 3.0139607297548427,
+      "research_closed_trades": 10,
+      "live_fill_count": 0,
+      "execution_drag_bps": 0.0,
+      "cost_bps": 0.0,
+      "total_drag_bps": 0.0,
+      "drag_share_pct": 0.0,
+      "edge_retention_pct": 100.0,
+      "fragility_label": "insufficient_live_data"
+    },
+    {
       "symbol": "UK100",
-      "broker_symbol": "UK100",
-      "candidate_name": "stock_trend_breakout_sweep_selective__15m_power",
-      "research_expectancy": 0.39182551000000904,
-      "research_closed_trades": 6,
+      "broker_symbol": "UK100.cash",
+      "candidate_name": "momentum__30m_power__near_miss_patient__trend_up",
+      "research_expectancy": 0.5356014799600052,
+      "research_closed_trades": 24,
       "live_fill_count": 0,
       "execution_drag_bps": 0.0,
       "cost_bps": 0.0,

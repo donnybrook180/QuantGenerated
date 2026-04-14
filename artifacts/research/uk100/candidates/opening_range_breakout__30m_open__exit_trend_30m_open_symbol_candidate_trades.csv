@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+UK100,2025-04-08T14:00:00+00:00,2025-04-09T13:30:00+00:00,14,13,opening_range_breakout,stop_loss,7880.05173,7684.48633,0.01000,-2.02122,0.06556,2,0.89595,"{'range_high': 7857.9, 'breakout_high': 7857.9}"
+UK100,2025-09-18T14:00:00+00:00,2025-09-19T13:30:00+00:00,14,13,opening_range_breakout,stale_breakout,9238.52337,9233.17653,0.01000,-0.12194,0.06847,2,0.58131,"{'range_high': 9225.9, 'breakout_high': 9225.9}"
+UK100,2026-03-30T14:00:00+00:00,2026-03-31T13:30:00+00:00,14,13,opening_range_breakout,take_profit,10072.39011,10189.68519,0.01000,1.10269,0.07026,2,0.93052,"{'range_high': 10042.8, 'breakout_high': 10042.8}"

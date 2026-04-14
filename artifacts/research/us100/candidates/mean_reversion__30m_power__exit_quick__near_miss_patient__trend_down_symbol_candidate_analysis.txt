@@ -1,0 +1,16 @@
+Artifact: mean_reversion__30m_power__exit_quick__near_miss_patient__trend_down_symbol_candidate
+Closed trades: 6
+Realized pnl: 0.02
+
+By entry hour
+19: trades=1 pnl=0.01 avg=0.01 win_rate=100.00%
+18: trades=5 pnl=0.02 avg=0.00 win_rate=40.00%
+
+By entry setup
+mean_reversion: trades=6 pnl=0.02 avg=0.00 win_rate=50.00%
+
+By exit reason
+stale_breakout: trades=2 pnl=-0.07 avg=-0.04 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.04 avg=-0.04 win_rate=0.00%
+end_of_run: trades=1 pnl=0.01 avg=0.01 win_rate=100.00%
+take_profit: trades=2 pnl=0.13 avg=0.06 win_rate=100.00%

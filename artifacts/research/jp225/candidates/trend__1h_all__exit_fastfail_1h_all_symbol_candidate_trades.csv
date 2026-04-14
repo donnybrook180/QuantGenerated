@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+JP225,2026-04-01T03:00:00+00:00,2026-04-01T09:00:00+00:00,3,9,trend,take_profit,53059.28209,54037.86263,0.01000,9.78581,0.00000,6,1.00000,"{'fast': 52399.573, 'slow': 51746.65633333333, 'trend_strength': 0.012617562426851414}"
+JP225,2026-04-02T03:00:00+00:00,2026-04-02T04:00:00+00:00,3,4,trend,structure_exit,54169.87696,52978.95310,0.01000,-11.90924,0.00000,1,1.00000,"{'fast': 54209.002, 'slow': 53476.99933333333, 'trend_strength': 0.01368817764257746}"
+JP225,2026-04-06T03:00:00+00:00,2026-04-06T08:00:00+00:00,3,8,trend,trailing_stop,53685.33557,53578.67186,0.01000,-1.06664,0.00000,5,1.00000,"{'fast': 53163.4, 'slow': 52964.682, 'trend_strength': 0.003751896405230992}"

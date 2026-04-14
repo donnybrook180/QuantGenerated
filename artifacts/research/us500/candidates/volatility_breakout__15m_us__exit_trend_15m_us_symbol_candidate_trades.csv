@@ -1,0 +1,11 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+SPY,2026-03-09T15:15:00+00:00,2026-03-09T16:30:00+00:00,15,16,volatility_breakout,take_profit,670.09224,671.52766,0.01000,0.01435,0.00000,5,0.86947,{'breakout_high': 668.8399}
+SPY,2026-03-09T19:15:00+00:00,2026-03-10T13:00:00+00:00,19,13,volatility_breakout,stale_breakout,677.71262,676.72740,0.01000,-0.00985,0.00000,7,1.00000,{'breakout_high': 671.3}
+SPY,2026-03-10T17:15:00+00:00,2026-03-10T17:30:00+00:00,17,17,volatility_breakout,stop_loss,683.58791,680.96719,0.01000,-0.02621,0.00000,1,1.00000,{'breakout_high': 682.35}
+SPY,2026-03-13T13:00:00+00:00,2026-03-13T13:30:00+00:00,13,13,volatility_breakout,take_profit,669.77222,671.61765,0.01000,0.01845,0.00000,2,0.96809,{'breakout_high': 668.65}
+SPY,2026-03-16T13:00:00+00:00,2026-03-16T14:30:00+00:00,13,14,volatility_breakout,trailing_stop,668.49216,667.89784,0.01000,-0.00594,0.00000,6,1.00000,{'breakout_high': 663.91}
+SPY,2026-03-17T13:00:00+00:00,2026-03-17T13:30:00+00:00,13,13,volatility_breakout,take_profit,671.97233,673.18757,0.01000,0.01215,0.00000,2,1.00000,{'breakout_high': 670.3}
+SPY,2026-03-30T13:00:00+00:00,2026-03-30T13:30:00+00:00,13,13,volatility_breakout,stop_loss,639.86073,636.84939,0.01000,-0.03011,0.00000,2,1.00000,{'breakout_high': 635.6099}
+SPY,2026-03-31T13:45:00+00:00,2026-03-31T14:30:00+00:00,13,14,volatility_breakout,signal_exit,642.95088,639.93084,0.01000,-0.03020,0.00000,3,1.00000,{'breakout_high': 640.53}
+SPY,2026-03-31T16:30:00+00:00,2026-04-01T14:45:00+00:00,16,14,volatility_breakout,take_profit,647.41110,656.17842,0.01000,0.08767,0.00000,25,1.00000,{'breakout_high': 642.63}
+SPY,2026-04-02T19:45:00+00:00,2026-04-02T20:45:00+00:00,19,20,volatility_breakout,end_of_run,656.20154,655.58845,0.01000,-0.00613,0.00000,4,0.90345,{'breakout_high': 655.27}

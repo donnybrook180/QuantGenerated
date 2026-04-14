@@ -1,0 +1,14 @@
+Artifact: mean_reversion__1h_all__exit_quick__near_miss_dense_symbol_candidate
+Closed trades: 2
+Realized pnl: 1.00
+
+By entry hour
+5: trades=1 pnl=-0.50 avg=-0.50 win_rate=0.00%
+6: trades=1 pnl=1.50 avg=1.50 win_rate=100.00%
+
+By entry setup
+mean_reversion: trades=2 pnl=1.00 avg=0.50 win_rate=50.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-0.50 avg=-0.50 win_rate=0.00%
+take_profit: trades=1 pnl=1.50 avg=1.50 win_rate=100.00%

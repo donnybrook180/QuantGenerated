@@ -35,6 +35,7 @@ from quant_system.agents.forex import (
     GBPUSDOverlapImpulseAgent,
     GBPUSDPriorDaySweepReversalAgent,
     ForexBreakoutMomentumAgent,
+    ForexCarryTrendAgent,
     ForexRangeReversionAgent,
     ForexShortBreakdownMomentumAgent,
     ForexShortTrendContinuationAgent,
@@ -103,6 +104,7 @@ from quant_system.plotting import plot_symbol_research
 from quant_system.regime import map_regime_label_to_unified
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
+from quant_system.research.funding import apply_broker_funding_context, load_broker_funding_context
 from quant_system.risk.limits import RiskManager
 from quant_system.symbols import (
     is_crypto_symbol as symbol_is_crypto,
@@ -197,6 +199,11 @@ class CandidateResult:
     regime_filter_label: str = ""
     reference_filter_label: str = ""
     cross_filter_label: str = ""
+    broker_swap_available: bool = False
+    broker_swap_long: float = 0.0
+    broker_swap_short: float = 0.0
+    broker_preferred_carry_side: str = ""
+    broker_carry_spread: float = 0.0
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
 
@@ -1016,8 +1023,10 @@ def _load_symbol_features_variant(
 def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: list[MarketBar]) -> list[FeatureVector]:
     if not bars:
         return []
+    funding_context = load_broker_funding_context(config, data_symbol, config.mt5.symbol)
     if not _is_stock_symbol(data_symbol):
         features = build_feature_library(bars)
+        features = apply_broker_funding_context(features, funding_context)
         if supports_cross_asset_context(data_symbol):
             multiplier, timespan = _infer_bars_timeframe(bars)
             features = apply_cross_asset_context(
@@ -1041,6 +1050,7 @@ def _build_features_with_events(config: SystemConfig, data_symbol: str, bars: li
         features = build_feature_library(bars)
     else:
         features = build_feature_library(bars, event_flags)
+    features = apply_broker_funding_context(features, funding_context)
     if supports_cross_asset_context(data_symbol):
         multiplier, timespan = _infer_bars_timeframe(bars)
         features = apply_cross_asset_context(
@@ -1807,6 +1817,29 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         if upper == "EURUSD":
             return [
                 CandidateSpec(
+                    name="eurusd_carry_trend",
+                    description="EURUSD carry-style continuation using USD and yield tailwind proxies",
+                    agents=[
+                        ForexCarryTrendAgent(
+                            lookback=24,
+                            min_pair_macro_bias=0.00016,
+                            min_trend_strength=0.00012,
+                            min_momentum_20=0.00010,
+                            min_relative_volume=0.58,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexCarryTrendAgent",
+                    allowed_variants=("30m_europe", "30m_overlap", "30m_us"),
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 8,
+                        "max_holding_bars": 28,
+                        "take_profit_atr_multiple": 2.25,
+                        "trailing_stop_atr_multiple": 0.9,
+                    },
+                ),
+                CandidateSpec(
                     name="forex_breakout_momentum",
                     description="EURUSD breakout momentum baseline",
                     agents=[ForexBreakoutMomentumAgent(), risk],
@@ -2077,6 +2110,20 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 ),
             ]
         return [
+            CandidateSpec(
+                name="forex_carry_trend",
+                description="Forex carry-style continuation using USD and yield tailwind proxies",
+                agents=[ForexCarryTrendAgent(), risk],
+                code_path="quant_system.agents.forex.ForexCarryTrendAgent",
+                allowed_variants=("30m_europe", "30m_overlap", "30m_us"),
+                execution_overrides={
+                    "structure_exit_bars": 0,
+                    "stale_breakout_bars": 8,
+                    "max_holding_bars": 28,
+                    "take_profit_atr_multiple": 2.2,
+                    "trailing_stop_atr_multiple": 0.9,
+                },
+            ),
             CandidateSpec(
                 name="forex_trend_continuation",
                 description="Forex trend continuation",
@@ -2508,6 +2555,7 @@ def _run_candidate(
     scored.cross_filter_label = spec.cross_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     _annotate_regime_metrics(scored, features, result.closed_trades)
+    _annotate_funding_context(scored, features)
     return scored
 
 
@@ -4559,6 +4607,23 @@ def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVect
     )
 
 
+def _annotate_funding_context(result: CandidateResult, features: list[FeatureVector]) -> None:
+    if not features:
+        return
+    latest = features[-1].values
+    result.broker_swap_available = latest.get("broker_swap_available", 0.0) > 0.0
+    result.broker_swap_long = float(latest.get("broker_swap_long", 0.0))
+    result.broker_swap_short = float(latest.get("broker_swap_short", 0.0))
+    result.broker_carry_spread = float(latest.get("broker_carry_spread", 0.0))
+    preferred_side = float(latest.get("broker_preferred_carry_side", 0.0))
+    if preferred_side >= 0.5:
+        result.broker_preferred_carry_side = "long"
+    elif preferred_side <= -0.5:
+        result.broker_preferred_carry_side = "short"
+    else:
+        result.broker_preferred_carry_side = "none"
+
+
 def _annotate_combo_results(results: list[CandidateResult]) -> None:
     lookup = {row.name: row for row in results}
     for row in results:
@@ -5652,6 +5717,11 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "regime_pf_by_label",
                 "regime_win_rate_by_label",
                 "regime_filter_label",
+                "broker_swap_available",
+                "broker_swap_long",
+                "broker_swap_short",
+                "broker_preferred_carry_side",
+                "broker_carry_spread",
                 "walk_forward_windows",
                 "walk_forward_pass_rate_pct",
                 "walk_forward_avg_validation_pnl",
@@ -5708,6 +5778,11 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     row.regime_pf_by_label,
                     row.regime_win_rate_by_label,
                     row.regime_filter_label,
+                    int(row.broker_swap_available),
+                    f"{row.broker_swap_long:.5f}",
+                    f"{row.broker_swap_short:.5f}",
+                    row.broker_preferred_carry_side,
+                    f"{row.broker_carry_spread:.5f}",
                     row.walk_forward_windows,
                     f"{row.walk_forward_pass_rate_pct:.5f}",
                     f"{row.walk_forward_avg_validation_pnl:.5f}",
@@ -5762,6 +5837,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         )
         lines.append(f"  regime_trade_counts: {row.regime_trade_count_by_label}")
         lines.append(f"  regime_pnls: {row.regime_pnl_by_label}")
+        lines.append(
+            f"  funding: available={'yes' if row.broker_swap_available else 'no'} "
+            f"swap_long={row.broker_swap_long:.5f} swap_short={row.broker_swap_short:.5f} "
+            f"preferred_side={row.broker_preferred_carry_side or 'none'} "
+            f"carry_spread={row.broker_carry_spread:.5f}"
+        )
         lines.append(f"  live_policy: {policy['policy_summary']}")
         if row.regime_filter_label:
             lines.append(f"  regime_filter: {row.regime_filter_label}")

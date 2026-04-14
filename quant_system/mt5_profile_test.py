@@ -13,6 +13,7 @@ from quant_system.logging_utils import configure_logging
 from quant_system.models import DecisionContext, Side
 from quant_system.profiles import resolve_profiles
 from quant_system.research.features import build_feature_library
+from quant_system.research.funding import apply_broker_funding_context
 
 
 LOGGER = logging.getLogger(__name__)
@@ -37,7 +38,28 @@ def _latest_decision_for_profile(config: SystemConfig, profile) -> tuple[Decisio
         bars = client.fetch_bars(bar_count=max(local_config.mt5.history_bars, 300))
         if not bars:
             raise RuntimeError(f"No MT5 bars returned for {profile.broker_symbol}")
-        features = build_feature_library(bars)
+        funding = client.funding_info()
+        preferred_side = 0.0
+        if funding.swap_long > funding.swap_short and funding.swap_long > 0.0:
+            preferred_side = 1.0
+        elif funding.swap_short > funding.swap_long and funding.swap_short > 0.0:
+            preferred_side = -1.0
+        features = apply_broker_funding_context(
+            build_feature_library(bars),
+            {
+                "broker_swap_available": 1.0,
+                "broker_swap_long": funding.swap_long,
+                "broker_swap_short": funding.swap_short,
+                "broker_swap_rollover3days": float(funding.swap_rollover3days),
+                "broker_contract_size": funding.contract_size,
+                "broker_point": funding.point,
+                "broker_positive_carry_long": 1.0 if funding.swap_long > 0.0 else 0.0,
+                "broker_positive_carry_short": 1.0 if funding.swap_short > 0.0 else 0.0,
+                "broker_preferred_carry_side": preferred_side,
+                "broker_carry_spread": funding.swap_long - funding.swap_short,
+                "broker_funding_rate": 0.0,
+            },
+        )
         agents = build_alpha_agents(local_config.agents, local_config.risk, profile.name)
         coordinator = AgentCoordinator(agents, consensus_min_confidence=local_config.agents.consensus_min_confidence)
 

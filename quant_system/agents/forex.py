@@ -146,6 +146,184 @@ class ForexShortTrendContinuationAgent(Agent):
         return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
 
 
+class ForexCarryTrendAgent(Agent):
+    name = "forex_carry_trend"
+
+    def __init__(
+        self,
+        lookback: int = 24,
+        min_pair_macro_bias: float = 0.00018,
+        min_carry_spread: float = 0.0,
+        min_trend_strength: float = 0.00014,
+        min_momentum_20: float = 0.00012,
+        min_relative_volume: float = 0.62,
+    ) -> None:
+        self.closes = RollingCloseState(lookback)
+        self.in_position = False
+        self.entry_side = Side.FLAT
+        self.entry_anchor: float | None = None
+        self.min_pair_macro_bias = min_pair_macro_bias
+        self.min_carry_spread = min_carry_spread
+        self.min_trend_strength = min_trend_strength
+        self.min_momentum_20 = min_momentum_20
+        self.min_relative_volume = min_relative_volume
+
+    def on_feature(self, feature: FeatureVector) -> SignalEvent | None:
+        close = feature.values["close"]
+        self.closes.append(close)
+        if not self.closes.ready:
+            return None
+
+        symbol = feature.symbol.upper()
+        usd_orientation = 1.0 if symbol.startswith("USD") else (-1.0 if symbol.endswith("USD") else 0.0)
+        if (
+            usd_orientation == 0.0
+            or feature.values.get("cross_dxy_available", 0.0) <= 0.0
+            or feature.values.get("cross_yield_available", 0.0) <= 0.0
+        ):
+            return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+        trend_strength = feature.values.get("trend_strength", 0.0)
+        momentum_5 = feature.values.get("momentum_5", 0.0)
+        momentum_20 = feature.values.get("momentum_20", 0.0)
+        relative_volume = feature.values.get("relative_volume", 1.0)
+        session_vwap = feature.values.get("session_vwap", close)
+        z_score_20 = feature.values.get("z_score_20", 0.0)
+        cross_dxy_momentum_20 = feature.values.get("cross_dxy_momentum_20", 0.0)
+        cross_yield_momentum_20 = feature.values.get("cross_yield_momentum_20", 0.0)
+        broker_swap_available = feature.values.get("broker_swap_available", 0.0) > 0.0
+        broker_swap_long = feature.values.get("broker_swap_long", 0.0)
+        broker_swap_short = feature.values.get("broker_swap_short", 0.0)
+        broker_preferred_carry_side = feature.values.get("broker_preferred_carry_side", 0.0)
+        broker_carry_spread = feature.values.get("broker_carry_spread", 0.0)
+
+        pair_macro_bias = usd_orientation * (cross_dxy_momentum_20 + (cross_yield_momentum_20 * 0.75))
+        carry_long_ok = True
+        carry_short_ok = True
+        if broker_swap_available:
+            carry_long_ok = (
+                broker_preferred_carry_side >= 0.5
+                and broker_swap_long > 0.0
+                and broker_carry_spread >= self.min_carry_spread
+            )
+            carry_short_ok = (
+                broker_preferred_carry_side <= -0.5
+                and broker_swap_short > 0.0
+                and (-broker_carry_spread) >= self.min_carry_spread
+            )
+        local_mean = self.closes.mean()
+        local_floor = self.closes.recent_low()
+        local_ceiling = self.closes.recent_high()
+
+        if (
+            not self.in_position
+            and close > session_vwap
+            and close > local_mean
+            and carry_long_ok
+            and pair_macro_bias >= self.min_pair_macro_bias
+            and trend_strength >= self.min_trend_strength
+            and momentum_20 >= self.min_momentum_20
+            and momentum_5 > -0.00012
+            and -1.25 <= z_score_20 <= 0.9
+            and relative_volume >= self.min_relative_volume
+        ):
+            self.in_position = True
+            self.entry_side = Side.BUY
+            self.entry_anchor = local_floor
+            confidence = scaled_confidence(0.24, (pair_macro_bias, 1400), (momentum_20, 700))
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                confidence,
+                {
+                    "pair_macro_bias": pair_macro_bias,
+                    "cross_dxy_momentum_20": cross_dxy_momentum_20,
+                    "cross_yield_momentum_20": cross_yield_momentum_20,
+                    "broker_swap_long": broker_swap_long,
+                    "broker_swap_short": broker_swap_short,
+                    "broker_carry_spread": broker_carry_spread,
+                },
+            )
+
+        if (
+            not self.in_position
+            and close < session_vwap
+            and close < local_mean
+            and carry_short_ok
+            and pair_macro_bias <= -self.min_pair_macro_bias
+            and trend_strength <= -self.min_trend_strength
+            and momentum_20 <= -self.min_momentum_20
+            and momentum_5 < 0.00012
+            and -0.9 <= z_score_20 <= 1.25
+            and relative_volume >= self.min_relative_volume
+        ):
+            self.in_position = True
+            self.entry_side = Side.SELL
+            self.entry_anchor = local_ceiling
+            confidence = scaled_confidence(0.24, (abs(pair_macro_bias), 1400), (abs(momentum_20), 700))
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.SELL,
+                confidence,
+                directional_metadata(
+                    Side.SELL,
+                    short_entry=True,
+                    pair_macro_bias=pair_macro_bias,
+                    cross_dxy_momentum_20=cross_dxy_momentum_20,
+                    cross_yield_momentum_20=cross_yield_momentum_20,
+                    broker_swap_long=broker_swap_long,
+                    broker_swap_short=broker_swap_short,
+                    broker_carry_spread=broker_carry_spread,
+                ),
+            )
+
+        if self.in_position and self.entry_side == Side.BUY and (
+            (broker_swap_available and not carry_long_ok)
+            or
+            pair_macro_bias < 0.0
+            or trend_strength < -0.00008
+            or momentum_20 < -0.0001
+            or (self.entry_anchor is not None and close < self.entry_anchor)
+        ):
+            self.in_position = False
+            self.entry_side = Side.FLAT
+            self.entry_anchor = None
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.SELL,
+                0.7,
+                {"macro_flip": 1.0, "pair_macro_bias": pair_macro_bias},
+            )
+
+        if self.in_position and self.entry_side == Side.SELL and (
+            (broker_swap_available and not carry_short_ok)
+            or
+            pair_macro_bias > 0.0
+            or trend_strength > 0.00008
+            or momentum_20 > 0.0001
+            or (self.entry_anchor is not None and close > self.entry_anchor)
+        ):
+            self.in_position = False
+            self.entry_side = Side.FLAT
+            self.entry_anchor = None
+            return SignalEvent(
+                feature.timestamp,
+                self.name,
+                feature.symbol,
+                Side.BUY,
+                0.7,
+                directional_metadata(Side.BUY, short_exit=True, macro_flip=1.0, pair_macro_bias=pair_macro_bias),
+            )
+
+        return SignalEvent(feature.timestamp, self.name, feature.symbol, Side.FLAT, 0.0, {})
+
+
 class ForexRangeReversionAgent(Agent):
     name = "forex_range_reversion"
 

@@ -8,6 +8,7 @@ from quant_system.integrations.stock_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
+from quant_system.research.funding import apply_broker_funding_context, load_broker_funding_context
 from quant_system.symbols import is_stock_symbol
 
 
@@ -72,8 +73,10 @@ def configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol:
 def build_features_with_events(config: SystemConfig, data_symbol: str, bars: list[MarketBar]) -> list[FeatureVector]:
     if not bars:
         return []
+    funding_context = load_broker_funding_context(config, data_symbol, config.mt5.symbol)
     if not is_stock_symbol(data_symbol):
         features = build_feature_library(bars)
+        features = apply_broker_funding_context(features, funding_context)
         if supports_cross_asset_context(data_symbol):
             multiplier, timespan = _infer_bars_timeframe(bars)
             features = apply_cross_asset_context(
@@ -94,6 +97,7 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
     except RuntimeError as exc:
         LOGGER.warning("Stock event enrichment failed for %s; continuing without event flags: %s", data_symbol, exc)
         features = build_feature_library(bars)
+    features = apply_broker_funding_context(features, funding_context)
     if supports_cross_asset_context(data_symbol):
         multiplier, timespan = _infer_bars_timeframe(bars)
         features = apply_cross_asset_context(

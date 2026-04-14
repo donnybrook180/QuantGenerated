@@ -15,6 +15,34 @@ class CrossAssetSpec:
 
 
 _CROSS_ASSET_SPECS: dict[str, tuple[CrossAssetSpec, ...]] = {
+    "EURUSD": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "GBPUSD": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "AUDUSD": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "NZDUSD": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "USDCHF": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "USDCAD": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
+    "USDJPY": (
+        CrossAssetSpec("dxy", ("DXY", "UUP")),
+        CrossAssetSpec("yield", ("I:TNX", "TNX", "US10Y", "TLT")),
+    ),
     "US500": (
         CrossAssetSpec("us100", ("QQQ", "US100")),
         CrossAssetSpec("dxy", ("DXY", "UUP")),

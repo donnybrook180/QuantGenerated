@@ -30,6 +30,7 @@ from quant_system.models import FeatureVector
 from quant_system.models import MarketBar, OrderRequest, Side
 from quant_system.profiles import StrategyProfile, resolve_profiles
 from quant_system.research.features import build_feature_library
+from quant_system.research.funding import apply_broker_funding_context, load_broker_funding_context
 from quant_system.risk.limits import RiskManager
 LOGGER = logging.getLogger(__name__)
 def _safe_artifact_stem(name: str, max_length: int = 140) -> str:
@@ -171,7 +172,9 @@ def load_features(config: SystemConfig, profile: StrategyProfile) -> tuple[list[
             config.instrument.data_symbol = config.market_data.symbol
             config.instrument.broker_symbol = config.mt5.symbol
             config.execution.symbol = config.market_data.symbol
-            return build_feature_library(persisted_bars), "duckdb_cache"
+            features = build_feature_library(persisted_bars)
+            funding_context = load_broker_funding_context(config, profile.data_symbol, profile.broker_symbol)
+            return apply_broker_funding_context(features, funding_context), "duckdb_cache"
         if config.market_data.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {config.market_data.symbol}/{scoped_timeframe}.")
     persisted_bars, data_source = _load_mt5_bars(
@@ -190,7 +193,9 @@ def load_features(config: SystemConfig, profile: StrategyProfile) -> tuple[list[
     config.instrument.data_symbol = config.market_data.symbol
     config.instrument.broker_symbol = config.mt5.symbol
     config.execution.symbol = config.market_data.symbol
-    return build_feature_library(persisted_bars), data_source
+    features = build_feature_library(persisted_bars)
+    funding_context = load_broker_funding_context(config, profile.data_symbol, profile.broker_symbol)
+    return apply_broker_funding_context(features, funding_context), data_source
 
 
 def scale_proxy_bars(bars: list[MarketBar], multiplier: float) -> list[MarketBar]:
@@ -226,7 +231,9 @@ def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> tupl
     if shadow_config.market_data.fetch_policy in {"cache_first", "cache_only"}:
         persisted_bars = _load_cached_bars(store, shadow_config.market_data.symbol, scoped_timeframe)
         if persisted_bars:
-            return build_feature_library(persisted_bars), "duckdb_cache"
+            features = build_feature_library(persisted_bars)
+            funding_context = load_broker_funding_context(shadow_config, profile.data_symbol, profile.broker_symbol)
+            return apply_broker_funding_context(features, funding_context), "duckdb_cache"
         if shadow_config.market_data.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {shadow_config.market_data.symbol}/{scoped_timeframe}.")
     persisted_bars, data_source = _load_mt5_bars(
@@ -239,7 +246,9 @@ def load_shadow_features(config: SystemConfig, profile: StrategyProfile) -> tupl
     )
     if not persisted_bars:
         raise RuntimeError("No shadow market data bars were loaded into DuckDB.")
-    return build_feature_library(persisted_bars), data_source
+    features = build_feature_library(persisted_bars)
+    funding_context = load_broker_funding_context(shadow_config, profile.data_symbol, profile.broker_symbol)
+    return apply_broker_funding_context(features, funding_context), data_source
 
 
 def build_system(

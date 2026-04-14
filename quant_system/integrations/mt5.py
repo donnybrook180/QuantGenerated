@@ -58,6 +58,16 @@ class MT5MarketSnapshot:
 
 
 @dataclass(slots=True)
+class MT5FundingInfo:
+    symbol: str
+    swap_long: float
+    swap_short: float
+    swap_rollover3days: int
+    contract_size: float
+    point: float
+
+
+@dataclass(slots=True)
 class MT5DealCost:
     deal_ticket: int
     order_ticket: int
@@ -265,6 +275,20 @@ class MT5Client:
             ask=ask,
             point=point,
             spread_points=spread_points,
+        )
+
+    def funding_info(self) -> MT5FundingInfo:
+        symbol = self.resolved_symbol or self.config.symbol
+        symbol_info = mt5.symbol_info(symbol)
+        if symbol_info is None:
+            raise MT5Error(f"MT5 symbol_info failed: {mt5.last_error()}")
+        return MT5FundingInfo(
+            symbol=symbol,
+            swap_long=float(getattr(symbol_info, "swap_long", 0.0) or 0.0),
+            swap_short=float(getattr(symbol_info, "swap_short", 0.0) or 0.0),
+            swap_rollover3days=int(getattr(symbol_info, "swap_rollover3days", 0) or 0),
+            contract_size=float(getattr(symbol_info, "trade_contract_size", 0.0) or 0.0),
+            point=float(getattr(symbol_info, "point", 0.0) or 0.0),
         )
 
     def _lookup_deal_cost(self, result, symbol: str) -> MT5DealCost:

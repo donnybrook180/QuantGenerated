@@ -700,11 +700,13 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
             return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe", "midday"), True
     if profile_symbol.upper() == "ETH":
-        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap", "us"), True
+        if mode == "seed":
+            return [("5m", 5, "minute"), ("1h", 60, "minute")], ("europe", "overlap"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
-            return [("5m", 5, "minute")], ("all", "europe"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("all", "europe", "us", "overlap"), True
+            return [("5m", 5, "minute"), ("1h", 60, "minute")], ("all", "europe"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "us", "overlap"), True
     if _is_metal_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute")], ("europe", "us"), True
@@ -944,7 +946,7 @@ def _load_symbol_features_variant(
             cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
                 return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
-            if timespan == "minute" and multiplier in {15, 30}:
+            if timespan == "minute" and multiplier in {15, 30, 60}:
                 base_cached = cache_store.load_bars(
                     cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
                 )
@@ -998,7 +1000,7 @@ def _load_symbol_features_variant(
             cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
             if cached and _has_plausible_price_scale(data_symbol, cached):
                 return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
-            if timespan == "minute" and multiplier in {15, 30}:
+            if timespan == "minute" and multiplier in {15, 30, 60}:
                 base_cached = cache_store.load_bars(
                     cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
                 )
@@ -1206,6 +1208,9 @@ def load_execution_features_for_variant(
     timeframe_label, _, session_label = variant_label.partition("_")
     if timeframe_label.endswith("m") and timeframe_label[:-1].isdigit():
         multiplier = int(timeframe_label[:-1])
+        timespan = "minute"
+    elif timeframe_label.endswith("h") and timeframe_label[:-1].isdigit():
+        multiplier = int(timeframe_label[:-1]) * 60
         timespan = "minute"
     else:
         features, data_source = _load_symbol_features(config, data_symbol)
@@ -1712,6 +1717,30 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             "max_holding_bars": 18,
                             "take_profit_atr_multiple": 1.35,
                             "trailing_stop_atr_multiple": 0.45,
+                        },
+                    ),
+                    CandidateSpec(
+                        name="btc_liquidity_sweep_reversal",
+                        description="BTC liquidity sweep reversal after failed intraday extension",
+                        agents=[
+                            EthLiquiditySweepReversalAgent(
+                                lookback=20,
+                                sweep_margin=0.00045,
+                                min_relative_volume=0.58,
+                                min_atr_proxy=0.0007,
+                                max_trend_strength=0.0014,
+                            ),
+                            risk,
+                        ],
+                        code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
+                        allowed_variants=("15m_overlap", "15m_us", "1h_us"),
+                        regime_filter_label="trend_flat_vol_mid",
+                        execution_overrides={
+                            "structure_exit_bars": 1,
+                            "stale_breakout_bars": 5,
+                            "max_holding_bars": 16,
+                            "take_profit_atr_multiple": 1.45,
+                            "trailing_stop_atr_multiple": 0.50,
                         },
                     ),
                     CandidateSpec(
@@ -3854,6 +3883,38 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
                     )
                 )
             return specs
+        if "BTC" in upper:
+            sweep_variants = [
+                ("balanced", 20, 0.00045, 0.58, 0.0007, 0.0014),
+                ("dense", 16, 0.00035, 0.54, 0.0006, 0.0017),
+                ("selective", 24, 0.00060, 0.66, 0.0009, 0.0010),
+            ]
+            for label, lookback, sweep_margin, rel_vol, atr, max_trend in sweep_variants:
+                specs.append(
+                    CandidateSpec(
+                        name=f"btc_liquidity_sweep_reversal_sweep_{label}",
+                        description=f"BTC liquidity sweep reversal sweep {label}",
+                        agents=[
+                            EthLiquiditySweepReversalAgent(
+                                lookback=lookback,
+                                sweep_margin=sweep_margin,
+                                min_relative_volume=rel_vol,
+                                min_atr_proxy=atr,
+                                max_trend_strength=max_trend,
+                            ),
+                            RiskSentinelAgent(max_volatility=config.risk.max_volatility * 2.0, min_relative_volume=max(rel_vol - 0.05, 0.5)),
+                        ],
+                        code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
+                        allowed_variants=("15m_overlap", "15m_us", "1h_us"),
+                        execution_overrides={
+                            "max_holding_bars": 14 if label == "dense" else (16 if label == "balanced" else 20),
+                            "take_profit_atr_multiple": 1.30 if label == "dense" else (1.45 if label == "balanced" else 1.65),
+                            "stale_breakout_bars": 4 if label == "dense" else (5 if label == "balanced" else 6),
+                            "structure_exit_bars": 1,
+                            "trailing_stop_atr_multiple": 0.45 if label == "dense" else (0.50 if label == "balanced" else 0.60),
+                        },
+                    )
+                )
         trend_variants = [
             ("balanced", 12, 0.00055, 0.00045, -2.1, 0.15, 0.65, 0.0014),
             ("dense", 9, 0.00035, 0.00030, -2.5, 0.40, 0.55, 0.0010),

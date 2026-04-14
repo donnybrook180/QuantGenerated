@@ -1,0 +1,18 @@
+Artifact: crypto_volatility_expansion__1h_all_1h_all_symbol_candidate
+Closed trades: 6
+Realized pnl: -39.78
+
+By entry hour
+0: trades=2 pnl=-14.51 avg=-7.26 win_rate=0.00%
+6: trades=1 pnl=-10.93 avg=-10.93 win_rate=0.00%
+8: trades=1 pnl=-5.46 avg=-5.46 win_rate=0.00%
+11: trades=1 pnl=-5.43 avg=-5.43 win_rate=0.00%
+2: trades=1 pnl=-3.44 avg=-3.44 win_rate=0.00%
+
+By entry setup
+crypto_volatility_expansion: trades=6 pnl=-39.78 avg=-6.63 win_rate=0.00%
+
+By exit reason
+signal_exit: trades=3 pnl=-20.15 avg=-6.72 win_rate=0.00%
+structure_exit: trades=1 pnl=-10.93 avg=-10.93 win_rate=0.00%
+trailing_stop: trades=2 pnl=-8.69 avg=-4.35 win_rate=0.00%

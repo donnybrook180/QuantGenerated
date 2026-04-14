@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:05:17.485945+00:00",
+  "generated_at": "2026-04-14T10:33:42.575480+00:00",
   "rows": [
     {
       "symbol": "BTC",
@@ -18,7 +18,7 @@
     },
     {
       "symbol": "ETH",
-      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
       "live_fill_count": 0,
       "edge_retention_pct": 100.0,
       "baseline_base_weight": 1.15,
@@ -65,13 +65,13 @@
       "symbol": "US100",
       "candidate_name": "us100_opening_range_short_breakdown_trend",
       "live_fill_count": 0,
-      "edge_retention_pct": 0.0,
-      "baseline_base_weight": 0.9777918618117529,
-      "adapted_base_weight": 0.9777918618117529,
+      "edge_retention_pct": 100.0,
+      "baseline_base_weight": 0.971119640053199,
+      "adapted_base_weight": 0.971119640053199,
       "baseline_max_risk": 0.6,
       "adapted_max_risk": 0.6,
-      "baseline_result_index": 0.0,
-      "adapted_result_index": 0.0,
+      "baseline_result_index": 58.267178403191934,
+      "adapted_result_index": 58.267178403191934,
       "result_index_change_pct": 0.0,
       "adaptation_action": "unchanged",
       "adaptation_reason": "healthy_or_insufficient_data"
@@ -93,7 +93,7 @@
     },
     {
       "symbol": "USDJPY",
-      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat",
+      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense",
       "live_fill_count": 0,
       "edge_retention_pct": 100.0,
       "baseline_base_weight": 0.35,

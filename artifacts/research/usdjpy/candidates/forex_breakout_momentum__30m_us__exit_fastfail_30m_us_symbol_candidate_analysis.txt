@@ -1,25 +1,24 @@
 Artifact: forex_breakout_momentum__30m_us__exit_fastfail_30m_us_symbol_candidate
-Closed trades: 40
-Realized pnl: 443.64
+Closed trades: 48
+Realized pnl: 907.47
 
 By entry hour
-16: trades=6 pnl=-934.92 avg=-155.82 win_rate=16.67%
-13: trades=2 pnl=-626.17 avg=-313.08 win_rate=0.00%
-19: trades=1 pnl=-311.67 avg=-311.67 win_rate=0.00%
-18: trades=4 pnl=-246.58 avg=-61.65 win_rate=25.00%
-17: trades=3 pnl=-212.35 avg=-70.78 win_rate=33.33%
-14: trades=7 pnl=454.21 avg=64.89 win_rate=57.14%
-15: trades=17 pnl=2321.12 avg=136.54 win_rate=47.06%
+16: trades=7 pnl=-744.59 avg=-106.37 win_rate=28.57%
+13: trades=2 pnl=-576.66 avg=-288.33 win_rate=0.00%
+19: trades=2 pnl=-317.89 avg=-158.95 win_rate=0.00%
+18: trades=6 pnl=-187.06 avg=-31.18 win_rate=50.00%
+17: trades=4 pnl=-51.73 avg=-12.93 win_rate=50.00%
+14: trades=8 pnl=639.88 avg=79.98 win_rate=62.50%
+15: trades=19 pnl=2145.54 avg=112.92 win_rate=47.37%
 
 By entry setup
-forex_breakout_momentum: trades=40 pnl=443.64 avg=11.09 win_rate=37.50%
+forex_breakout_momentum: trades=48 pnl=907.47 avg=18.91 win_rate=43.75%
 
 By exit reason
-stop_loss: trades=10 pnl=-2461.13 avg=-246.11 win_rate=0.00%
-structure_exit: trades=6 pnl=-1390.10 avg=-231.68 win_rate=0.00%
-signal_exit: trades=5 pnl=-913.99 avg=-182.80 win_rate=20.00%
-time_stop: trades=2 pnl=-176.47 avg=-88.23 win_rate=0.00%
-stale_breakout: trades=1 pnl=13.28 avg=13.28 win_rate=100.00%
-trailing_stop: trades=5 pnl=223.85 avg=44.77 win_rate=40.00%
-end_of_run: trades=1 pnl=1304.95 avg=1304.95 win_rate=100.00%
-take_profit: trades=10 pnl=3843.25 avg=384.33 win_rate=100.00%
+stop_loss: trades=11 pnl=-2351.05 avg=-213.73 win_rate=0.00%
+structure_exit: trades=7 pnl=-1272.24 avg=-181.75 win_rate=0.00%
+signal_exit: trades=5 pnl=-791.38 avg=-158.28 win_rate=20.00%
+time_stop: trades=2 pnl=-126.78 avg=-63.39 win_rate=0.00%
+end_of_run: trades=1 pnl=50.95 avg=50.95 win_rate=100.00%
+trailing_stop: trades=11 pnl=749.04 avg=68.09 win_rate=72.73%
+take_profit: trades=11 pnl=4648.92 avg=422.63 win_rate=100.00%

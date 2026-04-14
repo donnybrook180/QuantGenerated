@@ -1,5 +1,5 @@
 TCA impact report
-generated_at: 2026-04-14T10:05:16.890397+00:00
+generated_at: 2026-04-14T10:33:41.951684+00:00
 
 Metric: estimated research edge vs live execution drag.
 Interpretation: drag_share_pct shows how much of expected edge execution is consuming.
@@ -10,6 +10,7 @@ BTC      btc_trend_pullback_high_         0     100.0      0.0      0.000     0.
 ETH      crypto_vwap_reversion_us         0     100.0      0.0      0.000     0.000 insufficient_live_data
 EURUSD   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 JP225    jp225_volatility_short_b         0     100.0      0.0      0.000     0.000 insufficient_live_data
+US100    us100_opening_range_shor         0     100.0      0.0      0.000     0.000 insufficient_live_data
 US500    momentum__exit_trend__ne         0     100.0      0.0      0.000     0.000 insufficient_live_data
 USDJPY   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 XAUUSD   xauusd_volatility_breako         0     100.0      0.0      0.000     0.000 insufficient_live_data
@@ -27,9 +28,9 @@ BTC | btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
+ETH | crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high
   broker_symbol: ETHUSD
-  research_expectancy: 3.8874
+  research_expectancy: 4.8467
   research_closed_trades: 4
   live_fill_count: 0
   execution_drag_bps: 0.0000
@@ -53,8 +54,20 @@ EURUSD | forex_breakout_momentum__30m_overlap
 
 JP225 | jp225_volatility_short_breakdown_core_hours__exit_trend
   broker_symbol: JP225.cash
-  research_expectancy: 2.3304
+  research_expectancy: 2.3314
   research_closed_trades: 13
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+US100 | us100_opening_range_short_breakdown_trend
+  broker_symbol: US100.cash
+  research_expectancy: 0.0097
+  research_closed_trades: 18
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000
@@ -75,10 +88,10 @@ US500 | momentum__exit_trend__near_miss_patient
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-USDJPY | forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat
+USDJPY | forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense
   broker_symbol: USDJPY
-  research_expectancy: 955.8218
-  research_closed_trades: 11
+  research_expectancy: 138.8459
+  research_closed_trades: 93
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000

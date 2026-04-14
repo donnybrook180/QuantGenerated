@@ -1,31 +1,31 @@
 Viability autopsy: EURUSD
 Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
-Tier counts: core=7 specialist=15 reject=170
+Tier counts: core=9 specialist=0 reject=40
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 115
-- validation PF < 1.0 (0.00): 104
-- test PF < 1.0 (0.00): 99
-- walk-forward avg validation pnl <= 0 (0.00): 97
-- walk-forward avg test pnl <= 0 (0.00): 97
-- validation trades too low (0 < 1): 97
-- validation pnl <= 0 (0.00): 97
-- equity quality too low (0.25 < 0.45): 95
+- validation PF < 1.0 (0.00): 16
+- regime stability too low (0.00 < 0.50): 14
+- validation trades too low (0 < 1): 11
+- validation pnl <= 0 (0.00): 11
+- test PF < 1.0 (0.00): 9
+- equity quality too low (0.25 < 0.45): 9
+- test trades too low (0 < 1): 8
+- test pnl <= 0 (0.00): 8
 
 Top near-misses
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat__local_opt_consistency [specialist]: pnl=22.02 pf=1.26 val=-4.29/0.76/22 test=17.52/1.92/34 wf=0.00%
-  reasons: validation pnl <= 0 (-4.29), validation PF < 1.0 (0.76), walk-forward avg validation pnl <= 0 (-6.46), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat [specialist]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
-  reasons: validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat [specialist]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
-  reasons: validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat__local_opt_validation [specialist]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
-  reasons: validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat__local_opt_validation [specialist]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
-  reasons: validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat [specialist]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
-  reasons: validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15), broad viability failed, but candidate qualifies as a regime specialist
-- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_protective__trend_flat [specialist]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
-  reasons: validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15), broad viability failed, but candidate qualifies as a regime specialist
-- forex_short_breakdown_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat_vol_mid [reject]: pnl=18.14 pf=268.84 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
-  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (-0.03)
+- forex_breakout_momentum__15m_overlap__exit_fastfail__near_miss_patient__trend_up [reject]: pnl=4.17 pf=3.65 val=-0.09/0.00/1 test=-0.69/0.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.78), combined validation/test PF too low (0.00 < 1.00), walk-forward avg test pnl <= 0 (-0.73)
+- forex_breakout_momentum__15m_overlap__exit_fastfail [reject]: pnl=2.84 pf=1.06 val=-5.81/0.58/15 test=0.98/1.08/13 wf=0.00%
+  reasons: validation pnl <= 0 (-5.81), validation PF < 1.0 (0.58), walk-forward avg validation pnl <= 0 (-6.17), walk-forward avg test pnl <= 0 (-3.00)
+- forex_breakout_momentum__15m_us__exit_fastfail [reject]: pnl=2.15 pf=1.04 val=2.63/1.21/18 test=-1.07/0.93/15 wf=0.00%
+  reasons: test pnl <= 0 (-1.07), test PF < 1.0 (0.93), walk-forward avg validation pnl <= 0 (-0.86), walk-forward avg test pnl <= 0 (-1.85)
+- forex_breakout_momentum__15m_us__exit_fastfail__near_miss_patient__trend_up [reject]: pnl=0.84 pf=1.16 val=-0.82/0.00/2 test=-0.62/0.11/2 wf=0.00%
+  reasons: validation pnl <= 0 (-0.82), test pnl <= 0 (-0.62), validation PF < 1.0 (0.00), test PF < 1.0 (0.11), walk-forward avg validation pnl <= 0 (-0.31), walk-forward avg test pnl <= 0 (-0.70)
+- forex_breakout_momentum__15m_us__exit_fastfail__near_miss_patient [reject]: pnl=0.39 pf=1.01 val=-0.93/0.93/18 test=-4.47/0.70/15 wf=0.00%
+  reasons: validation pnl <= 0 (-0.93), test pnl <= 0 (-4.47), validation PF < 1.0 (0.93), test PF < 1.0 (0.70), walk-forward avg validation pnl <= 0 (-1.51), walk-forward avg test pnl <= 0 (-5.55)
+- forex_breakout_momentum__30m_us__exit_fastfail__regime_trend_up_vol_mid [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (0 < 1), test trades too low (0 < 1), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- forex_breakout_momentum__30m_overlap__regime_trend_up_vol_mid [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (0 < 1), test trades too low (0 < 1), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)
+- forex_breakout_momentum__30m_overlap__exit_fastfail__regime_trend_up_vol_mid [reject]: pnl=0.00 pf=0.00 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: validation trades too low (0 < 1), test trades too low (0 < 1), validation pnl <= 0 (0.00), test pnl <= 0 (0.00), validation PF < 1.0 (0.00), test PF < 1.0 (0.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00), no regime edge identified, best regime pnl <= 0 (0.00), regime stability too low (0.00 < 0.50), equity quality too low (0.25 < 0.45)

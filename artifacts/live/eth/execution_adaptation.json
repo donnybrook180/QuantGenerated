@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:05:21.698702+00:00",
+  "generated_at": "2026-04-14T10:33:46.705516+00:00",
   "symbol": "ETH",
   "broker_symbol": "ETHUSD",
   "action": "insufficient_data",
@@ -7,7 +7,7 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
@@ -24,24 +24,25 @@
     "symbol": "ETH",
     "data_symbol": "X:ETHUSD",
     "broker_symbol": "ETHUSD",
-    "research_run_id": 304,
-    "execution_set_id": 152,
-    "execution_validation_summary": "selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us data_source=duckdb_cache_aggregated pnl=15.55 pf=8.88 closed=4 quality=0.77 underwater=25.0% -> accepted",
+    "research_run_id": 322,
+    "execution_set_id": 167,
+    "execution_validation_summary": "selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high@15m_us|trend_flat_vol_high data_source=duckdb_cache_aggregated pnl=19.39 pf=999.00 closed=4 quality=0.88 underwater=0.0% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
       {
-        "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+        "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
         "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
         "promotion_tier": "core",
         "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
         "variant_label": "15m_us",
-        "regime_filter_label": "",
+        "regime_filter_label": "trend_flat_vol_high",
         "execution_overrides": {
+          "structure_exit_bars": 0,
+          "stale_breakout_bars": 7,
           "max_holding_bars": 0,
-          "take_profit_atr_multiple": 3.2,
-          "trailing_stop_atr_multiple": 1.2,
-          "stale_breakout_bars": 8,
-          "structure_exit_bars": 0
+          "take_profit_atr_multiple": 2.4000000000000004,
+          "break_even_atr_multiple": 0.4,
+          "trailing_stop_atr_multiple": 0.8
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [

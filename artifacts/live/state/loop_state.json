@@ -111,7 +111,7 @@
     "signal_timestamp": "2026-04-14T12:00:00+00:00",
     "signal_side": "buy",
     "intended_action": "policy_blocked::interpreter_blocked::breakout",
-    "updated_at": "2026-04-14T10:05:10.154101+00:00"
+    "updated_at": "2026-04-14T10:33:35.351441+00:00"
   },
   "EURUSD::forex_breakout_momentum__30m_overlap__exit_fastfail": {
     "signal_timestamp": "2026-04-08T14:00:00+00:00",
@@ -165,7 +165,7 @@
     "signal_timestamp": "",
     "signal_side": "flat",
     "intended_action": "hold",
-    "updated_at": "2026-04-14T10:05:09.689496+00:00"
+    "updated_at": "2026-04-14T10:07:42.610772+00:00"
   },
   "ETH::crypto_vwap_reversion__15m_us__exit_trend": {
     "signal_timestamp": "",
@@ -243,13 +243,13 @@
     "signal_timestamp": "",
     "signal_side": "flat",
     "intended_action": "hold",
-    "updated_at": "2026-04-14T10:05:10.904251+00:00"
+    "updated_at": "2026-04-14T10:33:36.063710+00:00"
   },
   "US500::momentum__exit_trend__near_miss_patient": {
     "signal_timestamp": "",
     "signal_side": "flat",
     "intended_action": "hold",
-    "updated_at": "2026-04-14T10:05:11.374715+00:00"
+    "updated_at": "2026-04-14T10:33:36.555029+00:00"
   },
   "USDJPY::forex_short_breakdown_momentum__30m_overlap": {
     "signal_timestamp": "2026-04-09T12:00:00+00:00",
@@ -276,10 +276,10 @@
     "updated_at": "2026-04-09T18:14:07.596485+00:00"
   },
   "XAUUSD::xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat": {
-    "signal_timestamp": "2026-04-13T16:10:00+00:00",
-    "signal_side": "buy",
+    "signal_timestamp": "2026-04-14T13:05:00+00:00",
+    "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_blocked::breakout",
-    "updated_at": "2026-04-14T10:05:12.276355+00:00"
+    "updated_at": "2026-04-14T10:33:37.484639+00:00"
   },
   "GBPUSD::gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient": {
     "signal_timestamp": "2026-04-13T12:00:00+00:00",
@@ -291,18 +291,30 @@
     "signal_timestamp": "2026-04-14T03:15:00+00:00",
     "signal_side": "buy",
     "intended_action": "policy_blocked::interpreter_not_allowed::trend_pullback",
-    "updated_at": "2026-04-14T10:05:10.373225+00:00"
+    "updated_at": "2026-04-14T10:33:35.571095+00:00"
   },
   "USDJPY::forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat": {
     "signal_timestamp": "2026-04-13T16:30:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_defensive::regime_block::event_risk",
-    "updated_at": "2026-04-14T10:05:11.860429+00:00"
+    "updated_at": "2026-04-14T10:10:17.263841+00:00"
   },
   "BTC::btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up": {
     "signal_timestamp": "",
     "signal_side": "flat",
     "intended_action": "hold",
-    "updated_at": "2026-04-14T10:05:09.471452+00:00"
+    "updated_at": "2026-04-14T10:33:34.588531+00:00"
+  },
+  "USDJPY::forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense": {
+    "signal_timestamp": "2026-04-14T10:00:00+00:00",
+    "signal_side": "sell",
+    "intended_action": "policy_blocked::interpreter_defensive::regime_block::event_risk",
+    "updated_at": "2026-04-14T10:33:36.948816+00:00"
+  },
+  "ETH::crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high": {
+    "signal_timestamp": "",
+    "signal_side": "flat",
+    "intended_action": "hold",
+    "updated_at": "2026-04-14T10:33:34.825711+00:00"
   }
 }

@@ -500,6 +500,7 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
         and regime_loss_ratio <= 0.75
         and equity_quality_score >= 0.35
         and best_trade_share_pct <= 80.0
+        and _meets_monte_carlo_viability(row)
     )
 
 
@@ -596,6 +597,7 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
             component_count <= 1
             or (combo_outperformance_score >= 0.0 and combo_trade_overlap_pct <= 80.0)
         )
+        and _meets_monte_carlo_viability(row)
     )
 
 
@@ -716,7 +718,7 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe", "midday"), True
     if profile_symbol.upper() == "ETH":
         if mode == "seed":
-            return [("5m", 5, "minute"), ("1h", 60, "minute")], ("europe", "overlap"), True
+            return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
@@ -1421,6 +1423,15 @@ def _calmar_ratio(realized_pnl: float, max_drawdown: float, initial_cash: float)
     total_return_pct = realized_pnl / initial_cash
     value = total_return_pct / max_drawdown
     return value if isfinite(value) else 0.0
+
+
+def _meets_monte_carlo_viability(row: CandidateResult | dict[str, object]) -> bool:
+    mc_simulations = int(row.mc_simulations if isinstance(row, CandidateResult) else row.get("mc_simulations", 0) or 0)
+    mc_pnl_p05 = float(row.mc_pnl_p05 if isinstance(row, CandidateResult) else row.get("mc_pnl_p05", 0.0) or 0.0)
+    mc_loss_probability_pct = float(
+        row.mc_loss_probability_pct if isinstance(row, CandidateResult) else row.get("mc_loss_probability_pct", 0.0) or 0.0
+    )
+    return mc_simulations > 0 and mc_pnl_p05 > 0.0 and mc_loss_probability_pct <= 10.0
 
 
 def _percentile(values: list[float], quantile: float) -> float:
@@ -5995,6 +6006,13 @@ def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
     test_min = int(thresholds["test_closed_trades"])
     wf_pass_min = float(thresholds["walk_forward_min_pass_rate_pct"])
     sparse_strategy = _is_sparse_candidate(row, symbol)
+    if row.mc_simulations <= 0:
+        reasons.append("monte carlo missing (no simulations recorded)")
+    else:
+        if row.mc_pnl_p05 <= 0.0:
+            reasons.append(f"monte carlo p05 pnl <= 0 ({row.mc_pnl_p05:.2f})")
+        if row.mc_loss_probability_pct > 10.0:
+            reasons.append(f"monte carlo loss probability too high ({row.mc_loss_probability_pct:.2f}% > 10.00%)")
     if sparse_strategy:
         combined_closed = row.validation_closed_trades + row.test_closed_trades
         combined_required = int(thresholds["sparse_combined_closed_trades"])

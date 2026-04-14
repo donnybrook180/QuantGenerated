@@ -1,0 +1,14 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:EURUSD,2025-07-21T18:00:00+00:00,2025-07-21T18:45:00+00:00,18,18,forex_breakout_momentum,trailing_stop,1.17061,1.17040,0.01000,-0.25853,0.05000,3,1.00000,{'breakout_high': 1.16983}
+C:EURUSD,2025-07-22T19:00:00+00:00,2025-07-28T02:15:00+00:00,19,2,forex_breakout_momentum,trailing_stop,1.17557,1.17589,0.01000,0.27121,0.05000,41,1.00000,{'breakout_high': 1.1749100000000001}
+C:EURUSD,2025-08-06T14:30:00+00:00,2025-08-06T16:00:00+00:00,14,16,forex_breakout_momentum,take_profit,1.16110,1.16322,0.01000,2.07189,0.05000,6,1.00000,{'breakout_high': 1.15889}
+C:EURUSD,2025-08-12T18:30:00+00:00,2025-08-12T19:00:00+00:00,18,19,forex_breakout_momentum,stop_loss,1.16955,1.16680,0.01000,-2.79841,0.05000,2,1.00000,{'breakout_high': 1.1688399999999999}
+C:EURUSD,2025-08-22T17:45:00+00:00,2025-08-22T21:45:00+00:00,17,21,forex_breakout_momentum,trailing_stop,1.17188,1.17204,0.01000,0.11140,0.05000,16,1.00000,{'breakout_high': 1.17148}
+C:EURUSD,2025-08-28T14:15:00+00:00,2025-08-28T15:45:00+00:00,14,15,forex_breakout_momentum,trailing_stop,1.16687,1.16687,0.01000,-0.04834,0.05000,6,1.00000,{'breakout_high': 1.16428}
+C:EURUSD,2025-09-05T15:30:00+00:00,2025-09-05T20:00:00+00:00,15,20,forex_breakout_momentum,trailing_stop,1.17354,1.17284,0.01000,-0.74866,0.05000,18,1.00000,{'breakout_high': 1.16801}
+C:EURUSD,2025-09-15T14:00:00+00:00,2025-09-15T15:30:00+00:00,14,15,forex_breakout_momentum,take_profit,1.17578,1.17663,0.01000,0.80119,0.05000,6,1.00000,{'breakout_high': 1.17416}
+C:EURUSD,2025-11-11T15:45:00+00:00,2025-11-13T11:00:00+00:00,15,11,forex_breakout_momentum,take_profit,1.16017,1.16309,0.01000,2.87192,0.05000,18,1.00000,{'breakout_high': 1.15911}
+C:EURUSD,2026-01-23T19:00:00+00:00,2026-01-23T20:00:00+00:00,19,20,forex_breakout_momentum,trailing_stop,1.17843,1.17775,0.01000,-0.72890,0.05000,4,1.00000,{'breakout_high': 1.17506}
+C:EURUSD,2026-02-09T15:15:00+00:00,2026-02-09T18:15:00+00:00,15,18,forex_breakout_momentum,trailing_stop,1.18970,1.18966,0.01000,-0.08948,0.05000,12,1.00000,{'breakout_high': 1.18699}
+C:EURUSD,2026-03-16T16:30:00+00:00,2026-03-16T17:30:00+00:00,16,17,forex_breakout_momentum,trailing_stop,1.14895,1.14831,0.01000,-0.68743,0.05000,4,1.00000,{'breakout_high': 1.14878}
+C:EURUSD,2026-03-31T19:30:00+00:00,2026-04-02T18:30:00+00:00,19,18,forex_breakout_momentum,trailing_stop,1.15477,1.15489,0.01000,0.07226,0.05000,37,1.00000,{'breakout_high': 1.15406}

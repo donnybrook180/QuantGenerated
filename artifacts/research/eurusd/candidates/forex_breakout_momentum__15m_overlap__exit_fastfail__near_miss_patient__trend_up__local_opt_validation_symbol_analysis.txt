@@ -1,0 +1,15 @@
+Artifact: forex_breakout_momentum__15m_overlap__exit_fastfail__near_miss_patient__trend_up__local_opt_validation_symbol
+Closed trades: 7
+Realized pnl: 5.87
+
+By entry hour
+16: trades=1 pnl=0.46 avg=0.46 win_rate=100.00%
+14: trades=3 pnl=1.64 avg=0.55 win_rate=33.33%
+15: trades=3 pnl=3.76 avg=1.25 win_rate=66.67%
+
+By entry setup
+forex_breakout_momentum: trades=7 pnl=5.87 avg=0.84 win_rate=57.14%
+
+By exit reason
+trailing_stop: trades=5 pnl=0.93 avg=0.19 win_rate=40.00%
+take_profit: trades=2 pnl=4.94 avg=2.47 win_rate=100.00%

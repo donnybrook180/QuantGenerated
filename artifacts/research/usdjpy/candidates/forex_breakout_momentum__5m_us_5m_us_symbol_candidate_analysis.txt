@@ -1,25 +1,25 @@
 Artifact: forex_breakout_momentum__5m_us_5m_us_symbol_candidate
-Closed trades: 38
-Realized pnl: 10592.88
+Closed trades: 57
+Realized pnl: 7222.97
 
 By entry hour
-16: trades=5 pnl=-692.01 avg=-138.40 win_rate=0.00%
-18: trades=5 pnl=-359.07 avg=-71.81 win_rate=20.00%
-20: trades=6 pnl=-158.58 avg=-26.43 win_rate=33.33%
-14: trades=5 pnl=-68.05 avg=-13.61 win_rate=40.00%
-17: trades=4 pnl=-39.45 avg=-9.86 win_rate=25.00%
-13: trades=2 pnl=57.85 avg=28.93 win_rate=100.00%
-19: trades=2 pnl=130.51 avg=65.26 win_rate=100.00%
-15: trades=9 pnl=11721.67 avg=1302.41 win_rate=44.44%
+17: trades=9 pnl=-379.04 avg=-42.12 win_rate=22.22%
+18: trades=6 pnl=-49.91 avg=-8.32 win_rate=33.33%
+20: trades=8 pnl=-41.51 avg=-5.19 win_rate=25.00%
+15: trades=12 pnl=142.77 avg=11.90 win_rate=25.00%
+14: trades=11 pnl=148.97 avg=13.54 win_rate=45.45%
+13: trades=3 pnl=186.71 avg=62.24 win_rate=100.00%
+19: trades=3 pnl=304.60 avg=101.53 win_rate=100.00%
+16: trades=5 pnl=6910.37 avg=1382.07 win_rate=40.00%
 
 By entry setup
-forex_breakout_momentum: trades=38 pnl=10592.88 avg=278.76 win_rate=36.84%
+forex_breakout_momentum: trades=57 pnl=7222.97 avg=126.72 win_rate=38.60%
 
 By exit reason
-stop_loss: trades=9 pnl=-1250.63 avg=-138.96 win_rate=0.00%
-structure_exit: trades=4 pnl=-524.38 avg=-131.10 win_rate=0.00%
-stale_breakout: trades=5 pnl=-333.85 avg=-66.77 win_rate=0.00%
-signal_exit: trades=2 pnl=-299.17 avg=-149.59 win_rate=0.00%
-take_profit: trades=4 pnl=673.80 avg=168.45 win_rate=100.00%
-trailing_stop: trades=13 pnl=827.53 avg=63.66 win_rate=69.23%
-end_of_run: trades=1 pnl=11499.58 avg=11499.58 win_rate=100.00%
+structure_exit: trades=9 pnl=-997.90 avg=-110.88 win_rate=0.00%
+stop_loss: trades=9 pnl=-901.24 avg=-100.14 win_rate=0.00%
+stale_breakout: trades=7 pnl=-388.03 avg=-55.43 win_rate=0.00%
+signal_exit: trades=3 pnl=-329.36 avg=-109.79 win_rate=0.00%
+trailing_stop: trades=16 pnl=776.78 avg=48.55 win_rate=56.25%
+take_profit: trades=12 pnl=1912.59 avg=159.38 win_rate=100.00%
+end_of_run: trades=1 pnl=7150.13 avg=7150.13 win_rate=100.00%

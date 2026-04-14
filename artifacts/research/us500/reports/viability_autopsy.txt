@@ -1,16 +1,16 @@
 Viability autopsy: US500
 Execution validation summary: selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.08 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted
-Tier counts: core=0 specialist=4 reject=93
+Tier counts: core=0 specialist=4 reject=76
 
 Top blockers
-- validation PF < 1.0 (0.00): 47
-- walk-forward avg validation pnl <= 0 (0.00): 43
-- best trade concentration too high (100.00% > 70%): 36
-- regime stability too low (0.00 < 0.50): 33
+- walk-forward avg validation pnl <= 0 (0.00): 37
+- best trade concentration too high (100.00% > 70%): 34
+- validation PF < 1.0 (0.00): 32
 - combined validation/test trades too low (1 < 2): 29
-- test PF < 1.0 (0.00): 24
-- regime loss ratio too high (999.00 > 1.25): 22
-- equity quality too low (0.25 < 0.45): 19
+- regime stability too low (0.00 < 0.50): 21
+- test PF < 1.0 (0.00): 13
+- equity quality too low (0.25 < 0.45): 13
+- regime loss ratio too high (999.00 > 1.25): 13
 
 Top near-misses
 - us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:05:16.890827+00:00",
+  "generated_at": "2026-04-14T10:33:41.952085+00:00",
   "rows": [
     {
       "symbol": "BTC",
@@ -18,8 +18,8 @@
     {
       "symbol": "ETH",
       "broker_symbol": "ETHUSD",
-      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
-      "research_expectancy": 3.88736320588501,
+      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
+      "research_expectancy": 4.846738655425008,
       "research_closed_trades": 4,
       "live_fill_count": 0,
       "execution_drag_bps": 0.0,
@@ -47,8 +47,22 @@
       "symbol": "JP225",
       "broker_symbol": "JP225.cash",
       "candidate_name": "jp225_volatility_short_breakdown_core_hours__exit_trend",
-      "research_expectancy": 2.330427512598617,
+      "research_expectancy": 2.3313814881206896,
       "research_closed_trades": 13,
+      "live_fill_count": 0,
+      "execution_drag_bps": 0.0,
+      "cost_bps": 0.0,
+      "total_drag_bps": 0.0,
+      "drag_share_pct": 0.0,
+      "edge_retention_pct": 100.0,
+      "fragility_label": "insufficient_live_data"
+    },
+    {
+      "symbol": "US100",
+      "broker_symbol": "US100.cash",
+      "candidate_name": "us100_opening_range_short_breakdown_trend",
+      "research_expectancy": 0.009664658519443302,
+      "research_closed_trades": 18,
       "live_fill_count": 0,
       "execution_drag_bps": 0.0,
       "cost_bps": 0.0,
@@ -74,9 +88,9 @@
     {
       "symbol": "USDJPY",
       "broker_symbol": "USDJPY",
-      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat",
-      "research_expectancy": 955.8218232611523,
-      "research_closed_trades": 11,
+      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense",
+      "research_expectancy": 138.84589220431732,
+      "research_closed_trades": 93,
       "live_fill_count": 0,
       "execution_drag_bps": 0.0,
       "cost_bps": 0.0,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:05:22.275821+00:00",
+  "generated_at": "2026-04-14T10:33:47.297710+00:00",
   "symbol": "US100",
   "broker_symbol": "US100.cash",
   "action": "insufficient_data",
@@ -13,7 +13,7 @@
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
-      "resulting_base_weight": 0.9777918618117529,
+      "resulting_base_weight": 0.971119640053199,
       "resulting_max_risk_multiplier": 0.6,
       "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
@@ -24,16 +24,16 @@
     "symbol": "US100",
     "data_symbol": "QQQ",
     "broker_symbol": "US100.cash",
-    "research_run_id": 269,
-    "execution_set_id": 146,
-    "execution_validation_summary": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=1.83 pf=1.70 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk",
+    "research_run_id": 319,
+    "execution_set_id": 164,
+    "execution_validation_summary": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=0.17 pf=1.65 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk",
     "symbol_status": "reduced_risk_only",
     "strategies": [
       {
         "candidate_name": "us100_opening_range_short_breakdown_trend",
         "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_flat_vol_high; vol_pct in [0.55, 0.97]; base_weight=0.98; risk_cap=0.60; stability=0.75; loss_ratio=0.17",
+        "policy_summary": "tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=dislocated_chop; vol_pct in [0.55, 0.97]; base_weight=0.97; risk_cap=0.60; stability=0.74; loss_ratio=0.18",
         "variant_label": "",
         "regime_filter_label": "",
         "execution_overrides": {
@@ -45,14 +45,14 @@
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_down_vol_high"
+          "trend_expansion"
         ],
         "blocked_regimes": [
-          "trend_flat_vol_high"
+          "dislocated_chop"
         ],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,
-        "base_allocation_weight": 0.9777918618117529,
+        "base_allocation_weight": 0.971119640053199,
         "max_risk_multiplier": 0.6,
         "min_risk_multiplier": 0.0
       }

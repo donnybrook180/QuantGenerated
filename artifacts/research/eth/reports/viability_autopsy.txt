@@ -1,31 +1,31 @@
 Viability autopsy: ETH
-Execution validation summary: selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high@15m_us|trend_flat_vol_high data_source=duckdb_cache_aggregated pnl=19.39 pf=999.00 closed=4 quality=0.88 underwater=0.0% -> accepted
-Tier counts: core=8 specialist=13 reject=51
+Execution validation summary: selection=combo_1 variant=crypto_vwap_reversion__30m_us__exit_trend@30m_us data_source=duckdb_cache_aggregated pnl=5.28 pf=6.71 closed=3 quality=0.66 underwater=33.3% -> accepted
+Tier counts: core=2 specialist=0 reject=224
 
 Top blockers
-- validation PF < 1.0 (0.00): 51
-- walk-forward pass rate too low (0.00% < 40%): 51
-- validation trades too low (0 < 2): 48
-- test trades too low (0 < 1): 48
-- validation pnl <= 0 (0.00): 48
-- test pnl <= 0 (0.00): 48
-- test PF < 1.0 (0.00): 48
-- walk-forward avg validation pnl <= 0 (0.00): 48
+- walk-forward avg validation pnl <= 0 (0.00): 157
+- walk-forward pass rate too low (0.00% < 40%): 149
+- test PF < 1.0 (0.00): 134
+- validation PF < 1.0 (0.00): 134
+- regime stability too low (0.00 < 0.50): 119
+- validation trades too low (0 < 2): 117
+- validation pnl <= 0 (0.00): 117
+- equity quality too low (0.25 < 0.45): 115
 
 Top near-misses
-- crypto_vwap_reversion_us_core__15m_us__exit_fastfail [specialist]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__exit_fastfail__near_miss_dense [specialist]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__near_miss_protective [specialist]: pnl=15.72 pf=11.22 val=17.26/999.00/2 test=-0.39/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.39), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__near_miss_dense [specialist]: pnl=15.72 pf=11.22 val=17.26/999.00/2 test=-0.39/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.39), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__exit_fastfail__near_miss_protective [specialist]: pnl=15.66 pf=10.78 val=17.26/999.00/2 test=-0.60/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.60), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__exit_fastfail__near_miss_patient [specialist]: pnl=14.43 pf=6.10 val=17.26/999.00/2 test=-0.47/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.47), best trade concentration too high (75.13% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us__exit_fastfail__near_miss_dense__trend_flat_vol_high [specialist]: pnl=13.08 pf=10.98 val=14.39/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (70.16% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- crypto_vwap_reversion_us_core__15m_us [specialist]: pnl=12.40 pf=9.06 val=13.94/999.00/2 test=-0.39/0.00/1 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-0.39), broad viability failed, but candidate qualifies as a regime specialist
+- crypto_vwap_reversion_us_core__15m_us__exit_trend [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
+- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_patient [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
+- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_protective [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
+- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_dense [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
+- crypto_vwap_reversion__15m_overlap__exit_trend [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
+- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_patient [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
+- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_protective [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
+- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_dense [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)

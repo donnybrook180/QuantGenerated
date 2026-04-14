@@ -1,0 +1,17 @@
+Artifact: momentum__exit_trend__regime_trend_up_vol_high__near_miss_patient__trend_up_symbol_candidate
+Closed trades: 8
+Realized pnl: -0.03
+
+By entry hour
+13: trades=2 pnl=-0.03 avg=-0.01 win_rate=0.00%
+16: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
+14: trades=3 pnl=0.00 avg=0.00 win_rate=33.33%
+19: trades=2 pnl=0.01 avg=0.01 win_rate=50.00%
+
+By entry setup
+momentum_confirmation: trades=8 pnl=-0.03 avg=-0.00 win_rate=25.00%
+
+By exit reason
+time_stop: trades=5 pnl=-0.08 avg=-0.02 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
+take_profit: trades=2 pnl=0.06 avg=0.03 win_rate=100.00%

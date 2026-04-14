@@ -1,0 +1,15 @@
+Artifact: jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high
+Closed trades: 6
+Realized pnl: 12.49
+
+By entry hour
+4: trades=2 pnl=2.07 avg=1.04 win_rate=50.00%
+3: trades=4 pnl=10.42 avg=2.61 win_rate=50.00%
+
+By entry setup
+volatility_short_breakdown: trades=6 pnl=12.49 avg=2.08 win_rate=50.00%
+
+By exit reason
+structure_exit: trades=2 pnl=-5.25 avg=-2.62 win_rate=0.00%
+stale_breakout: trades=1 pnl=-1.34 avg=-1.34 win_rate=0.00%
+take_profit: trades=3 pnl=19.08 avg=6.36 win_rate=100.00%

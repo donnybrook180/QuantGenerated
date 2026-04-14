@@ -1,16 +1,31 @@
 Viability autopsy: JP225
-Execution validation summary: selection=combo_1 variant=jp225_volatility_short_breakdown_core_hours__exit_trend@default data_source=duckdb_cache pnl=30.31 pf=4.54 closed=13 quality=0.69 underwater=53.8% -> accepted
-Tier counts: core=3 specialist=3 reject=0
+Execution validation summary: not_run
+Tier counts: core=0 specialist=0 reject=86
 
 Top blockers
-- combo overlap too high (100.00% > 80%): 3
-- broad viability failed, but candidate qualifies as a regime specialist: 3
-- combo underperformed components (-3.01): 2
+- walk-forward pass rate too low (0.00% < 50%): 53
+- regime stability too low (0.00 < 0.50): 32
+- test PF < 1.0 (0.00): 28
+- validation PF < 1.0 (0.00): 25
+- monte carlo loss probability too high (13.20% > 10.00%): 18
+- regime loss ratio too high (999.00 > 1.25): 18
+- monte carlo p05 pnl <= 0 (-6.13): 15
+- validation trades too low (2 < 3): 15
 
 Top near-misses
-- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend [specialist]: pnl=31.34 pf=4.38 val=12.21/999.00/2 test=5.52/2.73/3 wf=0.00%
-  reasons: combo underperformed components (-3.01), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
-- jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail [specialist]: pnl=31.34 pf=4.38 val=12.21/999.00/2 test=5.52/2.73/3 wf=0.00%
-  reasons: combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
-- jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail [specialist]: pnl=31.34 pf=4.38 val=12.21/999.00/2 test=5.52/2.73/3 wf=0.00%
-  reasons: combo underperformed components (-3.01), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)
+- jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient [reject]: pnl=12.49 pf=2.90 val=6.64/5.95/2 test=6.95/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-6.13), monte carlo loss probability too high (13.20% > 10.00%)

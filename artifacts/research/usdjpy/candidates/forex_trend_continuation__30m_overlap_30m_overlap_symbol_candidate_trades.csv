@@ -1,5 +1,5 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-08-18T12:00:00+00:00,2025-08-18T16:00:00+00:00,12,16,forex_trend_continuation,take_profit,147.40775,147.81722,0.01000,409.41619,0.05000,8,0.72599,{'pullback_floor': 147.227}
-C:USDJPY,2025-08-25T12:30:00+00:00,2025-08-25T13:00:00+00:00,12,13,forex_trend_continuation,signal_exit,147.36475,147.40624,0.01000,41.44470,0.05000,1,0.79185,{'pullback_floor': 147.271}
-C:USDJPY,2025-10-29T15:30:00+00:00,2025-10-29T16:00:00+00:00,15,16,forex_trend_continuation,stop_loss,152.26106,151.88896,0.01000,-372.14411,0.05000,1,1.00000,{'pullback_floor': 152.241}
-C:USDJPY,2025-11-11T12:00:00+00:00,2025-11-11T12:30:00+00:00,12,12,forex_trend_continuation,signal_exit,154.30619,154.22482,0.01000,-81.41914,0.05000,1,0.74118,{'pullback_floor': 154.286}
+C:USDJPY,2025-08-18T12:00:00+00:00,2025-08-18T15:00:00+00:00,12,15,forex_trend_continuation,take_profit,147.39568,147.66531,0.01000,269.57348,0.05000,6,0.72599,{'pullback_floor': 147.227}
+C:USDJPY,2025-08-25T12:30:00+00:00,2025-08-25T13:00:00+00:00,12,13,forex_trend_continuation,signal_exit,147.35268,147.41831,0.01000,65.58073,0.05000,1,0.79185,{'pullback_floor': 147.271}
+C:USDJPY,2025-10-29T15:30:00+00:00,2025-10-29T16:00:00+00:00,15,16,forex_trend_continuation,structure_exit,152.24881,151.90120,0.01000,-347.65375,0.05000,1,1.00000,{'pullback_floor': 152.241}
+C:USDJPY,2025-11-11T12:00:00+00:00,2025-11-11T12:30:00+00:00,12,12,forex_trend_continuation,structure_exit,154.29386,154.23714,0.01000,-56.76327,0.05000,1,0.74118,{'pullback_floor': 154.286}

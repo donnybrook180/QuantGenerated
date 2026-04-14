@@ -1,16 +1,17 @@
 Artifact: btc_trend_pullback_high_beta__5m_overlap__exit_trend_5m_overlap_symbol_candidate
 Closed trades: 5
-Realized pnl: 3.81
+Realized pnl: -0.56
 
 By entry hour
 15: trades=1 pnl=-3.65 avg=-3.65 win_rate=0.00%
-16: trades=1 pnl=-1.17 avg=-1.17 win_rate=0.00%
-12: trades=3 pnl=8.63 avg=2.88 win_rate=66.67%
+16: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
+12: trades=3 pnl=3.62 avg=1.21 win_rate=66.67%
 
 By entry setup
-crypto_trend_pullback: trades=5 pnl=3.81 avg=0.76 win_rate=40.00%
+crypto_trend_pullback: trades=5 pnl=-0.56 avg=-0.11 win_rate=40.00%
 
 By exit reason
 stop_loss: trades=1 pnl=-3.65 avg=-3.65 win_rate=0.00%
-signal_exit: trades=3 pnl=0.86 avg=0.29 win_rate=33.33%
-take_profit: trades=1 pnl=6.60 avg=6.60 win_rate=100.00%
+stale_breakout: trades=1 pnl=-1.34 avg=-1.34 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.54 avg=-0.54 win_rate=0.00%
+take_profit: trades=2 pnl=4.96 avg=2.48 win_rate=100.00%

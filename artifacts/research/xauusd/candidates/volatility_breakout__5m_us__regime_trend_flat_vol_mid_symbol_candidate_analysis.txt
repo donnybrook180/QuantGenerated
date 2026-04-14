@@ -1,0 +1,14 @@
+Artifact: volatility_breakout__5m_us__regime_trend_flat_vol_mid_symbol_candidate
+Closed trades: 2
+Realized pnl: 18.69
+
+By entry hour
+18: trades=1 pnl=-1.19 avg=-1.19 win_rate=0.00%
+13: trades=1 pnl=19.88 avg=19.88 win_rate=100.00%
+
+By entry setup
+volatility_breakout: trades=2 pnl=18.69 avg=9.34 win_rate=50.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-1.19 avg=-1.19 win_rate=0.00%
+take_profit: trades=1 pnl=19.88 avg=19.88 win_rate=100.00%

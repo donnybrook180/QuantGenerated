@@ -1,17 +1,17 @@
 Artifact: crypto_breakout_reclaim_sweep_dense__1h_europe_1h_europe_symbol_candidate
 Closed trades: 4
-Realized pnl: -26.88
+Realized pnl: -16.97
 
 By entry hour
 12: trades=1 pnl=-11.64 avg=-11.64 win_rate=0.00%
 11: trades=1 pnl=-10.16 avg=-10.16 win_rate=0.00%
 7: trades=1 pnl=-3.58 avg=-3.58 win_rate=0.00%
-10: trades=1 pnl=-1.49 avg=-1.49 win_rate=0.00%
+10: trades=1 pnl=8.41 avg=8.41 win_rate=100.00%
 
 By entry setup
-crypto_breakout_reclaim: trades=4 pnl=-26.88 avg=-6.72 win_rate=0.00%
+crypto_breakout_reclaim: trades=4 pnl=-16.97 avg=-4.24 win_rate=25.00%
 
 By exit reason
 stop_loss: trades=2 pnl=-21.81 avg=-10.90 win_rate=0.00%
-signal_exit: trades=1 pnl=-3.58 avg=-3.58 win_rate=0.00%
-trailing_stop: trades=1 pnl=-1.49 avg=-1.49 win_rate=0.00%
+trailing_stop: trades=1 pnl=-3.58 avg=-3.58 win_rate=0.00%
+take_profit: trades=1 pnl=8.41 avg=8.41 win_rate=100.00%

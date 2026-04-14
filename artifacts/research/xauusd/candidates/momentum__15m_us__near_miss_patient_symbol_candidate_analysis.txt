@@ -1,0 +1,23 @@
+Artifact: momentum__15m_us__near_miss_patient_symbol_candidate
+Closed trades: 19
+Realized pnl: 103.71
+
+By entry hour
+15: trades=3 pnl=-54.70 avg=-18.23 win_rate=33.33%
+14: trades=5 pnl=-41.23 avg=-8.25 win_rate=40.00%
+19: trades=3 pnl=-23.73 avg=-7.91 win_rate=0.00%
+18: trades=2 pnl=3.48 avg=1.74 win_rate=50.00%
+13: trades=3 pnl=22.63 avg=7.54 win_rate=66.67%
+16: trades=1 pnl=40.33 avg=40.33 win_rate=100.00%
+17: trades=1 pnl=63.32 avg=63.32 win_rate=100.00%
+20: trades=1 pnl=93.60 avg=93.60 win_rate=100.00%
+
+By entry setup
+momentum_confirmation: trades=19 pnl=103.71 avg=5.46 win_rate=47.37%
+
+By exit reason
+time_stop: trades=4 pnl=-100.22 avg=-25.06 win_rate=0.00%
+stop_loss: trades=2 pnl=-93.36 avg=-46.68 win_rate=0.00%
+stale_breakout: trades=2 pnl=-26.78 avg=-13.39 win_rate=0.00%
+trailing_stop: trades=3 pnl=-1.79 avg=-0.60 win_rate=33.33%
+take_profit: trades=8 pnl=325.86 avg=40.73 win_rate=100.00%

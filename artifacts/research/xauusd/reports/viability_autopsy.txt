@@ -1,31 +1,31 @@
 Viability autopsy: XAUUSD
-Execution validation summary: selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=164.52 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted
-Tier counts: core=36 specialist=11 reject=158
+Execution validation summary: selection=combo_1 variant=momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat@15m_us|trend_flat data_source=duckdb_cache pnl=161.77 pf=117.92 closed=4 quality=0.73 underwater=25.0% -> accepted
+Tier counts: core=9 specialist=0 reject=183
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 129
-- validation PF < 1.0 (0.00): 106
-- regime stability too low (0.00 < 0.50): 89
-- test PF < 1.0 (0.00): 80
-- equity quality too low (0.25 < 0.45): 67
-- validation trades too low (0 < 3): 64
-- validation pnl <= 0 (0.00): 64
-- test trades too low (0 < 2): 59
+- walk-forward pass rate too low (0.00% < 50%): 125
+- validation PF < 1.0 (0.00): 90
+- test PF < 1.0 (0.00): 73
+- regime stability too low (0.00 < 0.50): 73
+- walk-forward avg validation pnl <= 0 (0.00): 57
+- walk-forward avg test pnl <= 0 (0.00): 57
+- validation trades too low (0 < 3): 57
+- validation pnl <= 0 (0.00): 57
 
 Top near-misses
-- volatility_breakout__15m_overlap__exit_trend__near_miss_dense__trend_up_vol_high [reject]: pnl=91.00 pf=5.31 val=10.05/999.00/1 test=-8.40/0.00/1 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-3.51), equity quality too low (0.42 < 0.45), best trade concentration too high (100.00% > 70%)
-- xauusd_generic_breakout_selective__near_miss_patient__trend_flat [specialist]: pnl=80.06 pf=999.00 val=1.88/999.00/1 test=4.06/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.45% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_generic_breakout_selective__near_miss_dense__trend_flat [specialist]: pnl=80.06 pf=999.00 val=1.88/999.00/1 test=4.06/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.45% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_generic_breakout_selective__near_miss_patient__trend_flat__local_opt_density [specialist]: pnl=80.06 pf=999.00 val=1.88/999.00/1 test=4.06/999.00/1 wf=0.00%
-  reasons: best trade concentration too high (71.45% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_volatility_breakout_exit_relaxed [specialist]: pnl=74.97 pf=4.98 val=66.31/999.00/1 test=3.74/1.62/3 wf=0.00%
-  reasons: best trade concentration too high (70.70% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- xauusd_volatility_breakout_exit_relaxed__near_miss_patient [specialist]: pnl=74.97 pf=4.98 val=66.31/999.00/1 test=3.74/1.62/3 wf=0.00%
-  reasons: best trade concentration too high (70.70% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_overlap__near_miss_patient [specialist]: pnl=71.07 pf=4.93 val=60.72/11.87/2 test=3.74/1.62/3 wf=0.00%
-  reasons: best trade concentration too high (74.40% > 70%), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_overlap [specialist]: pnl=67.05 pf=4.71 val=60.72/11.87/2 test=3.74/1.62/3 wf=0.00%
-  reasons: best trade concentration too high (77.91% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- momentum__15m_us__exit_trend__near_miss_patient [reject]: pnl=186.98 pf=2.31 val=108.08/3.81/5 test=14.90/1.28/6 wf=100.00%
+  reasons: monte carlo p05 pnl <= 0 (-29.57)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol_high [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_protective [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_protective__trend_flat_vol_high [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_dense [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)
+- momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [reject]: pnl=161.77 pf=117.92 val=0.00/0.00/0 test=49.93/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2)

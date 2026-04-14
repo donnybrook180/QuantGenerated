@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:51:33.997649+00:00",
+  "generated_at": "2026-04-14T14:48:15.787082+00:00",
   "symbol": "ETH",
   "broker_symbol": "ETHUSD",
   "action": "insufficient_data",
@@ -7,7 +7,7 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
+      "candidate_name": "crypto_vwap_reversion__30m_us__exit_trend",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
@@ -24,31 +24,32 @@
     "symbol": "ETH",
     "data_symbol": "X:ETHUSD",
     "broker_symbol": "ETHUSD",
-    "research_run_id": 322,
-    "execution_set_id": 167,
-    "execution_validation_summary": "selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high@15m_us|trend_flat_vol_high data_source=duckdb_cache_aggregated pnl=19.39 pf=999.00 closed=4 quality=0.88 underwater=0.0% -> accepted",
+    "research_run_id": 324,
+    "execution_set_id": 168,
+    "execution_validation_summary": "selection=combo_1 variant=crypto_vwap_reversion__30m_us__exit_trend@30m_us data_source=duckdb_cache_aggregated pnl=5.28 pf=6.71 closed=3 quality=0.66 underwater=33.3% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
       {
-        "candidate_name": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high",
+        "candidate_name": "crypto_vwap_reversion__30m_us__exit_trend",
         "code_path": "quant_system.agents.crypto.CryptoVWAPReversionAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
-        "variant_label": "15m_us",
-        "regime_filter_label": "trend_flat_vol_high",
+        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=trend_expansion; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+        "variant_label": "30m_us",
+        "regime_filter_label": "",
         "execution_overrides": {
-          "structure_exit_bars": 0,
-          "stale_breakout_bars": 7,
           "max_holding_bars": 0,
-          "take_profit_atr_multiple": 2.4000000000000004,
-          "break_even_atr_multiple": 0.4,
-          "trailing_stop_atr_multiple": 0.8
+          "take_profit_atr_multiple": 3.2,
+          "trailing_stop_atr_multiple": 1.2,
+          "stale_breakout_bars": 8,
+          "structure_exit_bars": 0
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
           "dislocated_chop"
         ],
-        "blocked_regimes": [],
+        "blocked_regimes": [
+          "trend_expansion"
+        ],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,
         "base_allocation_weight": 1.15,

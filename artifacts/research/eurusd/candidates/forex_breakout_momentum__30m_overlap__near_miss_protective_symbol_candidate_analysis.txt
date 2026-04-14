@@ -1,0 +1,17 @@
+Artifact: forex_breakout_momentum__30m_overlap__near_miss_protective_symbol_candidate
+Closed trades: 7
+Realized pnl: 9.74
+
+By entry hour
+12: trades=2 pnl=-1.49 avg=-0.74 win_rate=0.00%
+13: trades=1 pnl=1.15 avg=1.15 win_rate=100.00%
+14: trades=2 pnl=3.76 avg=1.88 win_rate=100.00%
+16: trades=2 pnl=6.30 avg=3.15 win_rate=50.00%
+
+By entry setup
+forex_breakout_momentum: trades=7 pnl=9.74 avg=1.39 win_rate=57.14%
+
+By exit reason
+stop_loss: trades=1 pnl=-1.21 avg=-1.21 win_rate=0.00%
+trailing_stop: trades=4 pnl=2.43 avg=0.61 win_rate=50.00%
+take_profit: trades=2 pnl=8.51 avg=4.26 win_rate=100.00%

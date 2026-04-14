@@ -1,23 +1,19 @@
 {
-  "generated_at": "2026-04-14T10:51:33.877216+00:00",
+  "generated_at": "2026-04-14T14:48:15.605622+00:00",
   "summary": {
     "deployments_scanned": 9,
     "statuses": {
-      "live_ready": 5,
-      "reduced_risk_only": 3,
-      "research_only": 1
+      "live_ready": 3,
+      "reduced_risk_only": 1,
+      "research_only": 5
     },
     "symbols_with_incidents": 9,
     "total_fills": 0,
     "tradeable_now": [],
     "blocked_now": [
-      "BTC",
       "ETH",
       "EURUSD",
-      "JP225",
-      "US100",
-      "US500",
-      "USDJPY",
+      "GBPUSD",
       "XAUUSD"
     ],
     "recent_incidents": [
@@ -30,8 +26,8 @@
     "research_triggers": 0,
     "tca_overview": null,
     "worst_edge_retention": {
-      "symbol": "BTC",
-      "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up",
+      "symbol": "ETH",
+      "candidate_name": "crypto_vwap_reversion__30m_us__exit_trend",
       "edge_retention_pct": 100.0
     }
   },
@@ -47,21 +43,19 @@
   "symbols": [
     {
       "symbol": "BTC",
-      "status": "live_ready",
+      "status": "research_only",
       "broker_symbol": "BTCUSD",
-      "strategy_count": 1,
-      "tiers": [
-        "core"
-      ],
-      "execution_validation": "selection=combo_1 variant=btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up@5m_all|trend_up data_source=duckdb_cache pnl=23.00 pf=4.92 closed=8 quality=0.71 underwater=50.0% -> accepted",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\btc\\live.json",
-      "latest_journal": "artifacts\\live\\btc\\journals\\20260414T105126Z_journal.json",
+      "latest_journal": "artifacts\\live\\btc\\journals\\20260414T144422Z_journal.json",
       "latest_incident": "artifacts\\live\\btc\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up:hold[core] veto=interpreter_defensive::regime_block::event_risk"
+      "latest_actions": "crypto_trend_pullback_sweep_dense__30m_europe:hold[specialist] veto=interpreter_defensive::regime_block::event_risk"
     },
     {
       "symbol": "ETH",
@@ -71,15 +65,15 @@
       "tiers": [
         "core"
       ],
-      "execution_validation": "selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high@15m_us|trend_flat_vol_high data_source=duckdb_cache_aggregated pnl=19.39 pf=999.00 closed=4 quality=0.88 underwater=0.0% -> accepted",
+      "execution_validation": "selection=combo_1 variant=crypto_vwap_reversion__30m_us__exit_trend@30m_us data_source=duckdb_cache_aggregated pnl=5.28 pf=6.71 closed=3 quality=0.66 underwater=33.3% -> accepted",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eth\\live.json",
-      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T105126Z_journal.json",
+      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T144803Z_journal.json",
       "latest_incident": "artifacts\\live\\eth\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "crypto_vwap_reversion_us_core__15m_us__near_miss_patient__trend_flat_vol_high:hold[core] veto=interpreter_blocked::mean_reversion"
+      "latest_actions": "crypto_vwap_reversion__30m_us__exit_trend:hold[core] veto=interpreter_blocked::mean_reversion"
     },
     {
       "symbol": "EURUSD",
@@ -89,45 +83,45 @@
       "tiers": [
         "core"
       ],
-      "execution_validation": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache_aggregated pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted",
+      "execution_validation": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend@30m_overlap data_source=duckdb_cache_aggregated pnl=9.74 pf=7.31 closed=7 quality=0.57 underwater=57.1% -> accepted",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eurusd\\live.json",
-      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T105126Z_journal.json",
+      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T144804Z_journal.json",
       "latest_incident": "artifacts\\live\\eurusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "forex_breakout_momentum__30m_overlap:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
+      "latest_actions": "forex_breakout_momentum__30m_overlap__exit_trend:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
     },
     {
       "symbol": "GBPUSD",
-      "status": "research_only",
+      "status": "reduced_risk_only",
       "broker_symbol": "GBPUSD",
+      "strategy_count": 1,
+      "tiers": [
+        "specialist"
+      ],
+      "execution_validation": "selection=combo_1 variant=gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid@15m_overlap|trend_down_vol_mid data_source=duckdb_cache pnl=28.59 pf=10.91 closed=9 quality=0.81 underwater=22.2% -> accepted",
+      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_guardrail": "none",
+      "deployment_path": "artifacts\\deploy\\gbpusd\\live.json",
+      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T144804Z_journal.json",
+      "latest_incident": "artifacts\\live\\gbpusd\\incidents\\20260413T210151Z_incident.txt",
+      "fill_summary": null,
+      "tca_overview": null,
+      "latest_actions": "gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid:hold[specialist] veto=interpreter_defensive::regime_block::volatile_chop"
+    },
+    {
+      "symbol": "JP225",
+      "status": "research_only",
+      "broker_symbol": "JP225.cash",
       "strategy_count": 0,
       "tiers": [],
       "execution_validation": "not_run",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
-      "deployment_path": "artifacts\\deploy\\gbpusd\\live.json",
-      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T060006Z_journal.json",
-      "latest_incident": "artifacts\\live\\gbpusd\\incidents\\20260413T210151Z_incident.txt",
-      "fill_summary": null,
-      "tca_overview": null,
-      "latest_actions": "gbpusd_overlap_impulse__15m_overlap__near_miss_patient__plus__gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient:regime_blocked::calm_range[specialist] veto=regime"
-    },
-    {
-      "symbol": "JP225",
-      "status": "live_ready",
-      "broker_symbol": "JP225.cash",
-      "strategy_count": 1,
-      "tiers": [
-        "core"
-      ],
-      "execution_validation": "selection=combo_1 variant=jp225_volatility_short_breakdown_core_hours__exit_trend@default data_source=duckdb_cache pnl=30.31 pf=4.54 closed=13 quality=0.69 underwater=53.8% -> accepted",
-      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
-      "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\jp225\\live.json",
-      "latest_journal": "artifacts\\live\\jp225\\journals\\20260414T105126Z_journal.json",
+      "latest_journal": "artifacts\\live\\jp225\\journals\\20260414T134325Z_journal.json",
       "latest_incident": "artifacts\\live\\jp225\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -135,17 +129,15 @@
     },
     {
       "symbol": "US100",
-      "status": "reduced_risk_only",
+      "status": "research_only",
       "broker_symbol": "US100.cash",
-      "strategy_count": 1,
-      "tiers": [
-        "core"
-      ],
-      "execution_validation": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=0.17 pf=1.65 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\us100\\live.json",
-      "latest_journal": "artifacts\\live\\us100\\journals\\20260414T105127Z_journal.json",
+      "latest_journal": "artifacts\\live\\us100\\journals\\20260414T134440Z_journal.json",
       "latest_incident": "artifacts\\live\\us100\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -153,17 +145,15 @@
     },
     {
       "symbol": "US500",
-      "status": "reduced_risk_only",
+      "status": "research_only",
       "broker_symbol": "US500.cash",
-      "strategy_count": 1,
-      "tiers": [
-        "specialist"
-      ],
-      "execution_validation": "selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.08 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\us500\\live.json",
-      "latest_journal": "artifacts\\live\\us500\\journals\\20260414T105127Z_journal.json",
+      "latest_journal": "artifacts\\live\\us500\\journals\\20260414T134441Z_journal.json",
       "latest_incident": "artifacts\\live\\us500\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -171,17 +161,15 @@
     },
     {
       "symbol": "USDJPY",
-      "status": "reduced_risk_only",
+      "status": "research_only",
       "broker_symbol": "USDJPY",
-      "strategy_count": 1,
-      "tiers": [
-        "specialist"
-      ],
-      "execution_validation": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense@default data_source=duckdb_cache pnl=12912.67 pf=3.86 closed=93 quality=0.49 underwater=88.2% -> accepted_with_reduced_risk",
+      "strategy_count": 0,
+      "tiers": [],
+      "execution_validation": "not_run",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\usdjpy\\live.json",
-      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T105127Z_journal.json",
+      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T134825Z_journal.json",
       "latest_incident": "artifacts\\live\\usdjpy\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -195,15 +183,15 @@
       "tiers": [
         "core"
       ],
-      "execution_validation": "selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=164.52 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted",
+      "execution_validation": "selection=combo_1 variant=momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat@15m_us|trend_flat data_source=duckdb_cache pnl=161.77 pf=117.92 closed=4 quality=0.73 underwater=25.0% -> accepted",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
-      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T105127Z_journal.json",
+      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T144805Z_journal.json",
       "latest_incident": "artifacts\\live\\xauusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
+      "latest_actions": "momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat:regime_blocked::calm_range[core]"
     }
   ]
 }

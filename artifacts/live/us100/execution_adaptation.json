@@ -1,62 +1,21 @@
 {
-  "generated_at": "2026-04-14T10:51:34.380468+00:00",
+  "generated_at": "2026-04-14T14:48:16.578979+00:00",
   "symbol": "US100",
   "broker_symbol": "US100.cash",
   "action": "insufficient_data",
   "reason": "not enough local fills for adaptation",
   "overview": null,
-  "strategy_actions": [
-    {
-      "candidate_name": "us100_opening_range_short_breakdown_trend",
-      "fill_count": 0,
-      "action": "unchanged",
-      "base_weight_scale": 1.0,
-      "risk_scale": 1.0,
-      "min_bars_between_trades": 0,
-      "resulting_base_weight": 0.971119640053199,
-      "resulting_max_risk_multiplier": 0.6,
-      "local_rank_label": "baseline_local",
-      "reason": "healthy_or_insufficient_data"
-    }
-  ],
+  "strategy_actions": [],
   "adapted_deployment": {
     "profile_name": "symbol::us100",
     "symbol": "US100",
     "data_symbol": "QQQ",
     "broker_symbol": "US100.cash",
-    "research_run_id": 319,
-    "execution_set_id": 164,
-    "execution_validation_summary": "selection=combo_1 variant=us100_opening_range_short_breakdown_trend@default data_source=duckdb_cache pnl=0.17 pf=1.65 closed=18 quality=0.44 underwater=83.3% -> accepted_with_reduced_risk",
-    "symbol_status": "reduced_risk_only",
-    "strategies": [
-      {
-        "candidate_name": "us100_opening_range_short_breakdown_trend",
-        "code_path": "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent",
-        "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=dislocated_chop; vol_pct in [0.55, 0.97]; base_weight=0.97; risk_cap=0.60; stability=0.74; loss_ratio=0.18",
-        "variant_label": "",
-        "regime_filter_label": "",
-        "execution_overrides": {
-          "structure_exit_bars": 0,
-          "stale_breakout_bars": 8,
-          "max_holding_bars": 0,
-          "take_profit_atr_multiple": 3.0,
-          "trailing_stop_atr_multiple": 1.0
-        },
-        "allocation_weight": 1.0,
-        "allowed_regimes": [
-          "trend_expansion"
-        ],
-        "blocked_regimes": [
-          "dislocated_chop"
-        ],
-        "min_vol_percentile": 0.55,
-        "max_vol_percentile": 0.97,
-        "base_allocation_weight": 0.971119640053199,
-        "max_risk_multiplier": 0.6,
-        "min_risk_multiplier": 0.0
-      }
-    ],
+    "research_run_id": 328,
+    "execution_set_id": null,
+    "execution_validation_summary": "not_run",
+    "symbol_status": "research_only",
+    "strategies": [],
     "target_volatility": 0.0,
     "max_symbol_vol_percentile": 0.98,
     "block_new_entries_in_event_risk": true

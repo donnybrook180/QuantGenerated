@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T10:51:34.693018+00:00",
+  "generated_at": "2026-04-14T14:48:17.245119+00:00",
   "symbol": "XAUUSD",
   "broker_symbol": "XAUUSD",
   "action": "insufficient_data",
@@ -7,7 +7,7 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat",
+      "candidate_name": "momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
@@ -24,33 +24,31 @@
     "symbol": "XAUUSD",
     "data_symbol": "C:XAUUSD",
     "broker_symbol": "XAUUSD",
-    "research_run_id": 315,
-    "execution_set_id": 161,
-    "execution_validation_summary": "selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=164.52 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted",
+    "research_run_id": 331,
+    "execution_set_id": 171,
+    "execution_validation_summary": "selection=combo_1 variant=momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat@15m_us|trend_flat data_source=duckdb_cache pnl=161.77 pf=117.92 closed=4 quality=0.73 underwater=25.0% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
       {
-        "candidate_name": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat",
-        "code_path": "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
+        "candidate_name": "momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat",
+        "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
-        "variant_label": "",
+        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+        "variant_label": "15m_us",
         "regime_filter_label": "trend_flat",
         "execution_overrides": {
-          "structure_exit_bars": 0,
-          "stale_breakout_bars": 11,
           "max_holding_bars": 0,
-          "trailing_stop_atr_multiple": 0.95,
-          "take_profit_atr_multiple": 2.4000000000000004,
+          "take_profit_atr_multiple": 3.4000000000000004,
+          "trailing_stop_atr_multiple": 1.2,
+          "stale_breakout_bars": 10,
+          "structure_exit_bars": 0,
           "break_even_atr_multiple": 0.4
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
           "dislocated_chop"
         ],
-        "blocked_regimes": [
-          "orderly_range"
-        ],
+        "blocked_regimes": [],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,
         "base_allocation_weight": 1.15,

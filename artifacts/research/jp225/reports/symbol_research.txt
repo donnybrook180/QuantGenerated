@@ -3,107 +3,1369 @@ Broker symbol: JP225.cash
 Data source: duckdb_cache
 
 Ranked candidates
-jp225_volatility_short_breakdown_core_hours [single|core]: pnl=31.79 closed=13 pf=4.43 win_rate=53.85% dd=0.00%
-  tier: core
-  trade_metrics: expectancy=2.45 sharpe=0.51 sortino=1.17 calmar=24.45 avg_win=5.87 avg_loss=-1.54 payoff=3.80 avg_hold=13.6
-  exits: dominant=take_profit share=46.15%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=20.36 worst=orderly_trend (trend_down_vol_mid) pnl=3.62 dominant_share=46.15% stability=1.00 loss_ratio=0.00
-  unified_regimes: best=trend_expansion worst=orderly_trend
-  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 20.35592443336667, "trend_down_vol_mid": 3.6219066081348137, "trend_flat_vol_high": 7.815421752854818}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=32.57 p05=5.49 p95=61.68 dd_median=0.01% dd_p95=0.01% loss_prob=2.00%
-  live_policy: tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=13.60 avg_test_pnl=7.12 avg_val_pf=501.68 avg_test_pf=500.86
-  sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=11.20 val_pnl=12.21 val_pf=999.00 val_closed=2 test_pnl=5.52 test_pf=2.73 test_closed=3
-  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours_default_symbol_candidate_trades.csv
-  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours_default_symbol_candidate_analysis.txt
-jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend [combined|specialist]: pnl=31.34 closed=12 pf=4.38 win_rate=50.00% dd=0.00%
-  tier: specialist
-  trade_metrics: expectancy=2.61 sharpe=0.53 sortino=1.25 calmar=24.10 avg_win=6.77 avg_loss=-1.54 payoff=4.38 avg_hold=14.0
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high [regime_improved|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
   exits: dominant=take_profit share=50.00%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=20.36 worst=orderly_trend (trend_down_vol_mid) pnl=3.17 dominant_share=41.67% stability=1.00 loss_ratio=0.00
-  unified_regimes: best=trend_expansion worst=orderly_trend
-  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 5, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 20.35592443336667, "trend_down_vol_mid": 3.1678146013731747, "trend_flat_vol_high": 7.815421752854818}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=31.07 p05=2.95 p95=59.24 dd_median=0.00% dd_p95=0.01% loss_prob=4.60%
-  live_policy: tier=specialist; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=13.60 avg_test_pnl=7.12 avg_val_pf=501.68 avg_test_pf=500.86
-  sparse_strategy: soft_pass_rate=100.00%
-  combo_validation: components=2 outperformance=-3.01 trade_overlap=100.00%
-  splits: train_pnl=10.75 val_pnl=12.21 val_pf=999.00 val_closed=2 test_pnl=5.52 test_pf=2.73 test_closed=3
-  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend_sym_trades.csv
-  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_trend_sym_analysis.txt
-jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail [combined|specialist]: pnl=31.34 closed=12 pf=4.38 win_rate=50.00% dd=0.00%
-  tier: specialist
-  trade_metrics: expectancy=2.61 sharpe=0.53 sortino=1.25 calmar=24.10 avg_win=6.77 avg_loss=-1.54 payoff=4.38 avg_hold=14.0
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high [regime_improved|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
   exits: dominant=take_profit share=50.00%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=20.36 worst=orderly_trend (trend_down_vol_mid) pnl=3.17 dominant_share=41.67% stability=1.00 loss_ratio=0.00
-  unified_regimes: best=trend_expansion worst=orderly_trend
-  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 5, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 20.35592443336667, "trend_down_vol_mid": 3.1678146013731747, "trend_flat_vol_high": 7.815421752854818}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=31.07 p05=2.95 p95=59.24 dd_median=0.00% dd_p95=0.01% loss_prob=4.60%
-  live_policy: tier=specialist; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=13.60 avg_test_pnl=7.12 avg_val_pf=501.68 avg_test_pf=500.86
-  sparse_strategy: soft_pass_rate=100.00%
-  combo_validation: components=2 outperformance=0.00 trade_overlap=100.00%
-  splits: train_pnl=10.75 val_pnl=12.21 val_pf=999.00 val_closed=2 test_pnl=5.52 test_pf=2.73 test_closed=3
-  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail_trades.csv
-  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail_analysis.txt
-jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_core_hours__exit_fastfail [combined|specialist]: pnl=31.34 closed=12 pf=4.38 win_rate=50.00% dd=0.00%
-  tier: specialist
-  trade_metrics: expectancy=2.61 sharpe=0.53 sortino=1.25 calmar=24.10 avg_win=6.77 avg_loss=-1.54 payoff=4.38 avg_hold=14.0
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [regime_improved|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_hig_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_hig_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
   exits: dominant=take_profit share=50.00%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=20.36 worst=orderly_trend (trend_down_vol_mid) pnl=3.17 dominant_share=41.67% stability=1.00 loss_ratio=0.00
-  unified_regimes: best=trend_expansion worst=orderly_trend
-  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 5, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 20.35592443336667, "trend_down_vol_mid": 3.1678146013731747, "trend_flat_vol_high": 7.815421752854818}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=31.07 p05=2.95 p95=59.24 dd_median=0.00% dd_p95=0.01% loss_prob=4.60%
-  live_policy: tier=specialist; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=13.60 avg_test_pnl=7.12 avg_val_pf=501.68 avg_test_pf=500.86
-  sparse_strategy: soft_pass_rate=100.00%
-  combo_validation: components=2 outperformance=-3.01 trade_overlap=100.00%
-  splits: train_pnl=10.75 val_pnl=12.21 val_pf=999.00 val_closed=2 test_pnl=5.52 test_pf=2.73 test_closed=3
-  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_core_hours__ex_trades.csv
-  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend__plus__jp225_volatility_short_breakdown_core_hours__ex_analysis.txt
-jp225_volatility_short_breakdown_core_hours__exit_trend [entry_exit_family|core]: pnl=30.31 closed=13 pf=4.54 win_rate=61.54% dd=0.00%
-  tier: core
-  trade_metrics: expectancy=2.33 sharpe=0.51 sortino=1.04 calmar=23.31 avg_win=4.86 avg_loss=-1.71 payoff=2.84 avg_hold=20.5
-  exits: dominant=trailing_stop share=30.77%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=20.42 worst=dislocated_chop (trend_flat_vol_high) pnl=3.27 dominant_share=46.15% stability=1.00 loss_ratio=0.00
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient_symb_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient_symb_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__tre_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__tre_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense_symbol_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense_symbol_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=take_profit share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient_symbol_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient_symbol_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense_symbol_ca_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense_symbol_ca_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.49 closed=6 pf=2.90 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=2.08 sharpe=0.41 sortino=0.71 calmar=1.88 avg_win=6.36 avg_loss=-2.20 payoff=2.90 avg_hold=4.5
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.49 worst=trend_expansion (trend_down_vol_high) pnl=12.49 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 6}
+  regime_pnls: {"trend_down_vol_high": 12.494380073294087}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=12.01 p05=-6.13 p95=29.87 dd_median=0.01% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-0.73 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_do_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_do_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down_vol_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down_vol_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_s_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_s_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective_symb_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective_symb_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__trend_down_vol_high [near_miss_optimized|reject]: pnl=12.23 closed=7 pf=2.78 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.75 sharpe=0.39 sortino=0.89 calmar=1.77 avg_win=6.36 avg_loss=-1.71 payoff=3.71 avg_hold=4.1
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=12.23 worst=trend_expansion (trend_down_vol_high) pnl=12.23 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 12.229236900194882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=10.49 p05=-7.06 p95=31.28 dd_median=0.00% dd_p95=0.01% loss_prob=18.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=3.32 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=-1.00 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__tre_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__tre_analysis.txt
+jp225_volatility_short_breakdown_core_hours [single|reject]: pnl=9.32 closed=13 pf=2.48 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.72 sharpe=0.30 sortino=0.39 calmar=15.65 avg_win=2.23 avg_loss=-1.05 payoff=2.13 avg_hold=3.9
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=dislocated_chop (trend_flat_vol_high) pnl=0.98 dominant_share=46.15% stability=1.00 loss_ratio=0.00
   unified_regimes: best=trend_expansion worst=dislocated_chop
   regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 20.42120969227588, "trend_down_vol_mid": 6.621746191396233, "trend_flat_vol_high": 3.2650034618968498}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=29.70 p05=4.88 p95=60.27 dd_median=0.00% dd_p95=0.01% loss_prob=2.60%
-  live_policy: tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=10.50 avg_test_pnl=10.06 avg_val_pf=501.46 avg_test_pf=501.40
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": 3.0774204107555123, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=9.81 p05=-4.56 p95=24.14 dd_median=0.00% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=5.16 avg_val_pf=500.19 avg_test_pf=503.76
   sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=13.15 val_pnl=7.96 val_pf=999.00 val_closed=2 test_pnl=8.54 test_pf=3.80 test_closed=3
-  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend_default_symbol_candidate_trades.csv
-  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend_default_symbol_candidate_analysis.txt
-jp225_volatility_short_breakdown_core_hours__exit_fastfail [entry_exit_family|core]: pnl=24.53 closed=13 pf=3.49 win_rate=61.54% dd=0.00%
-  tier: core
-  trade_metrics: expectancy=1.89 sharpe=0.49 sortino=0.80 calmar=18.87 avg_win=4.30 avg_loss=-1.97 payoff=2.18 avg_hold=10.5
-  exits: dominant=take_profit share=61.54%
-  regimes: best=trend_expansion (trend_down_vol_high) pnl=14.65 worst=orderly_trend (trend_down_vol_mid) pnl=4.92 dominant_share=46.15% stability=1.00 loss_ratio=0.00
-  unified_regimes: best=trend_expansion worst=orderly_trend
+  splits: train_pnl=2.46 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__exit_fastfail [entry_exit_family|reject]: pnl=9.32 closed=13 pf=2.48 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.72 sharpe=0.30 sortino=0.39 calmar=15.65 avg_win=2.23 avg_loss=-1.05 payoff=2.13 avg_hold=3.9
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=dislocated_chop (trend_flat_vol_high) pnl=0.98 dominant_share=46.15% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=dislocated_chop
   regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
-  regime_pnls: {"trend_down_vol_high": 14.650163533653032, "trend_down_vol_mid": 4.921803113464922, "trend_flat_vol_high": 4.957875323420958}
-  funding: available=yes swap_long=-673.22000 swap_short=-362.50000 preferred_side=none carry_spread=-310.72000
-  monte_carlo: sims=500 pnl_median=24.79 p05=2.68 p95=47.31 dd_median=0.00% dd_p95=0.01% loss_prob=2.60%
-  live_policy: tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00
-  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=10.75 avg_test_pnl=4.83 avg_val_pf=501.27 avg_test_pf=500.51
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": 3.0774204107555123, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=9.81 p05=-4.56 p95=24.14 dd_median=0.00% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=5.16 avg_val_pf=500.19 avg_test_pf=503.76
   sparse_strategy: soft_pass_rate=100.00%
-  splits: train_pnl=8.98 val_pnl=10.11 val_pf=999.00 val_closed=2 test_pnl=3.24 test_pf=2.01 test_closed=3
+  splits: train_pnl=2.46 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=4.84 test_pf=8.52 test_closed=3
   trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_fastfail_default_symbol_candidate_trades.csv
   analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_dense [near_miss_optimized|reject]: pnl=9.32 closed=13 pf=2.48 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.72 sharpe=0.30 sortino=0.39 calmar=15.65 avg_win=2.23 avg_loss=-1.05 payoff=2.13 avg_hold=3.9
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=dislocated_chop (trend_flat_vol_high) pnl=0.98 dominant_share=46.15% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": 3.0774204107555123, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=9.81 p05=-4.56 p95=24.14 dd_median=0.00% dd_p95=0.01% loss_prob=13.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=5.16 avg_val_pf=500.19 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  splits: train_pnl=2.46 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__exit_trend__regime_trend_down_vol_high [regime_improved|reject]: pnl=8.07 closed=7 pf=1.73 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.15 sharpe=0.22 sortino=0.34 calmar=1.04 avg_win=6.36 avg_loss=-2.75 payoff=2.31 avg_hold=4.0
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=8.07 worst=trend_expansion (trend_down_vol_high) pnl=8.07 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 8.072180222628521}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.50 p05=-14.29 p95=28.84 dd_median=0.01% dd_p95=0.02% loss_prob=30.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.11 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=1.20 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend__regime_trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend__regime_trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down_vol_high [near_miss_optimized|reject]: pnl=8.07 closed=7 pf=1.73 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.15 sharpe=0.22 sortino=0.34 calmar=1.04 avg_win=6.36 avg_loss=-2.75 payoff=2.31 avg_hold=4.0
+  exits: dominant=stale_breakout share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=8.07 worst=trend_expansion (trend_down_vol_high) pnl=8.07 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 8.072180222628521}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.50 p05=-14.29 p95=28.84 dd_median=0.01% dd_p95=0.02% loss_prob=30.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.11 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=1.20 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down_vol_high [near_miss_optimized|reject]: pnl=8.07 closed=7 pf=1.73 win_rate=42.86% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=1.15 sharpe=0.22 sortino=0.34 calmar=1.04 avg_win=6.36 avg_loss=-2.75 payoff=2.31 avg_hold=4.0
+  exits: dominant=structure_exit share=42.86%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=8.07 worst=trend_expansion (trend_down_vol_high) pnl=8.07 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 7}
+  regime_pnls: {"trend_down_vol_high": 8.072180222628521}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.50 p05=-14.29 p95=28.84 dd_median=0.01% dd_p95=0.02% loss_prob=30.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.11 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=1.20 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down_vol_high [near_miss_optimized|reject]: pnl=7.81 closed=8 pf=1.69 win_rate=37.50% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=0.98 sharpe=0.21 sortino=0.37 calmar=0.97 avg_win=6.36 avg_loss=-2.25 payoff=2.82 avg_hold=3.8
+  exits: dominant=stale_breakout share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=7.81 worst=trend_expansion (trend_down_vol_high) pnl=7.81 dominant_share=100.00% stability=1.00 loss_ratio=0.00
+  unified_regimes: best=trend_expansion worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 8}
+  regime_pnls: {"trend_down_vol_high": 7.807037049529317}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.40 p05=-13.17 p95=27.77 dd_median=0.01% dd_p95=0.02% loss_prob=31.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=0.00
+  regime_filter: trend_down_vol_high
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.11 avg_test_pnl=3.29 avg_val_pf=2.97 avg_test_pf=499.50
+  sparse_strategy: soft_pass_rate=50.00%
+  splits: train_pnl=0.94 val_pnl=6.64 val_pf=5.95 val_closed=2 test_pnl=6.95 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down_vol_high_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down_vol_high_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__exit_trend [entry_exit_family|reject]: pnl=6.92 closed=13 pf=1.80 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.53 sharpe=0.21 sortino=0.26 calmar=11.62 avg_win=2.23 avg_loss=-1.45 payoff=1.54 avg_hold=5.0
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=4.72 worst=dislocated_chop (trend_flat_vol_high) pnl=-0.32 dominant_share=46.15% stability=0.96 loss_ratio=0.07
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 4.715055796150046, "trend_down_vol_mid": 2.527467614167908, "trend_flat_vol_high": -0.32438867203927657}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.61 p05=-7.57 p95=22.30 dd_median=0.00% dd_p95=0.01% loss_prob=20.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.96; loss_ratio=0.07
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=4.51 avg_val_pf=500.19 avg_test_pf=500.91
+  splits: train_pnl=1.36 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=3.54 test_pf=2.82 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__exit_trend_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_patient [near_miss_optimized|reject]: pnl=6.92 closed=13 pf=1.80 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.53 sharpe=0.21 sortino=0.26 calmar=11.62 avg_win=2.23 avg_loss=-1.45 payoff=1.54 avg_hold=5.0
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=4.72 worst=dislocated_chop (trend_flat_vol_high) pnl=-0.32 dominant_share=46.15% stability=0.96 loss_ratio=0.07
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 4.715055796150046, "trend_down_vol_mid": 2.527467614167908, "trend_flat_vol_high": -0.32438867203927657}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.61 p05=-7.57 p95=22.30 dd_median=0.00% dd_p95=0.01% loss_prob=20.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.96; loss_ratio=0.07
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=4.51 avg_val_pf=500.19 avg_test_pf=500.91
+  splits: train_pnl=1.36 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=3.54 test_pf=2.82 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_protective [near_miss_optimized|reject]: pnl=6.92 closed=13 pf=1.80 win_rate=53.85% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.53 sharpe=0.21 sortino=0.26 calmar=11.62 avg_win=2.23 avg_loss=-1.45 payoff=1.54 avg_hold=5.0
+  exits: dominant=take_profit share=38.46%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=4.72 worst=dislocated_chop (trend_flat_vol_high) pnl=-0.32 dominant_share=46.15% stability=0.96 loss_ratio=0.07
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 6, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 4.715055796150046, "trend_down_vol_mid": 2.527467614167908, "trend_flat_vol_high": -0.32438867203927657}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=7.61 p05=-7.57 p95=22.30 dd_median=0.00% dd_p95=0.01% loss_prob=20.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.96; loss_ratio=0.07
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.97 avg_test_pnl=4.51 avg_val_pf=500.19 avg_test_pf=500.91
+  splits: train_pnl=1.36 val_pnl=2.21 val_pf=999.00 val_closed=2 test_pnl=3.54 test_pf=2.82 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours [single|reject]: pnl=6.04 closed=8 pf=2.08 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.76 sharpe=0.25 sortino=0.33 calmar=15.10 avg_win=2.91 avg_loss=-1.40 payoff=2.08 avg_hold=4.6
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=orderly_trend (trend_down_vol_mid) pnl=-0.20 dominant_share=62.50% stability=0.97 loss_ratio=0.04
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=6.34 p05=-7.55 p95=19.09 dd_median=0.00% dd_p95=0.01% loss_prob=23.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.97; loss_ratio=0.04
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=5.16 avg_val_pf=500.03 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  splits: train_pnl=0.45 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail [entry_exit_family|reject]: pnl=6.04 closed=8 pf=2.08 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.76 sharpe=0.25 sortino=0.33 calmar=15.10 avg_win=2.91 avg_loss=-1.40 payoff=2.08 avg_hold=4.6
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=orderly_trend (trend_down_vol_mid) pnl=-0.20 dominant_share=62.50% stability=0.97 loss_ratio=0.04
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=6.34 p05=-7.55 p95=19.09 dd_median=0.00% dd_p95=0.01% loss_prob=23.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.97; loss_ratio=0.04
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=5.16 avg_val_pf=500.03 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  splits: train_pnl=0.45 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high [combined|reject]: pnl=6.04 closed=8 pf=2.08 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.76 sharpe=0.25 sortino=0.33 calmar=15.10 avg_win=2.91 avg_loss=-1.40 payoff=2.08 avg_hold=4.6
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=orderly_trend (trend_down_vol_mid) pnl=-0.20 dominant_share=62.50% stability=0.97 loss_ratio=0.04
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=6.34 p05=-7.55 p95=19.09 dd_median=0.00% dd_p95=0.01% loss_prob=23.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.97; loss_ratio=0.04
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=5.16 avg_val_pf=500.03 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  combo_validation: components=2 outperformance=-5.88 trade_overlap=100.00%
+  splits: train_pnl=0.45 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdow_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdow_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [combined|reject]: pnl=6.04 closed=8 pf=2.08 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.76 sharpe=0.25 sortino=0.33 calmar=15.10 avg_win=2.91 avg_loss=-1.40 payoff=2.08 avg_hold=4.6
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=orderly_trend (trend_down_vol_mid) pnl=-0.20 dominant_share=62.50% stability=0.97 loss_ratio=0.04
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=6.34 p05=-7.55 p95=19.09 dd_median=0.00% dd_p95=0.01% loss_prob=23.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.97; loss_ratio=0.04
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=5.16 avg_val_pf=500.03 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  combo_validation: components=2 outperformance=-5.88 trade_overlap=100.00%
+  splits: train_pnl=0.45 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdow_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdow_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__plus__jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high [combined|reject]: pnl=6.04 closed=8 pf=2.08 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.76 sharpe=0.25 sortino=0.33 calmar=15.10 avg_win=2.91 avg_loss=-1.40 payoff=2.08 avg_hold=4.6
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.27 worst=orderly_trend (trend_down_vol_mid) pnl=-0.20 dominant_share=62.50% stability=0.97 loss_ratio=0.04
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 5.26500859273765, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": 0.9754997562587233}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=6.34 p05=-7.55 p95=19.09 dd_median=0.00% dd_p95=0.01% loss_prob=23.20%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.97; loss_ratio=0.04
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=5.16 avg_val_pf=500.03 avg_test_pf=503.76
+  sparse_strategy: soft_pass_rate=100.00%
+  combo_validation: components=2 outperformance=-5.88 trade_overlap=100.00%
+  splits: train_pnl=0.45 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=4.84 test_pf=8.52 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__plus__jp225_volatility_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__plus__jp225_volatility_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend [entry_exit_family|reject]: pnl=4.19 closed=8 pf=1.56 win_rate=50.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.52 sharpe=0.17 sortino=0.21 calmar=10.48 avg_win=2.91 avg_loss=-1.86 payoff=1.56 avg_hold=6.2
+  exits: dominant=trailing_stop share=37.50%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=4.72 worst=dislocated_chop (trend_flat_vol_high) pnl=-0.32 dominant_share=62.50% stability=0.90 loss_ratio=0.07
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 1, "trend_flat_vol_high": 2}
+  regime_pnls: {"trend_down_vol_high": 4.715055796150046, "trend_down_vol_mid": -0.19669946016460016, "trend_flat_vol_high": -0.32438867203927657}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=4.22 p05=-9.42 p95=17.75 dd_median=0.00% dd_p95=0.01% loss_prob=31.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.90; loss_ratio=0.07
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.51 avg_test_pnl=4.51 avg_val_pf=500.03 avg_test_pf=500.91
+  splits: train_pnl=-0.10 val_pnl=0.76 val_pf=999.00 val_closed=1 test_pnl=3.54 test_pf=2.82 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_breakout [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_breakout_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_breakout_default_symbol_candidate_analysis.txt
+jp225_open_drive_mean_reversion_long [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_open_drive_mean_reversion_long_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_open_drive_mean_reversion_long_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_core_hours [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_asia_hours [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours_default_symbol_candidate_analysis.txt
+opening_range_short_breakdown [single|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_short_breakdown_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_short_breakdown_default_symbol_candidate_analysis.txt
+opening_range_breakout__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_breakout__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_breakout__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_breakout__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_breakout__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_open_drive_mean_reversion_long__exit_quick [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_open_drive_mean_reversion_long__exit_quick_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_open_drive_mean_reversion_long__exit_quick_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_core_hours__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours__exit_trend_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_core_hours__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_core_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_asia_hours__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours__exit_trend_default_symbol_candidate_analysis.txt
+jp225_failed_breakdown_reclaim_asia_hours__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_failed_breakdown_reclaim_asia_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_trend [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
+opening_range_short_breakdown__exit_fastfail [entry_exit_family|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=0.00 sharpe=0.00 sortino=0.00 calmar=0.00 avg_win=0.00 avg_loss=0.00 payoff=0.00 avg_hold=0.0
+  exits: dominant=none share=0.00%
+  regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
+  unified_regimes: best=none worst=none
+  regime_trade_counts: {}
+  regime_pnls: {}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
+  live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
+  splits: train_pnl=0.00 val_pnl=0.00 val_pf=0.00 val_closed=0 test_pnl=0.00 test_pf=0.00 test_closed=0
+  trades: artifacts\research\jp225\candidates\opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\opening_range_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
+momentum [single|reject]: pnl=-1.90 closed=14 pf=0.85 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.14 sharpe=-0.07 sortino=-0.07 calmar=-0.34 avg_win=1.53 avg_loss=-1.80 payoff=0.85 avg_hold=7.0
+  exits: dominant=trailing_stop share=35.71%
+  regimes: best=dislocated_chop (trend_flat_vol_high) pnl=5.99 worst=orderly_trend (trend_up_vol_mid) pnl=-5.76 dominant_share=35.71% stability=0.43 loss_ratio=0.96
+  unified_regimes: best=dislocated_chop worst=orderly_trend
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_mid": 2, "trend_up_vol_high": 5, "trend_up_vol_mid": 5}
+  regime_pnls: {"trend_flat_vol_high": 5.9883952985401265, "trend_flat_vol_mid": -1.101916629332991, "trend_up_vol_high": -1.0218630620426121, "trend_up_vol_mid": -5.759621979625445}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-2.14 p05=-15.12 p95=10.68 dd_median=0.01% dd_p95=0.02% loss_prob=61.80%
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.43; loss_ratio=0.96
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.36 avg_test_pnl=-1.53 avg_val_pf=1.18 avg_test_pf=0.28
+  splits: train_pnl=-2.58 val_pnl=1.13 val_pf=1.42 val_closed=4 test_pnl=-1.03 test_pf=0.56 test_closed=3
+  trades: artifacts\research\jp225\candidates\momentum_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\momentum_default_symbol_candidate_analysis.txt
+momentum__exit_trend [entry_exit_family|reject]: pnl=-1.90 closed=14 pf=0.85 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.14 sharpe=-0.07 sortino=-0.07 calmar=-0.34 avg_win=1.53 avg_loss=-1.80 payoff=0.85 avg_hold=7.0
+  exits: dominant=trailing_stop share=35.71%
+  regimes: best=dislocated_chop (trend_flat_vol_high) pnl=5.99 worst=orderly_trend (trend_up_vol_mid) pnl=-5.76 dominant_share=35.71% stability=0.43 loss_ratio=0.96
+  unified_regimes: best=dislocated_chop worst=orderly_trend
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_mid": 2, "trend_up_vol_high": 5, "trend_up_vol_mid": 5}
+  regime_pnls: {"trend_flat_vol_high": 5.9883952985401265, "trend_flat_vol_mid": -1.101916629332991, "trend_up_vol_high": -1.0218630620426121, "trend_up_vol_mid": -5.759621979625445}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-2.14 p05=-15.12 p95=10.68 dd_median=0.01% dd_p95=0.02% loss_prob=61.80%
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.43; loss_ratio=0.96
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.36 avg_test_pnl=-1.53 avg_val_pf=1.18 avg_test_pf=0.28
+  splits: train_pnl=-2.58 val_pnl=1.13 val_pf=1.42 val_closed=4 test_pnl=-1.03 test_pf=0.56 test_closed=3
+  trades: artifacts\research\jp225\candidates\momentum__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\momentum__exit_trend_default_symbol_candidate_analysis.txt
+momentum__exit_fastfail [entry_exit_family|reject]: pnl=-1.90 closed=14 pf=0.85 win_rate=50.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.14 sharpe=-0.07 sortino=-0.07 calmar=-0.34 avg_win=1.53 avg_loss=-1.80 payoff=0.85 avg_hold=7.0
+  exits: dominant=trailing_stop share=35.71%
+  regimes: best=dislocated_chop (trend_flat_vol_high) pnl=5.99 worst=orderly_trend (trend_up_vol_mid) pnl=-5.76 dominant_share=35.71% stability=0.43 loss_ratio=0.96
+  unified_regimes: best=dislocated_chop worst=orderly_trend
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_mid": 2, "trend_up_vol_high": 5, "trend_up_vol_mid": 5}
+  regime_pnls: {"trend_flat_vol_high": 5.9883952985401265, "trend_flat_vol_mid": -1.101916629332991, "trend_up_vol_high": -1.0218630620426121, "trend_up_vol_mid": -5.759621979625445}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-2.14 p05=-15.12 p95=10.68 dd_median=0.01% dd_p95=0.02% loss_prob=61.80%
+  live_policy: tier=reject; activate in unified_regimes=dislocated_chop; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.43; loss_ratio=0.96
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=0.36 avg_test_pnl=-1.53 avg_val_pf=1.18 avg_test_pf=0.28
+  splits: train_pnl=-2.58 val_pnl=1.13 val_pf=1.42 val_closed=4 test_pnl=-1.03 test_pf=0.56 test_closed=3
+  trades: artifacts\research\jp225\candidates\momentum__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\momentum__exit_fastfail_default_symbol_candidate_analysis.txt
+mean_reversion [single|reject]: pnl=-2.32 closed=9 pf=0.55 win_rate=22.22% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=-0.26 sharpe=-0.21 sortino=-0.29 calmar=-0.59 avg_win=1.44 avg_loss=-0.74 payoff=1.94 avg_hold=2.6
+  exits: dominant=structure_exit share=77.78%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=1.60 worst=orderly_trend (trend_down_vol_mid) pnl=-1.65 dominant_share=44.44% stability=0.29 loss_ratio=1.03
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 1, "trend_flat_vol_high": 3, "trend_up_vol_high": 1}
+  regime_pnls: {"trend_down_vol_high": 1.5982549567874231, "trend_down_vol_mid": -1.646961687994044, "trend_flat_vol_high": -1.2834131242651348, "trend_up_vol_high": -0.9924974982191634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-2.70 p05=-7.55 p95=3.94 dd_median=0.00% dd_p95=0.01% loss_prob=77.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.29; loss_ratio=1.03
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.31 avg_test_pnl=-1.15 avg_val_pf=10.72 avg_test_pf=0.00
+  splits: train_pnl=-1.04 val_pnl=-0.13 val_pf=0.00 val_closed=1 test_pnl=-1.15 test_pf=0.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\mean_reversion_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\mean_reversion_default_symbol_candidate_analysis.txt
+mean_reversion__exit_quick [entry_exit_family|reject]: pnl=-2.32 closed=9 pf=0.55 win_rate=22.22% dd=0.00%
+  tier: reject
+  trade_metrics: expectancy=-0.26 sharpe=-0.21 sortino=-0.29 calmar=-0.59 avg_win=1.44 avg_loss=-0.74 payoff=1.94 avg_hold=2.6
+  exits: dominant=structure_exit share=77.78%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=1.60 worst=orderly_trend (trend_down_vol_mid) pnl=-1.65 dominant_share=44.44% stability=0.29 loss_ratio=1.03
+  unified_regimes: best=trend_expansion worst=orderly_trend
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 1, "trend_flat_vol_high": 3, "trend_up_vol_high": 1}
+  regime_pnls: {"trend_down_vol_high": 1.5982549567874231, "trend_down_vol_mid": -1.646961687994044, "trend_flat_vol_high": -1.2834131242651348, "trend_up_vol_high": -0.9924974982191634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-2.70 p05=-7.55 p95=3.94 dd_median=0.00% dd_p95=0.01% loss_prob=77.80%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.29; loss_ratio=1.03
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.31 avg_test_pnl=-1.15 avg_val_pf=10.72 avg_test_pf=0.00
+  splits: train_pnl=-1.04 val_pnl=-0.13 val_pf=0.00 val_closed=1 test_pnl=-1.15 test_pf=0.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\mean_reversion__exit_quick_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\mean_reversion__exit_quick_default_symbol_candidate_analysis.txt
+jp225_asia_continuation_long [single|reject]: pnl=-3.73 closed=11 pf=0.65 win_rate=45.45% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.34 sharpe=-0.17 sortino=-0.15 calmar=-0.43 avg_win=1.38 avg_loss=-1.77 payoff=0.78 avg_hold=4.5
+  exits: dominant=take_profit share=36.36%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=2.62 worst=dislocated_chop (trend_flat_vol_high) pnl=-4.45 dominant_share=27.27% stability=0.36 loss_ratio=1.70
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 3, "trend_up_vol_high": 2, "trend_up_vol_low": 1, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_flat_vol_high": -4.448017998232099, "trend_flat_vol_low": 0.13867483972295308, "trend_flat_vol_mid": 1.8292253233434166, "trend_up_vol_high": -3.0497393444733456, "trend_up_vol_low": -0.8265235201729229, "trend_up_vol_mid": 2.6240609438966205}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-3.53 p05=-14.23 p95=6.19 dd_median=0.01% dd_p95=0.02% loss_prob=74.20%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.36; loss_ratio=1.70
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.10 avg_test_pnl=0.86 avg_val_pf=499.50 avg_test_pf=500.16
+  splits: train_pnl=-5.78 val_pnl=-0.43 val_pf=0.00 val_closed=1 test_pnl=1.58 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_asia_continuation_long_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_asia_continuation_long_default_symbol_candidate_analysis.txt
+jp225_asia_continuation_long__exit_trend [entry_exit_family|reject]: pnl=-3.73 closed=11 pf=0.65 win_rate=45.45% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.34 sharpe=-0.17 sortino=-0.15 calmar=-0.43 avg_win=1.38 avg_loss=-1.77 payoff=0.78 avg_hold=4.5
+  exits: dominant=take_profit share=36.36%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=2.62 worst=dislocated_chop (trend_flat_vol_high) pnl=-4.45 dominant_share=27.27% stability=0.36 loss_ratio=1.70
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 3, "trend_up_vol_high": 2, "trend_up_vol_low": 1, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_flat_vol_high": -4.448017998232099, "trend_flat_vol_low": 0.13867483972295308, "trend_flat_vol_mid": 1.8292253233434166, "trend_up_vol_high": -3.0497393444733456, "trend_up_vol_low": -0.8265235201729229, "trend_up_vol_mid": 2.6240609438966205}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-3.53 p05=-14.23 p95=6.19 dd_median=0.01% dd_p95=0.02% loss_prob=74.20%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.36; loss_ratio=1.70
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.10 avg_test_pnl=0.86 avg_val_pf=499.50 avg_test_pf=500.16
+  splits: train_pnl=-5.78 val_pnl=-0.43 val_pf=0.00 val_closed=1 test_pnl=1.58 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_asia_continuation_long__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_asia_continuation_long__exit_trend_default_symbol_candidate_analysis.txt
+jp225_asia_continuation_long__exit_fastfail [entry_exit_family|reject]: pnl=-3.73 closed=11 pf=0.65 win_rate=45.45% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.34 sharpe=-0.17 sortino=-0.15 calmar=-0.43 avg_win=1.38 avg_loss=-1.77 payoff=0.78 avg_hold=4.5
+  exits: dominant=take_profit share=36.36%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=2.62 worst=dislocated_chop (trend_flat_vol_high) pnl=-4.45 dominant_share=27.27% stability=0.36 loss_ratio=1.70
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 3, "trend_up_vol_high": 2, "trend_up_vol_low": 1, "trend_up_vol_mid": 1}
+  regime_pnls: {"trend_flat_vol_high": -4.448017998232099, "trend_flat_vol_low": 0.13867483972295308, "trend_flat_vol_mid": 1.8292253233434166, "trend_up_vol_high": -3.0497393444733456, "trend_up_vol_low": -0.8265235201729229, "trend_up_vol_mid": 2.6240609438966205}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-3.53 p05=-14.23 p95=6.19 dd_median=0.01% dd_p95=0.02% loss_prob=74.20%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.36; loss_ratio=1.70
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=1.10 avg_test_pnl=0.86 avg_val_pf=499.50 avg_test_pf=500.16
+  splits: train_pnl=-5.78 val_pnl=-0.43 val_pf=0.00 val_closed=1 test_pnl=1.58 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_asia_continuation_long__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_asia_continuation_long__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_asia_hours [single|reject]: pnl=-4.35 closed=8 pf=0.49 win_rate=37.50% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.29 sortino=-0.28 calmar=-0.73 avg_win=1.37 avg_loss=-1.69 payoff=0.81 avg_hold=2.8
+  exits: dominant=take_profit share=37.50%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=1.63 worst=dislocated_chop (trend_flat_vol_high) pnl=-2.99 dominant_share=25.00% stability=0.25 loss_ratio=1.84
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 1, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 2, "trend_up_vol_low": 2, "trend_up_vol_mid": 2}
+  regime_pnls: {"trend_flat_vol_high": -2.9929609499043726, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.7905714702574187, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 1.630623205197553}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-4.30 p05=-11.87 p95=3.51 dd_median=0.01% dd_p95=0.01% loss_prob=81.60%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.25; loss_ratio=1.84
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.38 avg_test_pnl=0.57 avg_val_pf=0.49 avg_test_pf=999.00
+  splits: train_pnl=-3.13 val_pnl=-2.69 val_pf=0.00 val_closed=1 test_pnl=0.57 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_asia_hours__exit_trend [entry_exit_family|reject]: pnl=-4.35 closed=8 pf=0.49 win_rate=37.50% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.29 sortino=-0.28 calmar=-0.73 avg_win=1.37 avg_loss=-1.69 payoff=0.81 avg_hold=2.8
+  exits: dominant=take_profit share=37.50%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=1.63 worst=dislocated_chop (trend_flat_vol_high) pnl=-2.99 dominant_share=25.00% stability=0.25 loss_ratio=1.84
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 1, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 2, "trend_up_vol_low": 2, "trend_up_vol_mid": 2}
+  regime_pnls: {"trend_flat_vol_high": -2.9929609499043726, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.7905714702574187, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 1.630623205197553}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-4.30 p05=-11.87 p95=3.51 dd_median=0.01% dd_p95=0.01% loss_prob=81.60%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.25; loss_ratio=1.84
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.38 avg_test_pnl=0.57 avg_val_pf=0.49 avg_test_pf=999.00
+  splits: train_pnl=-3.13 val_pnl=-2.69 val_pf=0.00 val_closed=1 test_pnl=0.57 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours__exit_trend_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_asia_hours__exit_fastfail [entry_exit_family|reject]: pnl=-4.35 closed=8 pf=0.49 win_rate=37.50% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.29 sortino=-0.28 calmar=-0.73 avg_win=1.37 avg_loss=-1.69 payoff=0.81 avg_hold=2.8
+  exits: dominant=take_profit share=37.50%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=1.63 worst=dislocated_chop (trend_flat_vol_high) pnl=-2.99 dominant_share=25.00% stability=0.25 loss_ratio=1.84
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 1, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 2, "trend_up_vol_low": 2, "trend_up_vol_mid": 2}
+  regime_pnls: {"trend_flat_vol_high": -2.9929609499043726, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.7905714702574187, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 1.630623205197553}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-4.30 p05=-11.87 p95=3.51 dd_median=0.01% dd_p95=0.01% loss_prob=81.60%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.25; loss_ratio=1.84
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.38 avg_test_pnl=0.57 avg_val_pf=0.49 avg_test_pf=999.00
+  splits: train_pnl=-3.13 val_pnl=-2.69 val_pf=0.00 val_closed=1 test_pnl=0.57 test_pf=999.00 test_closed=1
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_asia_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_core_hours [single|reject]: pnl=-6.44 closed=12 pf=0.40 win_rate=33.33% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.35 sortino=-0.33 calmar=-0.90 avg_win=1.06 avg_loss=-1.33 payoff=0.79 avg_hold=3.1
+  exits: dominant=trailing_stop share=33.33%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=0.70 worst=dislocated_chop (trend_flat_vol_high) pnl=-3.19 dominant_share=25.00% stability=0.14 loss_ratio=4.53
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 3, "trend_up_vol_high": 1, "trend_up_vol_low": 2, "trend_up_vol_mid": 3}
+  regime_pnls: {"trend_flat_vol_high": -3.1908838710231793, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.6579133602820366, "trend_up_vol_high": -1.0934995322570467, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 0.7036743908614882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-6.74 p05=-14.34 p95=1.74 dd_median=0.01% dd_p95=0.01% loss_prob=88.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.14; loss_ratio=4.53
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.47 avg_test_pnl=0.64 avg_val_pf=0.35 avg_test_pf=999.00
+  splits: train_pnl=-4.26 val_pnl=-3.79 val_pf=0.00 val_closed=2 test_pnl=0.70 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_core_hours__exit_trend [entry_exit_family|reject]: pnl=-6.44 closed=12 pf=0.40 win_rate=33.33% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.35 sortino=-0.33 calmar=-0.90 avg_win=1.06 avg_loss=-1.33 payoff=0.79 avg_hold=3.1
+  exits: dominant=trailing_stop share=33.33%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=0.70 worst=dislocated_chop (trend_flat_vol_high) pnl=-3.19 dominant_share=25.00% stability=0.14 loss_ratio=4.53
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 3, "trend_up_vol_high": 1, "trend_up_vol_low": 2, "trend_up_vol_mid": 3}
+  regime_pnls: {"trend_flat_vol_high": -3.1908838710231793, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.6579133602820366, "trend_up_vol_high": -1.0934995322570467, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 0.7036743908614882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-6.74 p05=-14.34 p95=1.74 dd_median=0.01% dd_p95=0.01% loss_prob=88.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.14; loss_ratio=4.53
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.47 avg_test_pnl=0.64 avg_val_pf=0.35 avg_test_pf=999.00
+  splits: train_pnl=-4.26 val_pnl=-3.79 val_pf=0.00 val_closed=2 test_pnl=0.70 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours__exit_trend_default_symbol_candidate_analysis.txt
+jp225_volatility_breakout_core_hours__exit_fastfail [entry_exit_family|reject]: pnl=-6.44 closed=12 pf=0.40 win_rate=33.33% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.54 sharpe=-0.35 sortino=-0.33 calmar=-0.90 avg_win=1.06 avg_loss=-1.33 payoff=0.79 avg_hold=3.1
+  exits: dominant=trailing_stop share=33.33%
+  regimes: best=orderly_trend (trend_up_vol_mid) pnl=0.70 worst=dislocated_chop (trend_flat_vol_high) pnl=-3.19 dominant_share=25.00% stability=0.14 loss_ratio=4.53
+  unified_regimes: best=orderly_trend worst=dislocated_chop
+  regime_trade_counts: {"trend_flat_vol_high": 2, "trend_flat_vol_low": 1, "trend_flat_vol_mid": 3, "trend_up_vol_high": 1, "trend_up_vol_low": 2, "trend_up_vol_mid": 3}
+  regime_pnls: {"trend_flat_vol_high": -3.1908838710231793, "trend_flat_vol_low": 0.5718063372726465, "trend_flat_vol_mid": -1.6579133602820366, "trend_up_vol_high": -1.0934995322570467, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": 0.7036743908614882}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-6.74 p05=-14.34 p95=1.74 dd_median=0.01% dd_p95=0.01% loss_prob=88.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.14; loss_ratio=4.53
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.47 avg_test_pnl=0.64 avg_val_pf=0.35 avg_test_pf=999.00
+  splits: train_pnl=-4.26 val_pnl=-3.79 val_pf=0.00 val_closed=2 test_pnl=0.70 test_pf=999.00 test_closed=2
+  trades: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_breakout_core_hours__exit_fastfail_default_symbol_candidate_analysis.txt
+volatility_short_breakdown [single|reject]: pnl=-8.63 closed=62 pf=0.78 win_rate=29.03% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.14 sharpe=-0.09 sortino=-0.11 calmar=-0.62 avg_win=1.68 avg_loss=-0.88 payoff=1.90 avg_hold=2.8
+  exits: dominant=structure_exit share=33.87%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.23 worst=orderly_range (trend_flat_vol_mid) pnl=-5.27 dominant_share=32.26% stability=0.27 loss_ratio=1.01
+  unified_regimes: best=trend_expansion worst=orderly_range
+  regime_trade_counts: {"trend_down_vol_high": 12, "trend_down_vol_low": 2, "trend_down_vol_mid": 14, "trend_flat_vol_high": 9, "trend_flat_vol_low": 5, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_high": 5.232656580585099, "trend_down_vol_low": -0.7275054283923237, "trend_down_vol_mid": -3.3149322742603546, "trend_flat_vol_high": -3.921988996455402, "trend_flat_vol_low": -0.6281902211693523, "trend_flat_vol_mid": -5.268101453006603}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-7.61 p05=-26.14 p95=13.21 dd_median=0.02% dd_p95=0.03% loss_prob=71.60%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.27; loss_ratio=1.01
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.25 avg_test_pnl=4.82 avg_val_pf=0.84 avg_test_pf=2.02
+  splits: train_pnl=-11.19 val_pnl=-1.28 val_pf=0.80 val_closed=12 test_pnl=5.25 test_pf=2.30 test_closed=9
+  trades: artifacts\research\jp225\candidates\volatility_short_breakdown_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_short_breakdown_default_symbol_candidate_analysis.txt
+volatility_short_breakdown__exit_fastfail [entry_exit_family|reject]: pnl=-8.63 closed=62 pf=0.78 win_rate=29.03% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.14 sharpe=-0.09 sortino=-0.11 calmar=-0.62 avg_win=1.68 avg_loss=-0.88 payoff=1.90 avg_hold=2.8
+  exits: dominant=structure_exit share=33.87%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=5.23 worst=orderly_range (trend_flat_vol_mid) pnl=-5.27 dominant_share=32.26% stability=0.27 loss_ratio=1.01
+  unified_regimes: best=trend_expansion worst=orderly_range
+  regime_trade_counts: {"trend_down_vol_high": 12, "trend_down_vol_low": 2, "trend_down_vol_mid": 14, "trend_flat_vol_high": 9, "trend_flat_vol_low": 5, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_high": 5.232656580585099, "trend_down_vol_low": -0.7275054283923237, "trend_down_vol_mid": -3.3149322742603546, "trend_flat_vol_high": -3.921988996455402, "trend_flat_vol_low": -0.6281902211693523, "trend_flat_vol_mid": -5.268101453006603}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-7.61 p05=-26.14 p95=13.21 dd_median=0.02% dd_p95=0.03% loss_prob=71.60%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.27; loss_ratio=1.01
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-1.25 avg_test_pnl=4.82 avg_val_pf=0.84 avg_test_pf=2.02
+  splits: train_pnl=-11.19 val_pnl=-1.28 val_pf=0.80 val_closed=12 test_pnl=5.25 test_pf=2.30 test_closed=9
+  trades: artifacts\research\jp225\candidates\volatility_short_breakdown__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_short_breakdown__exit_fastfail_default_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down [near_miss_optimized|reject]: pnl=-10.39 closed=8 pf=0.30 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.30 sharpe=-0.48 sortino=-0.44 calmar=-1.00 avg_win=2.26 avg_loss=-2.49 payoff=0.91 avg_hold=2.6
+  exits: dominant=structure_exit share=37.50%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.10 worst=trend_expansion (trend_down_vol_high) pnl=-9.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -9.296690080417394, "trend_down_vol_mid": -1.0965388123621236}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-10.80 p05=-22.23 p95=1.14 dd_median=0.01% dd_p95=0.02% loss_prob=93.00%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-2.80 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-2.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.37 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_symbol_ca_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_dense__trend_down_symbol_ca_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_down [near_miss_optimized|reject]: pnl=-10.39 closed=8 pf=0.30 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.30 sharpe=-0.48 sortino=-0.44 calmar=-1.00 avg_win=2.26 avg_loss=-2.49 payoff=0.91 avg_hold=2.6
+  exits: dominant=structure_exit share=37.50%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.10 worst=trend_expansion (trend_down_vol_high) pnl=-9.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -9.296690080417394, "trend_down_vol_mid": -1.0965388123621236}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-10.80 p05=-22.23 p95=1.14 dd_median=0.01% dd_p95=0.02% loss_prob=93.00%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-2.80 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-2.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.37 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_dense__trend_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down [near_miss_optimized|reject]: pnl=-10.42 closed=12 pf=0.36 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.87 sharpe=-0.37 sortino=-0.35 calmar=-1.00 avg_win=2.00 avg_loss=-1.82 payoff=1.09 avg_hold=2.4
+  exits: dominant=structure_exit share=50.00%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.13 worst=trend_expansion (trend_down_vol_high) pnl=-9.30 dominant_share=66.67% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 8}
+  regime_pnls: {"trend_down_vol_high": -9.296690080417394, "trend_down_vol_mid": -1.1268476085033765}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-10.27 p05=-24.85 p95=1.64 dd_median=0.01% dd_p95=0.03% loss_prob=91.60%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.49 avg_test_pnl=-2.07 avg_val_pf=0.44 avg_test_pf=0.55
+  splits: train_pnl=-4.15 val_pnl=-1.76 val_pf=0.61 val_closed=3 test_pnl=-4.37 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_dense__trend_down_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down [near_miss_optimized|reject]: pnl=-11.79 closed=8 pf=0.28 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.47 sharpe=-0.54 sortino=-0.48 calmar=-1.00 avg_win=2.26 avg_loss=-2.72 payoff=0.83 avg_hold=2.9
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.296604256031278, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.17 p05=-23.68 p95=0.23 dd_median=0.01% dd_p95=0.02% loss_prob=94.40%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_symbol_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_patient__trend_down_symbol_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__trend_down [near_miss_optimized|reject]: pnl=-11.79 closed=8 pf=0.28 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.47 sharpe=-0.54 sortino=-0.48 calmar=-1.00 avg_win=2.26 avg_loss=-2.72 payoff=0.83 avg_hold=2.9
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.296604256031278, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.17 p05=-23.68 p95=0.23 dd_median=0.01% dd_p95=0.02% loss_prob=94.40%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__tre_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_patient__tre_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_down [near_miss_optimized|reject]: pnl=-11.79 closed=8 pf=0.28 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.47 sharpe=-0.54 sortino=-0.48 calmar=-1.00 avg_win=2.26 avg_loss=-2.72 payoff=0.83 avg_hold=2.9
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.296604256031278, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.17 p05=-23.68 p95=0.23 dd_median=0.01% dd_p95=0.02% loss_prob=94.40%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_patient__trend_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_down [near_miss_optimized|reject]: pnl=-11.79 closed=8 pf=0.28 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.47 sharpe=-0.54 sortino=-0.48 calmar=-1.00 avg_win=2.26 avg_loss=-2.72 payoff=0.83 avg_hold=2.9
+  exits: dominant=stale_breakout share=50.00%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.30 dominant_share=50.00% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.296604256031278, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.17 p05=-23.68 p95=0.23 dd_median=0.01% dd_p95=0.02% loss_prob=94.40%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.81 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_do_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_dense__trend_do_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down [near_miss_optimized|reject]: pnl=-11.88 closed=9 pf=0.28 win_rate=22.22% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.32 sharpe=-0.57 sortino=-0.51 calmar=-1.00 avg_win=2.26 avg_loss=-2.34 payoff=0.97 avg_hold=2.7
+  exits: dominant=stale_breakout share=44.44%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.39 dominant_share=55.56% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.386762448398077, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.28 p05=-22.68 p95=-0.77 dd_median=0.01% dd_p95=0.02% loss_prob=96.00%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.90 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down_symb_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__regime_trend_down_vol_high__near_miss_protective__trend_down_symb_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective__trend_down [near_miss_optimized|reject]: pnl=-11.88 closed=9 pf=0.28 win_rate=22.22% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.32 sharpe=-0.57 sortino=-0.51 calmar=-1.00 avg_win=2.26 avg_loss=-2.34 payoff=0.97 avg_hold=2.7
+  exits: dominant=stale_breakout share=44.44%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.39 dominant_share=55.56% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.386762448398077, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.28 p05=-22.68 p95=-0.77 dd_median=0.01% dd_p95=0.02% loss_prob=96.00%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.90 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_fastfail__regime_trend_down_vol_high__near_miss_protective_analysis.txt
+jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__trend_down [near_miss_optimized|reject]: pnl=-11.88 closed=9 pf=0.28 win_rate=22.22% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.32 sharpe=-0.57 sortino=-0.51 calmar=-1.00 avg_win=2.26 avg_loss=-2.34 payoff=0.97 avg_hold=2.7
+  exits: dominant=stale_breakout share=44.44%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-1.50 worst=trend_expansion (trend_down_vol_high) pnl=-10.39 dominant_share=55.56% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 4}
+  regime_pnls: {"trend_down_vol_high": -10.386762448398077, "trend_down_vol_mid": -1.496504482607634}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.28 p05=-22.68 p95=-0.77 dd_median=0.01% dd_p95=0.02% loss_prob=96.00%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-3.85 avg_test_pnl=-3.00 avg_val_pf=0.14 avg_test_pf=0.25
+  splits: train_pnl=-3.90 val_pnl=-3.22 val_pf=0.28 val_closed=2 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__tre_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_asia_hours__exit_trend__regime_trend_down_vol_high__near_miss_protective__tre_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down [near_miss_optimized|reject]: pnl=-12.37 closed=12 pf=0.33 win_rate=25.00% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-1.03 sharpe=-0.44 sortino=-0.40 calmar=-1.00 avg_win=2.00 avg_loss=-2.04 payoff=0.98 avg_hold=2.7
+  exits: dominant=stale_breakout share=58.33%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-2.08 worst=trend_expansion (trend_down_vol_high) pnl=-10.30 dominant_share=66.67% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 4, "trend_down_vol_mid": 8}
+  regime_pnls: {"trend_down_vol_high": -10.296604256031278, "trend_down_vol_mid": -2.076766075336491}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.13 p05=-26.26 p95=0.17 dd_median=0.01% dd_p95=0.03% loss_prob=94.60%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.49 avg_test_pnl=-2.27 avg_val_pf=0.44 avg_test_pf=0.55
+  splits: train_pnl=-5.70 val_pnl=-1.76 val_pf=0.61 val_closed=3 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_patient__trend_down_symbol_candidate_analysis.txt
+jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down [near_miss_optimized|reject]: pnl=-12.46 closed=13 pf=0.32 win_rate=23.08% dd=0.01%
+  tier: reject
+  trade_metrics: expectancy=-0.96 sharpe=-0.47 sortino=-0.44 calmar=-1.00 avg_win=2.00 avg_loss=-1.84 payoff=1.08 avg_hold=2.5
+  exits: dominant=stale_breakout share=53.85%
+  regimes: best=orderly_trend (trend_down_vol_mid) pnl=-2.08 worst=trend_expansion (trend_down_vol_high) pnl=-10.39 dominant_share=61.54% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=trend_expansion
+  regime_trade_counts: {"trend_down_vol_high": 5, "trend_down_vol_mid": 8}
+  regime_pnls: {"trend_down_vol_high": -10.386762448398077, "trend_down_vol_mid": -2.076766075336491}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.23 p05=-24.04 p95=-0.15 dd_median=0.01% dd_p95=0.02% loss_prob=95.20%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  regime_filter: trend_down
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.49 avg_test_pnl=-2.27 avg_val_pf=0.44 avg_test_pf=0.55
+  splits: train_pnl=-5.79 val_pnl=-1.76 val_pf=0.61 val_closed=3 test_pnl=-4.77 test_pf=0.00 test_closed=3
+  trades: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\jp225_volatility_short_breakdown_core_hours__near_miss_protective__trend_down_symbol_candidate_analysis.txt
+volatility_short_breakdown__exit_trend [entry_exit_family|reject]: pnl=-14.05 closed=62 pf=0.68 win_rate=30.65% dd=0.02%
+  tier: reject
+  trade_metrics: expectancy=-0.23 sharpe=-0.14 sortino=-0.17 calmar=-0.78 avg_win=1.61 avg_loss=-1.04 payoff=1.55 avg_hold=3.3
+  exits: dominant=stale_breakout share=37.10%
+  regimes: best=trend_expansion (trend_down_vol_high) pnl=0.46 worst=dislocated_chop (trend_flat_vol_high) pnl=-5.22 dominant_share=32.26% stability=0.03 loss_ratio=11.28
+  unified_regimes: best=trend_expansion worst=dislocated_chop
+  regime_trade_counts: {"trend_down_vol_high": 12, "trend_down_vol_low": 2, "trend_down_vol_mid": 14, "trend_flat_vol_high": 9, "trend_flat_vol_low": 5, "trend_flat_vol_mid": 20}
+  regime_pnls: {"trend_down_vol_high": 0.4630659629070581, "trend_down_vol_low": -0.7275054283923237, "trend_down_vol_mid": -3.494916825870823, "trend_flat_vol_high": -5.221877424753401, "trend_flat_vol_low": -0.40820910253431064, "trend_flat_vol_mid": -4.663153376760165}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-12.84 p05=-32.22 p95=9.47 dd_median=0.02% dd_p95=0.04% loss_prob=81.00%
+  live_policy: tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=0.03; loss_ratio=11.28
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.60 avg_test_pnl=4.17 avg_val_pf=0.72 avg_test_pf=1.74
+  splits: train_pnl=-13.97 val_pnl=-2.63 val_pf=0.68 val_closed=12 test_pnl=3.96 test_pf=1.74 test_closed=9
+  trades: artifacts\research\jp225\candidates\volatility_short_breakdown__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_short_breakdown__exit_trend_default_symbol_candidate_analysis.txt
+volatility_breakout [single|reject]: pnl=-21.55 closed=39 pf=0.43 win_rate=35.90% dd=0.02%
+  tier: reject
+  trade_metrics: expectancy=-0.55 sharpe=-0.29 sortino=-0.26 calmar=-0.87 avg_win=1.18 avg_loss=-1.52 payoff=0.77 avg_hold=5.3
+  exits: dominant=trailing_stop share=30.77%
+  regimes: best=compressed_range (trend_flat_vol_low) pnl=-0.43 worst=trend_expansion (trend_up_vol_high) pnl=-8.45 dominant_share=35.90% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=compressed_range worst=trend_expansion
+  regime_trade_counts: {"trend_flat_vol_high": 6, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 6, "trend_up_vol_high": 14, "trend_up_vol_low": 2, "trend_up_vol_mid": 9}
+  regime_pnls: {"trend_flat_vol_high": -7.791770926989411, "trend_flat_vol_low": -0.4271607997115643, "trend_flat_vol_mid": -1.9646020065740595, "trend_up_vol_high": -8.454398596771426, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": -1.1410848374055784}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-20.94 p05=-41.78 p95=-1.82 dd_median=0.02% dd_p95=0.04% loss_prob=96.40%
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.25 avg_test_pnl=-0.51 avg_val_pf=0.80 avg_test_pf=0.92
+  splits: train_pnl=-19.13 val_pnl=-7.13 val_pf=0.06 val_closed=8 test_pnl=0.60 test_pf=1.26 test_closed=7
+  trades: artifacts\research\jp225\candidates\volatility_breakout_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_breakout_default_symbol_candidate_analysis.txt
+volatility_breakout__exit_trend [entry_exit_family|reject]: pnl=-21.55 closed=39 pf=0.43 win_rate=35.90% dd=0.02%
+  tier: reject
+  trade_metrics: expectancy=-0.55 sharpe=-0.29 sortino=-0.26 calmar=-0.87 avg_win=1.18 avg_loss=-1.52 payoff=0.77 avg_hold=5.3
+  exits: dominant=trailing_stop share=30.77%
+  regimes: best=compressed_range (trend_flat_vol_low) pnl=-0.43 worst=trend_expansion (trend_up_vol_high) pnl=-8.45 dominant_share=35.90% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=compressed_range worst=trend_expansion
+  regime_trade_counts: {"trend_flat_vol_high": 6, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 6, "trend_up_vol_high": 14, "trend_up_vol_low": 2, "trend_up_vol_mid": 9}
+  regime_pnls: {"trend_flat_vol_high": -7.791770926989411, "trend_flat_vol_low": -0.4271607997115643, "trend_flat_vol_mid": -1.9646020065740595, "trend_up_vol_high": -8.454398596771426, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": -1.1410848374055784}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-20.94 p05=-41.78 p95=-1.82 dd_median=0.02% dd_p95=0.04% loss_prob=96.40%
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.25 avg_test_pnl=-0.51 avg_val_pf=0.80 avg_test_pf=0.92
+  splits: train_pnl=-19.13 val_pnl=-7.13 val_pf=0.06 val_closed=8 test_pnl=0.60 test_pf=1.26 test_closed=7
+  trades: artifacts\research\jp225\candidates\volatility_breakout__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_breakout__exit_trend_default_symbol_candidate_analysis.txt
+volatility_breakout__exit_fastfail [entry_exit_family|reject]: pnl=-21.55 closed=39 pf=0.43 win_rate=35.90% dd=0.02%
+  tier: reject
+  trade_metrics: expectancy=-0.55 sharpe=-0.29 sortino=-0.26 calmar=-0.87 avg_win=1.18 avg_loss=-1.52 payoff=0.77 avg_hold=5.3
+  exits: dominant=trailing_stop share=30.77%
+  regimes: best=compressed_range (trend_flat_vol_low) pnl=-0.43 worst=trend_expansion (trend_up_vol_high) pnl=-8.45 dominant_share=35.90% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=compressed_range worst=trend_expansion
+  regime_trade_counts: {"trend_flat_vol_high": 6, "trend_flat_vol_low": 2, "trend_flat_vol_mid": 6, "trend_up_vol_high": 14, "trend_up_vol_low": 2, "trend_up_vol_mid": 9}
+  regime_pnls: {"trend_flat_vol_high": -7.791770926989411, "trend_flat_vol_low": -0.4271607997115643, "trend_flat_vol_mid": -1.9646020065740595, "trend_up_vol_high": -8.454398596771426, "trend_up_vol_low": -1.7703201567150972, "trend_up_vol_mid": -1.1410848374055784}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-20.94 p05=-41.78 p95=-1.82 dd_median=0.02% dd_p95=0.04% loss_prob=96.40%
+  live_policy: tier=reject; activate in unified_regimes=compressed_range; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-2.25 avg_test_pnl=-0.51 avg_val_pf=0.80 avg_test_pf=0.92
+  splits: train_pnl=-19.13 val_pnl=-7.13 val_pf=0.06 val_closed=8 test_pnl=0.60 test_pf=1.26 test_closed=7
+  trades: artifacts\research\jp225\candidates\volatility_breakout__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\volatility_breakout__exit_fastfail_default_symbol_candidate_analysis.txt
+trend [single|reject]: pnl=-22.55 closed=35 pf=0.36 win_rate=25.71% dd=0.03%
+  tier: reject
+  trade_metrics: expectancy=-0.64 sharpe=-0.40 sortino=-0.38 calmar=-0.90 avg_win=1.42 avg_loss=-1.36 payoff=1.04 avg_hold=3.3
+  exits: dominant=stop_loss share=34.29%
+  regimes: best=orderly_trend (trend_up_vol_low) pnl=-1.57 worst=orderly_trend (trend_up_vol_mid) pnl=-15.74 dominant_share=68.57% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=orderly_trend
+  regime_trade_counts: {"trend_up_vol_high": 7, "trend_up_vol_low": 4, "trend_up_vol_mid": 24}
+  regime_pnls: {"trend_up_vol_high": -5.244142272801473, "trend_up_vol_low": -1.565786446612765, "trend_up_vol_mid": -15.740030120068258}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-22.68 p05=-37.66 p95=-5.36 dd_median=0.02% dd_p95=0.04% loss_prob=98.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.74 avg_test_pnl=-0.77 avg_val_pf=0.48 avg_test_pf=0.58
+  splits: train_pnl=-14.81 val_pnl=-3.61 val_pf=0.48 val_closed=6 test_pnl=0.50 test_pf=1.17 test_closed=5
+  trades: artifacts\research\jp225\candidates\trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\trend_default_symbol_candidate_analysis.txt
+trend__exit_trend [entry_exit_family|reject]: pnl=-22.55 closed=35 pf=0.36 win_rate=25.71% dd=0.03%
+  tier: reject
+  trade_metrics: expectancy=-0.64 sharpe=-0.40 sortino=-0.38 calmar=-0.90 avg_win=1.42 avg_loss=-1.36 payoff=1.04 avg_hold=3.3
+  exits: dominant=stop_loss share=34.29%
+  regimes: best=orderly_trend (trend_up_vol_low) pnl=-1.57 worst=orderly_trend (trend_up_vol_mid) pnl=-15.74 dominant_share=68.57% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=orderly_trend
+  regime_trade_counts: {"trend_up_vol_high": 7, "trend_up_vol_low": 4, "trend_up_vol_mid": 24}
+  regime_pnls: {"trend_up_vol_high": -5.244142272801473, "trend_up_vol_low": -1.565786446612765, "trend_up_vol_mid": -15.740030120068258}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-22.68 p05=-37.66 p95=-5.36 dd_median=0.02% dd_p95=0.04% loss_prob=98.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.74 avg_test_pnl=-0.77 avg_val_pf=0.48 avg_test_pf=0.58
+  splits: train_pnl=-14.81 val_pnl=-3.61 val_pf=0.48 val_closed=6 test_pnl=0.50 test_pf=1.17 test_closed=5
+  trades: artifacts\research\jp225\candidates\trend__exit_trend_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\trend__exit_trend_default_symbol_candidate_analysis.txt
+trend__exit_fastfail [entry_exit_family|reject]: pnl=-22.55 closed=35 pf=0.36 win_rate=25.71% dd=0.03%
+  tier: reject
+  trade_metrics: expectancy=-0.64 sharpe=-0.40 sortino=-0.38 calmar=-0.90 avg_win=1.42 avg_loss=-1.36 payoff=1.04 avg_hold=3.3
+  exits: dominant=stop_loss share=34.29%
+  regimes: best=orderly_trend (trend_up_vol_low) pnl=-1.57 worst=orderly_trend (trend_up_vol_mid) pnl=-15.74 dominant_share=68.57% stability=0.00 loss_ratio=999.00
+  unified_regimes: best=orderly_trend worst=orderly_trend
+  regime_trade_counts: {"trend_up_vol_high": 7, "trend_up_vol_low": 4, "trend_up_vol_mid": 24}
+  regime_pnls: {"trend_up_vol_high": -5.244142272801473, "trend_up_vol_low": -1.565786446612765, "trend_up_vol_mid": -15.740030120068258}
+  funding: available=yes swap_long=-676.36000 swap_short=-364.20000 preferred_side=none carry_spread=-312.16000
+  monte_carlo: sims=500 pnl_median=-22.68 p05=-37.66 p95=-5.36 dd_median=0.02% dd_p95=0.04% loss_prob=98.80%
+  live_policy: tier=reject; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 0.45]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=999.00
+  walk_forward: windows=2 pass_rate=0.00% avg_val_pnl=-4.74 avg_test_pnl=-0.77 avg_val_pf=0.48 avg_test_pf=0.58
+  splits: train_pnl=-14.81 val_pnl=-3.61 val_pf=0.48 val_closed=6 test_pnl=0.50 test_pf=1.17 test_closed=5
+  trades: artifacts\research\jp225\candidates\trend__exit_fastfail_default_symbol_candidate_trades.csv
+  analysis: artifacts\research\jp225\candidates\trend__exit_fastfail_default_symbol_candidate_analysis.txt
 
 Top candidate-level winners
-- jp225_volatility_short_breakdown_core_hours [core] (JP225 short volatility breakdown limited to the strongest historical entry hours)
-- jp225_volatility_short_breakdown_core_hours__exit_trend [core] (JP225 short volatility breakdown limited to the strongest historical entry hours with trend-runner exits)
-- jp225_volatility_short_breakdown_core_hours__exit_fastfail [core] (JP225 short volatility breakdown limited to the strongest historical entry hours with fast-fail exits)
+No candidate met the positive-PnL and PF>=1.0 threshold.

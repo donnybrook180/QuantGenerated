@@ -1,21 +1,22 @@
 Artifact: trend__5m_europe_5m_europe_symbol_candidate
-Closed trades: 23
-Realized pnl: -102.53
+Closed trades: 59
+Realized pnl: -82.32
 
 By entry hour
-12: trades=3 pnl=-34.57 avg=-11.52 win_rate=0.00%
-9: trades=2 pnl=-30.68 avg=-15.34 win_rate=0.00%
-7: trades=6 pnl=-20.42 avg=-3.40 win_rate=33.33%
-10: trades=1 pnl=-14.19 avg=-14.19 win_rate=0.00%
-11: trades=7 pnl=-8.71 avg=-1.24 win_rate=28.57%
-8: trades=4 pnl=6.03 avg=1.51 win_rate=50.00%
+12: trades=14 pnl=-71.40 avg=-5.10 win_rate=21.43%
+9: trades=7 pnl=-46.25 avg=-6.61 win_rate=14.29%
+8: trades=12 pnl=-24.11 avg=-2.01 win_rate=25.00%
+10: trades=4 pnl=-3.18 avg=-0.79 win_rate=50.00%
+11: trades=12 pnl=22.16 avg=1.85 win_rate=41.67%
+7: trades=10 pnl=40.46 avg=4.05 win_rate=70.00%
 
 By entry setup
-trend: trades=23 pnl=-102.53 avg=-4.46 win_rate=26.09%
+trend: trades=59 pnl=-82.32 avg=-1.40 win_rate=35.59%
 
 By exit reason
-stop_loss: trades=8 pnl=-126.03 avg=-15.75 win_rate=0.00%
-structure_exit: trades=2 pnl=-30.68 avg=-15.34 win_rate=0.00%
-trailing_stop: trades=10 pnl=-5.75 avg=-0.58 win_rate=30.00%
-stale_breakout: trades=1 pnl=25.65 avg=25.65 win_rate=100.00%
-take_profit: trades=2 pnl=34.28 avg=17.14 win_rate=100.00%
+stop_loss: trades=10 pnl=-162.70 avg=-16.27 win_rate=0.00%
+structure_exit: trades=10 pnl=-93.65 avg=-9.36 win_rate=0.00%
+trailing_stop: trades=21 pnl=-42.39 avg=-2.02 win_rate=38.10%
+time_stop: trades=4 pnl=-30.96 avg=-7.74 win_rate=0.00%
+stale_breakout: trades=1 pnl=-7.42 avg=-7.42 win_rate=0.00%
+take_profit: trades=13 pnl=254.81 avg=19.60 win_rate=100.00%

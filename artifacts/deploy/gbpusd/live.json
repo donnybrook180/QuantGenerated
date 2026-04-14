@@ -3,11 +3,37 @@
   "symbol": "GBPUSD",
   "data_symbol": "C:GBPUSD",
   "broker_symbol": "GBPUSD",
-  "research_run_id": 307,
-  "execution_set_id": null,
-  "execution_validation_summary": "not_run",
-  "symbol_status": "research_only",
-  "strategies": [],
+  "research_run_id": 332,
+  "execution_set_id": 172,
+  "execution_validation_summary": "selection=combo_1 variant=gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid@15m_overlap|trend_down_vol_mid data_source=duckdb_cache pnl=28.59 pf=10.91 closed=9 quality=0.81 underwater=22.2% -> accepted",
+  "symbol_status": "reduced_risk_only",
+  "strategies": [
+    {
+      "candidate_name": "gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid",
+      "code_path": "quant_system.agents.forex.GBPUSDOverlapImpulseAgent",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=0.00",
+      "variant_label": "15m_overlap",
+      "regime_filter_label": "trend_down_vol_mid",
+      "execution_overrides": {
+        "structure_exit_bars": 1,
+        "stale_breakout_bars": 4,
+        "max_holding_bars": 16,
+        "take_profit_atr_multiple": 1.7,
+        "trailing_stop_atr_multiple": 0.65
+      },
+      "allocation_weight": 1.0,
+      "allowed_regimes": [
+        "orderly_trend"
+      ],
+      "blocked_regimes": [],
+      "min_vol_percentile": 0.2,
+      "max_vol_percentile": 0.8,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
+      "min_risk_multiplier": 0.0
+    }
+  ],
   "target_volatility": 0.0,
   "max_symbol_vol_percentile": 0.98,
   "block_new_entries_in_event_risk": true

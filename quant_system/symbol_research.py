@@ -457,17 +457,45 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
     equity_quality_score = float(
         row.equity_quality_score if isinstance(row, CandidateResult) else row.get("equity_quality_score", 0.0)
     )
+    closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0))
+    walk_forward_avg_validation_pnl = float(
+        row.walk_forward_avg_validation_pnl if isinstance(row, CandidateResult) else row.get("walk_forward_avg_validation_pnl", 0.0)
+    )
+    walk_forward_avg_test_pnl = float(
+        row.walk_forward_avg_test_pnl if isinstance(row, CandidateResult) else row.get("walk_forward_avg_test_pnl", 0.0)
+    )
     combined_closed_trades = int(
         (row.validation_closed_trades + row.test_closed_trades)
         if isinstance(row, CandidateResult)
         else (row.get("validation_closed_trades", 0) or 0) + (row.get("test_closed_trades", 0) or 0)
     )
+    if symbol.upper() == "BTC":
+        if (
+            _is_sparse_candidate(row, symbol)
+            and realized_pnl > 0.0
+            and profit_factor >= 1.25
+            and closed_trades >= 5
+            and bool(best_regime)
+            and best_regime_pnl > 0.0
+            and best_regime_trade_count >= 5
+            and best_regime_pf >= 1.0
+            and walk_forward_windows >= 1
+            and walk_forward_avg_validation_pnl > 0.0
+            and walk_forward_avg_test_pnl >= 0.0
+            and effective_pass_rate >= 0.0
+            and regime_stability_score >= 0.65
+            and regime_loss_ratio <= 0.75
+            and equity_quality_score >= 0.35
+            and best_trade_share_pct <= 85.0
+            and combined_closed_trades == 0
+            and _meets_monte_carlo_viability(row)
+        ):
+            return True
     if symbol.upper() == "GBPUSD":
         regime_filter_label = str(
             row.regime_filter_label if isinstance(row, CandidateResult) else row.get("regime_filter_label", "") or ""
         )
         payoff_ratio = float(row.payoff_ratio if isinstance(row, CandidateResult) else row.get("payoff_ratio", 0.0))
-        closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0))
         if (
             best_regime == "trend_flat_vol_mid"
             and regime_filter_label == "trend_flat_vol_mid"
@@ -719,6 +747,10 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe"), True
         return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "europe", "midday"), True
+    if profile_symbol.upper() == "BTC":
+        if mode == "seed":
+            return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
+        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
     if profile_symbol.upper() == "ETH":
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
@@ -748,6 +780,12 @@ def _variant_timeframe_key(data_symbol: str, multiplier: int, timespan: str) -> 
 
 def _cache_symbol_candidates(data_symbol: str) -> list[str]:
     return [data_symbol]
+
+
+def _candidate_row_value(row: CandidateResult | dict[str, object], field_name: str, default: object = None) -> object:
+    if isinstance(row, CandidateResult):
+        return getattr(row, field_name, default)
+    return row.get(field_name, default)
 
 
 def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source_multiplier: int) -> list[MarketBar]:
@@ -786,6 +824,49 @@ def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source
 
     flush_bucket(bucket, current_bucket_key)
     return aggregated
+
+
+def _load_cached_variant_bars(
+    store: DuckDBMarketDataStore,
+    data_symbol: str,
+    multiplier: int,
+    timespan: str,
+    cache_limit: int,
+    base_cache_limit: int,
+) -> tuple[list[MarketBar], str] | None:
+    for cache_symbol in _cache_symbol_candidates(data_symbol):
+        cached = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
+        if cached and _has_plausible_price_scale(data_symbol, cached):
+            return cached, "duckdb_cache"
+        if timespan == "minute" and multiplier in {15, 30, 60}:
+            base_cached = store.load_bars(
+                cache_symbol,
+                _variant_timeframe_key(cache_symbol, 5, "minute"),
+                base_cache_limit,
+            )
+            if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
+                aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
+                if aggregated:
+                    return aggregated, "duckdb_cache_aggregated"
+    return None
+
+
+def _cache_has_variant_bars(
+    store: DuckDBMarketDataStore,
+    data_symbol: str,
+    multiplier: int,
+    timespan: str,
+    minimum_bars: int,
+) -> bool:
+    cached = _load_cached_variant_bars(
+        store,
+        data_symbol,
+        multiplier,
+        timespan,
+        cache_limit=max(minimum_bars, 50_000),
+        base_cache_limit=50_000,
+    )
+    return bool(cached and len(cached[0]) >= minimum_bars)
 
 
 def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
@@ -904,21 +985,7 @@ def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol
     store = DuckDBMarketDataStore(config.mt5.database_path, read_only=True)
     timeframe_specs, _, _ = _research_variant_plan(profile_symbol, "full")
     for _, multiplier, timespan in timeframe_specs:
-        scoped_timeframe = _variant_timeframe_key(data_symbol, multiplier, timespan)
-        has_sufficient_cache = False
-        for cache_symbol in _cache_symbol_candidates(data_symbol):
-            scoped = _variant_timeframe_key(cache_symbol, multiplier, timespan)
-            bars = store.load_bars(cache_symbol, scoped, 2_500)
-            if len(bars) >= 500:
-                has_sufficient_cache = True
-                break
-            if timespan == "minute" and multiplier in {15, 30}:
-                base_bars = store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), 50_000)
-                aggregated = _aggregate_minute_bars(base_bars, multiplier, 5) if base_bars else []
-                if len(aggregated) >= 500:
-                    has_sufficient_cache = True
-                    break
-        if not has_sufficient_cache:
+        if not _cache_has_variant_bars(store, data_symbol, multiplier, timespan, minimum_bars=500):
             return "seed"
     return "full"
 
@@ -962,18 +1029,17 @@ def _load_symbol_features_variant(
         return _build_features_with_events(config, data_symbol, bars), f"{source}_direct"
 
     if config.market_data.fetch_policy in {"cache_first", "cache_only"}:
-        for cache_symbol in _cache_symbol_candidates(data_symbol):
-            cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
-            if cached and _has_plausible_price_scale(data_symbol, cached):
-                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
-            if timespan == "minute" and multiplier in {15, 30, 60}:
-                base_cached = cache_store.load_bars(
-                    cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
-                )
-                if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
-                    aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
-                    if aggregated:
-                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
+        cached_result = _load_cached_variant_bars(
+            cache_store,
+            data_symbol,
+            multiplier,
+            timespan,
+            cache_limit=cache_limit,
+            base_cache_limit=base_cache_limit,
+        )
+        if cached_result is not None:
+            cached_bars, cached_source = cached_result
+            return _build_features_with_events(config, data_symbol, cached_bars), cached_source
         if config.market_data.fetch_policy == "cache_only":
             raise RuntimeError(f"No cached DuckDB bars available for {data_symbol}/{scoped_timeframe}.")
 
@@ -1016,18 +1082,17 @@ def _load_symbol_features_variant(
                     return mt5_result
             except MT5Error as exc:
                 mt5_errors.append(str(exc))
-        for cache_symbol in _cache_symbol_candidates(data_symbol):
-            cached = cache_store.load_bars(cache_symbol, _variant_timeframe_key(cache_symbol, multiplier, timespan), cache_limit)
-            if cached and _has_plausible_price_scale(data_symbol, cached):
-                return _build_features_with_events(config, data_symbol, cached), "duckdb_cache"
-            if timespan == "minute" and multiplier in {15, 30, 60}:
-                base_cached = cache_store.load_bars(
-                    cache_symbol, _variant_timeframe_key(cache_symbol, 5, "minute"), base_cache_limit
-                )
-                if base_cached and _has_plausible_price_scale(data_symbol, base_cached):
-                    aggregated = _aggregate_minute_bars(base_cached, multiplier, 5)
-                    if aggregated:
-                        return _build_features_with_events(config, data_symbol, aggregated), "duckdb_cache_aggregated"
+        cached_result = _load_cached_variant_bars(
+            cache_store,
+            data_symbol,
+            multiplier,
+            timespan,
+            cache_limit=cache_limit,
+            base_cache_limit=base_cache_limit,
+        )
+        if cached_result is not None:
+            cached_bars, cached_source = cached_result
+            return _build_features_with_events(config, data_symbol, cached_bars), cached_source
         if mt5_errors:
             raise RuntimeError("; ".join(mt5_errors)) from None
         raise
@@ -1828,7 +1893,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             risk,
                         ],
                         code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
-                        allowed_variants=("15m_overlap", "15m_us", "1h_us"),
+                        allowed_variants=("15m_overlap", "15m_us", "30m_overlap", "30m_us", "1h_overlap", "1h_us"),
                         regime_filter_label="trend_flat_vol_mid",
                         execution_overrides={
                             "structure_exit_bars": 1,
@@ -1852,7 +1917,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             risk,
                         ],
                         code_path="quant_system.agents.crypto.CryptoMomentumContinuationAgent",
-                        allowed_variants=("15m_overlap", "15m_us"),
+                        allowed_variants=("15m_overlap", "15m_us", "30m_overlap", "30m_us"),
                         regime_filter_label="trend_up_vol_mid",
                         execution_overrides={
                             "structure_exit_bars": 0,
@@ -4046,7 +4111,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
                             RiskSentinelAgent(max_volatility=config.risk.max_volatility * 2.0, min_relative_volume=max(rel_vol - 0.05, 0.5)),
                         ],
                         code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
-                        allowed_variants=("15m_overlap", "15m_us", "1h_us"),
+                        allowed_variants=("15m_overlap", "15m_us", "30m_overlap", "30m_us", "1h_overlap", "1h_us"),
                         execution_overrides={
                             "max_holding_bars": 14 if label == "dense" else (16 if label == "balanced" else 20),
                             "take_profit_atr_multiple": 1.30 if label == "dense" else (1.45 if label == "balanced" else 1.65),
@@ -4752,8 +4817,15 @@ def _promotion_tier_for_row(row: CandidateResult | dict[str, object], symbol: st
 
 
 def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, object]) -> dict[str, object]:
-    symbol = str(row.get("symbol", "") or "") if isinstance(row, dict) else ""
-    promotion_tier = _promotion_tier_for_row(row, symbol)
+    symbol = str(row.get("symbol", "") or "") if isinstance(row, dict) else str(getattr(row, "symbol", "") or "")
+    existing_promotion_tier = (
+        str(row.get("promotion_tier", "") or "") if isinstance(row, dict) else str(getattr(row, "promotion_tier", "") or "")
+    )
+    promotion_tier = (
+        existing_promotion_tier
+        if existing_promotion_tier in {"core", "specialist", "reject"}
+        else _promotion_tier_for_row(row, symbol)
+    )
     best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "")
     worst_regime = str(row.worst_regime if isinstance(row, CandidateResult) else row.get("worst_regime", "") or "")
     regime_stability_score = float(
@@ -5111,59 +5183,71 @@ def _near_miss_optimizer_specs(symbol: str, specs: list[CandidateSpec], results:
     return generated
 
 
-def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> dict[str, object]:
+def _execution_candidate_row(symbol: str, row: CandidateResult | dict[str, object]) -> dict[str, object]:
     return {
-        "candidate_name": row.name,
+        "candidate_name": str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or ""),
         "symbol": symbol,
-        "code_path": row.code_path,
-        "realized_pnl": row.realized_pnl,
-        "profit_factor": row.profit_factor,
-        "closed_trades": row.closed_trades,
-        "sharpe_ratio": row.sharpe_ratio,
-        "sortino_ratio": row.sortino_ratio,
-        "calmar_ratio": row.calmar_ratio,
-        "payoff_ratio": row.payoff_ratio,
-        "validation_pnl": row.validation_pnl,
-        "validation_profit_factor": row.validation_profit_factor,
-        "validation_closed_trades": row.validation_closed_trades,
-        "test_pnl": row.test_pnl,
-        "test_profit_factor": row.test_profit_factor,
-        "test_closed_trades": row.test_closed_trades,
-        "walk_forward_windows": row.walk_forward_windows,
-        "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
-        "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
-        "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
-        "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
-        "best_trade_share_pct": row.best_trade_share_pct,
-        "equity_new_high_share_pct": row.equity_new_high_share_pct,
-        "max_consecutive_losses": row.max_consecutive_losses,
-        "equity_quality_score": row.equity_quality_score,
-        "mc_simulations": row.mc_simulations,
-        "mc_pnl_median": row.mc_pnl_median,
-        "mc_pnl_p05": row.mc_pnl_p05,
-        "mc_pnl_p95": row.mc_pnl_p95,
-        "mc_max_drawdown_pct_median": row.mc_max_drawdown_pct_median,
-        "mc_max_drawdown_pct_p95": row.mc_max_drawdown_pct_p95,
-        "mc_loss_probability_pct": row.mc_loss_probability_pct,
-        "sparse_strategy": row.sparse_strategy,
-        "component_count": row.component_count,
-        "combo_outperformance_score": row.combo_outperformance_score,
-        "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
+        "code_path": str(_candidate_row_value(row, "code_path", "") or ""),
+        "description": str(_candidate_row_value(row, "description", "") or ""),
+        "archetype": str(_candidate_row_value(row, "archetype", "") or ""),
+        "realized_pnl": float(_candidate_row_value(row, "realized_pnl", 0.0) or 0.0),
+        "profit_factor": float(_candidate_row_value(row, "profit_factor", 0.0) or 0.0),
+        "closed_trades": int(_candidate_row_value(row, "closed_trades", 0) or 0),
+        "sharpe_ratio": float(_candidate_row_value(row, "sharpe_ratio", 0.0) or 0.0),
+        "sortino_ratio": float(_candidate_row_value(row, "sortino_ratio", 0.0) or 0.0),
+        "calmar_ratio": float(_candidate_row_value(row, "calmar_ratio", 0.0) or 0.0),
+        "payoff_ratio": float(_candidate_row_value(row, "payoff_ratio", 0.0) or 0.0),
+        "validation_pnl": float(_candidate_row_value(row, "validation_pnl", 0.0) or 0.0),
+        "validation_profit_factor": float(_candidate_row_value(row, "validation_profit_factor", 0.0) or 0.0),
+        "validation_closed_trades": int(_candidate_row_value(row, "validation_closed_trades", 0) or 0),
+        "test_pnl": float(_candidate_row_value(row, "test_pnl", 0.0) or 0.0),
+        "test_profit_factor": float(_candidate_row_value(row, "test_profit_factor", 0.0) or 0.0),
+        "test_closed_trades": int(_candidate_row_value(row, "test_closed_trades", 0) or 0),
+        "walk_forward_windows": int(_candidate_row_value(row, "walk_forward_windows", 0) or 0),
+        "walk_forward_pass_rate_pct": float(_candidate_row_value(row, "walk_forward_pass_rate_pct", 0.0) or 0.0),
+        "walk_forward_soft_pass_rate_pct": float(_candidate_row_value(row, "walk_forward_soft_pass_rate_pct", 0.0) or 0.0),
+        "walk_forward_avg_validation_pnl": float(_candidate_row_value(row, "walk_forward_avg_validation_pnl", 0.0) or 0.0),
+        "walk_forward_avg_test_pnl": float(_candidate_row_value(row, "walk_forward_avg_test_pnl", 0.0) or 0.0),
+        "best_trade_share_pct": float(_candidate_row_value(row, "best_trade_share_pct", 0.0) or 0.0),
+        "equity_new_high_share_pct": float(_candidate_row_value(row, "equity_new_high_share_pct", 0.0) or 0.0),
+        "max_consecutive_losses": int(_candidate_row_value(row, "max_consecutive_losses", 0) or 0),
+        "equity_quality_score": float(_candidate_row_value(row, "equity_quality_score", 0.0) or 0.0),
+        "mc_simulations": int(_candidate_row_value(row, "mc_simulations", 0) or 0),
+        "mc_pnl_median": float(_candidate_row_value(row, "mc_pnl_median", 0.0) or 0.0),
+        "mc_pnl_p05": float(_candidate_row_value(row, "mc_pnl_p05", 0.0) or 0.0),
+        "mc_pnl_p95": float(_candidate_row_value(row, "mc_pnl_p95", 0.0) or 0.0),
+        "mc_max_drawdown_pct_median": float(_candidate_row_value(row, "mc_max_drawdown_pct_median", 0.0) or 0.0),
+        "mc_max_drawdown_pct_p95": float(_candidate_row_value(row, "mc_max_drawdown_pct_p95", 0.0) or 0.0),
+        "mc_loss_probability_pct": float(_candidate_row_value(row, "mc_loss_probability_pct", 0.0) or 0.0),
+        "sparse_strategy": bool(_candidate_row_value(row, "sparse_strategy", False)),
+        "component_count": int(_candidate_row_value(row, "component_count", 1) or 1),
+        "combo_outperformance_score": float(_candidate_row_value(row, "combo_outperformance_score", 0.0) or 0.0),
+        "combo_trade_overlap_pct": float(_candidate_row_value(row, "combo_trade_overlap_pct", 0.0) or 0.0),
         "recommended": False,
         "promotion_tier": _promotion_tier_for_row(row, symbol),
-        "variant_label": row.variant_label,
-        "session_label": row.session_label,
-        "regime_filter_label": row.regime_filter_label,
-        "cross_filter_label": row.cross_filter_label,
-        "execution_overrides": row.execution_overrides or {},
-        "best_regime": row.best_regime,
-        "best_regime_pnl": row.best_regime_pnl,
-        "regime_stability_score": row.regime_stability_score,
-        "regime_loss_ratio": row.regime_loss_ratio,
-        "regime_trade_count_by_label": row.regime_trade_count_by_label,
-        "regime_pf_by_label": row.regime_pf_by_label,
+        "variant_label": str(_candidate_row_value(row, "variant_label", "") or ""),
+        "timeframe_label": str(_candidate_row_value(row, "timeframe_label", "") or ""),
+        "session_label": str(_candidate_row_value(row, "session_label", "") or ""),
+        "regime_filter_label": str(_candidate_row_value(row, "regime_filter_label", "") or ""),
+        "cross_filter_label": str(_candidate_row_value(row, "cross_filter_label", "") or ""),
+        "execution_overrides": copy.deepcopy(_candidate_row_value(row, "execution_overrides", {}) or {}),
+        "best_regime": str(_candidate_row_value(row, "best_regime", "") or ""),
+        "best_unified_regime": str(_candidate_row_value(row, "best_unified_regime", "") or ""),
+        "best_regime_pnl": float(_candidate_row_value(row, "best_regime_pnl", 0.0) or 0.0),
+        "worst_regime": str(_candidate_row_value(row, "worst_regime", "") or ""),
+        "worst_unified_regime": str(_candidate_row_value(row, "worst_unified_regime", "") or ""),
+        "worst_regime_pnl": float(_candidate_row_value(row, "worst_regime_pnl", 0.0) or 0.0),
+        "dominant_regime_share_pct": float(_candidate_row_value(row, "dominant_regime_share_pct", 0.0) or 0.0),
+        "regime_stability_score": float(_candidate_row_value(row, "regime_stability_score", 0.0) or 0.0),
+        "regime_loss_ratio": float(_candidate_row_value(row, "regime_loss_ratio", 999.0) or 999.0),
+        "regime_trade_count_by_label": _candidate_row_value(row, "regime_trade_count_by_label", "{}"),
+        "regime_pf_by_label": _candidate_row_value(row, "regime_pf_by_label", "{}"),
         "regime_specialist_viable": _meets_regime_specialist_viability(row, symbol),
     }
+
+
+def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> dict[str, object]:
+    return _execution_candidate_row(symbol, row)
 
 
 def _selection_component_keys(row: dict[str, object]) -> set[str]:
@@ -5199,7 +5283,11 @@ def _candidate_selection_score(row: dict[str, object]) -> tuple[float, ...]:
     )
 
 
-def _is_valid_execution_combo(combo: tuple[dict[str, object], ...], symbol: str) -> bool:
+def _is_valid_execution_combo(
+    combo: tuple[dict[str, object], ...],
+    symbol: str,
+    max_candidates: int = 3,
+) -> bool:
     used_components: set[str] = set()
     used_signatures: set[tuple[str, str, str]] = set()
     used_code_paths: set[str] = set()
@@ -5232,7 +5320,8 @@ def _is_valid_execution_combo(combo: tuple[dict[str, object], ...], symbol: str)
             specialist_count += 1
         if tier == "core":
             core_count += 1
-    if specialist_count > 1:
+    specialist_limit = max(1, max_candidates) if allow_multi_core else 1
+    if specialist_count > specialist_limit:
         return False
     if core_count == 0 and any(str(row.get("promotion_tier", "")) == "core" for row in combo):
         return False
@@ -5267,7 +5356,7 @@ def _build_execution_candidate_sets(rows: list[dict[str, object]], symbol: str, 
     )[:6]
     for size in range(1, min(max_candidates, len(pool)) + 1):
         for combo in itertools.combinations(pool, size):
-            if not _is_valid_execution_combo(combo, symbol):
+            if not _is_valid_execution_combo(combo, symbol, max_candidates=max_candidates):
                 continue
             _append_set(f"combo_{size}", list(combo))
     return candidate_sets
@@ -5510,6 +5599,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     if selected and len(selected) < max_candidates:
         lead_regime = str(selected[0].get("best_regime", "") or "")
         for row in specialist_ranked:
+            if len(selected) >= max_candidates:
+                break
             components = _selection_component_keys(row)
             if components & used_components:
                 continue
@@ -5521,6 +5612,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             )
             if candidate_signature in used_variant_regimes:
                 continue
+            if candidate_code_path and candidate_code_path in used_code_paths:
+                continue
             if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
                 continue
             selected.append(row)
@@ -5528,7 +5621,6 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             if candidate_code_path:
                 used_code_paths.add(candidate_code_path)
             used_variant_regimes.add(candidate_signature)
-            break
 
     fallback_ranked = [row for row in ranked[1:] if row not in selected] + [row for row in specialist_ranked if row not in selected]
     for row in fallback_ranked:
@@ -6347,55 +6439,15 @@ def run_symbol_research(
     recommended = [row.name for row in viable_ranked[:3]]
     profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
 
-    execution_candidate_rows = [
-        (
-            {
-            "candidate_name": row.name,
-            "symbol": resolved.profile_symbol,
-            "code_path": row.code_path,
-            "realized_pnl": row.realized_pnl,
-            "profit_factor": row.profit_factor,
-            "closed_trades": row.closed_trades,
-            "sharpe_ratio": row.sharpe_ratio,
-            "sortino_ratio": row.sortino_ratio,
-            "calmar_ratio": row.calmar_ratio,
-            "payoff_ratio": row.payoff_ratio,
-            "validation_pnl": row.validation_pnl,
-            "validation_profit_factor": row.validation_profit_factor,
-            "validation_closed_trades": row.validation_closed_trades,
-            "test_pnl": row.test_pnl,
-            "test_profit_factor": row.test_profit_factor,
-            "test_closed_trades": row.test_closed_trades,
-            "walk_forward_windows": row.walk_forward_windows,
-            "walk_forward_pass_rate_pct": row.walk_forward_pass_rate_pct,
-            "walk_forward_soft_pass_rate_pct": row.walk_forward_soft_pass_rate_pct,
-            "walk_forward_avg_validation_pnl": row.walk_forward_avg_validation_pnl,
-            "walk_forward_avg_test_pnl": row.walk_forward_avg_test_pnl,
-            "sparse_strategy": row.sparse_strategy,
-            "component_count": row.component_count,
-            "combo_outperformance_score": row.combo_outperformance_score,
-            "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
-            "best_regime": row.best_regime,
-            "best_unified_regime": row.best_unified_regime,
-            "best_regime_pnl": row.best_regime_pnl,
-            "worst_regime": row.worst_regime,
-            "worst_unified_regime": row.worst_unified_regime,
-            "worst_regime_pnl": row.worst_regime_pnl,
-            "dominant_regime_share_pct": row.dominant_regime_share_pct,
-            "regime_stability_score": row.regime_stability_score,
-            "regime_loss_ratio": row.regime_loss_ratio,
-            "recommended": row.name in recommended,
-            "variant_label": row.variant_label,
-            "session_label": row.session_label,
-            "regime_filter_label": row.regime_filter_label,
-            "execution_overrides": row.execution_overrides or {},
-            "agents": copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None,
-        }
-        | build_execution_policy_from_candidate_row(row)
-        )
-        for row in results
-    ]
-    fallback_limit = 3 if symbol_is_forex(resolved.profile_symbol) or _is_crypto_symbol(resolved.profile_symbol) else 2
+    execution_candidate_rows = []
+    for row in results:
+        candidate_row = _execution_candidate_row_from_result(resolved.profile_symbol, row)
+        candidate_row["recommended"] = row.name in recommended
+        candidate_row["agents"] = copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None
+        candidate_row.update(build_execution_policy_from_candidate_row(candidate_row))
+        execution_candidate_rows.append(candidate_row)
+    default_limit = 3 if symbol_is_forex(resolved.profile_symbol) or _is_crypto_symbol(resolved.profile_symbol) else 2
+    fallback_limit = max(1, config.symbol_research.max_live_candidates_per_symbol or default_limit)
     candidate_sets = _build_execution_candidate_sets(
         execution_candidate_rows,
         resolved.profile_symbol,

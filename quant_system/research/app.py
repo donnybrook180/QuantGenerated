@@ -4,6 +4,7 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
 from quant_system.symbol_research import (
     _configure_symbol_execution,
+    _execution_candidate_row,
     _run_candidate_bundle,
     _symbol_slug,
     build_execution_policy_from_candidate_row,
@@ -44,7 +45,10 @@ def run_symbol_execute_app(requested_symbol: str) -> list[str]:
         candidate_rows = store.list_latest_symbol_research_candidates(profile_name)
         if not candidate_rows:
             return [f"No symbol research candidates found for {profile_name}."]
-        selected_candidates = select_execution_candidates(candidate_rows, max_candidates=1)
+        selected_candidates = select_execution_candidates(
+            candidate_rows,
+            max_candidates=max(1, config.symbol_research.max_live_candidates_per_symbol),
+        )
         if not selected_candidates:
             return [
                 f"No executable candidates selected for {profile_name}. "
@@ -56,9 +60,13 @@ def run_symbol_execute_app(requested_symbol: str) -> list[str]:
     enriched_candidates: list[dict[str, object]] = []
     for row in selected_candidates:
         merged = dict(row)
+        merged.setdefault("symbol", resolved.profile_symbol)
         merged.update(candidate_rows.get(str(row["candidate_name"]), {}))
-        merged.update(build_execution_policy_from_candidate_row(merged))
-        enriched_candidates.append(merged)
+        merged.setdefault("symbol", resolved.profile_symbol)
+        enriched = _execution_candidate_row(resolved.profile_symbol, merged)
+        enriched.update(merged)
+        enriched.update(build_execution_policy_from_candidate_row(enriched))
+        enriched_candidates.append(enriched)
     if not enriched_candidates:
         return [f"No executable candidates selected for {profile_name}."]
 

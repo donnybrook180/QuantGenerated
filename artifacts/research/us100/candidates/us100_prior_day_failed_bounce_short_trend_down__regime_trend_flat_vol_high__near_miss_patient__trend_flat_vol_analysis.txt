@@ -1,0 +1,14 @@
+Artifact: us100_prior_day_failed_bounce_short_trend_down__regime_trend_flat_vol_high__near_miss_patient__trend_flat_vol
+Closed trades: 2
+Realized pnl: 0.08
+
+By entry hour
+18: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
+16: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%
+
+By entry setup
+prior_day_failed_bounce_short: trades=2 pnl=0.08 avg=0.04 win_rate=50.00%
+
+By exit reason
+stale_breakout: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
+take_profit: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%

@@ -1,14 +1,13 @@
 Artifact: forex_trend_continuation__30m_europe__exit_fastfail_30m_europe_symbol_candidate
 Closed trades: 3
-Realized pnl: 171.45
+Realized pnl: 194.39
 
 By entry hour
-12: trades=3 pnl=171.45 avg=57.15 win_rate=33.33%
+12: trades=3 pnl=194.39 avg=64.80 win_rate=33.33%
 
 By entry setup
-forex_trend_continuation: trades=3 pnl=171.45 avg=57.15 win_rate=33.33%
+forex_trend_continuation: trades=3 pnl=194.39 avg=64.80 win_rate=33.33%
 
 By exit reason
-signal_exit: trades=1 pnl=-81.42 avg=-81.42 win_rate=0.00%
-structure_exit: trades=1 pnl=-42.55 avg=-42.55 win_rate=0.00%
-take_profit: trades=1 pnl=295.42 avg=295.42 win_rate=100.00%
+structure_exit: trades=2 pnl=-75.18 avg=-37.59 win_rate=0.00%
+take_profit: trades=1 pnl=269.57 avg=269.57 win_rate=100.00%

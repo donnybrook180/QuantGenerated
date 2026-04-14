@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-25T10:40:00+00:00,2026-03-25T10:50:00+00:00,10,10,crypto_vwap_reversion,structure_exit,71403.29640,71584.79461,0.01000,-2.27969,0.46471,2,0.71965,"{'position_intent': 'short_entry', 'z_score_20': 1.3960433667650063, 'vwap_distance': 0.006562895746940578}"
+X:BTCUSD,2026-03-25T10:40:00+00:00,2026-03-25T10:45:00+00:00,10,10,crypto_vwap_reversion,structure_exit,71403.29640,71554.68009,0.01000,-1.97845,0.46461,1,0.71965,"{'position_intent': 'short_entry', 'z_score_20': 1.3960433667650063, 'vwap_distance': 0.006562895746940578}"

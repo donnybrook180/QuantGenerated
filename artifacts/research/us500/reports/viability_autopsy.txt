@@ -1,16 +1,16 @@
 Viability autopsy: US500
-Execution validation summary: selection=combo_1 variant=momentum__exit_trend__near_miss_patient@default data_source=duckdb_cache pnl=0.08 pf=1.75 closed=9 quality=0.40 underwater=66.7% -> accepted
-Tier counts: core=0 specialist=4 reject=76
+Execution validation summary: not_run
+Tier counts: core=0 specialist=0 reject=97
 
 Top blockers
-- walk-forward avg validation pnl <= 0 (0.00): 37
-- best trade concentration too high (100.00% > 70%): 34
-- validation PF < 1.0 (0.00): 32
-- combined validation/test trades too low (1 < 2): 29
-- regime stability too low (0.00 < 0.50): 21
-- test PF < 1.0 (0.00): 13
-- equity quality too low (0.25 < 0.45): 13
-- regime loss ratio too high (999.00 > 1.25): 13
+- validation PF < 1.0 (0.00): 47
+- regime stability too low (0.00 < 0.50): 40
+- validation trades too low (1 < 2): 30
+- regime loss ratio too high (999.00 > 1.25): 26
+- walk-forward avg validation pnl <= 0 (0.00): 24
+- monte carlo loss probability too high (100.00% > 10.00%): 22
+- test PF < 1.0 (0.00): 20
+- monte carlo p05 pnl <= 0 (-0.27): 19
 
 Top near-misses
 - us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
@@ -27,5 +27,5 @@ Top near-misses
   reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
 - us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_dense__trend_flat_vol_high [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
-- us500_short_vwap_reject_flat_high__near_miss_patient [reject]: pnl=0.08 pf=999.00 val=0.00/0.00/0 test=0.08/999.00/1 wf=0.00%
+- us500_short_vwap_reject_flat_high__regime_trend_flat_vol_high__near_miss_patient__trend_flat [reject]: pnl=0.05 pf=999.00 val=0.00/0.00/0 test=0.05/999.00/1 wf=0.00%
   reasons: combined validation/test trades too low (1 < 2), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)

@@ -1,21 +1,23 @@
 Artifact: btc_momentum_continuation_overlap__15m_us_15m_us_symbol_candidate
-Closed trades: 37
-Realized pnl: -89.48
+Closed trades: 61
+Realized pnl: -59.25
 
 By entry hour
-13: trades=17 pnl=-28.22 avg=-1.66 win_rate=35.29%
-17: trades=3 pnl=-22.27 avg=-7.42 win_rate=0.00%
-19: trades=6 pnl=-20.90 avg=-3.48 win_rate=0.00%
-18: trades=3 pnl=-20.17 avg=-6.72 win_rate=0.00%
-15: trades=2 pnl=-3.05 avg=-1.52 win_rate=0.00%
-14: trades=4 pnl=1.40 avg=0.35 win_rate=25.00%
-16: trades=2 pnl=3.73 avg=1.86 win_rate=50.00%
+19: trades=8 pnl=-11.15 avg=-1.39 win_rate=12.50%
+14: trades=10 pnl=-10.79 avg=-1.08 win_rate=40.00%
+18: trades=4 pnl=-10.56 avg=-2.64 win_rate=0.00%
+15: trades=3 pnl=-9.43 avg=-3.14 win_rate=0.00%
+16: trades=8 pnl=-9.35 avg=-1.17 win_rate=50.00%
+17: trades=9 pnl=-9.08 avg=-1.01 win_rate=33.33%
+13: trades=17 pnl=-1.64 avg=-0.10 win_rate=52.94%
+20: trades=2 pnl=2.74 avg=1.37 win_rate=50.00%
 
 By entry setup
-crypto_momentum_continuation: trades=37 pnl=-89.48 avg=-2.42 win_rate=21.62%
+crypto_momentum_continuation: trades=61 pnl=-59.25 avg=-0.97 win_rate=36.07%
 
 By exit reason
-stale_breakout: trades=12 pnl=-69.42 avg=-5.79 win_rate=0.00%
-stop_loss: trades=10 pnl=-61.82 avg=-6.18 win_rate=0.00%
-trailing_stop: trades=11 pnl=-0.04 avg=-0.00 win_rate=36.36%
-take_profit: trades=4 pnl=41.80 avg=10.45 win_rate=100.00%
+stale_breakout: trades=18 pnl=-68.25 avg=-3.79 win_rate=0.00%
+trailing_stop: trades=20 pnl=-23.62 avg=-1.18 win_rate=40.00%
+time_stop: trades=7 pnl=-16.73 avg=-2.39 win_rate=0.00%
+stop_loss: trades=2 pnl=-12.90 avg=-6.45 win_rate=0.00%
+take_profit: trades=14 pnl=62.25 avg=4.45 win_rate=100.00%

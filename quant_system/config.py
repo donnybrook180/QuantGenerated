@@ -147,6 +147,7 @@ class SymbolResearchConfig:
     history_days: int = field(default_factory=lambda: int(os.getenv("SYMBOL_RESEARCH_HISTORY_DAYS", "180")))
     mode: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_MODE", "auto").lower())
     source_preference: str = field(default_factory=lambda: os.getenv("SYMBOL_RESEARCH_SOURCE_PREFERENCE", "broker_first").lower())
+    max_live_candidates_per_symbol: int = field(default_factory=lambda: int(os.getenv("LIVE_MAX_STRATEGIES_PER_SYMBOL", "3")))
 
 
 @dataclass(slots=True)

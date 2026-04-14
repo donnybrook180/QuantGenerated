@@ -1,14 +1,13 @@
 Artifact: crypto_short_reversion__30m_us__exit_trend_30m_us_symbol_candidate
 Closed trades: 2
-Realized pnl: 18.65
+Realized pnl: 14.66
 
 By entry hour
-17: trades=1 pnl=-0.31 avg=-0.31 win_rate=0.00%
-16: trades=1 pnl=18.96 avg=18.96 win_rate=100.00%
+17: trades=1 pnl=6.08 avg=6.08 win_rate=100.00%
+16: trades=1 pnl=8.57 avg=8.57 win_rate=100.00%
 
 By entry setup
-crypto_short_reversion: trades=2 pnl=18.65 avg=9.33 win_rate=50.00%
+crypto_short_reversion: trades=2 pnl=14.66 avg=7.33 win_rate=100.00%
 
 By exit reason
-trailing_stop: trades=1 pnl=-0.31 avg=-0.31 win_rate=0.00%
-take_profit: trades=1 pnl=18.96 avg=18.96 win_rate=100.00%
+take_profit: trades=2 pnl=14.66 avg=7.33 win_rate=100.00%

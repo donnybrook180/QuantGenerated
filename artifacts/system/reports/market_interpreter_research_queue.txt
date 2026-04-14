@@ -1,0 +1,85 @@
+Market interpreter research queue
+generated_at: 2026-04-12T19:08:34.649636+00:00
+
+BTC
+  broker_symbol: BTCUSD
+  priority: 2
+  labels: midday_chop, no_trade::regime_block::event_risk
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+  artifact: artifacts\live\btc\interpreter_research_trigger.json
+
+GBPUSD
+  broker_symbol: GBPUSD
+  priority: 2
+  labels: midday_chop, no_trade::regime_block::volatile_chop
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+  artifact: artifacts\live\gbpusd\interpreter_research_trigger.json
+
+US100
+  broker_symbol: US100.cash
+  priority: 2
+  labels: midday_chop, compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\us100\interpreter_research_trigger.json
+
+US500
+  broker_symbol: US500.cash
+  priority: 2
+  labels: midday_chop, compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\us500\interpreter_research_trigger.json
+
+USDJPY
+  broker_symbol: USDJPY
+  priority: 2
+  labels: midday_chop, no_trade::regime_block::event_risk
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+  artifact: artifacts\live\usdjpy\interpreter_research_trigger.json
+
+ETH
+  broker_symbol: ETHUSD
+  priority: 1
+  labels: compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\eth\interpreter_research_trigger.json
+
+EURUSD
+  broker_symbol: EURUSD
+  priority: 1
+  labels: range_rotation
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test mean-reversion-biased variants and avoid trend breakout logic
+  artifact: artifacts\live\eurusd\interpreter_research_trigger.json
+
+JP225
+  broker_symbol: JP225.cash
+  priority: 1
+  labels: compression_regime
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - compare breakout-only variants against current mixed archetypes
+  artifact: artifacts\live\jp225\interpreter_research_trigger.json
+
+XAUUSD
+  broker_symbol: XAUUSD
+  priority: 1
+  labels: midday_chop
+  objective: Improve archetype selection using market interpreter state and execution context.
+  suggested_experiments:
+    - test midday exclusion filters or mean-reversion-only variants
+  artifact: artifacts\live\xauusd\interpreter_research_trigger.json

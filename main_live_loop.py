@@ -8,6 +8,8 @@ from datetime import UTC, datetime
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
+from quant_system.interpreter.reporting import generate_market_interpreter_report
+from quant_system.interpreter.research import generate_interpreter_research_report
 from quant_system.live.adaptation import adapt_deployment_for_execution, generate_execution_adaptation_report, summarize_execution_adaptation
 from quant_system.live.activity import generate_improvement_activity_report
 from quant_system.live.autopsy import generate_live_research_queue, maybe_run_auto_research
@@ -172,6 +174,12 @@ def main() -> int:
                 )
                 if action.get("veto_reason"):
                     print(f"  veto: {action['veto_reason']}")
+                if action.get("interpreter_reason"):
+                    print(
+                        f"  interpreter: reason={action['interpreter_reason']} "
+                        f"bias={action.get('interpreter_bias', '')} "
+                        f"confidence={float(action.get('interpreter_confidence', 0.0) or 0.0):.2f}"
+                    )
                 if strategy is not None and strategy.policy_summary:
                     print(f"  policy: {strategy.policy_summary}")
             print("")
@@ -181,6 +189,8 @@ def main() -> int:
         adaptation_impact_report = generate_tca_adaptation_impact_report(config)
         research_queue_report = generate_live_research_queue(config)
         improvement_activity_report = generate_improvement_activity_report()
+        market_interpreter_report = generate_market_interpreter_report(config)
+        market_interpreter_research_report = generate_interpreter_research_report(config)
         health_report = generate_live_health_report(config)
         auto_research_lines = maybe_run_auto_research(config)
         print(f"TCA: {summarize_tca_overview(tca_report)}")
@@ -190,6 +200,8 @@ def main() -> int:
         print(f"Execution adaptation report: {adaptation_report}")
         print(f"Live research queue: {research_queue_report}")
         print(f"Live improvement activity report: {improvement_activity_report}")
+        print(f"Market interpreter report: {market_interpreter_report}")
+        print(f"Market interpreter research queue: {market_interpreter_research_report}")
         for line in auto_research_lines:
             print(line)
         print(f"Health report: {health_report}")

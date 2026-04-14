@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T06:00:12.492369+00:00",
+  "generated_at": "2026-04-14T06:08:23.697622+00:00",
   "symbol": "XAUUSD",
   "broker_symbol": "XAUUSD",
   "action": "insufficient_data",
@@ -24,8 +24,8 @@
     "symbol": "XAUUSD",
     "data_symbol": "C:XAUUSD",
     "broker_symbol": "XAUUSD",
-    "research_run_id": 302,
-    "execution_set_id": 150,
+    "research_run_id": 310,
+    "execution_set_id": 156,
     "execution_validation_summary": "selection=combo_1 variant=xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=163.99 pf=999.00 closed=3 quality=0.92 underwater=0.0% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
@@ -33,7 +33,7 @@
         "candidate_name": "xauusd_volatility_breakout_exit_relaxed__near_miss_patient__trend_flat",
         "code_path": "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid trend_flat_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=orderly_range; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
         "variant_label": "",
         "regime_filter_label": "trend_flat",
         "execution_overrides": {
@@ -46,10 +46,10 @@
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_flat_vol_high"
+          "dislocated_chop"
         ],
         "blocked_regimes": [
-          "trend_flat_vol_mid"
+          "orderly_range"
         ],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,

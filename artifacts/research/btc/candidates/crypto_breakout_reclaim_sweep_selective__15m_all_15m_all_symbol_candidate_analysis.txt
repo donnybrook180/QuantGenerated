@@ -1,23 +1,23 @@
 Artifact: crypto_breakout_reclaim_sweep_selective__15m_all_15m_all_symbol_candidate
 Closed trades: 14
-Realized pnl: -234.01
+Realized pnl: -23.40
 
 By entry hour
-14: trades=2 pnl=-134.36 avg=-67.18 win_rate=0.00%
-3: trades=2 pnl=-116.04 avg=-58.02 win_rate=0.00%
-13: trades=2 pnl=-76.78 avg=-38.39 win_rate=0.00%
-9: trades=2 pnl=-34.27 avg=-17.13 win_rate=0.00%
-21: trades=1 pnl=-13.08 avg=-13.08 win_rate=0.00%
-5: trades=1 pnl=4.42 avg=4.42 win_rate=100.00%
-2: trades=1 pnl=11.62 avg=11.62 win_rate=100.00%
-8: trades=3 pnl=124.48 avg=41.49 win_rate=33.33%
+14: trades=2 pnl=-13.44 avg=-6.72 win_rate=0.00%
+3: trades=2 pnl=-11.60 avg=-5.80 win_rate=0.00%
+13: trades=2 pnl=-7.68 avg=-3.84 win_rate=0.00%
+9: trades=2 pnl=-3.43 avg=-1.71 win_rate=0.00%
+21: trades=1 pnl=-1.31 avg=-1.31 win_rate=0.00%
+5: trades=1 pnl=0.44 avg=0.44 win_rate=100.00%
+2: trades=1 pnl=1.16 avg=1.16 win_rate=100.00%
+8: trades=3 pnl=12.45 avg=4.15 win_rate=33.33%
 
 By entry setup
-crypto_breakout_reclaim: trades=14 pnl=-234.01 avg=-16.71 win_rate=21.43%
+crypto_breakout_reclaim: trades=14 pnl=-23.40 avg=-1.67 win_rate=21.43%
 
 By exit reason
-signal_exit: trades=5 pnl=-189.73 avg=-37.95 win_rate=0.00%
-stale_breakout: trades=1 pnl=-95.36 avg=-95.36 win_rate=0.00%
-stop_loss: trades=1 pnl=-73.91 avg=-73.91 win_rate=0.00%
-trailing_stop: trades=6 pnl=-51.37 avg=-8.56 win_rate=33.33%
-take_profit: trades=1 pnl=176.36 avg=176.36 win_rate=100.00%
+signal_exit: trades=5 pnl=-18.97 avg=-3.79 win_rate=0.00%
+stale_breakout: trades=1 pnl=-9.54 avg=-9.54 win_rate=0.00%
+stop_loss: trades=1 pnl=-7.39 avg=-7.39 win_rate=0.00%
+trailing_stop: trades=6 pnl=-5.14 avg=-0.86 win_rate=33.33%
+take_profit: trades=1 pnl=17.64 avg=17.64 win_rate=100.00%

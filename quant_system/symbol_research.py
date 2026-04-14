@@ -99,6 +99,7 @@ from quant_system.live.deploy import build_symbol_deployment, export_symbol_depl
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
+from quant_system.regime import map_regime_label_to_unified
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
 from quant_system.research.features import build_feature_library
 from quant_system.risk.limits import RiskManager
@@ -177,8 +178,10 @@ class CandidateResult:
     combo_outperformance_score: float = 0.0
     combo_trade_overlap_pct: float = 0.0
     best_regime: str = ""
+    best_unified_regime: str = ""
     best_regime_pnl: float = 0.0
     worst_regime: str = ""
+    worst_unified_regime: str = ""
     worst_regime_pnl: float = 0.0
     dominant_regime_share_pct: float = 0.0
     regime_trade_count_by_label: str = "{}"
@@ -619,6 +622,10 @@ def _with_execution_overrides(config: SystemConfig, overrides: dict[str, float |
 
 def _configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> None:
     upper = symbol.upper()
+    if upper == "USDJPY":
+        # USDJPY research can explode in notional terms because forex uses 100k contract size.
+        # Keep research on mini-size here so viability is driven by signal quality, not oversized exposure.
+        config.execution.order_size = min(config.execution.order_size, 0.01)
     if "XAU" in upper:
         config.execution.min_bars_between_trades = 30
         config.execution.max_holding_bars = 18
@@ -4353,6 +4360,36 @@ def _feature_regime_label(feature: FeatureVector) -> str:
     return f"{trend_label}_{vol_label}"
 
 
+def _feature_regime_to_unified(label: str) -> str:
+    normalized = str(label or "").strip().lower()
+    if not normalized:
+        return ""
+    structure_label = "trend" if normalized.startswith(("trend_up", "trend_down")) else "range"
+    if normalized.endswith("vol_high"):
+        volatility_label = "high"
+    elif normalized.endswith("vol_low"):
+        volatility_label = "low"
+    else:
+        volatility_label = "normal"
+    synthetic_legacy = "calm_range"
+    if structure_label == "trend" and volatility_label == "high":
+        synthetic_legacy = "volatile_trend"
+    elif structure_label == "trend":
+        synthetic_legacy = "calm_trend"
+    elif volatility_label == "high":
+        synthetic_legacy = "volatile_chop"
+    return map_regime_label_to_unified(synthetic_legacy, volatility_label, structure_label)
+
+
+def _summarize_unified_regime(raw_label: str) -> str:
+    unified = _feature_regime_to_unified(raw_label)
+    if not unified:
+        return raw_label
+    if not raw_label:
+        return unified
+    return f"{unified} ({raw_label})"
+
+
 def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVector], trades) -> None:
     if not trades:
         return
@@ -4386,8 +4423,10 @@ def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVect
         elif pnl_total < 0.0:
             negative_pnl_total += abs(pnl_total)
     result.best_regime = best_regime
+    result.best_unified_regime = _feature_regime_to_unified(best_regime)
     result.best_regime_pnl = sum(regime_pnls[best_regime])
     result.worst_regime = worst_regime
+    result.worst_unified_regime = _feature_regime_to_unified(worst_regime)
     result.worst_regime_pnl = sum(regime_pnls[worst_regime])
     result.dominant_regime_share_pct = (len(regime_pnls[dominant_regime]) / total_trades * 100.0) if total_trades else 0.0
     result.regime_trade_count_by_label = json.dumps(regime_trade_count_by_label, sort_keys=True)
@@ -4462,15 +4501,26 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
             for item in sorted(regime_pnl_by_label.items(), key=lambda item: item[1])
             if item[1] < 0.0
         ]
-        allowed_regimes = tuple(positive_regimes[:2])
-        blocked_regimes = tuple(item for item in negative_regimes[:2] if item not in allowed_regimes)
+        active_feature_regimes = tuple(positive_regimes[:2])
+        blocked_feature_regimes = tuple(item for item in negative_regimes[:2] if item not in active_feature_regimes)
+        allowed_regimes = tuple(
+            item for item in dict.fromkeys(_feature_regime_to_unified(label) for label in active_feature_regimes) if item
+        )
+        blocked_regimes = tuple(
+            item for item in dict.fromkeys(_feature_regime_to_unified(label) for label in blocked_feature_regimes) if item and item not in allowed_regimes
+        )
     else:
-        allowed_regimes = (best_regime,) if best_regime else ()
-        blocked_regimes = tuple(item for item in (worst_regime,) if item and item not in allowed_regimes)
+        active_feature_regimes = (best_regime,) if best_regime else ()
+        allowed_regimes = tuple(
+            item for item in (_feature_regime_to_unified(best_regime),) if item
+        )
+        blocked_regimes = tuple(
+            item for item in (_feature_regime_to_unified(worst_regime),) if item and item not in allowed_regimes
+        )
     blocked_summary = ", ".join(blocked_regimes) if blocked_regimes else "no explicit blocked regime"
     allowed_summary = ", ".join(allowed_regimes) if allowed_regimes else "no preferred regime"
 
-    active_regimes = allowed_regimes or ((best_regime,) if best_regime else ())
+    active_regimes = active_feature_regimes or ((best_regime,) if best_regime else ())
     vol_suffixes = [regime.split("_")[-1] for regime in active_regimes if regime]
     min_vol_percentile = 0.0
     max_vol_percentile = 1.0
@@ -4504,8 +4554,8 @@ def build_execution_policy_from_candidate_row(row: CandidateResult | dict[str, o
         max_risk_multiplier = min(max_risk_multiplier, 0.20)
     policy_summary = (
         f"tier={promotion_tier}"
-        f"; activate in {allowed_summary}"
-        f"; avoid {blocked_summary}"
+        f"; activate in unified_regimes={allowed_summary}"
+        f"; avoid unified_regimes={blocked_summary}"
         f"; vol_pct in [{min_vol_percentile:.2f}, {max_vol_percentile:.2f}]"
         f"; base_weight={base_allocation_weight:.2f}"
         f"; risk_cap={max_risk_multiplier:.2f}"
@@ -4546,7 +4596,7 @@ def _regime_improvement_specs(specs: list[CandidateSpec], results: list[Candidat
         generated.append(
             CandidateSpec(
                 name=f"{base_spec.name}__regime_{row.best_regime}",
-                description=f"{base_spec.description} focused on {row.best_regime}",
+                description=f"{base_spec.description} focused on {_feature_regime_to_unified(row.best_regime) or row.best_regime}",
                 agents=base_spec.agents,
                 code_path=base_spec.code_path,
                 execution_overrides=copy.deepcopy(base_spec.execution_overrides),
@@ -5466,8 +5516,10 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "combo_outperformance_score",
                 "combo_trade_overlap_pct",
                 "best_regime",
+                "best_unified_regime",
                 "best_regime_pnl",
                 "worst_regime",
+                "worst_unified_regime",
                 "worst_regime_pnl",
                 "dominant_regime_share_pct",
                 "regime_stability_score",
@@ -5517,8 +5569,10 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     f"{row.combo_outperformance_score:.5f}",
                     f"{row.combo_trade_overlap_pct:.5f}",
                     row.best_regime,
+                    row.best_unified_regime,
                     f"{row.best_regime_pnl:.5f}",
                     row.worst_regime,
+                    row.worst_unified_regime,
                     f"{row.worst_regime_pnl:.5f}",
                     f"{row.dominant_regime_share_pct:.5f}",
                     f"{row.regime_stability_score:.5f}",
@@ -5570,10 +5624,14 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
             f"  exits: dominant={row.dominant_exit or 'none'} share={row.dominant_exit_share_pct:.2f}%"
         )
         lines.append(
-            f"  regimes: best={row.best_regime or 'none'} pnl={row.best_regime_pnl:.2f} "
-            f"worst={row.worst_regime or 'none'} pnl={row.worst_regime_pnl:.2f} "
+            f"  regimes: best={_summarize_unified_regime(row.best_regime) if row.best_regime else 'none'} pnl={row.best_regime_pnl:.2f} "
+            f"worst={_summarize_unified_regime(row.worst_regime) if row.worst_regime else 'none'} pnl={row.worst_regime_pnl:.2f} "
             f"dominant_share={row.dominant_regime_share_pct:.2f}% "
             f"stability={row.regime_stability_score:.2f} loss_ratio={row.regime_loss_ratio:.2f}"
+        )
+        lines.append(
+            f"  unified_regimes: best={row.best_unified_regime or 'none'} "
+            f"worst={row.worst_unified_regime or 'none'}"
         )
         lines.append(f"  regime_trade_counts: {row.regime_trade_count_by_label}")
         lines.append(f"  regime_pnls: {row.regime_pnl_by_label}")
@@ -5980,8 +6038,10 @@ def run_symbol_research(
             "combo_outperformance_score": row.combo_outperformance_score,
             "combo_trade_overlap_pct": row.combo_trade_overlap_pct,
             "best_regime": row.best_regime,
+            "best_unified_regime": row.best_unified_regime,
             "best_regime_pnl": row.best_regime_pnl,
             "worst_regime": row.worst_regime,
+            "worst_unified_regime": row.worst_unified_regime,
             "worst_regime_pnl": row.worst_regime_pnl,
             "dominant_regime_share_pct": row.dominant_regime_share_pct,
             "regime_stability_score": row.regime_stability_score,
@@ -6145,19 +6205,18 @@ def run_symbol_research(
         symbol_research_run_id=run_id,
     )
     deployment_path = None
-    if selected_execution_candidates:
-        deployment = build_symbol_deployment(
-            profile_name=profile_name,
-            symbol=resolved.profile_symbol,
-            data_symbol=resolved.data_symbol,
-            broker_symbol=resolved.broker_symbol,
-            research_run_id=run_id,
-            execution_set_id=execution_set_id,
-            execution_validation_summary=execution_validation_summary,
-            symbol_status=symbol_status,
-            selected_candidates=selected_execution_candidates,
-        )
-        deployment_path = export_symbol_deployment(deployment)
+    deployment = build_symbol_deployment(
+        profile_name=profile_name,
+        symbol=resolved.profile_symbol,
+        data_symbol=resolved.data_symbol,
+        broker_symbol=resolved.broker_symbol,
+        research_run_id=run_id,
+        execution_set_id=execution_set_id,
+        execution_validation_summary=execution_validation_summary,
+        symbol_status=symbol_status,
+        selected_candidates=selected_execution_candidates,
+    )
+    deployment_path = export_symbol_deployment(deployment)
     selected_execution_results = [row for row in results if row.name in {str(item["candidate_name"]) for item in selected_execution_candidates}]
     plot_paths = plot_symbol_research(
         resolved.profile_symbol,

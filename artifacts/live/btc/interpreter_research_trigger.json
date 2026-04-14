@@ -1,0 +1,14 @@
+{
+  "symbol": "BTC",
+  "broker_symbol": "BTCUSD",
+  "priority": 2,
+  "labels": [
+    "midday_chop",
+    "no_trade::regime_block::event_risk"
+  ],
+  "objective": "Improve archetype selection using market interpreter state and execution context.",
+  "suggested_experiments": [
+    "test midday exclusion filters or mean-reversion-only variants"
+  ],
+  "report_path": "artifacts\\live\\btc\\interpreter_research_trigger.json"
+}

@@ -1,14 +1,14 @@
 Artifact: crypto_vwap_reversion__30m_us_30m_us_symbol_candidate
 Closed trades: 3
-Realized pnl: 177.04
+Realized pnl: 17.70
 
 By entry hour
-19: trades=1 pnl=-54.79 avg=-54.79 win_rate=0.00%
-17: trades=2 pnl=231.84 avg=115.92 win_rate=50.00%
+19: trades=1 pnl=-5.48 avg=-5.48 win_rate=0.00%
+17: trades=2 pnl=23.18 avg=11.59 win_rate=50.00%
 
 By entry setup
-crypto_vwap_reversion: trades=3 pnl=177.04 avg=59.01 win_rate=33.33%
+crypto_vwap_reversion: trades=3 pnl=17.70 avg=5.90 win_rate=33.33%
 
 By exit reason
-structure_exit: trades=2 pnl=-66.06 avg=-33.03 win_rate=0.00%
-take_profit: trades=1 pnl=243.11 avg=243.11 win_rate=100.00%
+structure_exit: trades=2 pnl=-6.61 avg=-3.30 win_rate=0.00%
+take_profit: trades=1 pnl=24.31 avg=24.31 win_rate=100.00%

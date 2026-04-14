@@ -1,6 +1,6 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-11-28T10:45:00+00:00,2025-11-28T11:15:00+00:00,10,11,forex_range_reversion,structure_exit,156.25514,156.20186,0.10000,-533.29656,0.50000,2,0.78308,{'mean_level': 156.325}
-C:USDJPY,2025-12-11T11:15:00+00:00,2025-12-11T11:30:00+00:00,11,11,forex_range_reversion,signal_exit,155.76613,155.75487,0.10000,-113.03206,0.50000,1,0.75165,{'mean_level': 155.90640000000002}
-C:USDJPY,2026-01-22T10:45:00+00:00,2026-01-22T11:15:00+00:00,10,11,forex_range_reversion,signal_exit,158.63321,158.65579,0.10000,225.33798,0.50000,2,0.75412,{'mean_level': 158.75125}
-C:USDJPY,2026-02-13T12:45:00+00:00,2026-02-13T13:30:00+00:00,12,13,forex_range_reversion,structure_exit,153.25106,153.23294,0.10000,-181.60866,0.50000,3,0.70505,{'mean_level': 153.43865}
-C:USDJPY,2026-04-03T11:15:00+00:00,2026-04-03T11:45:00+00:00,11,11,forex_range_reversion,structure_exit,159.55723,159.54077,0.10000,-165.17323,0.50000,2,0.83201,{'mean_level': 159.59065}
+C:USDJPY,2025-11-28T10:45:00+00:00,2025-11-28T11:15:00+00:00,10,11,forex_range_reversion,structure_exit,156.26631,156.19069,0.01000,-75.66561,0.05000,2,0.78308,{'mean_level': 156.325}
+C:USDJPY,2025-12-11T11:15:00+00:00,2025-12-11T11:30:00+00:00,11,11,forex_range_reversion,signal_exit,155.77728,155.74372,0.01000,-33.60685,0.05000,1,0.75165,{'mean_level': 155.90640000000002}
+C:USDJPY,2026-01-22T10:45:00+00:00,2026-01-22T11:15:00+00:00,10,11,forex_range_reversion,signal_exit,158.64446,158.64454,0.01000,0.03105,0.05000,2,0.75412,{'mean_level': 158.75125}
+C:USDJPY,2026-02-13T12:45:00+00:00,2026-02-13T13:30:00+00:00,12,13,forex_range_reversion,structure_exit,153.26212,153.22188,0.01000,-40.29063,0.05000,3,0.70505,{'mean_level': 153.43865}
+C:USDJPY,2026-04-03T11:15:00+00:00,2026-04-03T11:45:00+00:00,11,11,forex_range_reversion,structure_exit,159.56852,159.52948,0.01000,-39.08252,0.05000,2,0.83201,{'mean_level': 159.59065}

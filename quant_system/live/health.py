@@ -8,6 +8,9 @@ from pathlib import Path
 from quant_system.ai.storage import ExperimentStore
 from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
 from quant_system.config import SystemConfig
+from quant_system.interpreter.app import build_all_market_interpreter_states
+from quant_system.interpreter.research import generate_interpreter_research_report
+from quant_system.interpreter.reporting import generate_market_interpreter_report
 from quant_system.live.adaptation import adapt_deployment_for_execution, summarize_execution_adaptation
 from quant_system.live.activity import generate_improvement_activity_report
 from quant_system.live.autopsy import build_live_research_directives, generate_live_research_queue
@@ -37,6 +40,9 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
     impact_rows = build_tca_impact_rows(config)
     impact_report = generate_tca_impact_report(config)
     adaptation_impact_report = generate_tca_adaptation_impact_report(config)
+    interpreter_report = generate_market_interpreter_report(config)
+    interpreter_research_report = generate_interpreter_research_report(config)
+    interpreter_states = {item.symbol: item for item in build_all_market_interpreter_states(config)}
     research_directives = build_live_research_directives(config)
     research_queue_report = generate_live_research_queue(config)
     improvement_activity_report = generate_improvement_activity_report()
@@ -87,6 +93,18 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
                 f"  latest_incident: {latest_incident if latest_incident is not None else 'none'}",
                 f"  fills: {_format_fill_summary(fill_summary)}",
                 f"  tca: {summarize_tca_overview(symbol_tca)}",
+                (
+                    f"  interpreter: legacy_regime={interpreter_states[symbol].legacy_regime_label} "
+                    f"unified_regime={interpreter_states[symbol].unified_regime_label} "
+                    f"bias={interpreter_states[symbol].directional_bias} "
+                    f"session={interpreter_states[symbol].session_regime} "
+                    f"structure={interpreter_states[symbol].structure_regime} "
+                    f"execution={interpreter_states[symbol].execution_regime} "
+                    f"risk={interpreter_states[symbol].risk_posture} "
+                    f"confidence={interpreter_states[symbol].confidence:.2f}"
+                )
+                if symbol in interpreter_states
+                else "  interpreter: none",
                 f"  latest_actions: {latest_actions}" if latest_actions else "",
                 "",
             ]
@@ -125,6 +143,8 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
         f"TCA report: {tca_report.report_path}",
         f"TCA impact report: {impact_report}",
         f"TCA adaptation impact report: {adaptation_impact_report}",
+        f"Market interpreter report: {interpreter_report}",
+        f"Market interpreter research queue: {interpreter_research_report}",
         f"Live research queue: {research_queue_report}",
         f"Live improvement activity report: {improvement_activity_report}",
         f"Live research triggers: {len(research_directives)}",
@@ -155,6 +175,8 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
                     "tca_report": str(tca_report.report_path),
                     "tca_impact_report": str(impact_report),
                     "tca_adaptation_impact_report": str(adaptation_impact_report),
+                    "market_interpreter_report": str(interpreter_report),
+                    "market_interpreter_research_queue": str(interpreter_research_report),
                     "live_research_queue": str(research_queue_report),
                     "live_improvement_activity_report": str(improvement_activity_report),
                 },
@@ -192,6 +214,8 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
                 "tca_report": str(tca_report.report_path),
                 "tca_impact_report": str(impact_report),
                 "tca_adaptation_impact_report": str(adaptation_impact_report),
+                "market_interpreter_report": str(interpreter_report),
+                "market_interpreter_research_queue": str(interpreter_research_report),
                 "live_research_queue": str(research_queue_report),
                 "live_improvement_activity_report": str(improvement_activity_report),
             },

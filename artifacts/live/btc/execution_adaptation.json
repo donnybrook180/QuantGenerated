@@ -1,23 +1,11 @@
 {
-  "generated_at": "2026-04-14T06:00:11.713083+00:00",
+  "generated_at": "2026-04-14T06:09:23.958908+00:00",
   "symbol": "BTC",
   "broker_symbol": "BTCUSD",
   "action": "insufficient_data",
   "reason": "not enough local fills for adaptation",
   "overview": null,
   "strategy_actions": [
-    {
-      "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
-      "fill_count": 0,
-      "action": "unchanged",
-      "base_weight_scale": 1.0,
-      "risk_scale": 1.0,
-      "min_bars_between_trades": 0,
-      "resulting_base_weight": 1.021404269810902,
-      "resulting_max_risk_multiplier": 0.6,
-      "local_rank_label": "baseline_local",
-      "reason": "healthy_or_insufficient_data"
-    },
     {
       "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up",
       "fill_count": 0,
@@ -26,7 +14,7 @@
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
       "resulting_base_weight": 1.119019762092518,
-      "resulting_max_risk_multiplier": 0.9800841327737616,
+      "resulting_max_risk_multiplier": 0.9800841327737617,
       "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     }
@@ -36,42 +24,16 @@
     "symbol": "BTC",
     "data_symbol": "X:BTCUSD",
     "broker_symbol": "BTCUSD",
-    "research_run_id": 249,
-    "execution_set_id": 128,
-    "execution_validation_summary": "selection=tiered_fallback core=2 specialist=0 -> accepted_with_reduced_risk",
-    "symbol_status": "reduced_risk_only",
+    "research_run_id": 303,
+    "execution_set_id": 151,
+    "execution_validation_summary": "selection=combo_1 variant=btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up@5m_all|trend_up data_source=duckdb_cache pnl=21.58 pf=4.68 closed=8 quality=0.71 underwater=50.0% -> accepted",
+    "symbol_status": "live_ready",
     "strategies": [
-      {
-        "candidate_name": "crypto_short_breakdown__15m_europe__exit_fastfail",
-        "code_path": "quant_system.agents.crypto.CryptoShortBreakdownAgent",
-        "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_flat_vol_high; avoid trend_down_vol_high; vol_pct in [0.55, 0.97]; base_weight=1.02; risk_cap=0.60; stability=0.82; loss_ratio=0.17",
-        "variant_label": "15m_europe",
-        "regime_filter_label": "",
-        "execution_overrides": {
-          "max_holding_bars": 18,
-          "take_profit_atr_multiple": 1.8,
-          "stale_breakout_bars": 4,
-          "structure_exit_bars": 2
-        },
-        "allocation_weight": 1.0,
-        "allowed_regimes": [
-          "trend_flat_vol_high"
-        ],
-        "blocked_regimes": [
-          "trend_down_vol_high"
-        ],
-        "min_vol_percentile": 0.55,
-        "max_vol_percentile": 0.97,
-        "base_allocation_weight": 1.021404269810902,
-        "max_risk_multiplier": 0.6,
-        "min_risk_multiplier": 0.0
-      },
       {
         "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up",
         "code_path": "quant_system.agents.crypto.CryptoTrendPullbackAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_up_vol_mid; avoid trend_up_vol_low; vol_pct in [0.20, 0.80]; base_weight=1.12; risk_cap=0.98; stability=0.96; loss_ratio=0.09",
+        "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=1.12; risk_cap=0.98; stability=0.96; loss_ratio=0.09",
         "variant_label": "5m_all",
         "regime_filter_label": "trend_up",
         "execution_overrides": {
@@ -83,15 +45,13 @@
         },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_up_vol_mid"
+          "orderly_trend"
         ],
-        "blocked_regimes": [
-          "trend_up_vol_low"
-        ],
+        "blocked_regimes": [],
         "min_vol_percentile": 0.2,
         "max_vol_percentile": 0.8,
         "base_allocation_weight": 1.119019762092518,
-        "max_risk_multiplier": 0.9800841327737616,
+        "max_risk_multiplier": 0.9800841327737617,
         "min_risk_multiplier": 0.0
       }
     ],

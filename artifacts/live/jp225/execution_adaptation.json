@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T06:00:12.118333+00:00",
+  "generated_at": "2026-04-14T06:08:22.760311+00:00",
   "symbol": "JP225",
   "broker_symbol": "JP225.cash",
   "action": "insufficient_data",
@@ -7,7 +7,7 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+      "candidate_name": "jp225_volatility_short_breakdown_core_hours__exit_trend",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
@@ -24,25 +24,31 @@
     "symbol": "JP225",
     "data_symbol": "JP225",
     "broker_symbol": "JP225.cash",
-    "research_run_id": 254,
-    "execution_set_id": 133,
-    "execution_validation_summary": "selection=tiered_fallback core=1 specialist=0 -> accepted_with_reduced_risk",
-    "symbol_status": "reduced_risk_only",
+    "research_run_id": 308,
+    "execution_set_id": 154,
+    "execution_validation_summary": "selection=combo_1 variant=jp225_volatility_short_breakdown_core_hours__exit_trend@default data_source=duckdb_cache pnl=30.30 pf=4.53 closed=13 quality=0.69 underwater=53.8% -> accepted",
+    "symbol_status": "live_ready",
     "strategies": [
       {
-        "candidate_name": "jp225_volatility_short_breakdown_core_hours",
+        "candidate_name": "jp225_volatility_short_breakdown_core_hours__exit_trend",
         "code_path": "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in trend_down_vol_high; avoid trend_down_vol_mid; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
+        "policy_summary": "tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=dislocated_chop; vol_pct in [0.55, 0.97]; base_weight=1.15; risk_cap=0.60; stability=1.00; loss_ratio=0.00",
         "variant_label": "",
         "regime_filter_label": "",
-        "execution_overrides": {},
+        "execution_overrides": {
+          "max_holding_bars": 0,
+          "take_profit_atr_multiple": 3.2,
+          "trailing_stop_atr_multiple": 1.2,
+          "stale_breakout_bars": 8,
+          "structure_exit_bars": 0
+        },
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "trend_down_vol_high"
+          "trend_expansion"
         ],
         "blocked_regimes": [
-          "trend_down_vol_mid"
+          "dislocated_chop"
         ],
         "min_vol_percentile": 0.55,
         "max_vol_percentile": 0.97,

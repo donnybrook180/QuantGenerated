@@ -1,15 +1,15 @@
 Artifact: btc_breakout_reclaim_trend__15m_europe__exit_trend_15m_europe_symbol_candidate
 Closed trades: 4
-Realized pnl: 106.93
+Realized pnl: 10.69
 
 By entry hour
-9: trades=2 pnl=-5.38 avg=-2.69 win_rate=50.00%
-7: trades=1 pnl=14.69 avg=14.69 win_rate=100.00%
-8: trades=1 pnl=97.62 avg=97.62 win_rate=100.00%
+9: trades=2 pnl=-0.54 avg=-0.27 win_rate=50.00%
+7: trades=1 pnl=1.47 avg=1.47 win_rate=100.00%
+8: trades=1 pnl=9.76 avg=9.76 win_rate=100.00%
 
 By entry setup
-crypto_breakout_reclaim: trades=4 pnl=106.93 avg=26.73 win_rate=75.00%
+crypto_breakout_reclaim: trades=4 pnl=10.69 avg=2.67 win_rate=75.00%
 
 By exit reason
-signal_exit: trades=2 pnl=21.21 avg=10.60 win_rate=100.00%
-trailing_stop: trades=2 pnl=85.72 avg=42.86 win_rate=50.00%
+signal_exit: trades=2 pnl=2.12 avg=1.06 win_rate=100.00%
+trailing_stop: trades=2 pnl=8.57 avg=4.29 win_rate=50.00%

@@ -1,31 +1,31 @@
 Viability autopsy: USDJPY
-Execution validation summary: selection=tiered_fallback core=2 specialist=1 -> accepted_with_reduced_risk
-Tier counts: core=3 specialist=11 reject=157
+Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat@30m_overlap|trend_flat data_source=duckdb_cache_aggregated pnl=10514.04 pf=10.68 closed=11 quality=0.54 underwater=54.5% -> accepted
+Tier counts: core=1 specialist=5 reject=162
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 88
-- regime stability too low (0.00 < 0.50): 47
-- validation PF < 1.0 (0.00): 46
-- best trade concentration too high (100.00% > 70%): 43
-- test PF < 1.0 (0.00): 40
-- walk-forward avg test pnl <= 0 (0.00): 36
-- regime loss ratio too high (999.00 > 1.25): 36
-- walk-forward pass rate too low (0.00% < 25%): 32
+- walk-forward pass rate too low (0.00% < 50%): 90
+- regime stability too low (0.00 < 0.50): 60
+- validation PF < 1.0 (0.00): 55
+- test PF < 1.0 (0.00): 53
+- regime loss ratio too high (999.00 > 1.25): 49
+- best trade concentration too high (100.00% > 70%): 47
+- walk-forward avg test pnl <= 0 (0.00): 32
+- equity quality too low (0.25 < 0.45): 31
 
 Top near-misses
-- forex_breakout_momentum__30m_overlap__exit_trend [reject]: pnl=146607.87 pf=999.00 val=3737.62/1.22/9 test=-733.27/0.91/10 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-2710.21), best trade concentration too high (88.59% > 70%)
-- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense [reject]: pnl=146607.87 pf=999.00 val=3737.62/1.22/9 test=-733.27/0.91/10 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-2710.21), best trade concentration too high (88.59% > 70%)
-- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_patient [reject]: pnl=144437.93 pf=999.00 val=5127.59/1.30/9 test=-733.27/0.91/10 wf=0.00%
-  reasons: walk-forward avg test pnl <= 0 (-2015.23), best trade concentration too high (89.92% > 70%)
-- forex_breakout_momentum__30m_us__exit_trend [reject]: pnl=141043.40 pf=999.00 val=8730.67/1.50/13 test=7787.31/1.72/13 wf=100.00%
-  reasons: best trade concentration too high (92.09% > 70%)
-- forex_breakout_momentum__30m_us__exit_trend__near_miss_dense [reject]: pnl=141043.40 pf=999.00 val=8730.67/1.50/13 test=2337.33/1.14/15 wf=100.00%
-  reasons: best trade concentration too high (92.09% > 70%)
-- forex_breakout_momentum__5m_overlap__exit_trend__near_miss_patient [reject]: pnl=138028.15 pf=42.81 val=-4141.80/0.76/28 test=15785.44/2.15/23 wf=50.00%
-  reasons: best trade concentration too high (92.67% > 70%)
-- forex_breakout_momentum__5m_overlap__exit_trend [reject]: pnl=137518.16 pf=42.65 val=-9964.17/0.22/17 test=14905.46/2.04/23 wf=50.00%
-  reasons: best trade concentration too high (93.01% > 70%)
-- forex_breakout_momentum__30m_us__exit_trend__near_miss_patient [reject]: pnl=136633.51 pf=999.00 val=4430.78/1.25/13 test=8357.29/1.77/13 wf=50.00%
-  reasons: best trade concentration too high (95.06% > 70%)
+- forex_breakout_momentum__30m_overlap__exit_trend [reject]: pnl=14787.42 pf=999.00 val=151.30/1.08/9 test=-443.44/0.59/10 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-292.14), walk-forward pass rate too low (0.00% < 25%), walk-forward avg test pnl <= 0 (-714.44), best trade concentration too high (87.67% > 70%)
+- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense [reject]: pnl=14787.42 pf=999.00 val=151.30/1.08/9 test=-443.44/0.59/10 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-292.14), walk-forward pass rate too low (0.00% < 25%), walk-forward avg test pnl <= 0 (-714.44), best trade concentration too high (87.67% > 70%)
+- forex_breakout_momentum__30m_overlap__exit_trend__near_miss_patient [reject]: pnl=14346.45 pf=999.00 val=290.29/1.16/9 test=-280.45/0.70/10 wf=0.00%
+  reasons: walk-forward avg test pnl <= 0 (-563.45), best trade concentration too high (90.36% > 70%)
+- forex_breakout_momentum__30m_us__exit_trend [reject]: pnl=14031.32 pf=999.00 val=642.01/1.34/13 test=348.66/1.25/13 wf=50.00%
+  reasons: best trade concentration too high (92.39% > 70%)
+- forex_breakout_momentum__30m_us__exit_trend__near_miss_dense [reject]: pnl=14031.32 pf=999.00 val=642.01/1.34/13 test=200.64/1.13/14 wf=50.00%
+  reasons: best trade concentration too high (92.39% > 70%)
+- forex_breakout_momentum__5m_europe__exit_trend__regime_trend_flat_vol_low [reject]: pnl=13902.55 pf=8.54 val=-937.16/0.37/19 test=3137.92/4.39/12 wf=50.00%
+  reasons: validation pnl <= 0 (-937.16), validation PF < 1.0 (0.37), best trade concentration too high (81.37% > 70%)
+- forex_breakout_momentum__5m_europe__exit_trend__regime_trend_flat_vol_low__near_miss_protective [reject]: pnl=13768.56 pf=10.16 val=-923.67/0.38/20 test=1334.36/2.35/14 wf=50.00%
+  reasons: validation pnl <= 0 (-923.67), validation PF < 1.0 (0.38), best trade concentration too high (83.89% > 70%)
+- forex_breakout_momentum__5m_europe__exit_trend__regime_trend_flat_vol_low__near_miss_protective__trend_flat_vol_low [reject]: pnl=13768.56 pf=10.16 val=-923.67/0.38/20 test=1334.36/2.35/14 wf=50.00%
+  reasons: validation pnl <= 0 (-923.67), validation PF < 1.0 (0.38), best trade concentration too high (83.89% > 70%)

@@ -1,0 +1,14 @@
+{
+  "symbol": "GBPUSD",
+  "broker_symbol": "GBPUSD",
+  "priority": 2,
+  "labels": [
+    "midday_chop",
+    "no_trade::regime_block::volatile_chop"
+  ],
+  "objective": "Improve archetype selection using market interpreter state and execution context.",
+  "suggested_experiments": [
+    "test midday exclusion filters or mean-reversion-only variants"
+  ],
+  "report_path": "artifacts\\live\\gbpusd\\interpreter_research_trigger.json"
+}

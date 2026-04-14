@@ -7,6 +7,8 @@ import pandas as pd
 import streamlit as st
 
 from quant_system.artifacts import LIVE_DIR, system_reports_dir
+from quant_system.ai.storage import ExperimentStore
+from quant_system.config import SystemConfig
 
 
 REPORTS_DIR = system_reports_dir()
@@ -77,6 +79,50 @@ def _load_latest_journal_actions() -> list[dict]:
 
 def _frame(rows: list[dict] | list[object]) -> pd.DataFrame:
     return pd.DataFrame(rows) if rows else pd.DataFrame()
+
+
+def _load_latest_symbol_research_rows() -> list[dict]:
+    config = SystemConfig()
+    store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
+    rows: list[dict] = []
+    for profile_name in store.list_symbol_research_profiles():
+        if not profile_name.startswith("symbol::"):
+            continue
+        latest = store.get_latest_symbol_research_run(profile_name)
+        if latest is None:
+            continue
+        for candidate in store.list_latest_symbol_research_candidates(profile_name):
+            rows.append(
+                {
+                    "profile_name": profile_name,
+                    "symbol": str(latest.get("broker_symbol") or latest.get("data_symbol") or profile_name),
+                    "candidate_name": candidate.get("candidate_name", ""),
+                    "recommended": bool(candidate.get("recommended", False)),
+                    "realized_pnl": float(candidate.get("realized_pnl", 0.0) or 0.0),
+                    "closed_trades": int(candidate.get("closed_trades", 0) or 0),
+                    "profit_factor": float(candidate.get("profit_factor", 0.0) or 0.0),
+                    "max_drawdown_pct": float(candidate.get("max_drawdown_pct", 0.0) or 0.0),
+                    "expectancy": float(candidate.get("expectancy", 0.0) or 0.0),
+                    "sharpe_ratio": float(candidate.get("sharpe_ratio", 0.0) or 0.0),
+                    "sortino_ratio": float(candidate.get("sortino_ratio", 0.0) or 0.0),
+                    "calmar_ratio": float(candidate.get("calmar_ratio", 0.0) or 0.0),
+                    "validation_profit_factor": float(candidate.get("validation_profit_factor", 0.0) or 0.0),
+                    "test_profit_factor": float(candidate.get("test_profit_factor", 0.0) or 0.0),
+                    "walk_forward_pass_rate_pct": float(candidate.get("walk_forward_pass_rate_pct", 0.0) or 0.0),
+                }
+            )
+    rows.sort(
+        key=lambda row: (
+            row["recommended"],
+            row["sortino_ratio"],
+            row["sharpe_ratio"],
+            row["calmar_ratio"],
+            row["profit_factor"],
+            row["realized_pnl"],
+        ),
+        reverse=True,
+    )
+    return rows
 
 
 def _metric(label: str, value, help_text: str = "") -> None:
@@ -214,6 +260,34 @@ def render_agents(impact: dict, adaptation_impact: dict) -> None:
 
 
 def render_research(queue: dict, activity_rows: list[dict]) -> None:
+    st.subheader("Latest Research Metrics")
+    research_metrics = _frame(_load_latest_symbol_research_rows())
+    if research_metrics.empty:
+        st.info("No symbol research candidates available.")
+    else:
+        st.dataframe(
+            research_metrics[
+                [
+                    "symbol",
+                    "candidate_name",
+                    "recommended",
+                    "realized_pnl",
+                    "closed_trades",
+                    "profit_factor",
+                    "max_drawdown_pct",
+                    "expectancy",
+                    "sharpe_ratio",
+                    "sortino_ratio",
+                    "calmar_ratio",
+                    "validation_profit_factor",
+                    "test_profit_factor",
+                    "walk_forward_pass_rate_pct",
+                ]
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+
     queue_frame = _frame(queue.get("items", []))
     st.subheader("Research Queue")
     if queue_frame.empty:

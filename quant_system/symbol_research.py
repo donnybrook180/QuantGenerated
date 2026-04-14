@@ -7,6 +7,7 @@ import copy
 import json
 import duckdb
 from dataclasses import dataclass
+from math import isfinite, sqrt
 from pathlib import Path
 from statistics import mean
 
@@ -157,6 +158,9 @@ class CandidateResult:
     validation_closed_trades: int = 0
     test_closed_trades: int = 0
     expectancy: float = 0.0
+    sharpe_ratio: float = 0.0
+    sortino_ratio: float = 0.0
+    calmar_ratio: float = 0.0
     avg_win: float = 0.0
     avg_loss: float = 0.0
     payoff_ratio: float = 0.0
@@ -1357,6 +1361,45 @@ def _aggregate_execution_results(initial_cash: float, results: list[ExecutionRes
     )
 
 
+def _stddev(values: list[float]) -> float:
+    if len(values) < 2:
+        return 0.0
+    avg = mean(values)
+    variance = sum((value - avg) ** 2 for value in values) / float(len(values) - 1)
+    return sqrt(max(variance, 0.0))
+
+
+def _sharpe_ratio(pnls: list[float]) -> float:
+    if len(pnls) < 2:
+        return 0.0
+    deviation = _stddev(pnls)
+    if deviation <= 0.0:
+        return 0.0
+    value = mean(pnls) / deviation
+    return value if isfinite(value) else 0.0
+
+
+def _sortino_ratio(pnls: list[float]) -> float:
+    if len(pnls) < 2:
+        return 0.0
+    downside = [value for value in pnls if value < 0.0]
+    if not downside:
+        return 999.0 if mean(pnls) > 0.0 else 0.0
+    downside_deviation = sqrt(sum(value**2 for value in downside) / float(len(downside)))
+    if downside_deviation <= 0.0:
+        return 0.0
+    value = mean(pnls) / downside_deviation
+    return value if isfinite(value) else 0.0
+
+
+def _calmar_ratio(realized_pnl: float, max_drawdown: float, initial_cash: float) -> float:
+    if initial_cash <= 0.0 or max_drawdown <= 0.0:
+        return 999.0 if realized_pnl > 0.0 else 0.0
+    total_return_pct = realized_pnl / initial_cash
+    value = total_return_pct / max_drawdown
+    return value if isfinite(value) else 0.0
+
+
 def _run_candidate_bundle(
     config: SystemConfig,
     profile_symbol: str,
@@ -2327,11 +2370,21 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     return specs
 
 
-def _score_result(name: str, description: str, archetype: str, code_path: str, result: ExecutionResult) -> CandidateResult:
+def _score_result(
+    name: str,
+    description: str,
+    archetype: str,
+    code_path: str,
+    result: ExecutionResult,
+    initial_cash: float,
+) -> CandidateResult:
     wins = [trade.pnl for trade in result.closed_trades if trade.pnl > 0]
     losses = [trade.pnl for trade in result.closed_trades if trade.pnl < 0]
     pnls = [trade.pnl for trade in result.closed_trades]
     expectancy = mean(result.closed_trade_pnls) if result.closed_trade_pnls else 0.0
+    sharpe_ratio = _sharpe_ratio(result.closed_trade_pnls)
+    sortino_ratio = _sortino_ratio(result.closed_trade_pnls)
+    calmar_ratio = _calmar_ratio(result.realized_pnl, result.max_drawdown, initial_cash)
     avg_win = mean(wins) if wins else 0.0
     avg_loss = mean(losses) if losses else 0.0
     payoff_ratio = (avg_win / abs(avg_loss)) if avg_loss < 0 else (999.0 if avg_win > 0 else 0.0)
@@ -2381,6 +2434,9 @@ def _score_result(name: str, description: str, archetype: str, code_path: str, r
         max_drawdown_pct=result.max_drawdown * 100.0,
         total_costs=result.total_costs,
         expectancy=expectancy,
+        sharpe_ratio=sharpe_ratio,
+        sortino_ratio=sortino_ratio,
+        calmar_ratio=calmar_ratio,
         avg_win=avg_win,
         avg_loss=avg_loss,
         payoff_ratio=payoff_ratio,
@@ -2413,7 +2469,7 @@ def _run_candidate(
         result.realized_pnl,
         artifact_prefix,
     )
-    scored = _score_result(spec.name, spec.description, archetype, spec.code_path, result)
+    scored = _score_result(spec.name, spec.description, archetype, spec.code_path, result, candidate_config.execution.initial_cash)
     scored.trade_log_path = str(trades_path)
     scored.trade_analysis_path = str(analysis_path)
     scored.variant_label = spec.variant_label
@@ -4844,6 +4900,9 @@ def _execution_candidate_row_from_result(symbol: str, row: CandidateResult) -> d
         "realized_pnl": row.realized_pnl,
         "profit_factor": row.profit_factor,
         "closed_trades": row.closed_trades,
+        "sharpe_ratio": row.sharpe_ratio,
+        "sortino_ratio": row.sortino_ratio,
+        "calmar_ratio": row.calmar_ratio,
         "payoff_ratio": row.payoff_ratio,
         "validation_pnl": row.validation_pnl,
         "validation_profit_factor": row.validation_profit_factor,
@@ -5506,6 +5565,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "max_drawdown_pct",
                 "total_costs",
                 "expectancy",
+                "sharpe_ratio",
+                "sortino_ratio",
+                "calmar_ratio",
                 "avg_win",
                 "avg_loss",
                 "payoff_ratio",
@@ -5559,6 +5621,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     f"{row.max_drawdown_pct:.5f}",
                     f"{row.total_costs:.5f}",
                     f"{row.expectancy:.5f}",
+                    f"{row.sharpe_ratio:.5f}",
+                    f"{row.sortino_ratio:.5f}",
+                    f"{row.calmar_ratio:.5f}",
                     f"{row.avg_win:.5f}",
                     f"{row.avg_loss:.5f}",
                     f"{row.payoff_ratio:.5f}",
@@ -5617,7 +5682,8 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         )
         lines.append(f"  tier: {policy['promotion_tier']}")
         lines.append(
-            f"  trade_metrics: expectancy={row.expectancy:.2f} avg_win={row.avg_win:.2f} "
+            f"  trade_metrics: expectancy={row.expectancy:.2f} sharpe={row.sharpe_ratio:.2f} "
+            f"sortino={row.sortino_ratio:.2f} calmar={row.calmar_ratio:.2f} avg_win={row.avg_win:.2f} "
             f"avg_loss={row.avg_loss:.2f} payoff={row.payoff_ratio:.2f} avg_hold={row.avg_hold_bars:.1f}"
         )
         lines.append(
@@ -6021,6 +6087,9 @@ def run_symbol_research(
             "realized_pnl": row.realized_pnl,
             "profit_factor": row.profit_factor,
             "closed_trades": row.closed_trades,
+            "sharpe_ratio": row.sharpe_ratio,
+            "sortino_ratio": row.sortino_ratio,
+            "calmar_ratio": row.calmar_ratio,
             "payoff_ratio": row.payoff_ratio,
             "validation_pnl": row.validation_pnl,
             "validation_profit_factor": row.validation_profit_factor,

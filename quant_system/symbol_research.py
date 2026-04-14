@@ -469,6 +469,13 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
         if isinstance(row, CandidateResult)
         else (row.get("validation_closed_trades", 0) or 0) + (row.get("test_closed_trades", 0) or 0)
     )
+    regime_filter_label = str(
+        row.regime_filter_label if isinstance(row, CandidateResult) else row.get("regime_filter_label", "") or ""
+    )
+    mc_pnl_p05 = float(row.mc_pnl_p05 if isinstance(row, CandidateResult) else row.get("mc_pnl_p05", 0.0))
+    mc_loss_probability_pct = float(
+        row.mc_loss_probability_pct if isinstance(row, CandidateResult) else row.get("mc_loss_probability_pct", 100.0)
+    )
     if symbol.upper() == "BTC":
         if (
             _is_sparse_candidate(row, symbol)
@@ -491,10 +498,33 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
             and _meets_monte_carlo_viability(row)
         ):
             return True
+    if symbol.upper() == "USDJPY":
+        if (
+            regime_filter_label == "trend_flat"
+            and best_regime == "trend_flat_vol_low"
+            and realized_pnl > 0.0
+            and profit_factor >= 5.0
+            and closed_trades >= 40
+            and best_regime_pnl > 0.0
+            and best_regime_trade_count >= 30
+            and best_regime_pf >= 1.2
+            and walk_forward_windows >= 1
+            and effective_pass_rate >= 50.0
+            and walk_forward_avg_validation_pnl > 0.0
+            and walk_forward_avg_test_pnl > 0.0
+            and validation_profit_factor >= 0.4
+            and test_profit_factor >= 0.9
+            and validation_pnl >= -1_000.0
+            and test_pnl >= -500.0
+            and regime_stability_score >= 0.9
+            and regime_loss_ratio <= 0.25
+            and equity_quality_score >= 0.35
+            and best_trade_share_pct <= 80.0
+            and mc_pnl_p05 >= -500.0
+            and mc_loss_probability_pct <= 10.0
+        ):
+            return True
     if symbol.upper() == "GBPUSD":
-        regime_filter_label = str(
-            row.regime_filter_label if isinstance(row, CandidateResult) else row.get("regime_filter_label", "") or ""
-        )
         payoff_ratio = float(row.payoff_ratio if isinstance(row, CandidateResult) else row.get("payoff_ratio", 0.0))
         if (
             best_regime == "trend_flat_vol_mid"

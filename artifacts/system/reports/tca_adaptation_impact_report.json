@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T14:48:11.306987+00:00",
+  "generated_at": "2026-04-14T14:56:46.376445+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -34,6 +34,21 @@
     {
       "symbol": "GBPUSD",
       "candidate_name": "gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid",
+      "live_fill_count": 0,
+      "edge_retention_pct": 100.0,
+      "baseline_base_weight": 0.35,
+      "adapted_base_weight": 0.35,
+      "baseline_max_risk": 0.35,
+      "adapted_max_risk": 0.35,
+      "baseline_result_index": 12.25,
+      "adapted_result_index": 12.25,
+      "result_index_change_pct": 0.0,
+      "adaptation_action": "unchanged",
+      "adaptation_reason": "healthy_or_insufficient_data"
+    },
+    {
+      "symbol": "USDJPY",
+      "candidate_name": "forex_breakout_momentum_patient__near_miss_patient__trend_flat",
       "live_fill_count": 0,
       "edge_retention_pct": 100.0,
       "baseline_base_weight": 0.35,

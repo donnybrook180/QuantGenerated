@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-14T14:48:15.605622+00:00",
+  "generated_at": "2026-04-14T14:56:51.009418+00:00",
   "summary": {
     "deployments_scanned": 9,
     "statuses": {
       "live_ready": 3,
-      "reduced_risk_only": 1,
-      "research_only": 5
+      "reduced_risk_only": 2,
+      "research_only": 4
     },
     "symbols_with_incidents": 9,
     "total_fills": 0,
@@ -14,6 +14,7 @@
       "ETH",
       "EURUSD",
       "GBPUSD",
+      "USDJPY",
       "XAUUSD"
     ],
     "recent_incidents": [
@@ -69,7 +70,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eth\\live.json",
-      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T144803Z_journal.json",
+      "latest_journal": "artifacts\\live\\eth\\journals\\20260414T145636Z_journal.json",
       "latest_incident": "artifacts\\live\\eth\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -87,7 +88,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eurusd\\live.json",
-      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T144804Z_journal.json",
+      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260414T145637Z_journal.json",
       "latest_incident": "artifacts\\live\\eurusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -105,7 +106,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\gbpusd\\live.json",
-      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T144804Z_journal.json",
+      "latest_journal": "artifacts\\live\\gbpusd\\journals\\20260414T145637Z_journal.json",
       "latest_incident": "artifacts\\live\\gbpusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
@@ -161,19 +162,21 @@
     },
     {
       "symbol": "USDJPY",
-      "status": "research_only",
+      "status": "reduced_risk_only",
       "broker_symbol": "USDJPY",
-      "strategy_count": 0,
-      "tiers": [],
-      "execution_validation": "not_run",
+      "strategy_count": 1,
+      "tiers": [
+        "specialist"
+      ],
+      "execution_validation": "selection=standard variant=forex_breakout_momentum_patient__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=13493.78 pf=7.76 closed=44 quality=0.47 underwater=84.1% -> accepted_with_reduced_risk",
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\usdjpy\\live.json",
-      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T134825Z_journal.json",
+      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260414T145638Z_journal.json",
       "latest_incident": "artifacts\\live\\usdjpy\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk"
+      "latest_actions": "forex_breakout_momentum_patient__near_miss_patient__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk"
     },
     {
       "symbol": "XAUUSD",
@@ -187,7 +190,7 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
-      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T144805Z_journal.json",
+      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260414T145639Z_journal.json",
       "latest_incident": "artifacts\\live\\xauusd\\incidents\\20260413T210151Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,

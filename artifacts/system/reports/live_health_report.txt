@@ -1,6 +1,6 @@
-Live health report generated at: 2026-04-14T14:48:15.605622+00:00
+Live health report generated at: 2026-04-14T14:56:51.009418+00:00
 Deployments scanned: 9
-Summary: live_ready=3 reduced_risk_only=1 research_only=5 symbols_with_incidents=9 total_fills=0
+Summary: live_ready=3 reduced_risk_only=2 research_only=4 symbols_with_incidents=9 total_fills=0
 TCA overview: none
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
@@ -12,7 +12,7 @@ Live improvement activity report: artifacts\system\reports\live_improvement_acti
 Live research triggers: 0
 TCA worst edge retention: ETH/crypto_vwap_reversion__30m_us__exit_trend=100.0%
 Tradeable now: none
-Blocked now: ETH, EURUSD, GBPUSD, XAUUSD
+Blocked now: ETH, EURUSD, GBPUSD, USDJPY, XAUUSD
 Recent incidents: BTC (20260413T210151Z_incident.txt), ETH (20260413T210151Z_incident.txt), EURUSD (20260413T210151Z_incident.txt), GBPUSD (20260413T210151Z_incident.txt), JP225 (20260413T210151Z_incident.txt)
 
 Symbol: BTC
@@ -40,7 +40,7 @@ Symbol: ETH
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260414T144803Z_journal.json
+  latest_journal: artifacts\live\eth\journals\20260414T145636Z_journal.json
   latest_incident: artifacts\live\eth\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -56,7 +56,7 @@ Symbol: EURUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260414T144804Z_journal.json
+  latest_journal: artifacts\live\eurusd\journals\20260414T145637Z_journal.json
   latest_incident: artifacts\live\eurusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -72,7 +72,7 @@ Symbol: GBPUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\gbpusd\live.json
-  latest_journal: artifacts\live\gbpusd\journals\20260414T144804Z_journal.json
+  latest_journal: artifacts\live\gbpusd\journals\20260414T145637Z_journal.json
   latest_incident: artifacts\live\gbpusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -128,20 +128,20 @@ Symbol: US500
   latest_actions: momentum__exit_trend__near_miss_patient:hold[specialist] veto=interpreter_not_allowed::trend_pullback
 
 Symbol: USDJPY
-  status: research_only
+  status: reduced_risk_only
   broker_symbol: USDJPY
-  strategies: 0
-  tiers: none
-  execution_validation: not_run
+  strategies: 1
+  tiers: specialist
+  execution_validation: selection=standard variant=forex_breakout_momentum_patient__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=13493.78 pf=7.76 closed=44 quality=0.47 underwater=84.1% -> accepted_with_reduced_risk
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260414T134825Z_journal.json
+  latest_journal: artifacts\live\usdjpy\journals\20260414T145638Z_journal.json
   latest_incident: artifacts\live\usdjpy\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=event_risk unified_regime=event_dislocation bias=long session=midday_chop structure=clean_breakout execution=unknown risk=defensive confidence=0.53
-  latest_actions: forex_breakout_momentum__30m_overlap__exit_trend__plus__forex_breakout_momentum__30m_overlap__exit_trend__near_miss_dense:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk
+  latest_actions: forex_breakout_momentum_patient__near_miss_patient__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk
 
 Symbol: XAUUSD
   status: live_ready
@@ -152,7 +152,7 @@ Symbol: XAUUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260414T144805Z_journal.json
+  latest_journal: artifacts\live\xauusd\journals\20260414T145639Z_journal.json
   latest_incident: artifacts\live\xauusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none

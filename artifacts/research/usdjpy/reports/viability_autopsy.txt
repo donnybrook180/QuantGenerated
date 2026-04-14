@@ -1,6 +1,6 @@
 Viability autopsy: USDJPY
-Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=177
+Execution validation summary: selection=standard variant=forex_breakout_momentum_patient__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=13493.78 pf=7.76 closed=44 quality=0.47 underwater=84.1% -> accepted_with_reduced_risk
+Tier counts: core=0 specialist=2 reject=175
 
 Top blockers
 - walk-forward pass rate too low (0.00% < 50%): 114
@@ -13,10 +13,10 @@ Top blockers
 - walk-forward avg test pnl <= 0 (0.00): 32
 
 Top near-misses
-- forex_breakout_momentum_patient__near_miss_patient__trend_flat [reject]: pnl=13493.78 pf=7.76 val=-887.21/0.41/29 test=-232.64/0.94/91 wf=50.00%
-  reasons: monte carlo p05 pnl <= 0 (-250.89), validation pnl <= 0 (-887.21), test pnl <= 0 (-232.64), validation PF < 1.0 (0.41), test PF < 1.0 (0.94), best trade concentration too high (79.74% > 70%)
-- forex_breakout_momentum_patient__near_miss_protective__trend_flat [reject]: pnl=13493.78 pf=7.76 val=-887.21/0.41/29 test=-232.64/0.94/91 wf=50.00%
-  reasons: monte carlo p05 pnl <= 0 (-250.89), validation pnl <= 0 (-887.21), test pnl <= 0 (-232.64), validation PF < 1.0 (0.41), test PF < 1.0 (0.94), best trade concentration too high (79.74% > 70%)
+- forex_breakout_momentum_patient__near_miss_patient__trend_flat [specialist]: pnl=13493.78 pf=7.76 val=-887.21/0.41/29 test=-232.64/0.94/91 wf=50.00%
+  reasons: monte carlo p05 pnl <= 0 (-250.89), validation pnl <= 0 (-887.21), test pnl <= 0 (-232.64), validation PF < 1.0 (0.41), test PF < 1.0 (0.94), best trade concentration too high (79.74% > 70%), broad viability failed, but candidate qualifies as a regime specialist
+- forex_breakout_momentum_patient__near_miss_protective__trend_flat [specialist]: pnl=13493.78 pf=7.76 val=-887.21/0.41/29 test=-232.64/0.94/91 wf=50.00%
+  reasons: monte carlo p05 pnl <= 0 (-250.89), validation pnl <= 0 (-887.21), test pnl <= 0 (-232.64), validation PF < 1.0 (0.41), test PF < 1.0 (0.94), best trade concentration too high (79.74% > 70%), broad viability failed, but candidate qualifies as a regime specialist
 - forex_breakout_momentum_patient [reject]: pnl=12439.93 pf=7.05 val=-819.06/0.45/30 test=-65.54/0.98/99 wf=50.00%
   reasons: monte carlo p05 pnl <= 0 (-943.14), monte carlo loss probability too high (17.00% > 10.00%), validation pnl <= 0 (-819.06), test pnl <= 0 (-65.54), validation PF < 1.0 (0.45), test PF < 1.0 (0.98), best trade concentration too high (85.22% > 70%)
 - forex_breakout_momentum_patient__near_miss_patient [reject]: pnl=12439.93 pf=7.05 val=-819.06/0.45/30 test=-65.54/0.98/99 wf=50.00%

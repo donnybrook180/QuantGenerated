@@ -1,5 +1,5 @@
 TCA impact report
-generated_at: 2026-04-14T14:48:10.417598+00:00
+generated_at: 2026-04-14T14:56:45.265974+00:00
 
 Metric: estimated research edge vs live execution drag.
 Interpretation: drag_share_pct shows how much of expected edge execution is consuming.
@@ -9,6 +9,7 @@ symbol   strategy                 livefills edge_ret%    drag%  short_bps  cost_
 ETH      crypto_vwap_reversion__3         0     100.0      0.0      0.000     0.000 insufficient_live_data
 EURUSD   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 GBPUSD   gbpusd_overlap_impulse__         0     100.0      0.0      0.000     0.000 insufficient_live_data
+USDJPY   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 XAUUSD   momentum__15m_us__exit_t         0     100.0      0.0      0.000     0.000 insufficient_live_data
 
 Details
@@ -40,6 +41,18 @@ GBPUSD | gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid
   broker_symbol: GBPUSD
   research_expectancy: 3.1772
   research_closed_trades: 9
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+USDJPY | forex_breakout_momentum_patient__near_miss_patient__trend_flat
+  broker_symbol: USDJPY
+  research_expectancy: 306.6767
+  research_closed_trades: 44
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000

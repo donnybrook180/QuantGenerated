@@ -3,11 +3,41 @@
   "symbol": "USDJPY",
   "data_symbol": "C:USDJPY",
   "broker_symbol": "USDJPY",
-  "research_run_id": 330,
-  "execution_set_id": null,
-  "execution_validation_summary": "not_run",
-  "symbol_status": "research_only",
-  "strategies": [],
+  "research_run_id": 342,
+  "execution_set_id": 176,
+  "execution_validation_summary": "selection=standard variant=forex_breakout_momentum_patient__near_miss_patient__trend_flat@default|trend_flat data_source=duckdb_cache pnl=13493.78 pf=7.76 closed=44 quality=0.47 underwater=84.1% -> accepted_with_reduced_risk",
+  "symbol_status": "reduced_risk_only",
+  "strategies": [
+    {
+      "candidate_name": "forex_breakout_momentum_patient__near_miss_patient__trend_flat",
+      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in unified_regimes=compressed_range; avoid unified_regimes=orderly_range; vol_pct in [0.00, 0.45]; base_weight=0.35; risk_cap=0.35; stability=1.00; loss_ratio=999.00",
+      "variant_label": "",
+      "regime_filter_label": "trend_flat",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 10,
+        "max_holding_bars": 36,
+        "take_profit_atr_multiple": 2.4000000000000004,
+        "break_even_atr_multiple": 0.4,
+        "trailing_stop_atr_multiple": 0.8,
+        "stale_breakout_atr_fraction": 0.1
+      },
+      "allocation_weight": 1.0,
+      "allowed_regimes": [
+        "compressed_range"
+      ],
+      "blocked_regimes": [
+        "orderly_range"
+      ],
+      "min_vol_percentile": 0.0,
+      "max_vol_percentile": 0.45,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
+      "min_risk_multiplier": 0.0
+    }
+  ],
   "target_volatility": 0.0,
   "max_symbol_vol_percentile": 0.98,
   "block_new_entries_in_event_risk": true

@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-DAX,2026-03-25T12:35:00+00:00,2026-03-26T10:10:00+00:00,12,10,volatility_breakout,structure_exit,43.72188,40.25818,0.01000,-0.03464,0.00000,1,1.00000,{'breakout_high': 42.48}
+DAX,2026-03-25T12:35:00+00:00,2026-03-26T10:10:00+00:00,12,10,volatility_breakout,stop_loss,43.35438,40.62568,0.01000,-0.02729,0.00000,1,1.00000,{'breakout_high': 42.48}

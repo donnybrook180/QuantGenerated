@@ -1,31 +1,31 @@
 Viability autopsy: EURUSD
-Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend@30m_overlap data_source=duckdb_cache_aggregated pnl=9.74 pf=7.31 closed=7 quality=0.57 underwater=57.1% -> accepted
-Tier counts: core=3 specialist=0 reject=192
+Execution validation summary: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
+Tier counts: core=5 specialist=0 reject=184
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 140
-- validation PF < 1.0 (0.00): 125
-- test PF < 1.0 (0.00): 118
-- validation trades too low (0 < 1): 110
-- validation pnl <= 0 (0.00): 110
-- equity quality too low (0.25 < 0.45): 107
-- test trades too low (0 < 1): 106
-- test pnl <= 0 (0.00): 106
+- regime stability too low (0.00 < 0.50): 119
+- validation PF < 1.0 (0.00): 108
+- test PF < 1.0 (0.00): 103
+- walk-forward avg test pnl <= 0 (0.00): 101
+- validation trades too low (0 < 1): 101
+- validation pnl <= 0 (0.00): 101
+- equity quality too low (0.25 < 0.45): 99
+- walk-forward avg validation pnl <= 0 (0.00): 98
 
 Top near-misses
-- forex_breakout_momentum__30m_us__exit_trend [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__exit_trend__near_miss_patient [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__exit_trend__near_miss_protective [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__exit_trend__near_miss_dense [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__near_miss_patient [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__near_miss_protective [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__exit_fastfail__near_miss_patient [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
-- forex_breakout_momentum__30m_us__exit_fastfail__near_miss_protective [reject]: pnl=8.54 pf=4.12 val=1.61/999.00/1 test=0.45/1.27/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-1.01)
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat__local_opt_consistency [reject]: pnl=22.02 pf=1.26 val=-4.29/0.76/22 test=17.52/1.92/34 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-10.12), monte carlo loss probability too high (16.40% > 10.00%), validation pnl <= 0 (-4.29), validation PF < 1.0 (0.76), walk-forward avg validation pnl <= 0 (-6.46)
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat [reject]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-14.18), monte carlo loss probability too high (17.80% > 10.00%), validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30)
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat [reject]: pnl=21.43 pf=1.25 val=-5.28/0.72/22 test=14.25/1.72/33 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-14.18), monte carlo loss probability too high (17.80% > 10.00%), validation pnl <= 0 (-5.28), validation PF < 1.0 (0.72), walk-forward avg validation pnl <= 0 (-5.30)
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_patient__trend_flat__local_opt_validation [reject]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-12.73), monte carlo loss probability too high (16.60% > 10.00%), validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71)
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_patient__trend_flat__local_opt_validation [reject]: pnl=20.68 pf=1.25 val=-0.28/0.98/23 test=13.72/1.76/34 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-12.73), monte carlo loss probability too high (16.60% > 10.00%), validation pnl <= 0 (-0.28), validation PF < 1.0 (0.98), walk-forward avg validation pnl <= 0 (-1.71)
+- eurusd_ny_overlap_continuation__15m_overlap__near_miss_protective__trend_flat [reject]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-12.82), monte carlo loss probability too high (18.20% > 10.00%), validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15)
+- eurusd_ny_overlap_continuation__15m_overlap__exit_fastfail__near_miss_protective__trend_flat [reject]: pnl=19.03 pf=1.23 val=-3.00/0.82/22 test=12.28/1.63/34 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-12.82), monte carlo loss probability too high (18.20% > 10.00%), validation pnl <= 0 (-3.00), validation PF < 1.0 (0.82), walk-forward avg validation pnl <= 0 (-5.15)
+- forex_short_breakdown_momentum__30m_europe__exit_trend__near_miss_patient__trend_flat_vol_mid [reject]: pnl=17.46 pf=6.86 val=0.00/0.00/0 test=0.00/0.00/0 wf=0.00%
+  reasons: combined validation/test trades too low (0 < 2), combined validation/test pnl <= 0 (0.00), combined validation/test PF too low (0.00 < 1.00), walk-forward avg validation pnl <= 0 (0.00), walk-forward avg test pnl <= 0 (0.00)

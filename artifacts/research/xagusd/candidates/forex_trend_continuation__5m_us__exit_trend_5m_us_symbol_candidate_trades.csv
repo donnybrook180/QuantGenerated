@@ -1,0 +1,26 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+C:XAGUSD,2025-07-17T20:00:00+00:00,2025-07-17T20:05:00+00:00,20,20,forex_trend_continuation,stop_loss,38.05200,37.96699,0.01000,-4.27674,0.02661,1,0.77921,{'pullback_floor': 37.98}
+C:XAGUSD,2025-08-07T15:00:00+00:00,2025-08-07T15:05:00+00:00,15,15,forex_trend_continuation,stop_loss,38.42816,38.20289,0.01000,-11.29008,0.02682,1,1.00000,{'pullback_floor': 38.284}
+C:XAGUSD,2025-08-12T20:15:00+00:00,2025-08-12T20:20:00+00:00,20,20,forex_trend_continuation,stop_loss,37.99297,37.88103,0.01000,-5.62358,0.02656,1,1.00000,{'pullback_floor': 37.907}
+C:XAGUSD,2025-09-04T13:20:00+00:00,2025-09-04T13:25:00+00:00,13,13,forex_trend_continuation,stop_loss,40.99026,40.89374,0.01000,-4.85456,0.02866,1,0.76663,{'pullback_floor': 40.932}
+C:XAGUSD,2025-09-08T14:45:00+00:00,2025-09-08T14:50:00+00:00,14,14,forex_trend_continuation,signal_exit,41.30139,41.22360,0.01000,-3.91853,0.02888,1,0.78855,{'pullback_floor': 41.23}
+C:XAGUSD,2025-09-11T20:35:00+00:00,2025-09-11T20:40:00+00:00,20,20,forex_trend_continuation,stop_loss,41.68255,41.56245,0.01000,-6.03422,0.02914,1,1.00000,{'pullback_floor': 41.557}
+C:XAGUSD,2025-09-22T13:05:00+00:00,2025-09-22T13:45:00+00:00,13,13,forex_trend_continuation,time_stop,43.75544,43.70053,0.01000,-2.77600,0.03061,8,1.00000,{'pullback_floor': 43.658}
+C:XAGUSD,2025-10-03T17:00:00+00:00,2025-10-03T17:05:00+00:00,17,17,forex_trend_continuation,signal_exit,47.76816,47.61386,0.01000,-7.74874,0.03338,1,1.00000,{'pullback_floor': 47.698}
+C:XAGUSD,2025-10-08T14:05:00+00:00,2025-10-08T14:15:00+00:00,14,14,forex_trend_continuation,stale_breakout,48.97168,48.85032,0.01000,-6.10191,0.03424,2,0.95398,{'pullback_floor': 48.915}
+C:XAGUSD,2025-10-29T16:25:00+00:00,2025-10-29T16:30:00+00:00,16,16,forex_trend_continuation,stop_loss,48.34341,48.06466,0.01000,-13.97110,0.03374,1,1.00000,{'pullback_floor': 48.136}
+C:XAGUSD,2025-11-05T18:55:00+00:00,2025-11-05T19:15:00+00:00,18,19,forex_trend_continuation,stale_breakout,48.16333,48.07066,0.01000,-4.66730,0.03368,4,1.00000,{'pullback_floor': 48.07}
+C:XAGUSD,2025-11-10T18:20:00+00:00,2025-11-10T19:00:00+00:00,18,19,forex_trend_continuation,take_profit,50.03413,50.11478,0.01000,3.99737,0.03505,8,1.00000,{'pullback_floor': 49.875}
+C:XAGUSD,2025-11-24T16:10:00+00:00,2025-11-24T16:15:00+00:00,16,16,forex_trend_continuation,stop_loss,50.26823,50.07180,0.01000,-9.85679,0.03512,1,1.00000,{'pullback_floor': 50.143}
+C:XAGUSD,2025-12-01T17:40:00+00:00,2025-12-01T17:45:00+00:00,17,17,forex_trend_continuation,signal_exit,57.51834,57.45563,0.01000,-3.17572,0.04024,1,1.00000,{'pullback_floor': 57.304}
+C:XAGUSD,2025-12-02T15:10:00+00:00,2025-12-02T15:40:00+00:00,15,15,forex_trend_continuation,trailing_stop,57.44931,57.40266,0.01000,-2.37306,0.04020,6,1.00000,{'pullback_floor': 57.365}
+C:XAGUSD,2025-12-02T20:50:00+00:00,2025-12-02T21:20:00+00:00,20,21,forex_trend_continuation,trailing_stop,58.08058,58.03139,0.01000,-2.50052,0.04064,6,1.00000,{'pullback_floor': 57.804}
+C:XAGUSD,2026-01-09T14:20:00+00:00,2026-01-09T14:25:00+00:00,14,14,forex_trend_continuation,signal_exit,78.11917,77.92885,0.01000,-9.57088,0.05462,1,0.99878,{'pullback_floor': 78.05}
+C:XAGUSD,2026-01-12T16:30:00+00:00,2026-01-12T16:40:00+00:00,16,16,forex_trend_continuation,stale_breakout,84.99212,84.69595,0.01000,-14.86815,0.05939,2,1.00000,{'pullback_floor': 83.968}
+C:XAGUSD,2026-01-13T17:40:00+00:00,2026-01-13T18:00:00+00:00,17,18,forex_trend_continuation,stale_breakout,88.45160,88.37037,0.01000,-4.12362,0.06189,4,1.00000,{'pullback_floor': 87.543}
+C:XAGUSD,2026-01-23T17:25:00+00:00,2026-01-23T17:45:00+00:00,17,17,forex_trend_continuation,take_profit,99.61839,100.07235,0.01000,22.62797,0.06989,4,1.00000,{'pullback_floor': 99.497}
+C:XAGUSD,2026-02-03T18:05:00+00:00,2026-02-03T18:15:00+00:00,18,18,forex_trend_continuation,take_profit,88.07344,88.86516,0.01000,39.52383,0.06193,2,1.00000,{'pullback_floor': 88.0}
+C:XAGUSD,2026-02-27T19:25:00+00:00,2026-02-27T19:35:00+00:00,19,19,forex_trend_continuation,stale_breakout,93.53778,93.27227,0.01000,-13.34130,0.06538,2,1.00000,{'pullback_floor': 93.256}
+C:XAGUSD,2026-03-04T13:15:00+00:00,2026-03-04T13:40:00+00:00,13,13,forex_trend_continuation,trailing_stop,86.09859,86.04037,0.01000,-2.97156,0.06025,5,1.00000,{'pullback_floor': 85.934}
+C:XAGUSD,2026-03-10T19:45:00+00:00,2026-03-10T19:55:00+00:00,19,19,forex_trend_continuation,stale_breakout,89.57008,89.31696,0.01000,-12.71863,0.06261,2,1.00000,{'pullback_floor': 89.488}
+C:XAGUSD,2026-04-09T17:55:00+00:00,2026-04-09T18:00:00+00:00,17,18,forex_trend_continuation,signal_exit,74.89979,74.66625,0.01000,-11.72961,0.05235,1,1.00000,{'pullback_floor': 74.407}

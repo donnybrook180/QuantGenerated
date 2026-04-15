@@ -1,31 +1,31 @@
 Viability autopsy: GBPUSD
-Execution validation summary: selection=combo_1 variant=gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid@15m_overlap|trend_down_vol_mid data_source=duckdb_cache pnl=28.59 pf=10.91 closed=9 quality=0.81 underwater=22.2% -> accepted
-Tier counts: core=0 specialist=21 reject=67
+Execution validation summary: not_run
+Tier counts: core=0 specialist=0 reject=85
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 37
-- validation PF < 1.0 (0.00): 30
-- test PF < 1.0 (0.00): 28
+- walk-forward avg validation pnl <= 0 (0.00): 41
+- test PF < 1.0 (0.00): 39
+- regime stability too low (0.00 < 0.50): 36
+- validation PF < 1.0 (0.00): 28
 - monte carlo missing (no simulations recorded): 27
 - validation trades too low (0 < 1): 27
 - validation pnl <= 0 (0.00): 27
 - test pnl <= 0 (0.00): 27
-- walk-forward avg validation pnl <= 0 (0.00): 27
 
 Top near-misses
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__exit_fastfail__regime_trend_down_vol_mid [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__exit_trend__regime_trend_down_vol_mid [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid__near_miss_patient [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid__near_miss_patient__trend_down_vol_mid [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid__near_miss_protective [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid__near_miss_protective__trend_down_vol_mid [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
-- gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid__near_miss_dense [specialist]: pnl=28.59 pf=10.91 val=-1.31/0.00/1 test=3.72/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-1.31), broad viability failed, but candidate qualifies as a regime specialist
+- gbpusd_overlap_impulse__15m_overlap__near_miss_patient [reject]: pnl=20.59 pf=1.25 val=-0.60/0.97/28 test=14.98/1.53/33 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-16.19), monte carlo loss probability too high (17.60% > 10.00%), validation pnl <= 0 (-0.60), validation PF < 1.0 (0.97)
+- gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_dense__trend_down [reject]: pnl=19.87 pf=2.44 val=4.70/2.12/4 test=-3.20/0.00/2 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.88), test pnl <= 0 (-3.20), test PF < 1.0 (0.00), walk-forward avg test pnl <= 0 (-2.68)
+- gbpusd_overlap_impulse__30m_overlap__exit_fastfail__regime_trend_down_vol_low__near_miss_dense__trend_down [reject]: pnl=19.87 pf=2.44 val=4.70/2.12/4 test=-3.20/0.00/2 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-0.88), test pnl <= 0 (-3.20), test PF < 1.0 (0.00), walk-forward avg test pnl <= 0 (-2.68)
+- gbpusd_overlap_impulse__15m_overlap__exit_fastfail__near_miss_patient [reject]: pnl=19.62 pf=1.23 val=-0.38/0.98/28 test=14.98/1.53/33 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-18.19), monte carlo loss probability too high (18.80% > 10.00%), validation pnl <= 0 (-0.38), validation PF < 1.0 (0.98)
+- gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low__near_miss_patient__trend_down [reject]: pnl=18.66 pf=2.19 val=3.77/1.61/4 test=-3.20/0.00/2 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-3.92), test pnl <= 0 (-3.20), test PF < 1.0 (0.00), walk-forward avg test pnl <= 0 (-3.14)
+- gbpusd_overlap_impulse__30m_overlap__exit_fastfail__regime_trend_down_vol_low__near_miss_patient__trend_down [reject]: pnl=17.91 pf=2.14 val=2.74/1.44/4 test=-3.20/0.00/2 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-5.15), test pnl <= 0 (-3.20), test PF < 1.0 (0.00), walk-forward avg test pnl <= 0 (-3.66)
+- gbpusd_overlap_impulse__30m_overlap__regime_trend_down_vol_low [reject]: pnl=13.98 pf=999.00 val=0.00/0.00/0 test=3.72/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (0.00)
+- gbpusd_overlap_impulse__30m_overlap__exit_fastfail__regime_trend_down_vol_low [reject]: pnl=13.98 pf=999.00 val=0.00/0.00/0 test=3.72/999.00/1 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (0.00)

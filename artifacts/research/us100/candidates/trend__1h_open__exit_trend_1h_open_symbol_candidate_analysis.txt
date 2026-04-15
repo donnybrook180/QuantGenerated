@@ -1,14 +1,13 @@
 Artifact: trend__1h_open__exit_trend_1h_open_symbol_candidate
-Closed trades: 7
-Realized pnl: -0.11
+Closed trades: 2
+Realized pnl: -0.06
 
 By entry hour
-14: trades=7 pnl=-0.11 avg=-0.02 win_rate=42.86%
+14: trades=2 pnl=-0.06 avg=-0.03 win_rate=50.00%
 
 By entry setup
-trend: trades=7 pnl=-0.11 avg=-0.02 win_rate=42.86%
+trend: trades=2 pnl=-0.06 avg=-0.03 win_rate=50.00%
 
 By exit reason
-stale_breakout: trades=3 pnl=-0.17 avg=-0.06 win_rate=0.00%
 stop_loss: trades=1 pnl=-0.12 avg=-0.12 win_rate=0.00%
-take_profit: trades=3 pnl=0.18 avg=0.06 win_rate=100.00%
+trailing_stop: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%

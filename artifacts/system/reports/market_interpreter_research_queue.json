@@ -1,6 +1,22 @@
 {
-  "generated_at": "2026-04-14T16:01:46.607058+00:00",
+  "generated_at": "2026-04-15T18:15:05.512655+00:00",
   "items": [
+    {
+      "symbol": "DXY",
+      "broker_symbol": "DXY",
+      "priority": 3,
+      "labels": [
+        "midday_chop",
+        "compression_regime",
+        "no_trade::regime_block::volatile_chop"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants",
+        "compare breakout-only variants against current mixed archetypes"
+      ],
+      "report_path": "artifacts\\live\\dxy\\interpreter_research_trigger.json"
+    },
     {
       "symbol": "IBM",
       "broker_symbol": "IBM",
@@ -18,22 +34,6 @@
       "report_path": "artifacts\\live\\ibm\\interpreter_research_trigger.json"
     },
     {
-      "symbol": "UK100",
-      "broker_symbol": "UK100.cash",
-      "priority": 3,
-      "labels": [
-        "midday_chop",
-        "range_rotation",
-        "no_trade::regime_block::volatile_chop"
-      ],
-      "objective": "Improve archetype selection using market interpreter state and execution context.",
-      "suggested_experiments": [
-        "test midday exclusion filters or mean-reversion-only variants",
-        "test mean-reversion-biased variants and avoid trend breakout logic"
-      ],
-      "report_path": "artifacts\\live\\uk100\\interpreter_research_trigger.json"
-    },
-    {
       "symbol": "BTC",
       "broker_symbol": "BTCUSD",
       "priority": 2,
@@ -46,21 +46,6 @@
         "test midday exclusion filters or mean-reversion-only variants"
       ],
       "report_path": "artifacts\\live\\btc\\interpreter_research_trigger.json"
-    },
-    {
-      "symbol": "DXY",
-      "broker_symbol": "DXY",
-      "priority": 2,
-      "labels": [
-        "midday_chop",
-        "range_rotation"
-      ],
-      "objective": "Improve archetype selection using market interpreter state and execution context.",
-      "suggested_experiments": [
-        "test midday exclusion filters or mean-reversion-only variants",
-        "test mean-reversion-biased variants and avoid trend breakout logic"
-      ],
-      "report_path": "artifacts\\live\\dxy\\interpreter_research_trigger.json"
     },
     {
       "symbol": "GBPUSD",
@@ -78,7 +63,7 @@
     },
     {
       "symbol": "GER40",
-      "broker_symbol": "GER40.cash",
+      "broker_symbol": "GER40",
       "priority": 2,
       "labels": [
         "midday_chop",
@@ -93,7 +78,7 @@
     },
     {
       "symbol": "HK50",
-      "broker_symbol": "HK50.cash",
+      "broker_symbol": "HK50",
       "priority": 2,
       "labels": [
         "midday_chop",
@@ -152,7 +137,7 @@
     },
     {
       "symbol": "US30",
-      "broker_symbol": "US30.cash",
+      "broker_symbol": "US30",
       "priority": 2,
       "labels": [
         "midday_chop",
@@ -167,7 +152,7 @@
     },
     {
       "symbol": "US500",
-      "broker_symbol": "US500.cash",
+      "broker_symbol": "US500",
       "priority": 2,
       "labels": [
         "midday_chop",
@@ -209,21 +194,23 @@
       "report_path": "artifacts\\live\\usoil\\interpreter_research_trigger.json"
     },
     {
-      "symbol": "ETH",
-      "broker_symbol": "ETHUSD",
-      "priority": 1,
+      "symbol": "XAGUSD",
+      "broker_symbol": "XAGUSD",
+      "priority": 2,
       "labels": [
+        "midday_chop",
         "compression_regime"
       ],
       "objective": "Improve archetype selection using market interpreter state and execution context.",
       "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants",
         "compare breakout-only variants against current mixed archetypes"
       ],
-      "report_path": "artifacts\\live\\eth\\interpreter_research_trigger.json"
+      "report_path": "artifacts\\live\\xagusd\\interpreter_research_trigger.json"
     },
     {
       "symbol": "EU50",
-      "broker_symbol": "EU50.cash",
+      "broker_symbol": "EU50",
       "priority": 1,
       "labels": [
         "midday_chop"
@@ -249,16 +236,29 @@
     },
     {
       "symbol": "JP225",
-      "broker_symbol": "JP225.cash",
+      "broker_symbol": "JP225",
       "priority": 1,
       "labels": [
-        "compression_regime"
+        "range_rotation"
       ],
       "objective": "Improve archetype selection using market interpreter state and execution context.",
       "suggested_experiments": [
-        "compare breakout-only variants against current mixed archetypes"
+        "test mean-reversion-biased variants and avoid trend breakout logic"
       ],
       "report_path": "artifacts\\live\\jp225\\interpreter_research_trigger.json"
+    },
+    {
+      "symbol": "UK100",
+      "broker_symbol": "UK100",
+      "priority": 1,
+      "labels": [
+        "midday_chop"
+      ],
+      "objective": "Improve archetype selection using market interpreter state and execution context.",
+      "suggested_experiments": [
+        "test midday exclusion filters or mean-reversion-only variants"
+      ],
+      "report_path": "artifacts\\live\\uk100\\interpreter_research_trigger.json"
     },
     {
       "symbol": "XAUUSD",

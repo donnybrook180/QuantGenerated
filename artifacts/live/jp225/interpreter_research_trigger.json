@@ -1,13 +1,13 @@
 {
   "symbol": "JP225",
-  "broker_symbol": "JP225.cash",
+  "broker_symbol": "JP225",
   "priority": 1,
   "labels": [
-    "compression_regime"
+    "range_rotation"
   ],
   "objective": "Improve archetype selection using market interpreter state and execution context.",
   "suggested_experiments": [
-    "compare breakout-only variants against current mixed archetypes"
+    "test mean-reversion-biased variants and avoid trend breakout logic"
   ],
   "report_path": "artifacts\\live\\jp225\\interpreter_research_trigger.json"
 }

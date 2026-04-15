@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-SPY,2026-04-02T14:40:00+00:00,2026-04-02T15:20:00+00:00,14,15,opening_range_breakout,time_stop,656.37155,654.37851,0.01000,-0.01993,0.00000,8,1.00000,"{'range_high': 649.89, 'breakout_high': 649.89}"
+SPY,2026-04-02T14:40:00+00:00,2026-04-02T16:05:00+00:00,14,16,opening_range_breakout,stop_loss,656.37155,653.25857,0.01000,-0.03113,0.00000,17,1.00000,"{'range_high': 649.89, 'breakout_high': 649.89}"

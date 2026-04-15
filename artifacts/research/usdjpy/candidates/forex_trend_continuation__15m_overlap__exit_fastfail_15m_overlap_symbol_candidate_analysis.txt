@@ -11,4 +11,6 @@ By entry setup
 forex_trend_continuation: trades=3 pnl=-244.11 avg=-81.37 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=3 pnl=-244.11 avg=-81.37 win_rate=0.00%
+stop_loss: trades=1 pnl=-121.90 avg=-121.90 win_rate=0.00%
+signal_exit: trades=1 pnl=-83.64 avg=-83.64 win_rate=0.00%
+structure_exit: trades=1 pnl=-38.57 avg=-38.57 win_rate=0.00%

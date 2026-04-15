@@ -9,6 +9,6 @@ By entry setup
 momentum_confirmation: trades=3 pnl=-0.05 avg=-0.02 win_rate=33.33%
 
 By exit reason
-stale_breakout: trades=1 pnl=-0.10 avg=-0.10 win_rate=0.00%
-time_stop: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.10 avg=-0.10 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
 take_profit: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%

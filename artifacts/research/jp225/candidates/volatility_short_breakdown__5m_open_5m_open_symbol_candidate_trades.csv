@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-JP225,2026-03-30T01:05:00+00:00,2026-03-31T01:05:00+00:00,1,1,volatility_short_breakdown,stale_breakout,50629.86380,51118.05626,0.01000,-4.88192,0.00000,5,1.00000,"{'breakout_low': 52613.44, 'rebound_high': 52733.44, 'position_intent': 'short_entry'}"
+JP225,2026-03-30T01:05:00+00:00,2026-03-31T01:05:00+00:00,1,1,volatility_short_breakdown,stop_loss,50629.87905,51118.04088,0.01000,-4.88162,0.00000,5,1.00000,"{'breakout_low': 52613.44, 'rebound_high': 52733.44, 'position_intent': 'short_entry'}"

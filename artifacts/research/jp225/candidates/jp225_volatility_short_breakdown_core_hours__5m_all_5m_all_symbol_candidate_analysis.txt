@@ -1,19 +1,20 @@
 Artifact: jp225_volatility_short_breakdown_core_hours__5m_all_5m_all_symbol_candidate
 Closed trades: 13
-Realized pnl: 9.32
+Realized pnl: 31.81
 
 By entry hour
-3: trades=4 pnl=-2.74 avg=-0.69 win_rate=50.00%
-17: trades=3 pnl=0.56 avg=0.19 win_rate=33.33%
-20: trades=2 pnl=2.71 avg=1.36 win_rate=100.00%
-9: trades=3 pnl=3.30 avg=1.10 win_rate=33.33%
-4: trades=1 pnl=5.48 avg=5.48 win_rate=100.00%
+17: trades=3 pnl=1.71 avg=0.57 win_rate=33.33%
+20: trades=2 pnl=3.36 avg=1.68 win_rate=100.00%
+9: trades=3 pnl=5.36 avg=1.79 win_rate=33.33%
+4: trades=1 pnl=8.72 avg=8.72 win_rate=100.00%
+3: trades=4 pnl=12.65 avg=3.16 win_rate=50.00%
 
 By entry setup
-volatility_short_breakdown: trades=13 pnl=9.32 avg=0.72 win_rate=53.85%
+volatility_short_breakdown: trades=13 pnl=31.81 avg=2.45 win_rate=53.85%
 
 By exit reason
 signal_exit: trades=1 pnl=-4.47 avg=-4.47 win_rate=0.00%
-structure_exit: trades=3 pnl=-1.42 avg=-0.47 win_rate=0.00%
-trailing_stop: trades=4 pnl=1.79 avg=0.45 win_rate=50.00%
-take_profit: trades=5 pnl=13.43 avg=2.69 win_rate=100.00%
+structure_exit: trades=4 pnl=-3.33 avg=-0.83 win_rate=0.00%
+stale_breakout: trades=1 pnl=-1.45 avg=-1.45 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.46 avg=0.46 win_rate=100.00%
+take_profit: trades=6 pnl=40.61 avg=6.77 win_rate=100.00%

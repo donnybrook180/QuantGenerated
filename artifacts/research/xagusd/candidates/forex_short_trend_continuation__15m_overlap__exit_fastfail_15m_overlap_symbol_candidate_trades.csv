@@ -1,0 +1,8 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+XAGUSD,2025-08-06T15:00:00+00:00,2025-08-06T16:00:00+00:00,15,16,forex_short_trend_continuation,structure_exit,37.73592,37.89310,0.01000,-157.23478,0.05000,4,0.76795,"{'rebound_high': 37.833, 'position_intent': 'short_entry'}"
+XAGUSD,2025-08-11T15:45:00+00:00,2025-08-11T16:00:00+00:00,15,16,forex_short_trend_continuation,structure_exit,37.85509,37.73792,0.01000,-117.22048,0.05000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
+XAGUSD,2025-09-11T13:00:00+00:00,2025-09-11T13:15:00+00:00,13,13,forex_short_trend_continuation,structure_exit,41.08937,40.96963,0.01000,-119.78834,0.05000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
+XAGUSD,2025-12-18T14:30:00+00:00,2025-12-18T15:00:00+00:00,14,15,forex_short_trend_continuation,take_profit,66.04467,65.87621,0.01000,168.40981,0.05000,2,1.00000,"{'rebound_high': 66.282, 'position_intent': 'short_entry'}"
+XAGUSD,2025-12-18T15:30:00+00:00,2025-12-18T15:45:00+00:00,15,15,forex_short_trend_continuation,structure_exit,66.36341,66.24659,0.01000,-116.86382,0.05000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
+XAGUSD,2025-12-29T14:45:00+00:00,2025-12-29T15:00:00+00:00,14,15,forex_short_trend_continuation,signal_exit,75.22103,75.51604,0.01000,-295.06265,0.05000,1,1.00000,"{'rebound_high': 75.284, 'position_intent': 'short_entry'}"
+XAGUSD,2026-01-07T12:30:00+00:00,2026-01-07T12:45:00+00:00,12,12,forex_short_trend_continuation,structure_exit,79.56565,79.40337,0.01000,-162.33185,0.05000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"

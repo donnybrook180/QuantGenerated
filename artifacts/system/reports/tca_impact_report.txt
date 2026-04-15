@@ -1,24 +1,24 @@
 TCA impact report
-generated_at: 2026-04-14T16:01:41.041526+00:00
+generated_at: 2026-04-15T18:15:00.981825+00:00
 
 Metric: estimated research edge vs live execution drag.
 Interpretation: drag_share_pct shows how much of expected edge execution is consuming.
 
 symbol   strategy                 livefills edge_ret%    drag%  short_bps  cost_bps label                 
 ----------------------------------------------------------------------------------------------------------
-ETH      crypto_vwap_reversion__3         0     100.0      0.0      0.000     0.000 insufficient_live_data
+ETH      crypto_vwap_reversion_us         0     100.0      0.0      0.000     0.000 insufficient_live_data
+EU50     volatility_breakout__5m_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 EURUSD   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
-GBPUSD   gbpusd_overlap_impulse__         0     100.0      0.0      0.000     0.000 insufficient_live_data
-JP225    volatility_short_breakdo         0     100.0      0.0      0.000     0.000 insufficient_live_data
-UK100    momentum__30m_power__nea         0     100.0      0.0      0.000     0.000 insufficient_live_data
+JP225    jp225_volatility_short_b         0     100.0      0.0      0.000     0.000 insufficient_live_data
+UK100    momentum__30m_power__exi         0     100.0      0.0      0.000     0.000 insufficient_live_data
 USDJPY   forex_breakout_momentum_         0     100.0      0.0      0.000     0.000 insufficient_live_data
-XAUUSD   momentum__15m_us__exit_t         0     100.0      0.0      0.000     0.000 insufficient_live_data
+XAUUSD   volatility_breakout__5m_         0     100.0      0.0      0.000     0.000 insufficient_live_data
 
 Details
-ETH | crypto_vwap_reversion__30m_us__exit_trend
+ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
   broker_symbol: ETHUSD
-  research_expectancy: 1.7591
-  research_closed_trades: 3
+  research_expectancy: 3.8874
+  research_closed_trades: 4
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000
@@ -27,9 +27,21 @@ ETH | crypto_vwap_reversion__30m_us__exit_trend
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-EURUSD | forex_breakout_momentum__30m_overlap__exit_trend
+EU50 | volatility_breakout__5m_europe__exit_trend
+  broker_symbol: EU50
+  research_expectancy: 0.3519
+  research_closed_trades: 8
+  live_fill_count: 0
+  execution_drag_bps: 0.0000
+  cost_bps: 0.0000
+  total_drag_bps: 0.0000
+  drag_share_pct: 0.00
+  edge_retention_pct: 100.00
+  verdict: insufficient_live_data
+
+EURUSD | forex_breakout_momentum__30m_overlap
   broker_symbol: EURUSD
-  research_expectancy: 1.3908
+  research_expectancy: 1.9194
   research_closed_trades: 7
   live_fill_count: 0
   execution_drag_bps: 0.0000
@@ -39,10 +51,10 @@ EURUSD | forex_breakout_momentum__30m_overlap__exit_trend
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-GBPUSD | gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid
-  broker_symbol: GBPUSD
-  research_expectancy: 3.1772
-  research_closed_trades: 9
+JP225 | jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend
+  broker_symbol: JP225
+  research_expectancy: 2.3326
+  research_closed_trades: 13
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000
@@ -51,10 +63,10 @@ GBPUSD | gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-JP225 | volatility_short_breakdown__30m_all
-  broker_symbol: JP225.cash
-  research_expectancy: 3.0140
-  research_closed_trades: 10
+UK100 | momentum__30m_power__exit_trend__near_miss_protective__trend_up
+  broker_symbol: UK100
+  research_expectancy: 0.6930
+  research_closed_trades: 12
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000
@@ -63,22 +75,10 @@ JP225 | volatility_short_breakdown__30m_all
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-UK100 | momentum__30m_power__near_miss_patient__trend_up
-  broker_symbol: UK100.cash
-  research_expectancy: 0.5356
-  research_closed_trades: 24
-  live_fill_count: 0
-  execution_drag_bps: 0.0000
-  cost_bps: 0.0000
-  total_drag_bps: 0.0000
-  drag_share_pct: 0.00
-  edge_retention_pct: 100.00
-  verdict: insufficient_live_data
-
-USDJPY | forex_breakout_momentum_patient__near_miss_patient__trend_flat
+USDJPY | forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat
   broker_symbol: USDJPY
-  research_expectancy: 306.6767
-  research_closed_trades: 44
+  research_expectancy: 436.0700
+  research_closed_trades: 21
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000
@@ -87,10 +87,10 @@ USDJPY | forex_breakout_momentum_patient__near_miss_patient__trend_flat
   edge_retention_pct: 100.00
   verdict: insufficient_live_data
 
-XAUUSD | momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat
+XAUUSD | volatility_breakout__5m_us__near_miss_dense__trend_flat
   broker_symbol: XAUUSD
-  research_expectancy: 40.4414
-  research_closed_trades: 4
+  research_expectancy: 35.3599
+  research_closed_trades: 5
   live_fill_count: 0
   execution_drag_bps: 0.0000
   cost_bps: 0.0000

@@ -1,31 +1,31 @@
 Viability autopsy: ETH
-Execution validation summary: selection=combo_1 variant=crypto_vwap_reversion__30m_us__exit_trend@30m_us data_source=duckdb_cache_aggregated pnl=5.28 pf=6.71 closed=3 quality=0.66 underwater=33.3% -> accepted
-Tier counts: core=2 specialist=0 reject=224
+Execution validation summary: selection=combo_1 variant=crypto_vwap_reversion_us_core__15m_us__exit_trend@15m_us data_source=duckdb_cache pnl=15.55 pf=8.88 closed=4 quality=0.77 underwater=25.0% -> accepted
+Tier counts: core=1 specialist=0 reject=225
 
 Top blockers
-- walk-forward avg validation pnl <= 0 (0.00): 157
-- walk-forward pass rate too low (0.00% < 40%): 149
-- test PF < 1.0 (0.00): 134
+- walk-forward avg validation pnl <= 0 (0.00): 177
+- walk-forward pass rate too low (0.00% < 40%): 142
 - validation PF < 1.0 (0.00): 134
-- regime stability too low (0.00 < 0.50): 119
-- validation trades too low (0 < 2): 117
-- validation pnl <= 0 (0.00): 117
-- equity quality too low (0.25 < 0.45): 115
+- test PF < 1.0 (0.00): 127
+- regime stability too low (0.00 < 0.50): 123
+- validation trades too low (0 < 2): 118
+- validation pnl <= 0 (0.00): 118
+- equity quality too low (0.25 < 0.45): 116
 
 Top near-misses
-- crypto_vwap_reversion_us_core__15m_us__exit_trend [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
-- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_patient [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
-- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_protective [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
-- crypto_vwap_reversion_us_core__15m_us__exit_trend__near_miss_dense [reject]: pnl=15.75 pf=11.43 val=17.26/999.00/2 test=-0.77/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-3.02), walk-forward avg test pnl <= 0 (-0.77), best trade concentration too high (75.13% > 70%)
-- crypto_vwap_reversion__15m_overlap__exit_trend [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
-- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_patient [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
-- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_protective [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
-- crypto_vwap_reversion__15m_overlap__exit_trend__near_miss_dense [reject]: pnl=15.62 pf=9.46 val=17.26/999.00/2 test=-0.44/0.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-2.18), walk-forward avg test pnl <= 0 (-0.44), best trade concentration too high (74.26% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__exit_trend__regime_trend_flat_vol_high [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat_vol_high [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__regime_trend_flat_vol_high__autopsy_trend_flat [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__exit_trend__regime_trend_flat_vol_high__autopsy_trend_flat_vol_high [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__exit_trend__regime_trend_flat_vol_high__autopsy_trend_flat [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__autopsy_trend_flat_vol_high [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- crypto_vwap_reversion_us_hour17__30m_us__autopsy_trend_flat [reject]: pnl=24.13 pf=999.00 val=0.00/0.00/0 test=24.13/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)

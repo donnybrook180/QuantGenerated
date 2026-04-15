@@ -1,14 +1,13 @@
 Artifact: trend__15m_power_15m_power_symbol_candidate
-Closed trades: 3
-Realized pnl: 0.05
+Closed trades: 2
+Realized pnl: 0.06
 
 By entry hour
-18: trades=2 pnl=-0.01 avg=-0.00 win_rate=0.00%
-19: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%
+19: trades=2 pnl=0.06 avg=0.03 win_rate=100.00%
 
 By entry setup
-trend: trades=3 pnl=0.05 avg=0.02 win_rate=33.33%
+trend: trades=2 pnl=0.06 avg=0.03 win_rate=100.00%
 
 By exit reason
-structure_exit: trades=2 pnl=-0.01 avg=-0.00 win_rate=0.00%
+end_of_run: trades=1 pnl=0.01 avg=0.01 win_rate=100.00%
 take_profit: trades=1 pnl=0.06 avg=0.06 win_rate=100.00%

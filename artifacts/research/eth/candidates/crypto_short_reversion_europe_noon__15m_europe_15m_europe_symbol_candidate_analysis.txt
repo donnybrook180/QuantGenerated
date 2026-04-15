@@ -1,13 +1,14 @@
 Artifact: crypto_short_reversion_europe_noon__15m_europe_15m_europe_symbol_candidate
 Closed trades: 3
-Realized pnl: -0.44
+Realized pnl: 7.08
 
 By entry hour
-12: trades=3 pnl=-0.44 avg=-0.15 win_rate=33.33%
+12: trades=3 pnl=7.08 avg=2.36 win_rate=66.67%
 
 By entry setup
-crypto_short_reversion: trades=3 pnl=-0.44 avg=-0.15 win_rate=33.33%
+crypto_short_reversion: trades=3 pnl=7.08 avg=2.36 win_rate=66.67%
 
 By exit reason
-structure_exit: trades=2 pnl=-3.36 avg=-1.68 win_rate=0.00%
-take_profit: trades=1 pnl=2.92 avg=2.92 win_rate=100.00%
+structure_exit: trades=1 pnl=-0.45 avg=-0.45 win_rate=0.00%
+trailing_stop: trades=1 pnl=3.25 avg=3.25 win_rate=100.00%
+take_profit: trades=1 pnl=4.28 avg=4.28 win_rate=100.00%

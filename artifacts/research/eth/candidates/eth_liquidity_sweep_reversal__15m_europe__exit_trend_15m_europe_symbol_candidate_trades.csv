@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:ETHUSD,2024-05-10T11:15:00+00:00,2024-05-10T12:15:00+00:00,11,12,eth_liquidity_sweep_reversal,trailing_stop,3032.21180,3030.70663,0.01000,-0.34756,0.19704,4,0.70908,"{'sweep_low': 3023.82, 'sweep_reclaim': 1.0}"
+X:ETHUSD,2024-05-10T11:15:00+00:00,2024-05-10T13:15:00+00:00,11,13,eth_liquidity_sweep_reversal,stale_breakout,3032.21180,3014.50312,0.01000,-1.96739,0.19652,8,0.70908,"{'sweep_low': 3023.82, 'sweep_reclaim': 1.0}"

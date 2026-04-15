@@ -1,7 +1,6 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-UK100,2025-04-08T14:15:00+00:00,2025-04-08T15:30:00+00:00,14,15,opening_range_breakout,trailing_stop,7880.05173,7886.24597,0.01000,-0.00382,0.06577,5,0.89595,"{'range_high': 7857.9, 'breakout_high': 7857.9}"
-UK100,2025-08-19T14:15:00+00:00,2025-08-19T15:00:00+00:00,14,15,opening_range_breakout,stale_breakout,9193.81443,9181.78681,0.01000,-0.18865,0.06838,3,0.61362,"{'range_high': 9179.9, 'breakout_high': 9179.9}"
-UK100,2025-09-18T14:15:00+00:00,2025-09-18T14:45:00+00:00,14,14,opening_range_breakout,stale_breakout,9238.52337,9231.27691,0.01000,-0.14093,0.06847,2,0.58131,"{'range_high': 9225.9, 'breakout_high': 9225.9}"
-UK100,2026-02-02T14:00:00+00:00,2026-02-02T14:45:00+00:00,14,14,opening_range_breakout,trailing_stop,10280.33169,10280.46703,0.01000,-0.06921,0.07056,3,0.70807,"{'range_high': 10260.5, 'breakout_high': 10260.5}"
-UK100,2026-03-30T14:15:00+00:00,2026-03-30T17:45:00+00:00,14,17,opening_range_breakout,take_profit,10072.39011,10120.49903,0.01000,0.41090,0.07019,14,0.93052,"{'range_high': 10042.8, 'breakout_high': 10042.8}"
-UK100,2026-03-31T14:00:00+00:00,2026-03-31T15:45:00+00:00,14,15,opening_range_breakout,stale_breakout,10217.61915,10204.68219,0.01000,-0.19979,0.07042,7,0.70595,"{'range_high': 10198.0, 'breakout_high': 10198.0}"
+UK100,2025-04-08T14:15:00+00:00,2025-04-08T17:00:00+00:00,14,17,opening_range_breakout,take_profit,7880.83923,7971.94117,0.01000,0.84517,0.06585,11,0.89595,"{'range_high': 7857.9, 'breakout_high': 7857.9}"
+UK100,2025-08-19T14:15:00+00:00,2025-08-19T15:00:00+00:00,14,15,opening_range_breakout,stop_loss,9194.60193,9180.99931,0.01000,-0.20440,0.06838,3,0.61362,"{'range_high': 9179.9, 'breakout_high': 9179.9}"
+UK100,2025-09-18T14:15:00+00:00,2025-09-18T15:15:00+00:00,14,15,opening_range_breakout,stale_breakout,9239.31087,9225.03050,0.01000,-0.21127,0.06846,4,0.58131,"{'range_high': 9225.9, 'breakout_high': 9225.9}"
+UK100,2026-02-02T14:00:00+00:00,2026-02-02T16:15:00+00:00,14,16,opening_range_breakout,take_profit,10281.11919,10318.47177,0.01000,0.30293,0.07060,9,0.70807,"{'range_high': 10260.5, 'breakout_high': 10260.5}"
+UK100,2026-03-30T14:15:00+00:00,2026-03-30T20:15:00+00:00,14,20,opening_range_breakout,trailing_stop,10073.17761,10085.81831,0.01000,0.05625,0.07016,24,0.93052,"{'range_high': 10042.8, 'breakout_high': 10042.8}"

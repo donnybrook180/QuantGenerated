@@ -1,0 +1,19 @@
+Artifact: forex_short_breakdown_momentum__15m_europe__exit_trend_15m_europe_symbol_candidate
+Closed trades: 8
+Realized pnl: -986.51
+
+By entry hour
+9: trades=3 pnl=-370.60 avg=-123.53 win_rate=0.00%
+10: trades=1 pnl=-289.43 avg=-289.43 win_rate=0.00%
+12: trades=1 pnl=-126.25 avg=-126.25 win_rate=0.00%
+7: trades=1 pnl=-80.13 avg=-80.13 win_rate=0.00%
+8: trades=1 pnl=-79.61 avg=-79.61 win_rate=0.00%
+11: trades=1 pnl=-40.49 avg=-40.49 win_rate=0.00%
+
+By entry setup
+forex_short_breakdown_momentum: trades=8 pnl=-986.51 avg=-123.31 win_rate=0.00%
+
+By exit reason
+stale_breakout: trades=6 pnl=-775.76 avg=-129.29 win_rate=0.00%
+stop_loss: trades=1 pnl=-170.26 avg=-170.26 win_rate=0.00%
+time_stop: trades=1 pnl=-40.49 avg=-40.49 win_rate=0.00%

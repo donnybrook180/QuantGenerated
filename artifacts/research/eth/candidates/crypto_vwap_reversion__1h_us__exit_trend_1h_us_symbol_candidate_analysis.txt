@@ -1,12 +1,12 @@
 Artifact: crypto_vwap_reversion__1h_us__exit_trend_1h_us_symbol_candidate
 Closed trades: 1
-Realized pnl: 3.74
+Realized pnl: 2.62
 
 By entry hour
-17: trades=1 pnl=3.74 avg=3.74 win_rate=100.00%
+17: trades=1 pnl=2.62 avg=2.62 win_rate=100.00%
 
 By entry setup
-crypto_vwap_reversion: trades=1 pnl=3.74 avg=3.74 win_rate=100.00%
+crypto_vwap_reversion: trades=1 pnl=2.62 avg=2.62 win_rate=100.00%
 
 By exit reason
-take_profit: trades=1 pnl=3.74 avg=3.74 win_rate=100.00%
+trailing_stop: trades=1 pnl=2.62 avg=2.62 win_rate=100.00%

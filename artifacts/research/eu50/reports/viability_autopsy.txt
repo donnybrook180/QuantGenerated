@@ -1,31 +1,31 @@
 Viability autopsy: EU50
-Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=226
+Execution validation summary: selection=combo_1 variant=volatility_breakout__5m_europe__exit_trend@5m_europe data_source=duckdb_cache pnl=2.81 pf=15.88 closed=8 quality=0.72 underwater=37.5% -> accepted
+Tier counts: core=2 specialist=7 reject=214
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 186
-- validation PF < 1.0 (0.00): 162
+- walk-forward pass rate too low (0.00% < 50%): 163
+- validation PF < 1.0 (0.00): 146
 - test PF < 1.0 (0.00): 145
-- walk-forward avg test pnl <= 0 (0.00): 142
-- test trades too low (0 < 2): 141
-- test pnl <= 0 (0.00): 141
-- validation trades too low (0 < 3): 129
-- validation pnl <= 0 (0.00): 129
+- walk-forward avg test pnl <= 0 (0.00): 141
+- test trades too low (0 < 2): 135
+- test pnl <= 0 (0.00): 135
+- walk-forward avg validation pnl <= 0 (0.00): 123
+- validation trades too low (0 < 3): 121
 
 Top near-misses
-- volatility_breakout__5m_europe [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__exit_trend [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__exit_fastfail [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__near_miss_patient [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__near_miss_protective [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__near_miss_dense [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__exit_trend__near_miss_patient [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
-- volatility_breakout__5m_europe__exit_trend__near_miss_protective [reject]: pnl=1.69 pf=9.77 val=-0.17/0.00/2 test=0.15/999.00/2 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.10), combined validation/test pnl <= 0 (-0.02), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-0.07), walk-forward avg test pnl <= 0 (-0.00), best trade concentration too high (83.29% > 70%)
+- volatility_breakout__5m_europe [specialist]: pnl=2.50 pf=14.21 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__near_miss_dense [specialist]: pnl=2.49 pf=13.28 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_dense [specialist]: pnl=2.49 pf=13.28 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__near_miss_patient [specialist]: pnl=2.47 pf=13.12 val=-0.15/0.00/2 test=0.28/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.10), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_patient [specialist]: pnl=2.47 pf=13.12 val=-0.15/0.00/2 test=0.28/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.10), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_trend__plus__volatility_breakout__5m_europe [specialist]: pnl=2.38 pf=7.91 val=-0.19/0.01/3 test=0.21/3.71/3 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.17), combo underperformed components (-0.40), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_fastfail [specialist]: pnl=2.36 pf=13.47 val=-0.12/0.02/2 test=0.23/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
+- momentum__5m_europe__exit_fastfail__near_miss_patient__trend_up [reject]: pnl=2.35 pf=7.64 val=0.07/1.69/2 test=0.39/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.02)

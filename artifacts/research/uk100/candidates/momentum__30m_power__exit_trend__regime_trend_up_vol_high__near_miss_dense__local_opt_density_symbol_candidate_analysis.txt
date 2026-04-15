@@ -1,0 +1,15 @@
+Artifact: momentum__30m_power__exit_trend__regime_trend_up_vol_high__near_miss_dense__local_opt_density_symbol_candidate
+Closed trades: 6
+Realized pnl: 10.59
+
+By entry hour
+19: trades=1 pnl=-1.74 avg=-1.74 win_rate=0.00%
+18: trades=5 pnl=12.33 avg=2.47 win_rate=80.00%
+
+By entry setup
+momentum_confirmation: trades=6 pnl=10.59 avg=1.77 win_rate=66.67%
+
+By exit reason
+stop_loss: trades=1 pnl=-1.74 avg=-1.74 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.22 avg=-0.22 win_rate=0.00%
+take_profit: trades=4 pnl=12.55 avg=3.14 win_rate=100.00%

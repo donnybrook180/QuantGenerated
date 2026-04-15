@@ -1,20 +1,19 @@
 Artifact: eurusd_ny_overlap_continuation__15m_overlap__exit_trend_15m_overlap_symbol_candidate
-Closed trades: 175
-Realized pnl: -13.83
+Closed trades: 161
+Realized pnl: 3.97
 
 By entry hour
-14: trades=24 pnl=-8.77 avg=-0.37 win_rate=20.83%
-13: trades=66 pnl=-7.17 avg=-0.11 win_rate=43.94%
-15: trades=43 pnl=-2.46 avg=-0.06 win_rate=37.21%
-16: trades=42 pnl=4.57 avg=0.11 win_rate=50.00%
+15: trades=36 pnl=-15.64 avg=-0.43 win_rate=30.56%
+14: trades=21 pnl=-3.78 avg=-0.18 win_rate=14.29%
+13: trades=66 pnl=1.34 avg=0.02 win_rate=37.88%
+16: trades=38 pnl=22.05 avg=0.58 win_rate=47.37%
 
 By entry setup
-eurusd_ny_overlap_continuation: trades=175 pnl=-13.83 avg=-0.08 win_rate=40.57%
+eurusd_ny_overlap_continuation: trades=161 pnl=3.97 avg=0.02 win_rate=35.40%
 
 By exit reason
-stop_loss: trades=35 pnl=-43.28 avg=-1.24 win_rate=0.00%
-stale_breakout: trades=32 pnl=-34.05 avg=-1.06 win_rate=0.00%
-time_stop: trades=6 pnl=-4.18 avg=-0.70 win_rate=0.00%
-trailing_stop: trades=42 pnl=-3.26 avg=-0.08 win_rate=35.71%
-signal_exit: trades=5 pnl=-2.97 avg=-0.59 win_rate=20.00%
-take_profit: trades=55 pnl=73.90 avg=1.34 win_rate=100.00%
+stop_loss: trades=49 pnl=-71.96 avg=-1.47 win_rate=0.00%
+stale_breakout: trades=14 pnl=-17.75 avg=-1.27 win_rate=0.00%
+signal_exit: trades=13 pnl=-3.07 avg=-0.24 win_rate=30.77%
+trailing_stop: trades=60 pnl=14.05 avg=0.23 win_rate=46.67%
+take_profit: trades=25 pnl=82.70 avg=3.31 win_rate=100.00%

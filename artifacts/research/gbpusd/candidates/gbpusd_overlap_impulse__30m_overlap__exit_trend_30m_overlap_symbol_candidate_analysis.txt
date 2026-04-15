@@ -1,20 +1,19 @@
 Artifact: gbpusd_overlap_impulse__30m_overlap__exit_trend_30m_overlap_symbol_candidate
-Closed trades: 76
-Realized pnl: -15.55
+Closed trades: 67
+Realized pnl: -31.68
 
 By entry hour
-15: trades=12 pnl=-16.97 avg=-1.41 win_rate=25.00%
-13: trades=16 pnl=-6.82 avg=-0.43 win_rate=31.25%
-16: trades=18 pnl=-0.92 avg=-0.05 win_rate=38.89%
-12: trades=16 pnl=3.27 avg=0.20 win_rate=43.75%
-14: trades=14 pnl=5.89 avg=0.42 win_rate=57.14%
+15: trades=9 pnl=-15.39 avg=-1.71 win_rate=22.22%
+12: trades=16 pnl=-9.95 avg=-0.62 win_rate=25.00%
+13: trades=16 pnl=-7.58 avg=-0.47 win_rate=37.50%
+16: trades=13 pnl=-6.81 avg=-0.52 win_rate=23.08%
+14: trades=13 pnl=8.06 avg=0.62 win_rate=46.15%
 
 By entry setup
-gbpusd_overlap_impulse: trades=76 pnl=-15.55 avg=-0.20 win_rate=39.47%
+gbpusd_overlap_impulse: trades=67 pnl=-31.68 avg=-0.47 win_rate=31.34%
 
 By exit reason
-stale_breakout: trades=18 pnl=-38.64 avg=-2.15 win_rate=0.00%
-stop_loss: trades=8 pnl=-22.15 avg=-2.77 win_rate=0.00%
-time_stop: trades=3 pnl=-2.92 avg=-0.97 win_rate=0.00%
-trailing_stop: trades=27 pnl=1.31 avg=0.05 win_rate=37.04%
-take_profit: trades=20 pnl=46.86 avg=2.34 win_rate=100.00%
+stop_loss: trades=23 pnl=-65.24 avg=-2.84 win_rate=0.00%
+stale_breakout: trades=14 pnl=-10.14 avg=-0.72 win_rate=14.29%
+trailing_stop: trades=22 pnl=5.31 avg=0.24 win_rate=50.00%
+take_profit: trades=8 pnl=38.40 avg=4.80 win_rate=100.00%

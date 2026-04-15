@@ -1,0 +1,13 @@
+Artifact: volatility_short_breakdown__15m_europe__exit_fastfail__near_miss_patient__trend_down_vol_high__local_opt_densi
+Closed trades: 4
+Realized pnl: 41.42
+
+By entry hour
+11: trades=4 pnl=41.42 avg=10.35 win_rate=75.00%
+
+By entry setup
+volatility_short_breakdown: trades=4 pnl=41.42 avg=10.35 win_rate=75.00%
+
+By exit reason
+trailing_stop: trades=1 pnl=-2.70 avg=-2.70 win_rate=0.00%
+take_profit: trades=3 pnl=44.11 avg=14.70 win_rate=100.00%

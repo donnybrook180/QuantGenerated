@@ -1,60 +1,21 @@
 TCA adaptation impact report
-generated_at: 2026-04-14T16:01:42.176632+00:00
+generated_at: 2026-04-15T18:15:01.811644+00:00
 
 Metric: estimated result index = edge_retention_pct x base_allocation_weight x max_risk_multiplier.
 Interpretation: this is a before/after estimate of what the execution adaptation layer changes in exposure to retained edge.
 
 symbol   strategy                  fills edge_ret%   base_idx  adapt_idx     chg% action            
 ----------------------------------------------------------------------------------------------------
-ETH      crypto_vwap_reversion__3      0     100.0      69.00      69.00      0.0 unchanged         
-EURUSD   forex_breakout_momentum_      0     100.0      64.67      64.67      0.0 unchanged         
-GBPUSD   gbpusd_overlap_impulse__      0     100.0      12.25      12.25      0.0 unchanged         
-JP225    volatility_short_breakdo      0     100.0      58.65      58.65      0.0 unchanged         
-UK100    momentum__30m_power__nea      0     100.0      58.65      58.65      0.0 unchanged         
+ETH      crypto_vwap_reversion_us      0     100.0      58.65      58.65      0.0 unchanged         
+EU50     volatility_breakout__5m_      0     100.0      58.65      58.65      0.0 unchanged         
+EURUSD   forex_breakout_momentum_      0     100.0     105.91     105.91      0.0 unchanged         
+JP225    jp225_volatility_short_b      0     100.0      58.65      58.65      0.0 unchanged         
+UK100    momentum__30m_power__exi      0     100.0      12.25      12.25      0.0 unchanged         
 USDJPY   forex_breakout_momentum_      0     100.0      12.25      12.25      0.0 unchanged         
-XAUUSD   momentum__15m_us__exit_t      0     100.0      69.00      69.00      0.0 unchanged         
+XAUUSD   volatility_breakout__5m_      0     100.0      58.65      58.65      0.0 unchanged         
 
 Details
-ETH | crypto_vwap_reversion__30m_us__exit_trend
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 1.150
-  adapted_base_weight: 1.150
-  baseline_max_risk: 0.600
-  adapted_max_risk: 0.600
-  baseline_result_index: 69.0000
-  adapted_result_index: 69.0000
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-EURUSD | forex_breakout_momentum__30m_overlap__exit_trend
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 1.078
-  adapted_base_weight: 1.078
-  baseline_max_risk: 0.600
-  adapted_max_risk: 0.600
-  baseline_result_index: 64.6666
-  adapted_result_index: 64.6666
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-GBPUSD | gbpusd_overlap_impulse__15m_overlap__regime_trend_down_vol_mid
-  live_fill_count: 0
-  edge_retention_pct: 100.00
-  baseline_base_weight: 0.350
-  adapted_base_weight: 0.350
-  baseline_max_risk: 0.350
-  adapted_max_risk: 0.350
-  baseline_result_index: 12.2500
-  adapted_result_index: 12.2500
-  result_index_change_pct: 0.00
-  adaptation_action: unchanged
-  adaptation_reason: healthy_or_insufficient_data
-
-JP225 | volatility_short_breakdown__30m_all
+ETH | crypto_vwap_reversion_us_core__15m_us__exit_trend
   live_fill_count: 0
   edge_retention_pct: 100.00
   baseline_base_weight: 0.977
@@ -67,7 +28,7 @@ JP225 | volatility_short_breakdown__30m_all
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
 
-UK100 | momentum__30m_power__near_miss_patient__trend_up
+EU50 | volatility_breakout__5m_europe__exit_trend
   live_fill_count: 0
   edge_retention_pct: 100.00
   baseline_base_weight: 0.977
@@ -80,7 +41,33 @@ UK100 | momentum__30m_power__near_miss_patient__trend_up
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
 
-USDJPY | forex_breakout_momentum_patient__near_miss_patient__trend_flat
+EURUSD | forex_breakout_momentum__30m_overlap
+  live_fill_count: 0
+  edge_retention_pct: 100.00
+  baseline_base_weight: 1.097
+  adapted_base_weight: 1.097
+  baseline_max_risk: 0.966
+  adapted_max_risk: 0.966
+  baseline_result_index: 105.9061
+  adapted_result_index: 105.9061
+  result_index_change_pct: 0.00
+  adaptation_action: unchanged
+  adaptation_reason: healthy_or_insufficient_data
+
+JP225 | jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend
+  live_fill_count: 0
+  edge_retention_pct: 100.00
+  baseline_base_weight: 0.977
+  adapted_base_weight: 0.977
+  baseline_max_risk: 0.600
+  adapted_max_risk: 0.600
+  baseline_result_index: 58.6500
+  adapted_result_index: 58.6500
+  result_index_change_pct: 0.00
+  adaptation_action: unchanged
+  adaptation_reason: healthy_or_insufficient_data
+
+UK100 | momentum__30m_power__exit_trend__near_miss_protective__trend_up
   live_fill_count: 0
   edge_retention_pct: 100.00
   baseline_base_weight: 0.350
@@ -93,15 +80,28 @@ USDJPY | forex_breakout_momentum_patient__near_miss_patient__trend_flat
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data
 
-XAUUSD | momentum__15m_us__exit_trend__regime_trend_flat_vol_high__near_miss_patient__trend_flat
+USDJPY | forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat
   live_fill_count: 0
   edge_retention_pct: 100.00
-  baseline_base_weight: 1.150
-  adapted_base_weight: 1.150
+  baseline_base_weight: 0.350
+  adapted_base_weight: 0.350
+  baseline_max_risk: 0.350
+  adapted_max_risk: 0.350
+  baseline_result_index: 12.2500
+  adapted_result_index: 12.2500
+  result_index_change_pct: 0.00
+  adaptation_action: unchanged
+  adaptation_reason: healthy_or_insufficient_data
+
+XAUUSD | volatility_breakout__5m_us__near_miss_dense__trend_flat
+  live_fill_count: 0
+  edge_retention_pct: 100.00
+  baseline_base_weight: 0.977
+  adapted_base_weight: 0.977
   baseline_max_risk: 0.600
   adapted_max_risk: 0.600
-  baseline_result_index: 69.0000
-  adapted_result_index: 69.0000
+  baseline_result_index: 58.6500
+  adapted_result_index: 58.6500
   result_index_change_pct: 0.00
   adaptation_action: unchanged
   adaptation_reason: healthy_or_insufficient_data

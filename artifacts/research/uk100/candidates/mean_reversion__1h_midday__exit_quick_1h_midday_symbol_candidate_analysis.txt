@@ -1,16 +1,17 @@
 Artifact: mean_reversion__1h_midday__exit_quick_1h_midday_symbol_candidate
-Closed trades: 18
-Realized pnl: -3.82
+Closed trades: 15
+Realized pnl: -3.96
 
 By entry hour
-17: trades=6 pnl=-2.93 avg=-0.49 win_rate=33.33%
-16: trades=6 pnl=-1.54 avg=-0.26 win_rate=0.00%
-15: trades=6 pnl=0.65 avg=0.11 win_rate=50.00%
+16: trades=5 pnl=-3.15 avg=-0.63 win_rate=20.00%
+17: trades=5 pnl=-1.58 avg=-0.32 win_rate=20.00%
+15: trades=5 pnl=0.77 avg=0.15 win_rate=40.00%
 
 By entry setup
-mean_reversion: trades=18 pnl=-3.82 avg=-0.21 win_rate=27.78%
+mean_reversion: trades=15 pnl=-3.96 avg=-0.26 win_rate=26.67%
 
 By exit reason
-structure_exit: trades=13 pnl=-6.07 avg=-0.47 win_rate=0.00%
-trailing_stop: trades=1 pnl=0.11 avg=0.11 win_rate=100.00%
-take_profit: trades=4 pnl=2.14 avg=0.54 win_rate=100.00%
+structure_exit: trades=8 pnl=-5.15 avg=-0.64 win_rate=0.00%
+stop_loss: trades=2 pnl=-2.49 avg=-1.25 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.03 avg=-0.03 win_rate=0.00%
+take_profit: trades=4 pnl=3.71 avg=0.93 win_rate=100.00%

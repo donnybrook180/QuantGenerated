@@ -1,17 +1,16 @@
 Artifact: mean_reversion__5m_overlap_5m_overlap_symbol_candidate
-Closed trades: 12
-Realized pnl: -49.69
+Closed trades: 10
+Realized pnl: -113.04
 
 By entry hour
-12: trades=3 pnl=-31.39 avg=-10.46 win_rate=0.00%
-13: trades=4 pnl=-7.45 avg=-1.86 win_rate=25.00%
-15: trades=4 pnl=-5.63 avg=-1.41 win_rate=25.00%
-16: trades=1 pnl=-5.22 avg=-5.22 win_rate=0.00%
+13: trades=3 pnl=-46.15 avg=-15.38 win_rate=0.00%
+12: trades=3 pnl=-31.76 avg=-10.59 win_rate=0.00%
+16: trades=1 pnl=-20.10 avg=-20.10 win_rate=0.00%
+15: trades=3 pnl=-15.03 avg=-5.01 win_rate=66.67%
 
 By entry setup
-mean_reversion: trades=12 pnl=-49.69 avg=-4.14 win_rate=16.67%
+mean_reversion: trades=10 pnl=-113.04 avg=-11.30 win_rate=20.00%
 
 By exit reason
-structure_exit: trades=10 pnl=-73.83 avg=-7.38 win_rate=0.00%
-trailing_stop: trades=1 pnl=7.28 avg=7.28 win_rate=100.00%
-take_profit: trades=1 pnl=16.86 avg=16.86 win_rate=100.00%
+structure_exit: trades=8 pnl=-134.66 avg=-16.83 win_rate=0.00%
+trailing_stop: trades=2 pnl=21.62 avg=10.81 win_rate=100.00%

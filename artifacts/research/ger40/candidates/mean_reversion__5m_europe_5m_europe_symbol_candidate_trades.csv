@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-DAX,2026-03-02T12:00:00+00:00,2026-03-03T09:00:00+00:00,12,9,mean_reversion,structure_exit,47.92209,44.04799,0.01000,-0.03874,0.00000,1,1.00000,"{'mean': 47.11875, 'z_score_20': -2.410249425931854}"
+DAX,2026-03-02T12:00:00+00:00,2026-03-03T09:00:00+00:00,12,9,mean_reversion,stop_loss,47.55459,44.41549,0.01000,-0.03139,0.00000,1,1.00000,"{'mean': 47.11875, 'z_score_20': -2.410249425931854}"

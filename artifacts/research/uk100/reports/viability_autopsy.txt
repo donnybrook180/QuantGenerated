@@ -1,31 +1,31 @@
 Viability autopsy: UK100
-Execution validation summary: selection=combo_1 variant=momentum__30m_power__near_miss_patient__trend_up@30m_power|trend_up data_source=duckdb_cache_aggregated pnl=12.85 pf=11.88 closed=24 quality=0.92 underwater=12.5% -> accepted
-Tier counts: core=6 specialist=0 reject=348
+Execution validation summary: selection=combo_1 variant=momentum__30m_power__exit_trend__near_miss_protective__trend_up@30m_power|trend_up data_source=duckdb_cache pnl=8.32 pf=6.72 closed=12 quality=0.85 underwater=25.0% -> accepted
+Tier counts: core=3 specialist=7 reject=344
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 307
-- regime stability too low (0.00 < 0.50): 171
-- validation PF < 1.0 (0.00): 149
-- test PF < 1.0 (0.00): 101
-- walk-forward avg validation pnl <= 0 (0.00): 100
-- regime loss ratio too high (999.00 > 1.25): 98
-- validation trades too low (0 < 3): 93
-- validation pnl <= 0 (0.00): 93
+- walk-forward pass rate too low (0.00% < 50%): 296
+- validation PF < 1.0 (0.00): 154
+- regime stability too low (0.00 < 0.50): 152
+- test PF < 1.0 (0.00): 106
+- walk-forward avg validation pnl <= 0 (0.00): 93
+- validation trades too low (0 < 3): 91
+- validation pnl <= 0 (0.00): 91
+- regime loss ratio too high (999.00 > 1.25): 87
 
 Top near-misses
-- momentum__30m_power__near_miss_patient__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power__near_miss_protective__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power__exit_fastfail__near_miss_patient__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power__exit_fastfail__near_miss_protective__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power__exit_trend__near_miss_patient__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power__exit_trend__near_miss_protective__trend_up_vol_high [reject]: pnl=6.05 pf=30.24 val=-1.84/0.00/2 test=1.05/6.06/2 wf=0.00%
-  reasons: combined validation/test pnl <= 0 (-0.79), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.84)
-- momentum__30m_power [reject]: pnl=5.30 pf=1.98 val=-1.28/0.41/6 test=3.86/3.86/8 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.75), validation pnl <= 0 (-1.28), validation PF < 1.0 (0.41), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.31)
-- momentum__30m_power__exit_fastfail [reject]: pnl=5.30 pf=1.98 val=-1.28/0.41/6 test=3.86/3.86/8 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.75), validation pnl <= 0 (-1.28), validation PF < 1.0 (0.41), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-1.31)
+- momentum__30m_power__exit_trend [reject]: pnl=10.22 pf=3.69 val=-1.04/0.46/4 test=6.07/27.35/5 wf=0.00%
+  reasons: validation pnl <= 0 (-1.04), validation PF < 1.0 (0.46), walk-forward pass rate too low (0.00% < 50%), walk-forward avg validation pnl <= 0 (-0.59)
+- momentum__30m_power__exit_trend__regime_trend_up_vol_high__near_miss_dense [reject]: pnl=10.12 pf=46.43 val=-1.65/0.05/2 test=1.02/5.56/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.63), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.65)
+- momentum__30m_power__exit_trend__regime_trend_up_vol_high__near_miss_dense__trend_up_vol_high [reject]: pnl=10.12 pf=46.43 val=-1.65/0.05/2 test=1.02/5.56/2 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.63), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.65)
+- momentum__30m_power__exit_trend__regime_trend_up_vol_high [reject]: pnl=9.97 pf=999.00 val=-1.74/0.00/1 test=1.24/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.50), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.74)
+- momentum__30m_power__exit_trend__near_miss_patient__trend_up_vol_high [reject]: pnl=9.97 pf=999.00 val=-1.74/0.00/1 test=1.24/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.50), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.74)
+- momentum__30m_power__exit_trend__near_miss_protective__trend_up_vol_high [reject]: pnl=9.97 pf=999.00 val=-1.74/0.00/1 test=1.24/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.50), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.74)
+- momentum__30m_power__exit_trend__regime_trend_up_vol_high__near_miss_patient [reject]: pnl=9.97 pf=999.00 val=-1.74/0.00/1 test=1.24/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.50), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.74)
+- momentum__30m_power__exit_trend__regime_trend_up_vol_high__near_miss_patient__trend_up_vol_high [reject]: pnl=9.97 pf=999.00 val=-1.74/0.00/1 test=1.24/999.00/1 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.50), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.74)

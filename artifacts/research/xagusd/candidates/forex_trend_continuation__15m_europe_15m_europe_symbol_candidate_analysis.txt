@@ -1,0 +1,18 @@
+Artifact: forex_trend_continuation__15m_europe_15m_europe_symbol_candidate
+Closed trades: 8
+Realized pnl: -236.25
+
+By entry hour
+11: trades=2 pnl=-623.04 avg=-311.52 win_rate=0.00%
+12: trades=1 pnl=-174.24 avg=-174.24 win_rate=0.00%
+7: trades=1 pnl=60.70 avg=60.70 win_rate=100.00%
+9: trades=3 pnl=129.93 avg=43.31 win_rate=33.33%
+8: trades=1 pnl=370.41 avg=370.41 win_rate=100.00%
+
+By entry setup
+forex_trend_continuation: trades=8 pnl=-236.25 avg=-29.53 win_rate=37.50%
+
+By exit reason
+structure_exit: trades=4 pnl=-962.40 avg=-240.60 win_rate=0.00%
+take_profit: trades=1 pnl=331.78 avg=331.78 win_rate=100.00%
+signal_exit: trades=3 pnl=394.37 avg=131.46 win_rate=66.67%

@@ -1,2 +1,2 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-QQQ,2025-10-22T14:00:00+00:00,2025-10-22T15:30:00+00:00,14,15,opening_range_short_breakdown,trailing_stop,606.62838,607.61159,0.01000,-0.00983,0.00000,3,0.78828,"{'breakout_low': 608.6301, 'rebound_high': 611.41, 'position_intent': 'short_entry'}"
+QQQ,2025-10-22T14:00:00+00:00,2025-10-23T13:30:00+00:00,14,13,opening_range_short_breakdown,stale_breakout,606.62838,609.13167,0.01000,-0.02503,0.00000,15,0.78828,"{'breakout_low': 608.6301, 'rebound_high': 611.41, 'position_intent': 'short_entry'}"

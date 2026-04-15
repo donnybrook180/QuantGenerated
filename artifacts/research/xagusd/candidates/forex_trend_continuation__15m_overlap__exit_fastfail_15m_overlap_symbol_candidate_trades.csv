@@ -1,0 +1,7 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+XAGUSD,2025-07-22T14:00:00+00:00,2025-07-22T14:15:00+00:00,14,14,forex_trend_continuation,structure_exit,38.90451,38.80849,0.01000,-96.06240,0.05000,1,0.63267,{'pullback_floor': 38.835}
+XAGUSD,2025-08-18T16:00:00+00:00,2025-08-18T16:30:00+00:00,16,16,forex_trend_continuation,signal_exit,38.18122,38.06079,0.01000,-120.47822,0.05000,2,1.00000,{'pullback_floor': 38.123}
+XAGUSD,2025-09-24T12:45:00+00:00,2025-09-24T13:00:00+00:00,12,13,forex_trend_continuation,structure_exit,44.20661,44.03242,0.01000,-174.24263,0.05000,1,0.83385,{'pullback_floor': 44.084}
+XAGUSD,2025-10-01T15:15:00+00:00,2025-10-01T15:45:00+00:00,15,15,forex_trend_continuation,structure_exit,47.34886,47.17117,0.01000,-177.73702,0.05000,2,1.00000,{'pullback_floor': 47.282}
+XAGUSD,2025-10-15T15:30:00+00:00,2025-10-15T16:00:00+00:00,15,16,forex_trend_continuation,structure_exit,52.83604,52.57902,0.01000,-257.06378,0.05000,2,1.00000,{'pullback_floor': 52.647}
+XAGUSD,2025-11-12T14:30:00+00:00,2026-04-02T23:45:00+00:00,14,23,forex_trend_continuation,end_of_run,51.78062,72.91194,0.01000,21131.27711,0.05000,9091,1.00000,{'pullback_floor': 51.474}

@@ -1,25 +1,25 @@
 Artifact: forex_short_breakdown_momentum__15m_us__exit_fastfail_15m_us_symbol_candidate
-Closed trades: 166
-Realized pnl: -33.33
+Closed trades: 158
+Realized pnl: -24.68
 
 By entry hour
-17: trades=28 pnl=-26.87 avg=-0.96 win_rate=7.14%
-14: trades=26 pnl=-7.29 avg=-0.28 win_rate=15.38%
-20: trades=10 pnl=-5.33 avg=-0.53 win_rate=30.00%
-18: trades=12 pnl=-5.04 avg=-0.42 win_rate=16.67%
-13: trades=19 pnl=-2.86 avg=-0.15 win_rate=26.32%
-19: trades=4 pnl=0.40 avg=0.10 win_rate=50.00%
-16: trades=29 pnl=6.21 avg=0.21 win_rate=44.83%
-15: trades=38 pnl=7.44 avg=0.20 win_rate=42.11%
+17: trades=26 pnl=-24.29 avg=-0.93 win_rate=19.23%
+14: trades=26 pnl=-11.63 avg=-0.45 win_rate=15.38%
+20: trades=10 pnl=-7.38 avg=-0.74 win_rate=20.00%
+18: trades=11 pnl=-1.23 avg=-0.11 win_rate=36.36%
+19: trades=4 pnl=-1.21 avg=-0.30 win_rate=25.00%
+13: trades=18 pnl=4.35 avg=0.24 win_rate=38.89%
+16: trades=27 pnl=5.36 avg=0.20 win_rate=44.44%
+15: trades=36 pnl=11.36 avg=0.32 win_rate=44.44%
 
 By entry setup
-forex_short_breakdown_momentum: trades=166 pnl=-33.33 avg=-0.20 win_rate=28.31%
+forex_short_breakdown_momentum: trades=158 pnl=-24.68 avg=-0.16 win_rate=32.28%
 
 By exit reason
-structure_exit: trades=70 pnl=-46.83 avg=-0.67 win_rate=0.00%
-stop_loss: trades=11 pnl=-15.74 avg=-1.43 win_rate=0.00%
-time_stop: trades=9 pnl=-10.16 avg=-1.13 win_rate=0.00%
-stale_breakout: trades=10 pnl=-9.50 avg=-0.95 win_rate=0.00%
-signal_exit: trades=1 pnl=-1.17 avg=-1.17 win_rate=0.00%
-trailing_stop: trades=31 pnl=-0.46 avg=-0.01 win_rate=41.94%
-take_profit: trades=34 pnl=50.53 avg=1.49 win_rate=100.00%
+structure_exit: trades=48 pnl=-43.19 avg=-0.90 win_rate=0.00%
+stop_loss: trades=26 pnl=-36.03 avg=-1.39 win_rate=0.00%
+stale_breakout: trades=11 pnl=-15.79 avg=-1.44 win_rate=18.18%
+time_stop: trades=4 pnl=-2.24 avg=-0.56 win_rate=0.00%
+signal_exit: trades=5 pnl=0.31 avg=0.06 win_rate=20.00%
+trailing_stop: trades=32 pnl=3.86 avg=0.12 win_rate=50.00%
+take_profit: trades=32 pnl=68.40 avg=2.14 win_rate=100.00%

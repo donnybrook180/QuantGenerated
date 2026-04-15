@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T16:01:51.805573+00:00",
+  "generated_at": "2026-04-15T18:13:55.806727+00:00",
   "symbol": "EURUSD",
   "broker_symbol": "EURUSD",
   "action": "insufficient_data",
@@ -7,14 +7,14 @@
   "overview": null,
   "strategy_actions": [
     {
-      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend",
+      "candidate_name": "forex_breakout_momentum__30m_overlap",
       "fill_count": 0,
       "action": "unchanged",
       "base_weight_scale": 1.0,
       "risk_scale": 1.0,
       "min_bars_between_trades": 0,
-      "resulting_base_weight": 1.0777763712215866,
-      "resulting_max_risk_multiplier": 0.6,
+      "resulting_base_weight": 1.0966635211408111,
+      "resulting_max_risk_multiplier": 0.9657122635905215,
       "local_rank_label": "baseline_local",
       "reason": "healthy_or_insufficient_data"
     }
@@ -24,36 +24,30 @@
     "symbol": "EURUSD",
     "data_symbol": "C:EURUSD",
     "broker_symbol": "EURUSD",
-    "research_run_id": 325,
-    "execution_set_id": 169,
-    "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap__exit_trend@30m_overlap data_source=duckdb_cache_aggregated pnl=9.74 pf=7.31 closed=7 quality=0.57 underwater=57.1% -> accepted",
+    "research_run_id": 382,
+    "execution_set_id": 190,
+    "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted",
     "symbol_status": "live_ready",
     "strategies": [
       {
-        "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend",
+        "candidate_name": "forex_breakout_momentum__30m_overlap",
         "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
         "promotion_tier": "core",
-        "policy_summary": "tier=core; activate in unified_regimes=dislocated_chop; avoid unified_regimes=compressed_range; vol_pct in [0.55, 0.97]; base_weight=1.08; risk_cap=0.60; stability=0.90; loss_ratio=0.20",
+        "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=compressed_range; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.97; stability=0.92; loss_ratio=0.21",
         "variant_label": "30m_overlap",
         "regime_filter_label": "",
-        "execution_overrides": {
-          "max_holding_bars": 0,
-          "take_profit_atr_multiple": 3.2,
-          "trailing_stop_atr_multiple": 1.2,
-          "stale_breakout_bars": 8,
-          "structure_exit_bars": 0
-        },
+        "execution_overrides": {},
         "allocation_weight": 1.0,
         "allowed_regimes": [
-          "dislocated_chop"
+          "orderly_trend"
         ],
         "blocked_regimes": [
           "compressed_range"
         ],
-        "min_vol_percentile": 0.55,
-        "max_vol_percentile": 0.97,
-        "base_allocation_weight": 1.0777763712215866,
-        "max_risk_multiplier": 0.6,
+        "min_vol_percentile": 0.2,
+        "max_vol_percentile": 0.8,
+        "base_allocation_weight": 1.0966635211408111,
+        "max_risk_multiplier": 0.9657122635905215,
         "min_risk_multiplier": 0.0
       }
     ],

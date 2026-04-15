@@ -1,15 +1,14 @@
 Artifact: volatility_short_breakdown__5m_midday_5m_midday_symbol_candidate
 Closed trades: 30
-Realized pnl: -0.70
+Realized pnl: -0.48
 
 By entry hour
-15: trades=18 pnl=-0.42 avg=-0.02 win_rate=0.00%
-16: trades=8 pnl=-0.19 avg=-0.02 win_rate=0.00%
-17: trades=4 pnl=-0.09 avg=-0.02 win_rate=0.00%
+15: trades=18 pnl=-0.28 avg=-0.02 win_rate=0.00%
+16: trades=8 pnl=-0.13 avg=-0.02 win_rate=0.00%
+17: trades=4 pnl=-0.06 avg=-0.02 win_rate=0.00%
 
 By entry setup
-volatility_short_breakdown: trades=30 pnl=-0.70 avg=-0.02 win_rate=0.00%
+volatility_short_breakdown: trades=30 pnl=-0.48 avg=-0.02 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=24 pnl=-0.56 avg=-0.02 win_rate=0.00%
-structure_exit: trades=6 pnl=-0.14 avg=-0.02 win_rate=0.00%
+stop_loss: trades=30 pnl=-0.48 avg=-0.02 win_rate=0.00%

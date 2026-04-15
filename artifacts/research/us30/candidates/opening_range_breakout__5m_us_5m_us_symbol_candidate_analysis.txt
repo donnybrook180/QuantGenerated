@@ -1,16 +1,14 @@
 Artifact: opening_range_breakout__5m_us_5m_us_symbol_candidate
 Closed trades: 22
-Realized pnl: -1.67
+Realized pnl: -1.66
 
 By entry hour
-14: trades=22 pnl=-1.67 avg=-0.08 win_rate=0.00%
+14: trades=22 pnl=-1.66 avg=-0.08 win_rate=0.00%
 
 By entry setup
-opening_range_breakout: trades=22 pnl=-1.67 avg=-0.08 win_rate=0.00%
+opening_range_breakout: trades=22 pnl=-1.66 avg=-0.08 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=16 pnl=-1.24 avg=-0.08 win_rate=0.00%
-structure_exit: trades=2 pnl=-0.19 avg=-0.09 win_rate=0.00%
+stop_loss: trades=19 pnl=-1.51 avg=-0.08 win_rate=0.00%
 time_stop: trades=2 pnl=-0.11 avg=-0.05 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.07 avg=-0.07 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.06 avg=-0.06 win_rate=0.00%
+take_profit: trades=1 pnl=-0.04 avg=-0.04 win_rate=0.00%

@@ -1,0 +1,22 @@
+Artifact: volatility_breakout__5m_us__near_miss_dense_symbol_candidate
+Closed trades: 15
+Realized pnl: 195.68
+
+By entry hour
+17: trades=2 pnl=-25.19 avg=-12.60 win_rate=0.00%
+15: trades=1 pnl=-5.53 avg=-5.53 win_rate=0.00%
+13: trades=3 pnl=-4.22 avg=-1.41 win_rate=33.33%
+19: trades=1 pnl=-0.75 avg=-0.75 win_rate=0.00%
+18: trades=3 pnl=9.96 avg=3.32 win_rate=66.67%
+16: trades=1 pnl=35.80 avg=35.80 win_rate=100.00%
+14: trades=3 pnl=66.27 avg=22.09 win_rate=100.00%
+20: trades=1 pnl=119.35 avg=119.35 win_rate=100.00%
+
+By entry setup
+volatility_breakout: trades=15 pnl=195.68 avg=13.05 win_rate=53.33%
+
+By exit reason
+signal_exit: trades=3 pnl=-22.36 avg=-7.45 win_rate=0.00%
+stop_loss: trades=1 pnl=-14.97 avg=-14.97 win_rate=0.00%
+trailing_stop: trades=8 pnl=21.44 avg=2.68 win_rate=62.50%
+take_profit: trades=3 pnl=211.57 avg=70.52 win_rate=100.00%

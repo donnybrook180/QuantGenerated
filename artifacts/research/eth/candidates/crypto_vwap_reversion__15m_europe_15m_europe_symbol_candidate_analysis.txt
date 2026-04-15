@@ -1,14 +1,14 @@
 Artifact: crypto_vwap_reversion__15m_europe_15m_europe_symbol_candidate
 Closed trades: 2
-Realized pnl: -0.53
+Realized pnl: -1.48
 
 By entry hour
-10: trades=1 pnl=-0.73 avg=-0.73 win_rate=0.00%
-12: trades=1 pnl=0.20 avg=0.20 win_rate=100.00%
+10: trades=1 pnl=-1.08 avg=-1.08 win_rate=0.00%
+12: trades=1 pnl=-0.40 avg=-0.40 win_rate=0.00%
 
 By entry setup
-crypto_vwap_reversion: trades=2 pnl=-0.53 avg=-0.26 win_rate=50.00%
+crypto_vwap_reversion: trades=2 pnl=-1.48 avg=-0.74 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=1 pnl=-0.73 avg=-0.73 win_rate=0.00%
-trailing_stop: trades=1 pnl=0.20 avg=0.20 win_rate=100.00%
+structure_exit: trades=1 pnl=-1.08 avg=-1.08 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.40 avg=-0.40 win_rate=0.00%

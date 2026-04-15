@@ -1,3 +1,3 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
 SPY,2026-03-17T14:45:00+00:00,2026-03-18T13:30:00+00:00,14,13,trend,stop_loss,673.35240,668.40791,0.01000,-0.04944,0.00000,1,1.00000,"{'fast': 671.7529999999999, 'slow': 671.7080066666666, 'trend_strength': 0.004412511576494582}"
-SPY,2026-04-02T14:00:00+00:00,2026-04-02T14:30:00+00:00,14,14,trend,take_profit,649.96123,655.72845,0.01000,0.05767,0.00000,2,1.00000,"{'fast': 651.367, 'slow': 644.4520866666667, 'trend_strength': -0.0029673012752985395}"
+SPY,2026-04-02T14:00:00+00:00,2026-04-02T14:45:00+00:00,14,14,trend,end_of_run,649.96123,655.06848,0.01000,0.05107,0.00000,3,1.00000,"{'fast': 651.367, 'slow': 644.4520866666667, 'trend_strength': -0.0029673012752985395}"

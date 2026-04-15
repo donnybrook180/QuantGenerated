@@ -1,0 +1,14 @@
+Artifact: volatility_short_breakdown__1h_midday__near_miss_dense_symbol_candidate
+Closed trades: 4
+Realized pnl: 0.17
+
+By entry hour
+15: trades=4 pnl=0.17 avg=0.04 win_rate=75.00%
+
+By entry setup
+volatility_short_breakdown: trades=4 pnl=0.17 avg=0.04 win_rate=75.00%
+
+By exit reason
+structure_exit: trades=1 pnl=-0.06 avg=-0.06 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.01 avg=0.01 win_rate=100.00%
+take_profit: trades=2 pnl=0.22 avg=0.11 win_rate=100.00%

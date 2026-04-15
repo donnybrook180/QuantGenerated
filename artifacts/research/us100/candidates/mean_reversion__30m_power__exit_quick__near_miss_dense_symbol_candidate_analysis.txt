@@ -1,14 +1,15 @@
 Artifact: mean_reversion__30m_power__exit_quick__near_miss_dense_symbol_candidate
 Closed trades: 7
-Realized pnl: 0.16
+Realized pnl: 0.26
 
 By entry hour
-18: trades=6 pnl=-0.01 avg=-0.00 win_rate=33.33%
+18: trades=6 pnl=0.08 avg=0.01 win_rate=33.33%
 19: trades=1 pnl=0.18 avg=0.18 win_rate=100.00%
 
 By entry setup
-mean_reversion: trades=7 pnl=0.16 avg=0.02 win_rate=42.86%
+mean_reversion: trades=7 pnl=0.26 avg=0.04 win_rate=42.86%
 
 By exit reason
-structure_exit: trades=4 pnl=-0.14 avg=-0.03 win_rate=0.00%
-take_profit: trades=3 pnl=0.30 avg=0.10 win_rate=100.00%
+structure_exit: trades=3 pnl=-0.08 avg=-0.03 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.04 avg=-0.04 win_rate=0.00%
+take_profit: trades=3 pnl=0.38 avg=0.13 win_rate=100.00%

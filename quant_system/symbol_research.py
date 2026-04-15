@@ -704,7 +704,7 @@ def _with_execution_overrides(config: SystemConfig, overrides: dict[str, float |
     if overrides:
         for key, value in overrides.items():
             setattr(tuned.execution, key, value)
-    apply_execution_mode_overrides(tuned)
+    apply_execution_mode_overrides(tuned, include_mini_trades=False)
     return tuned
 
 
@@ -765,7 +765,7 @@ def _configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol
         config.execution.stale_breakout_atr_fraction = 0.1
         config.execution.structure_exit_bars = 3
     apply_ftmo_cost_profile(config, symbol, broker_symbol)
-    apply_execution_mode_overrides(config)
+    apply_execution_mode_overrides(config, include_mini_trades=False)
 
 
 def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[FeatureVector], str]:

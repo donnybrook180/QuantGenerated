@@ -129,7 +129,15 @@ def _estimated_stop_distance(strategy_config: SystemConfig, latest_feature, refe
     return reference_price * atr_proxy * stop_multiple
 
 
-def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: DeploymentStrategy, snapshot: RegimeSnapshot) -> bool:
+def _is_strategy_regime_blocked(
+    deployment: SymbolDeployment,
+    strategy: DeploymentStrategy,
+    snapshot: RegimeSnapshot,
+    *,
+    relax_for_mini_trades: bool = False,
+) -> bool:
+    if relax_for_mini_trades:
+        return bool(int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0))
     return (
         bool(int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0))
         or
@@ -146,7 +154,9 @@ def _is_strategy_regime_blocked(deployment: SymbolDeployment, strategy: Deployme
     )
 
 
-def _interpreter_block_reason(strategy: DeploymentStrategy, interpreter_state) -> str:
+def _interpreter_block_reason(strategy: DeploymentStrategy, interpreter_state, *, relax_for_mini_trades: bool = False) -> str:
+    if relax_for_mini_trades:
+        return ""
     if interpreter_state is None:
         return ""
     archetype = _candidate_archetype(strategy)
@@ -236,6 +246,7 @@ class MT5LiveExecutor:
         self.portfolio_weight = max(portfolio_weight, 0.0)
         self.strategy_portfolio_weights = {str(key): max(float(value), 0.0) for key, value in (strategy_portfolio_weights or {}).items()}
         self.interpreter_state = build_market_interpreter_state(deployment, config)
+        self.relax_gates_for_mini_trades = bool(config.execution.mini_trades_enabled)
 
     def _strategy_portfolio_weight(self, strategy: DeploymentStrategy) -> float:
         return self.strategy_portfolio_weights.get(strategy.candidate_name, self.portfolio_weight)
@@ -366,13 +377,22 @@ class MT5LiveExecutor:
         if signal_side == Side.FLAT:
             return candidate_action
 
-        interpreter_reason = _interpreter_block_reason(strategy, self.interpreter_state)
+        interpreter_reason = _interpreter_block_reason(
+            strategy,
+            self.interpreter_state,
+            relax_for_mini_trades=self.relax_gates_for_mini_trades,
+        )
         if current_quantity == 0.0 and interpreter_reason:
             candidate_action.intended_action = f"policy_blocked::{interpreter_reason}"
             candidate_action.interpreter_reason = interpreter_reason
             return candidate_action
 
-        if current_quantity == 0.0 and _is_strategy_regime_blocked(self.deployment, strategy, snapshot):
+        if current_quantity == 0.0 and _is_strategy_regime_blocked(
+            self.deployment,
+            strategy,
+            snapshot,
+            relax_for_mini_trades=self.relax_gates_for_mini_trades,
+        ):
             candidate_action.intended_action = f"regime_blocked::{snapshot.regime_label}"
             return candidate_action
 
@@ -514,8 +534,20 @@ class MT5LiveExecutor:
                     snapshot = self.interpreter_state.regime_snapshot
                 if regime_snapshot is None:
                     regime_snapshot = snapshot
-                interpreter_reason = _interpreter_block_reason(strategy, self.interpreter_state)
-                score = 0.0 if (_is_strategy_regime_blocked(self.deployment, strategy, snapshot) or interpreter_reason) else _allocator_score(
+                interpreter_reason = _interpreter_block_reason(
+                    strategy,
+                    self.interpreter_state,
+                    relax_for_mini_trades=self.relax_gates_for_mini_trades,
+                )
+                score = 0.0 if (
+                    _is_strategy_regime_blocked(
+                        self.deployment,
+                        strategy,
+                        snapshot,
+                        relax_for_mini_trades=self.relax_gates_for_mini_trades,
+                    )
+                    or interpreter_reason
+                ) else _allocator_score(
                     strategy, signal_side, confidence, snapshot
                 )
                 evaluated.append(
@@ -579,7 +611,11 @@ class MT5LiveExecutor:
                 )
                 action.veto_reason = item.veto_reason
                 if not action.interpreter_reason:
-                    action.interpreter_reason = _interpreter_block_reason(item.strategy, self.interpreter_state)
+                    action.interpreter_reason = _interpreter_block_reason(
+                        item.strategy,
+                        self.interpreter_state,
+                        relax_for_mini_trades=self.relax_gates_for_mini_trades,
+                    )
                 action.interpreter_bias = self.interpreter_state.directional_bias
                 action.interpreter_confidence = self.interpreter_state.confidence
                 actions.append(action)

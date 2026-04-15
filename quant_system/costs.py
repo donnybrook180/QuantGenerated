@@ -35,6 +35,28 @@ def _is_forex_symbol(symbol: str) -> bool:
 
 def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
     upper = symbol.upper()
+    if any(code in upper for code in ("XAU", "XAG", "XPD", "XPT", "XCU")):
+        spread_points = 0.25
+        contract_size = 100.0
+        if "XAG" in upper:
+            spread_points = 0.03
+            contract_size = 5_000.0
+        elif "XPD" in upper or "XPT" in upper:
+            spread_points = 0.8
+        elif "XCU" in upper:
+            spread_points = 0.02
+            contract_size = 1_000.0
+        return CostProfile(
+            contract_size=contract_size,
+            spread_points=spread_points,
+            slippage_bps=0.8,
+            commission_mode="notional_pct",
+            commission_per_lot=0.0,
+            commission_notional_pct=0.0007,
+            fee_bps=0.0,
+            overnight_cost_per_lot_day=0.0,
+            notes="FTMO metals model: 0.0007% per side with metal-specific contract sizing and conservative spread assumptions.",
+        )
     if "BTC" in upper:
         return CostProfile(
             contract_size=1.0,
@@ -58,18 +80,6 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
             notes="FTMO crypto model: 0.0325% per side, contract size 10 for ETHUSD; spread/slippage slightly inflated to reflect observed MT5-vs-Binance intraday divergence.",
-        )
-    if "XAU" in upper:
-        return CostProfile(
-            contract_size=100.0,
-            spread_points=0.25,
-            slippage_bps=0.8,
-            commission_mode="notional_pct",
-            commission_per_lot=0.0,
-            commission_notional_pct=0.0007,
-            fee_bps=0.0,
-            overnight_cost_per_lot_day=0.0,
-            notes="FTMO metals model: 0.0007% per side; contract size 100 follows standard metal CFD convention; spread is a conservative inference.",
         )
     if upper in {"GER40", "GER40.CASH", "DAX", "SX5E", "EU50", "EU50.CASH", "ESTX50", "JP225", "JP225.CASH", "JPN225", "NK225", "HK50", "HK50.CASH", "HSI50", "HANGSENG", "US500", "US500.CASH", "SPY", "US100", "US100.CASH", "QQQ"}:
         spread_points = 1.0

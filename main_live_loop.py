@@ -77,6 +77,13 @@ def _record_action_state(state: dict[str, dict[str, object]], symbol: str, actio
     }
 
 
+def _run_report(label: str, builder):
+    try:
+        return builder(), None
+    except Exception as exc:
+        return None, f"{label} skipped: {exc}"
+
+
 def main() -> int:
     config = SystemConfig()
     paths = resolve_live_deployment_paths(sys.argv[1:])
@@ -183,28 +190,83 @@ def main() -> int:
                 if strategy is not None and strategy.policy_summary:
                     print(f"  policy: {strategy.policy_summary}")
             print("")
-        tca_report = generate_tca_report(config)
-        adaptation_report = generate_execution_adaptation_report(config)
-        impact_report = generate_tca_impact_report(config)
-        adaptation_impact_report = generate_tca_adaptation_impact_report(config)
-        research_queue_report = generate_live_research_queue(config)
-        improvement_activity_report = generate_improvement_activity_report()
-        market_interpreter_report = generate_market_interpreter_report(config)
-        market_interpreter_research_report = generate_interpreter_research_report(config)
-        health_report = generate_live_health_report(config)
+        report_errors: list[str] = []
+
+        tca_report, error = _run_report("TCA", lambda: generate_tca_report(config))
+        if error is not None:
+            report_errors.append(error)
+
+        adaptation_report, error = _run_report(
+            "Execution adaptation report",
+            lambda: generate_execution_adaptation_report(config),
+        )
+        if error is not None:
+            report_errors.append(error)
+
+        impact_report, error = _run_report("TCA impact report", lambda: generate_tca_impact_report(config))
+        if error is not None:
+            report_errors.append(error)
+
+        adaptation_impact_report, error = _run_report(
+            "TCA adaptation impact report",
+            lambda: generate_tca_adaptation_impact_report(config),
+        )
+        if error is not None:
+            report_errors.append(error)
+
+        research_queue_report, error = _run_report("Live research queue", lambda: generate_live_research_queue(config))
+        if error is not None:
+            report_errors.append(error)
+
+        improvement_activity_report, error = _run_report(
+            "Live improvement activity report",
+            generate_improvement_activity_report,
+        )
+        if error is not None:
+            report_errors.append(error)
+
+        market_interpreter_report, error = _run_report(
+            "Market interpreter report",
+            lambda: generate_market_interpreter_report(config),
+        )
+        if error is not None:
+            report_errors.append(error)
+
+        market_interpreter_research_report, error = _run_report(
+            "Market interpreter research queue",
+            lambda: generate_interpreter_research_report(config),
+        )
+        if error is not None:
+            report_errors.append(error)
+
+        health_report, error = _run_report("Health report", lambda: generate_live_health_report(config))
+        if error is not None:
+            report_errors.append(error)
+
         auto_research_lines = maybe_run_auto_research(config)
-        print(f"TCA: {summarize_tca_overview(tca_report)}")
-        print(f"TCA report: {tca_report.report_path}")
-        print(f"TCA impact report: {impact_report}")
-        print(f"TCA adaptation impact report: {adaptation_impact_report}")
-        print(f"Execution adaptation report: {adaptation_report}")
-        print(f"Live research queue: {research_queue_report}")
-        print(f"Live improvement activity report: {improvement_activity_report}")
-        print(f"Market interpreter report: {market_interpreter_report}")
-        print(f"Market interpreter research queue: {market_interpreter_research_report}")
+        if tca_report is not None:
+            print(f"TCA: {summarize_tca_overview(tca_report)}")
+            print(f"TCA report: {tca_report.report_path}")
+        if impact_report is not None:
+            print(f"TCA impact report: {impact_report}")
+        if adaptation_impact_report is not None:
+            print(f"TCA adaptation impact report: {adaptation_impact_report}")
+        if adaptation_report is not None:
+            print(f"Execution adaptation report: {adaptation_report}")
+        if research_queue_report is not None:
+            print(f"Live research queue: {research_queue_report}")
+        if improvement_activity_report is not None:
+            print(f"Live improvement activity report: {improvement_activity_report}")
+        if market_interpreter_report is not None:
+            print(f"Market interpreter report: {market_interpreter_report}")
+        if market_interpreter_research_report is not None:
+            print(f"Market interpreter research queue: {market_interpreter_research_report}")
         for line in auto_research_lines:
             print(line)
-        print(f"Health report: {health_report}")
+        if health_report is not None:
+            print(f"Health report: {health_report}")
+        for error in report_errors:
+            print(error)
         print("")
         time.sleep(max(config.mt5.poll_seconds, 5))
 

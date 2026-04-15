@@ -49,6 +49,18 @@ _SYMBOL_ALIASES: dict[str, tuple[str, str, str]] = {
     "XAUUSD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
     "C:XAUUSD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
     "GOLD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
+    "XAGUSD": ("XAGUSD", "C:XAGUSD", "XAGUSD"),
+    "C:XAGUSD": ("XAGUSD", "C:XAGUSD", "XAGUSD"),
+    "SILVER": ("XAGUSD", "C:XAGUSD", "XAGUSD"),
+    "XPDUSD": ("XPDUSD", "C:XPDUSD", "XPDUSD"),
+    "C:XPDUSD": ("XPDUSD", "C:XPDUSD", "XPDUSD"),
+    "PALLADIUM": ("XPDUSD", "C:XPDUSD", "XPDUSD"),
+    "XPTUSD": ("XPTUSD", "C:XPTUSD", "XPTUSD"),
+    "C:XPTUSD": ("XPTUSD", "C:XPTUSD", "XPTUSD"),
+    "PLATINUM": ("XPTUSD", "C:XPTUSD", "XPTUSD"),
+    "XCUUSD": ("XCUUSD", "C:XCUUSD", "XCUUSD"),
+    "C:XCUUSD": ("XCUUSD", "C:XCUUSD", "XCUUSD"),
+    "COPPER": ("XCUUSD", "C:XCUUSD", "XCUUSD"),
     "BTC": ("BTC", "X:BTCUSD", "BTCUSD"),
     "BTCUSD": ("BTC", "X:BTCUSD", "BTCUSD"),
     "X:BTCUSD": ("BTC", "X:BTCUSD", "BTCUSD"),
@@ -72,11 +84,14 @@ def is_crypto_symbol(symbol: str) -> bool:
 
 
 def is_metal_symbol(symbol: str) -> bool:
-    return "XAU" in symbol.upper()
+    upper = symbol.upper()
+    return any(code in upper for code in ("XAU", "XAG", "XPD", "XPT", "XCU"))
 
 
 def is_forex_symbol(symbol: str) -> bool:
     upper = symbol.upper()
+    if is_metal_symbol(upper):
+        return False
     return upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD")
 
 

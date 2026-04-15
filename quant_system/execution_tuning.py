@@ -3,8 +3,8 @@ from __future__ import annotations
 from quant_system.config import SystemConfig
 
 
-def apply_execution_mode_overrides(config: SystemConfig) -> None:
-    if not config.execution.mini_trades_enabled:
+def apply_execution_mode_overrides(config: SystemConfig, *, include_mini_trades: bool = True) -> None:
+    if not include_mini_trades or not config.execution.mini_trades_enabled:
         return
     config.execution.order_size = min(
         config.execution.order_size,

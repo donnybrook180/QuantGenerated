@@ -1,4 +1,4 @@
-Live health report generated at: 2026-04-15T18:13:55.303441+00:00
+Live health report generated at: 2026-04-15T18:16:28.995802+00:00
 Deployments scanned: 20
 Summary: live_ready=5 reduced_risk_only=2 research_only=13 symbols_with_incidents=10 total_fills=0
 TCA overview: none
@@ -55,7 +55,7 @@ Symbol: ETH
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260415T181341Z_journal.json
+  latest_journal: artifacts\live\eth\journals\20260415T181616Z_journal.json
   latest_incident: artifacts\live\eth\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -71,7 +71,7 @@ Symbol: EU50
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eu50\live.json
-  latest_journal: artifacts\live\eu50\journals\20260415T181341Z_journal.json
+  latest_journal: artifacts\live\eu50\journals\20260415T181616Z_journal.json
   latest_incident: artifacts\live\eu50\incidents\20260409T052848Z_incident.txt
   fills: none
   tca: none
@@ -87,7 +87,7 @@ Symbol: EURUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260415T181342Z_journal.json
+  latest_journal: artifacts\live\eurusd\journals\20260415T181616Z_journal.json
   latest_incident: artifacts\live\eurusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -164,7 +164,7 @@ Symbol: JP225
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\jp225\live.json
-  latest_journal: artifacts\live\jp225\journals\20260415T181342Z_journal.json
+  latest_journal: artifacts\live\jp225\journals\20260415T181616Z_journal.json
   latest_incident: artifacts\live\jp225\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -210,7 +210,7 @@ Symbol: UK100
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\uk100\live.json
-  latest_journal: artifacts\live\uk100\journals\20260415T181342Z_journal.json
+  latest_journal: artifacts\live\uk100\journals\20260415T181616Z_journal.json
   latest_incident: none
   fills: none
   tca: none
@@ -273,7 +273,7 @@ Symbol: USDJPY
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260415T181342Z_journal.json
+  latest_journal: artifacts\live\usdjpy\journals\20260415T181617Z_journal.json
   latest_incident: artifacts\live\usdjpy\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none
@@ -319,7 +319,7 @@ Symbol: XAUUSD
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260415T181343Z_journal.json
+  latest_journal: artifacts\live\xauusd\journals\20260415T181617Z_journal.json
   latest_incident: artifacts\live\xauusd\incidents\20260413T210151Z_incident.txt
   fills: none
   tca: none

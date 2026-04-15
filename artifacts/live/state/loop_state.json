@@ -111,7 +111,7 @@
     "signal_timestamp": "2026-04-15T12:00:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_blocked::breakout",
-    "updated_at": "2026-04-15T18:13:42.173342+00:00"
+    "updated_at": "2026-04-15T18:16:16.630750+00:00"
   },
   "EURUSD::forex_breakout_momentum__30m_overlap__exit_fastfail": {
     "signal_timestamp": "2026-04-08T14:00:00+00:00",
@@ -165,7 +165,7 @@
     "signal_timestamp": "",
     "signal_side": "flat",
     "intended_action": "hold",
-    "updated_at": "2026-04-15T18:13:41.667531+00:00"
+    "updated_at": "2026-04-15T18:16:16.144835+00:00"
   },
   "ETH::crypto_vwap_reversion__15m_us__exit_trend": {
     "signal_timestamp": "",
@@ -297,7 +297,7 @@
     "signal_timestamp": "2026-04-13T16:30:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_defensive::regime_block::event_risk",
-    "updated_at": "2026-04-15T18:13:42.867611+00:00"
+    "updated_at": "2026-04-15T18:16:17.267225+00:00"
   },
   "BTC::btc_trend_pullback_high_beta__5m_all__exit_trend__near_miss_patient__trend_up": {
     "signal_timestamp": "",
@@ -369,24 +369,24 @@
     "signal_timestamp": "2026-04-15T20:40:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_blocked::breakout",
-    "updated_at": "2026-04-15T18:13:43.174112+00:00"
+    "updated_at": "2026-04-15T18:16:17.557940+00:00"
   },
   "JP225::jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend": {
     "signal_timestamp": "2026-04-15T08:30:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_blocked::trend_pullback",
-    "updated_at": "2026-04-15T18:13:42.331946+00:00"
+    "updated_at": "2026-04-15T18:16:16.782980+00:00"
   },
   "UK100::momentum__30m_power__exit_trend__near_miss_protective__trend_up": {
     "signal_timestamp": "2026-04-02T18:30:00+00:00",
     "signal_side": "buy",
     "intended_action": "regime_blocked::calm_range",
-    "updated_at": "2026-04-15T18:13:42.496714+00:00"
+    "updated_at": "2026-04-15T18:16:16.931687+00:00"
   },
   "EU50::volatility_breakout__5m_europe__exit_trend": {
     "signal_timestamp": "2026-04-14T12:40:00+00:00",
     "signal_side": "sell",
     "intended_action": "policy_blocked::interpreter_blocked::breakout",
-    "updated_at": "2026-04-15T18:13:41.826496+00:00"
+    "updated_at": "2026-04-15T18:16:16.296645+00:00"
   }
 }

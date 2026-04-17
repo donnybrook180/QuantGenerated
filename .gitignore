@@ -8,17 +8,13 @@ __pycache__/
 
 # Generated live/runtime artifacts
 artifacts/deploy/*/live.json
-artifacts/live/*/autopsy_state.json
-artifacts/live/*/execution_adaptation.json
-artifacts/live/*/interpreter_research_trigger.json
-artifacts/live/*/market_interpreter.json
-artifacts/live/*/journals/
-artifacts/live/*/incidents/
-artifacts/live/state/loop_state.json
+artifacts/live/**
+!artifacts/live/
 
 # Generated system reports and logs
-artifacts/system/logs/
-artifacts/system/reports/*.json
-artifacts/system/reports/*.txt
+artifacts/system/logs/**
+!artifacts/system/logs/
+artifacts/system/reports/**
+!artifacts/system/reports/
 
 quant_data.duckdb

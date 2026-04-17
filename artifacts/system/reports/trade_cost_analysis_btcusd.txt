@@ -1,8 +1,0 @@
-Trade Cost Analysis
-Generated at: 2026-04-16 12:07:26Z
-Database: quant_data.duckdb
-Broker symbol filter: BTCUSD
-
-No MT5 fills found in mt5_fill_events.
-
-TCA needs real fills. The current project already records requested price, fill price, bid/ask, spread, slippage, strategy comment and magic number.

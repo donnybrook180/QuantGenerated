@@ -96,6 +96,7 @@ def main() -> int:
 
     print(f"Starting live loop. Poll seconds: {config.mt5.poll_seconds}")
     print(f"Live trading enabled: {'yes' if config.execution.live_trading_enabled else 'no (dry-run)'}")
+    print(f"Mini-trades (Calibration) mode: {'enabled' if config.execution.mini_trades_enabled else 'disabled'}")
     print("Loaded live deployments:")
     for path in paths:
         deployment = load_symbol_deployment(path)
@@ -118,9 +119,12 @@ def main() -> int:
         strategy_weights = resolve_live_strategy_weights(paths)
         for path in paths:
             deployment = load_symbol_deployment(path)
-            if deployment.symbol_status == "research_only":
-                print(f"{deployment.symbol}: skipped ({deployment.symbol_status})")
+            
+            # ALLOW research_only symbols if mini_trades are enabled
+            if deployment.symbol_status == "research_only" and not config.execution.mini_trades_enabled:
+                print(f"{deployment.symbol}: skipped ({deployment.symbol_status}) - Enable MINI_TRADES=true to include.")
                 continue
+
             deployment, adaptation = adapt_deployment_for_execution(deployment, config)
             if not deployment.strategies:
                 print(f"{deployment.symbol}: no active live strategies in {path}")

@@ -57,6 +57,23 @@ Agents emit `SignalEvent`s. The coordinator aggregates them into a single action
 
 ## Run
 
+## Local Postgres
+
+Er staat nu ook een eerste lokale Postgres-setup in de repo als migratiestart voor shared/live state:
+
+- Docker compose: [docker-compose.postgres.yml](docker-compose.postgres.yml)
+- bootstrap script: [main_postgres_bootstrap.py](main_postgres_bootstrap.py)
+- handleiding: [docs/local_postgres.md](docs/local_postgres.md)
+
+Start lokaal:
+
+```powershell
+docker compose -f docker-compose.postgres.yml up -d
+.\.venv\Scripts\python.exe main_postgres_bootstrap.py
+```
+
+Deze stap vervangt DuckDB nog niet; hij zet alleen de lokale Postgres en eerste schema klaar.
+
 ### Primary entrypoints
 
 Bovenaan in de repo staan nu alleen de scripts die je normaal zelf direct aanroept:

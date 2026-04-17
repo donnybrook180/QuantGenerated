@@ -4,7 +4,7 @@ import copy
 import hashlib
 import logging
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Callable
 
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
@@ -127,6 +127,28 @@ def _estimated_stop_distance(strategy_config: SystemConfig, latest_feature, refe
     if atr_proxy <= 0.0 or stop_multiple <= 0.0 or reference_price <= 0.0:
         return 0.0
     return reference_price * atr_proxy * stop_multiple
+
+
+def _protective_order_prices(
+    strategy_config: SystemConfig,
+    latest_feature,
+    reference_price: float,
+    side: Side,
+) -> tuple[float, float]:
+    if latest_feature is None or reference_price <= 0.0:
+        return 0.0, 0.0
+    atr_proxy = float(latest_feature.values.get("atr_proxy", 0.0) or 0.0)
+    if atr_proxy <= 0.0:
+        return 0.0, 0.0
+    stop_distance = reference_price * atr_proxy * float(strategy_config.execution.stop_loss_atr_multiple or 0.0)
+    target_distance = reference_price * atr_proxy * float(strategy_config.execution.take_profit_atr_multiple or 0.0)
+    if side == Side.BUY:
+        stop_price = reference_price - stop_distance if stop_distance > 0.0 else 0.0
+        target_price = reference_price + target_distance if target_distance > 0.0 else 0.0
+    else:
+        stop_price = reference_price + stop_distance if stop_distance > 0.0 else 0.0
+        target_price = reference_price - target_distance if target_distance > 0.0 else 0.0
+    return stop_price, target_price
 
 
 def _is_strategy_regime_blocked(
@@ -401,28 +423,45 @@ class MT5LiveExecutor:
             * allocation_fraction
             * candidate_action.risk_multiplier
         )
+        desired_side = signal_side
         strategy_config = self._build_strategy_config(strategy)
+        
+        # Mini-trades risk enforcement: FORCE the lower risk percent
+        risk_pct = strategy_config.execution.risk_per_trade_pct
+        if self.relax_gates_for_mini_trades:
+            risk_pct = min(risk_pct, strategy_config.execution.mini_trades_risk_per_trade_pct)
+        
         candidate_action.risk_budget_cash = (
             account_equity
-            * max(strategy_config.execution.risk_per_trade_pct, 0.0)
+            * max(risk_pct, 0.0)
             * candidate_action.effective_size_factor
         )
         market_snapshot = client.market_snapshot()
         reference_price = market_snapshot.ask if desired_side == Side.BUY else market_snapshot.bid
         stop_distance = _estimated_stop_distance(strategy_config, latest_feature, reference_price)
+        stop_loss_price, take_profit_price = _protective_order_prices(
+            strategy_config,
+            latest_feature,
+            reference_price,
+            desired_side,
+        )
         order_size = 0.0
         if candidate_action.risk_budget_cash > 0.0 and stop_distance > 0.0 and strategy_config.execution.contract_size > 0.0:
             order_size = candidate_action.risk_budget_cash / (stop_distance * strategy_config.execution.contract_size)
+            
+            # Additional safety for mini trades: force the mini trades order size if calculation is still too high
+            if self.relax_gates_for_mini_trades:
+                 order_size = min(order_size, strategy_config.execution.mini_trades_order_size)
         else:
             order_size = (
                 strategy_config.execution.order_size
                 * candidate_action.effective_size_factor
             )
+
         if order_size <= 0.0:
             candidate_action.intended_action = "skip_zero_size"
             return candidate_action
 
-        desired_side = signal_side
         if current_quantity > 0 and desired_side == Side.BUY:
             candidate_action.intended_action = "hold_long"
             return candidate_action
@@ -462,6 +501,8 @@ class MT5LiveExecutor:
                     quantity=order_size,
                     reason=strategy.candidate_name,
                     confidence=confidence,
+                    stop_loss_price=stop_loss_price,
+                    take_profit_price=take_profit_price,
                     metadata={"strategy": strategy.candidate_name},
                 ),
                 magic_number=magic_number,

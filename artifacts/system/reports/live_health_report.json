@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-15T18:16:28.995802+00:00",
+  "generated_at": "2026-04-16T12:07:26.515144+00:00",
   "summary": {
     "deployments_scanned": 20,
     "statuses": {
@@ -7,11 +7,9 @@
       "reduced_risk_only": 2,
       "research_only": 13
     },
-    "symbols_with_incidents": 10,
-    "total_fills": 0,
-    "tradeable_now": [],
-    "blocked_now": [
-      "ETH",
+    "symbols_with_incidents": 11,
+    "total_fills": 2,
+    "tradeable_now": [
       "EU50",
       "EURUSD",
       "JP225",
@@ -19,18 +17,47 @@
       "USDJPY",
       "XAUUSD"
     ],
+    "blocked_now": [
+      "ETH"
+    ],
     "recent_incidents": [
       "BTC (20260413T210151Z_incident.txt)",
-      "ETH (20260413T210151Z_incident.txt)",
-      "EU50 (20260409T052848Z_incident.txt)",
-      "EURUSD (20260413T210151Z_incident.txt)",
+      "ETH (20260415T210118Z_incident.txt)",
+      "EU50 (20260416T120702Z_incident.txt)",
+      "EURUSD (20260416T120703Z_incident.txt)",
       "GBPUSD (20260413T210151Z_incident.txt)"
     ],
     "research_triggers": 0,
-    "tca_overview": null,
+    "tca_overview": {
+      "label": "all_fills",
+      "fill_count": 5,
+      "first_fill_at": "2026-04-15 19:22:18.198166+00:00",
+      "last_fill_at": "2026-04-15 19:22:20.611638+00:00",
+      "buy_count": 1,
+      "sell_count": 4,
+      "open_count": 5,
+      "close_count": 0,
+      "avg_quantity": 16.338,
+      "avg_spread_points": 2.632006,
+      "median_spread_points": 1.16,
+      "p75_spread_points": 1.45,
+      "avg_touch_slippage_bps": 0.0,
+      "median_touch_slippage_bps": 0.0,
+      "p75_touch_slippage_bps": 0.0,
+      "weighted_touch_slippage_bps": 0.0,
+      "adverse_touch_fill_rate_pct": 0.0,
+      "avg_shortfall_bps": 0.0,
+      "median_shortfall_bps": 0.0,
+      "p75_shortfall_bps": 0.0,
+      "weighted_shortfall_bps": 0.0,
+      "total_costs": 0.0,
+      "avg_cost_per_fill": 0.0,
+      "weighted_cost_bps": 0.0,
+      "total_notional": 0.0
+    },
     "worst_edge_retention": {
-      "symbol": "ETH",
-      "candidate_name": "crypto_vwap_reversion_us_core__15m_us__exit_trend",
+      "symbol": "EURUSD",
+      "candidate_name": "forex_breakout_momentum__30m_overlap",
       "edge_retention_pct": 100.0
     }
   },
@@ -88,11 +115,11 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eth\\live.json",
-      "latest_journal": "artifacts\\live\\eth\\journals\\20260415T181616Z_journal.json",
-      "latest_incident": "artifacts\\live\\eth\\incidents\\20260413T210151Z_incident.txt",
+      "latest_journal": "artifacts\\live\\eth\\journals\\20260416T120702Z_journal.json",
+      "latest_incident": "artifacts\\live\\eth\\incidents\\20260415T210118Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core] veto=interpreter_blocked::mean_reversion"
+      "latest_actions": "crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core] veto=regime"
     },
     {
       "symbol": "EU50",
@@ -106,11 +133,11 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eu50\\live.json",
-      "latest_journal": "artifacts\\live\\eu50\\journals\\20260415T181616Z_journal.json",
-      "latest_incident": "artifacts\\live\\eu50\\incidents\\20260409T052848Z_incident.txt",
+      "latest_journal": "artifacts\\live\\eu50\\journals\\20260416T060700Z_journal.json",
+      "latest_incident": "artifacts\\live\\eu50\\incidents\\20260416T120702Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "volatility_breakout__5m_europe__exit_trend:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
+      "latest_actions": "volatility_breakout__5m_europe__exit_trend:hold_short[core] veto=regime"
     },
     {
       "symbol": "EURUSD",
@@ -121,14 +148,47 @@
         "core"
       ],
       "execution_validation": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted",
-      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_adaptation": "insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\eurusd\\live.json",
-      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260415T181616Z_journal.json",
-      "latest_incident": "artifacts\\live\\eurusd\\incidents\\20260413T210151Z_incident.txt",
-      "fill_summary": null,
-      "tca_overview": null,
-      "latest_actions": "forex_breakout_momentum__30m_overlap:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
+      "latest_journal": "artifacts\\live\\eurusd\\journals\\20260416T060701Z_journal.json",
+      "latest_incident": "artifacts\\live\\eurusd\\incidents\\20260416T120703Z_incident.txt",
+      "fill_summary": {
+        "broker_symbol": "EURUSD",
+        "fill_count": 1,
+        "first_fill_at": "2026-04-15 19:22:18.804172",
+        "last_fill_at": "2026-04-15 19:22:18.804172",
+        "avg_spread_points": 3.0000000000000004e-05,
+        "avg_slippage_bps": 10000.0
+      },
+      "tca_overview": {
+        "label": "all_fills",
+        "fill_count": 1,
+        "first_fill_at": "2026-04-15 19:22:18.804172+00:00",
+        "last_fill_at": "2026-04-15 19:22:18.804172+00:00",
+        "buy_count": 0,
+        "sell_count": 1,
+        "open_count": 1,
+        "close_count": 0,
+        "avg_quantity": 2.93,
+        "avg_spread_points": 3.0000000000000004e-05,
+        "median_spread_points": 3.0000000000000004e-05,
+        "p75_spread_points": 3.0000000000000004e-05,
+        "avg_touch_slippage_bps": 0.0,
+        "median_touch_slippage_bps": 0.0,
+        "p75_touch_slippage_bps": 0.0,
+        "weighted_touch_slippage_bps": 0.0,
+        "adverse_touch_fill_rate_pct": 0.0,
+        "avg_shortfall_bps": 0.0,
+        "median_shortfall_bps": 0.0,
+        "p75_shortfall_bps": 0.0,
+        "weighted_shortfall_bps": 0.0,
+        "total_costs": 0.0,
+        "avg_cost_per_fill": 0.0,
+        "weighted_cost_bps": 0.0,
+        "total_notional": 0.0
+      },
+      "latest_actions": "forex_breakout_momentum__30m_overlap:hold_short[core]"
     },
     {
       "symbol": "GBPUSD",
@@ -206,11 +266,11 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\jp225\\live.json",
-      "latest_journal": "artifacts\\live\\jp225\\journals\\20260415T181616Z_journal.json",
-      "latest_incident": "artifacts\\live\\jp225\\incidents\\20260413T210151Z_incident.txt",
+      "latest_journal": "artifacts\\live\\jp225\\journals\\20260416T060701Z_journal.json",
+      "latest_incident": "artifacts\\live\\jp225\\incidents\\20260416T120703Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend:policy_blocked::interpreter_blocked::trend_pullback[core] veto=interpreter_blocked::trend_pullback"
+      "latest_actions": "jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend:hold_short[core] veto=regime"
     },
     {
       "symbol": "NVDA",
@@ -256,11 +316,11 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\uk100\\live.json",
-      "latest_journal": "artifacts\\live\\uk100\\journals\\20260415T181616Z_journal.json",
-      "latest_incident": null,
+      "latest_journal": "artifacts\\live\\uk100\\journals\\20260416T060702Z_journal.json",
+      "latest_incident": "artifacts\\live\\uk100\\incidents\\20260416T120704Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "momentum__30m_power__exit_trend__near_miss_protective__trend_up:regime_blocked::calm_range[specialist] veto=regime"
+      "latest_actions": "momentum__30m_power__exit_trend__near_miss_protective__trend_up:hold_long[specialist] veto=regime"
     },
     {
       "symbol": "US100",
@@ -322,11 +382,11 @@
       "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\usdjpy\\live.json",
-      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260415T181617Z_journal.json",
-      "latest_incident": "artifacts\\live\\usdjpy\\incidents\\20260413T210151Z_incident.txt",
+      "latest_journal": "artifacts\\live\\usdjpy\\journals\\20260416T120705Z_journal.json",
+      "latest_incident": "artifacts\\live\\usdjpy\\incidents\\20260415T210119Z_incident.txt",
       "fill_summary": null,
       "tca_overview": null,
-      "latest_actions": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk"
+      "latest_actions": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat:skip_zero_size[specialist] veto=regime"
     },
     {
       "symbol": "USOIL",
@@ -369,14 +429,47 @@
         "core"
       ],
       "execution_validation": "selection=combo_1 variant=volatility_breakout__5m_us__near_miss_dense__trend_flat@5m_us|trend_flat data_source=duckdb_cache pnl=176.80 pf=116.80 closed=5 quality=0.79 underwater=20.0% -> accepted",
-      "execution_adaptation": "insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
+      "execution_adaptation": "insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0",
       "execution_guardrail": "none",
       "deployment_path": "artifacts\\deploy\\xauusd\\live.json",
-      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260415T181617Z_journal.json",
-      "latest_incident": "artifacts\\live\\xauusd\\incidents\\20260413T210151Z_incident.txt",
-      "fill_summary": null,
-      "tca_overview": null,
-      "latest_actions": "volatility_breakout__5m_us__near_miss_dense__trend_flat:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout"
+      "latest_journal": "artifacts\\live\\xauusd\\journals\\20260416T060704Z_journal.json",
+      "latest_incident": "artifacts\\live\\xauusd\\incidents\\20260416T120705Z_incident.txt",
+      "fill_summary": {
+        "broker_symbol": "XAUUSD",
+        "fill_count": 1,
+        "first_fill_at": "2026-04-15 19:22:20.611638",
+        "last_fill_at": "2026-04-15 19:22:20.611638",
+        "avg_spread_points": 0.55,
+        "avg_slippage_bps": 10000.0
+      },
+      "tca_overview": {
+        "label": "all_fills",
+        "fill_count": 1,
+        "first_fill_at": "2026-04-15 19:22:20.611638+00:00",
+        "last_fill_at": "2026-04-15 19:22:20.611638+00:00",
+        "buy_count": 0,
+        "sell_count": 1,
+        "open_count": 1,
+        "close_count": 0,
+        "avg_quantity": 0.78,
+        "avg_spread_points": 0.55,
+        "median_spread_points": 0.55,
+        "p75_spread_points": 0.55,
+        "avg_touch_slippage_bps": 0.0,
+        "median_touch_slippage_bps": 0.0,
+        "p75_touch_slippage_bps": 0.0,
+        "weighted_touch_slippage_bps": 0.0,
+        "adverse_touch_fill_rate_pct": 0.0,
+        "avg_shortfall_bps": 0.0,
+        "median_shortfall_bps": 0.0,
+        "p75_shortfall_bps": 0.0,
+        "weighted_shortfall_bps": 0.0,
+        "total_costs": 0.0,
+        "avg_cost_per_fill": 0.0,
+        "weighted_cost_bps": 0.0,
+        "total_notional": 0.0
+      },
+      "latest_actions": "volatility_breakout__5m_us__near_miss_dense__trend_flat:hold_short[core]"
     }
   ]
 }

@@ -1,8 +1,56 @@
 Trade Cost Analysis
-Generated at: 2026-04-15 18:16:31Z
+Generated at: 2026-04-16 12:07:29Z
 Database: quant_data.duckdb
 Broker symbol filter: XAUUSD
 
-No MT5 fills found in mt5_fill_events.
+Overview
+fills: 1
+window: 2026-04-15 19:22:20Z -> 2026-04-15 19:22:20Z
+buy_vs_sell: 0/1
+open_vs_close: 1/0
+avg_quantity: 0.7800
+avg_spread_points: 0.550000
+median_spread_points: 0.550000
+p75_spread_points: 0.550000
+avg_touch_slippage_bps: 0.0000
+median_touch_slippage_bps: 0.0000
+p75_touch_slippage_bps: 0.0000
+weighted_touch_slippage_bps: 0.0000
+avg_implementation_shortfall_bps: 0.0000
+median_implementation_shortfall_bps: 0.0000
+p75_implementation_shortfall_bps: 0.0000
+weighted_implementation_shortfall_bps: 0.0000
+total_broker_costs: 0.0000
+avg_cost_per_fill: 0.000000
+weighted_cost_bps: 0.0000
+adverse_touch_fill_rate_pct: 0.00
+total_notional: 0.00
 
-TCA needs real fills. The current project already records requested price, fill price, bid/ask, spread, slippage, strategy comment and magic number.
+By symbol
+label                    fills  open close   spr_avg  slip_w_bps  is_w_bps  cost_bps    adv%
+--------------------------------------------------------------------------------------------
+XAUUSD                       1     1     0    0.5500       0.000     0.000     0.000     0.0
+
+By strategy
+label                    fills  open close   spr_avg  slip_w_bps  is_w_bps  cost_bps    adv%
+--------------------------------------------------------------------------------------------
+volatility_breakout__5m_     1     1     0    0.5500       0.000     0.000     0.000     0.0
+
+By intent
+label                    fills  open close   spr_avg  slip_w_bps  is_w_bps  cost_bps    adv%
+--------------------------------------------------------------------------------------------
+open                         1     1     0    0.5500       0.000     0.000     0.000     0.0
+
+By hour (UTC)
+label                    fills  open close   spr_avg  slip_w_bps  is_w_bps  cost_bps    adv%
+--------------------------------------------------------------------------------------------
+19:00                        1     1     0    0.5500       0.000     0.000     0.000     0.0
+
+Worst fills by implementation shortfall
+ts                   symbol         strategy                 side  intent short_bps  slip_bps      cost
+-------------------------------------------------------------------------------------------------------
+2026-04-15 19:22:20Z XAUUSD         volatility_breakout__5m_ sell  open      0.000     0.000    0.0000
+
+Definitions
+touch slippage: fill vs requested bid/ask; positive means worse execution.
+implementation shortfall: fill vs mid-price at decision time; this includes half-spread plus slippage.

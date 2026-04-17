@@ -255,6 +255,29 @@ class AIConfig:
 
 
 @dataclass(slots=True)
+class PostgresConfig:
+    enabled: bool = field(default_factory=lambda: os.getenv("POSTGRES_ENABLED", "false").lower() == "true")
+    host: str = field(default_factory=lambda: os.getenv("POSTGRES_HOST", "127.0.0.1"))
+    port: int = field(default_factory=lambda: int(os.getenv("POSTGRES_PORT", "5432")))
+    database: str = field(default_factory=lambda: os.getenv("POSTGRES_DB", "quant_generated"))
+    user: str = field(default_factory=lambda: os.getenv("POSTGRES_USER", "quant"))
+    password: str = field(default_factory=lambda: os.getenv("POSTGRES_PASSWORD", "quant"))
+    sslmode: str = field(default_factory=lambda: os.getenv("POSTGRES_SSLMODE", "prefer"))
+    connect_timeout_seconds: int = field(default_factory=lambda: int(os.getenv("POSTGRES_CONNECT_TIMEOUT_SECONDS", "5")))
+    docker_compose_file: str = field(default_factory=lambda: os.getenv("POSTGRES_DOCKER_COMPOSE_FILE", "docker-compose.postgres.yml"))
+
+    def dsn(self, *, include_password: bool = True, include_database: bool = True) -> str:
+        credentials = self.user
+        if include_password and self.password:
+            credentials = f"{credentials}:{self.password}"
+        database = f"/{self.database}" if include_database and self.database else ""
+        return (
+            f"postgresql://{credentials}@{self.host}:{self.port}{database}"
+            f"?sslmode={self.sslmode}&connect_timeout={self.connect_timeout_seconds}"
+        )
+
+
+@dataclass(slots=True)
 class SystemConfig:
     execution: ExecutionConfig = field(default_factory=ExecutionConfig)
     risk: RiskConfig = field(default_factory=RiskConfig)
@@ -268,3 +291,4 @@ class SystemConfig:
     symbol_research: SymbolResearchConfig = field(default_factory=SymbolResearchConfig)
     ftmo: FTMOEvaluationConfig = field(default_factory=FTMOEvaluationConfig)
     ai: AIConfig = field(default_factory=AIConfig)
+    postgres: PostgresConfig = field(default_factory=PostgresConfig)

@@ -1,5 +1,5 @@
 Execution adaptation report
-generated_at: 2026-04-15T18:14:59.986273+00:00
+generated_at: 2026-04-16T12:07:05.967889+00:00
 
 BTC: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
@@ -23,11 +23,11 @@ EU50: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_f
   artifact: artifacts\live\eu50\execution_adaptation.json
   strategy volatility_breakout__5m_europe__exit_trend: unchanged fills=0 scale=1.00/1.00 base_weight=0.98 max_risk=0.60 min_bars=0 rank=baseline_local
 
-EURUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+EURUSD: insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
   guardrail: none
   artifact: artifacts\live\eurusd\execution_adaptation.json
-  strategy forex_breakout_momentum__30m_overlap: unchanged fills=0 scale=1.00/1.00 base_weight=1.10 max_risk=0.97 min_bars=0 rank=baseline_local
+  strategy forex_breakout_momentum__30m_overlap: unchanged fills=1 scale=1.00/1.00 base_weight=1.10 max_risk=0.97 min_bars=0 rank=baseline_local
 
 GBPUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
@@ -102,8 +102,8 @@ XAGUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse
   guardrail: none
   artifact: artifacts\live\xagusd\execution_adaptation.json
 
-XAUUSD: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+XAUUSD: insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   reason: not enough local fills for adaptation
   guardrail: none
   artifact: artifacts\live\xauusd\execution_adaptation.json
-  strategy volatility_breakout__5m_us__near_miss_dense__trend_flat: unchanged fills=0 scale=1.00/1.00 base_weight=0.98 max_risk=0.60 min_bars=7 rank=baseline_local
+  strategy volatility_breakout__5m_us__near_miss_dense__trend_flat: unchanged fills=1 scale=1.00/1.00 base_weight=0.98 max_risk=0.60 min_bars=7 rank=baseline_local

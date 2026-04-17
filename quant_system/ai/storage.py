@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
@@ -9,12 +10,16 @@ import tempfile
 
 import duckdb
 from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, ExperimentSnapshot
+from quant_system.config import PostgresConfig
+from quant_system.db.postgres import connect_postgres
 
 
 class ExperimentStore:
     def __init__(self, database_path: str, *, read_only: bool = False) -> None:
         self.database_path = database_path
         self.read_only = read_only
+        self.postgres_config = PostgresConfig()
+        self._use_postgres_mt5_fill_events = self.postgres_config.enabled
         if not self.read_only:
             self._initialize_schema()
 
@@ -381,6 +386,18 @@ class ExperimentStore:
         if isinstance(value, Path):
             return str(value)
         return json.dumps(value)
+
+    def _pg_connect(self, *, autocommit: bool = False):
+        return connect_postgres(self.postgres_config, autocommit=autocommit)
+
+    @staticmethod
+    def _pg_fetchone(cursor):
+        row = cursor.fetchone()
+        return row
+
+    @staticmethod
+    def _pg_fetchall(cursor):
+        return cursor.fetchall()
 
     def _row_to_snapshot(self, row) -> ExperimentSnapshot:
         return ExperimentSnapshot(
@@ -1371,6 +1388,59 @@ class ExperimentStore:
         comment: str | None = None,
         position_ticket: int | None = None,
     ) -> int:
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect(autocommit=True) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO mt5_fill_events (
+                            event_timestamp,
+                            broker_symbol,
+                            requested_symbol,
+                            side,
+                            quantity,
+                            requested_price,
+                            fill_price,
+                            bid,
+                            ask,
+                            spread_points,
+                            slippage_points,
+                            slippage_bps,
+                            costs,
+                            reason,
+                            confidence,
+                            metadata_json,
+                            magic_number,
+                            comment,
+                            position_ticket
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        RETURNING id
+                        """,
+                        [
+                            event_timestamp,
+                            broker_symbol,
+                            requested_symbol,
+                            side,
+                            quantity,
+                            requested_price,
+                            fill_price,
+                            bid,
+                            ask,
+                            spread_points,
+                            slippage_points,
+                            slippage_bps,
+                            costs,
+                            reason,
+                            confidence,
+                            self._serialize(metadata or {}),
+                            magic_number,
+                            comment,
+                            position_ticket,
+                        ],
+                    )
+                    row = cursor.fetchone()
+                    return int(row[0])
         with self._connect() as connection:
             fill_id = int(connection.execute("SELECT COALESCE(MAX(id), 0) + 1 FROM mt5_fill_events").fetchone()[0])
             connection.execute(
@@ -1425,17 +1495,32 @@ class ExperimentStore:
         return fill_id
 
     def load_mt5_fill_calibration(self, broker_symbol: str, lookback_rows: int = 250) -> dict[str, float] | None:
-        with self._connect() as connection:
-            rows = connection.execute(
-                """
-                SELECT spread_points, slippage_bps
-                FROM mt5_fill_events
-                WHERE broker_symbol = ?
-                ORDER BY event_timestamp DESC, id DESC
-                LIMIT ?
-                """,
-                [broker_symbol, lookback_rows],
-            ).fetchall()
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect() as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT spread_points, slippage_bps
+                        FROM mt5_fill_events
+                        WHERE broker_symbol = %s
+                        ORDER BY event_timestamp DESC, id DESC
+                        LIMIT %s
+                        """,
+                        [broker_symbol, lookback_rows],
+                    )
+                    rows = cursor.fetchall()
+        else:
+            with self._connect() as connection:
+                rows = connection.execute(
+                    """
+                    SELECT spread_points, slippage_bps
+                    FROM mt5_fill_events
+                    WHERE broker_symbol = ?
+                    ORDER BY event_timestamp DESC, id DESC
+                    LIMIT ?
+                    """,
+                    [broker_symbol, lookback_rows],
+                ).fetchall()
         if len(rows) < 5:
             return None
         spreads = sorted(float(row[0] or 0.0) for row in rows)
@@ -1453,33 +1538,64 @@ class ExperimentStore:
         }
 
     def list_mt5_fill_symbols(self) -> list[str]:
-        with self._connect() as connection:
-            rows = connection.execute(
-                """
-                SELECT DISTINCT broker_symbol
-                FROM mt5_fill_events
-                WHERE broker_symbol IS NOT NULL AND broker_symbol <> ''
-                ORDER BY broker_symbol ASC
-                """
-            ).fetchall()
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect() as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT DISTINCT broker_symbol
+                        FROM mt5_fill_events
+                        WHERE broker_symbol IS NOT NULL AND broker_symbol <> ''
+                        ORDER BY broker_symbol ASC
+                        """
+                    )
+                    rows = cursor.fetchall()
+        else:
+            with self._connect() as connection:
+                rows = connection.execute(
+                    """
+                    SELECT DISTINCT broker_symbol
+                    FROM mt5_fill_events
+                    WHERE broker_symbol IS NOT NULL AND broker_symbol <> ''
+                    ORDER BY broker_symbol ASC
+                    """
+                ).fetchall()
         return [str(row[0]) for row in rows]
 
     def load_mt5_fill_summary(self, broker_symbol: str) -> dict[str, object] | None:
-        with self._connect() as connection:
-            row = connection.execute(
-                """
-                SELECT
-                    COUNT(*) AS fill_count,
-                    MIN(event_timestamp) AS first_fill_at,
-                    MAX(event_timestamp) AS last_fill_at,
-                    AVG(spread_points) AS avg_spread_points,
-                    AVG(slippage_bps) AS avg_slippage_bps
-                FROM mt5_fill_events
-                WHERE broker_symbol = ?
-                """
-                ,
-                [broker_symbol],
-            ).fetchone()
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect() as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT
+                            COUNT(*) AS fill_count,
+                            MIN(event_timestamp) AS first_fill_at,
+                            MAX(event_timestamp) AS last_fill_at,
+                            AVG(spread_points) AS avg_spread_points,
+                            AVG(slippage_bps) AS avg_slippage_bps
+                        FROM mt5_fill_events
+                        WHERE broker_symbol = %s
+                        """,
+                        [broker_symbol],
+                    )
+                    row = cursor.fetchone()
+        else:
+            with self._connect() as connection:
+                row = connection.execute(
+                    """
+                    SELECT
+                        COUNT(*) AS fill_count,
+                        MIN(event_timestamp) AS first_fill_at,
+                        MAX(event_timestamp) AS last_fill_at,
+                        AVG(spread_points) AS avg_spread_points,
+                        AVG(slippage_bps) AS avg_slippage_bps
+                    FROM mt5_fill_events
+                    WHERE broker_symbol = ?
+                    """
+                    ,
+                    [broker_symbol],
+                ).fetchone()
         if row is None or int(row[0] or 0) <= 0:
             return None
         return {
@@ -1492,65 +1608,47 @@ class ExperimentStore:
         }
 
     def list_mt5_fill_events(self, broker_symbol: str | None = None) -> list[dict[str, object]]:
-        with self._connect() as connection:
-            if broker_symbol:
-                rows = connection.execute(
-                    """
-                    SELECT
-                        id,
-                        event_timestamp,
-                        broker_symbol,
-                        requested_symbol,
-                        side,
-                        quantity,
-                        requested_price,
-                        fill_price,
-                        bid,
-                        ask,
-                        spread_points,
-                        slippage_points,
-                        slippage_bps,
-                        costs,
-                        reason,
-                        confidence,
-                        metadata_json,
-                        magic_number,
-                        comment,
-                        position_ticket
-                    FROM mt5_fill_events
-                    WHERE broker_symbol = ?
-                    ORDER BY event_timestamp ASC, id ASC
-                    """,
-                    [broker_symbol],
-                ).fetchall()
-            else:
-                rows = connection.execute(
-                    """
-                    SELECT
-                        id,
-                        event_timestamp,
-                        broker_symbol,
-                        requested_symbol,
-                        side,
-                        quantity,
-                        requested_price,
-                        fill_price,
-                        bid,
-                        ask,
-                        spread_points,
-                        slippage_points,
-                        slippage_bps,
-                        costs,
-                        reason,
-                        confidence,
-                        metadata_json,
-                        magic_number,
-                        comment,
-                        position_ticket
-                    FROM mt5_fill_events
-                    ORDER BY event_timestamp ASC, id ASC
-                    """
-                ).fetchall()
+        query = """
+            SELECT
+                id,
+                event_timestamp,
+                broker_symbol,
+                requested_symbol,
+                side,
+                quantity,
+                requested_price,
+                fill_price,
+                bid,
+                ask,
+                spread_points,
+                slippage_points,
+                slippage_bps,
+                costs,
+                reason,
+                confidence,
+                metadata_json,
+                magic_number,
+                comment,
+                position_ticket
+            FROM mt5_fill_events
+        """
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect() as connection:
+                with connection.cursor() as cursor:
+                    if broker_symbol:
+                        cursor.execute(query + " WHERE broker_symbol = %s ORDER BY event_timestamp ASC, id ASC", [broker_symbol])
+                    else:
+                        cursor.execute(query + " ORDER BY event_timestamp ASC, id ASC")
+                    rows = cursor.fetchall()
+        else:
+            with self._connect() as connection:
+                if broker_symbol:
+                    rows = connection.execute(
+                        query + " WHERE broker_symbol = ? ORDER BY event_timestamp ASC, id ASC",
+                        [broker_symbol],
+                    ).fetchall()
+                else:
+                    rows = connection.execute(query + " ORDER BY event_timestamp ASC, id ASC").fetchall()
         return [
             {
                 "id": int(row[0]),

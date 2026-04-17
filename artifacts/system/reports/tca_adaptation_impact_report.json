@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-15T18:16:23.777749+00:00",
+  "generated_at": "2026-04-16T12:07:17.722083+00:00",
   "rows": [
     {
       "symbol": "ETH",
@@ -34,7 +34,7 @@
     {
       "symbol": "EURUSD",
       "candidate_name": "forex_breakout_momentum__30m_overlap",
-      "live_fill_count": 0,
+      "live_fill_count": 1,
       "edge_retention_pct": 100.0,
       "baseline_base_weight": 1.0966635211408111,
       "adapted_base_weight": 1.0966635211408111,
@@ -94,7 +94,7 @@
     {
       "symbol": "XAUUSD",
       "candidate_name": "volatility_breakout__5m_us__near_miss_dense__trend_flat",
-      "live_fill_count": 0,
+      "live_fill_count": 1,
       "edge_retention_pct": 100.0,
       "baseline_base_weight": 0.9774999999999999,
       "adapted_base_weight": 0.9774999999999999,

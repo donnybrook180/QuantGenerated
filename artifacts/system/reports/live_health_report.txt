@@ -1,7 +1,7 @@
-Live health report generated at: 2026-04-15T18:16:28.995802+00:00
+Live health report generated at: 2026-04-16T12:07:26.515144+00:00
 Deployments scanned: 20
-Summary: live_ready=5 reduced_risk_only=2 research_only=13 symbols_with_incidents=10 total_fills=0
-TCA overview: none
+Summary: live_ready=5 reduced_risk_only=2 research_only=13 symbols_with_incidents=11 total_fills=2
+TCA overview: fills=5 w_touch_slip_bps=0.000 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
 TCA report: artifacts\system\reports\trade_cost_analysis.txt
 TCA impact report: artifacts\system\reports\tca_impact_report.txt
 TCA adaptation impact report: artifacts\system\reports\tca_adaptation_impact_report.txt
@@ -10,10 +10,10 @@ Market interpreter research queue: artifacts\system\reports\market_interpreter_r
 Live research queue: artifacts\system\reports\live_research_queue.txt
 Live improvement activity report: artifacts\system\reports\live_improvement_activity_report.txt
 Live research triggers: 0
-TCA worst edge retention: ETH/crypto_vwap_reversion_us_core__15m_us__exit_trend=100.0%
-Tradeable now: none
-Blocked now: ETH, EU50, EURUSD, JP225, UK100, USDJPY, XAUUSD
-Recent incidents: BTC (20260413T210151Z_incident.txt), ETH (20260413T210151Z_incident.txt), EU50 (20260409T052848Z_incident.txt), EURUSD (20260413T210151Z_incident.txt), GBPUSD (20260413T210151Z_incident.txt)
+TCA worst edge retention: EURUSD/forex_breakout_momentum__30m_overlap=100.0%
+Tradeable now: EU50, EURUSD, JP225, UK100, USDJPY, XAUUSD
+Blocked now: ETH
+Recent incidents: BTC (20260413T210151Z_incident.txt), ETH (20260415T210118Z_incident.txt), EU50 (20260416T120702Z_incident.txt), EURUSD (20260416T120703Z_incident.txt), GBPUSD (20260413T210151Z_incident.txt)
 
 Symbol: BTC
   status: research_only
@@ -55,12 +55,12 @@ Symbol: ETH
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eth\live.json
-  latest_journal: artifacts\live\eth\journals\20260415T181616Z_journal.json
-  latest_incident: artifacts\live\eth\incidents\20260413T210151Z_incident.txt
+  latest_journal: artifacts\live\eth\journals\20260416T120702Z_journal.json
+  latest_incident: artifacts\live\eth\incidents\20260415T210118Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=volatile_trend unified_regime=trend_expansion bias=long session=us_open_balance structure=clean_breakout execution=unknown risk=normal confidence=0.65
-  latest_actions: crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core] veto=interpreter_blocked::mean_reversion
+  latest_actions: crypto_vwap_reversion_us_core__15m_us__exit_trend:hold[core] veto=regime
 
 Symbol: EU50
   status: live_ready
@@ -71,12 +71,12 @@ Symbol: EU50
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eu50\live.json
-  latest_journal: artifacts\live\eu50\journals\20260415T181616Z_journal.json
-  latest_incident: artifacts\live\eu50\incidents\20260409T052848Z_incident.txt
+  latest_journal: artifacts\live\eu50\journals\20260416T060700Z_journal.json
+  latest_incident: artifacts\live\eu50\incidents\20260416T120702Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=calm_range unified_regime=orderly_trend bias=short session=midday_chop structure=failed_breakout execution=unknown risk=normal confidence=0.47
-  latest_actions: volatility_breakout__5m_europe__exit_trend:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout
+  latest_actions: volatility_breakout__5m_europe__exit_trend:hold_short[core] veto=regime
 
 Symbol: EURUSD
   status: live_ready
@@ -84,15 +84,15 @@ Symbol: EURUSD
   strategies: 1
   tiers: core
   execution_validation: selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache pnl=13.44 pf=12.12 closed=7 quality=0.84 underwater=14.3% -> accepted
-  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_adaptation: insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\eurusd\live.json
-  latest_journal: artifacts\live\eurusd\journals\20260415T181616Z_journal.json
-  latest_incident: artifacts\live\eurusd\incidents\20260413T210151Z_incident.txt
-  fills: none
-  tca: none
+  latest_journal: artifacts\live\eurusd\journals\20260416T060701Z_journal.json
+  latest_incident: artifacts\live\eurusd\incidents\20260416T120703Z_incident.txt
+  fills: count=1 last=2026-04-15 19:22:18.804172 avg_spread=0.00 avg_slippage_bps=10000.00
+  tca: fills=1 w_touch_slip_bps=0.000 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   interpreter: legacy_regime=calm_range unified_regime=orderly_range bias=long session=us_open_balance structure=range_rotation execution=unknown risk=normal confidence=0.55
-  latest_actions: forex_breakout_momentum__30m_overlap:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout
+  latest_actions: forex_breakout_momentum__30m_overlap:hold_short[core]
 
 Symbol: GBPUSD
   status: research_only
@@ -164,12 +164,12 @@ Symbol: JP225
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\jp225\live.json
-  latest_journal: artifacts\live\jp225\journals\20260415T181616Z_journal.json
-  latest_incident: artifacts\live\jp225\incidents\20260413T210151Z_incident.txt
+  latest_journal: artifacts\live\jp225\journals\20260416T060701Z_journal.json
+  latest_incident: artifacts\live\jp225\incidents\20260416T120703Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=calm_range unified_regime=orderly_range bias=neutral session=europe_balance structure=range_rotation execution=unknown risk=normal confidence=0.50
-  latest_actions: jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend:policy_blocked::interpreter_blocked::trend_pullback[core] veto=interpreter_blocked::trend_pullback
+  latest_actions: jp225_volatility_short_breakdown_core_hours__5m_all__exit_trend:hold_short[core] veto=regime
 
 Symbol: NVDA
   status: research_only
@@ -210,12 +210,12 @@ Symbol: UK100
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\uk100\live.json
-  latest_journal: artifacts\live\uk100\journals\20260415T181616Z_journal.json
-  latest_incident: none
+  latest_journal: artifacts\live\uk100\journals\20260416T060702Z_journal.json
+  latest_incident: artifacts\live\uk100\incidents\20260416T120704Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=calm_range unified_regime=orderly_range bias=short session=midday_chop structure=trend_pullback execution=unknown risk=normal confidence=0.56
-  latest_actions: momentum__30m_power__exit_trend__near_miss_protective__trend_up:regime_blocked::calm_range[specialist] veto=regime
+  latest_actions: momentum__30m_power__exit_trend__near_miss_protective__trend_up:hold_long[specialist] veto=regime
 
 Symbol: US100
   status: research_only
@@ -273,12 +273,12 @@ Symbol: USDJPY
   execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\usdjpy\live.json
-  latest_journal: artifacts\live\usdjpy\journals\20260415T181617Z_journal.json
-  latest_incident: artifacts\live\usdjpy\incidents\20260413T210151Z_incident.txt
+  latest_journal: artifacts\live\usdjpy\journals\20260416T120705Z_journal.json
+  latest_incident: artifacts\live\usdjpy\incidents\20260415T210119Z_incident.txt
   fills: none
   tca: none
   interpreter: legacy_regime=event_risk unified_regime=event_dislocation bias=long session=midday_chop structure=clean_breakout execution=unknown risk=defensive confidence=0.53
-  latest_actions: forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat:policy_blocked::interpreter_defensive::regime_block::event_risk[specialist] veto=interpreter_defensive::regime_block::event_risk
+  latest_actions: forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat:skip_zero_size[specialist] veto=regime
 
 Symbol: USOIL
   status: research_only
@@ -316,12 +316,12 @@ Symbol: XAUUSD
   strategies: 1
   tiers: core
   execution_validation: selection=combo_1 variant=volatility_breakout__5m_us__near_miss_dense__trend_flat@5m_us|trend_flat data_source=duckdb_cache pnl=176.80 pf=116.80 closed=5 quality=0.79 underwater=20.0% -> accepted
-  execution_adaptation: insufficient_data fills=0 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
+  execution_adaptation: insufficient_data fills=1 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   execution_guardrail: none
   deployment: artifacts\deploy\xauusd\live.json
-  latest_journal: artifacts\live\xauusd\journals\20260415T181617Z_journal.json
-  latest_incident: artifacts\live\xauusd\incidents\20260413T210151Z_incident.txt
-  fills: none
-  tca: none
+  latest_journal: artifacts\live\xauusd\journals\20260416T060704Z_journal.json
+  latest_incident: artifacts\live\xauusd\incidents\20260416T120705Z_incident.txt
+  fills: count=1 last=2026-04-15 19:22:20.611638 avg_spread=0.55 avg_slippage_bps=10000.00
+  tca: fills=1 w_touch_slip_bps=0.000 w_shortfall_bps=0.000 w_cost_bps=0.000 adverse_fill_rate_pct=0.0
   interpreter: legacy_regime=calm_range unified_regime=orderly_trend bias=short session=midday_chop structure=failed_breakout execution=unknown risk=normal confidence=0.47
-  latest_actions: volatility_breakout__5m_us__near_miss_dense__trend_flat:policy_blocked::interpreter_blocked::breakout[core] veto=interpreter_blocked::breakout
+  latest_actions: volatility_breakout__5m_us__near_miss_dense__trend_flat:hold_short[core]

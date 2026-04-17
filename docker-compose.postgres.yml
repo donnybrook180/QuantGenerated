@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: quantgenerated-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-quant_generated}
+      POSTGRES_USER: ${POSTGRES_USER:-quant}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quant}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - quantgenerated_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quant} -d ${POSTGRES_DB:-quant_generated}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  quantgenerated_postgres_data:

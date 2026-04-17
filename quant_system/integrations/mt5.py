@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 import logging
+import re
 from typing import ClassVar
 
 import MetaTrader5 as mt5
@@ -13,6 +14,27 @@ from quant_system.models import FillEvent, MarketBar, OrderRequest, PortfolioSna
 
 
 LOGGER = logging.getLogger(__name__)
+_SAFE_MT5_COMMENT_RE = re.compile(r"[^A-Za-z0-9_-]+")
+_MT5_BROKER_SAFE_COMMENT = "QG"
+
+
+def _sanitize_mt5_comment(value: str | None) -> str:
+    raw = (value or "").strip()
+    if not raw:
+        return _MT5_BROKER_SAFE_COMMENT
+    cleaned = _SAFE_MT5_COMMENT_RE.sub("_", raw)
+    cleaned = cleaned.strip("._-")
+    if not cleaned:
+        cleaned = _MT5_BROKER_SAFE_COMMENT
+    # Some MT5 brokers reject otherwise-valid comments. Keep the wire comment minimal and
+    # rely on magic number + stored metadata for full strategy identity.
+    return _MT5_BROKER_SAFE_COMMENT
+
+
+def _normalize_price(value: float, digits: int) -> float:
+    if value <= 0.0:
+        return 0.0
+    return round(value, max(digits, 0))
 
 
 TIMEFRAME_MAP = {
@@ -352,6 +374,26 @@ class MT5Client:
         volume = max(float(symbol_info.volume_min), round(order.quantity / volume_step) * volume_step)
         snapshot = self.market_snapshot()
         price = snapshot.ask if order.side == Side.BUY else snapshot.bid
+        digits = int(getattr(symbol_info, "digits", 0) or 0)
+        point = float(getattr(symbol_info, "point", 0.0) or 0.0)
+        min_stop_distance = float(getattr(symbol_info, "trade_stops_level", 0) or 0) * point
+        stop_loss_price = _normalize_price(order.stop_loss_price, digits)
+        take_profit_price = _normalize_price(order.take_profit_price, digits)
+
+        if order.side == Side.BUY:
+            if stop_loss_price > 0.0 and (stop_loss_price >= price or (price - stop_loss_price) < min_stop_distance):
+                LOGGER.warning("Skipping invalid MT5 stop loss for %s buy order: sl=%s price=%s", symbol, stop_loss_price, price)
+                stop_loss_price = 0.0
+            if take_profit_price > 0.0 and (take_profit_price <= price or (take_profit_price - price) < min_stop_distance):
+                LOGGER.warning("Skipping invalid MT5 take profit for %s buy order: tp=%s price=%s", symbol, take_profit_price, price)
+                take_profit_price = 0.0
+        else:
+            if stop_loss_price > 0.0 and (stop_loss_price <= price or (stop_loss_price - price) < min_stop_distance):
+                LOGGER.warning("Skipping invalid MT5 stop loss for %s sell order: sl=%s price=%s", symbol, stop_loss_price, price)
+                stop_loss_price = 0.0
+            if take_profit_price > 0.0 and (take_profit_price >= price or (price - take_profit_price) < min_stop_distance):
+                LOGGER.warning("Skipping invalid MT5 take profit for %s sell order: tp=%s price=%s", symbol, take_profit_price, price)
+                take_profit_price = 0.0
         request = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": symbol,
@@ -360,10 +402,14 @@ class MT5Client:
             "price": price,
             "deviation": self.config.deviation,
             "magic": magic_number if magic_number is not None else self.config.magic_number,
-            "comment": (comment or order.reason)[:31],
+            "comment": _sanitize_mt5_comment(comment or order.reason),
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
         }
+        if stop_loss_price > 0.0:
+            request["sl"] = stop_loss_price
+        if take_profit_price > 0.0:
+            request["tp"] = take_profit_price
         if position_ticket is not None:
             request["position"] = int(position_ticket)
         result = mt5.order_send(request)
@@ -391,8 +437,10 @@ class MT5Client:
                 "slippage_bps": slippage_bps,
                 "reason": order.reason,
                 "confidence": order.confidence,
+                "requested_stop_loss_price": stop_loss_price,
+                "requested_take_profit_price": take_profit_price,
                 "magic_number": int(magic_number if magic_number is not None else self.config.magic_number),
-                "comment": (comment or order.reason)[:31],
+                "comment": _sanitize_mt5_comment(comment or order.reason),
                 "position_ticket": int(position_ticket) if position_ticket is not None else 0,
                 "deal_ticket": deal_cost.deal_ticket,
                 "order_ticket": deal_cost.order_ticket,
@@ -422,6 +470,8 @@ class MT5Client:
                 confidence=order.confidence,
                 metadata={
                     **dict(order.metadata),
+                    "requested_stop_loss_price": stop_loss_price,
+                    "requested_take_profit_price": take_profit_price,
                     "deal_ticket": deal_cost.deal_ticket,
                     "order_ticket": deal_cost.order_ticket,
                     "broker_position_id": deal_cost.position_id,

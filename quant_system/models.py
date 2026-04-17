@@ -55,6 +55,8 @@ class OrderRequest:
     quantity: float
     reason: str
     confidence: float = 0.0
+    stop_loss_price: float = 0.0
+    take_profit_price: float = 0.0
     metadata: dict[str, float | str] = field(default_factory=dict)
     bar_index: int = -1
 

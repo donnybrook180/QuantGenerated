@@ -291,6 +291,7 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
     config = config or SystemConfig()
     store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
     fills = store.list_mt5_fill_events(broker_symbol=broker_symbol)
+    valid_fills = [fill for fill in fills if float(fill.get("fill_price") or 0.0) > 0.0]
     generated_at = datetime.now(UTC)
     suffix = f"_{_slug(broker_symbol)}" if broker_symbol else ""
     report_path = system_reports_dir() / f"trade_cost_analysis{suffix}.txt"
@@ -324,13 +325,43 @@ def generate_tca_report(config: SystemConfig | None = None, broker_symbol: str |
         )
         _write_tca_json(report, config.ai.experiment_database_path)
         return report
+    if not valid_fills:
+        report_path.write_text(
+            "\n".join(
+                [
+                    "Trade Cost Analysis",
+                    f"Generated at: {_fmt_ts(generated_at)}",
+                    f"Database: {config.ai.experiment_database_path}",
+                    f"Broker symbol filter: {broker_symbol or 'all'}",
+                    "",
+                    f"Found {len(fills)} MT5 fill rows, but none have a valid fill_price > 0.",
+                    "Spread snapshots may still be present, but slippage and implementation shortfall cannot be trusted yet.",
+                    "Fix MT5 fill-price capture first, then regenerate TCA from new fills.",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = TCAReport(
+            generated_at=generated_at,
+            broker_symbol=broker_symbol,
+            overview=None,
+            by_symbol=[],
+            by_strategy=[],
+            by_intent=[],
+            by_hour=[],
+            worst_fills=[],
+            report_path=report_path,
+        )
+        _write_tca_json(report, config.ai.experiment_database_path)
+        return report
 
-    overview = _aggregate("all_fills", fills)
-    by_symbol = _group_aggregates(fills, lambda fill: fill.get("broker_symbol") or fill.get("requested_symbol") or "unknown")
-    by_strategy = _group_aggregates(fills, _infer_strategy)
-    by_intent = _group_aggregates(fills, _fill_intent)
-    by_hour = _group_aggregates(fills, lambda fill: f"{_as_utc(fill['event_timestamp']).hour:02d}:00")
-    worst = _worst_fills(fills)
+    overview = _aggregate("all_fills", valid_fills)
+    by_symbol = _group_aggregates(valid_fills, lambda fill: fill.get("broker_symbol") or fill.get("requested_symbol") or "unknown")
+    by_strategy = _group_aggregates(valid_fills, _infer_strategy)
+    by_intent = _group_aggregates(valid_fills, _fill_intent)
+    by_hour = _group_aggregates(valid_fills, lambda fill: f"{_as_utc(fill['event_timestamp']).hour:02d}:00")
+    worst = _worst_fills(valid_fills)
     report_path.write_text(render_tca_report_text(generated_at, config.ai.experiment_database_path, broker_symbol, overview, by_symbol, by_strategy, by_intent, by_hour, worst), encoding="utf-8")
     report = TCAReport(
         generated_at=generated_at,

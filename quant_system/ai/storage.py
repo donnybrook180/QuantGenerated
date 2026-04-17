@@ -1502,7 +1502,7 @@ class ExperimentStore:
                         """
                         SELECT spread_points, slippage_bps
                         FROM mt5_fill_events
-                        WHERE broker_symbol = %s
+                        WHERE broker_symbol = %s AND fill_price > 0
                         ORDER BY event_timestamp DESC, id DESC
                         LIMIT %s
                         """,
@@ -1515,7 +1515,7 @@ class ExperimentStore:
                     """
                     SELECT spread_points, slippage_bps
                     FROM mt5_fill_events
-                    WHERE broker_symbol = ?
+                    WHERE broker_symbol = ? AND fill_price > 0
                     ORDER BY event_timestamp DESC, id DESC
                     LIMIT ?
                     """,

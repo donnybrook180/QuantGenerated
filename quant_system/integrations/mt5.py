@@ -94,6 +94,7 @@ class MT5DealCost:
     deal_ticket: int
     order_ticket: int
     position_id: int
+    fill_price: float
     commission: float
     swap: float
     fee: float
@@ -317,14 +318,14 @@ class MT5Client:
         deal_ticket = int(getattr(result, "deal", 0) or 0)
         order_ticket = int(getattr(result, "order", 0) or 0)
         if deal_ticket <= 0 and order_ticket <= 0:
-            return MT5DealCost(0, 0, 0, 0.0, 0.0, 0.0, 0.0)
+            return MT5DealCost(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
         now = datetime.now(UTC)
         start = now - timedelta(minutes=15)
         deals = mt5.history_deals_get(start, now)
         if deals is None:
             LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
-            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0)
+            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
         matched = None
         for deal in deals:
@@ -339,8 +340,9 @@ class MT5Client:
             if order_ticket > 0 and current_order_ticket == order_ticket:
                 matched = deal
         if matched is None:
-            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0)
+            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
+        fill_price = float(getattr(matched, "price", 0.0) or 0.0)
         commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
         swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
         fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
@@ -348,6 +350,7 @@ class MT5Client:
             deal_ticket=int(getattr(matched, "ticket", 0) or 0),
             order_ticket=int(getattr(matched, "order", 0) or 0),
             position_id=int(getattr(matched, "position_id", 0) or 0),
+            fill_price=fill_price,
             commission=commission,
             swap=swap,
             fee=fee,
@@ -434,11 +437,13 @@ class MT5Client:
                 f"terminal_trade_allowed={terminal_trade_allowed} "
                 f"symbol_trade_mode={symbol_trade_mode}"
             )
-        LOGGER.info("mt5 order sent side=%s volume=%.2f price=%.2f", order.side.value, volume, result.price)
-        fill_price = float(result.price)
-        slippage_points = abs(fill_price - price)
-        slippage_bps = (slippage_points / price * 10_000.0) if price > 0 else 0.0
         deal_cost = self._lookup_deal_cost(result, symbol)
+        fill_price = float(result.price or 0.0)
+        if fill_price <= 0.0:
+            fill_price = deal_cost.fill_price
+        LOGGER.info("mt5 order sent side=%s volume=%.2f price=%.5f", order.side.value, volume, fill_price)
+        slippage_points = abs(fill_price - price) if fill_price > 0.0 else 0.0
+        slippage_bps = (slippage_points / price * 10_000.0) if fill_price > 0.0 and price > 0 else 0.0
         fill = FillEvent(
             timestamp=order.timestamp,
             symbol=order.symbol,
@@ -454,6 +459,7 @@ class MT5Client:
                 "spread_points": snapshot.spread_points,
                 "slippage_points": slippage_points,
                 "slippage_bps": slippage_bps,
+                "fill_price_valid": fill_price > 0.0,
                 "reason": order.reason,
                 "confidence": order.confidence,
                 "requested_stop_loss_price": stop_loss_price,
@@ -491,6 +497,7 @@ class MT5Client:
                     **dict(order.metadata),
                     "requested_stop_loss_price": stop_loss_price,
                     "requested_take_profit_price": take_profit_price,
+                    "fill_price_valid": fill_price > 0.0,
                     "deal_ticket": deal_cost.deal_ticket,
                     "order_ticket": deal_cost.order_ticket,
                     "broker_position_id": deal_cost.position_id,

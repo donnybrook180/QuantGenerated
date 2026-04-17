@@ -370,6 +370,15 @@ class MT5Client:
         symbol_info = mt5.symbol_info(symbol)
         if symbol_info is None:
             raise MT5Error(f"MT5 symbol_info failed: {mt5.last_error()}")
+        account_info = mt5.account_info()
+        terminal_info = mt5.terminal_info()
+        if account_info is not None and not bool(getattr(account_info, "trade_allowed", True)):
+            raise MT5Error(
+                "MT5 account trading disabled by broker/server "
+                f"(login={getattr(account_info, 'login', 'unknown')} server={getattr(account_info, 'server', 'unknown')})"
+            )
+        if terminal_info is not None and not bool(getattr(terminal_info, "trade_allowed", True)):
+            raise MT5Error("MT5 terminal trading disabled. Enable AutoTrading in the terminal.")
         volume_step = float(symbol_info.volume_step or 0.01)
         volume = max(float(symbol_info.volume_min), round(order.quantity / volume_step) * volume_step)
         snapshot = self.market_snapshot()
@@ -414,7 +423,17 @@ class MT5Client:
             request["position"] = int(position_ticket)
         result = mt5.order_send(request)
         if result is None or result.retcode != mt5.TRADE_RETCODE_DONE:
-            raise MT5Error(f"MT5 order_send failed: {result.retcode if result else None} {mt5.last_error()}")
+            account_trade_allowed = getattr(account_info, "trade_allowed", None) if account_info is not None else None
+            terminal_trade_allowed = getattr(terminal_info, "trade_allowed", None) if terminal_info is not None else None
+            symbol_trade_mode = getattr(symbol_info, "trade_mode", None)
+            raise MT5Error(
+                "MT5 order_send failed: "
+                f"retcode={result.retcode if result else None} "
+                f"last_error={mt5.last_error()} "
+                f"account_trade_allowed={account_trade_allowed} "
+                f"terminal_trade_allowed={terminal_trade_allowed} "
+                f"symbol_trade_mode={symbol_trade_mode}"
+            )
         LOGGER.info("mt5 order sent side=%s volume=%.2f price=%.2f", order.side.value, volume, result.price)
         fill_price = float(result.price)
         slippage_points = abs(fill_price - price)

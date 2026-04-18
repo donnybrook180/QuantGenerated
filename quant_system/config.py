@@ -78,6 +78,10 @@ class ExecutionConfig:
     mini_trades_stale_breakout_bars: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_STALE_BREAKOUT_BARS", "2")))
     mini_trades_stale_breakout_atr_fraction: float = field(default_factory=lambda: float(os.getenv("MINI_TRADES_STALE_BREAKOUT_ATR_FRACTION", "0.04")))
     mini_trades_structure_exit_bars: int = field(default_factory=lambda: int(os.getenv("MINI_TRADES_STRUCTURE_EXIT_BARS", "1")))
+    avoid_weekend_holds: bool = field(default_factory=lambda: os.getenv("EXECUTION_AVOID_WEEKEND_HOLDS", "true").lower() == "true")
+    weekend_flatten_weekday_utc: int = field(default_factory=lambda: int(os.getenv("EXECUTION_WEEKEND_FLATTEN_WEEKDAY_UTC", "4")))
+    weekend_flatten_hour_utc: int = field(default_factory=lambda: int(os.getenv("EXECUTION_WEEKEND_FLATTEN_HOUR_UTC", "20")))
+    weekend_flatten_minute_utc: int = field(default_factory=lambda: int(os.getenv("EXECUTION_WEEKEND_FLATTEN_MINUTE_UTC", "45")))
 
 
 @dataclass(slots=True)

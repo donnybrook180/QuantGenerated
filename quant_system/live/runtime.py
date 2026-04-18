@@ -20,6 +20,36 @@ from quant_system.regime import RegimeSnapshot, classify_regime, map_regime_labe
 LOGGER = logging.getLogger(__name__)
 
 
+def _weekend_flatten_cutoff(config: SystemConfig) -> tuple[int, int]:
+    hour = min(max(int(config.execution.weekend_flatten_hour_utc), 0), 23)
+    minute = min(max(int(config.execution.weekend_flatten_minute_utc), 0), 59)
+    return hour, minute
+
+
+def _is_weekend_entry_block(config: SystemConfig, now: datetime | None = None) -> bool:
+    if not config.execution.avoid_weekend_holds:
+        return False
+    current = now or datetime.now(UTC)
+    weekday = current.weekday()
+    cutoff_hour, cutoff_minute = _weekend_flatten_cutoff(config)
+    if weekday > 4:
+        return True
+    if weekday < int(config.execution.weekend_flatten_weekday_utc):
+        return False
+    if weekday > int(config.execution.weekend_flatten_weekday_utc):
+        return True
+    return (current.hour, current.minute) >= (cutoff_hour, cutoff_minute)
+
+
+def _should_force_weekend_flatten(config: SystemConfig, now: datetime | None = None) -> bool:
+    if not config.execution.avoid_weekend_holds:
+        return False
+    current = now or datetime.now(UTC)
+    cutoff_weekday = int(config.execution.weekend_flatten_weekday_utc)
+    cutoff_hour, cutoff_minute = _weekend_flatten_cutoff(config)
+    return current.weekday() == cutoff_weekday and (current.hour, current.minute) >= (cutoff_hour, cutoff_minute)
+
+
 def _candidate_archetype(strategy: DeploymentStrategy) -> str:
     name = strategy.candidate_name.lower()
     if "reclaim" in name:
@@ -373,6 +403,9 @@ class MT5LiveExecutor:
         positions = client.list_positions(magic_number=magic_number)
         current_quantity = self._net_quantity(positions)
         comment = strategy.candidate_name[:31]
+        now_utc = datetime.now(UTC)
+        weekend_entry_block = _is_weekend_entry_block(self.config, now_utc)
+        force_weekend_flatten = _should_force_weekend_flatten(self.config, now_utc)
 
         candidate_action = StrategyAction(
             strategy.candidate_name,
@@ -396,7 +429,37 @@ class MT5LiveExecutor:
             interpreter_bias=self.interpreter_state.directional_bias,
             interpreter_confidence=self.interpreter_state.confidence,
         )
+        if current_quantity != 0.0 and force_weekend_flatten:
+            close_side = Side.SELL if current_quantity > 0 else Side.BUY
+            candidate_action.intended_action = "force_flatten_weekend"
+            if self.config.execution.live_trading_enabled:
+                for position in positions:
+                    client.send_market_order(
+                        OrderRequest(
+                            timestamp=bars_timestamp_now(),
+                            symbol=self.deployment.broker_symbol,
+                            side=Side.SELL if position.side == Side.BUY else Side.BUY,
+                            quantity=position.quantity,
+                            reason=f"weekend_flatten_{strategy.candidate_name}",
+                            confidence=confidence,
+                            metadata={"strategy": strategy.candidate_name, "forced_exit": "weekend_flatten"},
+                        ),
+                        magic_number=magic_number,
+                        comment=comment,
+                        position_ticket=position.ticket,
+                    )
+            else:
+                candidate_action.intended_action = "dry_run_force_flatten_weekend"
+            candidate_action.signal_side = close_side
+            return candidate_action
+
         if signal_side == Side.FLAT:
+            if current_quantity != 0.0 and weekend_entry_block:
+                candidate_action.intended_action = "weekend_hold_detected"
+            return candidate_action
+
+        if current_quantity == 0.0 and weekend_entry_block:
+            candidate_action.intended_action = "weekend_entry_blocked"
             return candidate_action
 
         interpreter_reason = _interpreter_block_reason(

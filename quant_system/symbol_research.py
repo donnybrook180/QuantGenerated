@@ -136,6 +136,9 @@ class CandidateSpec:
     reference_filter_label: str = ""
     cross_filter_label: str = ""
     allowed_variants: tuple[str, ...] = ()
+    strategy_family: str = ""
+    direction_mode: str = ""
+    direction_role: str = ""
 
 
 @dataclass(slots=True)
@@ -216,6 +219,9 @@ class CandidateResult:
     mc_loss_probability_pct: float = 0.0
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
+    strategy_family: str = ""
+    direction_mode: str = ""
+    direction_role: str = ""
 
 
 def _symbol_slug(symbol: str) -> str:
@@ -831,6 +837,71 @@ def _candidate_row_value(row: CandidateResult | dict[str, object], field_name: s
     if isinstance(row, CandidateResult):
         return getattr(row, field_name, default)
     return row.get(field_name, default)
+
+
+def _infer_strategy_family_name(candidate_name: str, code_path: str) -> str:
+    explicit = {
+        "quant_system.agents.strategies.OpeningRangeBreakoutAgent": "opening_range_breakout",
+        "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent": "opening_range_breakout",
+        "quant_system.agents.strategies.VolatilityBreakoutAgent": "volatility_breakout",
+        "quant_system.agents.strategies.VolatilityShortBreakdownAgent": "volatility_breakout",
+        "quant_system.agents.crypto.CryptoTrendPullbackAgent": "crypto_trend_pullback",
+    }
+    if code_path in explicit:
+        return explicit[code_path]
+    lowered = candidate_name.strip().lower()
+    if "opening_range" in lowered:
+        return "opening_range_breakout"
+    if "volatility" in lowered:
+        return "volatility_breakout"
+    return lowered
+
+
+def _infer_direction_mode(candidate_name: str, code_path: str) -> str:
+    lowered = f"{candidate_name} {code_path}".lower()
+    if "short" in lowered or "downside" in lowered or "breakdown" in lowered:
+        return "short_only"
+    if "trendagent" in lowered or "meanreversionagent" in lowered or "momentumconfirmationagent" in lowered:
+        return "both"
+    return "long_only"
+
+
+def _infer_direction_role(direction_mode: str) -> str:
+    if direction_mode == "short_only":
+        return "short_leg"
+    if direction_mode == "both":
+        return "combined"
+    return "long_leg"
+
+
+def _strategy_family(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "strategy_family", "") or "").strip()
+    if explicit:
+        return explicit
+    candidate_name = str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or "")
+    code_path = str(_candidate_row_value(row, "code_path", "") or "")
+    return _infer_strategy_family_name(candidate_name, code_path)
+
+
+def _direction_mode(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "direction_mode", "") or "").strip()
+    if explicit:
+        return explicit
+    candidate_name = str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or "")
+    code_path = str(_candidate_row_value(row, "code_path", "") or "")
+    return _infer_direction_mode(candidate_name, code_path)
+
+
+def _direction_role(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "direction_role", "") or "").strip()
+    if explicit:
+        return explicit
+    return _infer_direction_role(_direction_mode(row))
+
+
+def _family_unused_for_single_selection(row: dict[str, object], used_families: set[str]) -> bool:
+    family = str(row.get("strategy_family", "") or "").strip()
+    return not family or family not in used_families
 
 
 def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source_multiplier: int) -> list[MarketBar]:
@@ -5309,6 +5380,9 @@ def _execution_candidate_row(symbol: str, row: CandidateResult | dict[str, objec
         "combo_trade_overlap_pct": float(_candidate_row_value(row, "combo_trade_overlap_pct", 0.0) or 0.0),
         "recommended": False,
         "promotion_tier": _promotion_tier_for_row(row, symbol),
+        "strategy_family": _strategy_family(row),
+        "direction_mode": _direction_mode(row),
+        "direction_role": _direction_role(row),
         "variant_label": str(_candidate_row_value(row, "variant_label", "") or ""),
         "timeframe_label": str(_candidate_row_value(row, "timeframe_label", "") or ""),
         "session_label": str(_candidate_row_value(row, "session_label", "") or ""),
@@ -5338,6 +5412,10 @@ def _selection_component_keys(row: dict[str, object]) -> set[str]:
     candidate_name = str(row.get("candidate_name", "")).strip()
     variant_label = str(row.get("variant_label", "")).strip()
     regime_filter_label = str(row.get("regime_filter_label", "")).strip()
+    strategy_family = str(row.get("strategy_family", "")).strip()
+    direction_mode = str(row.get("direction_mode", "")).strip()
+    if strategy_family:
+        return {f"{strategy_family}|{direction_mode}|{variant_label}|{regime_filter_label}"}
     parts = _component_names(candidate_name)
     if parts:
         return {
@@ -5376,6 +5454,7 @@ def _is_valid_execution_combo(
     used_signatures: set[tuple[str, str, str]] = set()
     used_code_paths: set[str] = set()
     used_regimes: set[str] = set()
+    used_families: dict[str, set[str]] = {}
     allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     specialist_count = 0
     core_count = 0
@@ -5399,6 +5478,17 @@ def _is_valid_execution_combo(
             if best_regime in used_regimes:
                 return False
             used_regimes.add(best_regime)
+        family = str(row.get("strategy_family", "") or "").strip()
+        direction = str(row.get("direction_mode", "") or "").strip()
+        if family:
+            directions = used_families.setdefault(family, set())
+            if direction == "both" and directions:
+                return False
+            if "both" in directions:
+                return False
+            if direction in directions:
+                return False
+            directions.add(direction)
         tier = str(row.get("promotion_tier", "reject"))
         if tier == "specialist":
             specialist_count += 1
@@ -5432,6 +5522,17 @@ def _build_execution_candidate_sets(rows: list[dict[str, object]], symbol: str, 
 
     sparse_candidates = select_sparse_execution_candidates(rows, symbol, max_candidates=max_candidates)
     _append_set("sparse", sparse_candidates)
+
+    rows_by_family: dict[str, list[dict[str, object]]] = {}
+    for row in rows:
+        family = str(row.get("strategy_family", "") or "").strip()
+        if family:
+            rows_by_family.setdefault(family, []).append(row)
+    for family, family_rows in rows_by_family.items():
+        best_long = next((row for row in sorted(family_rows, key=_candidate_selection_score, reverse=True) if str(row.get("direction_mode", "")) == "long_only"), None)
+        best_short = next((row for row in sorted(family_rows, key=_candidate_selection_score, reverse=True) if str(row.get("direction_mode", "")) == "short_only"), None)
+        if best_long is not None and best_short is not None:
+            _append_set(f"family_both_{family}", [best_long, best_short])
 
     pool = sorted(
         [row for row in rows if str(row.get("promotion_tier", "reject")) in {"core", "specialist"}],
@@ -5632,6 +5733,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     used_components: set[str] = set()
     used_code_paths: set[str] = set()
     used_variant_regimes: set[tuple[str, str, str]] = set()
+    used_families: set[str] = set()
     viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
     specialist_rows = [
         row for row in rows if bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", "")))
@@ -5669,6 +5771,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         lead = ranked[0]
         selected.append(lead)
         used_components.update(_selection_component_keys(lead))
+        if str(lead.get("strategy_family", "") or "").strip():
+            used_families.add(str(lead.get("strategy_family", "") or "").strip())
         lead_code_path = str(lead.get("code_path", "") or "").strip()
         if lead_code_path:
             used_code_paths.add(lead_code_path)
@@ -5688,6 +5792,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             components = _selection_component_keys(row)
             if components & used_components:
                 continue
+            if not _family_unused_for_single_selection(row, used_families):
+                continue
             candidate_code_path = str(row.get("code_path", "") or "").strip()
             candidate_signature = (
                 candidate_code_path,
@@ -5702,6 +5808,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
                 continue
             selected.append(row)
             used_components.update(components)
+            if str(row.get("strategy_family", "") or "").strip():
+                used_families.add(str(row.get("strategy_family", "") or "").strip())
             if candidate_code_path:
                 used_code_paths.add(candidate_code_path)
             used_variant_regimes.add(candidate_signature)
@@ -5710,6 +5818,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     for row in fallback_ranked:
         components = _selection_component_keys(row)
         if selected and components & used_components:
+            continue
+        if not _family_unused_for_single_selection(row, used_families):
             continue
         candidate_code_path = str(row.get("code_path", "") or "").strip()
         candidate_signature = (
@@ -5723,6 +5833,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             continue
         selected.append(row)
         used_components.update(components)
+        if str(row.get("strategy_family", "") or "").strip():
+            used_families.add(str(row.get("strategy_family", "") or "").strip())
         if candidate_code_path:
             used_code_paths.add(candidate_code_path)
         used_variant_regimes.add(candidate_signature)
@@ -5847,6 +5959,7 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     used_variants: set[str] = set()
+    used_families: set[str] = set()
     sparse_rows = [
         row
         for row in rows
@@ -5885,6 +5998,8 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
             components = _selection_component_keys(row)
             if selected and components & used_components:
                 continue
+            if not _family_unused_for_single_selection(row, used_families):
+                continue
             variant_label = str(row.get("variant_label", "")).strip()
             if selected and variant_label and variant_label in used_variants:
                 continue
@@ -5912,6 +6027,8 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
             break
         selected.append(best_row)
         used_components.update(_selection_component_keys(best_row))
+        if str(best_row.get("strategy_family", "") or "").strip():
+            used_families.add(str(best_row.get("strategy_family", "") or "").strip())
         variant_label = str(best_row.get("variant_label", "")).strip()
         if variant_label:
             used_variants.add(variant_label)
@@ -5960,6 +6077,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "name",
                 "description",
                 "archetype",
+                "strategy_family",
+                "direction_mode",
+                "direction_role",
                 "realized_pnl",
                 "closed_trades",
                 "win_rate_pct",
@@ -6028,6 +6148,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     row.name,
                     row.description,
                     row.archetype,
+                    row.strategy_family,
+                    row.direction_mode,
+                    row.direction_role,
                     f"{row.realized_pnl:.5f}",
                     row.closed_trades,
                     f"{row.win_rate_pct:.5f}",

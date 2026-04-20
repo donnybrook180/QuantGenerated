@@ -118,6 +118,14 @@ If `AI_API_KEY` is set in `.env`, the app also attempts an LLM-enriched summary.
 
 Als je niet eerst zelf een vast profiel wilt kiezen, kun je ook direct research doen op alleen een symbool:
 
+## Functional Test Suite
+
+De functionele validaties voor `research`, `interpreter`, `evaluation` en `optimization` kun je nu in één keer draaien:
+
+```powershell
+.\.venv\Scripts\python.exe tools\main_test_functional_suite.py
+```
+
 ```powershell
 .\.venv\Scripts\python.exe main_symbol_research.py C:XAUUSD XAUUSD
 ```

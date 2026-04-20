@@ -136,6 +136,9 @@ class CandidateSpec:
     reference_filter_label: str = ""
     cross_filter_label: str = ""
     allowed_variants: tuple[str, ...] = ()
+    strategy_family: str = ""
+    direction_mode: str = ""
+    direction_role: str = ""
 
 
 @dataclass(slots=True)
@@ -216,6 +219,9 @@ class CandidateResult:
     mc_loss_probability_pct: float = 0.0
     sparse_strategy: bool = False
     walk_forward_soft_pass_rate_pct: float = 0.0
+    strategy_family: str = ""
+    direction_mode: str = ""
+    direction_role: str = ""
 
 
 def _symbol_slug(symbol: str) -> str:
@@ -831,6 +837,198 @@ def _candidate_row_value(row: CandidateResult | dict[str, object], field_name: s
     if isinstance(row, CandidateResult):
         return getattr(row, field_name, default)
     return row.get(field_name, default)
+
+
+EXPLICIT_STRATEGY_CATALOG: dict[str, tuple[str, str, str]] = {
+    "quant_system.agents.trend.TrendAgent": ("trend_agent", "both", "combined"),
+    "quant_system.agents.trend.MomentumConfirmationAgent": ("momentum_confirmation", "both", "combined"),
+    "quant_system.agents.trend.MeanReversionAgent": ("mean_reversion", "both", "combined"),
+    "quant_system.agents.strategies.VolatilityBreakoutAgent": ("volatility_breakout", "long_only", "long_leg"),
+    "quant_system.agents.strategies.VolatilityShortBreakdownAgent": ("volatility_breakout", "short_only", "short_leg"),
+    "quant_system.agents.strategies.OpeningRangeBreakoutAgent": ("opening_range_breakout", "long_only", "long_leg"),
+    "quant_system.agents.strategies.OpeningRangeShortBreakdownAgent": ("opening_range_breakout", "short_only", "short_leg"),
+    "quant_system.agents.strategies.AfternoonDownsideContinuationAgent": ("afternoon_downside_continuation", "short_only", "short_leg"),
+    "quant_system.agents.strategies.FailedBounceShortAgent": ("failed_bounce_reversal", "short_only", "short_leg"),
+    "quant_system.agents.strategies.FailedBreakdownReclaimLongAgent": ("failed_breakdown_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.strategies.JP225OpenDriveMeanReversionLongAgent": ("jp225_open_drive_mean_reversion", "long_only", "long_leg"),
+    "quant_system.agents.strategies.JP225AsiaContinuationLongAgent": ("jp225_asia_continuation", "long_only", "long_leg"),
+    "quant_system.agents.crypto.CryptoVWAPReversionAgent": ("crypto_vwap_reversion", "both", "combined"),
+    "quant_system.agents.crypto.EthLiquiditySweepReversalAgent": ("eth_liquidity_sweep_reversal", "both", "combined"),
+    "quant_system.agents.crypto.CryptoShortReversionAgent": ("crypto_short_reversion", "short_only", "short_leg"),
+    "quant_system.agents.crypto.CryptoTrendPullbackAgent": ("crypto_trend_pullback", "long_only", "long_leg"),
+    "quant_system.agents.crypto.CryptoBreakoutReclaimAgent": ("crypto_breakout_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.crypto.CryptoVolatilityExpansionAgent": ("crypto_volatility_expansion", "long_only", "long_leg"),
+    "quant_system.agents.crypto.CryptoShortBreakdownAgent": ("crypto_volatility_expansion", "short_only", "short_leg"),
+    "quant_system.agents.crypto.CryptoMomentumContinuationAgent": ("crypto_momentum_continuation", "long_only", "long_leg"),
+    "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent": ("xauusd_volatility_breakout", "long_only", "long_leg"),
+    "quant_system.agents.xauusd.XAUUSDShortBreakdownAgent": ("xauusd_volatility_breakout", "short_only", "short_leg"),
+    "quant_system.agents.xauusd.XAUUSDVWAPReclaimAgent": ("xauusd_vwap_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.forex.ForexCarryTrendAgent": ("forex_carry_trend", "both", "combined"),
+    "quant_system.agents.forex.ForexBreakoutMomentumAgent": ("forex_breakout_momentum", "long_only", "long_leg"),
+    "quant_system.agents.forex.ForexShortBreakdownMomentumAgent": ("forex_breakout_momentum", "short_only", "short_leg"),
+    "quant_system.agents.forex.ForexTrendContinuationAgent": ("forex_trend_continuation", "long_only", "long_leg"),
+    "quant_system.agents.forex.ForexShortTrendContinuationAgent": ("forex_trend_continuation", "short_only", "short_leg"),
+    "quant_system.agents.forex.ForexRangeReversionAgent": ("forex_range_reversion", "both", "combined"),
+    "quant_system.agents.forex.EURUSDLondonRangeReclaimAgent": ("eurusd_london_range_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.forex.EURUSDLondonFalseBreakReversalAgent": ("eurusd_london_false_break_reversal", "both", "combined"),
+    "quant_system.agents.forex.EURUSDNYOverlapContinuationAgent": ("eurusd_ny_overlap_continuation", "both", "combined"),
+    "quant_system.agents.forex.EURUSDPostNewsReclaimAgent": ("eurusd_post_news_reclaim", "both", "combined"),
+    "quant_system.agents.forex.GBPUSDLondonRangeFadeAgent": ("gbpusd_london_range_fade", "short_only", "short_leg"),
+    "quant_system.agents.forex.GBPUSDLondonBreakoutReclaimAgent": ("gbpusd_london_breakout_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.forex.GBPUSDOverlapImpulseAgent": ("gbpusd_overlap_impulse", "both", "combined"),
+    "quant_system.agents.forex.GBPUSDPriorDaySweepReversalAgent": ("gbpusd_prior_day_sweep_reversal", "both", "combined"),
+    "quant_system.agents.ger40.GER40RangeRejectShortAgent": ("ger40_range_reject", "short_only", "short_leg"),
+    "quant_system.agents.ger40.GER40FailedBreakoutShortAgent": ("ger40_failed_breakout", "short_only", "short_leg"),
+    "quant_system.agents.ger40.GER40OpeningDriveFadeLongAgent": ("ger40_opening_drive_fade", "long_only", "long_leg"),
+    "quant_system.agents.ger40.GER40RangeReclaimLongAgent": ("ger40_range_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.ger40.GER40MiddayBreakoutLongAgent": ("ger40_midday_breakout", "long_only", "long_leg"),
+    "quant_system.agents.ger40.GER40MiddayBreakoutShortAgent": ("ger40_midday_breakout", "short_only", "short_leg"),
+    "quant_system.agents.ger40.GER40EuropeMeanReversionLongAgent": ("ger40_europe_mean_reversion", "long_only", "long_leg"),
+    "quant_system.agents.ger40.GER40EuropeMeanReversionShortAgent": ("ger40_europe_mean_reversion", "short_only", "short_leg"),
+    "quant_system.agents.eu50.EU50OpenReclaimLongAgent": ("eu50_open_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockTrendBreakoutAgent": ("stock_trend_breakout", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockNewsMomentumAgent": ("stock_news_momentum", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockEventOpenDriveContinuationAgent": ("stock_event_open_drive_continuation", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockPostEarningsDriftAgent": ("stock_post_earnings_drift", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockGapFadeAgent": ("stock_gap_fade", "short_only", "short_leg"),
+    "quant_system.agents.stocks.StockGapAndGoAgent": ("stock_gap_and_go", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockGapOpenReclaimAgent": ("stock_gap_open_reclaim", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockPremarketSweepReversalAgent": ("stock_premarket_sweep_reversal", "long_only", "long_leg"),
+    "quant_system.agents.stocks.StockPowerHourContinuationAgent": ("stock_power_hour_continuation", "long_only", "long_leg"),
+    "quant_system.agents.us100.PriorDayFailedBounceShortAgent": ("prior_day_failed_bounce", "short_only", "short_leg"),
+    "quant_system.agents.us500.US500MomentumImpulseAgent": ("us500_momentum_impulse", "both", "combined"),
+    "quant_system.agents.us500.US500OpeningDriveShortReclaimAgent": ("us500_opening_drive_reclaim", "short_only", "short_leg"),
+    "quant_system.agents.us500.US500ShortTrendRejectionAgent": ("us500_trend_rejection", "short_only", "short_leg"),
+    "quant_system.agents.us500.US500ShortVWAPRejectAgent": ("us500_vwap_reject", "short_only", "short_leg"),
+    "quant_system.agents.us500.US500FlatHighReversalAgent": ("us500_flat_high_reversal", "both", "combined"),
+    "quant_system.agents.us500.US500FlatTapeMeanReversionAgent": ("us500_flat_tape_mean_reversion", "both", "combined"),
+    "quant_system.agents.us500.US500OvernightGapFadeAgent": ("us500_overnight_gap_fade", "both", "combined"),
+}
+
+
+def _candidate_spec(
+    *,
+    name: str,
+    description: str,
+    agents: list[Agent],
+    code_path: str,
+    execution_overrides: dict[str, float | int] | None = None,
+    variant_label: str = "",
+    timeframe_label: str = "",
+    session_label: str = "",
+    regime_filter_label: str = "",
+    reference_filter_label: str = "",
+    cross_filter_label: str = "",
+    allowed_variants: tuple[str, ...] = (),
+    strategy_family: str = "",
+    direction_mode: str = "",
+    direction_role: str = "",
+) -> CandidateSpec:
+    resolved_strategy_family = strategy_family or _infer_strategy_family_name(name, code_path)
+    resolved_direction_mode = direction_mode or _infer_direction_mode(name, code_path)
+    resolved_direction_role = direction_role or _infer_direction_role(resolved_direction_mode)
+    return CandidateSpec(
+        name=name,
+        description=description,
+        agents=agents,
+        code_path=code_path,
+        execution_overrides=execution_overrides,
+        variant_label=variant_label,
+        timeframe_label=timeframe_label,
+        session_label=session_label,
+        regime_filter_label=regime_filter_label,
+        reference_filter_label=reference_filter_label,
+        cross_filter_label=cross_filter_label,
+        allowed_variants=allowed_variants,
+        strategy_family=resolved_strategy_family,
+        direction_mode=resolved_direction_mode,
+        direction_role=resolved_direction_role,
+    )
+
+
+def _infer_strategy_family_name(candidate_name: str, code_path: str) -> str:
+    code_paths = [item.strip() for item in code_path.split(";") if item.strip()]
+    if len(code_paths) > 1:
+        families = []
+        for item in code_paths:
+            metadata = EXPLICIT_STRATEGY_CATALOG.get(item)
+            families.append(metadata[0] if metadata is not None else item.rsplit(".", 1)[-1].lower())
+        return "+".join(dict.fromkeys(sorted(families)))
+    metadata = EXPLICIT_STRATEGY_CATALOG.get(code_path.strip())
+    if metadata is not None:
+        return metadata[0]
+    return candidate_name.strip().lower()
+
+
+def _infer_direction_mode(candidate_name: str, code_path: str) -> str:
+    code_paths = [item.strip() for item in code_path.split(";") if item.strip()]
+    if len(code_paths) > 1:
+        modes = {(_metadata[1] if (_metadata := EXPLICIT_STRATEGY_CATALOG.get(item)) is not None else "both") for item in code_paths}
+        if "both" in modes or len(modes) > 1:
+            return "both"
+        return next(iter(modes), "both")
+    metadata = EXPLICIT_STRATEGY_CATALOG.get(code_path.strip())
+    if metadata is not None:
+        return metadata[1]
+    return "both"
+
+
+def _infer_direction_role(direction_mode: str) -> str:
+    if direction_mode == "long_only":
+        return "long_leg"
+    if direction_mode == "short_only":
+        return "short_leg"
+    return "combined"
+
+
+def _strategy_family(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "strategy_family", "") or "").strip()
+    if explicit:
+        return explicit
+    candidate_name = str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or "")
+    code_path = str(_candidate_row_value(row, "code_path", "") or "")
+    return _infer_strategy_family_name(candidate_name, code_path)
+
+
+def _direction_mode(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "direction_mode", "") or "").strip()
+    if explicit:
+        return explicit
+    candidate_name = str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or "")
+    code_path = str(_candidate_row_value(row, "code_path", "") or "")
+    return _infer_direction_mode(candidate_name, code_path)
+
+
+def _direction_role(row: CandidateResult | dict[str, object]) -> str:
+    explicit = str(_candidate_row_value(row, "direction_role", "") or "").strip()
+    if explicit:
+        return explicit
+    return _infer_direction_role(_direction_mode(row))
+
+
+def _is_directionally_compatible(row: dict[str, object], used_families: dict[str, set[str]]) -> bool:
+    family = _strategy_family(row)
+    direction = _direction_mode(row)
+    if not family:
+        return True
+    existing = used_families.get(family, set())
+    if not existing:
+        return True
+    if direction == "both":
+        return False
+    return direction not in existing and existing <= {"long_only", "short_only"}
+
+
+def _register_family_direction(row: dict[str, object], used_families: dict[str, set[str]]) -> None:
+    family = _strategy_family(row)
+    if not family:
+        return
+    used_families.setdefault(family, set()).add(_direction_mode(row))
+
+
+def _family_unused_for_single_selection(row: dict[str, object], used_families: dict[str, set[str]]) -> bool:
+    family = _strategy_family(row)
+    return not family or family not in used_families
 
 
 def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source_multiplier: int) -> list[MarketBar]:
@@ -1700,7 +1898,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         min_relative_volume=config.agents.min_relative_volume,
     )
     specs = [
-        CandidateSpec(
+        _candidate_spec(
             name="trend",
             description="EMA trend continuation",
             agents=[
@@ -1714,25 +1912,25 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             ],
             code_path="quant_system.agents.trend.TrendAgent",
         ),
-        CandidateSpec(
+        _candidate_spec(
             name="momentum",
             description="Momentum confirmation",
             agents=[MomentumConfirmationAgent(config.agents.mean_reversion_threshold), risk],
             code_path="quant_system.agents.trend.MomentumConfirmationAgent",
         ),
-        CandidateSpec(
+        _candidate_spec(
             name="mean_reversion",
             description="Intraday mean reversion",
             agents=[MeanReversionAgent(config.agents.mean_reversion_window, config.agents.mean_reversion_threshold), risk],
             code_path="quant_system.agents.trend.MeanReversionAgent",
         ),
-        CandidateSpec(
+        _candidate_spec(
             name="volatility_breakout",
             description="Generic volatility breakout",
             agents=[VolatilityBreakoutAgent(lookback=max(8, config.agents.mean_reversion_window)), risk],
             code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
         ),
-        CandidateSpec(
+        _candidate_spec(
             name="opening_range_breakout",
             description="Opening range breakout",
             agents=[OpeningRangeBreakoutAgent(), risk],
@@ -1742,7 +1940,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     if "BTC" in upper or "ETH" in upper:
         if "ETH" in upper:
             return [
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_vwap_reversion",
                     description="ETH selective VWAP/z-score mean reversion",
                     agents=[
@@ -1756,7 +1954,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eth_liquidity_sweep_reversal",
                     description="ETH selective liquidity sweep reversal",
                     agents=[
@@ -1770,7 +1968,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.crypto.EthLiquiditySweepReversalAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_short_reversion",
                     description="ETH short mean reversion in downtrend",
                     agents=[
@@ -1786,7 +1984,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_short_reversion_late_europe",
                     description="ETH short mean reversion focused on late Europe handoff",
                     agents=[
@@ -1804,7 +2002,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
                     allowed_variants=("15m_europe",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_short_reversion_europe_noon",
                     description="ETH short mean reversion limited to Europe noon reversals",
                     agents=[
@@ -1822,7 +2020,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.crypto.CryptoShortReversionAgent",
                     allowed_variants=("15m_europe",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_vwap_reversion_us_core",
                     description="ETH VWAP reversion focused on core US reversal hours",
                     agents=[
@@ -1838,7 +2036,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.crypto.CryptoVWAPReversionAgent",
                     allowed_variants=("15m_us",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_vwap_reversion_us_hour17",
                     description="ETH VWAP reversion limited to the 30m US 17:00 bar",
                     agents=[
@@ -1856,37 +2054,37 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 ),
             ]
         specs = [
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_trend_pullback",
                 description="Crypto trend pullback continuation",
                 agents=[CryptoTrendPullbackAgent(), risk],
                 code_path="quant_system.agents.crypto.CryptoTrendPullbackAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_breakout_reclaim",
                 description="Crypto breakout reclaim",
                 agents=[CryptoBreakoutReclaimAgent(), risk],
                 code_path="quant_system.agents.crypto.CryptoBreakoutReclaimAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_volatility_expansion",
                 description="Crypto volatility expansion",
                 agents=[CryptoVolatilityExpansionAgent(), risk],
                 code_path="quant_system.agents.crypto.CryptoVolatilityExpansionAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_volatility_breakout",
                 description="24/7 crypto volatility breakout",
                 agents=[VolatilityBreakoutAgent(lookback=16, allowed_hours=None), risk],
                 code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_short_breakdown",
                 description="Crypto short breakdown continuation",
                 agents=[CryptoShortBreakdownAgent(), risk],
                 code_path="quant_system.agents.crypto.CryptoShortBreakdownAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_short_reversion",
                 description="Crypto short mean reversion in downtrend",
                 agents=[CryptoShortReversionAgent(), risk],
@@ -1896,7 +2094,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         if "BTC" in upper:
             specs.extend(
                 [
-                    CandidateSpec(
+                    _candidate_spec(
                         name="btc_trend_pullback_high_beta",
                         description="BTC trend pullback continuation in stronger trend regimes",
                         agents=[
@@ -1919,7 +2117,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             "max_holding_bars": 42,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="btc_breakout_reclaim_trend",
                         description="BTC breakout reclaim continuation for trend-up volatility regimes",
                         agents=[
@@ -1941,7 +2139,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             "max_holding_bars": 40,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="btc_vwap_reversion_flat_mid",
                         description="BTC VWAP mean reversion for flat mid-volatility tape",
                         agents=[
@@ -1963,7 +2161,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             "trailing_stop_atr_multiple": 0.45,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="btc_liquidity_sweep_reversal",
                         description="BTC liquidity sweep reversal after failed intraday extension",
                         agents=[
@@ -1987,7 +2185,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                             "trailing_stop_atr_multiple": 0.50,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="btc_momentum_continuation_overlap",
                         description="BTC momentum continuation with denser participation threshold",
                         agents=[
@@ -2014,7 +2212,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         return specs
     if "XAU" in upper:
         specs.append(
-            CandidateSpec(
+            _candidate_spec(
                 name="xauusd_volatility_breakout",
                 description="XAUUSD-tuned volatility breakout",
                 agents=[XAUUSDVolatilityBreakoutAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
@@ -2022,7 +2220,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             )
         )
         specs.append(
-            CandidateSpec(
+            _candidate_spec(
                 name="xauusd_volatility_breakout_cross_tailwind",
                 description="XAUUSD-tuned volatility breakout with cross-asset gold tailwind confirmation",
                 agents=[XAUUSDVolatilityBreakoutAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
@@ -2031,7 +2229,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             )
         )
         specs.append(
-            CandidateSpec(
+            _candidate_spec(
                 name="xauusd_short_breakdown",
                 description="XAUUSD short breakdown continuation",
                 agents=[XAUUSDShortBreakdownAgent(lookback=max(6, config.agents.mean_reversion_window)), risk],
@@ -2039,7 +2237,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             )
         )
         specs.append(
-            CandidateSpec(
+            _candidate_spec(
                 name="xauusd_vwap_reclaim",
                 description="XAUUSD VWAP reclaim after oversold washout",
                 agents=[XAUUSDVWAPReclaimAgent(), risk],
@@ -2050,7 +2248,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     if upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         if upper == "EURUSD":
             return [
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_carry_trend",
                     description="EURUSD carry-style continuation using USD and yield tailwind proxies",
                     agents=[
@@ -2073,19 +2271,19 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.9,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_breakout_momentum",
                     description="EURUSD breakout momentum baseline",
                     agents=[ForexBreakoutMomentumAgent(), risk],
                     code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_short_breakdown_momentum",
                     description="EURUSD short breakdown momentum baseline",
                     agents=[ForexShortBreakdownMomentumAgent(), risk],
                     code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_london_range_reclaim",
                     description="EURUSD London range reclaim",
                     agents=[
@@ -2105,7 +2303,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.55,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_london_false_break_reversal",
                     description="EURUSD London false-break reversal around prior-day and overnight levels",
                     agents=[
@@ -2126,7 +2324,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.5,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_ny_overlap_continuation",
                     description="EURUSD NY-overlap trend continuation",
                     agents=[
@@ -2148,7 +2346,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_ny_overlap_continuation_selective",
                     description="EURUSD NY-overlap trend continuation selective",
                     agents=[
@@ -2170,7 +2368,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.65,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eurusd_post_news_reclaim",
                     description="EURUSD post-news VWAP reclaim",
                     agents=[
@@ -2194,7 +2392,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
             ]
         if upper == "GBPUSD":
             return [
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_breakout_momentum",
                     description="GBPUSD-focused Europe-session breakout momentum",
                     agents=[
@@ -2209,7 +2407,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
                     allowed_variants=("15m_europe",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_short_breakdown_momentum",
                     description="GBPUSD short breakdown momentum baseline",
                     agents=[
@@ -2224,7 +2422,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
                     allowed_variants=("15m_europe",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_range_reversion",
                     description="GBPUSD range reversion baseline",
                     agents=[
@@ -2238,7 +2436,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     code_path="quant_system.agents.forex.ForexRangeReversionAgent",
                     allowed_variants=("15m_europe", "30m_europe"),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="gbpusd_range_reversion_overlap",
                     description="GBPUSD overlap-session range reversion extension",
                     agents=[
@@ -2260,7 +2458,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.4,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="gbpusd_london_range_fade",
                     description="GBPUSD London range fade around VWAP and session extremes",
                     agents=[
@@ -2281,7 +2479,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.5,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="gbpusd_london_breakout_reclaim",
                     description="GBPUSD London breakout reclaim continuation",
                     agents=[
@@ -2301,7 +2499,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="gbpusd_overlap_impulse",
                     description="GBPUSD London/NY overlap impulse continuation",
                     agents=[
@@ -2321,7 +2519,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.65,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="gbpusd_prior_day_sweep_reversal",
                     description="GBPUSD prior-day sweep reversal in flat or transition regimes",
                     agents=[
@@ -2344,7 +2542,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 ),
             ]
         return [
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_carry_trend",
                 description="Forex carry-style continuation using USD and yield tailwind proxies",
                 agents=[ForexCarryTrendAgent(), risk],
@@ -2358,31 +2556,31 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     "trailing_stop_atr_multiple": 0.9,
                 },
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_trend_continuation",
                 description="Forex trend continuation",
                 agents=[ForexTrendContinuationAgent(), risk],
                 code_path="quant_system.agents.forex.ForexTrendContinuationAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_range_reversion",
                 description="Forex range reversion",
                 agents=[ForexRangeReversionAgent(), risk],
                 code_path="quant_system.agents.forex.ForexRangeReversionAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_breakout_momentum",
                 description="Forex breakout momentum",
                 agents=[ForexBreakoutMomentumAgent(), risk],
                 code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_short_trend_continuation",
                 description="Forex short trend continuation",
                 agents=[ForexShortTrendContinuationAgent(), risk],
                 code_path="quant_system.agents.forex.ForexShortTrendContinuationAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="forex_short_breakdown_momentum",
                 description="Forex short breakdown momentum",
                 agents=[ForexShortBreakdownMomentumAgent(), risk],
@@ -2392,7 +2590,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     if upper == "EU50":
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_range_reject_short",
                     description="EU50 Europe-session failed range reclaim short",
                     agents=[GER40RangeRejectShortAgent(), risk],
@@ -2406,7 +2604,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.55,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_failed_breakout_short",
                     description="EU50 Europe-session failed upside breakout short",
                     agents=[GER40FailedBreakoutShortAgent(), risk],
@@ -2420,7 +2618,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.5,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_opening_drive_fade_long",
                     description="EU50 Europe open drive fade back into range",
                     agents=[GER40OpeningDriveFadeLongAgent(), risk],
@@ -2434,7 +2632,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.45,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_range_reclaim_long",
                     description="EU50 Europe-session failed breakdown reclaim long",
                     agents=[GER40RangeReclaimLongAgent(), risk],
@@ -2448,7 +2646,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.5,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_midday_breakout_long",
                     description="EU50 midday continuation breakout long",
                     agents=[GER40MiddayBreakoutLongAgent(), risk],
@@ -2462,7 +2660,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_midday_breakout_short",
                     description="EU50 midday continuation breakout short",
                     agents=[GER40MiddayBreakoutShortAgent(), risk],
@@ -2476,7 +2674,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_mean_reversion_down_mid",
                     description="EU50 Europe-session mean reversion after downside extension in down-mid regimes",
                     agents=[MeanReversionAgent(max(config.agents.mean_reversion_window - 2, 4), config.agents.mean_reversion_threshold * 0.8), risk],
@@ -2491,7 +2689,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.4,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="eu50_open_reclaim_long",
                     description="EU50 Europe-open reclaim long after downside washout",
                     agents=[EU50OpenReclaimLongAgent(), risk],
@@ -2510,19 +2708,19 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
     if upper == "JP225":
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_open_drive_mean_reversion_long",
                     description="JP225 open-drive mean reversion long after failed downside extension",
                     agents=[JP225OpenDriveMeanReversionLongAgent(), risk],
                     code_path="quant_system.agents.strategies.JP225OpenDriveMeanReversionLongAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_asia_continuation_long",
                     description="JP225 Asia-session continuation long after controlled upside expansion",
                     agents=[JP225AsiaContinuationLongAgent(), risk],
                     code_path="quant_system.agents.strategies.JP225AsiaContinuationLongAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_failed_breakdown_reclaim_core_hours",
                     description="JP225 failed breakdown reclaim long limited to the strongest upside reversal hours",
                     agents=[
@@ -2532,7 +2730,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_failed_breakdown_reclaim_asia_hours",
                     description="JP225 failed breakdown reclaim long focused on Asia-hours reversal windows",
                     agents=[
@@ -2542,7 +2740,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_volatility_breakout_core_hours",
                     description="JP225 long volatility breakout limited to the strongest historical upside entry hours",
                     agents=[
@@ -2552,7 +2750,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_volatility_breakout_asia_hours",
                     description="JP225 long volatility breakout focused on the strongest Asia-hours upside continuation windows",
                     agents=[
@@ -2562,7 +2760,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_volatility_short_breakdown_core_hours",
                     description="JP225 short volatility breakdown limited to the strongest historical entry hours",
                     agents=[
@@ -2572,7 +2770,7 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     ],
                     code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="jp225_volatility_short_breakdown_asia_hours",
                     description="JP225 short volatility breakdown focused on the strongest Asia-Europe handoff hours",
                     agents=[
@@ -2588,73 +2786,73 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         stock_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=False)
         stock_event_risk = EventAwareRiskSentinelAgent(allow_high_impact_day=True, allow_event_blackout=True)
         return [
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_trend_breakout",
                 description="Stock trend breakout outside event blackout windows",
                 agents=[StockTrendBreakoutAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockTrendBreakoutAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_news_momentum",
                 description="Stock post-news momentum on high-impact event days",
                 agents=[StockNewsMomentumAgent(), stock_event_risk, risk],
                 code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_event_open_drive_continuation",
                 description="Stock event-day continuation anchored to premarket and opening-drive structure",
                 agents=[StockEventOpenDriveContinuationAgent(), stock_event_risk, risk],
                 code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_post_earnings_drift",
                 description="Stock post-earnings drift continuation after the open",
                 agents=[StockPostEarningsDriftAgent(), stock_event_risk, risk],
                 code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_gap_fade",
                 description="Stock gap fade after overextended opening move",
                 agents=[StockGapFadeAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockGapFadeAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_gap_and_go",
                 description="Stock gap-and-go continuation after the open",
                 agents=[StockGapAndGoAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockGapAndGoAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_gap_open_reclaim",
                 description="Stock gap continuation after reclaiming premarket structure",
                 agents=[StockGapOpenReclaimAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_premarket_sweep_reversal",
                 description="Stock premarket sweep reversal after failed opening extension",
                 agents=[StockPremarketSweepReversalAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="stock_power_hour_continuation",
                 description="Stock power-hour continuation into the close",
                 agents=[StockPowerHourContinuationAgent(), stock_risk, risk],
                 code_path="quant_system.agents.stocks.StockPowerHourContinuationAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="momentum",
                 description="Momentum confirmation",
                 agents=[MomentumConfirmationAgent(config.agents.mean_reversion_threshold * 0.85), stock_risk, risk],
                 code_path="quant_system.agents.trend.MomentumConfirmationAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="mean_reversion",
                 description="Intraday mean reversion away from event windows",
                 agents=[MeanReversionAgent(config.agents.mean_reversion_window, config.agents.mean_reversion_threshold), stock_risk, risk],
                 code_path="quant_system.agents.trend.MeanReversionAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="volatility_breakout",
                 description="Generic volatility breakout outside event blackout windows",
                 agents=[VolatilityBreakoutAgent(lookback=max(8, config.agents.mean_reversion_window)), stock_risk, risk],
@@ -2663,13 +2861,13 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
         ]
     specs.extend(
         [
-            CandidateSpec(
+            _candidate_spec(
                 name="volatility_short_breakdown",
                 description="Generic short volatility breakdown",
                 agents=[VolatilityShortBreakdownAgent(lookback=max(8, config.agents.mean_reversion_window)), risk],
                 code_path="quant_system.agents.strategies.VolatilityShortBreakdownAgent",
             ),
-            CandidateSpec(
+            _candidate_spec(
                 name="opening_range_short_breakdown",
                 description="Opening range short breakdown",
                 agents=[OpeningRangeShortBreakdownAgent(), risk],
@@ -2795,6 +2993,9 @@ def _run_candidate(
     scored.session_label = spec.session_label
     scored.regime_filter_label = spec.regime_filter_label
     scored.cross_filter_label = spec.cross_filter_label
+    scored.strategy_family = spec.strategy_family or _infer_strategy_family_name(spec.name, spec.code_path)
+    scored.direction_mode = spec.direction_mode or _infer_direction_mode(spec.name, spec.code_path)
+    scored.direction_role = spec.direction_role or _infer_direction_role(scored.direction_mode)
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     _annotate_regime_metrics(scored, features, result.closed_trades)
     _annotate_funding_context(scored, features)
@@ -2988,7 +3189,7 @@ def _exit_family_specs(config: SystemConfig, symbol: str, specs: list[CandidateS
             continue
         if "mean_reversion" in spec.name or "range_reversion" in spec.name:
             exit_specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{spec.name}__exit_quick",
                     description=f"{spec.description} with quick-fail mean reversion exits",
                     agents=spec.agents,
@@ -3011,7 +3212,7 @@ def _exit_family_specs(config: SystemConfig, symbol: str, specs: list[CandidateS
 
         exit_specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{spec.name}__exit_trend",
                     description=f"{spec.description} with trend-runner exits",
                     agents=spec.agents,
@@ -3030,7 +3231,7 @@ def _exit_family_specs(config: SystemConfig, symbol: str, specs: list[CandidateS
                     timeframe_label=spec.timeframe_label,
                     session_label=spec.session_label,
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{spec.name}__exit_fastfail",
                     description=f"{spec.description} with fast-fail exits",
                     agents=spec.agents,
@@ -3073,7 +3274,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
         if trend_result is not None:
             specs.extend(
                 [
-                    CandidateSpec(
+                    _candidate_spec(
                         name="crypto_trend_pullback_looser",
                         description="Crypto trend pullback with looser entry and softer exits",
                         agents=[
@@ -3091,7 +3292,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         code_path="quant_system.agents.crypto.CryptoTrendPullbackAgent",
                         execution_overrides={"structure_exit_bars": 0, "max_holding_bars": 42, "stale_breakout_bars": 12},
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="crypto_trend_pullback_patient",
                         description="Crypto trend pullback with wider stop and longer hold",
                         agents=[
@@ -3119,7 +3320,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
 
         if best_name in {"crypto_breakout_reclaim", "crypto_trend_pullback"} or not results:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_breakout_reclaim_looser",
                     description="Crypto breakout reclaim with looser reclaim and softer exits",
                     agents=[
@@ -3139,7 +3340,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
             )
 
         specs.append(
-            CandidateSpec(
+            _candidate_spec(
                 name="crypto_volatility_expansion_selective",
                 description="Crypto volatility expansion with higher-quality trigger",
                 agents=[
@@ -3160,56 +3361,56 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
     elif _is_stock_symbol(symbol):
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_news_momentum_patient",
                     description=f"{upper} news momentum with slower exits and wider event follow-through",
                     agents=[StockNewsMomentumAgent(min_relative_volume=1.25, min_atr_proxy=0.0036), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
                     code_path="quant_system.agents.stocks.StockNewsMomentumAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_event_open_drive_patient",
                     description=f"{upper} event-day opening-drive continuation with patient exits",
                     agents=[StockEventOpenDriveContinuationAgent(min_relative_volume=1.2, min_atr_proxy=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
                     code_path="quant_system.agents.stocks.StockEventOpenDriveContinuationAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 24},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_gap_fade_selective",
                     description=f"{upper} selective gap fade with stricter extension filter",
                     agents=[StockGapFadeAgent(min_gap_proxy=0.0038, min_relative_volume=1.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapFadeAgent",
                     execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_gap_and_go_selective",
                     description=f"{upper} selective gap-and-go continuation with stricter opening filter",
                     agents=[StockGapAndGoAgent(min_relative_volume=1.1, min_atr_proxy=0.0032, max_minutes_from_open=120.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapAndGoAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_gap_open_reclaim_selective",
                     description=f"{upper} selective gap reclaim continuation after premarket retake",
                     agents=[StockGapOpenReclaimAgent(min_relative_volume=1.0, min_gap_pct=0.0035, max_minutes_from_open=135.0), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockGapOpenReclaimAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 22},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_premarket_sweep_reversal",
                     description=f"{upper} premarket sweep reversal after failed gap extension",
                     agents=[StockPremarketSweepReversalAgent(min_relative_volume=1.0, min_gap_pct=0.003), EventAwareRiskSentinelAgent(False), risk],
                     code_path="quant_system.agents.stocks.StockPremarketSweepReversalAgent",
                     execution_overrides={"structure_exit_bars": 1, "stale_breakout_bars": 5, "max_holding_bars": 18},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_patient",
                     description=f"{upper} post-earnings drift with patient exits",
                     agents=[StockPostEarningsDriftAgent(min_relative_volume=1.05, max_minutes_from_open=180.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), risk],
                     code_path="quant_system.agents.stocks.StockPostEarningsDriftAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 28},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_power_hour_continuation_selective",
                     description=f"{upper} power-hour continuation with stronger momentum requirement",
                     agents=[StockPowerHourContinuationAgent(min_relative_volume=0.95, min_momentum_20=0.0035), EventAwareRiskSentinelAgent(False), risk],
@@ -3221,14 +3422,14 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
     elif "XAU" in upper:
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name="xauusd_volatility_breakout_looser",
                     description="XAUUSD breakout with slightly looser entries and softer exits",
                     agents=[XAUUSDVolatilityBreakoutAgent(lookback=8), risk],
                     code_path="quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 8, "max_holding_bars": 22},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="xauusd_generic_breakout_selective",
                     description="XAUUSD generic breakout with tighter trade filtering",
                     agents=[VolatilityBreakoutAgent(lookback=10, allowed_hours={13, 14, 15, 16}), risk],
@@ -3245,7 +3446,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
     elif upper in {"US500", "US100"}:
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_trend_density",
                     description=f"{upper} trend candidate with slightly higher trade density",
                     agents=[
@@ -3260,7 +3461,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     code_path="quant_system.agents.trend.TrendAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 6, "max_holding_bars": 20},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_momentum_selective",
                     description=f"{upper} momentum candidate with stricter holding logic",
                     agents=[MomentumConfirmationAgent(config.agents.mean_reversion_threshold * 0.8), risk],
@@ -3272,7 +3473,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.85,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection",
                     description=f"{upper} short rejection after weak rebound",
                     agents=[US500ShortTrendRejectionAgent(config.agents.min_trend_strength), risk],
@@ -3284,7 +3485,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "take_profit_atr_multiple": 2.3,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_opening_drive_short_reclaim",
                     description=f"{upper} short reclaim after failed opening drive",
                     agents=[US500OpeningDriveShortReclaimAgent(config.agents.min_trend_strength), risk],
@@ -3296,7 +3497,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "take_profit_atr_multiple": 2.0,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection_selective",
                     description=f"{upper} short rejection with stricter 16:00-only filter",
                     agents=[
@@ -3317,7 +3518,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.75,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection_flat_high",
                     description=f"{upper} short rejection limited to flat/high-volatility regime",
                     agents=[
@@ -3339,7 +3540,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.72,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection_flat_high_dense",
                     description=f"{upper} denser short rejection in flat/high-volatility regime",
                     agents=[
@@ -3361,7 +3562,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.85,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection_flat_high_exit_optimized",
                     description=f"{upper} flat/high-volatility short rejection with trend-friendly exits",
                     agents=[
@@ -3386,7 +3587,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.6,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_opening_drive_short_reclaim_selective",
                     description=f"{upper} short reclaim with tighter session and volume filter",
                     agents=[
@@ -3407,7 +3608,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_opening_range_short_breakdown_trend",
                     description=f"{upper} opening-range short breakdown with trend-runner exits",
                     agents=[OpeningRangeShortBreakdownAgent(), risk],
@@ -3420,7 +3621,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 1.0,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_opening_range_short_breakdown_trend_cross_risk_off",
                     description=f"{upper} opening-range short breakdown with cross-asset risk-off confirmation",
                     agents=[OpeningRangeShortBreakdownAgent(), risk],
@@ -3434,7 +3635,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 1.0,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_opening_range_short_breakdown_fast",
                     description=f"{upper} opening-range short breakdown with faster failure control",
                     agents=[OpeningRangeShortBreakdownAgent(), risk],
@@ -3446,7 +3647,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "take_profit_atr_multiple": 1.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_volatility_short_breakdown_selective",
                     description=f"{upper} selective intraday short breakdown after volatility expansion",
                     agents=[
@@ -3469,7 +3670,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.75,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_volatility_short_breakdown_flat_high",
                     description=f"{upper} short breakdown focused on flat/high-volatility sessions",
                     agents=[
@@ -3493,7 +3694,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.8,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_afternoon_downside_continuation",
                     description=f"{upper} afternoon downside continuation after failed rebounds",
                     agents=[
@@ -3514,7 +3715,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.82,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_afternoon_downside_continuation_trend_down",
                     description=f"{upper} afternoon downside continuation limited to trend-down regimes",
                     agents=[
@@ -3536,7 +3737,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.78,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_failed_bounce_short",
                     description=f"{upper} failed-bounce short after weak reclaim attempts",
                     agents=[
@@ -3558,7 +3759,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.74,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_failed_bounce_short_trend_down",
                     description=f"{upper} failed-bounce short limited to trend-down regimes",
                     agents=[
@@ -3581,7 +3782,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.7,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_prior_day_failed_bounce_short",
                     description=f"{upper} short failed-bounce against prior-day and overnight context",
                     agents=[
@@ -3599,7 +3800,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.72,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_prior_day_failed_bounce_short_trend_down",
                     description=f"{upper} prior-day failed-bounce short limited to trend-down/high-vol regimes",
                     agents=[
@@ -3623,7 +3824,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
         if upper == "US500":
             specs.extend(
                 [
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_momentum_impulse",
                         description="US500 momentum impulse in strong uptrend and high participation",
                         agents=[
@@ -3643,7 +3844,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.8,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_momentum_impulse_high_vol",
                         description="US500 momentum impulse focused on trend-up/high-volatility regime",
                         agents=[
@@ -3664,7 +3865,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.78,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_momentum_impulse_high_vol_us100_breakout_confirm",
                         description="US500 momentum impulse with US100 breakout confirmation",
                         agents=[
@@ -3686,7 +3887,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.78,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_short_vwap_reject",
                         description="US500 short rejection around VWAP in weak or flat tape",
                         agents=[
@@ -3706,7 +3907,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.72,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_short_vwap_reject_flat_high",
                         description="US500 short VWAP rejection limited to flat/high-volatility regime",
                         agents=[
@@ -3727,7 +3928,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.7,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_short_vwap_reject_flat_high_dense",
                         description="US500 denser short VWAP rejection in flat/high-volatility regime",
                         agents=[
@@ -3748,7 +3949,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.82,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_opening_drive_short_reclaim_flat_high",
                         description="US500 opening-drive short reclaim in flat/high-volatility tape",
                         agents=[
@@ -3770,7 +3971,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.78,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_volatility_short_breakdown_flat_high",
                         description="US500 short volatility breakdown in flat/high-volatility sessions",
                         agents=[
@@ -3794,7 +3995,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.8,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_flat_high_reversal",
                         description="US500 flat/high-volatility reversal fade",
                         agents=[
@@ -3816,7 +4017,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.65,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_flat_high_reversal_dense",
                         description="US500 denser flat/high-volatility reversal fade",
                         agents=[
@@ -3838,7 +4039,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.6,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_flat_tape_mean_reversion",
                         description="US500 flat-tape mean reversion around VWAP and rolling mean",
                         agents=[
@@ -3861,7 +4062,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.55,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_flat_tape_mean_reversion_dense",
                         description="US500 denser flat-tape mean reversion in flat/high-volatility tape",
                         agents=[
@@ -3884,7 +4085,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.5,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_overnight_gap_fade",
                         description="US500 overnight gap fade using prior-day and overnight context",
                         agents=[
@@ -3904,7 +4105,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "trailing_stop_atr_multiple": 0.55,
                         },
                     ),
-                    CandidateSpec(
+                    _candidate_spec(
                         name="us500_overnight_gap_fade_flat_high",
                         description="US500 overnight gap fade focused on flat/high-volatility tape",
                         agents=[
@@ -3930,7 +4131,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
     elif upper == "GER40":
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_orb_patient",
                     description="GER40 opening range breakout with slower stale exit",
                     agents=[OpeningRangeBreakoutAgent(), risk],
@@ -3943,7 +4144,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     },
                     allowed_variants=("5m_open", "15m_open"),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_volatility_breakout",
                     description="GER40 generic breakout candidate",
                     agents=[VolatilityBreakoutAgent(lookback=12, allowed_hours={14}), risk],
@@ -3955,7 +4156,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     },
                     allowed_variants=("5m_open",),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_range_reject_short",
                     description="GER40 short rejection below opening range",
                     agents=[GER40RangeRejectShortAgent(), risk],
@@ -3968,7 +4169,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     },
                     allowed_variants=("5m_europe", "15m_europe"),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_failed_breakout_short",
                     description="GER40 short after failed upside breakout",
                     agents=[GER40FailedBreakoutShortAgent(), risk],
@@ -3981,7 +4182,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     },
                     allowed_variants=("5m_europe", "15m_europe"),
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_opening_drive_fade_long",
                     description="GER40 long fade after opening drive washout and reclaim",
                     agents=[GER40OpeningDriveFadeLongAgent(), risk],
@@ -3996,7 +4197,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.45,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_range_reclaim_long",
                     description="GER40 long reclaim after failed breakdown below opening range",
                     agents=[GER40RangeReclaimLongAgent(), risk],
@@ -4011,7 +4212,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.4,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_midday_breakout_long",
                     description="GER40 midday continuation breakout after opening range compression",
                     agents=[GER40MiddayBreakoutLongAgent(), risk],
@@ -4026,7 +4227,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.55,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_midday_breakout_short",
                     description="GER40 midday downside continuation after opening range compression",
                     agents=[GER40MiddayBreakoutShortAgent(), risk],
@@ -4041,7 +4242,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.55,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_europe_mean_reversion_long",
                     description="GER40 higher-frequency Europe-session mean reversion from session lows",
                     agents=[GER40EuropeMeanReversionLongAgent(), risk],
@@ -4056,7 +4257,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                         "trailing_stop_atr_multiple": 0.35,
                     },
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_europe_mean_reversion_short",
                     description="GER40 higher-frequency Europe-session mean reversion from session highs",
                     agents=[GER40EuropeMeanReversionShortAgent(), risk],
@@ -4076,7 +4277,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
     elif upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         specs.extend(
             [
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_trend_continuation_looser",
                     description="Forex trend continuation with higher trade density",
                     agents=[
@@ -4091,7 +4292,7 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                     code_path="quant_system.agents.forex.ForexTrendContinuationAgent",
                     execution_overrides={"structure_exit_bars": 0, "stale_breakout_bars": 7, "max_holding_bars": 30},
                 ),
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_breakout_momentum_patient",
                     description="Forex breakout momentum with slower exits",
                     agents=[
@@ -4123,7 +4324,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
             ]
             for label, z_entry, rel_vol, max_trend, atr in reversion_variants:
                 specs.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=f"crypto_vwap_reversion_sweep_{label}",
                         description=f"ETH VWAP reversion sweep {label}",
                         agents=[
@@ -4150,7 +4351,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
             ]
             for label, lookback, sweep_margin, rel_vol, atr, max_trend in sweep_variants:
                 specs.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=f"eth_liquidity_sweep_reversal_sweep_{label}",
                         description=f"ETH liquidity sweep reversal sweep {label}",
                         agents=[
@@ -4181,7 +4382,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
             ]
             for label, lookback, sweep_margin, rel_vol, atr, max_trend in sweep_variants:
                 specs.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=f"btc_liquidity_sweep_reversal_sweep_{label}",
                         description=f"BTC liquidity sweep reversal sweep {label}",
                         agents=[
@@ -4212,7 +4413,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, lookback, trend, mom20, z_low, z_high, rel_vol, atr in trend_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"crypto_trend_pullback_sweep_{label}",
                     description=f"Crypto trend pullback sweep {label}",
                     agents=[
@@ -4244,7 +4445,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, lookback, reclaim, trend, mom20, rel_vol, atr in reclaim_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"crypto_breakout_reclaim_sweep_{label}",
                     description=f"Crypto breakout reclaim sweep {label}",
                     agents=[
@@ -4274,7 +4475,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, lookback, atr, trend, mom5, mom20, rel_vol in expansion_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"crypto_volatility_expansion_sweep_{label}",
                     description=f"Crypto volatility expansion sweep {label}",
                     agents=[
@@ -4306,7 +4507,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, fast_window, slow_window, rel_vol, atr, mom5, mom20 in trend_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"stock_trend_breakout_sweep_{label}",
                     description=f"Stock trend breakout sweep {label}",
                     agents=[
@@ -4341,7 +4542,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, rel_vol, atr, mom5, mom20, max_minutes in gap_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"stock_gap_and_go_sweep_{label}",
                     description=f"Stock gap-and-go sweep {label}",
                     agents=[
@@ -4374,7 +4575,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, rel_vol, mom20, mom5, hours in power_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"stock_power_hour_sweep_{label}",
                     description=f"Stock power-hour continuation sweep {label}",
                     agents=[
@@ -4405,7 +4606,7 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
         ]
         for label, rel_vol, atr, max_minutes in event_variants:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"stock_post_earnings_drift_sweep_{label}",
                     description=f"Stock post-earnings drift sweep {label}",
                     agents=[
@@ -4433,7 +4634,7 @@ def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec
     if variant_label == "default":
         return spec
     timeframe_label, _, session_label = variant_label.partition("_")
-    return CandidateSpec(
+    return _candidate_spec(
         name=f"{spec.name}__{variant_label}",
         description=f"{spec.description} [{variant_label}]",
         agents=spec.agents,
@@ -4497,7 +4698,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
         if best_tradeable.name.startswith("crypto_trend_pullback"):
             if weakest_exit == "structure_exit":
                 specs.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name="crypto_trend_pullback_exit_relaxed",
                         description="Crypto trend pullback with structure exit disabled after autopsy",
                         agents=[
@@ -4524,7 +4725,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                 )
             if closed_trades <= 3:
                 specs.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name="crypto_trend_pullback_density",
                         description="Crypto trend pullback with more trade density",
                         agents=[
@@ -4545,7 +4746,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
                 )
         elif best_tradeable.name.startswith("crypto_breakout_reclaim"):
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="crypto_breakout_reclaim_patient",
                     description="Crypto breakout reclaim with slower exits after autopsy",
                     agents=[
@@ -4566,7 +4767,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
     elif "XAU" in upper:
         if weakest_exit in {"signal_exit", "structure_exit"}:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="xauusd_volatility_breakout_exit_relaxed",
                     description="XAUUSD breakout with relaxed structure exit after autopsy",
                     agents=[XAUUSDVolatilityBreakoutAgent(lookback=8), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=0.75)],
@@ -4582,7 +4783,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
     elif _is_stock_symbol(symbol):
         if weakest_exit in {"stale_breakout", "structure_exit"}:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_news_momentum_exit_relaxed",
                     description=f"{upper} stock news momentum with relaxed structure exit after autopsy",
                     agents=[StockNewsMomentumAgent(min_relative_volume=1.2, min_atr_proxy=0.0035), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
@@ -4592,7 +4793,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
             )
         if closed_trades <= 4:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_stock_post_earnings_drift_dense",
                     description=f"{upper} denser post-earnings drift variant",
                     agents=[StockPostEarningsDriftAgent(min_relative_volume=1.0, max_minutes_from_open=210.0), EventAwareRiskSentinelAgent(True, allow_event_blackout=True), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=config.agents.min_relative_volume)],
@@ -4603,7 +4804,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
     elif upper in {"US500", "US100"}:
         if closed_trades <= 4:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_trend_density_second_pass",
                     description=f"{upper} second-pass density variant",
                     agents=[
@@ -4623,7 +4824,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
             f"{upper.lower()}_opening_drive_short_reclaim"
         ):
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{upper.lower()}_short_trend_rejection_second_pass",
                     description=f"{upper} second-pass short rejection focused on early weakness",
                     agents=[
@@ -4647,7 +4848,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
     elif upper == "GER40":
         if weakest_exit in {"stale_breakout", "structure_exit"}:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="ger40_orb_exit_relaxed",
                     description="GER40 ORB with relaxed stale/structure exit after autopsy",
                     agents=[OpeningRangeBreakoutAgent(), RiskSentinelAgent(max_volatility=config.risk.max_volatility, min_relative_volume=0.8)],
@@ -4663,7 +4864,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
     elif upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD"):
         if best_tradeable.name.startswith("forex_trend_continuation") and closed_trades <= 4:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_trend_continuation_second_pass",
                     description="Forex trend continuation second-pass density variant",
                     agents=[
@@ -4681,7 +4882,7 @@ def _second_pass_specs(config: SystemConfig, symbol: str, results: list[Candidat
             )
         if weakest_exit in {"structure_exit", "signal_exit"}:
             specs.append(
-                CandidateSpec(
+                _candidate_spec(
                     name="forex_breakout_momentum_exit_relaxed",
                     description="Forex breakout momentum with relaxed exit after autopsy",
                     agents=[
@@ -4721,7 +4922,7 @@ def _combined_specs(config: SystemConfig, specs: list[CandidateSpec], winners: l
             )
         )
         combined.append(
-            CandidateSpec(
+            _candidate_spec(
                 name=f"{left.name}__plus__{right.name}",
                 description=f"Combined {left.name} + {right.name}",
                 agents=combo_agents,
@@ -5025,7 +5226,7 @@ def _regime_improvement_specs(specs: list[CandidateSpec], results: list[Candidat
             continue
         seen.add(key)
         generated.append(
-            CandidateSpec(
+            _candidate_spec(
                 name=f"{base_spec.name}__regime_{row.best_regime}",
                 description=f"{base_spec.description} focused on {_feature_regime_to_unified(row.best_regime) or row.best_regime}",
                 agents=base_spec.agents,
@@ -5098,7 +5299,7 @@ def _autopsy_improvement_specs(
         if _is_stock_symbol(symbol):
             if row.name.startswith("mean_reversion__15m_midday"):
                 generated.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=f"{base_spec.name}__autopsy_midday_dense",
                         description=f"{base_spec.description} autopsy-tuned for denser midday continuation mean reversion",
                         agents=[
@@ -5119,7 +5320,7 @@ def _autopsy_improvement_specs(
                 )
             if row.name.startswith("momentum__15m_power"):
                 generated.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=f"{base_spec.name}__autopsy_power_dense",
                         description=f"{base_spec.description} autopsy-tuned for denser power-hour continuation",
                         agents=[
@@ -5144,7 +5345,7 @@ def _autopsy_improvement_specs(
                 continue
             seen.add(key)
             generated.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=f"{base_spec.name}__autopsy_{_symbol_slug(regime_filter)}",
                     description=f"{base_spec.description} autopsy-focused on {regime_filter}",
                     agents=base_spec.agents,
@@ -5234,7 +5435,7 @@ def _near_miss_optimizer_specs(symbol: str, specs: list[CandidateSpec], results:
                 continue
             seen.add(candidate_name)
             generated.append(
-                CandidateSpec(
+                _candidate_spec(
                     name=candidate_name,
                     description=f"{base_spec.description} {description_suffix}",
                     agents=base_spec.agents,
@@ -5252,7 +5453,7 @@ def _near_miss_optimizer_specs(symbol: str, specs: list[CandidateSpec], results:
                     continue
                 seen.add(regime_name)
                 generated.append(
-                    CandidateSpec(
+                    _candidate_spec(
                         name=regime_name,
                         description=f"{base_spec.description} {description_suffix} focused on {regime_filter}",
                         agents=base_spec.agents,
@@ -5309,6 +5510,9 @@ def _execution_candidate_row(symbol: str, row: CandidateResult | dict[str, objec
         "combo_trade_overlap_pct": float(_candidate_row_value(row, "combo_trade_overlap_pct", 0.0) or 0.0),
         "recommended": False,
         "promotion_tier": _promotion_tier_for_row(row, symbol),
+        "strategy_family": _strategy_family(row),
+        "direction_mode": _direction_mode(row),
+        "direction_role": _direction_role(row),
         "variant_label": str(_candidate_row_value(row, "variant_label", "") or ""),
         "timeframe_label": str(_candidate_row_value(row, "timeframe_label", "") or ""),
         "session_label": str(_candidate_row_value(row, "session_label", "") or ""),
@@ -5338,6 +5542,10 @@ def _selection_component_keys(row: dict[str, object]) -> set[str]:
     candidate_name = str(row.get("candidate_name", "")).strip()
     variant_label = str(row.get("variant_label", "")).strip()
     regime_filter_label = str(row.get("regime_filter_label", "")).strip()
+    strategy_family = str(row.get("strategy_family", "")).strip()
+    direction_mode = str(row.get("direction_mode", "")).strip()
+    if strategy_family:
+        return {f"{strategy_family}|{direction_mode}|{variant_label}|{regime_filter_label}"}
     parts = _component_names(candidate_name)
     if parts:
         return {
@@ -5376,6 +5584,7 @@ def _is_valid_execution_combo(
     used_signatures: set[tuple[str, str, str]] = set()
     used_code_paths: set[str] = set()
     used_regimes: set[str] = set()
+    family_directions: dict[str, set[str]] = {}
     allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     specialist_count = 0
     core_count = 0
@@ -5399,6 +5608,20 @@ def _is_valid_execution_combo(
             if best_regime in used_regimes:
                 return False
             used_regimes.add(best_regime)
+        strategy_family = str(row.get("strategy_family", "") or "").strip()
+        direction_mode = str(row.get("direction_mode", "") or "").strip()
+        if strategy_family:
+            directions = family_directions.setdefault(strategy_family, set())
+            if direction_mode == "both":
+                if directions:
+                    return False
+            elif direction_mode in directions:
+                return False
+            elif directions and directions != {"long_only", "short_only"}:
+                return False
+            directions.add(direction_mode)
+            if len(directions) > 2 or not directions <= {"long_only", "short_only", "both"}:
+                return False
         tier = str(row.get("promotion_tier", "reject"))
         if tier == "specialist":
             specialist_count += 1
@@ -5432,6 +5655,29 @@ def _build_execution_candidate_sets(rows: list[dict[str, object]], symbol: str, 
 
     sparse_candidates = select_sparse_execution_candidates(rows, symbol, max_candidates=max_candidates)
     _append_set("sparse", sparse_candidates)
+
+    rows_by_family: dict[str, list[dict[str, object]]] = {}
+    for row in rows:
+        family = str(row.get("strategy_family", "") or "").strip()
+        if family:
+            rows_by_family.setdefault(family, []).append(row)
+    for family, family_rows in rows_by_family.items():
+        best_long = next(
+            (
+                row for row in sorted(family_rows, key=_candidate_selection_score, reverse=True)
+                if str(row.get("direction_mode", "") or "") == "long_only"
+            ),
+            None,
+        )
+        best_short = next(
+            (
+                row for row in sorted(family_rows, key=_candidate_selection_score, reverse=True)
+                if str(row.get("direction_mode", "") or "") == "short_only"
+            ),
+            None,
+        )
+        if best_long is not None and best_short is not None:
+            _append_set(f"family_both_{family}", [best_long, best_short])
 
     pool = sorted(
         [row for row in rows if str(row.get("promotion_tier", "reject")) in {"core", "specialist"}],
@@ -5578,7 +5824,7 @@ def _near_miss_local_optimizer(
             if candidate_name in seen:
                 continue
             seen.add(candidate_name)
-            candidate_spec = CandidateSpec(
+            candidate_spec = _candidate_spec(
                 name=candidate_name,
                 description=f"{base_spec.description} {suffix}",
                 agents=base_spec.agents,
@@ -5632,6 +5878,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     used_components: set[str] = set()
     used_code_paths: set[str] = set()
     used_variant_regimes: set[tuple[str, str, str]] = set()
+    used_families: dict[str, set[str]] = {}
     viable_rows = [row for row in rows if _meets_viability(row, str(row.get("symbol", "")))]
     specialist_rows = [
         row for row in rows if bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", "")))
@@ -5669,6 +5916,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         lead = ranked[0]
         selected.append(lead)
         used_components.update(_selection_component_keys(lead))
+        _register_family_direction(lead, used_families)
         lead_code_path = str(lead.get("code_path", "") or "").strip()
         if lead_code_path:
             used_code_paths.add(lead_code_path)
@@ -5688,6 +5936,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             components = _selection_component_keys(row)
             if components & used_components:
                 continue
+            if not _family_unused_for_single_selection(row, used_families):
+                continue
             candidate_code_path = str(row.get("code_path", "") or "").strip()
             candidate_signature = (
                 candidate_code_path,
@@ -5702,6 +5952,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
                 continue
             selected.append(row)
             used_components.update(components)
+            _register_family_direction(row, used_families)
             if candidate_code_path:
                 used_code_paths.add(candidate_code_path)
             used_variant_regimes.add(candidate_signature)
@@ -5710,6 +5961,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
     for row in fallback_ranked:
         components = _selection_component_keys(row)
         if selected and components & used_components:
+            continue
+        if not _family_unused_for_single_selection(row, used_families):
             continue
         candidate_code_path = str(row.get("code_path", "") or "").strip()
         candidate_signature = (
@@ -5723,6 +5976,7 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
             continue
         selected.append(row)
         used_components.update(components)
+        _register_family_direction(row, used_families)
         if candidate_code_path:
             used_code_paths.add(candidate_code_path)
         used_variant_regimes.add(candidate_signature)
@@ -5847,6 +6101,7 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
     selected: list[dict[str, object]] = []
     used_components: set[str] = set()
     used_variants: set[str] = set()
+    used_families: dict[str, set[str]] = {}
     sparse_rows = [
         row
         for row in rows
@@ -5885,6 +6140,8 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
             components = _selection_component_keys(row)
             if selected and components & used_components:
                 continue
+            if not _family_unused_for_single_selection(row, used_families):
+                continue
             variant_label = str(row.get("variant_label", "")).strip()
             if selected and variant_label and variant_label in used_variants:
                 continue
@@ -5912,6 +6169,7 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
             break
         selected.append(best_row)
         used_components.update(_selection_component_keys(best_row))
+        _register_family_direction(best_row, used_families)
         variant_label = str(best_row.get("variant_label", "")).strip()
         if variant_label:
             used_variants.add(variant_label)
@@ -5960,6 +6218,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "name",
                 "description",
                 "archetype",
+                "strategy_family",
+                "direction_mode",
+                "direction_role",
                 "realized_pnl",
                 "closed_trades",
                 "win_rate_pct",
@@ -6028,6 +6289,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     row.name,
                     row.description,
                     row.archetype,
+                    row.strategy_family,
+                    row.direction_mode,
+                    row.direction_role,
                     f"{row.realized_pnl:.5f}",
                     row.closed_trades,
                     f"{row.win_rate_pct:.5f}",
@@ -6780,3 +7044,4 @@ def run_symbol_research(
     else:
         lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 50% / 20% / 20%")
     return lines
+

@@ -10,6 +10,8 @@ class DeploymentStrategy:
     direction_mode: str = ""
     direction_role: str = ""
     promotion_tier: str = "core"
+    specialist_live_approved: bool = False
+    specialist_live_rejection_reason: str = ""
     policy_summary: str = ""
     variant_label: str = ""
     regime_filter_label: str = ""

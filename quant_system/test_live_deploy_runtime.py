@@ -94,6 +94,7 @@ class LiveDeployRuntimeTests(unittest.TestCase):
                     "direction_mode": "both",
                     "direction_role": "combined",
                     "promotion_tier": "specialist",
+                    "specialist_live_approved": True,
                     "variant_label": "4h_us",
                 }
             ],
@@ -105,6 +106,38 @@ class LiveDeployRuntimeTests(unittest.TestCase):
             deployment = load_symbol_deployment(path)
 
         self.assertEqual(deployment.symbol_status, "reduced_risk_only")
+
+    def test_load_symbol_deployment_infers_research_only_for_unapproved_specialist_only_set(self) -> None:
+        payload = {
+            "profile_name": "symbol::uk100",
+            "symbol": "UK100",
+            "data_symbol": "UK100",
+            "broker_symbol": "UK100",
+            "research_run_id": 1,
+            "execution_set_id": 2,
+            "execution_validation_summary": "accepted_with_reduced_risk",
+            "symbol_status": "",
+            "strategies": [
+                {
+                    "candidate_name": "momentum__30m_power__exit_trend__near_miss_protective__trend_up",
+                    "code_path": "quant_system.agents.trend.MomentumConfirmationAgent",
+                    "strategy_family": "momentum",
+                    "direction_mode": "both",
+                    "direction_role": "combined",
+                    "promotion_tier": "specialist",
+                    "specialist_live_approved": False,
+                    "specialist_live_rejection_reason": "specialist_walk_forward_confirmation_missing",
+                    "variant_label": "30m_power",
+                }
+            ],
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "live.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            deployment = load_symbol_deployment(path)
+
+        self.assertEqual(deployment.symbol_status, "research_only")
 
     def test_mt5_timeframe_from_variant_maps_4h_variant_to_h4(self) -> None:
         timeframe = _mt5_timeframe_from_variant("4h_overlap", "M5")

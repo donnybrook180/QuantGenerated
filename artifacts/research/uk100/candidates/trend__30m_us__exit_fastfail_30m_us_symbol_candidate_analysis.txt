@@ -1,21 +1,21 @@
 Artifact: trend__30m_us__exit_fastfail_30m_us_symbol_candidate
-Closed trades: 70
-Realized pnl: -110.71
+Closed trades: 69
+Realized pnl: -73.92
 
 By entry hour
-14: trades=18 pnl=-37.69 avg=-2.09 win_rate=27.78%
-15: trades=20 pnl=-34.93 avg=-1.75 win_rate=30.00%
-17: trades=13 pnl=-20.80 avg=-1.60 win_rate=23.08%
-16: trades=10 pnl=-13.24 avg=-1.32 win_rate=50.00%
-19: trades=3 pnl=-4.74 avg=-1.58 win_rate=33.33%
-18: trades=6 pnl=0.67 avg=0.11 win_rate=16.67%
+14: trades=18 pnl=-33.05 avg=-1.84 win_rate=27.78%
+15: trades=20 pnl=-29.11 avg=-1.46 win_rate=30.00%
+16: trades=10 pnl=-8.13 avg=-0.81 win_rate=50.00%
+19: trades=3 pnl=-3.70 avg=-1.23 win_rate=33.33%
+17: trades=12 pnl=-2.09 avg=-0.17 win_rate=33.33%
+18: trades=6 pnl=2.15 avg=0.36 win_rate=33.33%
 
 By entry setup
-trend: trades=70 pnl=-110.71 avg=-1.58 win_rate=30.00%
+trend: trades=69 pnl=-73.92 avg=-1.07 win_rate=33.33%
 
 By exit reason
-stop_loss: trades=26 pnl=-110.80 avg=-4.26 win_rate=0.00%
-structure_exit: trades=14 pnl=-62.35 avg=-4.45 win_rate=0.00%
-trailing_stop: trades=8 pnl=-6.36 avg=-0.80 win_rate=25.00%
-stale_breakout: trades=3 pnl=-6.30 avg=-2.10 win_rate=0.00%
-take_profit: trades=19 pnl=75.11 avg=3.95 win_rate=100.00%
+stop_loss: trades=26 pnl=-104.91 avg=-4.04 win_rate=0.00%
+structure_exit: trades=14 pnl=-49.03 avg=-3.50 win_rate=0.00%
+trailing_stop: trades=7 pnl=-4.27 avg=-0.61 win_rate=28.57%
+stale_breakout: trades=1 pnl=-2.65 avg=-2.65 win_rate=0.00%
+take_profit: trades=21 pnl=86.94 avg=4.14 win_rate=100.00%

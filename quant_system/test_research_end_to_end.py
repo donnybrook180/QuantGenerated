@@ -292,6 +292,60 @@ class ResearchEndToEndTests(unittest.TestCase):
         self.assertEqual(deployment.symbol_status, "research_only")
         self.assertEqual(len(deployment.strategies), 0)
 
+    def test_research_end_to_end_filters_weak_specialist_out_of_live_deployment(self) -> None:
+        specs = [
+            CandidateSpec(
+                name="btc_specialist_candidate",
+                description="btc specialist",
+                agents=[],
+                code_path="quant_system.agents.crypto.CryptoTrendPullbackAgent",
+                allowed_variants=("15m_us",),
+            ),
+        ]
+        specialist_result = make_candidate_result(
+            name="btc_specialist_candidate__15m_us",
+            code_path="quant_system.agents.crypto.CryptoTrendPullbackAgent",
+            realized_pnl=25.0,
+            profit_factor=1.4,
+            closed_trades=5,
+            validation_pnl=0.0,
+            validation_closed_trades=0,
+            test_pnl=0.0,
+            test_closed_trades=0,
+            walk_forward_windows=1,
+            walk_forward_pass_rate_pct=0.0,
+            walk_forward_avg_validation_pnl=5.0,
+            walk_forward_avg_test_pnl=0.0,
+            best_regime="trend_up_vol_high",
+            best_regime_pnl=25.0,
+            regime_stability_score=1.0,
+            regime_loss_ratio=0.0,
+            best_trade_share_pct=80.0,
+            equity_quality_score=0.5,
+            mc_pnl_p05=3.0,
+            strategy_family="crypto_trend_pullback",
+            direction_mode="long_only",
+            direction_role="long_leg",
+        )
+        specialist_result.sparse_strategy = True
+
+        lines, _reports_dir, deploy_dir = self._execute_fake_research(
+            symbol="BTC",
+            feature_variants={"15m_us": [make_feature(index=0, symbol="BTC")]},
+            specs=specs,
+            results_by_name={specialist_result.name: specialist_result},
+            evaluator=lambda candidate_set: (
+                make_execution_result(realized_pnl=25.0, profit_factor=1.2, trades=5, closed_trade_pnls=[10.0, -5.0, 8.0, 6.0, 6.0]),
+                "test",
+                "btc_specialist_candidate__15m_us@15m_us",
+            ),
+        )
+
+        self.assertIn("Symbol status: research_only", lines)
+        deployment = load_symbol_deployment(deploy_dir / "btc" / "live.json")
+        self.assertEqual(deployment.symbol_status, "research_only")
+        self.assertEqual(len(deployment.strategies), 0)
+
     def _execute_fake_research(
         self,
         *,

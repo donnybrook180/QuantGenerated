@@ -28,6 +28,8 @@ def build_symbol_deployment(
             direction_mode=str(row.get("direction_mode", "") or ""),
             direction_role=str(row.get("direction_role", "") or ""),
             promotion_tier=str(row.get("promotion_tier", "core") or "core"),
+            specialist_live_approved=bool(row.get("specialist_live_approved", False)),
+            specialist_live_rejection_reason=str(row.get("specialist_live_rejection_reason", "") or ""),
             policy_summary=str(row.get("policy_summary", "") or ""),
             variant_label=str(row.get("variant_label", "") or ""),
             regime_filter_label=str(row.get("regime_filter_label", "") or ""),
@@ -72,9 +74,14 @@ def load_symbol_deployment(path: Path) -> SymbolDeployment:
     stored_status = str(payload.get("symbol_status", "") or "")
     inferred_status = "research_only"
     if strategies:
-        if "accepted_with_reduced_risk" in execution_validation or {strategy.promotion_tier for strategy in strategies} <= {"specialist"}:
+        specialist_only = {strategy.promotion_tier for strategy in strategies} <= {"specialist"}
+        approved_specialists = [strategy for strategy in strategies if strategy.promotion_tier == "specialist" and strategy.specialist_live_approved]
+        if "accepted_with_reduced_risk" in execution_validation:
+            if any(strategy.promotion_tier == "core" for strategy in strategies) or approved_specialists:
+                inferred_status = "reduced_risk_only"
+        elif specialist_only and approved_specialists:
             inferred_status = "reduced_risk_only"
-        else:
+        elif any(strategy.promotion_tier == "core" for strategy in strategies):
             inferred_status = "live_ready"
     if not stored_status or (stored_status == "research_only" and strategies):
         payload["symbol_status"] = inferred_status

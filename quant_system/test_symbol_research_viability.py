@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from quant_system.symbol_research import _meets_viability, _promotion_tier_for_row
+from quant_system.symbol_research import _meets_viability, _promotion_tier_for_row, _specialist_live_gate
 from quant_system.test_fixtures import make_candidate_row
 
 
@@ -72,6 +72,51 @@ class SymbolResearchViabilityTests(unittest.TestCase):
     def test_promotion_tier_returns_reject_for_non_viable_candidate(self) -> None:
         row = make_candidate_row(realized_pnl=-1.0)
         self.assertEqual(_promotion_tier_for_row(row, "EURUSD"), "reject")
+
+    def test_specialist_live_gate_accepts_strong_specialist(self) -> None:
+        row = make_candidate_row(
+            symbol="US500",
+            promotion_tier="specialist",
+            regime_specialist_viable=True,
+            realized_pnl=90.0,
+            profit_factor=2.1,
+            closed_trades=12,
+            validation_pnl=1.0,
+            validation_closed_trades=2,
+            test_pnl=5.0,
+            test_closed_trades=2,
+            dominant_regime_share_pct=80.0,
+            equity_quality_score=0.62,
+            walk_forward_pass_rate_pct=0.0,
+            walk_forward_soft_pass_rate_pct=50.0,
+            best_regime="trend_up_vol_high",
+        )
+        approved, reasons = _specialist_live_gate(row, "US500")
+        self.assertTrue(approved)
+        self.assertEqual(reasons, [])
+
+    def test_specialist_live_gate_rejects_weak_specialist(self) -> None:
+        row = make_candidate_row(
+            symbol="UK100",
+            promotion_tier="specialist",
+            regime_specialist_viable=True,
+            realized_pnl=40.0,
+            profit_factor=1.3,
+            closed_trades=4,
+            validation_pnl=-6.0,
+            validation_closed_trades=1,
+            test_pnl=0.0,
+            test_closed_trades=1,
+            dominant_regime_share_pct=35.0,
+            equity_quality_score=0.41,
+            walk_forward_pass_rate_pct=0.0,
+            walk_forward_soft_pass_rate_pct=0.0,
+            best_regime="trend_up_vol_high",
+        )
+        approved, reasons = _specialist_live_gate(row, "UK100")
+        self.assertFalse(approved)
+        self.assertTrue(any("profit_factor" in reason for reason in reasons))
+        self.assertTrue(any("walk_forward" in reason for reason in reasons))
 
 
 if __name__ == "__main__":

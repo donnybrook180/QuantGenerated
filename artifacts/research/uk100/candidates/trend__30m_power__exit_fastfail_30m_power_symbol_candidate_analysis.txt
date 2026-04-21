@@ -1,16 +1,15 @@
 Artifact: trend__30m_power__exit_fastfail_30m_power_symbol_candidate
 Closed trades: 27
-Realized pnl: -9.44
+Realized pnl: -13.76
 
 By entry hour
-18: trades=27 pnl=-9.44 avg=-0.35 win_rate=33.33%
+18: trades=27 pnl=-13.76 avg=-0.51 win_rate=37.04%
 
 By entry setup
-trend: trades=27 pnl=-9.44 avg=-0.35 win_rate=33.33%
+trend: trades=27 pnl=-13.76 avg=-0.51 win_rate=37.04%
 
 By exit reason
-structure_exit: trades=10 pnl=-31.26 avg=-3.13 win_rate=0.00%
-stop_loss: trades=6 pnl=-26.29 avg=-4.38 win_rate=0.00%
-stale_breakout: trades=1 pnl=-1.03 avg=-1.03 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.67 avg=-0.67 win_rate=0.00%
-take_profit: trades=9 pnl=49.81 avg=5.53 win_rate=100.00%
+structure_exit: trades=12 pnl=-50.79 avg=-4.23 win_rate=0.00%
+stop_loss: trades=4 pnl=-18.05 avg=-4.51 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.33 avg=-0.33 win_rate=0.00%
+take_profit: trades=10 pnl=55.40 avg=5.54 win_rate=100.00%

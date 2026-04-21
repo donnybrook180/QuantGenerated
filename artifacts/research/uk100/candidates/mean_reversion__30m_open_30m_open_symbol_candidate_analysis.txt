@@ -1,15 +1,15 @@
 Artifact: mean_reversion__30m_open_30m_open_symbol_candidate
 Closed trades: 8
-Realized pnl: 26.12
+Realized pnl: 30.94
 
 By entry hour
-14: trades=8 pnl=26.12 avg=3.27 win_rate=50.00%
+14: trades=8 pnl=30.94 avg=3.87 win_rate=50.00%
 
 By entry setup
-mean_reversion: trades=8 pnl=26.12 avg=3.27 win_rate=50.00%
+mean_reversion: trades=8 pnl=30.94 avg=3.87 win_rate=50.00%
 
 By exit reason
-stop_loss: trades=2 pnl=-25.65 avg=-12.82 win_rate=0.00%
-structure_exit: trades=2 pnl=-3.23 avg=-1.61 win_rate=0.00%
-trailing_stop: trades=1 pnl=0.12 avg=0.12 win_rate=100.00%
-take_profit: trades=3 pnl=54.88 avg=18.29 win_rate=100.00%
+stop_loss: trades=1 pnl=-21.20 avg=-21.20 win_rate=0.00%
+structure_exit: trades=3 pnl=-4.24 avg=-1.41 win_rate=0.00%
+trailing_stop: trades=1 pnl=0.47 avg=0.47 win_rate=100.00%
+take_profit: trades=3 pnl=55.92 avg=18.64 win_rate=100.00%

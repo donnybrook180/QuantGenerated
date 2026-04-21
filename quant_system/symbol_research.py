@@ -612,6 +612,56 @@ def _meets_regime_specialist_viability(row: CandidateResult | dict[str, object],
     )
 
 
+def _specialist_live_gate(row: CandidateResult | dict[str, object], symbol: str) -> tuple[bool, list[str]]:
+    specialist_viable = (
+        bool(row.get("regime_specialist_viable", False))
+        if isinstance(row, dict)
+        else _meets_regime_specialist_viability(row, symbol)
+    )
+    if not specialist_viable:
+        return False, ["not_regime_specialist_viable"]
+    closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0) or 0)
+    profit_factor = float(row.profit_factor if isinstance(row, CandidateResult) else row.get("profit_factor", 0.0) or 0.0)
+    validation_pnl = float(row.validation_pnl if isinstance(row, CandidateResult) else row.get("validation_pnl", 0.0) or 0.0)
+    test_pnl = float(row.test_pnl if isinstance(row, CandidateResult) else row.get("test_pnl", 0.0) or 0.0)
+    validation_closed_trades = int(
+        row.validation_closed_trades if isinstance(row, CandidateResult) else row.get("validation_closed_trades", 0) or 0
+    )
+    test_closed_trades = int(row.test_closed_trades if isinstance(row, CandidateResult) else row.get("test_closed_trades", 0) or 0)
+    dominant_regime_share_pct = float(
+        row.dominant_regime_share_pct if isinstance(row, CandidateResult) else row.get("dominant_regime_share_pct", 0.0) or 0.0
+    )
+    equity_quality_score = float(
+        row.equity_quality_score if isinstance(row, CandidateResult) else row.get("equity_quality_score", 0.0) or 0.0
+    )
+    walk_forward_pass_rate_pct = float(
+        row.walk_forward_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_pass_rate_pct", 0.0) or 0.0
+    )
+    walk_forward_soft_pass_rate_pct = float(
+        row.walk_forward_soft_pass_rate_pct if isinstance(row, CandidateResult) else row.get("walk_forward_soft_pass_rate_pct", 0.0) or 0.0
+    )
+    best_regime = str(row.best_regime if isinstance(row, CandidateResult) else row.get("best_regime", "") or "").strip()
+    reasons: list[str] = []
+    if closed_trades < 8:
+        reasons.append(f"specialist_closed_trades_too_low({closed_trades}<8)")
+    if profit_factor < 1.75:
+        reasons.append(f"specialist_profit_factor_too_low({profit_factor:.2f}<1.75)")
+    if dominant_regime_share_pct < 55.0:
+        reasons.append(f"specialist_regime_niche_too_broad({dominant_regime_share_pct:.1f}<55.0)")
+    if equity_quality_score < 0.55:
+        reasons.append(f"specialist_equity_quality_too_low({equity_quality_score:.2f}<0.55)")
+    effective_pass_rate = max(walk_forward_pass_rate_pct, walk_forward_soft_pass_rate_pct)
+    if effective_pass_rate <= 0.0:
+        reasons.append("specialist_walk_forward_confirmation_missing")
+    if validation_closed_trades + test_closed_trades < 3:
+        reasons.append(f"specialist_out_of_sample_trades_too_low({validation_closed_trades + test_closed_trades}<3)")
+    if validation_pnl < 0.0 and test_pnl <= 0.0:
+        reasons.append(f"specialist_negative_out_of_sample(validation={validation_pnl:.2f},test={test_pnl:.2f})")
+    if not best_regime:
+        reasons.append("specialist_best_regime_missing")
+    return not reasons, reasons
+
+
 def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> bool:
     thresholds = _research_thresholds(symbol)
     realized_pnl = float(row.realized_pnl if isinstance(row, CandidateResult) else row.get("realized_pnl", 0.0))
@@ -1679,10 +1729,36 @@ def _derive_symbol_status(
         return "research_only"
     tiers = {str(row.get("promotion_tier", "") or "") for row in selected_execution_candidates}
     if "accepted_with_reduced_risk" in execution_validation_summary:
-        return "reduced_risk_only"
+        if any(str(row.get("promotion_tier", "") or "") == "core" for row in selected_execution_candidates):
+            return "reduced_risk_only"
+        approved_specialists = [
+            row for row in selected_execution_candidates if str(row.get("promotion_tier", "") or "") == "specialist" and bool(row.get("specialist_live_approved"))
+        ]
+        return "reduced_risk_only" if approved_specialists else "research_only"
     if tiers and tiers <= {"specialist"}:
-        return "reduced_risk_only"
+        approved_specialists = [
+            row for row in selected_execution_candidates if bool(row.get("specialist_live_approved"))
+        ]
+        return "reduced_risk_only" if approved_specialists else "research_only"
     return "live_ready"
+
+
+def _filter_live_approved_execution_candidates(
+    selected_execution_candidates: list[dict[str, object]],
+) -> tuple[list[dict[str, object]], list[str]]:
+    approved: list[dict[str, object]] = []
+    rejected: list[str] = []
+    for row in selected_execution_candidates:
+        if str(row.get("promotion_tier", "") or "") != "specialist":
+            approved.append(row)
+            continue
+        if bool(row.get("specialist_live_approved")):
+            approved.append(row)
+            continue
+        rejected.append(
+            f"{row.get('candidate_name', 'unknown')} specialist_live_rejected::{row.get('specialist_live_rejection_reason', 'unknown')}"
+        )
+    return approved, rejected
 
 
 def _aggregate_execution_results(initial_cash: float, results: list[ExecutionResult]) -> ExecutionResult:
@@ -5479,6 +5555,7 @@ def _near_miss_optimizer_specs(symbol: str, specs: list[CandidateSpec], results:
 
 
 def _execution_candidate_row(symbol: str, row: CandidateResult | dict[str, object]) -> dict[str, object]:
+    specialist_live_approved, specialist_live_rejection_reasons = _specialist_live_gate(row, symbol)
     return {
         "candidate_name": str(_candidate_row_value(row, "name", _candidate_row_value(row, "candidate_name", "")) or ""),
         "symbol": symbol,
@@ -5541,6 +5618,8 @@ def _execution_candidate_row(symbol: str, row: CandidateResult | dict[str, objec
         "regime_trade_count_by_label": _candidate_row_value(row, "regime_trade_count_by_label", "{}"),
         "regime_pf_by_label": _candidate_row_value(row, "regime_pf_by_label", "{}"),
         "regime_specialist_viable": _meets_regime_specialist_viability(row, symbol),
+        "specialist_live_approved": specialist_live_approved,
+        "specialist_live_rejection_reason": "; ".join(specialist_live_rejection_reasons),
     }
 
 
@@ -7030,6 +7109,13 @@ def run_symbol_research(
                 f"selection=tiered_fallback core={core_count} specialist={specialist_count} "
                 f"-> accepted_with_reduced_risk"
             )
+    specialist_live_rejections: list[str] = []
+    if selected_execution_candidates:
+        selected_execution_candidates, specialist_live_rejections = _filter_live_approved_execution_candidates(
+            selected_execution_candidates
+        )
+        if specialist_live_rejections:
+            execution_validation_summary += " specialist_live_gate=" + "; ".join(specialist_live_rejections)
     recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
     symbol_status = _derive_symbol_status(selected_execution_candidates, execution_validation_summary)
     tier_counts = {"core": 0, "specialist": 0, "reject": 0}
@@ -7164,6 +7250,15 @@ def run_symbol_research(
         lines.append(
             "Execution regime overlap rejections: "
             + ("; ".join(specialist_overlap_rejections) if specialist_overlap_rejections else "none")
+        )
+        lines.append(
+            "Execution specialist live rejections: "
+            + ("; ".join(specialist_live_rejections) if specialist_live_rejections else "none")
+        )
+    elif specialist_live_rejections:
+        lines.append(
+            "Execution specialist live rejections: "
+            + "; ".join(specialist_live_rejections)
         )
     lines.append(f"Execution set id: {execution_set_id if execution_set_id is not None else 'none'}")
     lines.append(f"Execution validation: {execution_validation_summary}")

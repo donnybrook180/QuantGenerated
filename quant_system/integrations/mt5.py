@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 import logging
 import re
+import time
 from typing import ClassVar
 
 import MetaTrader5 as mt5
@@ -319,43 +320,51 @@ class MT5Client:
         order_ticket = int(getattr(result, "order", 0) or 0)
         if deal_ticket <= 0 and order_ticket <= 0:
             return MT5DealCost(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        attempts = 12
+        sleep_seconds = 0.25
+        for _ in range(attempts):
+            now = datetime.now(UTC)
+            start = now - timedelta(minutes=15)
+            deals = mt5.history_deals_get(start, now)
+            if deals is None:
+                LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
+                return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-        now = datetime.now(UTC)
-        start = now - timedelta(minutes=15)
-        deals = mt5.history_deals_get(start, now)
-        if deals is None:
-            LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
-            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
-
-        matched = None
-        for deal in deals:
-            current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
-            current_order_ticket = int(getattr(deal, "order", 0) or 0)
-            current_symbol = str(getattr(deal, "symbol", "") or "")
-            if current_symbol != symbol:
-                continue
-            if deal_ticket > 0 and current_deal_ticket == deal_ticket:
-                matched = deal
-                break
-            if order_ticket > 0 and current_order_ticket == order_ticket:
-                matched = deal
-        if matched is None:
-            return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
-
-        fill_price = float(getattr(matched, "price", 0.0) or 0.0)
-        commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
-        swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
-        fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
-        return MT5DealCost(
-            deal_ticket=int(getattr(matched, "ticket", 0) or 0),
-            order_ticket=int(getattr(matched, "order", 0) or 0),
-            position_id=int(getattr(matched, "position_id", 0) or 0),
-            fill_price=fill_price,
-            commission=commission,
-            swap=swap,
-            fee=fee,
-            total_cost=commission + swap + fee,
+            matched = None
+            for deal in deals:
+                current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
+                current_order_ticket = int(getattr(deal, "order", 0) or 0)
+                current_symbol = str(getattr(deal, "symbol", "") or "")
+                if current_symbol != symbol:
+                    continue
+                if deal_ticket > 0 and current_deal_ticket == deal_ticket:
+                    matched = deal
+                    break
+                if order_ticket > 0 and current_order_ticket == order_ticket:
+                    matched = deal
+            if matched is not None:
+                fill_price = float(getattr(matched, "price", 0.0) or 0.0)
+                commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
+                swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
+                fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
+                return MT5DealCost(
+                    deal_ticket=int(getattr(matched, "ticket", 0) or 0),
+                    order_ticket=int(getattr(matched, "order", 0) or 0),
+                    position_id=int(getattr(matched, "position_id", 0) or 0),
+                    fill_price=fill_price,
+                    commission=commission,
+                    swap=swap,
+                    fee=fee,
+                    total_cost=commission + swap + fee,
+                )
+            time.sleep(sleep_seconds)
+        LOGGER.warning(
+            "mt5 deal lookup timed out for symbol=%s order_ticket=%s deal_ticket=%s",
+            symbol,
+            order_ticket,
+            deal_ticket,
         )
+        return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
     def send_market_order(
         self,

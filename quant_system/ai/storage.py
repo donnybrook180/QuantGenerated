@@ -12,6 +12,7 @@ import duckdb
 from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, ExperimentSnapshot
 from quant_system.config import PostgresConfig
 from quant_system.db.postgres import connect_postgres
+from quant_system.symbols import resolve_symbol_request
 
 
 class ExperimentStore:
@@ -72,6 +73,7 @@ class ExperimentStore:
                 )
                 """
             )
+
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS experiment_artifacts (
@@ -389,6 +391,27 @@ class ExperimentStore:
 
     def _pg_connect(self, *, autocommit: bool = False):
         return connect_postgres(self.postgres_config, autocommit=autocommit)
+
+    def _mt5_fill_symbol_variants(self, broker_symbol: str) -> list[str]:
+        raw = str(broker_symbol or "").strip()
+        if not raw:
+            return []
+        variants: list[str] = []
+        resolved = resolve_symbol_request(raw)
+        for candidate in (raw, resolved.broker_symbol, resolved.profile_symbol):
+            normalized = str(candidate or "").strip()
+            if normalized and normalized not in variants:
+                variants.append(normalized)
+        upper = raw.upper()
+        if upper.endswith(".CASH"):
+            base = raw[:-5]
+            if base and base not in variants:
+                variants.append(base)
+        else:
+            cash = f"{raw}.cash"
+            if cash not in variants:
+                variants.append(cash)
+        return variants
 
     @staticmethod
     def _pg_fetchone(cursor):
@@ -1495,6 +1518,9 @@ class ExperimentStore:
         return fill_id
 
     def load_mt5_fill_calibration(self, broker_symbol: str, lookback_rows: int = 250) -> dict[str, float] | None:
+        symbol_variants = self._mt5_fill_symbol_variants(broker_symbol)
+        if not symbol_variants:
+            return None
         if self._use_postgres_mt5_fill_events:
             with self._pg_connect() as connection:
                 with connection.cursor() as cursor:
@@ -1502,24 +1528,25 @@ class ExperimentStore:
                         """
                         SELECT spread_points, slippage_bps
                         FROM mt5_fill_events
-                        WHERE broker_symbol = %s AND fill_price > 0
+                        WHERE broker_symbol = ANY(%s) AND fill_price > 0
                         ORDER BY event_timestamp DESC, id DESC
                         LIMIT %s
                         """,
-                        [broker_symbol, lookback_rows],
+                        [symbol_variants, lookback_rows],
                     )
                     rows = cursor.fetchall()
         else:
+            placeholders = ", ".join("?" for _ in symbol_variants)
             with self._connect() as connection:
                 rows = connection.execute(
-                    """
+                    f"""
                     SELECT spread_points, slippage_bps
                     FROM mt5_fill_events
-                    WHERE broker_symbol = ? AND fill_price > 0
+                    WHERE broker_symbol IN ({placeholders}) AND fill_price > 0
                     ORDER BY event_timestamp DESC, id DESC
                     LIMIT ?
                     """,
-                    [broker_symbol, lookback_rows],
+                    [*symbol_variants, lookback_rows],
                 ).fetchall()
         if len(rows) < 5:
             return None
@@ -1563,6 +1590,9 @@ class ExperimentStore:
         return [str(row[0]) for row in rows]
 
     def load_mt5_fill_summary(self, broker_symbol: str) -> dict[str, object] | None:
+        symbol_variants = self._mt5_fill_symbol_variants(broker_symbol)
+        if not symbol_variants:
+            return None
         if self._use_postgres_mt5_fill_events:
             with self._pg_connect() as connection:
                 with connection.cursor() as cursor:
@@ -1575,15 +1605,16 @@ class ExperimentStore:
                             AVG(spread_points) AS avg_spread_points,
                             AVG(slippage_bps) AS avg_slippage_bps
                         FROM mt5_fill_events
-                        WHERE broker_symbol = %s
+                        WHERE broker_symbol = ANY(%s)
                         """,
-                        [broker_symbol],
+                        [symbol_variants],
                     )
                     row = cursor.fetchone()
         else:
+            placeholders = ", ".join("?" for _ in symbol_variants)
             with self._connect() as connection:
                 row = connection.execute(
-                    """
+                    f"""
                     SELECT
                         COUNT(*) AS fill_count,
                         MIN(event_timestamp) AS first_fill_at,
@@ -1591,10 +1622,9 @@ class ExperimentStore:
                         AVG(spread_points) AS avg_spread_points,
                         AVG(slippage_bps) AS avg_slippage_bps
                     FROM mt5_fill_events
-                    WHERE broker_symbol = ?
-                    """
-                    ,
-                    [broker_symbol],
+                    WHERE broker_symbol IN ({placeholders})
+                    """,
+                    symbol_variants,
                 ).fetchone()
         if row is None or int(row[0] or 0) <= 0:
             return None
@@ -1636,16 +1666,21 @@ class ExperimentStore:
             with self._pg_connect() as connection:
                 with connection.cursor() as cursor:
                     if broker_symbol:
-                        cursor.execute(query + " WHERE broker_symbol = %s ORDER BY event_timestamp ASC, id ASC", [broker_symbol])
+                        cursor.execute(
+                            query + " WHERE broker_symbol = ANY(%s) ORDER BY event_timestamp ASC, id ASC",
+                            [self._mt5_fill_symbol_variants(broker_symbol)],
+                        )
                     else:
                         cursor.execute(query + " ORDER BY event_timestamp ASC, id ASC")
                     rows = cursor.fetchall()
         else:
             with self._connect() as connection:
                 if broker_symbol:
+                    symbol_variants = self._mt5_fill_symbol_variants(broker_symbol)
+                    placeholders = ", ".join("?" for _ in symbol_variants)
                     rows = connection.execute(
-                        query + " WHERE broker_symbol = ? ORDER BY event_timestamp ASC, id ASC",
-                        [broker_symbol],
+                        query + f" WHERE broker_symbol IN ({placeholders}) ORDER BY event_timestamp ASC, id ASC",
+                        symbol_variants,
                     ).fetchall()
                 else:
                     rows = connection.execute(query + " ORDER BY event_timestamp ASC, id ASC").fetchall()

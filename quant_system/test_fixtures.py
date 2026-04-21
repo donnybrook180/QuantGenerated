@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 
 from quant_system.execution.engine import ExecutionResult
-from quant_system.models import ClosedTradeRecord, FeatureVector
+from quant_system.models import ClosedTradeRecord, FeatureVector, MarketBar
 from quant_system.symbol_research import CandidateResult
 
 
@@ -26,6 +26,31 @@ def make_feature_series(count: int, *, symbol: str = "EURUSD", start_close: floa
         make_feature(index=index, symbol=symbol, close=start_close + float(index))
         for index in range(count)
     ]
+
+
+def make_market_bar_series(
+    count: int,
+    *,
+    symbol: str = "EURUSD",
+    start_close: float = 100.0,
+    minutes: int = 60,
+) -> list[MarketBar]:
+    start = datetime(2026, 1, 1, tzinfo=UTC)
+    bars: list[MarketBar] = []
+    for index in range(count):
+        close = start_close + float(index)
+        bars.append(
+            MarketBar(
+                timestamp=start + timedelta(minutes=index * minutes),
+                symbol=symbol,
+                open=close - 0.5,
+                high=close + 1.0,
+                low=close - 1.0,
+                close=close,
+                volume=100.0 + float(index),
+            )
+        )
+    return bars
 
 
 def make_closed_trade(

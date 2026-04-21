@@ -7,12 +7,21 @@ import unittest
 TEST_MODULES = [
     "quant_system.test_evaluation_report",
     "quant_system.test_optimization_walk_forward",
+    "quant_system.test_market_data_duckdb",
+    "quant_system.test_ai_storage_fills",
+    "quant_system.test_symbol_resolution",
+    "quant_system.test_mt5_integration",
+    "quant_system.test_live_deploy_runtime",
     "quant_system.test_interpreter_engines",
     "quant_system.test_interpreter_app",
     "quant_system.test_interpreter_reporting",
     "quant_system.test_symbol_research_selection",
     "quant_system.test_symbol_research_viability",
     "quant_system.test_symbol_research_exports",
+    "quant_system.test_research_end_to_end",
+    "quant_system.test_research_artifacts",
+    "quant_system.test_symbol_threshold_profiles",
+    "quant_system.test_research_failure_modes",
 ]
 
 

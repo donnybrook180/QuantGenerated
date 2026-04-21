@@ -63,6 +63,8 @@ def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) 
         return []
 
     plot_dir = research_plots_dir(symbol)
+    best_equity_path = plot_dir / "best_candidate_equity.png"
+    execution_equity_path = plot_dir / "execution_set_equity.png"
     slug = _safe_name(symbol)
     ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
     top = ranked[:8]
@@ -123,7 +125,6 @@ def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) 
         equity_row = best_row if best_row is not None else top[0]
         trade_pnls = _load_trade_pnls(equity_row.trade_log_path)
         if trade_pnls:
-            equity_path = plot_dir / "best_candidate_equity.png"
             fig, ax = plt.subplots(figsize=(12, 5))
             ax.plot(_equity_curve(trade_pnls), color="#1f4e79", linewidth=2)
             ax.set_title(f"{symbol} Equity Curve: {equity_row.name}")
@@ -131,9 +132,11 @@ def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) 
             ax.set_ylabel("Cumulative PnL")
             ax.axhline(0.0, color="gray", linewidth=1)
             fig.tight_layout()
-            fig.savefig(equity_path, dpi=150)
+            fig.savefig(best_equity_path, dpi=150)
             plt.close(fig)
-            paths.append(equity_path)
+            paths.append(best_equity_path)
+        elif best_equity_path.exists():
+            best_equity_path.unlink()
 
         if execution_rows:
             execution_records: list[dict[str, object]] = []
@@ -142,7 +145,6 @@ def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) 
                 execution_records.extend(_load_trade_records(str(trade_log_path or "")))
             execution_records.sort(key=lambda item: item["exit_timestamp"])
             if execution_records:
-                execution_equity_path = plot_dir / "execution_set_equity.png"
                 fig, ax = plt.subplots(figsize=(12, 5))
                 ax.plot(_equity_curve([float(item["pnl"]) for item in execution_records]), color="#8c2d04", linewidth=2)
                 ax.set_title(f"{symbol} Equity Curve: Execution Set")
@@ -153,5 +155,9 @@ def plot_symbol_research(symbol: str, rows, best_row=None, execution_rows=None) 
                 fig.savefig(execution_equity_path, dpi=150)
                 plt.close(fig)
                 paths.append(execution_equity_path)
+            elif execution_equity_path.exists():
+                execution_equity_path.unlink()
+        elif execution_equity_path.exists():
+            execution_equity_path.unlink()
 
     return paths

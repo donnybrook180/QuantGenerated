@@ -70,6 +70,8 @@ def _mt5_timeframe_from_variant(variant_label: str, default_timeframe: str) -> s
         return "M15"
     if variant_label.startswith("30m"):
         return "M30"
+    if variant_label.startswith("4h"):
+        return "H4"
     return default_timeframe
 
 

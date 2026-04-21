@@ -43,6 +43,7 @@ class StrategyImpactRow:
     candidate_name: str
     research_expectancy: float
     research_closed_trades: int
+    raw_live_fill_count: int
     live_fill_count: int
     execution_drag_bps: float
     cost_bps: float
@@ -90,6 +91,7 @@ def build_tca_impact_rows(config: SystemConfig | None = None) -> list[StrategyIm
             if candidate_row is None:
                 continue
             strategy_tca = _find_strategy_row(tca_report.by_strategy, strategy.candidate_name)
+            fill_summary = store.load_mt5_fill_summary(deployment.broker_symbol)
             research_edge_bps = _estimate_edge_bps(candidate_row)
             execution_drag_bps = strategy_tca.weighted_shortfall_bps if strategy_tca is not None else 0.0
             cost_bps = strategy_tca.weighted_cost_bps if strategy_tca is not None else 0.0
@@ -97,6 +99,7 @@ def build_tca_impact_rows(config: SystemConfig | None = None) -> list[StrategyIm
             drag_share_pct = (total_drag_bps / research_edge_bps * 100.0) if research_edge_bps > 0.0 else 0.0
             edge_retention_pct = max(0.0, 100.0 - drag_share_pct) if research_edge_bps > 0.0 else 0.0
             live_fill_count = strategy_tca.fill_count if strategy_tca is not None else 0
+            raw_live_fill_count = int(fill_summary.get("fill_count", 0) or 0) if fill_summary is not None else 0
             rows.append(
                 StrategyImpactRow(
                     symbol=deployment.symbol,
@@ -104,6 +107,7 @@ def build_tca_impact_rows(config: SystemConfig | None = None) -> list[StrategyIm
                     candidate_name=strategy.candidate_name,
                     research_expectancy=float(candidate_row.get("expectancy") or 0.0),
                     research_closed_trades=int(candidate_row.get("closed_trades") or 0),
+                    raw_live_fill_count=raw_live_fill_count,
                     live_fill_count=live_fill_count,
                     execution_drag_bps=execution_drag_bps,
                     cost_bps=cost_bps,
@@ -135,14 +139,14 @@ def generate_tca_impact_report(config: SystemConfig | None = None) -> Path:
         _write_tca_impact_json(report_path, rows)
         return report_path
     header = (
-        f"{'symbol':<8} {'strategy':<24} {'livefills':>9} {'edge_ret%':>9} "
+        f"{'symbol':<8} {'strategy':<24} {'rawfills':>8} {'tcafills':>8} {'edge_ret%':>9} "
         f"{'drag%':>8} {'short_bps':>10} {'cost_bps':>9} {'label':<22}"
     )
     lines.append(header)
     lines.append("-" * len(header))
     for row in rows:
         lines.append(
-            f"{row.symbol[:8]:<8} {row.candidate_name[:24]:<24} {row.live_fill_count:>9} "
+            f"{row.symbol[:8]:<8} {row.candidate_name[:24]:<24} {row.raw_live_fill_count:>8} {row.live_fill_count:>8} "
             f"{_fmt_num(row.edge_retention_pct, 1):>9} {_fmt_num(row.drag_share_pct, 1):>8} "
             f"{_fmt_num(row.execution_drag_bps, 3):>10} {_fmt_num(row.cost_bps, 3):>9} {row.fragility_label:<22}"
         )
@@ -154,6 +158,7 @@ def generate_tca_impact_report(config: SystemConfig | None = None) -> Path:
                 f"  broker_symbol: {row.broker_symbol}",
                 f"  research_expectancy: {_fmt_num(row.research_expectancy, 4)}",
                 f"  research_closed_trades: {row.research_closed_trades}",
+                f"  raw_live_fill_count: {row.raw_live_fill_count}",
                 f"  live_fill_count: {row.live_fill_count}",
                 f"  execution_drag_bps: {_fmt_num(row.execution_drag_bps, 4)}",
                 f"  cost_bps: {_fmt_num(row.cost_bps, 4)}",

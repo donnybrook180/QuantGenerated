@@ -5,6 +5,7 @@ from datetime import UTC, datetime, timedelta
 import logging
 import re
 import time
+from types import SimpleNamespace
 from typing import ClassVar
 
 import MetaTrader5 as mt5
@@ -364,6 +365,9 @@ class MT5Client:
                     fee=fee,
                     total_cost=commission + swap + fee,
                 )
+            order_fallback = self._lookup_order_fill_from_history(order_ticket=order_ticket, symbol=symbol, start=start, end=now)
+            if order_fallback is not None:
+                return order_fallback
             time.sleep(sleep_seconds)
         LOGGER.warning(
             "mt5 deal lookup timed out for symbol=%s order_ticket=%s deal_ticket=%s",
@@ -372,6 +376,91 @@ class MT5Client:
             deal_ticket,
         )
         return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+    def _lookup_order_fill_from_history(
+        self,
+        *,
+        order_ticket: int,
+        symbol: str,
+        start: datetime,
+        end: datetime,
+    ) -> MT5DealCost | None:
+        if order_ticket <= 0:
+            return None
+        orders = mt5.history_orders_get(start, end)
+        if orders is None:
+            LOGGER.warning("mt5 history_orders_get failed while loading broker fill price: %s", mt5.last_error())
+            return None
+        matched = None
+        fallback_symbol_match = None
+        for order in orders:
+            current_order_ticket = int(getattr(order, "ticket", 0) or 0)
+            current_symbol = str(getattr(order, "symbol", "") or "")
+            if current_order_ticket != order_ticket:
+                continue
+            matched = order
+            if current_symbol == symbol:
+                break
+            if fallback_symbol_match is None:
+                fallback_symbol_match = order
+        if matched is None and fallback_symbol_match is not None:
+            matched = fallback_symbol_match
+        if matched is None:
+            return None
+        fill_price = self._extract_order_history_fill_price(matched)
+        if fill_price <= 0.0:
+            return None
+        return MT5DealCost(
+            deal_ticket=0,
+            order_ticket=int(getattr(matched, "ticket", 0) or order_ticket),
+            position_id=int(getattr(matched, "position_id", 0) or getattr(matched, "position_by_id", 0) or 0),
+            fill_price=fill_price,
+            commission=0.0,
+            swap=0.0,
+            fee=0.0,
+            total_cost=0.0,
+        )
+
+    def _extract_order_history_fill_price(self, order) -> float:
+        for attr in ("price_current", "price_open", "price_stoplimit"):
+            value = float(getattr(order, attr, 0.0) or 0.0)
+            if value > 0.0:
+                return value
+        return 0.0
+
+    def reconcile_stored_fill_event(self, row: dict[str, object], *, lookback_minutes: int = 24 * 60) -> dict[str, object] | None:
+        metadata = dict(row.get("metadata") or {})
+        if float(row.get("fill_price") or 0.0) > 0.0:
+            return None
+        result = SimpleNamespace(
+            deal=int(metadata.get("deal_ticket") or 0),
+            order=int(metadata.get("order_ticket") or 0),
+        )
+        symbol = str(row.get("broker_symbol") or self.resolved_symbol or self.config.symbol)
+        deal_cost = self._lookup_deal_cost(result, symbol)
+        fill_price = deal_cost.fill_price
+        if fill_price <= 0.0:
+            return None
+        requested_price = float(row.get("requested_price") or 0.0)
+        slippage_points = abs(fill_price - requested_price) if requested_price > 0.0 else 0.0
+        slippage_bps = (slippage_points / requested_price * 10_000.0) if requested_price > 0.0 else 0.0
+        return {
+            "fill_id": int(row.get("id") or 0),
+            "fill_price": fill_price,
+            "slippage_points": slippage_points,
+            "slippage_bps": slippage_bps,
+            "costs": deal_cost.total_cost,
+            "metadata_updates": {
+                "fill_price_valid": True,
+                "deal_ticket": deal_cost.deal_ticket,
+                "order_ticket": deal_cost.order_ticket,
+                "broker_position_id": deal_cost.position_id,
+                "commission": deal_cost.commission,
+                "swap": deal_cost.swap,
+                "fee": deal_cost.fee,
+                "broker_cost_total": deal_cost.total_cost,
+            },
+        }
 
     def send_market_order(
         self,

@@ -1517,6 +1517,86 @@ class ExperimentStore:
             )
         return fill_id
 
+    def update_mt5_fill_event_resolution(
+        self,
+        fill_id: int,
+        *,
+        fill_price: float,
+        slippage_points: float,
+        slippage_bps: float,
+        costs: float,
+        metadata_updates: dict[str, object] | None = None,
+    ) -> None:
+        if self._use_postgres_mt5_fill_events:
+            with self._pg_connect(autocommit=True) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT metadata_json
+                        FROM mt5_fill_events
+                        WHERE id = %s
+                        """,
+                        [fill_id],
+                    )
+                    row = cursor.fetchone()
+                    if row is None:
+                        return
+                    metadata = json.loads(row[0] or "{}")
+                    metadata.update(metadata_updates or {})
+                    cursor.execute(
+                        """
+                        UPDATE mt5_fill_events
+                        SET fill_price = %s,
+                            slippage_points = %s,
+                            slippage_bps = %s,
+                            costs = %s,
+                            metadata_json = %s
+                        WHERE id = %s
+                        """,
+                        [
+                            fill_price,
+                            slippage_points,
+                            slippage_bps,
+                            costs,
+                            self._serialize(metadata),
+                            fill_id,
+                        ],
+                    )
+            return
+
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT metadata_json
+                FROM mt5_fill_events
+                WHERE id = ?
+                """,
+                [fill_id],
+            ).fetchone()
+            if row is None:
+                return
+            metadata = json.loads(row[0] or "{}")
+            metadata.update(metadata_updates or {})
+            connection.execute(
+                """
+                UPDATE mt5_fill_events
+                SET fill_price = ?,
+                    slippage_points = ?,
+                    slippage_bps = ?,
+                    costs = ?,
+                    metadata_json = ?
+                WHERE id = ?
+                """,
+                [
+                    fill_price,
+                    slippage_points,
+                    slippage_bps,
+                    costs,
+                    self._serialize(metadata),
+                    fill_id,
+                ],
+            )
+
     def load_mt5_fill_calibration(self, broker_symbol: str, lookback_rows: int = 250) -> dict[str, float] | None:
         symbol_variants = self._mt5_fill_symbol_variants(broker_symbol)
         if not symbol_variants:

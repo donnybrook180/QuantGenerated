@@ -64,6 +64,54 @@ class MT5IntegrationTests(unittest.TestCase):
         self.assertAlmostEqual(deal_cost.total_cost, 1.2)
         sleep_mock.assert_not_called()
 
+    def test_lookup_deal_cost_falls_back_to_history_orders_when_no_deal_exists(self) -> None:
+        client = MT5Client(MT5Config(symbol="XAUUSD"))
+        result = SimpleNamespace(deal=0, order=654)
+        matching_order = SimpleNamespace(
+            ticket=654,
+            symbol="XAUUSD",
+            price_current=3350.4,
+            price_open=0.0,
+            price_stoplimit=0.0,
+            position_id=88,
+            position_by_id=0,
+        )
+
+        with patch("quant_system.integrations.mt5.mt5.history_deals_get", return_value=[]), patch(
+            "quant_system.integrations.mt5.mt5.history_orders_get",
+            return_value=[matching_order],
+        ), patch("quant_system.integrations.mt5.time.sleep") as sleep_mock:
+            deal_cost = client._lookup_deal_cost(result, "XAUUSD")
+
+        self.assertEqual(deal_cost.deal_ticket, 0)
+        self.assertEqual(deal_cost.order_ticket, 654)
+        self.assertEqual(deal_cost.position_id, 88)
+        self.assertEqual(deal_cost.fill_price, 3350.4)
+        sleep_mock.assert_not_called()
+
+    def test_reconcile_stored_fill_event_returns_resolution_for_order_history_match(self) -> None:
+        client = MT5Client(MT5Config(symbol="US500.cash"))
+        row = {
+            "id": 17,
+            "broker_symbol": "US500.cash",
+            "requested_price": 5280.0,
+            "fill_price": 0.0,
+            "metadata": {"deal_ticket": 0, "order_ticket": 777},
+        }
+        with patch.object(
+            MT5Client,
+            "_lookup_deal_cost",
+            return_value=MT5DealCost(0, 777, 91, 5280.6, 0.0, 0.0, 0.0, 0.0),
+        ):
+            resolution = client.reconcile_stored_fill_event(row)
+
+        assert resolution is not None
+        self.assertEqual(resolution["fill_id"], 17)
+        self.assertEqual(resolution["fill_price"], 5280.6)
+        self.assertGreater(resolution["slippage_points"], 0.0)
+        self.assertTrue(resolution["metadata_updates"]["fill_price_valid"])
+        self.assertEqual(resolution["metadata_updates"]["order_ticket"], 777)
+
     def test_send_market_order_returns_zero_fill_fields_when_no_deal_is_found_in_time(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             config = MT5Config(symbol="EURUSD", database_path=f"{temp_dir}\\fills.duckdb")

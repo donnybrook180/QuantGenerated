@@ -145,7 +145,7 @@ def _fragility_style(value: object) -> str:
 
 def _style_agents_frame(frame: pd.DataFrame):
     style = frame.style
-    for column in [name for name in ("live_fill_count",) if name in frame.columns]:
+    for column in [name for name in ("raw_live_fill_count", "live_fill_count") if name in frame.columns]:
         style = style.map(lambda value: _metric_heat(value, good_high=20.0, warn_low=5.0), subset=[column])
     for column in [name for name in ("edge_retention_pct",) if name in frame.columns]:
         style = style.map(lambda value: _metric_heat(value, good_high=70.0, warn_low=40.0), subset=[column])
@@ -424,6 +424,7 @@ def render_agents(impact: dict, adaptation_impact: dict) -> None:
         [
             "symbol",
             "candidate_name",
+            "raw_live_fill_count",
             "live_fill_count",
             "edge_retention_pct",
             "drag_share_pct",

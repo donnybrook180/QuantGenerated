@@ -1,0 +1,20 @@
+Artifact: crypto_volatility_expansion_sweep_dense__4h_all_4h_all_symbol_candidate
+Closed trades: 59
+Realized pnl: -82.91
+
+By entry hour
+16: trades=14 pnl=-845.26 avg=-60.38 win_rate=28.57%
+4: trades=6 pnl=-642.84 avg=-107.14 win_rate=16.67%
+0: trades=17 pnl=-45.90 avg=-2.70 win_rate=35.29%
+8: trades=8 pnl=45.13 avg=5.64 win_rate=25.00%
+20: trades=5 pnl=676.57 avg=135.31 win_rate=20.00%
+12: trades=9 pnl=729.39 avg=81.04 win_rate=33.33%
+
+By entry setup
+crypto_volatility_expansion: trades=59 pnl=-82.91 avg=-1.41 win_rate=28.81%
+
+By exit reason
+signal_exit: trades=28 pnl=-2599.41 avg=-92.84 win_rate=14.29%
+stale_breakout: trades=10 pnl=-2004.80 avg=-200.48 win_rate=10.00%
+trailing_stop: trades=13 pnl=-151.88 avg=-11.68 win_rate=30.77%
+take_profit: trades=8 pnl=4673.18 avg=584.15 win_rate=100.00%

@@ -1,17 +1,17 @@
 Artifact: volatility_short_breakdown__1h_us__exit_fastfail__local_opt_density_symbol_candidate
 Closed trades: 7
-Realized pnl: 0.27
+Realized pnl: 2.71
 
 By entry hour
-13: trades=4 pnl=-0.03 avg=-0.01 win_rate=25.00%
-18: trades=1 pnl=0.10 avg=0.10 win_rate=100.00%
-16: trades=1 pnl=0.10 avg=0.10 win_rate=100.00%
-15: trades=1 pnl=0.10 avg=0.10 win_rate=100.00%
+13: trades=4 pnl=-0.29 avg=-0.07 win_rate=25.00%
+18: trades=1 pnl=0.97 avg=0.97 win_rate=100.00%
+16: trades=1 pnl=1.00 avg=1.00 win_rate=100.00%
+15: trades=1 pnl=1.03 avg=1.03 win_rate=100.00%
 
 By entry setup
-volatility_short_breakdown: trades=7 pnl=0.27 avg=0.04 win_rate=57.14%
+volatility_short_breakdown: trades=7 pnl=2.71 avg=0.39 win_rate=57.14%
 
 By exit reason
-structure_exit: trades=2 pnl=-0.08 avg=-0.04 win_rate=0.00%
-stop_loss: trades=1 pnl=-0.06 avg=-0.06 win_rate=0.00%
-take_profit: trades=4 pnl=0.41 avg=0.10 win_rate=100.00%
+structure_exit: trades=2 pnl=-0.77 avg=-0.38 win_rate=0.00%
+stop_loss: trades=1 pnl=-0.63 avg=-0.63 win_rate=0.00%
+take_profit: trades=4 pnl=4.11 avg=1.03 win_rate=100.00%

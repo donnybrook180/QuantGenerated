@@ -1,0 +1,16 @@
+Artifact: volatility_breakout__4h_us__exit_fastfail__near_miss_protective__trend_up_symbol_candidate
+Closed trades: 10
+Realized pnl: 20715.10
+
+By entry hour
+20: trades=1 pnl=-175.00 avg=-175.00 win_rate=0.00%
+16: trades=9 pnl=20890.11 avg=2321.12 win_rate=33.33%
+
+By entry setup
+volatility_breakout: trades=10 pnl=20715.10 avg=2071.51 win_rate=30.00%
+
+By exit reason
+stale_breakout: trades=3 pnl=-505.63 avg=-168.54 win_rate=0.00%
+signal_exit: trades=2 pnl=-282.54 avg=-141.27 win_rate=0.00%
+trailing_stop: trades=4 pnl=-127.22 avg=-31.81 win_rate=50.00%
+end_of_run: trades=1 pnl=21630.49 avg=21630.49 win_rate=100.00%

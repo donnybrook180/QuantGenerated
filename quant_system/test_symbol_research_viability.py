@@ -19,6 +19,15 @@ class SymbolResearchViabilityTests(unittest.TestCase):
         row = make_candidate_row(mc_pnl_p05=-1.0)
         self.assertFalse(_meets_viability(row, "EURUSD"))
 
+    def test_meets_viability_requires_extra_trade_support_for_4h(self) -> None:
+        row = make_candidate_row(
+            timeframe_label="4h",
+            closed_trades=3,
+            validation_closed_trades=1,
+            test_closed_trades=0,
+        )
+        self.assertFalse(_meets_viability(row, "JP225"))
+
     def test_promotion_tier_returns_core_for_viable_candidate(self) -> None:
         row = make_candidate_row()
         self.assertEqual(_promotion_tier_for_row(row, "EURUSD"), "core")

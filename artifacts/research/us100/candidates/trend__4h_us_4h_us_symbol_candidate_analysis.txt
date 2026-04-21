@@ -1,0 +1,15 @@
+Artifact: trend__4h_us_4h_us_symbol_candidate
+Closed trades: 20
+Realized pnl: 16.74
+
+By entry hour
+16: trades=20 pnl=16.74 avg=0.84 win_rate=35.00%
+
+By entry setup
+trend: trades=20 pnl=16.74 avg=0.84 win_rate=35.00%
+
+By exit reason
+structure_exit: trades=9 pnl=-179.87 avg=-19.99 win_rate=0.00%
+stop_loss: trades=4 pnl=-113.23 avg=-28.31 win_rate=0.00%
+trailing_stop: trades=1 pnl=6.67 avg=6.67 win_rate=100.00%
+take_profit: trades=6 pnl=303.18 avg=50.53 win_rate=100.00%

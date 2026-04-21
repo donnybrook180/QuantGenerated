@@ -283,6 +283,8 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     base_history = max(config.symbol_research.history_days, config.market_data.history_days)
     if symbol.upper() == "ETH":
         return max(base_history, 1460)
+    if _supports_4h_research(symbol):
+        return max(base_history, 730)
     if _is_crypto_symbol(symbol):
         return max(base_history, 365)
     if _is_index_symbol(symbol):
@@ -294,6 +296,40 @@ def _symbol_research_history_days(config: SystemConfig, symbol: str) -> int:
     if _is_metal_symbol(symbol) or _is_forex_symbol(symbol):
         return max(base_history, 180)
     return max(base_history, 180)
+
+
+def _supports_4h_research(symbol: str) -> bool:
+    return symbol.upper() in {"XAUUSD", "JP225", "US100", "US500", "BTC", "ETH", "NVDA", "TSLA", "META", "AMZN"}
+
+
+def _supports_4h_family(code_path: str) -> bool:
+    return code_path in {
+        "quant_system.agents.trend.TrendAgent",
+        "quant_system.agents.strategies.VolatilityBreakoutAgent",
+        "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
+        "quant_system.agents.xauusd.XAUUSDVolatilityBreakoutAgent",
+        "quant_system.agents.stocks.StockTrendBreakoutAgent",
+        "quant_system.agents.stocks.StockPostEarningsDriftAgent",
+        "quant_system.agents.crypto.CryptoTrendPullbackAgent",
+        "quant_system.agents.crypto.CryptoBreakoutReclaimAgent",
+        "quant_system.agents.crypto.CryptoVolatilityExpansionAgent",
+        "quant_system.agents.forex.ForexCarryTrendAgent",
+    }
+
+
+def _expanded_allowed_variants(spec: CandidateSpec) -> tuple[str, ...]:
+    allowed = tuple(spec.allowed_variants or ())
+    if not allowed or not _supports_4h_family(spec.code_path):
+        return allowed
+    expanded = list(allowed)
+    for variant_label in allowed:
+        _, _, session_label = variant_label.partition("_")
+        if not session_label:
+            continue
+        candidate = f"4h_{session_label}"
+        if candidate not in expanded:
+            expanded.append(candidate)
+    return tuple(expanded)
 
 
 def _research_thresholds(symbol: str) -> dict[str, float | int]:
@@ -580,6 +616,7 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     thresholds = _research_thresholds(symbol)
     realized_pnl = float(row.realized_pnl if isinstance(row, CandidateResult) else row.get("realized_pnl", 0.0))
     profit_factor = float(row.profit_factor if isinstance(row, CandidateResult) else row.get("profit_factor", 0.0))
+    closed_trades = int(row.closed_trades if isinstance(row, CandidateResult) else row.get("closed_trades", 0))
     validation_closed_trades = int(row.validation_closed_trades if isinstance(row, CandidateResult) else row.get("validation_closed_trades", 0))
     test_closed_trades = int(row.test_closed_trades if isinstance(row, CandidateResult) else row.get("test_closed_trades", 0))
     validation_pnl = float(row.validation_pnl if isinstance(row, CandidateResult) else row.get("validation_pnl", 0.0))
@@ -613,6 +650,7 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     equity_quality_score = float(
         row.equity_quality_score if isinstance(row, CandidateResult) else row.get("equity_quality_score", 0.0)
     )
+    timeframe_label = str(row.timeframe_label if isinstance(row, CandidateResult) else row.get("timeframe_label", "") or "")
     sparse_strategy = _is_sparse_candidate(row, symbol)
     core_use_combined_splits = bool(thresholds.get("core_use_combined_splits", 0))
     core_combined_closed_trades = int(thresholds.get("core_combined_closed_trades", 0) or 0)
@@ -647,7 +685,7 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
         if sparse_strategy
         else walk_forward_pass_rate_pct >= float(thresholds["walk_forward_min_pass_rate_pct"])
     )
-    return (
+    viable = (
         realized_pnl > 0.0
         and profit_factor >= float(thresholds["min_profit_factor"])
         and split_trade_requirement_met
@@ -670,6 +708,19 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
             or (combo_outperformance_score >= 0.0 and combo_trade_overlap_pct <= 80.0)
         )
         and _meets_monte_carlo_viability(row)
+    )
+    if not viable:
+        return False
+    if timeframe_label != "4h":
+        return True
+    combined_closed_trades = validation_closed_trades + test_closed_trades
+    return (
+        closed_trades >= 4
+        and combined_closed_trades >= 2
+        and walk_forward_windows >= 1
+        and regime_stability_score >= 0.60
+        and equity_quality_score >= 0.50
+        and best_trade_share_pct <= 80.0
     )
 
 
@@ -781,25 +832,37 @@ def _load_symbol_features(config: SystemConfig, data_symbol: str) -> tuple[list[
 
 def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[str, int, str]], tuple[str, ...], bool]:
     upper = profile_symbol.upper()
+    add_4h = _supports_4h_research(profile_symbol) and mode != "seed"
     if profile_symbol.upper() in {"TSLA", "NVDA"}:
         if mode == "seed":
             return [("5m", 5, "minute"), ("15m", 15, "minute")], ("open", "power"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
+        return timeframes, ("us", "open", "power", "midday"), True
     if upper == "GBPUSD":
         return [("15m", 15, "minute"), ("30m", 30, "minute")], ("europe", "overlap"), True
     if upper == "GER40":
         timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
         return timeframes, ("open", "europe", "midday"), True
     if upper == "BTC":
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
         if mode == "seed":
-            return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "overlap", "us"), True
+            return timeframes, ("all", "europe", "overlap", "us"), True
+        return timeframes, ("all", "europe", "overlap", "us"), True
     if upper == "ETH":
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
         if mode == "seed":
-            return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("europe", "overlap", "us"), True
+            return timeframes, ("europe", "overlap", "us"), True
+        return timeframes, ("europe", "overlap", "us"), True
     if _is_index_symbol(profile_symbol):
         full_timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        if add_4h:
+            full_timeframes.append(("4h", 240, "minute"))
         seed_timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
         if upper in {"GER40", "EU50"}:
             return (seed_timeframes if mode == "seed" else full_timeframes), ("open", "europe", "midday"), True
@@ -809,11 +872,17 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
     if _is_crypto_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute"), ("1h", 60, "minute")], ("all", "europe"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")], ("all", "europe", "us", "overlap"), True
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute"), ("30m", 30, "minute"), ("1h", 60, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
+        return timeframes, ("all", "europe", "us", "overlap"), True
     if _is_metal_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute")], ("europe", "us"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("europe", "us", "overlap"), True
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
+        return timeframes, ("europe", "us", "overlap"), True
     if _is_forex_symbol(profile_symbol):
         if mode == "seed":
             return [("15m", 15, "minute")], ("europe", "overlap"), True
@@ -821,7 +890,10 @@ def _research_variant_plan(profile_symbol: str, mode: str) -> tuple[list[tuple[s
     if _is_stock_symbol(profile_symbol):
         if mode == "seed":
             return [("5m", 5, "minute")], ("us", "open"), True
-        return [("5m", 5, "minute"), ("15m", 15, "minute")], ("us", "open", "power", "midday"), True
+        timeframes = [("5m", 5, "minute"), ("15m", 15, "minute")]
+        if add_4h:
+            timeframes.append(("4h", 240, "minute"))
+        return timeframes, ("us", "open", "power", "midday"), True
     return [("5m", 5, "minute")], ("all",), False
 
 
@@ -899,6 +971,24 @@ def _direction_role(row: CandidateResult | dict[str, object]) -> str:
     return _infer_direction_role(_direction_mode(row))
 
 
+def _spec_strategy_family(spec: CandidateSpec) -> str:
+    if spec.strategy_family.strip():
+        return spec.strategy_family.strip()
+    return _infer_strategy_family_name(spec.name, spec.code_path)
+
+
+def _spec_direction_mode(spec: CandidateSpec) -> str:
+    if spec.direction_mode.strip():
+        return spec.direction_mode.strip()
+    return _infer_direction_mode(spec.name, spec.code_path)
+
+
+def _spec_direction_role(spec: CandidateSpec) -> str:
+    if spec.direction_role.strip():
+        return spec.direction_role.strip()
+    return _infer_direction_role(_spec_direction_mode(spec))
+
+
 def _family_unused_for_single_selection(row: dict[str, object], used_families: set[str]) -> bool:
     family = str(row.get("strategy_family", "") or "").strip()
     return not family or family not in used_families
@@ -915,10 +1005,12 @@ def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source
     def flush_bucket(items: list[MarketBar], bucket_key: tuple[int, int, int, int] | None) -> None:
         if len(items) != ratio or bucket_key is None:
             return
-        bucket_minute = bucket_key[3] % 60
+        total_minutes = bucket_key[3]
+        bucket_hour = total_minutes // 60
+        bucket_minute = total_minutes % 60
         aggregated.append(
             MarketBar(
-                timestamp=items[0].timestamp.replace(minute=bucket_minute, second=0, microsecond=0),
+                timestamp=items[0].timestamp.replace(hour=bucket_hour, minute=bucket_minute, second=0, microsecond=0),
                 symbol=items[0].symbol,
                 open=items[0].open,
                 high=max(item.high for item in items),
@@ -929,8 +1021,9 @@ def _aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source
         )
 
     for bar in bars:
-        minute_bucket = (bar.timestamp.minute // target_multiplier) * target_multiplier
-        bucket_key = (bar.timestamp.year, bar.timestamp.month, bar.timestamp.day, (bar.timestamp.hour * 60) + minute_bucket)
+        total_minutes = (bar.timestamp.hour * 60) + bar.timestamp.minute
+        bucket_start_minutes = (total_minutes // target_multiplier) * target_multiplier
+        bucket_key = (bar.timestamp.year, bar.timestamp.month, bar.timestamp.day, bucket_start_minutes)
         if current_bucket_key != bucket_key:
             flush_bucket(bucket, current_bucket_key)
             bucket = [bar]
@@ -1016,6 +1109,12 @@ def _has_plausible_price_scale(data_symbol: str, bars: list[MarketBar]) -> bool:
 
 
 def _load_crypto_network_bars(config: SystemConfig, data_symbol: str, multiplier: int, timespan: str) -> tuple[list[MarketBar], str]:
+    if timespan == "minute" and multiplier == 240:
+        base_bars, source = _load_crypto_network_bars(config, data_symbol, 60, timespan)
+        aggregated = _aggregate_minute_bars(base_bars, 240, 60)
+        if aggregated:
+            return aggregated, f"{source}_aggregated_4h"
+        raise RuntimeError("Unable to aggregate crypto 4h bars from 1h source bars.")
     errors: list[str] = []
     try:
         bars = BinanceKlineClient(
@@ -1082,6 +1181,19 @@ def _load_mt5_network_bars(
 ) -> tuple[list[MarketBar], str]:
     if timespan != "minute":
         raise MT5Error(f"Unsupported MT5 timespan {timespan}.")
+    if multiplier == 240:
+        base_bars, source = _load_mt5_network_bars(
+            config,
+            profile_symbol,
+            data_symbol,
+            broker_symbol,
+            60,
+            timespan,
+        )
+        aggregated = _aggregate_minute_bars(base_bars, 240, 60)
+        if aggregated:
+            return aggregated, f"{source}_aggregated_4h"
+        raise MT5Error(f"Unable to aggregate MT5 4h bars for {broker_symbol} from H1 source bars.")
     timeframe_map = {1: "M1", 5: "M5", 15: "M15", 30: "M30", 60: "H1"}
     timeframe = timeframe_map.get(multiplier)
     if timeframe is None:
@@ -2864,6 +2976,9 @@ def _run_candidate(
     scored.variant_label = spec.variant_label
     scored.timeframe_label = spec.timeframe_label
     scored.session_label = spec.session_label
+    scored.strategy_family = _spec_strategy_family(spec)
+    scored.direction_mode = _spec_direction_mode(spec)
+    scored.direction_role = _spec_direction_role(spec)
     scored.regime_filter_label = spec.regime_filter_label
     scored.cross_filter_label = spec.cross_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
@@ -4499,10 +4614,32 @@ def _parameter_sweep_specs(config: SystemConfig, symbol: str) -> list[CandidateS
 
 
 def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec | None:
-    if spec.allowed_variants and variant_label not in spec.allowed_variants:
+    allowed_variants = _expanded_allowed_variants(spec)
+    if allowed_variants and variant_label not in allowed_variants:
         return None
+    if variant_label.startswith("4h_") and not _supports_4h_family(spec.code_path):
+        return None
+    strategy_family = _spec_strategy_family(spec)
+    direction_mode = _spec_direction_mode(spec)
+    direction_role = _spec_direction_role(spec)
     if variant_label == "default":
-        return spec
+        return CandidateSpec(
+            name=spec.name,
+            description=spec.description,
+            agents=spec.agents,
+            code_path=spec.code_path,
+            execution_overrides=spec.execution_overrides,
+            variant_label=spec.variant_label,
+            timeframe_label=spec.timeframe_label,
+            session_label=spec.session_label,
+            regime_filter_label=spec.regime_filter_label,
+            reference_filter_label=spec.reference_filter_label,
+            cross_filter_label=spec.cross_filter_label,
+            allowed_variants=allowed_variants,
+            strategy_family=strategy_family,
+            direction_mode=direction_mode,
+            direction_role=direction_role,
+        )
     timeframe_label, _, session_label = variant_label.partition("_")
     return CandidateSpec(
         name=f"{spec.name}__{variant_label}",
@@ -4516,7 +4653,10 @@ def _with_variant_name(spec: CandidateSpec, variant_label: str) -> CandidateSpec
         regime_filter_label=spec.regime_filter_label,
         reference_filter_label=spec.reference_filter_label,
         cross_filter_label=spec.cross_filter_label,
-        allowed_variants=spec.allowed_variants,
+        allowed_variants=allowed_variants,
+        strategy_family=strategy_family,
+        direction_mode=direction_mode,
+        direction_role=direction_role,
     )
 
 
@@ -6199,6 +6339,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                 "name",
                 "description",
                 "archetype",
+                "variant_label",
+                "timeframe_label",
+                "session_label",
                 "strategy_family",
                 "direction_mode",
                 "direction_role",
@@ -6270,9 +6413,12 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
                     row.name,
                     row.description,
                     row.archetype,
-                    row.strategy_family,
-                    row.direction_mode,
-                    row.direction_role,
+                    row.variant_label,
+                    row.timeframe_label,
+                    row.session_label,
+                    _strategy_family(row),
+                    _direction_mode(row),
+                    _direction_role(row),
                     f"{row.realized_pnl:.5f}",
                     row.closed_trades,
                     f"{row.win_rate_pct:.5f}",

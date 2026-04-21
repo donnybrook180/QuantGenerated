@@ -1,17 +1,17 @@
 Artifact: volatility_breakout__5m_europe__near_miss_patient_symbol_candidate
 Closed trades: 6
-Realized pnl: 2487.75
+Realized pnl: 2488.38
 
 By entry hour
-9: trades=1 pnl=-88.98 avg=-88.98 win_rate=0.00%
-7: trades=1 pnl=5.05 avg=5.05 win_rate=100.00%
-12: trades=1 pnl=7.89 avg=7.89 win_rate=100.00%
-11: trades=3 pnl=2563.79 avg=854.60 win_rate=33.33%
+9: trades=1 pnl=-88.87 avg=-88.87 win_rate=0.00%
+7: trades=1 pnl=5.15 avg=5.15 win_rate=100.00%
+12: trades=1 pnl=8.00 avg=8.00 win_rate=100.00%
+11: trades=3 pnl=2564.11 avg=854.70 win_rate=33.33%
 
 By entry setup
-volatility_breakout: trades=6 pnl=2487.75 avg=414.63 win_rate=50.00%
+volatility_breakout: trades=6 pnl=2488.38 avg=414.73 win_rate=50.00%
 
 By exit reason
-signal_exit: trades=2 pnl=-189.47 avg=-94.73 win_rate=0.00%
-trailing_stop: trades=3 pnl=-10.61 avg=-3.54 win_rate=66.67%
-end_of_run: trades=1 pnl=2687.84 avg=2687.84 win_rate=100.00%
+signal_exit: trades=2 pnl=-189.26 avg=-94.63 win_rate=0.00%
+trailing_stop: trades=3 pnl=-10.30 avg=-3.43 win_rate=66.67%
+end_of_run: trades=1 pnl=2687.94 avg=2687.94 win_rate=100.00%

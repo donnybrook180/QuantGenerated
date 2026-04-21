@@ -1,19 +1,19 @@
 Artifact: volatility_breakout__30m_all__exit_fastfail_30m_all_symbol_candidate
 Closed trades: 8
-Realized pnl: -206.51
+Realized pnl: -206.53
 
 By entry hour
-3: trades=3 pnl=-61.30 avg=-20.43 win_rate=0.00%
-11: trades=2 pnl=-48.87 avg=-24.44 win_rate=0.00%
-16: trades=1 pnl=-37.94 avg=-37.94 win_rate=0.00%
+3: trades=3 pnl=-61.31 avg=-20.44 win_rate=0.00%
+11: trades=2 pnl=-48.88 avg=-24.44 win_rate=0.00%
+16: trades=1 pnl=-37.95 avg=-37.95 win_rate=0.00%
 6: trades=1 pnl=-34.00 avg=-34.00 win_rate=0.00%
 14: trades=1 pnl=-24.40 avg=-24.40 win_rate=0.00%
 
 By entry setup
-volatility_breakout: trades=8 pnl=-206.51 avg=-25.81 win_rate=0.00%
+volatility_breakout: trades=8 pnl=-206.53 avg=-25.82 win_rate=0.00%
 
 By exit reason
-signal_exit: trades=4 pnl=-119.51 avg=-29.88 win_rate=0.00%
+signal_exit: trades=4 pnl=-119.52 avg=-29.88 win_rate=0.00%
 stop_loss: trades=1 pnl=-34.00 avg=-34.00 win_rate=0.00%
 structure_exit: trades=1 pnl=-26.45 avg=-26.45 win_rate=0.00%
 time_stop: trades=1 pnl=-24.40 avg=-24.40 win_rate=0.00%

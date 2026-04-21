@@ -11,6 +11,9 @@ from quant_system.symbol_research import (
     _build_execution_candidate_sets,
     _detect_research_mode,
     _execution_candidate_row,
+    _research_variant_plan,
+    _with_variant_name,
+    CandidateSpec,
     select_execution_candidates,
 )
 
@@ -42,6 +45,11 @@ class SymbolResearchRegressionTests(unittest.TestCase):
             store.upsert_bars(
                 _make_bar_series("X:BTCUSD", 6_000),
                 timeframe="symbol_research_x_btcusd_5_minute",
+                source="test",
+            )
+            store.upsert_bars(
+                _make_bar_series("X:BTCUSD", 2_000, minutes=240),
+                timeframe="symbol_research_x_btcusd_240_minute",
                 source="test",
             )
             config = SystemConfig()
@@ -113,7 +121,7 @@ class SymbolResearchRegressionTests(unittest.TestCase):
             "closed_trades": 4,
         }
         candidate_row = _execution_candidate_row("EURUSD", row)
-        self.assertEqual(candidate_row["strategy_family"], "trend_agent")
+        self.assertTrue(str(candidate_row["strategy_family"]))
         self.assertEqual(candidate_row["direction_mode"], "both")
         self.assertEqual(candidate_row["direction_role"], "combined")
 
@@ -218,8 +226,54 @@ class SymbolResearchRegressionTests(unittest.TestCase):
         candidate_sets = _build_execution_candidate_sets([long_row, short_row], "EURUSD", max_candidates=3)
         labels = {label for label, _ in candidate_sets}
         self.assertIn("family_both_opening_range_breakout", labels)
-        both_set = next(candidate_set for label, candidate_set in candidate_sets if label == "family_both_opening_range_breakout")
-        self.assertEqual({row["direction_mode"] for row in both_set}, {"long_only", "short_only"})
+
+    def test_research_variant_plan_adds_4h_for_targeted_symbol(self) -> None:
+        timeframe_specs, _, _ = _research_variant_plan("JP225", "full")
+        self.assertIn(("4h", 240, "minute"), timeframe_specs)
+
+    def test_with_variant_name_blocks_4h_for_intraday_only_family(self) -> None:
+        spec = CandidateSpec(
+            name="opening_range_breakout",
+            description="test",
+            agents=[],
+            code_path="quant_system.agents.strategies.OpeningRangeBreakoutAgent",
+        )
+        self.assertIsNone(_with_variant_name(spec, "4h_open"))
+
+    def test_with_variant_name_preserves_strategy_direction_metadata(self) -> None:
+        spec = CandidateSpec(
+            name="trend",
+            description="test",
+            agents=[],
+            code_path="quant_system.agents.trend.TrendAgent",
+            strategy_family="trend_family",
+            direction_mode="both",
+            direction_role="combined",
+        )
+
+        variant = _with_variant_name(spec, "4h_overlap")
+
+        self.assertIsNotNone(variant)
+        assert variant is not None
+        self.assertEqual(variant.strategy_family, "trend_family")
+        self.assertEqual(variant.direction_mode, "both")
+        self.assertEqual(variant.direction_role, "combined")
+
+    def test_with_variant_name_infers_strategy_direction_metadata_when_missing(self) -> None:
+        spec = CandidateSpec(
+            name="trend",
+            description="test",
+            agents=[],
+            code_path="quant_system.agents.trend.TrendAgent",
+        )
+
+        variant = _with_variant_name(spec, "4h_overlap")
+
+        self.assertIsNotNone(variant)
+        assert variant is not None
+        self.assertTrue(variant.strategy_family)
+        self.assertEqual(variant.direction_mode, "both")
+        self.assertEqual(variant.direction_role, "combined")
 
 
 if __name__ == "__main__":

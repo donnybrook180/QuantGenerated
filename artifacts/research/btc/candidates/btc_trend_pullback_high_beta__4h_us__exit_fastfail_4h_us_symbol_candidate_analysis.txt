@@ -1,0 +1,15 @@
+Artifact: btc_trend_pullback_high_beta__4h_us__exit_fastfail_4h_us_symbol_candidate
+Closed trades: 5
+Realized pnl: 71.07
+
+By entry hour
+16: trades=2 pnl=-64.40 avg=-32.20 win_rate=0.00%
+20: trades=3 pnl=135.47 avg=45.16 win_rate=66.67%
+
+By entry setup
+crypto_trend_pullback: trades=5 pnl=71.07 avg=14.21 win_rate=40.00%
+
+By exit reason
+structure_exit: trades=3 pnl=-110.90 avg=-36.97 win_rate=0.00%
+trailing_stop: trades=1 pnl=24.00 avg=24.00 win_rate=100.00%
+take_profit: trades=1 pnl=157.97 avg=157.97 win_rate=100.00%

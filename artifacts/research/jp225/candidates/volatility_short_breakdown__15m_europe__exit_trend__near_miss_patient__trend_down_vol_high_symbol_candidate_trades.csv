@@ -1,4 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-JP225,2026-03-19T11:15:00+00:00,2026-03-19T12:45:00+00:00,11,12,volatility_short_breakdown,trailing_stop,52738.81609,53008.20493,0.10000,-26.93888,0.00000,6,1.00000,"{'breakout_low': 52850.5, 'rebound_high': 53210.5, 'position_intent': 'short_entry'}"
-JP225,2026-03-23T11:00:00+00:00,2026-03-27T11:00:00+00:00,11,11,volatility_short_breakdown,signal_exit,51542.08170,52709.81852,0.10000,116.77368,0.00000,23,0.70000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
-JP225,2026-03-31T11:45:00+00:00,2026-04-02T07:00:00+00:00,11,7,volatility_short_breakdown,take_profit,51391.06901,52587.32882,0.10000,119.62598,0.00000,2,0.70000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
+JP225,2026-03-19T11:15:00+00:00,2026-03-19T12:45:00+00:00,11,12,volatility_short_breakdown,trailing_stop,52738.80398,53008.21709,0.10000,-26.94131,0.00000,6,1.00000,"{'breakout_low': 52850.5, 'rebound_high': 53210.5, 'position_intent': 'short_entry'}"
+JP225,2026-03-23T11:00:00+00:00,2026-03-27T11:00:00+00:00,11,11,volatility_short_breakdown,signal_exit,51542.09353,52709.80642,0.10000,116.77129,0.00000,23,0.70000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
+JP225,2026-03-31T11:45:00+00:00,2026-04-02T07:00:00+00:00,11,7,volatility_short_breakdown,take_profit,51391.08080,52587.31675,0.10000,119.62359,0.00000,2,0.70000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"

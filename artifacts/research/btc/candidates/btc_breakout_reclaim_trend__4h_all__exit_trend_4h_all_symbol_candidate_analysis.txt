@@ -1,0 +1,20 @@
+Artifact: btc_breakout_reclaim_trend__4h_all__exit_trend_4h_all_symbol_candidate
+Closed trades: 15
+Realized pnl: 1949.06
+
+By entry hour
+4: trades=2 pnl=-308.97 avg=-154.49 win_rate=0.00%
+12: trades=1 pnl=79.79 avg=79.79 win_rate=100.00%
+20: trades=3 pnl=134.74 avg=44.91 win_rate=66.67%
+0: trades=5 pnl=795.69 avg=159.14 win_rate=80.00%
+16: trades=4 pnl=1247.82 avg=311.96 win_rate=100.00%
+
+By entry setup
+crypto_breakout_reclaim: trades=15 pnl=1949.06 avg=129.94 win_rate=73.33%
+
+By exit reason
+stale_breakout: trades=1 pnl=-444.88 avg=-444.88 win_rate=0.00%
+stop_loss: trades=1 pnl=-206.17 avg=-206.17 win_rate=0.00%
+trailing_stop: trades=1 pnl=124.79 avg=124.79 win_rate=100.00%
+signal_exit: trades=9 pnl=653.23 avg=72.58 win_rate=77.78%
+take_profit: trades=3 pnl=1822.09 avg=607.36 win_rate=100.00%

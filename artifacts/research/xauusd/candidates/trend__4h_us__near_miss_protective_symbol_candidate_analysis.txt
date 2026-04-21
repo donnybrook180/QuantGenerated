@@ -1,0 +1,18 @@
+Artifact: trend__4h_us__near_miss_protective_symbol_candidate
+Closed trades: 61
+Realized pnl: 6256.45
+
+By entry hour
+20: trades=4 pnl=1084.76 avg=271.19 win_rate=75.00%
+16: trades=57 pnl=5171.68 avg=90.73 win_rate=42.11%
+
+By entry setup
+trend: trades=61 pnl=6256.45 avg=102.56 win_rate=44.26%
+
+By exit reason
+stop_loss: trades=11 pnl=-3220.45 avg=-292.77 win_rate=0.00%
+stale_breakout: trades=8 pnl=-1105.30 avg=-138.16 win_rate=12.50%
+trailing_stop: trades=26 pnl=-178.34 avg=-6.86 win_rate=42.31%
+time_stop: trades=1 pnl=-36.90 avg=-36.90 win_rate=0.00%
+end_of_run: trades=1 pnl=5051.75 avg=5051.75 win_rate=100.00%
+take_profit: trades=14 pnl=5745.69 avg=410.41 win_rate=100.00%

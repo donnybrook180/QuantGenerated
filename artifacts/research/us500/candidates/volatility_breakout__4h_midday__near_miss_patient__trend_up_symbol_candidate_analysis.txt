@@ -1,0 +1,14 @@
+Artifact: volatility_breakout__4h_midday__near_miss_patient__trend_up_symbol_candidate
+Closed trades: 7
+Realized pnl: 7.02
+
+By entry hour
+16: trades=7 pnl=7.02 avg=1.00 win_rate=28.57%
+
+By entry setup
+volatility_breakout: trades=7 pnl=7.02 avg=1.00 win_rate=28.57%
+
+By exit reason
+signal_exit: trades=3 pnl=-7.71 avg=-2.57 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.97 avg=-0.48 win_rate=0.00%
+take_profit: trades=2 pnl=15.71 avg=7.85 win_rate=100.00%

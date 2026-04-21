@@ -1,31 +1,31 @@
 Viability autopsy: US100
-Execution validation summary: not_run
-Tier counts: core=0 specialist=0 reject=383
+Execution validation summary: selection=family_both_opening_range_breakout variant=opening_range_breakout__5m_open__exit_fastfail@5m_open, opening_range_short_breakdown__30m_us@30m_us data_source=duckdb_cache pnl=-1.63 pf=0.54 closed=18 quality=0.40 underwater=88.9% max_regime_overlap=0.06 overlaps=opening_range_breakout__5m_open__exit_fastfail vs opening_range_short_breakdown__30m_us=0.06 -> rejected
+Tier counts: core=0 specialist=0 reject=401
 
 Top blockers
-- regime stability too low (0.00 < 0.50): 240
-- test PF < 1.0 (0.00): 183
-- validation PF < 1.0 (0.00): 176
-- regime loss ratio too high (999.00 > 1.25): 160
-- monte carlo loss probability too high (100.00% > 10.00%): 131
-- test pnl <= 0 (0.00): 116
-- validation trades too low (0 < 3): 107
-- validation pnl <= 0 (0.00): 107
+- regime stability too low (0.00 < 0.50): 257
+- test PF < 1.0 (0.00): 204
+- validation PF < 1.0 (0.00): 178
+- regime loss ratio too high (999.00 > 1.25): 174
+- test pnl <= 0 (0.00): 114
+- walk-forward avg test pnl <= 0 (0.00): 102
+- equity quality too low (0.25 < 0.45): 98
+- validation trades too low (0 < 3): 97
 
 Top near-misses
-- mean_reversion__30m_power__near_miss_patient [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__near_miss_protective [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__exit_quick__near_miss_patient [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__exit_quick__near_miss_protective [reject]: pnl=0.18 pf=2.48 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.12), monte carlo loss probability too high (17.00% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__exit_quick [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__near_miss_dense [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
-- mean_reversion__30m_power__exit_quick__near_miss_dense [reject]: pnl=0.16 pf=2.19 val=-0.03/0.00/2 test=0.18/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-0.16), monte carlo loss probability too high (20.20% > 10.00%), walk-forward avg validation pnl <= 0 (-0.02)
+- trend__4h_midday__exit_trend__near_miss_patient [reject]: pnl=243.08 pf=3.24 val=44.68/155.67/2 test=55.54/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-30.75), walk-forward avg validation pnl <= 0 (-18.08)
+- volatility_short_breakdown__4h_midday__exit_trend__near_miss_patient [reject]: pnl=185.22 pf=1.63 val=-41.50/0.52/4 test=94.56/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-204.56), monte carlo loss probability too high (25.20% > 10.00%), walk-forward avg validation pnl <= 0 (-54.18)
+- trend__4h_midday__exit_trend__near_miss_dense__trend_up [reject]: pnl=185.20 pf=2.37 val=-28.97/0.00/1 test=-0.46/0.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-102.97), monte carlo loss probability too high (13.80% > 10.00%), combined validation/test trades too low (2 < 3), combined validation/test pnl <= 0 (-29.42), combined validation/test PF too low (0.00 < 1.00), walk-forward avg test pnl <= 0 (-0.23)
+- trend__4h_midday__exit_fastfail__near_miss_protective [reject]: pnl=184.00 pf=2.18 val=44.68/155.67/2 test=55.54/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-86.00), monte carlo loss probability too high (13.80% > 10.00%), walk-forward avg validation pnl <= 0 (-2.72)
+- volatility_short_breakdown__4h_midday__exit_trend [reject]: pnl=176.59 pf=1.60 val=-41.50/0.52/4 test=94.56/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-206.16), monte carlo loss probability too high (26.00% > 10.00%), walk-forward avg validation pnl <= 0 (-54.18)
+- volatility_short_breakdown__4h_midday__exit_trend__near_miss_dense [reject]: pnl=176.59 pf=1.60 val=-41.50/0.52/4 test=94.56/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-206.16), monte carlo loss probability too high (26.00% > 10.00%), walk-forward avg validation pnl <= 0 (-54.18)
+- trend__4h_midday__near_miss_protective [reject]: pnl=153.28 pf=1.82 val=44.68/155.67/2 test=55.54/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-122.74), monte carlo loss probability too high (18.20% > 10.00%), walk-forward avg validation pnl <= 0 (-18.08)
+- trend__4h_midday__exit_fastfail [reject]: pnl=137.14 pf=1.88 val=44.68/155.67/2 test=55.54/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-117.50), monte carlo loss probability too high (19.00% > 10.00%)

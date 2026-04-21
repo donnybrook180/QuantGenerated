@@ -1,0 +1,18 @@
+Artifact: trend__4h_europe__exit_fastfail_4h_europe_symbol_candidate
+Closed trades: 74
+Realized pnl: 4512.14
+
+By entry hour
+12: trades=25 pnl=1900.46 avg=76.02 win_rate=52.00%
+8: trades=49 pnl=2611.69 avg=53.30 win_rate=38.78%
+
+By entry setup
+trend: trades=74 pnl=4512.14 avg=60.97 win_rate=43.24%
+
+By exit reason
+stop_loss: trades=14 pnl=-3690.52 avg=-263.61 win_rate=0.00%
+structure_exit: trades=13 pnl=-1683.05 avg=-129.47 win_rate=0.00%
+trailing_stop: trades=17 pnl=-850.03 avg=-50.00 win_rate=23.53%
+time_stop: trades=1 pnl=-172.80 avg=-172.80 win_rate=0.00%
+stale_breakout: trades=3 pnl=35.30 avg=11.77 win_rate=66.67%
+take_profit: trades=26 pnl=10873.24 avg=418.20 win_rate=100.00%

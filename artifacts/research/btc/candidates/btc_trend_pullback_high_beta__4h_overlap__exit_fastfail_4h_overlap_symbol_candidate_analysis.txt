@@ -1,0 +1,14 @@
+Artifact: btc_trend_pullback_high_beta__4h_overlap__exit_fastfail_4h_overlap_symbol_candidate
+Closed trades: 3
+Realized pnl: 65.19
+
+By entry hour
+16: trades=2 pnl=-64.40 avg=-32.20 win_rate=0.00%
+12: trades=1 pnl=129.59 avg=129.59 win_rate=100.00%
+
+By entry setup
+crypto_trend_pullback: trades=3 pnl=65.19 avg=21.73 win_rate=33.33%
+
+By exit reason
+structure_exit: trades=2 pnl=-64.40 avg=-32.20 win_rate=0.00%
+take_profit: trades=1 pnl=129.59 avg=129.59 win_rate=100.00%

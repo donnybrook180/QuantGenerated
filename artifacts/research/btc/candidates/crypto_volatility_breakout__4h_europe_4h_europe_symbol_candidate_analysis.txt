@@ -1,0 +1,15 @@
+Artifact: crypto_volatility_breakout__4h_europe_4h_europe_symbol_candidate
+Closed trades: 14
+Realized pnl: 1879.46
+
+By entry hour
+8: trades=3 pnl=831.95 avg=277.32 win_rate=66.67%
+12: trades=11 pnl=1047.51 avg=95.23 win_rate=54.55%
+
+By entry setup
+volatility_breakout: trades=14 pnl=1879.46 avg=134.25 win_rate=57.14%
+
+By exit reason
+stop_loss: trades=2 pnl=-433.84 avg=-216.92 win_rate=0.00%
+trailing_stop: trades=8 pnl=137.10 avg=17.14 win_rate=50.00%
+take_profit: trades=4 pnl=2176.20 avg=544.05 win_rate=100.00%

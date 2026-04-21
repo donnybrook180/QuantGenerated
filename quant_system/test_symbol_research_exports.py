@@ -14,6 +14,9 @@ from quant_system.test_fixtures import make_candidate_result, make_candidate_row
 class SymbolResearchExportsTests(unittest.TestCase):
     def test_export_results_writes_direction_columns_to_csv(self) -> None:
         row = make_candidate_result()
+        row.variant_label = "4h_overlap"
+        row.timeframe_label = "4h"
+        row.session_label = "overlap"
         with tempfile.TemporaryDirectory() as temp_dir:
             reports_dir = Path(temp_dir)
             with patch("quant_system.symbol_research.research_reports_dir", return_value=reports_dir):
@@ -26,6 +29,12 @@ class SymbolResearchExportsTests(unittest.TestCase):
         self.assertIn("strategy_family", header)
         self.assertIn("direction_mode", header)
         self.assertIn("direction_role", header)
+        self.assertIn("variant_label", header)
+        self.assertIn("timeframe_label", header)
+        self.assertIn("session_label", header)
+        self.assertEqual(values[header.index("variant_label")], "4h_overlap")
+        self.assertEqual(values[header.index("timeframe_label")], "4h")
+        self.assertEqual(values[header.index("session_label")], "overlap")
         self.assertEqual(values[header.index("strategy_family")], "opening_range_breakout")
         self.assertEqual(values[header.index("direction_mode")], "long_only")
         self.assertEqual(values[header.index("direction_role")], "long_leg")
@@ -68,6 +77,28 @@ class SymbolResearchExportsTests(unittest.TestCase):
         self.assertEqual(row["strategy_family"], "opening_range_breakout")
         self.assertEqual(row["direction_mode"], "long_only")
         self.assertEqual(row["direction_role"], "long_leg")
+
+    def test_export_results_writes_inferred_strategy_direction_for_legacy_result(self) -> None:
+        row = make_candidate_result(
+            name="trend__4h_overlap",
+            code_path="quant_system.agents.trend.TrendAgent",
+            strategy_family="",
+            direction_mode="",
+            direction_role="",
+        )
+        row.variant_label = "4h_overlap"
+        row.timeframe_label = "4h"
+        row.session_label = "overlap"
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            reports_dir = Path(temp_dir)
+            with patch("quant_system.symbol_research.research_reports_dir", return_value=reports_dir):
+                csv_path, _ = _export_results("XAUUSD", "XAUUSD", "test", [row])
+            with csv_path.open("r", encoding="utf-8", newline="") as handle:
+                reader = list(csv.DictReader(handle))
+
+        self.assertEqual(reader[0]["timeframe_label"], "4h")
+        self.assertTrue(reader[0]["strategy_family"])
 
 
 if __name__ == "__main__":

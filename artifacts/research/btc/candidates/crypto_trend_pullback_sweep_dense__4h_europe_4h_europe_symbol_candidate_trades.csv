@@ -1,0 +1,7 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:BTCUSD,2024-05-15T08:00:00+00:00,2024-05-15T12:00:00+00:00,8,12,crypto_trend_pullback,take_profit,62123.25559,63703.28157,0.10000,153.91324,4.08936,1,1.00000,{'pullback_floor': 61400.94}
+X:BTCUSD,2024-12-27T08:00:00+00:00,2024-12-30T20:00:00+00:00,8,20,crypto_trend_pullback,stop_loss,96752.17915,91848.75912,0.10000,-496.47153,6.12953,9,1.00000,{'pullback_floor': 95646.64}
+X:BTCUSD,2025-01-21T12:00:00+00:00,2025-01-22T12:00:00+00:00,12,12,crypto_trend_pullback,trailing_stop,104437.29174,104006.36520,0.10000,-49.86707,6.77442,6,1.00000,{'pullback_floor': 101347.73}
+X:BTCUSD,2025-03-17T08:00:00+00:00,2025-03-17T12:00:00+00:00,8,12,crypto_trend_pullback,signal_exit,83506.69263,82970.72102,0.10000,-59.00768,5.41052,1,1.00000,{'pullback_floor': 83007.97}
+X:BTCUSD,2025-07-24T12:00:00+00:00,2025-07-25T04:00:00+00:00,12,4,crypto_trend_pullback,stop_loss,118506.72184,116015.64354,0.10000,-256.72981,7.62198,4,0.96206,{'pullback_floor': 117905.15}
+X:BTCUSD,2025-09-16T08:00:00+00:00,2025-09-17T12:00:00+00:00,8,12,crypto_trend_pullback,trailing_stop,115644.24254,116122.04758,0.10000,40.24810,7.53240,7,0.99930,{'pullback_floor': 115033.05}

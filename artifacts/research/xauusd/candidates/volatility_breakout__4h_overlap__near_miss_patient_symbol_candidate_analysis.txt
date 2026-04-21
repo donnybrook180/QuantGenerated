@@ -1,0 +1,17 @@
+Artifact: volatility_breakout__4h_overlap__near_miss_patient_symbol_candidate
+Closed trades: 14
+Realized pnl: 23612.59
+
+By entry hour
+12: trades=4 pnl=57.10 avg=14.28 win_rate=50.00%
+16: trades=10 pnl=23555.49 avg=2355.55 win_rate=20.00%
+
+By entry setup
+volatility_breakout: trades=14 pnl=23612.59 avg=1686.61 win_rate=28.57%
+
+By exit reason
+stale_breakout: trades=3 pnl=-564.01 avg=-188.00 win_rate=0.00%
+signal_exit: trades=4 pnl=-467.98 avg=-117.00 win_rate=0.00%
+trailing_stop: trades=5 pnl=93.42 avg=18.68 win_rate=40.00%
+take_profit: trades=1 pnl=235.67 avg=235.67 win_rate=100.00%
+end_of_run: trades=1 pnl=24315.49 avg=24315.49 win_rate=100.00%

@@ -1,0 +1,7 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+JP225,2025-05-12T08:00:00+00:00,2025-05-15T08:00:00+00:00,8,8,volatility_breakout,signal_exit,38319.20897,37574.31239,0.10000,-74.48966,0.00000,6,1.00000,{'breakout_high': 37646.73}
+JP225,2025-06-26T08:00:00+00:00,2025-06-27T08:00:00+00:00,8,8,volatility_breakout,take_profit,39536.31154,40176.09309,0.10000,63.97815,0.00000,2,1.00000,{'breakout_high': 39167.73}
+JP225,2025-07-23T08:00:00+00:00,2025-07-25T08:00:00+00:00,8,8,volatility_breakout,trailing_stop,41272.45786,41364.99287,0.10000,9.25350,0.00000,4,1.00000,{'breakout_high': 39960.73}
+JP225,2025-08-07T08:00:00+00:00,2025-08-08T08:00:00+00:00,8,8,volatility_breakout,take_profit,41197.45154,41918.94618,0.10000,72.14946,0.00000,2,1.00000,{'breakout_high': 40855.73}
+JP225,2025-10-29T08:00:00+00:00,2025-10-31T08:00:00+00:00,8,8,volatility_breakout,take_profit,51309.40374,52464.15732,0.10000,115.47536,0.00000,4,1.00000,{'breakout_high': 50628.83}
+JP225,2026-01-02T08:00:00+00:00,2026-01-08T08:00:00+00:00,8,8,volatility_breakout,trailing_stop,51172.39219,51458.24210,0.10000,28.58499,0.00000,8,1.00000,{'breakout_high': 50729.83}

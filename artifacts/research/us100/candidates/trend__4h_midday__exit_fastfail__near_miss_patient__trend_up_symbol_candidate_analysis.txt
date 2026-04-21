@@ -1,0 +1,17 @@
+Artifact: trend__4h_midday__exit_fastfail__near_miss_patient__trend_up_symbol_candidate
+Closed trades: 8
+Realized pnl: 70.03
+
+By entry hour
+16: trades=8 pnl=70.03 avg=8.75 win_rate=50.00%
+
+By entry setup
+trend: trades=8 pnl=70.03 avg=8.75 win_rate=50.00%
+
+By exit reason
+signal_exit: trades=1 pnl=-44.07 avg=-44.07 win_rate=0.00%
+stale_breakout: trades=1 pnl=-37.50 avg=-37.50 win_rate=0.00%
+stop_loss: trades=1 pnl=-29.88 avg=-29.88 win_rate=0.00%
+end_of_run: trades=1 pnl=-18.08 avg=-18.08 win_rate=0.00%
+trailing_stop: trades=1 pnl=10.04 avg=10.04 win_rate=100.00%
+take_profit: trades=3 pnl=189.52 avg=63.17 win_rate=100.00%

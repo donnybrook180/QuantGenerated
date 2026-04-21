@@ -1,0 +1,3 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:BTCUSD,2024-04-08T08:00:00+00:00,2024-04-10T12:00:00+00:00,8,12,crypto_breakout_reclaim,stale_breakout,72066.84691,67981.62973,0.10000,-413.07329,4.55158,13,1.00000,{'breakout_high': 69480.64}
+X:BTCUSD,2025-09-10T12:00:00+00:00,2025-09-15T16:00:00+00:00,12,16,crypto_breakout_reclaim,trailing_stop,113414.59814,114591.07726,0.10000,110.23773,7.41018,19,1.00000,{'breakout_high': 113343.63}

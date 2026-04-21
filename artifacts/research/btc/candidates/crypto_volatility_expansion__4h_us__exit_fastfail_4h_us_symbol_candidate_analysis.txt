@@ -1,0 +1,18 @@
+Artifact: crypto_volatility_expansion__4h_us__exit_fastfail_4h_us_symbol_candidate
+Closed trades: 15
+Realized pnl: 674.80
+
+By entry hour
+16: trades=12 pnl=-47.02 avg=-3.92 win_rate=33.33%
+20: trades=3 pnl=721.82 avg=240.61 win_rate=66.67%
+
+By entry setup
+crypto_volatility_expansion: trades=15 pnl=674.80 avg=44.99 win_rate=40.00%
+
+By exit reason
+structure_exit: trades=4 pnl=-797.02 avg=-199.26 win_rate=0.00%
+trailing_stop: trades=2 pnl=-173.02 avg=-86.51 win_rate=0.00%
+time_stop: trades=1 pnl=-169.94 avg=-169.94 win_rate=0.00%
+stale_breakout: trades=1 pnl=27.54 avg=27.54 win_rate=100.00%
+signal_exit: trades=3 pnl=125.30 avg=41.77 win_rate=33.33%
+take_profit: trades=4 pnl=1661.95 avg=415.49 win_rate=100.00%

@@ -1,0 +1,11 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+X:BTCUSD,2024-03-08T16:00:00+00:00,2024-03-14T20:00:00+00:00,16,20,crypto_breakout_reclaim,signal_exit,68418.49974,71038.51112,0.10000,257.46879,4.53235,25,1.00000,{'breakout_high': 68066.74}
+X:BTCUSD,2024-12-16T00:00:00+00:00,2024-12-18T20:00:00+00:00,0,20,crypto_breakout_reclaim,stale_breakout,105526.59512,101144.96448,0.10000,-444.87989,6.71683,17,1.00000,{'breakout_high': 101967.07}
+X:BTCUSD,2025-01-03T16:00:00+00:00,2025-01-07T16:00:00+00:00,16,16,crypto_breakout_reclaim,stale_breakout,97995.56563,97205.48549,0.10000,-85.35205,6.34403,12,1.00000,{'breakout_high': 97625.17}
+X:BTCUSD,2025-04-14T04:00:00+00:00,2025-04-16T00:00:00+00:00,4,0,crypto_breakout_reclaim,stale_breakout,84846.79361,83066.80661,0.10000,-183.45589,5.45719,11,1.00000,{'breakout_high': 83873.27}
+X:BTCUSD,2025-04-21T00:00:00+00:00,2025-04-21T12:00:00+00:00,0,12,crypto_breakout_reclaim,signal_exit,86607.05761,86964.12192,0.10000,30.06537,5.64106,3,1.00000,{'breakout_high': 85932.07}
+X:BTCUSD,2025-05-21T04:00:00+00:00,2025-05-21T08:00:00+00:00,4,8,crypto_breakout_reclaim,signal_exit,107256.45456,106297.82143,0.10000,-102.80383,6.94051,1,1.00000,{'breakout_high': 107066.77}
+X:BTCUSD,2025-07-10T16:00:00+00:00,2025-07-11T08:00:00+00:00,16,8,crypto_breakout_reclaim,take_profit,112607.35707,117906.37989,0.10000,522.41059,7.49170,4,1.00000,{'breakout_high': 111850.07}
+X:BTCUSD,2025-08-13T20:00:00+00:00,2025-08-14T08:00:00+00:00,20,8,crypto_breakout_reclaim,signal_exit,122990.12425,121613.49374,0.10000,-145.61267,7.94962,3,1.00000,{'breakout_high': 122198.34}
+X:BTCUSD,2025-09-10T12:00:00+00:00,2025-09-11T20:00:00+00:00,12,20,crypto_breakout_reclaim,signal_exit,113414.59814,114286.45296,0.10000,79.78520,7.40028,8,1.00000,{'breakout_high': 113343.63}
+X:BTCUSD,2025-10-02T00:00:00+00:00,2025-10-06T00:00:00+00:00,0,0,crypto_breakout_reclaim,take_profit,118424.16946,123266.88569,0.10000,476.41666,7.85496,12,1.00000,{'breakout_high': 117865.4}

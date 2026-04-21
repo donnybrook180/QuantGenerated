@@ -1,0 +1,15 @@
+Artifact: trend__4h_midday__exit_trend__near_miss_dense__trend_up_vol_high_symbol_candidate
+Closed trades: 10
+Realized pnl: 22.55
+
+By entry hour
+16: trades=10 pnl=22.55 avg=2.26 win_rate=40.00%
+
+By entry setup
+trend: trades=10 pnl=22.55 avg=2.26 win_rate=40.00%
+
+By exit reason
+stop_loss: trades=3 pnl=-128.04 avg=-42.68 win_rate=0.00%
+trailing_stop: trades=3 pnl=-25.15 avg=-8.38 win_rate=33.33%
+end_of_run: trades=1 pnl=-18.08 avg=-18.08 win_rate=0.00%
+take_profit: trades=3 pnl=193.81 avg=64.60 win_rate=100.00%

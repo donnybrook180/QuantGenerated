@@ -1,0 +1,16 @@
+Artifact: crypto_trend_pullback_sweep_dense__4h_europe_4h_europe_symbol_candidate
+Closed trades: 6
+Realized pnl: -667.91
+
+By entry hour
+8: trades=4 pnl=-361.32 avg=-90.33 win_rate=50.00%
+12: trades=2 pnl=-306.60 avg=-153.30 win_rate=0.00%
+
+By entry setup
+crypto_trend_pullback: trades=6 pnl=-667.91 avg=-111.32 win_rate=33.33%
+
+By exit reason
+stop_loss: trades=2 pnl=-753.20 avg=-376.60 win_rate=0.00%
+signal_exit: trades=1 pnl=-59.01 avg=-59.01 win_rate=0.00%
+trailing_stop: trades=2 pnl=-9.62 avg=-4.81 win_rate=50.00%
+take_profit: trades=1 pnl=153.91 avg=153.91 win_rate=100.00%

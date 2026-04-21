@@ -3,7 +3,7 @@ Closed trades: 4
 Realized pnl: -63.15
 
 By entry hour
-4: trades=1 pnl=-89.10 avg=-89.10 win_rate=0.00%
+4: trades=1 pnl=-89.11 avg=-89.11 win_rate=0.00%
 5: trades=1 pnl=-5.20 avg=-5.20 win_rate=0.00%
 3: trades=2 pnl=31.16 avg=15.58 win_rate=50.00%
 
@@ -11,6 +11,6 @@ By entry setup
 mean_reversion: trades=4 pnl=-63.15 avg=-15.79 win_rate=25.00%
 
 By exit reason
-stop_loss: trades=1 pnl=-89.10 avg=-89.10 win_rate=0.00%
-structure_exit: trades=2 pnl=-44.63 avg=-22.32 win_rate=0.00%
+stop_loss: trades=1 pnl=-89.11 avg=-89.11 win_rate=0.00%
+structure_exit: trades=2 pnl=-44.64 avg=-22.32 win_rate=0.00%
 signal_exit: trades=1 pnl=70.59 avg=70.59 win_rate=100.00%

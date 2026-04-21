@@ -1,0 +1,17 @@
+Artifact: trend__4h_us__near_miss_dense__trend_up_vol_high_symbol_candidate
+Closed trades: 24
+Realized pnl: 25939.47
+
+By entry hour
+20: trades=1 pnl=-17.20 avg=-17.20 win_rate=0.00%
+16: trades=23 pnl=25956.67 avg=1128.55 win_rate=69.57%
+
+By entry setup
+trend: trades=24 pnl=25939.47 avg=1080.81 win_rate=66.67%
+
+By exit reason
+stop_loss: trades=4 pnl=-1389.44 avg=-347.36 win_rate=0.00%
+structure_exit: trades=2 pnl=-802.30 avg=-401.15 win_rate=0.00%
+trailing_stop: trades=6 pnl=461.84 avg=76.97 win_rate=66.67%
+take_profit: trades=11 pnl=4094.71 avg=372.25 win_rate=100.00%
+end_of_run: trades=1 pnl=23574.66 avg=23574.66 win_rate=100.00%

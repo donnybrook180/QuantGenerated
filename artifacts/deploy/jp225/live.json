@@ -2,10 +2,10 @@
   "profile_name": "symbol::jp225",
   "symbol": "JP225",
   "data_symbol": "JP225",
-  "broker_symbol": "JP225",
-  "research_run_id": 403,
-  "execution_set_id": 204,
-  "execution_validation_summary": "selection=family_both_volatility_breakout variant=volatility_breakout__1h_all@1h_all, volatility_short_breakdown__15m_europe__exit_fastfail__near_miss_patient__trend_down_vol_high@15m_europe|trend_down_vol_high data_source=duckdb_cache pnl=489.61 pf=19.17 closed=6 quality=0.83 underwater=16.7% max_regime_overlap=0.00 overlaps=volatility_breakout__1h_all vs volatility_short_breakdown__15m_europe__exit_fastfail__near_miss_patient__trend_down_vol_high=0.00 -> accepted",
+  "broker_symbol": "JP225.cash",
+  "research_run_id": 418,
+  "execution_set_id": 212,
+  "execution_validation_summary": "selection=family_both_volatility_breakout variant=volatility_breakout__1h_all@1h_all, jp225_volatility_short_breakdown_asia_hours__4h_all@4h_all data_source=duckdb_cache pnl=613.03 pf=47.20 closed=7 quality=0.84 underwater=14.3% max_regime_overlap=0.00 overlaps=volatility_breakout__1h_all vs jp225_volatility_short_breakdown_asia_hours__4h_all=0.00 -> accepted",
   "symbol_status": "live_ready",
   "strategies": [
     {
@@ -31,24 +31,16 @@
       "min_risk_multiplier": 0.0
     },
     {
-      "candidate_name": "volatility_short_breakdown__15m_europe__exit_fastfail__near_miss_patient__trend_down_vol_high",
+      "candidate_name": "jp225_volatility_short_breakdown_asia_hours__4h_all",
       "code_path": "quant_system.agents.strategies.VolatilityShortBreakdownAgent",
       "strategy_family": "volatility_breakout",
       "direction_mode": "short_only",
       "direction_role": "short_leg",
-      "promotion_tier": "reject",
-      "policy_summary": "tier=reject; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.20; risk_cap=0.20; stability=1.00; loss_ratio=999.00",
-      "variant_label": "15m_europe",
-      "regime_filter_label": "trend_down_vol_high",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 2.0,
-        "stale_breakout_bars": 6,
-        "structure_exit_bars": 0,
-        "break_even_atr_multiple": 0.4,
-        "trailing_stop_atr_multiple": 0.8,
-        "stale_breakout_atr_fraction": 0.1
-      },
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.98; risk_cap=0.60; stability=1.00; loss_ratio=999.00",
+      "variant_label": "4h_all",
+      "regime_filter_label": "",
+      "execution_overrides": {},
       "allocation_weight": 1.0,
       "allowed_regimes": [
         "trend_expansion"
@@ -56,8 +48,8 @@
       "blocked_regimes": [],
       "min_vol_percentile": 0.55,
       "max_vol_percentile": 0.97,
-      "base_allocation_weight": 0.2,
-      "max_risk_multiplier": 0.2,
+      "base_allocation_weight": 0.9774999999999999,
+      "max_risk_multiplier": 0.6,
       "min_risk_multiplier": 0.0
     }
   ],

@@ -1,0 +1,16 @@
+Artifact: trend__4h_all__exit_trend_4h_all_symbol_candidate
+Closed trades: 29
+Realized pnl: 700.81
+
+By entry hour
+4: trades=29 pnl=700.81 avg=24.17 win_rate=51.72%
+
+By entry setup
+trend: trades=29 pnl=700.81 avg=24.17 win_rate=51.72%
+
+By exit reason
+stop_loss: trades=6 pnl=-256.71 avg=-42.79 win_rate=0.00%
+stale_breakout: trades=3 pnl=-82.99 avg=-27.66 win_rate=0.00%
+trailing_stop: trades=11 pnl=26.79 avg=2.44 win_rate=54.55%
+end_of_run: trades=1 pnl=37.05 avg=37.05 win_rate=100.00%
+take_profit: trades=8 pnl=976.67 avg=122.08 win_rate=100.00%

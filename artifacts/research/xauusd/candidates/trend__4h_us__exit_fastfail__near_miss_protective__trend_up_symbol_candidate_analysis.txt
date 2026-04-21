@@ -1,0 +1,17 @@
+Artifact: trend__4h_us__exit_fastfail__near_miss_protective__trend_up_symbol_candidate
+Closed trades: 24
+Realized pnl: 19856.44
+
+By entry hour
+16: trades=24 pnl=19856.44 avg=827.35 win_rate=50.00%
+
+By entry setup
+trend: trades=24 pnl=19856.44 avg=827.35 win_rate=50.00%
+
+By exit reason
+stop_loss: trades=5 pnl=-1888.54 avg=-377.71 win_rate=0.00%
+stale_breakout: trades=3 pnl=-411.32 avg=-137.11 win_rate=33.33%
+time_stop: trades=1 pnl=-114.26 avg=-114.26 win_rate=0.00%
+trailing_stop: trades=9 pnl=143.77 avg=15.97 win_rate=55.56%
+take_profit: trades=5 pnl=1426.87 avg=285.37 win_rate=100.00%
+end_of_run: trades=1 pnl=20699.91 avg=20699.91 win_rate=100.00%

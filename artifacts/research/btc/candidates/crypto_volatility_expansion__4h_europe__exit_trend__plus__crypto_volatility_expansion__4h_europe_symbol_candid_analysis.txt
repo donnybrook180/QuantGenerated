@@ -1,0 +1,33 @@
+Artifact: crypto_volatility_expansion__4h_europe__exit_trend__plus__crypto_volatility_expansion__4h_europe_symbol_candid
+Closed trades: 40
+Realized pnl: -954.26
+
+By entry hour
+17: trades=4 pnl=-198.86 avg=-49.71 win_rate=0.00%
+18: trades=2 pnl=-137.91 avg=-68.95 win_rate=0.00%
+15: trades=2 pnl=-133.25 avg=-66.62 win_rate=0.00%
+11: trades=1 pnl=-130.47 avg=-130.47 win_rate=0.00%
+13: trades=5 pnl=-80.61 avg=-16.12 win_rate=20.00%
+4: trades=2 pnl=-73.88 avg=-36.94 win_rate=0.00%
+5: trades=1 pnl=-68.04 avg=-68.04 win_rate=0.00%
+2: trades=3 pnl=-53.59 avg=-17.86 win_rate=0.00%
+3: trades=3 pnl=-49.68 avg=-16.56 win_rate=33.33%
+19: trades=1 pnl=-40.48 avg=-40.48 win_rate=0.00%
+20: trades=1 pnl=-34.37 avg=-34.37 win_rate=0.00%
+21: trades=1 pnl=-33.72 avg=-33.72 win_rate=0.00%
+10: trades=2 pnl=-25.70 avg=-12.85 win_rate=0.00%
+22: trades=1 pnl=-9.81 avg=-9.81 win_rate=0.00%
+7: trades=1 pnl=5.27 avg=5.27 win_rate=100.00%
+0: trades=4 pnl=10.33 avg=2.58 win_rate=50.00%
+12: trades=1 pnl=41.50 avg=41.50 win_rate=100.00%
+8: trades=5 pnl=59.02 avg=11.80 win_rate=40.00%
+
+By entry setup
+crypto_volatility_expansion: trades=40 pnl=-954.26 avg=-23.86 win_rate=20.00%
+
+By exit reason
+structure_exit: trades=11 pnl=-607.60 avg=-55.24 win_rate=0.00%
+signal_exit: trades=5 pnl=-341.28 avg=-68.26 win_rate=0.00%
+stale_breakout: trades=9 pnl=-173.56 avg=-19.28 win_rate=11.11%
+trailing_stop: trades=14 pnl=25.60 avg=1.83 win_rate=42.86%
+take_profit: trades=1 pnl=142.58 avg=142.58 win_rate=100.00%

@@ -1,0 +1,17 @@
+Artifact: jp225_volatility_short_breakdown_core_hours__4h_all_4h_all_symbol_candidate
+Closed trades: 7
+Realized pnl: 374.63
+
+By entry hour
+20: trades=3 pnl=-155.15 avg=-51.72 win_rate=0.00%
+4: trades=4 pnl=529.77 avg=132.44 win_rate=75.00%
+
+By entry setup
+volatility_short_breakdown: trades=7 pnl=374.63 avg=53.52 win_rate=42.86%
+
+By exit reason
+stop_loss: trades=1 pnl=-63.21 avg=-63.21 win_rate=0.00%
+stale_breakout: trades=1 pnl=-55.90 avg=-55.90 win_rate=0.00%
+signal_exit: trades=1 pnl=-36.05 avg=-36.05 win_rate=0.00%
+structure_exit: trades=1 pnl=-13.27 avg=-13.27 win_rate=0.00%
+take_profit: trades=3 pnl=543.05 avg=181.02 win_rate=100.00%

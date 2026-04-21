@@ -1,6 +1,6 @@
 Artifact: volatility_short_breakdown__30m_all__exit_trend__near_miss_dense__trend_down_symbol_candidate
 Closed trades: 8
-Realized pnl: 296.75
+Realized pnl: 296.73
 
 By entry hour
 9: trades=1 pnl=-63.64 avg=-63.64 win_rate=0.00%
@@ -13,9 +13,9 @@ By entry hour
 11: trades=1 pnl=210.42 avg=210.42 win_rate=100.00%
 
 By entry setup
-volatility_short_breakdown: trades=8 pnl=296.75 avg=37.09 win_rate=62.50%
+volatility_short_breakdown: trades=8 pnl=296.73 avg=37.09 win_rate=62.50%
 
 By exit reason
-stop_loss: trades=3 pnl=-165.20 avg=-55.07 win_rate=0.00%
+stop_loss: trades=3 pnl=-165.21 avg=-55.07 win_rate=0.00%
 trailing_stop: trades=3 pnl=87.60 avg=29.20 win_rate=100.00%
-take_profit: trades=2 pnl=374.35 avg=187.18 win_rate=100.00%
+take_profit: trades=2 pnl=374.35 avg=187.17 win_rate=100.00%

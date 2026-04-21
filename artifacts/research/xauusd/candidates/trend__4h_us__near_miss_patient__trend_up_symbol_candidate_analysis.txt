@@ -1,0 +1,17 @@
+Artifact: trend__4h_us__near_miss_patient__trend_up_symbol_candidate
+Closed trades: 35
+Realized pnl: 10432.46
+
+By entry hour
+20: trades=2 pnl=47.58 avg=23.79 win_rate=50.00%
+16: trades=33 pnl=10384.88 avg=314.69 win_rate=60.61%
+
+By entry setup
+trend: trades=35 pnl=10432.46 avg=298.07 win_rate=60.00%
+
+By exit reason
+stop_loss: trades=7 pnl=-2307.48 avg=-329.64 win_rate=0.00%
+stale_breakout: trades=3 pnl=-388.62 avg=-129.54 win_rate=33.33%
+trailing_stop: trades=14 pnl=652.54 avg=46.61 win_rate=64.29%
+take_profit: trades=10 pnl=5163.48 avg=516.35 win_rate=100.00%
+end_of_run: trades=1 pnl=7312.54 avg=7312.54 win_rate=100.00%

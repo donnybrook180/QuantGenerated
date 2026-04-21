@@ -1,0 +1,17 @@
+Artifact: trend__4h_us__exit_fastfail__near_miss_dense_symbol_candidate
+Closed trades: 48
+Realized pnl: 25031.54
+
+By entry hour
+20: trades=2 pnl=-210.10 avg=-105.05 win_rate=0.00%
+16: trades=46 pnl=25241.64 avg=548.73 win_rate=47.83%
+
+By entry setup
+trend: trades=48 pnl=25031.54 avg=521.49 win_rate=45.83%
+
+By exit reason
+structure_exit: trades=14 pnl=-1879.23 avg=-134.23 win_rate=0.00%
+stop_loss: trades=6 pnl=-1451.74 avg=-241.96 win_rate=0.00%
+trailing_stop: trades=14 pnl=482.95 avg=34.50 win_rate=57.14%
+take_profit: trades=13 pnl=4304.91 avg=331.15 win_rate=100.00%
+end_of_run: trades=1 pnl=23574.66 avg=23574.66 win_rate=100.00%

@@ -2,12 +2,39 @@
   "profile_name": "symbol::us500",
   "symbol": "US500",
   "data_symbol": "SPY",
-  "broker_symbol": "US500",
-  "research_run_id": 386,
-  "execution_set_id": null,
-  "execution_validation_summary": "not_run",
-  "symbol_status": "research_only",
-  "strategies": [],
+  "broker_symbol": "US500.cash",
+  "research_run_id": 421,
+  "execution_set_id": 214,
+  "execution_validation_summary": "selection=standard variant=trend__4h_us__local_opt_density@4h_us data_source=duckdb_cache pnl=76.58 pf=3.29 closed=17 quality=0.68 underwater=58.8% max_regime_overlap=0.00 -> accepted",
+  "symbol_status": "reduced_risk_only",
+  "strategies": [
+    {
+      "candidate_name": "trend__4h_us__local_opt_density",
+      "code_path": "quant_system.agents.trend.TrendAgent",
+      "strategy_family": "trend__4h_us__local_opt_density",
+      "direction_mode": "both",
+      "direction_role": "combined",
+      "promotion_tier": "specialist",
+      "policy_summary": "tier=specialist; activate in unified_regimes=trend_expansion; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.55, 0.97]; base_weight=0.35; risk_cap=0.35; stability=0.93; loss_ratio=0.07",
+      "variant_label": "4h_us",
+      "regime_filter_label": "",
+      "execution_overrides": {
+        "min_bars_between_trades": 8,
+        "max_holding_bars": 0,
+        "stale_breakout_bars": 6
+      },
+      "allocation_weight": 1.0,
+      "allowed_regimes": [
+        "trend_expansion"
+      ],
+      "blocked_regimes": [],
+      "min_vol_percentile": 0.55,
+      "max_vol_percentile": 0.97,
+      "base_allocation_weight": 0.35,
+      "max_risk_multiplier": 0.35,
+      "min_risk_multiplier": 0.0
+    }
+  ],
   "target_volatility": 0.0,
   "max_symbol_vol_percentile": 0.98,
   "block_new_entries_in_event_risk": true

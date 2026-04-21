@@ -126,6 +126,20 @@ De functionele validaties voor `research`, `interpreter`, `evaluation` en `optim
 .\.venv\Scripts\python.exe tools\main_test_functional_suite.py
 ```
 
+## MT5 Fill Capture Validation
+
+Na live trading kun je voor de belangrijkste symbolen direct controleren of nieuwe MT5 fills nu echt met `fill_price` en `deal_ticket` worden opgeslagen:
+
+```powershell
+.\.venv\Scripts\python.exe tools\main_validate_mt5_fill_capture.py
+```
+
+Of expliciet voor de huidige index/forex live-symbolen:
+
+```powershell
+.\.venv\Scripts\python.exe tools\main_validate_mt5_fill_capture.py EURUSD JP225 EU50 UK100
+```
+
 ```powershell
 .\.venv\Scripts\python.exe main_symbol_research.py C:XAUUSD XAUUSD
 ```

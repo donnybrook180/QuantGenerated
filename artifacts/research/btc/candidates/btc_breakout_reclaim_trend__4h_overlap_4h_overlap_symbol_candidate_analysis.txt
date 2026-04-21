@@ -1,0 +1,15 @@
+Artifact: btc_breakout_reclaim_trend__4h_overlap_4h_overlap_symbol_candidate
+Closed trades: 5
+Realized pnl: 1011.70
+
+By entry hour
+12: trades=1 pnl=110.24 avg=110.24 win_rate=100.00%
+16: trades=4 pnl=901.47 avg=225.37 win_rate=50.00%
+
+By entry setup
+crypto_breakout_reclaim: trades=5 pnl=1011.70 avg=202.34 win_rate=60.00%
+
+By exit reason
+stale_breakout: trades=1 pnl=-100.93 avg=-100.93 win_rate=0.00%
+trailing_stop: trades=3 pnl=248.38 avg=82.79 win_rate=66.67%
+take_profit: trades=1 pnl=864.26 avg=864.26 win_rate=100.00%

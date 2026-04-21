@@ -1,0 +1,21 @@
+Artifact: momentum__30m_power__near_miss_patient__trend_up__plus__mean_reversion__30m_power__exit_quick__near_miss_prote
+Closed trades: 35
+Realized pnl: -8.47
+
+By entry hour
+14: trades=25 pnl=-5.64 avg=-0.23 win_rate=28.00%
+13: trades=10 pnl=-2.84 avg=-0.28 win_rate=0.00%
+
+By entry setup
+momentum_confirmation: trades=32 pnl=-7.09 avg=-0.22 win_rate=21.88%
+mean_reversion: trades=3 pnl=-1.38 avg=-0.46 win_rate=0.00%
+
+By exit reason
+stop_loss: trades=15 pnl=-8.42 avg=-0.56 win_rate=0.00%
+structure_exit: trades=7 pnl=-2.41 avg=-0.34 win_rate=0.00%
+time_stop: trades=1 pnl=-0.38 avg=-0.38 win_rate=0.00%
+end_of_run: trades=1 pnl=-0.26 avg=-0.26 win_rate=0.00%
+signal_exit: trades=1 pnl=-0.24 avg=-0.24 win_rate=0.00%
+trailing_stop: trades=3 pnl=-0.15 avg=-0.05 win_rate=33.33%
+stale_breakout: trades=1 pnl=-0.08 avg=-0.08 win_rate=0.00%
+take_profit: trades=6 pnl=3.46 avg=0.58 win_rate=100.00%

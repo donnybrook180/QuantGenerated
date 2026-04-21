@@ -1,14 +1,14 @@
 Artifact: crypto_volatility_expansion__1h_europe__exit_fastfail_1h_europe_symbol_candidate
 Closed trades: 2
-Realized pnl: -7.44
+Realized pnl: -150.16
 
 By entry hour
-8: trades=1 pnl=-5.46 avg=-5.46 win_rate=0.00%
-11: trades=1 pnl=-1.98 avg=-1.98 win_rate=0.00%
+11: trades=1 pnl=-95.52 avg=-95.52 win_rate=0.00%
+8: trades=1 pnl=-54.64 avg=-54.64 win_rate=0.00%
 
 By entry setup
-crypto_volatility_expansion: trades=2 pnl=-7.44 avg=-3.72 win_rate=0.00%
+crypto_volatility_expansion: trades=2 pnl=-150.16 avg=-75.08 win_rate=0.00%
 
 By exit reason
-signal_exit: trades=1 pnl=-5.46 avg=-5.46 win_rate=0.00%
-stale_breakout: trades=1 pnl=-1.98 avg=-1.98 win_rate=0.00%
+stale_breakout: trades=1 pnl=-95.52 avg=-95.52 win_rate=0.00%
+signal_exit: trades=1 pnl=-54.64 avg=-54.64 win_rate=0.00%

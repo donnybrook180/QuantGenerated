@@ -1,15 +1,15 @@
 Artifact: mean_reversion__15m_europe__exit_quick_15m_europe_symbol_candidate
 Closed trades: 4
-Realized pnl: 0.52
+Realized pnl: 4.76
 
 By entry hour
-10: trades=2 pnl=-0.35 avg=-0.17 win_rate=0.00%
-11: trades=1 pnl=-0.06 avg=-0.06 win_rate=0.00%
-12: trades=1 pnl=0.92 avg=0.92 win_rate=100.00%
+10: trades=2 pnl=-2.92 avg=-1.46 win_rate=0.00%
+11: trades=1 pnl=-1.51 avg=-1.51 win_rate=0.00%
+12: trades=1 pnl=9.19 avg=9.19 win_rate=100.00%
 
 By entry setup
-mean_reversion: trades=4 pnl=0.52 avg=0.13 win_rate=25.00%
+mean_reversion: trades=4 pnl=4.76 avg=1.19 win_rate=25.00%
 
 By exit reason
-structure_exit: trades=3 pnl=-0.40 avg=-0.13 win_rate=0.00%
-take_profit: trades=1 pnl=0.92 avg=0.92 win_rate=100.00%
+structure_exit: trades=3 pnl=-4.43 avg=-1.48 win_rate=0.00%
+take_profit: trades=1 pnl=9.19 avg=9.19 win_rate=100.00%

@@ -1,16 +1,16 @@
 Artifact: mean_reversion__15m_power_15m_power_symbol_candidate
 Closed trades: 17
-Realized pnl: -5.38
+Realized pnl: -54.56
 
 By entry hour
-18: trades=16 pnl=-5.86 avg=-0.37 win_rate=6.25%
-19: trades=1 pnl=0.48 avg=0.48 win_rate=100.00%
+18: trades=16 pnl=-59.35 avg=-3.71 win_rate=6.25%
+19: trades=1 pnl=4.79 avg=4.79 win_rate=100.00%
 
 By entry setup
-mean_reversion: trades=17 pnl=-5.38 avg=-0.32 win_rate=11.76%
+mean_reversion: trades=17 pnl=-54.56 avg=-3.21 win_rate=11.76%
 
 By exit reason
-structure_exit: trades=12 pnl=-5.80 avg=-0.48 win_rate=0.00%
-stop_loss: trades=2 pnl=-0.59 avg=-0.29 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.01 avg=-0.01 win_rate=0.00%
-take_profit: trades=2 pnl=1.02 avg=0.51 win_rate=100.00%
+structure_exit: trades=12 pnl=-58.47 avg=-4.87 win_rate=0.00%
+stop_loss: trades=2 pnl=-5.99 avg=-3.00 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.18 avg=-0.18 win_rate=0.00%
+take_profit: trades=2 pnl=10.09 avg=5.04 win_rate=100.00%

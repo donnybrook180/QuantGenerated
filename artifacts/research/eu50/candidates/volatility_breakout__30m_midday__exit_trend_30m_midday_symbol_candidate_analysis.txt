@@ -1,13 +1,13 @@
 Artifact: volatility_breakout__30m_midday__exit_trend_30m_midday_symbol_candidate
 Closed trades: 2
-Realized pnl: 1.22
+Realized pnl: 12.09
 
 By entry hour
-15: trades=2 pnl=1.22 avg=0.61 win_rate=100.00%
+15: trades=2 pnl=12.09 avg=6.05 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=2 pnl=1.22 avg=0.61 win_rate=100.00%
+volatility_breakout: trades=2 pnl=12.09 avg=6.05 win_rate=100.00%
 
 By exit reason
-trailing_stop: trades=1 pnl=0.01 avg=0.01 win_rate=100.00%
-take_profit: trades=1 pnl=1.20 avg=1.20 win_rate=100.00%
+trailing_stop: trades=1 pnl=0.08 avg=0.08 win_rate=100.00%
+take_profit: trades=1 pnl=12.01 avg=12.01 win_rate=100.00%

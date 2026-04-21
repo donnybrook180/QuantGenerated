@@ -1,0 +1,5 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+META,2026-02-20T18:00:00+00:00,2026-02-20T19:15:00+00:00,18,19,momentum_confirmation,stop_loss,659.88195,654.21913,0.10000,-1.07942,0.51314,5,1.00000,"{'momentum_5': 0.01661093733146357, 'momentum_20': 0.022868217054263562}"
+META,2026-03-02T18:00:00+00:00,2026-03-02T18:15:00+00:00,18,18,momentum_confirmation,stop_loss,655.17101,650.13995,0.10000,-1.01616,0.51305,1,1.00000,"{'momentum_5': 0.010505530444441025, 'momentum_20': 0.018629676857524924}"
+META,2026-03-04T18:00:00+00:00,2026-03-04T19:30:00+00:00,18,19,momentum_confirmation,stop_loss,670.42406,666.18674,0.10000,-0.93710,0.51337,6,1.00000,"{'momentum_5': 0.00630545421789841, 'momentum_20': 0.02890430724833437}"
+META,2026-03-23T18:00:00+00:00,2026-03-23T18:45:00+00:00,18,18,momentum_confirmation,stop_loss,608.04158,604.35910,0.10000,-0.88037,0.51212,3,1.00000,"{'momentum_5': 0.0067400844580607355, 'momentum_20': 0.021165087683934436}"

@@ -1,16 +1,16 @@
 Artifact: forex_short_trend_continuation__15m_overlap__exit_fastfail_15m_overlap_symbol_candidate
 Closed trades: 5
-Realized pnl: -511.43
+Realized pnl: -554.41
 
 By entry hour
-13: trades=2 pnl=-309.80 avg=-154.90 win_rate=0.00%
-12: trades=2 pnl=-205.92 avg=-102.96 win_rate=0.00%
-15: trades=1 pnl=4.29 avg=4.29 win_rate=100.00%
+13: trades=2 pnl=-327.01 avg=-163.50 win_rate=0.00%
+12: trades=2 pnl=-223.18 avg=-111.59 win_rate=0.00%
+15: trades=1 pnl=-4.22 avg=-4.22 win_rate=0.00%
 
 By entry setup
-forex_short_trend_continuation: trades=5 pnl=-511.43 avg=-102.29 win_rate=20.00%
+forex_short_trend_continuation: trades=5 pnl=-554.41 avg=-110.88 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=3 pnl=-431.76 avg=-143.92 win_rate=0.00%
-signal_exit: trades=1 pnl=-83.96 avg=-83.96 win_rate=0.00%
-stale_breakout: trades=1 pnl=4.29 avg=4.29 win_rate=100.00%
+structure_exit: trades=3 pnl=-457.60 avg=-152.53 win_rate=0.00%
+signal_exit: trades=1 pnl=-92.59 avg=-92.59 win_rate=0.00%
+stale_breakout: trades=1 pnl=-4.22 avg=-4.22 win_rate=0.00%

@@ -1,18 +1,18 @@
 Artifact: stock_power_hour_continuation__5m_power__exit_fastfail_5m_power_symbol_candidate
-Closed trades: 410
-Realized pnl: -211.22
+Closed trades: 364
+Realized pnl: -185.42
 
 By entry hour
-18: trades=216 pnl=-112.36 avg=-0.52 win_rate=1.85%
-19: trades=194 pnl=-98.86 avg=-0.51 win_rate=5.15%
+18: trades=205 pnl=-106.09 avg=-0.52 win_rate=1.95%
+19: trades=159 pnl=-79.33 avg=-0.50 win_rate=5.66%
 
 By entry setup
-stock_power_hour_continuation: trades=410 pnl=-211.22 avg=-0.52 win_rate=3.41%
+stock_power_hour_continuation: trades=364 pnl=-185.42 avg=-0.51 win_rate=3.57%
 
 By exit reason
-structure_exit: trades=114 pnl=-75.82 avg=-0.67 win_rate=0.00%
-stop_loss: trades=127 pnl=-73.50 avg=-0.58 win_rate=0.00%
-take_profit: trades=116 pnl=-34.02 avg=-0.29 win_rate=12.07%
-trailing_stop: trades=38 pnl=-19.38 avg=-0.51 win_rate=0.00%
-time_stop: trades=11 pnl=-6.41 avg=-0.58 win_rate=0.00%
-stale_breakout: trades=4 pnl=-2.09 avg=-0.52 win_rate=0.00%
+stop_loss: trades=118 pnl=-68.29 avg=-0.58 win_rate=0.00%
+structure_exit: trades=90 pnl=-60.84 avg=-0.68 win_rate=0.00%
+take_profit: trades=109 pnl=-31.54 avg=-0.29 win_rate=11.93%
+trailing_stop: trades=30 pnl=-15.25 avg=-0.51 win_rate=0.00%
+time_stop: trades=12 pnl=-6.92 avg=-0.58 win_rate=0.00%
+stale_breakout: trades=5 pnl=-2.57 avg=-0.51 win_rate=0.00%

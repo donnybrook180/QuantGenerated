@@ -1,0 +1,15 @@
+Artifact: meta_stock_power_hour_continuation_selective_symbol_candidate
+Closed trades: 11
+Realized pnl: -7.70
+
+By entry hour
+18: trades=9 pnl=-6.25 avg=-0.69 win_rate=0.00%
+19: trades=2 pnl=-1.46 avg=-0.73 win_rate=0.00%
+
+By entry setup
+stock_power_hour_continuation: trades=11 pnl=-7.70 avg=-0.70 win_rate=0.00%
+
+By exit reason
+stale_breakout: trades=6 pnl=-4.53 avg=-0.76 win_rate=0.00%
+stop_loss: trades=3 pnl=-2.35 avg=-0.78 win_rate=0.00%
+trailing_stop: trades=2 pnl=-0.82 avg=-0.41 win_rate=0.00%

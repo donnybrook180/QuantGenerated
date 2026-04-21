@@ -40,6 +40,7 @@ class SymbolResearchExportsTests(unittest.TestCase):
 
         self.assertIn("Top candidate-level winners", report_text)
         self.assertIn(row.name, report_text)
+        self.assertIn("strategy_scope: family=opening_range_breakout direction=long_only role=long_leg", report_text)
 
     def test_build_symbol_deployment_preserves_strategy_family_and_direction(self) -> None:
         deployment = build_symbol_deployment(

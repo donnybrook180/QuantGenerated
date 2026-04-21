@@ -1,3 +1,3 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:ETHUSD,2022-05-31T08:30:00+00:00,2022-05-31T09:30:00+00:00,8,9,crypto_vwap_reversion,structure_exit,1973.76859,1963.45370,0.01000,-1.15945,0.12796,2,0.69669,"{'z_score_20': -1.316773387324801, 'vwap_distance': -0.006425099967347414}"
-X:ETHUSD,2022-09-05T07:30:00+00:00,2022-09-05T09:00:00+00:00,7,9,crypto_vwap_reversion,structure_exit,1564.61500,1560.71486,0.01000,-0.49159,0.10157,3,0.71089,"{'z_score_20': -1.4789378971191773, 'vwap_distance': -0.005887993116946988}"
+X:ETHUSD,2022-05-31T08:30:00+00:00,2022-05-31T09:30:00+00:00,8,9,crypto_vwap_reversion,structure_exit,1973.76859,1963.45370,0.10000,-11.59449,1.27960,2,0.69669,"{'z_score_20': -1.316773387324801, 'vwap_distance': -0.006425099967347414}"
+X:ETHUSD,2022-09-05T07:30:00+00:00,2022-09-05T09:00:00+00:00,7,9,crypto_vwap_reversion,structure_exit,1564.61500,1560.71486,0.10000,-4.91586,1.01573,3,0.71089,"{'z_score_20': -1.4789378971191773, 'vwap_distance': -0.005887993116946988}"

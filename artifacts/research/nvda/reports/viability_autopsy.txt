@@ -5,9 +5,9 @@ Tier counts: core=0 specialist=0 reject=377
 Top blockers
 - walk-forward pass rate too low (0.00% < 20%): 377
 - regime stability too low (0.00 < 0.50): 377
-- test PF < 1.0 (0.00): 325
-- validation PF < 1.0 (0.00): 306
-- equity quality too low (0.25 < 0.45): 242
+- test PF < 1.0 (0.00): 291
+- validation PF < 1.0 (0.00): 261
+- equity quality too low (0.25 < 0.45): 223
 - monte carlo loss probability too high (100.00% > 10.00%): 215
 - regime loss ratio too high (999.00 > 1.25): 215
 - validation trades too low (0 < 1): 186

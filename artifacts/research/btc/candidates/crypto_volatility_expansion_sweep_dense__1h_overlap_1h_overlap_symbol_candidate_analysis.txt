@@ -1,12 +1,12 @@
 Artifact: crypto_volatility_expansion_sweep_dense__1h_overlap_1h_overlap_symbol_candidate
 Closed trades: 1
-Realized pnl: -1.55
+Realized pnl: 94.76
 
 By entry hour
-13: trades=1 pnl=-1.55 avg=-1.55 win_rate=0.00%
+13: trades=1 pnl=94.76 avg=94.76 win_rate=100.00%
 
 By entry setup
-crypto_volatility_expansion: trades=1 pnl=-1.55 avg=-1.55 win_rate=0.00%
+crypto_volatility_expansion: trades=1 pnl=94.76 avg=94.76 win_rate=100.00%
 
 By exit reason
-time_stop: trades=1 pnl=-1.55 avg=-1.55 win_rate=0.00%
+trailing_stop: trades=1 pnl=94.76 avg=94.76 win_rate=100.00%

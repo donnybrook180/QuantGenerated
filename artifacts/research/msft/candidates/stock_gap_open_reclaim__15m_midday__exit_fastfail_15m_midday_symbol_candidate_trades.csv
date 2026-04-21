@@ -1,3 +1,10 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-05-08T15:15:00+00:00,2025-05-08T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,440.32461,438.06611,0.10000,-0.73463,0.50878,5,1.00000,{'minutes_from_open': 105.0}
-MSFT,2025-05-27T15:30:00+00:00,2025-05-27T16:30:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,458.45908,456.65640,0.10000,-0.68942,0.50915,4,1.00000,{'minutes_from_open': 120.0}
+MSFT,2025-05-08T15:15:00+00:00,2025-05-08T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,439.97798,438.41230,0.10000,-0.66535,0.50878,5,1.00000,{'minutes_from_open': 105.0}
+MSFT,2025-05-27T15:30:00+00:00,2025-05-28T15:30:00+00:00,15,15,stock_gap_open_reclaim,trailing_stop,458.10660,458.33831,0.10000,-0.48599,0.50916,12,1.00000,{'minutes_from_open': 120.0}
+MSFT,2025-09-12T15:15:00+00:00,2025-09-12T16:30:00+00:00,15,16,stock_gap_open_reclaim,structure_exit,510.77303,506.47868,0.10000,-0.93961,0.51017,5,1.00000,{'minutes_from_open': 105.0}
+MSFT,2025-11-10T15:00:00+00:00,2025-11-11T15:15:00+00:00,15,15,stock_gap_open_reclaim,structure_exit,504.83095,504.62855,0.10000,-0.53033,0.51009,13,1.00000,{'minutes_from_open': 90.0}
+MSFT,2025-11-20T15:15:00+00:00,2025-11-20T15:45:00+00:00,15,15,stock_gap_open_reclaim,structure_exit,492.90856,490.62186,0.10000,-0.73851,0.50984,2,1.00000,{'minutes_from_open': 105.0}
+MSFT,2026-01-07T15:00:00+00:00,2026-01-07T15:45:00+00:00,15,15,stock_gap_open_reclaim,take_profit,483.87676,487.61746,0.10000,-0.13564,0.50971,3,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-02-18T15:00:00+00:00,2026-02-18T16:30:00+00:00,15,16,stock_gap_open_reclaim,structure_exit,400.65511,398.87021,0.10000,-0.68649,0.50800,6,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-02-26T15:00:00+00:00,2026-02-26T15:15:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,404.65591,401.58967,0.10000,-0.81469,0.50806,1,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-03-04T15:15:00+00:00,2026-03-04T15:45:00+00:00,15,15,stock_gap_open_reclaim,structure_exit,405.40246,405.03898,0.10000,-0.54445,0.50810,2,1.00000,{'minutes_from_open': 105.0}

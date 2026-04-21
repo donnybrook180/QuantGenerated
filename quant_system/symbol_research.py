@@ -5445,6 +5445,114 @@ def _candidate_selection_score(row: dict[str, object]) -> tuple[float, ...]:
     )
 
 
+def _regime_share_map(row: dict[str, object]) -> dict[str, float]:
+    regime_trade_counts = _metric_map_from_row(row, "regime_trade_count_by_label")
+    if regime_trade_counts:
+        total = sum(max(value, 0.0) for value in regime_trade_counts.values())
+        if total > 0.0:
+            return {
+                str(label): max(value, 0.0) / total
+                for label, value in regime_trade_counts.items()
+                if max(value, 0.0) > 0.0
+            }
+    best_regime = str(row.get("best_regime", "") or "").strip()
+    return {best_regime: 1.0} if best_regime else {}
+
+
+def _pairwise_regime_overlap_score(left: dict[str, object], right: dict[str, object]) -> float:
+    left_map = _regime_share_map(left)
+    right_map = _regime_share_map(right)
+    if not left_map or not right_map:
+        return 1.0
+    labels = set(left_map) | set(right_map)
+    return sum(min(left_map.get(label, 0.0), right_map.get(label, 0.0)) for label in labels)
+
+
+def _max_regime_overlap_score(candidate: dict[str, object], selected: list[dict[str, object]]) -> float:
+    if not selected:
+        return 0.0
+    return max(_pairwise_regime_overlap_score(candidate, row) for row in selected)
+
+
+def _specialist_has_low_regime_overlap(
+    candidate: dict[str, object],
+    selected: list[dict[str, object]],
+    max_overlap: float = 0.25,
+) -> bool:
+    if not selected:
+        return True
+    candidate_best_regime = str(candidate.get("best_regime", "") or "").strip()
+    if candidate_best_regime and any(candidate_best_regime == str(row.get("best_regime", "") or "").strip() for row in selected):
+        return False
+    return _max_regime_overlap_score(candidate, selected) <= max_overlap
+
+
+def _regime_overlap_diagnostics(candidate_set: list[dict[str, object]]) -> tuple[float, list[str]]:
+    if len(candidate_set) < 2:
+        return 0.0, []
+    max_overlap = 0.0
+    diagnostics: list[str] = []
+    for index, left in enumerate(candidate_set):
+        for right in candidate_set[index + 1 :]:
+            overlap = _pairwise_regime_overlap_score(left, right)
+            max_overlap = max(max_overlap, overlap)
+            diagnostics.append(
+                f"{left.get('candidate_name', 'unknown')} vs {right.get('candidate_name', 'unknown')}={overlap:.2f}"
+            )
+    return max_overlap, diagnostics
+
+
+def _regime_overlap_conflict(candidate: dict[str, object], selected: list[dict[str, object]]) -> tuple[float, str]:
+    if not selected:
+        return 0.0, ""
+    best_overlap = -1.0
+    best_name = ""
+    for row in selected:
+        overlap = _pairwise_regime_overlap_score(candidate, row)
+        if overlap > best_overlap:
+            best_overlap = overlap
+            best_name = str(row.get("candidate_name", "") or "")
+    return max(best_overlap, 0.0), best_name
+
+
+def _specialist_regime_overlap_rejections(
+    rows: list[dict[str, object]],
+    selected: list[dict[str, object]],
+    *,
+    max_overlap: float = 0.25,
+) -> list[str]:
+    if not selected:
+        return []
+    selected_names = {str(row.get("candidate_name", "") or "") for row in selected}
+    reasons: list[str] = []
+    for row in rows:
+        if str(row.get("candidate_name", "") or "") in selected_names:
+            continue
+        if not bool(row.get("regime_specialist_viable")):
+            continue
+        if _meets_viability(row, str(row.get("symbol", ""))):
+            continue
+        candidate_best_regime = str(row.get("best_regime", "") or "").strip()
+        conflicting_regime_match = next(
+            (
+                str(selected_row.get("candidate_name", "") or "")
+                for selected_row in selected
+                if candidate_best_regime and candidate_best_regime == str(selected_row.get("best_regime", "") or "").strip()
+            ),
+            "",
+        )
+        overlap, overlap_name = _regime_overlap_conflict(row, selected)
+        if conflicting_regime_match:
+            reasons.append(
+                f"{row.get('candidate_name', 'unknown')} rejected_due_to_regime_overlap same_best_regime={candidate_best_regime} conflicts_with={conflicting_regime_match}"
+            )
+        elif overlap > max_overlap:
+            reasons.append(
+                f"{row.get('candidate_name', 'unknown')} rejected_due_to_regime_overlap overlap={overlap:.2f} threshold={max_overlap:.2f} conflicts_with={overlap_name or 'unknown'}"
+            )
+    return reasons
+
+
 def _is_valid_execution_combo(
     combo: tuple[dict[str, object], ...],
     symbol: str,
@@ -5458,6 +5566,7 @@ def _is_valid_execution_combo(
     allow_multi_core = symbol_is_forex(symbol) or _is_crypto_symbol(symbol) or _is_metal_symbol(symbol)
     specialist_count = 0
     core_count = 0
+    accepted_rows: list[dict[str, object]] = []
     for row in combo:
         components = _selection_component_keys(row)
         if components & used_components:
@@ -5489,6 +5598,13 @@ def _is_valid_execution_combo(
             if direction in directions:
                 return False
             directions.add(direction)
+        is_specialist = str(row.get("promotion_tier", "reject")) == "specialist" or (
+            bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", "")))
+        )
+        max_allowed_overlap = 0.25 if is_specialist else 0.60
+        if accepted_rows and _max_regime_overlap_score(row, accepted_rows) > max_allowed_overlap:
+            return False
+        accepted_rows.append(row)
         tier = str(row.get("promotion_tier", "reject"))
         if tier == "specialist":
             specialist_count += 1
@@ -5806,6 +5922,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
                 continue
             if lead_regime and str(row.get("best_regime", "") or "") == lead_regime:
                 continue
+            if not _specialist_has_low_regime_overlap(row, selected):
+                continue
             selected.append(row)
             used_components.update(components)
             if str(row.get("strategy_family", "") or "").strip():
@@ -5820,6 +5938,8 @@ def select_execution_candidates(rows: list[dict[str, object]], max_candidates: i
         if selected and components & used_components:
             continue
         if not _family_unused_for_single_selection(row, used_families):
+            continue
+        if bool(row.get("regime_specialist_viable")) and not _meets_viability(row, str(row.get("symbol", ""))) and not _specialist_has_low_regime_overlap(row, selected):
             continue
         candidate_code_path = str(row.get("code_path", "") or "").strip()
         candidate_signature = (
@@ -5941,6 +6061,8 @@ def _tiered_fallback_candidates(rows: list[dict[str, object]], symbol: str, max_
         if same_regime and allow_forex_specialist_third and len(selected) < 2:
             continue
         if candidate_code_path and candidate_code_path in used_code_paths:
+            continue
+        if not _specialist_has_low_regime_overlap(row, selected):
             continue
         selected.append(row)
         used_components.update(components)
@@ -6243,6 +6365,9 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
             f"worst={_summarize_unified_regime(row.worst_regime) if row.worst_regime else 'none'} pnl={row.worst_regime_pnl:.2f} "
             f"dominant_share={row.dominant_regime_share_pct:.2f}% "
             f"stability={row.regime_stability_score:.2f} loss_ratio={row.regime_loss_ratio:.2f}"
+        )
+        lines.append(
+            f"  strategy_scope: family={row.strategy_family or 'none'} direction={row.direction_mode or 'none'} role={row.direction_role or 'none'}"
         )
         lines.append(
             f"  unified_regimes: best={row.best_unified_regime or 'none'} "
@@ -6682,6 +6807,7 @@ def run_symbol_research(
             candidate_set,
         )
         path_metrics = _execution_path_metrics(execution_validation_result)
+        max_regime_overlap, overlap_diagnostics = _regime_overlap_diagnostics(candidate_set)
         sparse_execution = any(bool(row.get("sparse_strategy")) for row in candidate_set)
         min_execution_closed_trades = 3 if sparse_execution else 2
         accepted = (
@@ -6708,8 +6834,11 @@ def run_symbol_research(
             f"pf={execution_validation_result.profit_factor:.2f} "
             f"closed={len(execution_validation_result.closed_trades)} "
             f"quality={path_metrics['equity_quality_score']:.2f} "
-            f"underwater={path_metrics['time_under_water_pct']:.1f}%"
+            f"underwater={path_metrics['time_under_water_pct']:.1f}% "
+            f"max_regime_overlap={max_regime_overlap:.2f}"
         )
+        if overlap_diagnostics:
+            summary += " overlaps=" + "; ".join(overlap_diagnostics)
         if accepted and normal_quality:
             summary += " -> accepted"
             score = _execution_result_score(execution_validation_result, candidate_set)
@@ -6875,9 +7004,20 @@ def run_symbol_research(
         if execution_rejection_reason:
             lines.append(f"Execution rejection reason: {execution_rejection_reason}")
     if selected_execution_candidates:
+        selected_max_overlap, selected_overlap_diagnostics = _regime_overlap_diagnostics(selected_execution_candidates)
+        specialist_overlap_rejections = _specialist_regime_overlap_rejections(execution_candidate_rows, selected_execution_candidates)
         lines.append(
             "Execution tiers: "
             + ", ".join(f"{row['candidate_name']}[{row.get('promotion_tier', 'core')}]" for row in selected_execution_candidates)
+        )
+        lines.append(f"Execution regime overlap max: {selected_max_overlap:.2f}")
+        lines.append(
+            "Execution regime overlap detail: "
+            + ("; ".join(selected_overlap_diagnostics) if selected_overlap_diagnostics else "none")
+        )
+        lines.append(
+            "Execution regime overlap rejections: "
+            + ("; ".join(specialist_overlap_rejections) if specialist_overlap_rejections else "none")
         )
     lines.append(f"Execution set id: {execution_set_id if execution_set_id is not None else 'none'}")
     lines.append(f"Execution validation: {execution_validation_summary}")

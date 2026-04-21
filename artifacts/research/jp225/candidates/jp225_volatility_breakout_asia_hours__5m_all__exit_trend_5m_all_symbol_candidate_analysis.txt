@@ -1,16 +1,16 @@
 Artifact: jp225_volatility_breakout_asia_hours__5m_all__exit_trend_5m_all_symbol_candidate
 Closed trades: 8
-Realized pnl: -10.18
+Realized pnl: -101.66
 
 By entry hour
-2: trades=5 pnl=-5.55 avg=-1.11 win_rate=0.00%
-8: trades=2 pnl=-3.69 avg=-1.84 win_rate=0.00%
-1: trades=1 pnl=-0.94 avg=-0.94 win_rate=0.00%
+2: trades=5 pnl=-55.41 avg=-11.08 win_rate=0.00%
+8: trades=2 pnl=-36.83 avg=-18.42 win_rate=0.00%
+1: trades=1 pnl=-9.42 avg=-9.42 win_rate=0.00%
 
 By entry setup
-volatility_breakout: trades=8 pnl=-10.18 avg=-1.27 win_rate=0.00%
+volatility_breakout: trades=8 pnl=-101.66 avg=-12.71 win_rate=0.00%
 
 By exit reason
-stop_loss: trades=4 pnl=-7.45 avg=-1.86 win_rate=0.00%
-trailing_stop: trades=3 pnl=-1.73 avg=-0.58 win_rate=0.00%
-signal_exit: trades=1 pnl=-0.99 avg=-0.99 win_rate=0.00%
+stop_loss: trades=4 pnl=-74.49 avg=-18.62 win_rate=0.00%
+trailing_stop: trades=3 pnl=-17.25 avg=-5.75 win_rate=0.00%
+signal_exit: trades=1 pnl=-9.92 avg=-9.92 win_rate=0.00%

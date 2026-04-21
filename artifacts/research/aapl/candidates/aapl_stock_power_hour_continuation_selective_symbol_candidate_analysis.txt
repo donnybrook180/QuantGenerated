@@ -1,17 +1,17 @@
 Artifact: aapl_stock_power_hour_continuation_selective_symbol_candidate
-Closed trades: 417
-Realized pnl: -217.39
+Closed trades: 372
+Realized pnl: -193.15
 
 By entry hour
-18: trades=252 pnl=-131.63 avg=-0.52 win_rate=0.40%
-19: trades=165 pnl=-85.76 avg=-0.52 win_rate=0.00%
+18: trades=233 pnl=-121.43 avg=-0.52 win_rate=0.43%
+19: trades=139 pnl=-71.72 avg=-0.52 win_rate=0.00%
 
 By entry setup
-stock_power_hour_continuation: trades=417 pnl=-217.39 avg=-0.52 win_rate=0.24%
+stock_power_hour_continuation: trades=372 pnl=-193.15 avg=-0.52 win_rate=0.27%
 
 By exit reason
-stop_loss: trades=144 pnl=-82.94 avg=-0.58 win_rate=0.00%
-trailing_stop: trades=87 pnl=-43.20 avg=-0.50 win_rate=0.00%
-stale_breakout: trades=68 pnl=-38.18 avg=-0.56 win_rate=0.00%
-time_stop: trades=53 pnl=-29.23 avg=-0.55 win_rate=0.00%
-take_profit: trades=65 pnl=-23.84 avg=-0.37 win_rate=1.54%
+stop_loss: trades=132 pnl=-76.23 avg=-0.58 win_rate=0.00%
+trailing_stop: trades=76 pnl=-37.54 avg=-0.49 win_rate=0.00%
+stale_breakout: trades=52 pnl=-29.38 avg=-0.57 win_rate=0.00%
+time_stop: trades=52 pnl=-28.30 avg=-0.54 win_rate=0.00%
+take_profit: trades=60 pnl=-21.69 avg=-0.36 win_rate=1.67%

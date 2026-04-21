@@ -1,17 +1,16 @@
 Artifact: stock_gap_and_go__15m_open__exit_fastfail_15m_open_symbol_candidate
-Closed trades: 58
-Realized pnl: -2.83
+Closed trades: 49
+Realized pnl: -23.61
 
 By entry hour
-14: trades=27 pnl=-1.47 avg=-0.05 win_rate=7.41%
-13: trades=31 pnl=-1.36 avg=-0.04 win_rate=6.45%
+14: trades=24 pnl=-12.50 avg=-0.52 win_rate=8.33%
+13: trades=25 pnl=-11.10 avg=-0.44 win_rate=8.00%
 
 By entry setup
-stock_gap_and_go: trades=58 pnl=-2.83 avg=-0.05 win_rate=6.90%
+stock_gap_and_go: trades=49 pnl=-23.61 avg=-0.48 win_rate=8.16%
 
 By exit reason
-structure_exit: trades=18 pnl=-1.29 avg=-0.07 win_rate=0.00%
-trailing_stop: trades=14 pnl=-0.71 avg=-0.05 win_rate=0.00%
-stop_loss: trades=8 pnl=-0.57 avg=-0.07 win_rate=0.00%
-time_stop: trades=2 pnl=-0.13 avg=-0.06 win_rate=0.00%
-take_profit: trades=16 pnl=-0.12 avg=-0.01 win_rate=25.00%
+structure_exit: trades=20 pnl=-13.03 avg=-0.65 win_rate=0.00%
+stop_loss: trades=10 pnl=-7.97 avg=-0.80 win_rate=0.00%
+take_profit: trades=18 pnl=-2.02 avg=-0.11 win_rate=22.22%
+trailing_stop: trades=1 pnl=-0.59 avg=-0.59 win_rate=0.00%

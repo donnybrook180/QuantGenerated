@@ -1,0 +1,19 @@
+Artifact: trend__5m_overlap__exit_trend__near_miss_dense__trend_up_symbol_candidate
+Closed trades: 20
+Realized pnl: 909.09
+
+By entry hour
+15: trades=2 pnl=-424.19 avg=-212.09 win_rate=0.00%
+14: trades=7 pnl=-223.91 avg=-31.99 win_rate=28.57%
+16: trades=1 pnl=-211.25 avg=-211.25 win_rate=0.00%
+13: trades=2 pnl=670.55 avg=335.27 win_rate=50.00%
+12: trades=8 pnl=1097.89 avg=137.24 win_rate=50.00%
+
+By entry setup
+trend: trades=20 pnl=909.09 avg=45.45 win_rate=35.00%
+
+By exit reason
+stop_loss: trades=8 pnl=-1522.03 avg=-190.25 win_rate=0.00%
+trailing_stop: trades=5 pnl=-78.98 avg=-15.80 win_rate=40.00%
+stale_breakout: trades=3 pnl=-24.81 avg=-8.27 win_rate=33.33%
+take_profit: trades=4 pnl=2534.91 avg=633.73 win_rate=100.00%

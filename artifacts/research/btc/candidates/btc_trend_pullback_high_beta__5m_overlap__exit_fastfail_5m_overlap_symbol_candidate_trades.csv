@@ -1,6 +1,6 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-13T12:00:00+00:00,2026-03-13T12:15:00+00:00,12,12,crypto_trend_pullback,structure_exit,72430.88150,72344.34522,0.01000,-1.33588,0.47052,3,0.57028,{'pullback_floor': 72246.3}
-X:BTCUSD,2026-03-16T12:10:00+00:00,2026-03-16T12:25:00+00:00,12,12,crypto_trend_pullback,take_profit,73623.06030,73852.91890,0.01000,1.81929,0.47930,3,1.00000,{'pullback_floor': 73563.79}
-X:BTCUSD,2026-03-23T12:35:00+00:00,2026-03-23T12:40:00+00:00,12,12,crypto_trend_pullback,take_profit,70348.64922,70708.39065,0.01000,3.13898,0.45844,1,1.00000,{'pullback_floor': 70328.1}
-X:BTCUSD,2026-03-23T15:10:00+00:00,2026-03-23T15:15:00+00:00,15,15,crypto_trend_pullback,stop_loss,71411.70865,71093.03294,0.01000,-3.64990,0.46314,1,1.00000,{'pullback_floor': 71391.0}
-X:BTCUSD,2026-04-02T16:00:00+00:00,2026-04-02T16:15:00+00:00,16,16,crypto_trend_pullback,trailing_stop,66856.18542,66845.97010,0.01000,-0.53669,0.43453,3,1.00000,{'pullback_floor': 66807.97}
+X:BTCUSD,2026-03-13T12:00:00+00:00,2026-03-13T12:15:00+00:00,12,12,crypto_trend_pullback,structure_exit,72430.88150,72344.34522,0.10000,-13.35882,4.70519,3,0.57028,{'pullback_floor': 72246.3}
+X:BTCUSD,2026-03-16T12:10:00+00:00,2026-03-16T13:30:00+00:00,12,13,crypto_trend_pullback,take_profit,73623.06030,74254.85860,0.10000,58.37380,4.80603,16,1.00000,{'pullback_floor': 73563.79}
+X:BTCUSD,2026-03-23T12:35:00+00:00,2026-03-23T12:45:00+00:00,12,12,crypto_trend_pullback,signal_exit,70348.64922,70731.38720,0.10000,33.68870,4.58510,2,1.00000,{'pullback_floor': 70328.1}
+X:BTCUSD,2026-03-23T15:10:00+00:00,2026-03-23T15:15:00+00:00,15,15,crypto_trend_pullback,stop_loss,71411.70865,71093.03294,0.10000,-36.49897,4.63140,1,1.00000,{'pullback_floor': 71391.0}
+X:BTCUSD,2026-04-02T16:00:00+00:00,2026-04-02T16:20:00+00:00,16,16,crypto_trend_pullback,structure_exit,66856.18542,66782.47963,0.10000,-11.71384,4.34326,4,1.00000,{'pullback_floor': 66807.97}

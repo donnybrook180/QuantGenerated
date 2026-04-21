@@ -1,31 +1,31 @@
 Viability autopsy: EU50
-Execution validation summary: selection=combo_1 variant=volatility_breakout__5m_europe__exit_trend@5m_europe data_source=duckdb_cache pnl=2.81 pf=15.88 closed=8 quality=0.72 underwater=37.5% -> accepted
-Tier counts: core=2 specialist=7 reject=214
+Execution validation summary: selection=combo_1 variant=volatility_breakout__5m_europe__exit_trend@5m_europe data_source=duckdb_cache pnl=27.91 pf=15.30 closed=8 quality=0.72 underwater=37.5% max_regime_overlap=0.00 -> accepted
+Tier counts: core=2 specialist=6 reject=215
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 163
-- validation PF < 1.0 (0.00): 146
-- test PF < 1.0 (0.00): 145
+- walk-forward pass rate too low (0.00% < 50%): 164
+- validation PF < 1.0 (0.00): 147
+- test PF < 1.0 (0.00): 146
 - walk-forward avg test pnl <= 0 (0.00): 141
 - test trades too low (0 < 2): 135
 - test pnl <= 0 (0.00): 135
 - walk-forward avg validation pnl <= 0 (0.00): 123
-- validation trades too low (0 < 3): 121
+- validation trades too low (0 < 3): 122
 
 Top near-misses
-- volatility_breakout__5m_europe [specialist]: pnl=2.50 pf=14.21 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__near_miss_dense [specialist]: pnl=2.49 pf=13.28 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__exit_fastfail__near_miss_dense [specialist]: pnl=2.49 pf=13.28 val=-0.12/0.02/2 test=0.29/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__near_miss_patient [specialist]: pnl=2.47 pf=13.12 val=-0.15/0.00/2 test=0.28/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.10), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__exit_fastfail__near_miss_patient [specialist]: pnl=2.47 pf=13.12 val=-0.15/0.00/2 test=0.28/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.10), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__exit_trend__plus__volatility_breakout__5m_europe [specialist]: pnl=2.38 pf=7.91 val=-0.19/0.01/3 test=0.21/3.71/3 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.17), combo underperformed components (-0.40), combo overlap too high (100.00% > 80%), broad viability failed, but candidate qualifies as a regime specialist
-- volatility_breakout__5m_europe__exit_fastfail [specialist]: pnl=2.36 pf=13.47 val=-0.12/0.02/2 test=0.23/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.09), broad viability failed, but candidate qualifies as a regime specialist
-- momentum__5m_europe__exit_fastfail__near_miss_patient__trend_up [reject]: pnl=2.35 pf=7.64 val=0.07/1.69/2 test=0.39/999.00/2 wf=0.00%
-  reasons: walk-forward avg validation pnl <= 0 (-0.02)
+- volatility_breakout__5m_europe [specialist]: pnl=24.75 pf=13.63 val=-1.22/0.00/2 test=2.84/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.98), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__near_miss_dense [specialist]: pnl=24.58 pf=12.58 val=-1.22/0.00/2 test=2.84/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.98), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_dense [specialist]: pnl=24.58 pf=12.58 val=-1.22/0.00/2 test=2.84/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.98), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__near_miss_patient [specialist]: pnl=24.48 pf=12.49 val=-1.52/0.00/2 test=2.74/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-1.06), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_patient [specialist]: pnl=24.48 pf=12.49 val=-1.52/0.00/2 test=2.74/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-1.06), broad viability failed, but candidate qualifies as a regime specialist
+- volatility_breakout__5m_europe__exit_trend__plus__volatility_breakout__5m_europe [reject]: pnl=23.51 pf=7.57 val=-2.03/0.00/3 test=2.02/3.50/3 wf=0.00%
+  reasons: combined validation/test pnl <= 0 (-0.00), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (-1.79), combo underperformed components (-4.07), combo overlap too high (100.00% > 80%)
+- volatility_breakout__5m_europe__exit_fastfail [specialist]: pnl=23.45 pf=12.97 val=-1.22/0.00/2 test=2.24/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.98), broad viability failed, but candidate qualifies as a regime specialist
+- momentum__5m_europe__exit_fastfail__near_miss_patient__trend_up [reject]: pnl=23.26 pf=7.40 val=0.68/1.61/2 test=3.84/999.00/2 wf=0.00%
+  reasons: walk-forward avg validation pnl <= 0 (-0.21)

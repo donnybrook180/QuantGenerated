@@ -3,41 +3,11 @@
   "symbol": "USDJPY",
   "data_symbol": "C:USDJPY",
   "broker_symbol": "USDJPY",
-  "research_run_id": 391,
-  "execution_set_id": 194,
-  "execution_validation_summary": "selection=standard variant=forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat@30m_overlap|trend_flat data_source=duckdb_cache pnl=9157.47 pf=5.00 closed=21 quality=0.60 underwater=61.9% -> accepted",
-  "symbol_status": "reduced_risk_only",
-  "strategies": [
-    {
-      "candidate_name": "forex_breakout_momentum__30m_overlap__exit_trend__near_miss_protective__trend_flat",
-      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
-      "promotion_tier": "specialist",
-      "policy_summary": "tier=specialist; activate in unified_regimes=orderly_range; avoid unified_regimes=compressed_range; vol_pct in [0.20, 0.80]; base_weight=0.35; risk_cap=0.35; stability=0.97; loss_ratio=0.03",
-      "variant_label": "30m_overlap",
-      "regime_filter_label": "trend_flat",
-      "execution_overrides": {
-        "max_holding_bars": 0,
-        "take_profit_atr_multiple": 3.2,
-        "trailing_stop_atr_multiple": 0.55,
-        "stale_breakout_bars": 8,
-        "structure_exit_bars": 0,
-        "stop_loss_atr_multiple": 1.0999999999999999,
-        "break_even_atr_multiple": 0.25
-      },
-      "allocation_weight": 1.0,
-      "allowed_regimes": [
-        "orderly_range"
-      ],
-      "blocked_regimes": [
-        "compressed_range"
-      ],
-      "min_vol_percentile": 0.2,
-      "max_vol_percentile": 0.8,
-      "base_allocation_weight": 0.35,
-      "max_risk_multiplier": 0.35,
-      "min_risk_multiplier": 0.0
-    }
-  ],
+  "research_run_id": 398,
+  "execution_set_id": null,
+  "execution_validation_summary": "not_run",
+  "symbol_status": "research_only",
+  "strategies": [],
   "target_volatility": 0.0,
   "max_symbol_vol_percentile": 0.98,
   "block_new_entries_in_event_risk": true

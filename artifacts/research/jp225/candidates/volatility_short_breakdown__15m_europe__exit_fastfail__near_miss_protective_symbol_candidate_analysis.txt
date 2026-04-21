@@ -1,17 +1,17 @@
 Artifact: volatility_short_breakdown__15m_europe__exit_fastfail__near_miss_protective_symbol_candidate
 Closed trades: 7
-Realized pnl: 24.53
+Realized pnl: 245.40
 
 By entry hour
-9: trades=1 pnl=-3.49 avg=-3.49 win_rate=0.00%
-8: trades=3 pnl=-2.66 avg=-0.89 win_rate=0.00%
-11: trades=3 pnl=30.68 avg=10.23 win_rate=66.67%
+9: trades=1 pnl=-34.89 avg=-34.89 win_rate=0.00%
+8: trades=3 pnl=-26.57 avg=-8.86 win_rate=0.00%
+11: trades=3 pnl=306.86 avg=102.29 win_rate=66.67%
 
 By entry setup
-volatility_short_breakdown: trades=7 pnl=24.53 avg=3.50 win_rate=28.57%
+volatility_short_breakdown: trades=7 pnl=245.40 avg=35.06 win_rate=28.57%
 
 By exit reason
-stale_breakout: trades=1 pnl=-3.49 avg=-3.49 win_rate=0.00%
-stop_loss: trades=2 pnl=-3.21 avg=-1.60 win_rate=0.00%
-trailing_stop: trades=2 pnl=-0.42 avg=-0.21 win_rate=0.00%
-take_profit: trades=2 pnl=31.65 avg=15.82 win_rate=100.00%
+stale_breakout: trades=1 pnl=-34.89 avg=-34.89 win_rate=0.00%
+stop_loss: trades=2 pnl=-32.04 avg=-16.02 win_rate=0.00%
+trailing_stop: trades=2 pnl=-4.16 avg=-2.08 win_rate=0.00%
+take_profit: trades=2 pnl=316.49 avg=158.25 win_rate=100.00%

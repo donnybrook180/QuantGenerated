@@ -1,14 +1,14 @@
 Artifact: jp225_volatility_short_breakdown_core_hours__5m_europe__exit_fastfail_5m_europe_symbol_candidate
 Closed trades: 3
-Realized pnl: 3.19
+Realized pnl: 31.94
 
 By entry hour
-9: trades=3 pnl=3.19 avg=1.06 win_rate=33.33%
+9: trades=3 pnl=31.94 avg=10.65 win_rate=33.33%
 
 By entry setup
-volatility_short_breakdown: trades=3 pnl=3.19 avg=1.06 win_rate=33.33%
+volatility_short_breakdown: trades=3 pnl=31.94 avg=10.65 win_rate=33.33%
 
 By exit reason
-stale_breakout: trades=1 pnl=-1.45 avg=-1.45 win_rate=0.00%
-time_stop: trades=1 pnl=-1.12 avg=-1.12 win_rate=0.00%
-take_profit: trades=1 pnl=5.76 avg=5.76 win_rate=100.00%
+stale_breakout: trades=1 pnl=-14.48 avg=-14.48 win_rate=0.00%
+time_stop: trades=1 pnl=-11.17 avg=-11.17 win_rate=0.00%
+take_profit: trades=1 pnl=57.58 avg=57.58 win_rate=100.00%

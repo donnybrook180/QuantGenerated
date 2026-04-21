@@ -1,17 +1,18 @@
 Artifact: stock_gap_open_reclaim__5m_open_5m_open_symbol_candidate
-Closed trades: 44
-Realized pnl: -2.17
+Closed trades: 37
+Realized pnl: -17.15
 
 By entry hour
-14: trades=23 pnl=-1.13 avg=-0.05 win_rate=4.35%
-13: trades=21 pnl=-1.04 avg=-0.05 win_rate=0.00%
+13: trades=21 pnl=-9.09 avg=-0.43 win_rate=0.00%
+14: trades=16 pnl=-8.06 avg=-0.50 win_rate=12.50%
 
 By entry setup
-stock_gap_open_reclaim: trades=44 pnl=-2.17 avg=-0.05 win_rate=2.27%
+stock_gap_open_reclaim: trades=37 pnl=-17.15 avg=-0.46 win_rate=5.41%
 
 By exit reason
-trailing_stop: trades=12 pnl=-0.62 avg=-0.05 win_rate=0.00%
-take_profit: trades=17 pnl=-0.62 avg=-0.04 win_rate=5.88%
-structure_exit: trades=9 pnl=-0.57 avg=-0.06 win_rate=0.00%
-stop_loss: trades=3 pnl=-0.20 avg=-0.07 win_rate=0.00%
-time_stop: trades=3 pnl=-0.16 avg=-0.05 win_rate=0.00%
+structure_exit: trades=12 pnl=-8.14 avg=-0.68 win_rate=0.00%
+stop_loss: trades=4 pnl=-2.80 avg=-0.70 win_rate=0.00%
+trailing_stop: trades=5 pnl=-2.51 avg=-0.50 win_rate=0.00%
+take_profit: trades=13 pnl=-2.18 avg=-0.17 win_rate=15.38%
+stale_breakout: trades=2 pnl=-1.00 avg=-0.50 win_rate=0.00%
+time_stop: trades=1 pnl=-0.51 avg=-0.51 win_rate=0.00%

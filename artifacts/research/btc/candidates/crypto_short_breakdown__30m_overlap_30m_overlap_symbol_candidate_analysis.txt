@@ -1,16 +1,17 @@
 Artifact: crypto_short_breakdown__30m_overlap_30m_overlap_symbol_candidate
 Closed trades: 5
-Realized pnl: -9.14
+Realized pnl: -229.70
 
 By entry hour
-14: trades=2 pnl=-5.27 avg=-2.63 win_rate=0.00%
-13: trades=2 pnl=-3.48 avg=-1.74 win_rate=0.00%
-16: trades=1 pnl=-0.40 avg=-0.40 win_rate=0.00%
+16: trades=1 pnl=-93.44 avg=-93.44 win_rate=0.00%
+13: trades=2 pnl=-91.91 avg=-45.96 win_rate=0.00%
+14: trades=2 pnl=-44.35 avg=-22.17 win_rate=0.00%
 
 By entry setup
-crypto_short_breakdown: trades=5 pnl=-9.14 avg=-1.83 win_rate=0.00%
+crypto_short_breakdown: trades=5 pnl=-229.70 avg=-45.94 win_rate=0.00%
 
 By exit reason
-structure_exit: trades=3 pnl=-6.59 avg=-2.20 win_rate=0.00%
-time_stop: trades=1 pnl=-2.15 avg=-2.15 win_rate=0.00%
-trailing_stop: trades=1 pnl=-0.40 avg=-0.40 win_rate=0.00%
+stop_loss: trades=1 pnl=-93.44 avg=-93.44 win_rate=0.00%
+stale_breakout: trades=1 pnl=-80.24 avg=-80.24 win_rate=0.00%
+structure_exit: trades=2 pnl=-44.35 avg=-22.17 win_rate=0.00%
+trailing_stop: trades=1 pnl=-11.67 avg=-11.67 win_rate=0.00%

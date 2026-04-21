@@ -1,19 +1,19 @@
 Artifact: crypto_vwap_reversion__5m_overlap_5m_overlap_symbol_candidate
 Closed trades: 20
-Realized pnl: -17.93
+Realized pnl: -179.28
 
 By entry hour
-12: trades=7 pnl=-8.84 avg=-1.26 win_rate=0.00%
-14: trades=5 pnl=-7.63 avg=-1.53 win_rate=20.00%
-16: trades=2 pnl=-2.61 avg=-1.31 win_rate=0.00%
-15: trades=1 pnl=-1.23 avg=-1.23 win_rate=0.00%
-13: trades=5 pnl=2.38 avg=0.48 win_rate=20.00%
+12: trades=7 pnl=-88.37 avg=-12.62 win_rate=0.00%
+14: trades=5 pnl=-76.32 avg=-15.26 win_rate=20.00%
+16: trades=2 pnl=-26.13 avg=-13.06 win_rate=0.00%
+15: trades=1 pnl=-12.30 avg=-12.30 win_rate=0.00%
+13: trades=5 pnl=23.85 avg=4.77 win_rate=20.00%
 
 By entry setup
-crypto_vwap_reversion: trades=20 pnl=-17.93 avg=-0.90 win_rate=10.00%
+crypto_vwap_reversion: trades=20 pnl=-179.28 avg=-8.96 win_rate=10.00%
 
 By exit reason
-stop_loss: trades=8 pnl=-13.70 avg=-1.71 win_rate=0.00%
-structure_exit: trades=6 pnl=-7.63 avg=-1.27 win_rate=0.00%
-trailing_stop: trades=4 pnl=-2.44 avg=-0.61 win_rate=0.00%
-take_profit: trades=2 pnl=5.86 avg=2.93 win_rate=100.00%
+stop_loss: trades=8 pnl=-137.05 avg=-17.13 win_rate=0.00%
+structure_exit: trades=6 pnl=-76.35 avg=-12.72 win_rate=0.00%
+trailing_stop: trades=4 pnl=-24.43 avg=-6.11 win_rate=0.00%
+take_profit: trades=2 pnl=58.55 avg=29.28 win_rate=100.00%

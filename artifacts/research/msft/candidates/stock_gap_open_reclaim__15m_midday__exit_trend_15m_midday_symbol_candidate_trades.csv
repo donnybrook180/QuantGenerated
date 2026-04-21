@@ -1,3 +1,10 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-05-08T15:15:00+00:00,2025-05-08T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,440.32461,438.06611,0.10000,-0.73463,0.50878,5,1.00000,{'minutes_from_open': 105.0}
-MSFT,2025-05-27T15:30:00+00:00,2025-05-27T16:30:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,458.45908,456.65640,0.10000,-0.68942,0.50915,4,1.00000,{'minutes_from_open': 120.0}
+MSFT,2025-05-08T15:15:00+00:00,2025-05-08T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,439.97798,438.41230,0.10000,-0.66535,0.50878,5,1.00000,{'minutes_from_open': 105.0}
+MSFT,2025-05-27T15:30:00+00:00,2025-05-28T16:30:00+00:00,15,16,stock_gap_open_reclaim,take_profit,458.10660,462.02758,0.10000,-0.11710,0.50920,16,1.00000,{'minutes_from_open': 120.0}
+MSFT,2025-09-12T15:15:00+00:00,2025-09-12T16:30:00+00:00,15,16,stock_gap_open_reclaim,stop_loss,510.77303,506.47868,0.10000,-0.93961,0.51017,5,1.00000,{'minutes_from_open': 105.0}
+MSFT,2025-11-10T15:00:00+00:00,2025-11-11T15:15:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,504.83095,504.62855,0.10000,-0.53033,0.51009,13,1.00000,{'minutes_from_open': 90.0}
+MSFT,2025-11-20T15:15:00+00:00,2025-11-20T15:45:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,492.90856,490.62186,0.10000,-0.73851,0.50984,2,1.00000,{'minutes_from_open': 105.0}
+MSFT,2026-01-07T15:00:00+00:00,2026-01-07T16:30:00+00:00,15,16,stock_gap_open_reclaim,trailing_stop,483.87676,483.59326,0.10000,-0.53802,0.50967,6,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-02-18T15:00:00+00:00,2026-02-19T15:15:00+00:00,15,15,stock_gap_open_reclaim,trailing_stop,400.65511,400.51988,0.10000,-0.52154,0.50801,13,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-02-26T15:00:00+00:00,2026-02-26T15:15:00+00:00,15,15,stock_gap_open_reclaim,stop_loss,404.65591,401.58967,0.10000,-0.81469,0.50806,1,1.00000,{'minutes_from_open': 90.0}
+MSFT,2026-03-04T15:15:00+00:00,2026-03-05T15:15:00+00:00,15,15,stock_gap_open_reclaim,trailing_stop,405.40246,407.27853,0.10000,-0.32052,0.50813,12,1.00000,{'minutes_from_open': 105.0}

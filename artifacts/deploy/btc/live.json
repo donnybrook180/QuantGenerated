@@ -3,11 +3,40 @@
   "symbol": "BTC",
   "data_symbol": "X:BTCUSD",
   "broker_symbol": "BTCUSD",
-  "research_run_id": 341,
-  "execution_set_id": null,
-  "execution_validation_summary": "not_run",
-  "symbol_status": "research_only",
-  "strategies": [],
+  "research_run_id": 405,
+  "execution_set_id": 206,
+  "execution_validation_summary": "selection=standard variant=btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up@5m_all|trend_up data_source=duckdb_cache pnl=215.79 pf=4.68 closed=8 quality=0.71 underwater=50.0% max_regime_overlap=0.00 -> accepted",
+  "symbol_status": "live_ready",
+  "strategies": [
+    {
+      "candidate_name": "btc_trend_pullback_high_beta__5m_all__exit_trend__autopsy_trend_up",
+      "code_path": "quant_system.agents.crypto.CryptoTrendPullbackAgent",
+      "strategy_family": "crypto_trend_pullback",
+      "direction_mode": "long_only",
+      "direction_role": "long_leg",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.20, 0.80]; base_weight=1.12; risk_cap=0.98; stability=0.96; loss_ratio=0.09",
+      "variant_label": "5m_all",
+      "regime_filter_label": "trend_up",
+      "execution_overrides": {
+        "structure_exit_bars": 0,
+        "stale_breakout_bars": 8,
+        "max_holding_bars": 0,
+        "take_profit_atr_multiple": 3.2,
+        "trailing_stop_atr_multiple": 1.2
+      },
+      "allocation_weight": 1.0,
+      "allowed_regimes": [
+        "orderly_trend"
+      ],
+      "blocked_regimes": [],
+      "min_vol_percentile": 0.2,
+      "max_vol_percentile": 0.8,
+      "base_allocation_weight": 1.119019762092518,
+      "max_risk_multiplier": 0.9800841327737616,
+      "min_risk_multiplier": 0.0
+    }
+  ],
   "target_volatility": 0.0,
   "max_symbol_vol_percentile": 0.98,
   "block_new_entries_in_event_risk": true

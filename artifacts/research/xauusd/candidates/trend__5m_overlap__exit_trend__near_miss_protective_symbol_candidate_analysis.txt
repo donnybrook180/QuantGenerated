@@ -1,0 +1,18 @@
+Artifact: trend__5m_overlap__exit_trend__near_miss_protective_symbol_candidate
+Closed trades: 18
+Realized pnl: 440.68
+
+By entry hour
+14: trades=4 pnl=-574.35 avg=-143.59 win_rate=0.00%
+16: trades=4 pnl=-229.71 avg=-57.43 win_rate=50.00%
+12: trades=7 pnl=-198.44 avg=-28.35 win_rate=14.29%
+13: trades=2 pnl=51.15 avg=25.57 win_rate=50.00%
+15: trades=1 pnl=1392.02 avg=1392.02 win_rate=100.00%
+
+By entry setup
+trend: trades=18 pnl=440.68 avg=24.48 win_rate=27.78%
+
+By exit reason
+stop_loss: trades=7 pnl=-1045.59 avg=-149.37 win_rate=0.00%
+trailing_stop: trades=10 pnl=94.24 avg=9.42 win_rate=40.00%
+end_of_run: trades=1 pnl=1392.02 avg=1392.02 win_rate=100.00%

@@ -1,10 +1,1 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-MSFT,2025-05-06T16:10:00+00:00,2025-05-06T16:40:00+00:00,16,16,stock_news_momentum,structure_exit,437.76327,435.68736,0.10000,-0.71633,0.50873,6,1.00000,"{'news_count_1d': 6.0, 'earnings_event_day': 1.0}"
-MSFT,2025-12-11T15:05:00+00:00,2025-12-11T16:25:00+00:00,15,16,stock_news_momentum,structure_exit,481.83629,478.49688,0.10000,-0.84354,0.50960,16,1.00000,"{'news_count_1d': 10.0, 'earnings_event_day': 1.0}"
-MSFT,2026-01-23T15:00:00+00:00,2026-01-23T15:55:00+00:00,15,15,stock_news_momentum,take_profit,460.10994,467.28084,0.10000,0.20782,0.50927,11,1.00000,"{'news_count_1d': 11.0, 'earnings_event_day': 1.0}"
-MSFT,2026-01-26T16:00:00+00:00,2026-01-27T15:05:00+00:00,16,15,stock_news_momentum,take_profit,471.85108,478.05121,0.10000,0.11051,0.50950,25,1.00000,"{'news_count_1d': 13.0, 'earnings_event_day': 1.0}"
-MSFT,2026-02-04T15:05:00+00:00,2026-02-04T16:35:00+00:00,15,16,stock_news_momentum,time_stop,415.19649,414.65336,0.10000,-0.56261,0.50830,18,1.00000,"{'news_count_1d': 21.0, 'earnings_event_day': 1.0}"
-MSFT,2026-02-10T15:00:00+00:00,2026-02-10T15:20:00+00:00,15,15,stock_news_momentum,stop_loss,422.56033,419.82565,0.10000,-0.78189,0.50842,4,1.00000,"{'news_count_1d': 18.0, 'earnings_event_day': 1.0}"
-MSFT,2026-02-19T15:00:00+00:00,2026-02-19T15:25:00+00:00,15,15,stock_news_momentum,stop_loss,404.35583,400.18592,0.10000,-0.92504,0.50805,5,1.00000,"{'news_count_1d': 10.0, 'earnings_event_day': 1.0}"
-MSFT,2026-03-04T17:05:00+00:00,2026-03-05T15:20:00+00:00,17,15,stock_news_momentum,trailing_stop,407.91268,407.45282,0.10000,-0.55414,0.50815,15,1.00000,"{'news_count_1d': 11.0, 'earnings_event_day': 1.0}"
-MSFT,2026-03-31T16:35:00+00:00,2026-03-31T17:35:00+00:00,16,17,stock_news_momentum,trailing_stop,366.48605,368.01274,0.10000,-0.35468,0.50734,12,1.00000,"{'news_count_1d': 22.0, 'earnings_event_day': 1.0}"

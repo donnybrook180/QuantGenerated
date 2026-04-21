@@ -1,18 +1,18 @@
 Artifact: nvda_stock_gap_and_go_selective_symbol_candidate
-Closed trades: 89
-Realized pnl: -4.64
+Closed trades: 67
+Realized pnl: -34.78
 
 By entry hour
-13: trades=40 pnl=-2.06 avg=-0.05 win_rate=0.00%
-14: trades=39 pnl=-2.01 avg=-0.05 win_rate=0.00%
-15: trades=10 pnl=-0.57 avg=-0.06 win_rate=0.00%
+13: trades=37 pnl=-18.73 avg=-0.51 win_rate=0.00%
+14: trades=26 pnl=-13.66 avg=-0.53 win_rate=0.00%
+15: trades=4 pnl=-2.38 avg=-0.60 win_rate=0.00%
 
 By entry setup
-stock_gap_and_go: trades=89 pnl=-4.64 avg=-0.05 win_rate=0.00%
+stock_gap_and_go: trades=67 pnl=-34.78 avg=-0.52 win_rate=0.00%
 
 By exit reason
-trailing_stop: trades=26 pnl=-1.34 avg=-0.05 win_rate=0.00%
-time_stop: trades=16 pnl=-0.91 avg=-0.06 win_rate=0.00%
-take_profit: trades=23 pnl=-0.86 avg=-0.04 win_rate=0.00%
-stale_breakout: trades=12 pnl=-0.79 avg=-0.07 win_rate=0.00%
-stop_loss: trades=12 pnl=-0.75 avg=-0.06 win_rate=0.00%
+stale_breakout: trades=22 pnl=-13.06 avg=-0.59 win_rate=0.00%
+stop_loss: trades=15 pnl=-9.80 avg=-0.65 win_rate=0.00%
+trailing_stop: trades=19 pnl=-8.68 avg=-0.46 win_rate=0.00%
+take_profit: trades=10 pnl=-2.71 avg=-0.27 win_rate=0.00%
+time_stop: trades=1 pnl=-0.52 avg=-0.52 win_rate=0.00%

@@ -1,31 +1,31 @@
 Viability autopsy: XAUUSD
-Execution validation summary: selection=combo_1 variant=volatility_breakout__5m_us__near_miss_dense__trend_flat@5m_us|trend_flat data_source=duckdb_cache pnl=176.80 pf=116.80 closed=5 quality=0.79 underwater=20.0% -> accepted
-Tier counts: core=10 specialist=0 reject=188
+Execution validation summary: not_run
+Tier counts: core=0 specialist=0 reject=202
 
 Top blockers
-- walk-forward pass rate too low (0.00% < 50%): 124
-- validation PF < 1.0 (0.00): 98
-- regime stability too low (0.00 < 0.50): 83
-- test PF < 1.0 (0.00): 74
-- validation trades too low (0 < 3): 61
-- validation pnl <= 0 (0.00): 61
-- equity quality too low (0.25 < 0.45): 61
-- walk-forward avg test pnl <= 0 (0.00): 60
+- walk-forward pass rate too low (0.00% < 50%): 102
+- validation PF < 1.0 (0.00): 82
+- test PF < 1.0 (0.00): 72
+- regime stability too low (0.00 < 0.50): 72
+- equity quality too low (0.25 < 0.45): 68
+- walk-forward avg validation pnl <= 0 (0.00): 67
+- monte carlo missing (no simulations recorded): 61
+- no regime edge identified: 61
 
 Top near-misses
-- volatility_breakout__5m_us__near_miss_patient [reject]: pnl=143.65 pf=4.31 val=149.23/27.97/3 test=3.89/1.65/3 wf=100.00%
-  reasons: monte carlo p05 pnl <= 0 (-16.44)
-- volatility_breakout__5m_us [reject]: pnl=136.53 pf=4.14 val=146.13/27.41/3 test=3.89/1.65/3 wf=100.00%
-  reasons: monte carlo p05 pnl <= 0 (-19.08)
-- trend__5m_us__exit_trend [reject]: pnl=125.16 pf=1.73 val=149.33/11.40/5 test=54.14/3.36/7 wf=100.00%
-  reasons: monte carlo p05 pnl <= 0 (-102.35), monte carlo loss probability too high (22.40% > 10.00%)
-- momentum__15m_us__exit_fastfail__near_miss_protective__trend_flat [reject]: pnl=121.32 pf=46.41 val=74.01/999.00/1 test=49.98/999.00/1 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-5.34)
-- volatility_breakout__5m_us__exit_trend [reject]: pnl=113.97 pf=3.53 val=133.93/25.20/3 test=7.81/2.31/3 wf=100.00%
-  reasons: monte carlo p05 pnl <= 0 (-34.00), monte carlo loss probability too high (12.40% > 10.00%)
-- volatility_breakout__5m_us__exit_trend__near_miss_patient [reject]: pnl=113.97 pf=3.53 val=133.93/25.20/3 test=7.81/2.31/3 wf=100.00%
-  reasons: monte carlo p05 pnl <= 0 (-34.00), monte carlo loss probability too high (12.40% > 10.00%)
-- momentum__15m_us__exit_fastfail [reject]: pnl=98.12 pf=1.59 val=112.90/6.13/3 test=53.03/2.29/3 wf=50.00%
-  reasons: monte carlo p05 pnl <= 0 (-162.69), monte carlo loss probability too high (28.80% > 10.00%)
-- xauusd_volatility_breakout__5m_us__exit_fastfail [reject]: pnl=95.87 pf=5.21 val=50.88/999.00/1 test=3.89/1.65/3 wf=0.00%
-  reasons: monte carlo p05 pnl <= 0 (-14.58)
+- volatility_breakout__5m_europe__exit_fastfail [reject]: pnl=2710.73 pf=13.73 val=-220.69/0.00/2 test=-155.67/0.00/3 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-317.65), monte carlo loss probability too high (17.60% > 10.00%), combined validation/test pnl <= 0 (-376.35), combined validation/test PF too low (0.00 < 1.00), walk-forward avg test pnl <= 0 (-131.11), best trade concentration too high (91.93% > 70%)
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_patient [reject]: pnl=2710.73 pf=13.73 val=-261.68/0.00/2 test=-174.57/0.00/3 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-317.65), monte carlo loss probability too high (17.60% > 10.00%), combined validation/test pnl <= 0 (-436.25), combined validation/test PF too low (0.00 < 1.00), walk-forward avg test pnl <= 0 (-150.01), best trade concentration too high (91.93% > 70%)
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_patient__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=502.65/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_breakout__5m_europe__exit_fastfail__near_miss_dense__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=502.65/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_breakout__5m_europe__near_miss_patient__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=263.17/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_breakout__5m_europe__near_miss_dense__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=502.65/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_breakout__5m_europe__exit_trend__near_miss_patient__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=33.89/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)
+- volatility_breakout__5m_europe__exit_trend__near_miss_dense__trend_up_vol_high [reject]: pnl=2656.74 pf=999.00 val=0.00/0.00/0 test=33.89/999.00/1 wf=0.00%
+  reasons: combined validation/test trades too low (1 < 2), walk-forward pass rate too low (0.00% < 25%), walk-forward avg validation pnl <= 0 (0.00), best trade concentration too high (100.00% > 70%)

@@ -1,0 +1,4 @@
+symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
+META,2026-02-25T16:45:00+00:00,2026-02-25T17:30:00+00:00,16,17,volatility_breakout,signal_exit,650.92016,648.11035,0.10000,-0.79397,0.51299,3,1.00000,{'breakout_high': 649.25}
+META,2026-03-04T16:45:00+00:00,2026-03-05T16:45:00+00:00,16,16,volatility_breakout,signal_exit,666.22322,667.78642,0.10000,-0.35702,0.51334,5,1.00000,{'breakout_high': 655.18}
+META,2026-03-10T16:45:00+00:00,2026-03-11T16:45:00+00:00,16,16,volatility_breakout,signal_exit,653.19061,656.87860,0.10000,-0.14430,0.51310,5,1.00000,{'breakout_high': 649.33}

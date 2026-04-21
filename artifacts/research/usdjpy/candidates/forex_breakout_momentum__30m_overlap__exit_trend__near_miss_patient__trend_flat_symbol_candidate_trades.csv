@@ -1,8 +1,7 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-07-24T12:00:00+00:00,2025-07-25T09:30:00+00:00,12,9,forex_breakout_momentum,take_profit,146.60766,147.04732,0.01000,439.60863,0.05000,4,1.00000,{'breakout_high': 146.579}
-C:USDJPY,2025-07-30T15:30:00+00:00,2025-08-04T07:00:00+00:00,15,7,forex_breakout_momentum,stale_breakout,148.85672,147.55631,0.01000,-1300.46032,0.05000,30,1.00000,{'breakout_high': 148.522}
-C:USDJPY,2025-08-11T14:00:00+00:00,2025-08-12T15:30:00+00:00,14,15,forex_breakout_momentum,trailing_stop,147.87370,148.02130,0.01000,147.55262,0.05000,18,1.00000,{'breakout_high': 147.74}
-C:USDJPY,2025-08-18T14:30:00+00:00,2025-08-19T04:30:00+00:00,14,4,forex_breakout_momentum,trailing_stop,147.55469,147.74031,0.01000,185.56763,0.05000,10,1.00000,{'breakout_high': 147.517}
-C:USDJPY,2025-08-19T16:00:00+00:00,2025-08-19T16:30:00+00:00,16,16,forex_breakout_momentum,stop_loss,147.86670,147.64431,0.01000,-222.43778,0.05000,1,0.68031,{'breakout_high': 147.849}
-C:USDJPY,2025-08-29T15:30:00+00:00,2025-08-29T16:30:00+00:00,15,16,forex_breakout_momentum,signal_exit,147.32468,147.09032,0.01000,-234.41037,0.05000,2,1.00000,{'breakout_high': 147.31}
-C:USDJPY,2025-09-01T16:30:00+00:00,2026-04-07T17:30:00+00:00,16,17,forex_breakout_momentum,end_of_run,147.25968,159.94700,0.01000,12687.26983,0.05000,4203,1.00000,{'breakout_high': 147.247}
+C:USDJPY,2025-07-24T12:00:00+00:00,2025-07-25T09:30:00+00:00,12,9,forex_breakout_momentum,take_profit,146.61183,147.04315,0.01000,431.26519,0.05000,4,1.00000,{'breakout_high': 146.579}
+C:USDJPY,2025-07-30T15:30:00+00:00,2025-08-04T07:00:00+00:00,15,7,forex_breakout_momentum,stale_breakout,148.86092,147.55213,0.01000,-1308.83891,0.05000,30,1.00000,{'breakout_high': 148.522}
+C:USDJPY,2025-08-11T14:00:00+00:00,2025-08-12T15:30:00+00:00,14,15,forex_breakout_momentum,trailing_stop,147.87788,148.01711,0.01000,139.18064,0.05000,18,1.00000,{'breakout_high': 147.74}
+C:USDJPY,2025-08-18T14:30:00+00:00,2025-08-19T04:30:00+00:00,14,4,forex_breakout_momentum,trailing_stop,147.55887,147.73612,0.01000,177.20329,0.05000,10,1.00000,{'breakout_high': 147.517}
+C:USDJPY,2025-08-19T16:00:00+00:00,2025-08-19T16:30:00+00:00,16,16,forex_breakout_momentum,stop_loss,147.87088,147.64013,0.01000,-230.80487,0.05000,1,0.68031,{'breakout_high': 147.849}
+C:USDJPY,2025-08-29T15:30:00+00:00,2026-04-07T17:30:00+00:00,15,17,forex_breakout_momentum,end_of_run,147.32886,159.94266,0.01000,12613.75118,0.05000,4251,1.00000,{'breakout_high': 147.31}

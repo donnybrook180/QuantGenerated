@@ -1,23 +1,23 @@
 Artifact: crypto_vwap_reversion__5m_us__exit_fastfail_5m_us_symbol_candidate
 Closed trades: 39
-Realized pnl: -29.01
+Realized pnl: -290.09
 
 By entry hour
-14: trades=6 pnl=-9.28 avg=-1.55 win_rate=0.00%
-18: trades=8 pnl=-5.40 avg=-0.68 win_rate=12.50%
-19: trades=8 pnl=-4.99 avg=-0.62 win_rate=12.50%
-17: trades=4 pnl=-4.09 avg=-1.02 win_rate=0.00%
-20: trades=5 pnl=-2.81 avg=-0.56 win_rate=20.00%
-16: trades=2 pnl=-2.56 avg=-1.28 win_rate=0.00%
-15: trades=1 pnl=-1.23 avg=-1.23 win_rate=0.00%
-13: trades=5 pnl=1.34 avg=0.27 win_rate=40.00%
+14: trades=6 pnl=-92.76 avg=-15.46 win_rate=0.00%
+18: trades=8 pnl=-54.01 avg=-6.75 win_rate=12.50%
+19: trades=8 pnl=-49.85 avg=-6.23 win_rate=12.50%
+17: trades=4 pnl=-40.94 avg=-10.24 win_rate=0.00%
+20: trades=5 pnl=-28.07 avg=-5.61 win_rate=20.00%
+16: trades=2 pnl=-25.61 avg=-12.81 win_rate=0.00%
+15: trades=1 pnl=-12.30 avg=-12.30 win_rate=0.00%
+13: trades=5 pnl=13.44 avg=2.69 win_rate=40.00%
 
 By entry setup
-crypto_vwap_reversion: trades=39 pnl=-29.01 avg=-0.74 win_rate=12.82%
+crypto_vwap_reversion: trades=39 pnl=-290.09 avg=-7.44 win_rate=12.82%
 
 By exit reason
-structure_exit: trades=28 pnl=-30.43 avg=-1.09 win_rate=0.00%
-stop_loss: trades=3 pnl=-4.49 avg=-1.50 win_rate=0.00%
-trailing_stop: trades=2 pnl=-0.53 avg=-0.27 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.43 avg=-0.43 win_rate=0.00%
-take_profit: trades=5 pnl=6.88 avg=1.38 win_rate=100.00%
+structure_exit: trades=28 pnl=-304.31 avg=-10.87 win_rate=0.00%
+stop_loss: trades=3 pnl=-44.95 avg=-14.98 win_rate=0.00%
+trailing_stop: trades=2 pnl=-5.35 avg=-2.67 win_rate=0.00%
+stale_breakout: trades=1 pnl=-4.31 avg=-4.31 win_rate=0.00%
+take_profit: trades=5 pnl=68.82 avg=13.76 win_rate=100.00%

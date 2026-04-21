@@ -1,14 +1,14 @@
 Artifact: forex_range_reversion__30m_us__exit_quick_30m_us_symbol_candidate
 Closed trades: 2
-Realized pnl: 332.32
+Realized pnl: 315.18
 
 By entry hour
-16: trades=1 pnl=105.97 avg=105.97 win_rate=100.00%
-18: trades=1 pnl=226.35 avg=226.35 win_rate=100.00%
+16: trades=1 pnl=97.30 avg=97.30 win_rate=100.00%
+18: trades=1 pnl=217.87 avg=217.87 win_rate=100.00%
 
 By entry setup
-forex_range_reversion: trades=2 pnl=332.32 avg=166.16 win_rate=100.00%
+forex_range_reversion: trades=2 pnl=315.18 avg=157.59 win_rate=100.00%
 
 By exit reason
-signal_exit: trades=1 pnl=105.97 avg=105.97 win_rate=100.00%
-take_profit: trades=1 pnl=226.35 avg=226.35 win_rate=100.00%
+signal_exit: trades=1 pnl=97.30 avg=97.30 win_rate=100.00%
+take_profit: trades=1 pnl=217.87 avg=217.87 win_rate=100.00%

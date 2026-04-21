@@ -1,25 +1,25 @@
 Artifact: volatility_short_breakdown__5m_us__exit_fastfail_5m_us_symbol_candidate
-Closed trades: 267
-Realized pnl: -44.42
+Closed trades: 268
+Realized pnl: -449.66
 
 By entry hour
-16: trades=57 pnl=-9.67 avg=-0.17 win_rate=10.53%
-13: trades=50 pnl=-8.31 avg=-0.17 win_rate=4.00%
-20: trades=15 pnl=-6.79 avg=-0.45 win_rate=26.67%
-18: trades=38 pnl=-5.61 avg=-0.15 win_rate=10.53%
-15: trades=35 pnl=-4.21 avg=-0.12 win_rate=20.00%
-14: trades=26 pnl=-4.17 avg=-0.16 win_rate=3.85%
-19: trades=19 pnl=-3.77 avg=-0.20 win_rate=5.26%
-17: trades=27 pnl=-1.91 avg=-0.07 win_rate=22.22%
+16: trades=57 pnl=-99.68 avg=-1.75 win_rate=10.53%
+13: trades=50 pnl=-83.19 avg=-1.66 win_rate=4.00%
+20: trades=15 pnl=-67.99 avg=-4.53 win_rate=33.33%
+18: trades=38 pnl=-58.06 avg=-1.53 win_rate=7.89%
+15: trades=36 pnl=-41.85 avg=-1.16 win_rate=19.44%
+14: trades=26 pnl=-41.79 avg=-1.61 win_rate=3.85%
+19: trades=19 pnl=-38.69 avg=-2.04 win_rate=5.26%
+17: trades=27 pnl=-18.41 avg=-0.68 win_rate=22.22%
 
 By entry setup
-volatility_short_breakdown: trades=267 pnl=-44.42 avg=-0.17 win_rate=11.61%
+volatility_short_breakdown: trades=268 pnl=-449.66 avg=-1.68 win_rate=11.57%
 
 By exit reason
-stop_loss: trades=68 pnl=-19.37 avg=-0.28 win_rate=0.00%
-structure_exit: trades=76 pnl=-16.29 avg=-0.21 win_rate=0.00%
-stale_breakout: trades=46 pnl=-8.83 avg=-0.19 win_rate=0.00%
-trailing_stop: trades=29 pnl=-3.03 avg=-0.10 win_rate=6.90%
-time_stop: trades=11 pnl=-2.28 avg=-0.21 win_rate=0.00%
-signal_exit: trades=2 pnl=-0.37 avg=-0.19 win_rate=0.00%
-take_profit: trades=35 pnl=5.75 avg=0.16 win_rate=82.86%
+stop_loss: trades=67 pnl=-190.62 avg=-2.85 win_rate=0.00%
+structure_exit: trades=75 pnl=-165.37 avg=-2.20 win_rate=0.00%
+stale_breakout: trades=48 pnl=-95.25 avg=-1.98 win_rate=0.00%
+trailing_stop: trades=30 pnl=-32.37 avg=-1.08 win_rate=6.67%
+time_stop: trades=11 pnl=-22.13 avg=-2.01 win_rate=0.00%
+signal_exit: trades=2 pnl=-3.85 avg=-1.92 win_rate=0.00%
+take_profit: trades=35 pnl=59.93 avg=1.71 win_rate=82.86%

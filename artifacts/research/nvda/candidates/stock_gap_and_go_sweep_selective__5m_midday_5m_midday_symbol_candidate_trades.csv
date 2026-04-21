@@ -1,4 +1,4 @@
 symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-NVDA,2025-06-16T15:00:00+00:00,2025-06-16T15:25:00+00:00,15,15,stock_gap_and_go,trailing_stop,145.43411,145.37065,0.01000,-0.05093,0.05029,5,1.00000,{'minutes_from_open': 90.0}
-NVDA,2026-03-06T15:00:00+00:00,2026-03-06T15:05:00+00:00,15,15,stock_gap_and_go,stop_loss,182.62619,181.52556,0.01000,-0.06137,0.05036,1,1.00000,{'minutes_from_open': 90.0}
-NVDA,2026-03-11T15:00:00+00:00,2026-03-11T15:15:00+00:00,15,15,stock_gap_and_go,stale_breakout,186.71085,185.51442,0.01000,-0.06234,0.05037,3,1.00000,{'minutes_from_open': 90.0}
+NVDA,2025-06-16T15:00:00+00:00,2025-06-16T17:35:00+00:00,15,17,stock_gap_and_go,time_stop,145.36407,145.32943,0.10000,-0.50637,0.50291,31,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-03-06T15:00:00+00:00,2026-03-06T15:05:00+00:00,15,15,stock_gap_and_go,stop_loss,182.55300,181.59867,0.10000,-0.59907,0.50364,1,1.00000,{'minutes_from_open': 90.0}
+NVDA,2026-03-11T15:00:00+00:00,2026-03-11T15:15:00+00:00,15,15,stock_gap_and_go,stop_loss,186.63732,185.58787,0.10000,-0.60867,0.50372,3,1.00000,{'minutes_from_open': 90.0}

@@ -1,14 +1,15 @@
 Artifact: crypto_breakout_reclaim__5m_europe__exit_fastfail_5m_europe_symbol_candidate
 Closed trades: 3
-Realized pnl: 0.15
+Realized pnl: -8.08
 
 By entry hour
-12: trades=1 pnl=-0.87 avg=-0.87 win_rate=0.00%
-8: trades=2 pnl=1.03 avg=0.51 win_rate=50.00%
+12: trades=1 pnl=-5.91 avg=-5.91 win_rate=0.00%
+8: trades=2 pnl=-2.17 avg=-1.08 win_rate=50.00%
 
 By entry setup
-crypto_breakout_reclaim: trades=3 pnl=0.15 avg=0.05 win_rate=33.33%
+crypto_breakout_reclaim: trades=3 pnl=-8.08 avg=-2.69 win_rate=33.33%
 
 By exit reason
-time_stop: trades=2 pnl=-2.49 avg=-1.25 win_rate=0.00%
-take_profit: trades=1 pnl=2.65 avg=2.65 win_rate=100.00%
+signal_exit: trades=1 pnl=-28.62 avg=-28.62 win_rate=0.00%
+trailing_stop: trades=1 pnl=-5.91 avg=-5.91 win_rate=0.00%
+take_profit: trades=1 pnl=26.45 avg=26.45 win_rate=100.00%

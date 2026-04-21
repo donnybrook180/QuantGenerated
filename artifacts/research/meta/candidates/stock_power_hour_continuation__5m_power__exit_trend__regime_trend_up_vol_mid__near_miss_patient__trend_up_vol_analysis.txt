@@ -1,0 +1,14 @@
+Artifact: stock_power_hour_continuation__5m_power__exit_trend__regime_trend_up_vol_mid__near_miss_patient__trend_up_vol
+Closed trades: 5
+Realized pnl: -2.62
+
+By entry hour
+18: trades=4 pnl=-2.06 avg=-0.52 win_rate=0.00%
+19: trades=1 pnl=-0.56 avg=-0.56 win_rate=0.00%
+
+By entry setup
+stock_power_hour_continuation: trades=5 pnl=-2.62 avg=-0.52 win_rate=0.00%
+
+By exit reason
+time_stop: trades=4 pnl=-2.20 avg=-0.55 win_rate=0.00%
+trailing_stop: trades=1 pnl=-0.42 avg=-0.42 win_rate=0.00%

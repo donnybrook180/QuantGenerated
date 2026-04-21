@@ -1,15 +1,15 @@
 Artifact: xauusd_volatility_breakout_looser_symbol_candidate
 Closed trades: 8
-Realized pnl: 92.72
+Realized pnl: 924.66
 
 By entry hour
-13: trades=5 pnl=16.50 avg=3.30 win_rate=40.00%
-14: trades=3 pnl=76.21 avg=25.40 win_rate=100.00%
+13: trades=5 pnl=163.47 avg=32.69 win_rate=40.00%
+14: trades=3 pnl=761.19 avg=253.73 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=8 pnl=92.72 avg=11.59 win_rate=62.50%
+volatility_breakout: trades=8 pnl=924.66 avg=115.58 win_rate=62.50%
 
 By exit reason
-signal_exit: trades=1 pnl=-9.07 avg=-9.07 win_rate=0.00%
-trailing_stop: trades=6 pnl=35.42 avg=5.90 win_rate=66.67%
-take_profit: trades=1 pnl=66.36 avg=66.36 win_rate=100.00%
+signal_exit: trades=1 pnl=-91.00 avg=-91.00 win_rate=0.00%
+trailing_stop: trades=6 pnl=352.34 avg=58.72 win_rate=66.67%
+take_profit: trades=1 pnl=663.32 avg=663.32 win_rate=100.00%

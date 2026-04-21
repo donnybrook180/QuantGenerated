@@ -1,18 +1,18 @@
 Artifact: volatility_breakout__5m_europe__near_miss_dense__trend_up_symbol_candidate
 Closed trades: 8
-Realized pnl: 0.60
+Realized pnl: 5.73
 
 By entry hour
-10: trades=3 pnl=-0.18 avg=-0.06 win_rate=0.00%
-9: trades=1 pnl=0.03 avg=0.03 win_rate=100.00%
-11: trades=3 pnl=0.17 avg=0.06 win_rate=33.33%
-12: trades=1 pnl=0.57 avg=0.57 win_rate=100.00%
+10: trades=3 pnl=-1.88 avg=-0.63 win_rate=0.00%
+9: trades=1 pnl=0.29 avg=0.29 win_rate=100.00%
+11: trades=3 pnl=1.66 avg=0.55 win_rate=33.33%
+12: trades=1 pnl=5.67 avg=5.67 win_rate=100.00%
 
 By entry setup
-volatility_breakout: trades=8 pnl=0.60 avg=0.07 win_rate=37.50%
+volatility_breakout: trades=8 pnl=5.73 avg=0.72 win_rate=37.50%
 
 By exit reason
-signal_exit: trades=2 pnl=-0.17 avg=-0.08 win_rate=0.00%
-stale_breakout: trades=1 pnl=-0.07 avg=-0.07 win_rate=0.00%
-trailing_stop: trades=3 pnl=0.01 avg=0.00 win_rate=33.33%
-take_profit: trades=2 pnl=0.83 avg=0.41 win_rate=100.00%
+signal_exit: trades=2 pnl=-1.72 avg=-0.86 win_rate=0.00%
+stale_breakout: trades=1 pnl=-0.74 avg=-0.74 win_rate=0.00%
+trailing_stop: trades=3 pnl=-0.02 avg=-0.01 win_rate=33.33%
+take_profit: trades=2 pnl=8.21 avg=4.11 win_rate=100.00%

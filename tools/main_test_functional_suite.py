@@ -11,6 +11,7 @@ TEST_MODULES = [
     "quant_system.test_ai_storage_fills",
     "quant_system.test_symbol_resolution",
     "quant_system.test_mt5_integration",
+    "quant_system.test_mt5_fill_validation",
     "quant_system.test_live_deploy_runtime",
     "quant_system.test_interpreter_engines",
     "quant_system.test_interpreter_app",

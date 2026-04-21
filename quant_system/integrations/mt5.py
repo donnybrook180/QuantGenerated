@@ -320,8 +320,10 @@ class MT5Client:
         order_ticket = int(getattr(result, "order", 0) or 0)
         if deal_ticket <= 0 and order_ticket <= 0:
             return MT5DealCost(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        attempts = 12
-        sleep_seconds = 0.25
+        # Some brokers publish the deal into account history a few seconds after
+        # order_send returns, so keep polling long enough to catch the delayed fill.
+        attempts = 40
+        sleep_seconds = 0.5
         for _ in range(attempts):
             now = datetime.now(UTC)
             start = now - timedelta(minutes=15)
@@ -331,17 +333,22 @@ class MT5Client:
                 return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
             matched = None
+            fallback_symbol_match = None
             for deal in deals:
                 current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
                 current_order_ticket = int(getattr(deal, "order", 0) or 0)
                 current_symbol = str(getattr(deal, "symbol", "") or "")
-                if current_symbol != symbol:
-                    continue
                 if deal_ticket > 0 and current_deal_ticket == deal_ticket:
                     matched = deal
                     break
                 if order_ticket > 0 and current_order_ticket == order_ticket:
                     matched = deal
+                    if current_symbol == symbol:
+                        break
+                    if fallback_symbol_match is None:
+                        fallback_symbol_match = deal
+            if matched is None and fallback_symbol_match is not None:
+                matched = fallback_symbol_match
             if matched is not None:
                 fill_price = float(getattr(matched, "price", 0.0) or 0.0)
                 commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))

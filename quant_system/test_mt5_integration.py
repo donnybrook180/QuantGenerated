@@ -38,6 +38,32 @@ class MT5IntegrationTests(unittest.TestCase):
         self.assertAlmostEqual(deal_cost.total_cost, 1.7)
         sleep_mock.assert_called_once()
 
+    def test_lookup_deal_cost_matches_order_ticket_even_when_broker_symbol_differs(self) -> None:
+        client = MT5Client(MT5Config(symbol="JP225.cash"))
+        result = SimpleNamespace(deal=0, order=654)
+        matching_deal = SimpleNamespace(
+            ticket=321,
+            order=654,
+            symbol="JP225",
+            price=40101.5,
+            commission=-1.0,
+            swap=0.0,
+            fee=-0.2,
+            position_id=99,
+        )
+
+        with patch("quant_system.integrations.mt5.mt5.history_deals_get", return_value=[matching_deal]), patch(
+            "quant_system.integrations.mt5.time.sleep"
+        ) as sleep_mock:
+            deal_cost = client._lookup_deal_cost(result, "JP225.cash")
+
+        self.assertEqual(deal_cost.deal_ticket, 321)
+        self.assertEqual(deal_cost.order_ticket, 654)
+        self.assertEqual(deal_cost.position_id, 99)
+        self.assertEqual(deal_cost.fill_price, 40101.5)
+        self.assertAlmostEqual(deal_cost.total_cost, 1.2)
+        sleep_mock.assert_not_called()
+
     def test_send_market_order_returns_zero_fill_fields_when_no_deal_is_found_in_time(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             config = MT5Config(symbol="EURUSD", database_path=f"{temp_dir}\\fills.duckdb")

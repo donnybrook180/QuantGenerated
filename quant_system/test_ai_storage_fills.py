@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import unittest
 from datetime import UTC, datetime, timedelta
+from unittest.mock import patch
 
 from quant_system.ai.storage import ExperimentStore
 
@@ -101,6 +102,16 @@ class AIStorageFillsTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["broker_symbol"], "EU50.cash")
         self.assertEqual(rows[0]["requested_symbol"], "EU50")
+
+    def test_load_mt5_fill_calibration_returns_none_when_postgres_temporarily_unavailable(self) -> None:
+        temp_dir, store = self._make_store()
+        self.addCleanup(temp_dir.cleanup)
+        store._use_postgres_mt5_fill_events = True
+
+        with patch.object(store, "_pg_connect", side_effect=RuntimeError("timeout")):
+            calibration = store.load_mt5_fill_calibration("EURUSD")
+
+        self.assertIsNone(calibration)
 
 
 if __name__ == "__main__":

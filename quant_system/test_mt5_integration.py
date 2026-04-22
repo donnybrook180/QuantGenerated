@@ -89,6 +89,46 @@ class MT5IntegrationTests(unittest.TestCase):
         self.assertEqual(deal_cost.fill_price, 3350.4)
         sleep_mock.assert_not_called()
 
+    def test_lookup_deal_cost_falls_back_to_open_position_price_when_history_is_empty(self) -> None:
+        client = MT5Client(MT5Config(symbol="EURUSD"))
+        result = SimpleNamespace(deal=0, order=654)
+        matching_position = SimpleNamespace(
+            ticket=654,
+            identifier=654,
+            symbol="EURUSD",
+            price_open=1.17521,
+        )
+
+        with patch("quant_system.integrations.mt5.mt5.history_deals_get", return_value=[]), patch(
+            "quant_system.integrations.mt5.mt5.history_orders_get",
+            return_value=[],
+        ), patch(
+            "quant_system.integrations.mt5.mt5.positions_get",
+            return_value=[matching_position],
+        ), patch("quant_system.integrations.mt5.time.sleep") as sleep_mock:
+            deal_cost = client._lookup_deal_cost(result, "EURUSD")
+
+        self.assertEqual(deal_cost.order_ticket, 654)
+        self.assertEqual(deal_cost.position_id, 654)
+        self.assertEqual(deal_cost.fill_price, 1.17521)
+        sleep_mock.assert_not_called()
+
+    def test_prop_broker_fill_routes_prioritize_open_position(self) -> None:
+        client = MT5Client(MT5Config(symbol="EURUSD", server="FTMO-Demo"))
+        with patch("quant_system.integrations.mt5.mt5.terminal_info", return_value=SimpleNamespace(company="FTMO Global Markets Ltd")):
+            self.assertEqual(client._broker_family(), "ftmo")
+            self.assertEqual(client._fill_resolution_routes(), ("history_deals", "open_position", "history_orders"))
+
+        client = MT5Client(MT5Config(symbol="EURUSD", server="FundedNext-Demo"))
+        with patch("quant_system.integrations.mt5.mt5.terminal_info", return_value=SimpleNamespace(company="FundedNext Ltd")):
+            self.assertEqual(client._broker_family(), "fundednext")
+            self.assertEqual(client._fill_resolution_routes(), ("history_deals", "open_position", "history_orders"))
+
+        client = MT5Client(MT5Config(symbol="EURUSD", server="BlueGuardian-Demo"))
+        with patch("quant_system.integrations.mt5.mt5.terminal_info", return_value=SimpleNamespace(company="Blue Guardian")):
+            self.assertEqual(client._broker_family(), "blue_guardian")
+            self.assertEqual(client._fill_resolution_routes(), ("history_deals", "open_position", "history_orders"))
+
     def test_reconcile_stored_fill_event_returns_resolution_for_order_history_match(self) -> None:
         client = MT5Client(MT5Config(symbol="US500.cash"))
         row = {

@@ -101,6 +101,7 @@ class MT5DealCost:
     swap: float
     fee: float
     total_cost: float
+    resolution_source: str = "unresolved"
 
 
 @dataclass(slots=True)
@@ -316,6 +317,24 @@ class MT5Client:
             point=float(getattr(symbol_info, "point", 0.0) or 0.0),
         )
 
+    def _broker_family(self) -> str:
+        server = str(self.config.server or "").strip().lower()
+        terminal = str(getattr(mt5.terminal_info(), "company", "") or "").strip().lower()
+        joined = f"{server} {terminal}"
+        if "ftmo" in joined:
+            return "ftmo"
+        if "fundednext" in joined:
+            return "fundednext"
+        if "blue guardian" in joined or "blueguardian" in joined:
+            return "blue_guardian"
+        return "generic"
+
+    def _fill_resolution_routes(self) -> tuple[str, ...]:
+        family = self._broker_family()
+        if family in {"ftmo", "fundednext", "blue_guardian"}:
+            return ("history_deals", "open_position", "history_orders")
+        return ("history_deals", "history_orders", "open_position")
+
     def _lookup_deal_cost(self, result, symbol: str) -> MT5DealCost:
         deal_ticket = int(getattr(result, "deal", 0) or 0)
         order_ticket = int(getattr(result, "order", 0) or 0)
@@ -325,49 +344,29 @@ class MT5Client:
         # order_send returns, so keep polling long enough to catch the delayed fill.
         attempts = 40
         sleep_seconds = 0.5
+        routes = self._fill_resolution_routes()
         for _ in range(attempts):
             now = datetime.now(UTC)
             start = now - timedelta(minutes=15)
-            deals = mt5.history_deals_get(start, now)
-            if deals is None:
-                LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
-                return MT5DealCost(deal_ticket, order_ticket, 0, 0.0, 0.0, 0.0, 0.0, 0.0)
-
-            matched = None
-            fallback_symbol_match = None
-            for deal in deals:
-                current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
-                current_order_ticket = int(getattr(deal, "order", 0) or 0)
-                current_symbol = str(getattr(deal, "symbol", "") or "")
-                if deal_ticket > 0 and current_deal_ticket == deal_ticket:
-                    matched = deal
-                    break
-                if order_ticket > 0 and current_order_ticket == order_ticket:
-                    matched = deal
-                    if current_symbol == symbol:
-                        break
-                    if fallback_symbol_match is None:
-                        fallback_symbol_match = deal
-            if matched is None and fallback_symbol_match is not None:
-                matched = fallback_symbol_match
-            if matched is not None:
-                fill_price = float(getattr(matched, "price", 0.0) or 0.0)
-                commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
-                swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
-                fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
-                return MT5DealCost(
-                    deal_ticket=int(getattr(matched, "ticket", 0) or 0),
-                    order_ticket=int(getattr(matched, "order", 0) or 0),
-                    position_id=int(getattr(matched, "position_id", 0) or 0),
-                    fill_price=fill_price,
-                    commission=commission,
-                    swap=swap,
-                    fee=fee,
-                    total_cost=commission + swap + fee,
-                )
-            order_fallback = self._lookup_order_fill_from_history(order_ticket=order_ticket, symbol=symbol, start=start, end=now)
-            if order_fallback is not None:
-                return order_fallback
+            for route in routes:
+                if route == "history_deals":
+                    deal_fallback = self._lookup_deal_fill_from_history(
+                        deal_ticket=deal_ticket,
+                        order_ticket=order_ticket,
+                        symbol=symbol,
+                        start=start,
+                        end=now,
+                    )
+                    if deal_fallback is not None:
+                        return deal_fallback
+                elif route == "history_orders":
+                    order_fallback = self._lookup_order_fill_from_history(order_ticket=order_ticket, symbol=symbol, start=start, end=now)
+                    if order_fallback is not None:
+                        return order_fallback
+                elif route == "open_position":
+                    position_fallback = self._lookup_position_fill(order_ticket=order_ticket, symbol=symbol)
+                    if position_fallback is not None:
+                        return position_fallback
             time.sleep(sleep_seconds)
         LOGGER.warning(
             "mt5 deal lookup timed out for symbol=%s order_ticket=%s deal_ticket=%s",
@@ -419,6 +418,55 @@ class MT5Client:
             swap=0.0,
             fee=0.0,
             total_cost=0.0,
+            resolution_source="order_history",
+        )
+
+    def _lookup_deal_fill_from_history(
+        self,
+        *,
+        deal_ticket: int,
+        order_ticket: int,
+        symbol: str,
+        start: datetime,
+        end: datetime,
+    ) -> MT5DealCost | None:
+        deals = mt5.history_deals_get(start, end)
+        if deals is None:
+            LOGGER.warning("mt5 history_deals_get failed while loading broker costs: %s", mt5.last_error())
+            return None
+        matched = None
+        fallback_symbol_match = None
+        for deal in deals:
+            current_deal_ticket = int(getattr(deal, "ticket", 0) or 0)
+            current_order_ticket = int(getattr(deal, "order", 0) or 0)
+            current_symbol = str(getattr(deal, "symbol", "") or "")
+            if deal_ticket > 0 and current_deal_ticket == deal_ticket:
+                matched = deal
+                break
+            if order_ticket > 0 and current_order_ticket == order_ticket:
+                matched = deal
+                if current_symbol == symbol:
+                    break
+                if fallback_symbol_match is None:
+                    fallback_symbol_match = deal
+        if matched is None and fallback_symbol_match is not None:
+            matched = fallback_symbol_match
+        if matched is None:
+            return None
+        fill_price = float(getattr(matched, "price", 0.0) or 0.0)
+        commission = abs(float(getattr(matched, "commission", 0.0) or 0.0))
+        swap = abs(float(getattr(matched, "swap", 0.0) or 0.0))
+        fee = abs(float(getattr(matched, "fee", 0.0) or 0.0))
+        return MT5DealCost(
+            deal_ticket=int(getattr(matched, "ticket", 0) or 0),
+            order_ticket=int(getattr(matched, "order", 0) or 0),
+            position_id=int(getattr(matched, "position_id", 0) or 0),
+            fill_price=fill_price,
+            commission=commission,
+            swap=swap,
+            fee=fee,
+            total_cost=commission + swap + fee,
+            resolution_source="deal_history",
         )
 
     def _extract_order_history_fill_price(self, order) -> float:
@@ -427,6 +475,40 @@ class MT5Client:
             if value > 0.0:
                 return value
         return 0.0
+
+    def _lookup_position_fill(self, *, order_ticket: int, symbol: str) -> MT5DealCost | None:
+        if order_ticket <= 0:
+            return None
+        positions = mt5.positions_get(symbol=symbol)
+        if positions is None:
+            return None
+        fallback = None
+        for position in positions:
+            ticket = int(getattr(position, "ticket", 0) or 0)
+            identifier = int(getattr(position, "identifier", 0) or 0)
+            position_symbol = str(getattr(position, "symbol", "") or "")
+            if ticket == order_ticket or identifier == order_ticket:
+                fallback = position
+                if position_symbol == symbol:
+                    break
+        if fallback is None:
+            return None
+        fill_price = float(getattr(fallback, "price_open", 0.0) or 0.0)
+        if fill_price <= 0.0:
+            return None
+        ticket = int(getattr(fallback, "ticket", 0) or 0)
+        identifier = int(getattr(fallback, "identifier", 0) or 0)
+        return MT5DealCost(
+            deal_ticket=0,
+            order_ticket=order_ticket,
+            position_id=identifier if identifier > 0 else ticket,
+            fill_price=fill_price,
+            commission=0.0,
+            swap=0.0,
+            fee=0.0,
+            total_cost=0.0,
+            resolution_source="position_open",
+        )
 
     def reconcile_stored_fill_event(self, row: dict[str, object], *, lookback_minutes: int = 24 * 60) -> dict[str, object] | None:
         metadata = dict(row.get("metadata") or {})
@@ -459,6 +541,8 @@ class MT5Client:
                 "swap": deal_cost.swap,
                 "fee": deal_cost.fee,
                 "broker_cost_total": deal_cost.total_cost,
+                "fill_resolution_source": deal_cost.resolution_source,
+                "broker_family": self._broker_family(),
             },
         }
 
@@ -541,9 +625,10 @@ class MT5Client:
                 f"account_trade_allowed={account_trade_allowed} "
                 f"terminal_trade_allowed={terminal_trade_allowed} "
                 f"symbol_trade_mode={symbol_trade_mode}"
-            )
+        )
         deal_cost = self._lookup_deal_cost(result, symbol)
         fill_price = float(result.price or 0.0)
+        fill_resolution_source = "order_send_result" if fill_price > 0.0 else deal_cost.resolution_source
         if fill_price <= 0.0:
             fill_price = deal_cost.fill_price
         LOGGER.info("mt5 order sent side=%s volume=%.2f price=%.5f", order.side.value, volume, fill_price)
@@ -579,6 +664,8 @@ class MT5Client:
                 "swap": deal_cost.swap,
                 "fee": deal_cost.fee,
                 "broker_cost_total": deal_cost.total_cost,
+                "fill_resolution_source": fill_resolution_source,
+                "broker_family": self._broker_family(),
             },
         )
         try:
@@ -610,6 +697,8 @@ class MT5Client:
                     "swap": deal_cost.swap,
                     "fee": deal_cost.fee,
                     "broker_cost_total": deal_cost.total_cost,
+                    "fill_resolution_source": fill_resolution_source,
+                    "broker_family": self._broker_family(),
                 },
                 magic_number=int(magic_number if magic_number is not None else self.config.magic_number),
                 comment=(comment or order.reason)[:31],

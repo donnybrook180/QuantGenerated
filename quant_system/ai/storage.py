@@ -1602,19 +1602,22 @@ class ExperimentStore:
         if not symbol_variants:
             return None
         if self._use_postgres_mt5_fill_events:
-            with self._pg_connect() as connection:
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        SELECT spread_points, slippage_bps
-                        FROM mt5_fill_events
-                        WHERE broker_symbol = ANY(%s) AND fill_price > 0
-                        ORDER BY event_timestamp DESC, id DESC
-                        LIMIT %s
-                        """,
-                        [symbol_variants, lookback_rows],
-                    )
-                    rows = cursor.fetchall()
+            try:
+                with self._pg_connect() as connection:
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """
+                            SELECT spread_points, slippage_bps
+                            FROM mt5_fill_events
+                            WHERE broker_symbol = ANY(%s) AND fill_price > 0
+                            ORDER BY event_timestamp DESC, id DESC
+                            LIMIT %s
+                            """,
+                            [symbol_variants, lookback_rows],
+                        )
+                        rows = cursor.fetchall()
+            except Exception:
+                return None
         else:
             placeholders = ", ".join("?" for _ in symbol_variants)
             with self._connect() as connection:

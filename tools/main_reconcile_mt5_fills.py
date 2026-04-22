@@ -12,7 +12,7 @@ from quant_system.symbols import resolve_symbol_request
 
 def _reconcile_symbol(requested_symbol: str) -> list[str]:
     config = SystemConfig()
-    store = ExperimentStore(config.ai.experiment_database_path)
+    store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
     resolved = resolve_symbol_request(requested_symbol)
     rows = store.list_mt5_fill_events(resolved.broker_symbol)
     unresolved = [row for row in rows if float(row.get("fill_price") or 0.0) <= 0.0]

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import time
 
 import psycopg
 
@@ -267,8 +268,15 @@ def connect_postgres(
     dsn = postgres.dsn(include_database=include_database)
     if database_override:
         dsn = postgres.dsn(include_database=False) + f"&dbname={database_override}"
-    connection = psycopg.connect(dsn, autocommit=autocommit)
-    return connection
+    last_error = None
+    for _ in range(3):
+        try:
+            connection = psycopg.connect(dsn, autocommit=autocommit)
+            return connection
+        except psycopg.OperationalError as exc:
+            last_error = exc
+            time.sleep(0.25)
+    raise last_error
 
 
 def ensure_postgres_database(config: SystemConfig | PostgresConfig | None = None) -> None:

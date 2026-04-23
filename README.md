@@ -1,6 +1,6 @@
 # QuantGenerated
 
-Personal multi-agent quant research trading system scaffold built around three isolated environments, now wired for DuckDB storage, Optuna optimization, and MT5 execution for FTMO-style workflows:
+Personal multi-agent quant research trading system scaffold built around three isolated environments, now wired for DuckDB storage, Optuna optimization, and MT5 execution for prop-firm MT5 workflows such as FTMO, FundedNext, and Blue Guardian:
 
 - `research`: feature engineering and alpha discovery
 - `optimization`: walk-forward validation and parameter search
@@ -128,7 +128,7 @@ De functionele validaties voor `research`, `interpreter`, `evaluation` en `optim
 
 ## MT5 Fill Capture Validation
 
-Na live trading kun je voor de belangrijkste symbolen direct controleren of nieuwe MT5 fills nu echt met `fill_price` en `deal_ticket` worden opgeslagen:
+Na live trading kun je voor de belangrijkste symbolen direct controleren of nieuwe MT5 fills nu echt met `fill_price` worden opgeslagen. `deal_ticket` is broker-afhankelijk en daarom informatief, niet meer de harde succesmaat:
 
 ```powershell
 .\.venv\Scripts\python.exe tools\main_validate_mt5_fill_capture.py
@@ -496,7 +496,8 @@ Live order placement is disabled by default. Enable it only after paper validati
 Je configureert nu drie lagen expliciet in `.env`:
 
 - `MARKET_DATA_SYMBOL` voor research/backtest data
-- `MT5_BROKER_SYMBOL` voor je echte FTMO/MT5 order routing
+- `PROP_BROKER` voor brokerprofiel-selectie zoals `ftmo`, `fundednext`, `blue_guardian` of `generic`
+- `MT5_BROKER_SYMBOL` voor je echte MT5 order routing
 - kosten- en drawdownparameters zoals `EXECUTION_COMMISSION_PER_UNIT`, `EXECUTION_SLIPPAGE_BPS`, `RISK_MAX_DAILY_LOSS_PCT` en `RISK_MAX_TOTAL_DRAWDOWN_PCT`
 
 Na elke run print de app ook een FTMO-evaluatie met:

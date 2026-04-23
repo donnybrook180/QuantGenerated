@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 from quant_system.config import SystemConfig
-from quant_system.costs import apply_ftmo_cost_profile
+from quant_system.costs import apply_prop_cost_profile
 from quant_system.execution_tuning import apply_execution_mode_overrides
 from quant_system.integrations.stock_events import fetch_stock_event_flags
 from quant_system.models import FeatureVector, MarketBar
@@ -68,7 +68,7 @@ def configure_symbol_execution(config: SystemConfig, symbol: str, broker_symbol:
         config.execution.stale_breakout_bars = 5
         config.execution.stale_breakout_atr_fraction = 0.1
         config.execution.structure_exit_bars = 3
-    apply_ftmo_cost_profile(config, symbol, broker_symbol)
+    apply_prop_cost_profile(config, symbol, broker_symbol)
     apply_execution_mode_overrides(config)
 
 

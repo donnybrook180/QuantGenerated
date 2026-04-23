@@ -113,6 +113,7 @@ class OptimizationConfig:
 
 @dataclass(slots=True)
 class MT5Config:
+    prop_broker: str = field(default_factory=lambda: os.getenv("PROP_BROKER", "generic").strip().lower())
     symbol: str = field(default_factory=lambda: os.getenv("MT5_BROKER_SYMBOL", "SPY"))
     timeframe: str = field(default_factory=lambda: os.getenv("MT5_TIMEFRAME", "M5"))
     history_bars: int = field(default_factory=lambda: int(os.getenv("MT5_HISTORY_BARS", "500")))

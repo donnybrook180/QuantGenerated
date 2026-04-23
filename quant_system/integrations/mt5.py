@@ -318,6 +318,9 @@ class MT5Client:
         )
 
     def _broker_family(self) -> str:
+        explicit = str(getattr(self.config, "prop_broker", "") or "").strip().lower()
+        if explicit and explicit != "generic":
+            return explicit
         server = str(self.config.server or "").strip().lower()
         terminal = str(getattr(mt5.terminal_info(), "company", "") or "").strip().lower()
         joined = f"{server} {terminal}"

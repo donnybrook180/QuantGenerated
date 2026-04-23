@@ -33,8 +33,21 @@ def _is_forex_symbol(symbol: str) -> bool:
     return upper.endswith("USD") or upper.endswith("JPY") or upper.startswith("EUR") or upper.startswith("GBP") or upper.startswith("AUD")
 
 
-def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
+def _prop_broker_family(config: SystemConfig | None) -> str:
+    if config is None:
+        return "generic"
+    broker = str(getattr(config.mt5, "prop_broker", "") or "").strip().lower()
+    return broker or "generic"
+
+
+def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> CostProfile:
     upper = symbol.upper()
+    broker = broker_family.strip().lower()
+    broker_label = {
+        "ftmo": "FTMO",
+        "fundednext": "FundedNext",
+        "blue_guardian": "Blue Guardian",
+    }.get(broker, "Generic prop")
     if any(code in upper for code in ("XAU", "XAG", "XPD", "XPT", "XCU")):
         spread_points = 0.25
         contract_size = 100.0
@@ -49,37 +62,37 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
         return CostProfile(
             contract_size=contract_size,
             spread_points=spread_points,
-            slippage_bps=0.8,
+            slippage_bps=0.8 if broker != "fundednext" else 1.0,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
-            commission_notional_pct=0.0007,
+            commission_notional_pct=0.0007 if broker != "blue_guardian" else 0.0008,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO metals model: 0.0007% per side with metal-specific contract sizing and conservative spread assumptions.",
+            notes=f"{broker_label} metals model with metal-specific contract sizing and conservative spread assumptions.",
         )
     if "BTC" in upper:
         return CostProfile(
             contract_size=1.0,
             spread_points=20.0,
-            slippage_bps=1.5,
+            slippage_bps=1.5 if broker != "fundednext" else 2.0,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
             commission_notional_pct=0.0325,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO crypto model: 0.0325% per side, contract size 1 for BTCUSD; spread is a conservative inference.",
+            notes=f"{broker_label} crypto model: 0.0325% per side, contract size 1 for BTCUSD; spread is a conservative inference.",
         )
     if "ETH" in upper:
         return CostProfile(
             contract_size=10.0,
             spread_points=3.0,
-            slippage_bps=4.0,
+            slippage_bps=4.0 if broker != "fundednext" else 4.5,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
             commission_notional_pct=0.0325,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO crypto model: 0.0325% per side, contract size 10 for ETHUSD; spread/slippage slightly inflated to reflect observed MT5-vs-Binance intraday divergence.",
+            notes=f"{broker_label} crypto model: 0.0325% per side, contract size 10 for ETHUSD; spread/slippage slightly inflated to reflect observed MT5-vs-Binance intraday divergence.",
         )
     if upper in {"GER40", "GER40.CASH", "DAX", "SX5E", "EU50", "EU50.CASH", "ESTX50", "JP225", "JP225.CASH", "JPN225", "NK225", "HK50", "HK50.CASH", "HSI50", "HANGSENG", "US500", "US500.CASH", "SPY", "US100", "US100.CASH", "QQQ"}:
         spread_points = 1.0
@@ -90,13 +103,13 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
         return CostProfile(
             contract_size=1.0,
             spread_points=spread_points,
-            slippage_bps=0.5,
+            slippage_bps=0.5 if broker != "blue_guardian" else 0.75,
             commission_mode="none",
             commission_per_lot=0.0,
             commission_notional_pct=0.0,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO index CFD model: no direct commission, spread modeled conservatively.",
+            notes=f"{broker_label} index CFD model: no direct commission, spread modeled conservatively.",
         )
     if _is_forex_symbol(upper):
         spread_points = 0.00008
@@ -109,13 +122,13 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
         return CostProfile(
             contract_size=100_000.0,
             spread_points=spread_points,
-            slippage_bps=0.25,
+            slippage_bps=0.25 if broker != "fundednext" else 0.35,
             commission_mode="per_lot",
-            commission_per_lot=2.5,
+            commission_per_lot=2.5 if broker != "blue_guardian" else 3.0,
             commission_notional_pct=0.0,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
-            notes="FTMO forex model: $2.50 per lot per side; spread is a conservative inference.",
+            notes=f"{broker_label} forex model: per-lot commission with conservative spread assumptions.",
         )
     return CostProfile(
         contract_size=1.0,
@@ -126,8 +139,12 @@ def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
         commission_notional_pct=0.0,
         fee_bps=1.0,
         overnight_cost_per_lot_day=0.0,
-        notes="Fallback generic cost model.",
+        notes=f"{broker_label} fallback generic cost model.",
     )
+
+
+def resolve_ftmo_cost_profile(symbol: str) -> CostProfile:
+    return resolve_prop_cost_profile(symbol, "ftmo")
 
 
 def calibrate_cost_profile_with_mt5(config: SystemConfig, symbol: str, broker_symbol: str | None, profile: CostProfile) -> CostProfile:
@@ -192,8 +209,8 @@ def calibrate_cost_profile_with_mt5(config: SystemConfig, symbol: str, broker_sy
     )
 
 
-def apply_ftmo_cost_profile(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> CostProfile:
-    profile = resolve_ftmo_cost_profile(symbol)
+def apply_prop_cost_profile(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> CostProfile:
+    profile = resolve_prop_cost_profile(symbol, _prop_broker_family(config))
     profile = calibrate_cost_profile_with_mt5(config, symbol, broker_symbol, profile)
     config.execution.contract_size = profile.contract_size
     config.execution.spread_points = profile.spread_points
@@ -206,3 +223,7 @@ def apply_ftmo_cost_profile(config: SystemConfig, symbol: str, broker_symbol: st
     if profile.commission_mode != "legacy":
         config.execution.commission_per_unit = 0.0
     return profile
+
+
+def apply_ftmo_cost_profile(config: SystemConfig, symbol: str, broker_symbol: str | None = None) -> CostProfile:
+    return apply_prop_cost_profile(config, symbol, broker_symbol)

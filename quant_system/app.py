@@ -17,7 +17,7 @@ from quant_system.ai.storage import ExperimentStore
 from quant_system.agents.factory import build_alpha_agents, build_shadow_candidate_agents, describe_profile_agents
 from quant_system.artifacts import ARTIFACTS_DIR, profile_logs_dir, profile_reports_dir, research_candidates_dir
 from quant_system.config import SystemConfig
-from quant_system.costs import apply_ftmo_cost_profile
+from quant_system.costs import apply_prop_cost_profile
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.evaluation.report import build_ftmo_report
 from quant_system.execution.broker import SimulatedBroker
@@ -128,7 +128,7 @@ def configure_profile_execution(config: SystemConfig, profile: StrategyProfile) 
         config.execution.stale_breakout_bars = 6
         config.execution.stale_breakout_atr_fraction = 0.2
         config.execution.structure_exit_bars = 4
-    apply_ftmo_cost_profile(config, profile.broker_symbol or profile.data_symbol, profile.broker_symbol)
+    apply_prop_cost_profile(config, profile.broker_symbol or profile.data_symbol, profile.broker_symbol)
     apply_execution_mode_overrides(config)
 
 

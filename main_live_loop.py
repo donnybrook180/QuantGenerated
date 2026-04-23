@@ -97,6 +97,13 @@ def main() -> int:
     print(f"Starting live loop. Poll seconds: {config.mt5.poll_seconds}")
     print(f"Live trading enabled: {'yes' if config.execution.live_trading_enabled else 'no (dry-run)'}")
     print(f"Mini-trades (Calibration) mode: {'enabled' if config.execution.mini_trades_enabled else 'disabled'}")
+    print(
+        "MT5 config: "
+        f"login={config.mt5.login} "
+        f"server={config.mt5.server} "
+        f"broker={config.mt5.prop_broker} "
+        f"terminal_path={config.mt5.terminal_path}"
+    )
     print("Loaded live deployments:")
     for path in paths:
         deployment = load_symbol_deployment(path)

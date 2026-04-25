@@ -96,8 +96,8 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.execution.broker import SimulatedBroker
 from quant_system.execution.engine import AgentCoordinator, EventDrivenEngine, ExecutionResult
 from quant_system.execution_tuning import apply_execution_mode_overrides
-from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
-from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
+from quant_system.integrations.binance_data import BinanceKlineClient
+from quant_system.integrations.kraken_data import KrakenOHLCClient
 from quant_system.integrations.mt5 import MT5Client, MT5Error
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
 from quant_system.models import FeatureVector, MarketBar
@@ -105,8 +105,76 @@ from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
 from quant_system.regime import map_regime_label_to_unified
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
+from quant_system.research.data_sources import (
+    ExternalMarketDataUnavailableError,
+    aggregate_minute_bars as _research_aggregate_minute_bars,
+    build_features_with_events as _research_build_features_with_events,
+    cache_bar_limit as _research_cache_bar_limit,
+    cache_has_variant_bars as _research_cache_has_variant_bars,
+    detect_research_mode as _research_detect_research_mode,
+    full_mode_minimum_bars as _research_full_mode_minimum_bars,
+    has_plausible_price_scale as _research_has_plausible_price_scale,
+    infer_bars_timeframe as _research_infer_bars_timeframe,
+    load_cached_variant_bars as _research_load_cached_variant_bars,
+    load_crypto_network_bars as _research_load_crypto_network_bars,
+    load_mt5_network_bars as _research_load_mt5_network_bars,
+    load_symbol_features_variant as _research_load_symbol_features_variant,
+    mt5_bar_limit as _research_mt5_bar_limit,
+    normalize_bars_symbol as _research_normalize_bars_symbol,
+)
+from quant_system.research.exports import export_results as _research_export_results
 from quant_system.research.features import build_feature_library
 from quant_system.research.funding import apply_broker_funding_context, load_broker_funding_context
+from quant_system.research.reporting import (
+    candidate_failure_reasons as _research_candidate_failure_reasons,
+    export_viability_autopsy as _research_export_viability_autopsy,
+)
+from quant_system.research.orchestration import run_symbol_research_orchestration as _research_run_symbol_research_orchestration
+from quant_system.research.runner import (
+    run_candidate as _research_run_candidate,
+    run_candidate_with_splits as _research_run_candidate_with_splits,
+    score_result as _research_score_result,
+)
+from quant_system.research.common import (
+    component_names as _research_component_names,
+    component_set as _research_component_set,
+    direction_mode as _research_direction_mode,
+    direction_role as _research_direction_role,
+    family_unused_for_single_selection as _research_family_unused_for_single_selection,
+    infer_direction_mode as _research_infer_direction_mode,
+    infer_direction_role as _research_infer_direction_role,
+    infer_strategy_family_name as _research_infer_strategy_family_name,
+    is_sparse_candidate as _research_is_sparse_candidate,
+    meets_monte_carlo_viability as _research_meets_monte_carlo_viability,
+    metric_map_from_row as _research_metric_map_from_row,
+    research_thresholds as _research_thresholds_impl,
+    row_value as _research_row_value,
+    strategy_family as _research_strategy_family,
+)
+from quant_system.research.selection import (
+    candidate_selection_score as _research_candidate_selection_score,
+    build_execution_candidate_sets as _research_build_execution_candidate_sets,
+    execution_candidate_row as _research_execution_candidate_row,
+    execution_candidate_row_from_result as _research_execution_candidate_row_from_result,
+    is_valid_execution_combo as _research_is_valid_execution_combo,
+    max_regime_overlap_score as _research_max_regime_overlap_score,
+    regime_overlap_diagnostics as _research_regime_overlap_diagnostics,
+    select_execution_candidates as _research_select_execution_candidates,
+    select_sparse_execution_candidates as _research_select_sparse_execution_candidates,
+    selection_component_keys as _research_selection_component_keys,
+    specialist_has_low_regime_overlap as _research_specialist_has_low_regime_overlap,
+    specialist_regime_overlap_rejections as _research_specialist_regime_overlap_rejections,
+)
+from quant_system.research.viability import (
+    meets_regime_specialist_viability as _research_meets_regime_specialist_viability,
+    meets_viability as _research_meets_viability,
+    promotion_tier_for_row as _research_promotion_tier_for_row,
+    specialist_live_gate as _research_specialist_live_gate,
+)
+from quant_system.research.splits import (
+    split_features as _research_split_features,
+    walk_forward_slices as _research_walk_forward_slices,
+)
 from quant_system.risk.limits import RiskManager
 from quant_system.symbols import (
     is_crypto_symbol as symbol_is_crypto,
@@ -6407,355 +6475,195 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
 
 
 def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: list[CandidateResult]) -> tuple[Path, Path]:
-    reports_dir = research_reports_dir(symbol)
-    csv_path = reports_dir / "symbol_research.csv"
-    txt_path = reports_dir / "symbol_research.txt"
+    return _research_export_results(
+        symbol,
+        broker_symbol,
+        data_source,
+        rows,
+        reports_dir_fn=research_reports_dir,
+        strategy_family_fn=_strategy_family,
+        direction_mode_fn=_direction_mode,
+        direction_role_fn=_direction_role,
+        execution_candidate_row_from_result_fn=_execution_candidate_row_from_result,
+        build_execution_policy_from_candidate_row_fn=build_execution_policy_from_candidate_row,
+        summarize_unified_regime_fn=_summarize_unified_regime,
+        meets_viability_fn=_meets_viability,
+        promotion_tier_for_row_fn=_promotion_tier_for_row,
+    )
 
-    with csv_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.writer(handle)
-        writer.writerow(
-            [
-                "name",
-                "description",
-                "archetype",
-                "variant_label",
-                "timeframe_label",
-                "session_label",
-                "strategy_family",
-                "direction_mode",
-                "direction_role",
-                "realized_pnl",
-                "closed_trades",
-                "win_rate_pct",
-                "profit_factor",
-                "max_drawdown_pct",
-                "total_costs",
-                "expectancy",
-                "sharpe_ratio",
-                "sortino_ratio",
-                "calmar_ratio",
-                "avg_win",
-                "avg_loss",
-                "payoff_ratio",
-                "avg_hold_bars",
-                "dominant_exit",
-                "dominant_exit_share_pct",
-                "component_count",
-                "combo_outperformance_score",
-                "combo_trade_overlap_pct",
-                "best_regime",
-                "best_unified_regime",
-                "best_regime_pnl",
-                "worst_regime",
-                "worst_unified_regime",
-                "worst_regime_pnl",
-                "dominant_regime_share_pct",
-                "regime_stability_score",
-                "regime_loss_ratio",
-                "regime_trade_count_by_label",
-                "regime_pnl_by_label",
-                "regime_pf_by_label",
-                "regime_win_rate_by_label",
-                "regime_filter_label",
-                "broker_swap_available",
-                "broker_swap_long",
-                "broker_swap_short",
-                "broker_preferred_carry_side",
-                "broker_carry_spread",
-                "mc_simulations",
-                "mc_pnl_median",
-                "mc_pnl_p05",
-                "mc_pnl_p95",
-                "mc_max_drawdown_pct_median",
-                "mc_max_drawdown_pct_p95",
-                "mc_loss_probability_pct",
-                "walk_forward_windows",
-                "walk_forward_pass_rate_pct",
-                "walk_forward_avg_validation_pnl",
-                "walk_forward_avg_test_pnl",
-                "walk_forward_avg_validation_pf",
-                "walk_forward_avg_test_pf",
-                "train_pnl",
-                "validation_pnl",
-                "validation_profit_factor",
-                "validation_closed_trades",
-                "test_pnl",
-                "test_profit_factor",
-                "test_closed_trades",
-                "trade_log_path",
-                "trade_analysis_path",
-            ]
-        )
-        for row in rows:
-            writer.writerow(
-                [
-                    row.name,
-                    row.description,
-                    row.archetype,
-                    row.variant_label,
-                    row.timeframe_label,
-                    row.session_label,
-                    _strategy_family(row),
-                    _direction_mode(row),
-                    _direction_role(row),
-                    f"{row.realized_pnl:.5f}",
-                    row.closed_trades,
-                    f"{row.win_rate_pct:.5f}",
-                    f"{row.profit_factor:.5f}",
-                    f"{row.max_drawdown_pct:.5f}",
-                    f"{row.total_costs:.5f}",
-                    f"{row.expectancy:.5f}",
-                    f"{row.sharpe_ratio:.5f}",
-                    f"{row.sortino_ratio:.5f}",
-                    f"{row.calmar_ratio:.5f}",
-                    f"{row.avg_win:.5f}",
-                    f"{row.avg_loss:.5f}",
-                    f"{row.payoff_ratio:.5f}",
-                    f"{row.avg_hold_bars:.5f}",
-                    row.dominant_exit,
-                    f"{row.dominant_exit_share_pct:.5f}",
-                    row.component_count,
-                    f"{row.combo_outperformance_score:.5f}",
-                    f"{row.combo_trade_overlap_pct:.5f}",
-                    row.best_regime,
-                    row.best_unified_regime,
-                    f"{row.best_regime_pnl:.5f}",
-                    row.worst_regime,
-                    row.worst_unified_regime,
-                    f"{row.worst_regime_pnl:.5f}",
-                    f"{row.dominant_regime_share_pct:.5f}",
-                    f"{row.regime_stability_score:.5f}",
-                    f"{row.regime_loss_ratio:.5f}",
-                    row.regime_trade_count_by_label,
-                    row.regime_pnl_by_label,
-                    row.regime_pf_by_label,
-                    row.regime_win_rate_by_label,
-                    row.regime_filter_label,
-                    int(row.broker_swap_available),
-                    f"{row.broker_swap_long:.5f}",
-                    f"{row.broker_swap_short:.5f}",
-                    row.broker_preferred_carry_side,
-                    f"{row.broker_carry_spread:.5f}",
-                    row.mc_simulations,
-                    f"{row.mc_pnl_median:.5f}",
-                    f"{row.mc_pnl_p05:.5f}",
-                    f"{row.mc_pnl_p95:.5f}",
-                    f"{row.mc_max_drawdown_pct_median:.5f}",
-                    f"{row.mc_max_drawdown_pct_p95:.5f}",
-                    f"{row.mc_loss_probability_pct:.5f}",
-                    row.walk_forward_windows,
-                    f"{row.walk_forward_pass_rate_pct:.5f}",
-                    f"{row.walk_forward_avg_validation_pnl:.5f}",
-                    f"{row.walk_forward_avg_test_pnl:.5f}",
-                    f"{row.walk_forward_avg_validation_pf:.5f}",
-                    f"{row.walk_forward_avg_test_pf:.5f}",
-                    f"{row.train_pnl:.5f}",
-                    f"{row.validation_pnl:.5f}",
-                    f"{row.validation_profit_factor:.5f}",
-                    row.validation_closed_trades,
-                    f"{row.test_pnl:.5f}",
-                    f"{row.test_profit_factor:.5f}",
-                    row.test_closed_trades,
-                    row.trade_log_path,
-                    row.trade_analysis_path,
-                ]
-            )
 
-    ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
-    lines = [
-        f"Symbol research: {symbol}",
-        f"Broker symbol: {broker_symbol}",
-        f"Data source: {data_source}",
-        "",
-        "Ranked candidates",
-    ]
-    for row in ranked:
-        candidate_row = _execution_candidate_row_from_result(symbol, row)
-        policy = build_execution_policy_from_candidate_row(candidate_row)
-        lines.append(
-            f"{row.name} [{row.archetype}|{policy['promotion_tier']}]: pnl={row.realized_pnl:.2f} closed={row.closed_trades} "
-            f"pf={row.profit_factor:.2f} win_rate={row.win_rate_pct:.2f}% dd={row.max_drawdown_pct:.2f}%"
-        )
-        lines.append(f"  tier: {policy['promotion_tier']}")
-        lines.append(
-            f"  trade_metrics: expectancy={row.expectancy:.2f} sharpe={row.sharpe_ratio:.2f} "
-            f"sortino={row.sortino_ratio:.2f} calmar={row.calmar_ratio:.2f} avg_win={row.avg_win:.2f} "
-            f"avg_loss={row.avg_loss:.2f} payoff={row.payoff_ratio:.2f} avg_hold={row.avg_hold_bars:.1f}"
-        )
-        lines.append(
-            f"  exits: dominant={row.dominant_exit or 'none'} share={row.dominant_exit_share_pct:.2f}%"
-        )
-        lines.append(
-            f"  regimes: best={_summarize_unified_regime(row.best_regime) if row.best_regime else 'none'} pnl={row.best_regime_pnl:.2f} "
-            f"worst={_summarize_unified_regime(row.worst_regime) if row.worst_regime else 'none'} pnl={row.worst_regime_pnl:.2f} "
-            f"dominant_share={row.dominant_regime_share_pct:.2f}% "
-            f"stability={row.regime_stability_score:.2f} loss_ratio={row.regime_loss_ratio:.2f}"
-        )
-        lines.append(
-            f"  strategy_scope: family={row.strategy_family or 'none'} direction={row.direction_mode or 'none'} role={row.direction_role or 'none'}"
-        )
-        lines.append(
-            f"  unified_regimes: best={row.best_unified_regime or 'none'} "
-            f"worst={row.worst_unified_regime or 'none'}"
-        )
-        lines.append(f"  regime_trade_counts: {row.regime_trade_count_by_label}")
-        lines.append(f"  regime_pnls: {row.regime_pnl_by_label}")
-        lines.append(
-            f"  funding: available={'yes' if row.broker_swap_available else 'no'} "
-            f"swap_long={row.broker_swap_long:.5f} swap_short={row.broker_swap_short:.5f} "
-            f"preferred_side={row.broker_preferred_carry_side or 'none'} "
-            f"carry_spread={row.broker_carry_spread:.5f}"
-        )
-        lines.append(
-            f"  monte_carlo: sims={row.mc_simulations} pnl_median={row.mc_pnl_median:.2f} "
-            f"p05={row.mc_pnl_p05:.2f} p95={row.mc_pnl_p95:.2f} "
-            f"dd_median={row.mc_max_drawdown_pct_median:.2f}% dd_p95={row.mc_max_drawdown_pct_p95:.2f}% "
-            f"loss_prob={row.mc_loss_probability_pct:.2f}%"
-        )
-        lines.append(f"  live_policy: {policy['policy_summary']}")
-        if row.regime_filter_label:
-            lines.append(f"  regime_filter: {row.regime_filter_label}")
-        lines.append(
-            f"  walk_forward: windows={row.walk_forward_windows} pass_rate={row.walk_forward_pass_rate_pct:.2f}% "
-            f"avg_val_pnl={row.walk_forward_avg_validation_pnl:.2f} avg_test_pnl={row.walk_forward_avg_test_pnl:.2f} "
-            f"avg_val_pf={row.walk_forward_avg_validation_pf:.2f} avg_test_pf={row.walk_forward_avg_test_pf:.2f}"
-        )
-        if row.sparse_strategy:
-            lines.append(f"  sparse_strategy: soft_pass_rate={row.walk_forward_soft_pass_rate_pct:.2f}%")
-        if row.component_count > 1:
-            lines.append(
-                f"  combo_validation: components={row.component_count} outperformance={row.combo_outperformance_score:.2f} "
-                f"trade_overlap={row.combo_trade_overlap_pct:.2f}%"
-            )
-        lines.append(
-            f"  splits: train_pnl={row.train_pnl:.2f} val_pnl={row.validation_pnl:.2f} "
-            f"val_pf={row.validation_profit_factor:.2f} val_closed={row.validation_closed_trades} "
-            f"test_pnl={row.test_pnl:.2f} test_pf={row.test_profit_factor:.2f} test_closed={row.test_closed_trades}"
-        )
-        lines.append(f"  trades: {row.trade_log_path}")
-        lines.append(f"  analysis: {row.trade_analysis_path}")
-    winners = [
-        row
-        for row in ranked
-        if _meets_viability(row, symbol)
-    ]
-    lines.extend(["", "Top candidate-level winners"])
-    if winners:
-        for row in winners[:3]:
-            tier = _promotion_tier_for_row(row, symbol)
-            lines.append(f"- {row.name} [{tier}] ({row.description})")
-    else:
-        lines.append("No candidate met the positive-PnL and PF>=1.0 threshold.")
-    txt_path.write_text("\n".join(lines), encoding="utf-8")
-    return csv_path, txt_path
+_research_thresholds = _research_thresholds_impl
+_is_sparse_candidate = _research_is_sparse_candidate
+_metric_map_from_row = _research_metric_map_from_row
+_aggregate_minute_bars = _research_aggregate_minute_bars
+_load_cached_variant_bars = lambda store, data_symbol, multiplier, timespan, cache_limit, base_cache_limit, write_store=None: _research_load_cached_variant_bars(
+    store,
+    data_symbol,
+    multiplier,
+    timespan,
+    cache_limit,
+    base_cache_limit,
+    cache_symbol_candidates_fn=_cache_symbol_candidates,
+    variant_timeframe_key_fn=_variant_timeframe_key,
+    has_plausible_price_scale_fn=_has_plausible_price_scale,
+    write_store=write_store,
+)
+_cache_has_variant_bars = lambda store, data_symbol, multiplier, timespan, minimum_bars: _research_cache_has_variant_bars(
+    store,
+    data_symbol,
+    multiplier,
+    timespan,
+    minimum_bars,
+    cache_symbol_candidates_fn=_cache_symbol_candidates,
+    variant_timeframe_key_fn=_variant_timeframe_key,
+    has_plausible_price_scale_fn=_has_plausible_price_scale,
+)
+_full_mode_minimum_bars = _research_full_mode_minimum_bars
+_has_plausible_price_scale = _research_has_plausible_price_scale
+_load_crypto_network_bars = lambda config, data_symbol, multiplier, timespan: _research_load_crypto_network_bars(
+    config,
+    data_symbol,
+    multiplier,
+    timespan,
+    binance_client_cls=BinanceKlineClient,
+    kraken_client_cls=KrakenOHLCClient,
+)
+_cache_bar_limit = _research_cache_bar_limit
+_mt5_bar_limit = lambda config, symbol, multiplier, timespan: _research_mt5_bar_limit(
+    config,
+    symbol,
+    multiplier,
+    timespan,
+    uses_continuous_session_stream_fn=_uses_continuous_session_stream,
+)
+_normalize_bars_symbol = _research_normalize_bars_symbol
+_load_mt5_network_bars = lambda config, profile_symbol, data_symbol, broker_symbol, multiplier, timespan: _research_load_mt5_network_bars(
+    config,
+    profile_symbol,
+    data_symbol,
+    broker_symbol,
+    multiplier,
+    timespan,
+    mt5_client_cls=MT5Client,
+    uses_continuous_session_stream_fn=_uses_continuous_session_stream,
+)
+_detect_research_mode = lambda config, profile_symbol, data_symbol: _research_detect_research_mode(
+    config,
+    profile_symbol,
+    data_symbol,
+    research_variant_plan_fn=_research_variant_plan,
+    cache_symbol_candidates_fn=_cache_symbol_candidates,
+    variant_timeframe_key_fn=_variant_timeframe_key,
+)
+_load_symbol_features_variant = lambda config, data_symbol, multiplier, timespan, broker_symbol=None, profile_symbol=None: _research_load_symbol_features_variant(
+    config,
+    data_symbol,
+    multiplier,
+    timespan,
+    symbol_slug_fn=_symbol_slug,
+    cache_symbol_candidates_fn=_cache_symbol_candidates,
+    variant_timeframe_key_fn=_variant_timeframe_key,
+    uses_continuous_session_stream_fn=_uses_continuous_session_stream,
+    broker_symbol=broker_symbol,
+    profile_symbol=profile_symbol,
+)
+_build_features_with_events = _research_build_features_with_events
+_infer_bars_timeframe = _research_infer_bars_timeframe
+_meets_regime_specialist_viability = _research_meets_regime_specialist_viability
+_specialist_live_gate = _research_specialist_live_gate
+_meets_viability = _research_meets_viability
+_candidate_row_value = _research_row_value
+_infer_strategy_family_name = _research_infer_strategy_family_name
+_infer_direction_mode = _research_infer_direction_mode
+_infer_direction_role = _research_infer_direction_role
+_strategy_family = _research_strategy_family
+_direction_mode = _research_direction_mode
+_direction_role = _research_direction_role
+_family_unused_for_single_selection = _research_family_unused_for_single_selection
+_meets_monte_carlo_viability = _research_meets_monte_carlo_viability
+_component_set = _research_component_set
+_component_names = _research_component_names
+_promotion_tier_for_row = _research_promotion_tier_for_row
+_execution_candidate_row = _research_execution_candidate_row
+_execution_candidate_row_from_result = _research_execution_candidate_row_from_result
+_selection_component_keys = _research_selection_component_keys
+_candidate_selection_score = _research_candidate_selection_score
+_max_regime_overlap_score = _research_max_regime_overlap_score
+_specialist_has_low_regime_overlap = _research_specialist_has_low_regime_overlap
+_regime_overlap_diagnostics = _research_regime_overlap_diagnostics
+_specialist_regime_overlap_rejections = _research_specialist_regime_overlap_rejections
+_is_valid_execution_combo = _research_is_valid_execution_combo
+_build_execution_candidate_sets = _research_build_execution_candidate_sets
+select_execution_candidates = _research_select_execution_candidates
+select_sparse_execution_candidates = _research_select_sparse_execution_candidates
+_split_features = _research_split_features
+_walk_forward_slices = _research_walk_forward_slices
+_score_result = lambda name, description, archetype, code_path, result, initial_cash: _research_score_result(
+    candidate_result_cls=CandidateResult,
+    sharpe_ratio_fn=_sharpe_ratio,
+    sortino_ratio_fn=_sortino_ratio,
+    calmar_ratio_fn=_calmar_ratio,
+    monte_carlo_summary_fn=_monte_carlo_summary,
+    name=name,
+    description=description,
+    archetype=archetype,
+    code_path=code_path,
+    result=result,
+    initial_cash=initial_cash,
+)
+_run_candidate = lambda config, features, spec, archetype, artifact_prefix: _research_run_candidate(
+    config,
+    features,
+    spec,
+    archetype,
+    artifact_prefix,
+    with_execution_overrides_fn=_with_execution_overrides,
+    with_session_gate_fn=_with_session_gate,
+    build_engine_fn=_build_engine,
+    export_closed_trade_artifacts_fn=__import__("quant_system.research_artifacts", fromlist=["export_closed_trade_artifacts"]).export_closed_trade_artifacts,
+    score_result_fn=_score_result,
+    spec_strategy_family_fn=_spec_strategy_family,
+    spec_direction_mode_fn=_spec_direction_mode,
+    spec_direction_role_fn=_spec_direction_role,
+    annotate_regime_metrics_fn=_annotate_regime_metrics,
+    annotate_funding_context_fn=_annotate_funding_context,
+)
+_run_candidate_with_splits = lambda config, features, spec, archetype, artifact_prefix: _research_run_candidate_with_splits(
+    config,
+    features,
+    spec,
+    archetype,
+    artifact_prefix,
+    run_candidate_fn=_run_candidate,
+    research_thresholds_fn=_research_thresholds,
+    is_sparse_candidate_fn=_is_sparse_candidate,
+    with_execution_overrides_fn=_with_execution_overrides,
+    with_session_gate_fn=_with_session_gate,
+    build_engine_fn=_build_engine,
+    walk_forward_slices_fn=_walk_forward_slices,
+    aggregate_profit_factor_fn=_aggregate_profit_factor,
+)
 
 
 def _candidate_failure_reasons(row: CandidateResult, symbol: str) -> list[str]:
-    reasons: list[str] = []
-    specialist_viable = _meets_regime_specialist_viability(row, symbol)
-    thresholds = _research_thresholds(symbol)
-    validation_min = int(thresholds["validation_closed_trades"])
-    test_min = int(thresholds["test_closed_trades"])
-    wf_pass_min = float(thresholds["walk_forward_min_pass_rate_pct"])
-    sparse_strategy = _is_sparse_candidate(row, symbol)
-    if row.mc_simulations <= 0:
-        reasons.append("monte carlo missing (no simulations recorded)")
-    else:
-        if row.mc_pnl_p05 <= 0.0:
-            reasons.append(f"monte carlo p05 pnl <= 0 ({row.mc_pnl_p05:.2f})")
-        if row.mc_loss_probability_pct > 10.0:
-            reasons.append(f"monte carlo loss probability too high ({row.mc_loss_probability_pct:.2f}% > 10.00%)")
-    if sparse_strategy:
-        combined_closed = row.validation_closed_trades + row.test_closed_trades
-        combined_required = int(thresholds["sparse_combined_closed_trades"])
-        if combined_closed < combined_required:
-            reasons.append(f"combined validation/test trades too low ({combined_closed} < {combined_required})")
-        if (row.validation_pnl + row.test_pnl) <= 0.0:
-            reasons.append(f"combined validation/test pnl <= 0 ({row.validation_pnl + row.test_pnl:.2f})")
-        if max(row.validation_profit_factor, row.test_profit_factor) < 1.0:
-            reasons.append(
-                f"combined validation/test PF too low ({max(row.validation_profit_factor, row.test_profit_factor):.2f} < 1.00)"
-            )
-        wf_pass_min = float(thresholds["sparse_walk_forward_min_pass_rate_pct"])
-    else:
-        if row.validation_closed_trades < validation_min:
-            reasons.append(f"validation trades too low ({row.validation_closed_trades} < {validation_min})")
-        if row.test_closed_trades < test_min:
-            reasons.append(f"test trades too low ({row.test_closed_trades} < {test_min})")
-        if row.validation_pnl <= 0.0:
-            reasons.append(f"validation pnl <= 0 ({row.validation_pnl:.2f})")
-        if row.test_pnl <= 0.0:
-            reasons.append(f"test pnl <= 0 ({row.test_pnl:.2f})")
-        if row.validation_profit_factor < 1.0:
-            reasons.append(f"validation PF < 1.0 ({row.validation_profit_factor:.2f})")
-        if row.test_profit_factor < 1.0:
-            reasons.append(f"test PF < 1.0 ({row.test_profit_factor:.2f})")
-    if row.walk_forward_windows < 1:
-        reasons.append("no walk-forward windows")
-    effective_pass_rate = row.walk_forward_soft_pass_rate_pct if sparse_strategy else row.walk_forward_pass_rate_pct
-    if effective_pass_rate < wf_pass_min:
-        reasons.append(f"walk-forward pass rate too low ({effective_pass_rate:.2f}% < {wf_pass_min:.0f}%)")
-    if row.walk_forward_avg_validation_pnl <= 0.0:
-        reasons.append(f"walk-forward avg validation pnl <= 0 ({row.walk_forward_avg_validation_pnl:.2f})")
-    if row.walk_forward_avg_test_pnl <= 0.0:
-        reasons.append(f"walk-forward avg test pnl <= 0 ({row.walk_forward_avg_test_pnl:.2f})")
-    if not row.best_regime:
-        reasons.append("no regime edge identified")
-    if row.best_regime_pnl <= 0.0:
-        reasons.append(f"best regime pnl <= 0 ({row.best_regime_pnl:.2f})")
-    if row.regime_stability_score < 0.50:
-        reasons.append(f"regime stability too low ({row.regime_stability_score:.2f} < 0.50)")
-    if row.regime_loss_ratio > 1.25:
-        reasons.append(f"regime loss ratio too high ({row.regime_loss_ratio:.2f} > 1.25)")
-    if row.equity_quality_score < 0.45:
-        reasons.append(f"equity quality too low ({row.equity_quality_score:.2f} < 0.45)")
-    if row.best_trade_share_pct > 70.0:
-        reasons.append(f"best trade concentration too high ({row.best_trade_share_pct:.2f}% > 70%)")
-    if row.component_count > 1 and row.combo_outperformance_score < 0.0:
-        reasons.append(f"combo underperformed components ({row.combo_outperformance_score:.2f})")
-    if row.component_count > 1 and row.combo_trade_overlap_pct > 80.0:
-        reasons.append(f"combo overlap too high ({row.combo_trade_overlap_pct:.2f}% > 80%)")
-    if reasons and specialist_viable:
-        reasons.append("broad viability failed, but candidate qualifies as a regime specialist")
-    return reasons
+    return _research_candidate_failure_reasons(
+        row,
+        symbol,
+        meets_regime_specialist_viability_fn=_meets_regime_specialist_viability,
+        research_thresholds_fn=_research_thresholds,
+        is_sparse_candidate_fn=_is_sparse_candidate,
+    )
 
 
 def _export_viability_autopsy(symbol: str, rows: list[CandidateResult], execution_validation_summary: str) -> Path:
-    path = research_reports_dir(symbol) / "viability_autopsy.txt"
-    ranked = sorted(rows, key=lambda item: (item.realized_pnl, item.profit_factor, item.closed_trades), reverse=True)
-    counts: dict[str, int] = {}
-    near_misses: list[tuple[CandidateResult, list[str]]] = []
-    tier_counts = {"core": 0, "specialist": 0, "reject": 0}
-    for row in ranked:
-        tier = _promotion_tier_for_row(row, symbol)
-        tier_counts[tier] = tier_counts.get(tier, 0) + 1
-        reasons = _candidate_failure_reasons(row, symbol)
-        for reason in reasons:
-            counts[reason] = counts.get(reason, 0) + 1
-        if reasons:
-            near_misses.append((row, reasons))
-
-    lines = [
-        f"Viability autopsy: {symbol}",
-        f"Execution validation summary: {execution_validation_summary}",
-        f"Tier counts: core={tier_counts['core']} specialist={tier_counts['specialist']} reject={tier_counts['reject']}",
-        "",
-        "Top blockers",
-    ]
-    for reason, count in sorted(counts.items(), key=lambda item: item[1], reverse=True)[:8]:
-        lines.append(f"- {reason}: {count}")
-    lines.extend(["", "Top near-misses"])
-    for row, reasons in near_misses[:8]:
-        tier = _promotion_tier_for_row(row, symbol)
-        lines.append(
-            f"- {row.name} [{tier}]: pnl={row.realized_pnl:.2f} pf={row.profit_factor:.2f} "
-            f"val={row.validation_pnl:.2f}/{row.validation_profit_factor:.2f}/{row.validation_closed_trades} "
-            f"test={row.test_pnl:.2f}/{row.test_profit_factor:.2f}/{row.test_closed_trades} "
-            f"wf={row.walk_forward_pass_rate_pct:.2f}%"
-        )
-        lines.append(f"  reasons: {', '.join(reasons)}")
-    path.write_text("\n".join(lines), encoding="utf-8")
-    return path
+    return _research_export_viability_autopsy(
+        symbol,
+        rows,
+        execution_validation_summary,
+        reports_dir_fn=research_reports_dir,
+        promotion_tier_for_row_fn=_promotion_tier_for_row,
+        candidate_failure_reasons_fn=_candidate_failure_reasons,
+    )
 
 
 def run_symbol_research(
@@ -6764,523 +6672,52 @@ def run_symbol_research(
     *,
     candidate_name_prefixes: tuple[str, ...] | None = None,
 ) -> list[str]:
-    config = SystemConfig()
-    resolved = resolve_symbol_request(data_symbol, broker_symbol)
-    config.symbol_research.broker_symbol = resolved.broker_symbol
-    config.market_data.history_days = _symbol_research_history_days(config, resolved.profile_symbol)
-    _configure_symbol_execution(config, resolved.profile_symbol, resolved.broker_symbol)
-    feature_variants, data_source, effective_mode = _build_symbol_feature_variants(
-        config,
-        resolved.profile_symbol,
-        resolved.data_symbol,
+    return _research_run_symbol_research_orchestration(
+        data_symbol,
+        broker_symbol,
+        candidate_name_prefixes=candidate_name_prefixes,
+        system_config_cls=SystemConfig,
+        resolve_symbol_request_fn=resolve_symbol_request,
+        symbol_research_history_days_fn=_symbol_research_history_days,
+        configure_symbol_execution_fn=_configure_symbol_execution,
+        build_symbol_feature_variants_fn=_build_symbol_feature_variants,
+        is_stock_symbol_fn=_is_stock_symbol,
+        default_variant_features_fn=_default_variant_features,
+        candidate_specs_fn=_candidate_specs,
+        with_variant_name_fn=_with_variant_name,
+        symbol_slug_fn=_symbol_slug,
+        exit_family_specs_fn=_exit_family_specs,
+        run_candidate_with_splits_fn=_run_candidate_with_splits,
+        parameter_sweep_specs_fn=_parameter_sweep_specs,
+        auto_improvement_specs_fn=_auto_improvement_specs,
+        second_pass_specs_fn=_second_pass_specs,
+        regime_improvement_specs_fn=_regime_improvement_specs,
+        autopsy_improvement_specs_fn=_autopsy_improvement_specs,
+        near_miss_optimizer_specs_fn=_near_miss_optimizer_specs,
+        near_miss_local_optimizer_fn=_near_miss_local_optimizer,
+        combined_specs_fn=_combined_specs,
+        load_execution_features_for_variant_fn=load_execution_features_for_variant,
+        annotate_combo_results_fn=_annotate_combo_results,
+        export_results_fn=_export_results,
+        meets_viability_fn=_meets_viability,
+        execution_candidate_row_from_result_fn=_execution_candidate_row_from_result,
+        build_execution_policy_from_candidate_row_fn=build_execution_policy_from_candidate_row,
+        build_execution_candidate_sets_fn=_build_execution_candidate_sets,
+        evaluate_execution_candidate_set_fn=_evaluate_execution_candidate_set,
+        execution_path_metrics_fn=_execution_path_metrics,
+        regime_overlap_diagnostics_fn=_regime_overlap_diagnostics,
+        execution_result_score_fn=_execution_result_score,
+        tiered_fallback_candidates_fn=_tiered_fallback_candidates,
+        filter_live_approved_execution_candidates_fn=_filter_live_approved_execution_candidates,
+        derive_symbol_status_fn=_derive_symbol_status,
+        promotion_tier_for_row_fn=_promotion_tier_for_row,
+        experiment_store_cls=ExperimentStore,
+        export_viability_autopsy_fn=_export_viability_autopsy,
+        agent_descriptor_cls=AgentDescriptor,
+        build_symbol_deployment_fn=build_symbol_deployment,
+        export_symbol_deployment_fn=export_symbol_deployment,
+        plot_symbol_research_fn=plot_symbol_research,
+        specialist_regime_overlap_rejections_fn=_specialist_regime_overlap_rejections,
+        is_crypto_symbol_fn=_is_crypto_symbol,
+        is_forex_symbol_fn=symbol_is_forex,
     )
-    if _is_stock_symbol(resolved.profile_symbol) and config.symbol_research.mode == "auto" and effective_mode == "seed":
-        full_config = copy.deepcopy(config)
-        full_config.symbol_research.mode = "full"
-        full_mode_variants, full_mode_source, full_mode = _build_symbol_feature_variants(
-            full_config,
-            resolved.profile_symbol,
-            resolved.data_symbol,
-        )
-        if full_mode == "full" and any(features for features in full_mode_variants.values()):
-            feature_variants = full_mode_variants
-            data_source = full_mode_source
-            effective_mode = full_mode
-    default_features = _default_variant_features(feature_variants)
-    if not default_features:
-        raise RuntimeError(f"No usable feature variants were generated for {resolved.profile_symbol}.")
-    singles = _candidate_specs(config, resolved.profile_symbol)
-    if candidate_name_prefixes:
-        singles = [
-            spec
-            for spec in singles
-            if any(spec.name.startswith(prefix) for prefix in candidate_name_prefixes)
-        ]
-    symbol_slug = _symbol_slug(resolved.profile_symbol)
-    results: list[CandidateResult] = []
-    explored_entry_exit_specs: list[CandidateSpec] = []
-    for variant_label, features in feature_variants.items():
-        if not features:
-            continue
-        variant_specs = [spec for base_spec in singles if (spec := _with_variant_name(base_spec, variant_label)) is not None]
-        exit_family_specs = _exit_family_specs(config, resolved.profile_symbol, variant_specs)
-        explored_entry_exit_specs.extend(variant_specs + exit_family_specs)
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                features,
-                spec,
-                "single" if "__exit_" not in spec.name else "entry_exit_family",
-                f"{symbol_slug}_{spec.name}_{variant_label}_symbol_candidate",
-            )
-            for spec in (variant_specs + exit_family_specs)
-        )
-    sweep_specs = _parameter_sweep_specs(config, resolved.profile_symbol)
-    if sweep_specs:
-        for variant_label, features in feature_variants.items():
-            if not features:
-                continue
-            results.extend(
-                _run_candidate_with_splits(
-                    config,
-                    features,
-                    materialized_spec,
-                    "parameter_sweep",
-                    f"{symbol_slug}_{materialized_spec.name}_{variant_label}_symbol_candidate",
-                )
-                for base_spec in sweep_specs
-                if (materialized_spec := _with_variant_name(base_spec, variant_label)) is not None
-            )
-    improvement_specs = _auto_improvement_specs(config, resolved.profile_symbol, results)
-    if improvement_specs:
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                default_features,
-                spec,
-                "auto_improved",
-                f"{symbol_slug}_{spec.name}_symbol_candidate",
-            )
-            for spec in improvement_specs
-        )
-    second_pass_specs = _second_pass_specs(config, resolved.profile_symbol, results)
-    if second_pass_specs:
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                default_features,
-                spec,
-                "auto_second_pass",
-                f"{symbol_slug}_{spec.name}_symbol_candidate",
-            )
-            for spec in second_pass_specs
-        )
-    regime_specs = _regime_improvement_specs(explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs, results)
-    if regime_specs:
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                load_execution_features_for_variant(
-                    config,
-                    resolved.profile_symbol,
-                    resolved.data_symbol,
-                    spec.variant_label,
-                    spec.regime_filter_label,
-                    spec.cross_filter_label,
-                )[0],
-                spec,
-                "regime_improved",
-                f"{symbol_slug}_{spec.name}_symbol_candidate",
-            )
-            for spec in regime_specs
-        )
-    autopsy_specs = _autopsy_improvement_specs(
-        config,
-        resolved.profile_symbol,
-        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs,
-        results,
-    )
-    if autopsy_specs:
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                load_execution_features_for_variant(
-                    config,
-                    resolved.profile_symbol,
-                    resolved.data_symbol,
-                    spec.variant_label,
-                    spec.regime_filter_label,
-                    spec.cross_filter_label,
-                )[0],
-                spec,
-                "autopsy_improved",
-                f"{symbol_slug}_{spec.name}_symbol_candidate",
-            )
-            for spec in autopsy_specs
-        )
-    near_miss_specs = _near_miss_optimizer_specs(
-        resolved.profile_symbol,
-        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs,
-        results,
-    )
-    if near_miss_specs:
-        results.extend(
-            _run_candidate_with_splits(
-                config,
-                load_execution_features_for_variant(
-                    config,
-                    resolved.profile_symbol,
-                    resolved.data_symbol,
-                    spec.variant_label,
-                    spec.regime_filter_label,
-                    spec.cross_filter_label,
-                )[0],
-                spec,
-                "near_miss_optimized",
-                f"{symbol_slug}_{spec.name}_symbol_candidate",
-            )
-            for spec in near_miss_specs
-        )
-    local_optimized_specs, local_optimized_results = _near_miss_local_optimizer(
-        config,
-        resolved.profile_symbol,
-        resolved.data_symbol,
-        explored_entry_exit_specs + sweep_specs + improvement_specs + second_pass_specs + regime_specs + autopsy_specs + near_miss_specs,
-        results,
-        symbol_slug,
-    )
-    results.extend(local_optimized_results)
-    combos = _combined_specs(
-        config,
-        (
-            explored_entry_exit_specs
-            + sweep_specs
-            + improvement_specs
-            + second_pass_specs
-            + regime_specs
-            + autopsy_specs
-            + near_miss_specs
-            + local_optimized_specs
-        ),
-        results,
-    )
-    results.extend(
-        _run_candidate_with_splits(
-            config,
-            default_features,
-            spec,
-            "combined",
-            f"{symbol_slug}_{spec.name}_symbol_candidate",
-        )
-        for spec in combos
-    )
-    spec_lookup = {
-        spec.name: spec
-        for spec in (
-            explored_entry_exit_specs
-            + sweep_specs
-            + improvement_specs
-            + second_pass_specs
-            + regime_specs
-            + autopsy_specs
-            + near_miss_specs
-            + local_optimized_specs
-            + combos
-        )
-    }
-    _annotate_combo_results(results)
-    csv_path, txt_path = _export_results(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
-    ranked = sorted(
-        results,
-        key=lambda item: (
-            _meets_viability(item, resolved.profile_symbol),
-            item.regime_stability_score,
-            -item.regime_loss_ratio,
-            item.combo_outperformance_score,
-            item.walk_forward_pass_rate_pct,
-            item.walk_forward_avg_test_pnl,
-            item.walk_forward_avg_validation_pnl,
-            item.test_pnl,
-            item.validation_pnl,
-            item.test_profit_factor,
-            item.test_closed_trades,
-        ),
-        reverse=True,
-    )
-    viable_ranked = [
-        row
-        for row in ranked
-        if _meets_viability(row, resolved.profile_symbol)
-    ]
-    best = viable_ranked[0] if viable_ranked else None
-    recommended = [row.name for row in viable_ranked[:3]]
-    profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
-
-    execution_candidate_rows = []
-    for row in results:
-        candidate_row = _execution_candidate_row_from_result(resolved.profile_symbol, row)
-        candidate_row["recommended"] = row.name in recommended
-        candidate_row["agents"] = copy.deepcopy(spec_lookup[row.name].agents) if row.name in spec_lookup else None
-        candidate_row.update(build_execution_policy_from_candidate_row(candidate_row))
-        execution_candidate_rows.append(candidate_row)
-    default_limit = 3 if symbol_is_forex(resolved.profile_symbol) or _is_crypto_symbol(resolved.profile_symbol) else 2
-    fallback_limit = max(1, config.symbol_research.max_live_candidates_per_symbol or default_limit)
-    candidate_sets = _build_execution_candidate_sets(
-        execution_candidate_rows,
-        resolved.profile_symbol,
-        max_candidates=fallback_limit,
-    )
-    standard_candidates = next((candidate_set for label, candidate_set in candidate_sets if label == "standard"), [])
-    sparse_candidates = next((candidate_set for label, candidate_set in candidate_sets if label == "sparse"), [])
-    selected_execution_candidates: list[dict[str, object]] = []
-    execution_set_id: int | None = None
-    execution_validation_summary = "not_run"
-    execution_rejection_reason = ""
-    selection_diagnostics = (
-        f"standard={len(standard_candidates)} sparse={len(sparse_candidates)}"
-    )
-    generated_combo_count = sum(1 for label, _ in candidate_sets if label.startswith("combo_"))
-    if generated_combo_count:
-        selection_diagnostics += f" combos={generated_combo_count}"
-    best_execution_choice: tuple[tuple[float, float, float, float, int], list[dict[str, object]], str] | None = None
-    best_reduced_risk_choice: tuple[tuple[float, float, float, float, int], list[dict[str, object]], str] | None = None
-    for selection_kind, candidate_set in candidate_sets:
-        execution_validation_result, execution_validation_source, execution_variant = _evaluate_execution_candidate_set(
-            config,
-            resolved.profile_symbol,
-            resolved.data_symbol,
-            candidate_set,
-        )
-        path_metrics = _execution_path_metrics(execution_validation_result)
-        max_regime_overlap, overlap_diagnostics = _regime_overlap_diagnostics(candidate_set)
-        sparse_execution = any(bool(row.get("sparse_strategy")) for row in candidate_set)
-        min_execution_closed_trades = 3 if sparse_execution else 2
-        accepted = (
-            execution_validation_result.realized_pnl > 0.0
-            and execution_validation_result.profit_factor >= 1.0
-            and len(execution_validation_result.closed_trades) >= min_execution_closed_trades
-        )
-        normal_quality = (
-            path_metrics["equity_quality_score"] >= 0.35
-            and path_metrics["time_under_water_pct"] <= 75.0
-            and path_metrics["best_trade_share_pct"] <= 75.0
-        )
-        reduced_risk_acceptable = (
-            execution_validation_result.realized_pnl > 0.0
-            and execution_validation_result.profit_factor >= 1.0
-            and len(execution_validation_result.closed_trades) >= min_execution_closed_trades
-            and path_metrics["equity_quality_score"] >= 0.18
-            and path_metrics["time_under_water_pct"] <= 90.0
-            and path_metrics["best_trade_share_pct"] <= 90.0
-        )
-        summary = (
-            f"selection={selection_kind} variant={execution_variant} data_source={execution_validation_source} "
-            f"pnl={execution_validation_result.realized_pnl:.2f} "
-            f"pf={execution_validation_result.profit_factor:.2f} "
-            f"closed={len(execution_validation_result.closed_trades)} "
-            f"quality={path_metrics['equity_quality_score']:.2f} "
-            f"underwater={path_metrics['time_under_water_pct']:.1f}% "
-            f"max_regime_overlap={max_regime_overlap:.2f}"
-        )
-        if overlap_diagnostics:
-            summary += " overlaps=" + "; ".join(overlap_diagnostics)
-        if accepted and normal_quality:
-            summary += " -> accepted"
-            score = _execution_result_score(execution_validation_result, candidate_set)
-            if best_execution_choice is None or score > best_execution_choice[0]:
-                best_execution_choice = (score, candidate_set, summary)
-        elif reduced_risk_acceptable:
-            summary += " -> accepted_with_reduced_risk"
-            score = _execution_result_score(execution_validation_result, candidate_set)
-            if best_reduced_risk_choice is None or score > best_reduced_risk_choice[0]:
-                best_reduced_risk_choice = (score, candidate_set, summary)
-        elif best_execution_choice is None:
-            execution_validation_summary = summary + " -> rejected"
-            rejection_reasons: list[str] = []
-            if execution_validation_result.realized_pnl <= 0.0:
-                rejection_reasons.append(f"execution pnl <= 0 ({execution_validation_result.realized_pnl:.2f})")
-            if execution_validation_result.profit_factor < 1.0:
-                rejection_reasons.append(f"execution PF < 1.0 ({execution_validation_result.profit_factor:.2f})")
-            if len(execution_validation_result.closed_trades) < min_execution_closed_trades:
-                rejection_reasons.append(
-                    f"execution closed trades too low ({len(execution_validation_result.closed_trades)} < {min_execution_closed_trades})"
-                )
-            if path_metrics["equity_quality_score"] < 0.2:
-                rejection_reasons.append(f"execution quality too low ({path_metrics['equity_quality_score']:.2f})")
-            execution_rejection_reason = ", ".join(rejection_reasons) if rejection_reasons else "execution set rejected by validation"
-    if best_execution_choice is not None:
-        _, selected_execution_candidates, execution_validation_summary = best_execution_choice
-    elif best_reduced_risk_choice is not None:
-        _, selected_execution_candidates, execution_validation_summary = best_reduced_risk_choice
-    else:
-        tiered_fallback = _tiered_fallback_candidates(
-            execution_candidate_rows,
-            resolved.profile_symbol,
-            max_candidates=fallback_limit,
-        )
-        selection_diagnostics += f" tiered_fallback={len(tiered_fallback)}"
-        if tiered_fallback:
-            selected_execution_candidates = tiered_fallback
-            core_count = sum(1 for row in selected_execution_candidates if str(row.get("promotion_tier", "")) == "core")
-            specialist_count = sum(
-                1 for row in selected_execution_candidates if str(row.get("promotion_tier", "")) == "specialist"
-            )
-            execution_validation_summary = (
-                f"selection=tiered_fallback core={core_count} specialist={specialist_count} "
-                f"-> accepted_with_reduced_risk"
-            )
-    specialist_live_rejections: list[str] = []
-    if selected_execution_candidates:
-        selected_execution_candidates, specialist_live_rejections = _filter_live_approved_execution_candidates(
-            selected_execution_candidates
-        )
-        if specialist_live_rejections:
-            execution_validation_summary += " specialist_live_gate=" + "; ".join(specialist_live_rejections)
-    recommended = [str(row["candidate_name"]) for row in selected_execution_candidates]
-    symbol_status = _derive_symbol_status(selected_execution_candidates, execution_validation_summary)
-    tier_counts = {"core": 0, "specialist": 0, "reject": 0}
-    for row in results:
-        tier = _promotion_tier_for_row(row, resolved.profile_symbol)
-        tier_counts[tier] = tier_counts.get(tier, 0) + 1
-    store = ExperimentStore(config.ai.experiment_database_path)
-    run_id = store.record_symbol_research_run(
-        profile_name=profile_name,
-        data_symbol=resolved.data_symbol,
-        broker_symbol=resolved.broker_symbol,
-        data_source=data_source,
-        candidates=results,
-        recommended_names=recommended,
-    )
-    if selected_execution_candidates:
-        execution_set_id = store.record_symbol_execution_set(
-            profile_name=profile_name,
-            symbol_research_run_id=run_id,
-            selected_candidates=selected_execution_candidates,
-        )
-    autopsy_path = _export_viability_autopsy(resolved.profile_symbol, results, execution_validation_summary)
-    descriptors = [
-        AgentDescriptor(
-            profile_name=profile_name,
-            agent_name=row.name,
-            lifecycle_scope="active",
-            class_name=row.name,
-            code_path=row.code_path,
-            description=row.description,
-            is_active=row.name in recommended,
-            variant_label=row.variant_label,
-            timeframe_label=row.timeframe_label,
-            session_label=row.session_label,
-        )
-        for row in results
-    ]
-    store.promote_symbol_research_candidates(
-        profile_name=profile_name,
-        data_symbol=resolved.data_symbol,
-        broker_symbol=resolved.broker_symbol,
-        descriptors=descriptors,
-        candidates=results,
-        recommended_names=recommended,
-        symbol_research_run_id=run_id,
-    )
-    deployment_path = None
-    deployment = build_symbol_deployment(
-        profile_name=profile_name,
-        symbol=resolved.profile_symbol,
-        data_symbol=resolved.data_symbol,
-        broker_symbol=resolved.broker_symbol,
-        research_run_id=run_id,
-        execution_set_id=execution_set_id,
-        execution_validation_summary=execution_validation_summary,
-        symbol_status=symbol_status,
-        selected_candidates=selected_execution_candidates,
-    )
-    deployment_path = export_symbol_deployment(deployment)
-    selected_execution_results = [row for row in results if row.name in {str(item["candidate_name"]) for item in selected_execution_candidates}]
-    plot_paths = plot_symbol_research(
-        resolved.profile_symbol,
-        results,
-        best_row=best,
-        execution_rows=selected_execution_results,
-    )
-
-    lines = [
-        f"Requested symbol: {resolved.requested_symbol}",
-        f"Symbol: {resolved.profile_symbol}",
-        f"Data symbol: {resolved.data_symbol}",
-        f"Broker symbol: {resolved.broker_symbol}",
-        f"Catalog profile: {profile_name}",
-        f"Data source: {data_source}",
-        f"Candidates tested: {len(results)}",
-        f"Research CSV: {csv_path}",
-        f"Research report: {txt_path}",
-        f"Viability autopsy: {autopsy_path}",
-    ]
-    if plot_paths:
-        lines.append("Plots: " + ", ".join(str(path) for path in plot_paths))
-    if best is not None:
-        lines.extend(
-            [
-                f"Best candidate: {best.name}",
-                f"Best PnL: {best.realized_pnl:.2f}",
-                f"Best profit factor: {best.profit_factor:.2f}",
-                f"Best closed trades: {best.closed_trades}",
-                f"Validation: pnl={best.validation_pnl:.2f} pf={best.validation_profit_factor:.2f} closed={best.validation_closed_trades}",
-                f"Test: pnl={best.test_pnl:.2f} pf={best.test_profit_factor:.2f} closed={best.test_closed_trades}",
-            ]
-        )
-    else:
-        lines.append("Best candidate: none")
-        lines.append(
-            "No viable candidate met the symbol-specific viability rules "
-            "(validation/test robustness, walk-forward robustness, and execution consistency)."
-        )
-    lines.append("Recommended active agents: " + (", ".join(recommended) if recommended else "none"))
-    lines.append(f"Symbol status: {symbol_status}")
-    lines.append(
-        f"Tier counts: core={tier_counts['core']} specialist={tier_counts['specialist']} reject={tier_counts['reject']}"
-    )
-    lines.append(
-        "Execution set: "
-        + (
-            ", ".join(str(row["candidate_name"]) for row in selected_execution_candidates)
-            if selected_execution_candidates
-            else "none"
-        )
-    )
-    if not selected_execution_candidates and tier_counts["core"] > 0:
-        lines.append(
-            "Execution set note: core candidates existed, but no candidate set survived symbol-level execution selection "
-            "or execution validation."
-        )
-        lines.append(f"Execution selection diagnostics: {selection_diagnostics}")
-        if execution_rejection_reason:
-            lines.append(f"Execution rejection reason: {execution_rejection_reason}")
-    if selected_execution_candidates:
-        selected_max_overlap, selected_overlap_diagnostics = _regime_overlap_diagnostics(selected_execution_candidates)
-        specialist_overlap_rejections = _specialist_regime_overlap_rejections(execution_candidate_rows, selected_execution_candidates)
-        lines.append(
-            "Execution tiers: "
-            + ", ".join(f"{row['candidate_name']}[{row.get('promotion_tier', 'core')}]" for row in selected_execution_candidates)
-        )
-        lines.append(f"Execution regime overlap max: {selected_max_overlap:.2f}")
-        lines.append(
-            "Execution regime overlap detail: "
-            + ("; ".join(selected_overlap_diagnostics) if selected_overlap_diagnostics else "none")
-        )
-        lines.append(
-            "Execution regime overlap rejections: "
-            + ("; ".join(specialist_overlap_rejections) if specialist_overlap_rejections else "none")
-        )
-        lines.append(
-            "Execution specialist live rejections: "
-            + ("; ".join(specialist_live_rejections) if specialist_live_rejections else "none")
-        )
-    elif specialist_live_rejections:
-        lines.append(
-            "Execution specialist live rejections: "
-            + "; ".join(specialist_live_rejections)
-        )
-    lines.append(f"Execution set id: {execution_set_id if execution_set_id is not None else 'none'}")
-    lines.append(f"Execution validation: {execution_validation_summary}")
-    if deployment_path is not None:
-        lines.append(f"Live deployment: {deployment_path}")
-    lines.append(f"Research history days: {config.market_data.history_days}")
-    lines.append(f"Research mode: {effective_mode}")
-    if config.symbol_research.mode == "auto":
-        lines.append(
-            "Research mode selection: "
-            + (
-                "full because all required timeframe caches were found."
-                if effective_mode == "full"
-                else "seed because one or more full-research timeframe caches were missing."
-            )
-        )
-    if resolved.profile_symbol.upper() == "US500":
-        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 15% / 15%")
-    elif _is_crypto_symbol(resolved.profile_symbol):
-        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 45% / 25% / 20%")
-    elif _is_stock_symbol(resolved.profile_symbol):
-        lines.append("Split ratio: train 50% / validation 25% / test 25% ; walk-forward windows use 42% / 22% / 22%")
-    else:
-        lines.append("Split ratio: train 60% / validation 20% / test 20% ; walk-forward windows use 50% / 20% / 20%")
-    return lines

@@ -13,6 +13,7 @@ import MetaTrader5 as mt5
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import MT5Config
 from quant_system.models import FillEvent, MarketBar, OrderRequest, PortfolioSnapshot, Position, Side
+from quant_system.venues import get_venue_profile, infer_venue_key
 
 
 LOGGER = logging.getLogger(__name__)
@@ -318,25 +319,14 @@ class MT5Client:
         )
 
     def _broker_family(self) -> str:
-        explicit = str(getattr(self.config, "prop_broker", "") or "").strip().lower()
-        if explicit and explicit != "generic":
-            return explicit
+        explicit = str(getattr(self.config, "prop_broker", "") or "")
         server = str(self.config.server or "").strip().lower()
         terminal = str(getattr(mt5.terminal_info(), "company", "") or "").strip().lower()
-        joined = f"{server} {terminal}"
-        if "ftmo" in joined:
-            return "ftmo"
-        if "fundednext" in joined:
-            return "fundednext"
-        if "blue guardian" in joined or "blueguardian" in joined:
-            return "blue_guardian"
-        return "generic"
+        return infer_venue_key(server=server, company=terminal, explicit=explicit)
 
     def _fill_resolution_routes(self) -> tuple[str, ...]:
         family = self._broker_family()
-        if family in {"ftmo", "fundednext", "blue_guardian"}:
-            return ("history_deals", "open_position", "history_orders")
-        return ("history_deals", "history_orders", "open_position")
+        return get_venue_profile(family).rules.fill_resolution_routes
 
     def _lookup_deal_cost(self, result, symbol: str) -> MT5DealCost:
         deal_ticket = int(getattr(result, "deal", 0) or 0)

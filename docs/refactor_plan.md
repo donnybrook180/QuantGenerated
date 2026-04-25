@@ -379,6 +379,10 @@ Inhoud:
 - waar agent-definities staan
 - welke entrypoint waarvoor bedoeld is
 
+Status:
+
+- `docs/architecture_map.md` bestaat nu en beschrijft de huidige Step 1 boundary-indeling
+
 ## Prioriteit
 
 Start met deze volgorde:

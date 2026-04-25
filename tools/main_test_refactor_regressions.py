@@ -16,6 +16,7 @@ from quant_system.artifacts import DEPLOY_DIR, RESEARCH_DIR, SYSTEM_DIR, artifac
 DEFAULT_SYMBOLS = ("EURUSD", "XAUUSD", "JP225")
 DEDICATED_TEST_MODULES = [
     "quant_system.test_symbol_resolution",
+    "quant_system.test_venues_registry",
     "quant_system.test_mt5_integration",
     "quant_system.test_evaluation_report",
     "quant_system.test_interpreter_engines",

@@ -11,7 +11,7 @@ import tempfile
 import duckdb
 from quant_system.ai.models import AgentDescriptor, AgentRegistryRecord, ExperimentSnapshot
 from quant_system.config import PostgresConfig
-from quant_system.db.postgres import connect_postgres
+from quant_system.db.postgres import connect_postgres, postgres_driver_available
 from quant_system.symbols import resolve_symbol_request
 
 
@@ -20,7 +20,7 @@ class ExperimentStore:
         self.database_path = database_path
         self.read_only = read_only
         self.postgres_config = PostgresConfig()
-        self._use_postgres_mt5_fill_events = self.postgres_config.enabled
+        self._use_postgres_mt5_fill_events = self.postgres_config.enabled and postgres_driver_available()
         if not self.read_only:
             self._initialize_schema()
 
@@ -390,6 +390,8 @@ class ExperimentStore:
         return json.dumps(value)
 
     def _pg_connect(self, *, autocommit: bool = False):
+        if not postgres_driver_available():
+            raise RuntimeError("PostgreSQL support requires the optional 'psycopg' dependency.")
         return connect_postgres(self.postgres_config, autocommit=autocommit)
 
     def _mt5_fill_symbol_variants(self, broker_symbol: str) -> list[str]:
@@ -1620,17 +1622,20 @@ class ExperimentStore:
                 return None
         else:
             placeholders = ", ".join("?" for _ in symbol_variants)
-            with self._connect() as connection:
-                rows = connection.execute(
-                    f"""
-                    SELECT spread_points, slippage_bps
-                    FROM mt5_fill_events
-                    WHERE broker_symbol IN ({placeholders}) AND fill_price > 0
-                    ORDER BY event_timestamp DESC, id DESC
-                    LIMIT ?
-                    """,
-                    [*symbol_variants, lookback_rows],
-                ).fetchall()
+            try:
+                with self._connect() as connection:
+                    rows = connection.execute(
+                        f"""
+                        SELECT spread_points, slippage_bps
+                        FROM mt5_fill_events
+                        WHERE broker_symbol IN ({placeholders}) AND fill_price > 0
+                        ORDER BY event_timestamp DESC, id DESC
+                        LIMIT ?
+                        """,
+                        [*symbol_variants, lookback_rows],
+                    ).fetchall()
+            except (duckdb.IOException, FileNotFoundError):
+                return None
         if len(rows) < 5:
             return None
         spreads = sorted(float(row[0] or 0.0) for row in rows)

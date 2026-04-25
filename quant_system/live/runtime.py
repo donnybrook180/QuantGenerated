@@ -1,66 +1,63 @@
 from __future__ import annotations
 
-import copy
 import hashlib
 import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Callable
 
-from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
-from quant_system.execution.engine import AgentCoordinator
 from quant_system.integrations.mt5 import MT5AccountModeInfo, MT5Client, MT5Error, MT5PositionInfo
 from quant_system.interpreter.app import build_market_interpreter_state
+from quant_system.live.allocation import allocate_symbol_exposure as _live_allocate_symbol_exposure
+from quant_system.live.interpreter_gate import (
+    allocator_score as _live_allocator_score,
+    candidate_archetype as _live_candidate_archetype,
+    effective_risk_multiplier as _live_effective_risk_multiplier,
+    interpreter_block_reason as _live_interpreter_block_reason,
+    is_strategy_regime_blocked as _live_is_strategy_regime_blocked,
+)
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
+from quant_system.live.orchestration import run_live_cycle as _live_run_live_cycle
+from quant_system.live.order_sizing import (
+    compute_order_size as _live_compute_order_size,
+    estimated_stop_distance as _live_estimated_stop_distance,
+    protective_order_prices as _live_protective_order_prices,
+)
+from quant_system.live.reconcile import (
+    net_quantity as _live_net_quantity,
+    reconcile_strategy as _live_reconcile_strategy,
+)
+from quant_system.live.strategy_eval import (
+    build_strategy_config as _live_build_strategy_config,
+    evaluate_strategy as _live_evaluate_strategy,
+    feature_regime_label as _live_feature_regime_label,
+    matches_regime as _live_matches_regime,
+    matches_session as _live_matches_session,
+    session_name_from_variant as _live_session_name_from_variant,
+)
+from quant_system.live.weekend_policy import (
+    is_weekend_entry_block as _live_is_weekend_entry_block,
+    should_force_weekend_flatten as _live_should_force_weekend_flatten,
+    weekend_flatten_cutoff as _live_weekend_flatten_cutoff,
+)
 from quant_system.models import OrderRequest, Side
-from quant_system.regime import RegimeSnapshot, classify_regime, map_regime_label_to_unified, regime_allows_strategy
+from quant_system.regime import RegimeSnapshot
 
 
 LOGGER = logging.getLogger(__name__)
 
 
-def _weekend_flatten_cutoff(config: SystemConfig) -> tuple[int, int]:
-    hour = min(max(int(config.execution.weekend_flatten_hour_utc), 0), 23)
-    minute = min(max(int(config.execution.weekend_flatten_minute_utc), 0), 59)
-    return hour, minute
+_weekend_flatten_cutoff = _live_weekend_flatten_cutoff
 
 
-def _is_weekend_entry_block(config: SystemConfig, now: datetime | None = None) -> bool:
-    if not config.execution.avoid_weekend_holds:
-        return False
-    current = now or datetime.now(UTC)
-    weekday = current.weekday()
-    cutoff_hour, cutoff_minute = _weekend_flatten_cutoff(config)
-    if weekday > 4:
-        return True
-    if weekday < int(config.execution.weekend_flatten_weekday_utc):
-        return False
-    if weekday > int(config.execution.weekend_flatten_weekday_utc):
-        return True
-    return (current.hour, current.minute) >= (cutoff_hour, cutoff_minute)
+_is_weekend_entry_block = _live_is_weekend_entry_block
 
 
-def _should_force_weekend_flatten(config: SystemConfig, now: datetime | None = None) -> bool:
-    if not config.execution.avoid_weekend_holds:
-        return False
-    current = now or datetime.now(UTC)
-    cutoff_weekday = int(config.execution.weekend_flatten_weekday_utc)
-    cutoff_hour, cutoff_minute = _weekend_flatten_cutoff(config)
-    return current.weekday() == cutoff_weekday and (current.hour, current.minute) >= (cutoff_hour, cutoff_minute)
+_should_force_weekend_flatten = _live_should_force_weekend_flatten
 
 
-def _candidate_archetype(strategy: DeploymentStrategy) -> str:
-    name = strategy.candidate_name.lower()
-    if "reclaim" in name:
-        return "reclaim"
-    if "reversion" in name:
-        return "mean_reversion"
-    if "breakout" in name:
-        return "breakout"
-    if "pullback" in name or "trend" in name:
-        return "trend_pullback"
-    return "unknown"
+_candidate_archetype = _live_candidate_archetype
 
 
 def _mt5_timeframe_from_variant(variant_label: str, default_timeframe: str) -> str:
@@ -76,64 +73,19 @@ def _mt5_timeframe_from_variant(variant_label: str, default_timeframe: str) -> s
 
 
 def _feature_regime_label(feature) -> str:
-    trend_strength = feature.values.get("trend_strength", 0.0)
-    atr_proxy = feature.values.get("atr_proxy", 0.0)
-    if trend_strength >= 0.001:
-        trend_label = "trend_up"
-    elif trend_strength <= -0.001:
-        trend_label = "trend_down"
-    else:
-        trend_label = "trend_flat"
-
-    if atr_proxy >= 0.003:
-        vol_label = "vol_high"
-    elif atr_proxy <= 0.0012:
-        vol_label = "vol_low"
-    else:
-        vol_label = "vol_mid"
-    return f"{trend_label}_{vol_label}"
+    return _live_feature_regime_label(feature)
 
 
 def _matches_regime(feature, regime_filter_label: str) -> bool:
-    if not regime_filter_label:
-        return True
-    label = _feature_regime_label(feature)
-    if regime_filter_label.startswith("exclude:"):
-        excluded = regime_filter_label.removeprefix("exclude:")
-        if excluded.startswith("trend_") and excluded.count("_") == 1:
-            return not label.startswith(excluded + "_")
-        if excluded.startswith("vol_") and excluded.count("_") == 1:
-            return not label.endswith("_" + excluded)
-        return label != excluded
-    if regime_filter_label.startswith("trend_") and regime_filter_label.count("_") == 1:
-        return label.startswith(regime_filter_label + "_")
-    if regime_filter_label.startswith("vol_") and regime_filter_label.count("_") == 1:
-        return label.endswith("_" + regime_filter_label)
-    return label == regime_filter_label
+    return _live_matches_regime(feature, regime_filter_label)
 
 
 def _session_name_from_variant(variant_label: str) -> str:
-    _, _, session_label = variant_label.partition("_")
-    return session_label or "all"
+    return _live_session_name_from_variant(variant_label)
 
 
 def _matches_session(feature, session_name: str) -> bool:
-    hour = int(feature.values.get("hour_of_day", feature.timestamp.hour))
-    if session_name == "all":
-        return True
-    if session_name == "europe":
-        return hour in set(range(7, 13))
-    if session_name == "us":
-        return hour in set(range(13, 21))
-    if session_name == "overlap":
-        return hour in set(range(12, 17))
-    if session_name == "open":
-        return feature.values.get("in_regular_session", 0.0) >= 1.0 and 0 <= feature.values.get("minutes_from_open", -1.0) < 90
-    if session_name == "power":
-        return hour in {18, 19}
-    if session_name == "midday":
-        return hour in {15, 16, 17}
-    return True
+    return _live_matches_session(feature, session_name)
 
 
 def _strategy_magic(base_magic: int, symbol: str, candidate_name: str) -> int:
@@ -142,23 +94,11 @@ def _strategy_magic(base_magic: int, symbol: str, candidate_name: str) -> int:
     return base_magic * 10 + suffix
 
 
-def _effective_risk_multiplier(snapshot: RegimeSnapshot, strategy: DeploymentStrategy) -> float:
-    multiplier = snapshot.risk_multiplier
-    if multiplier < strategy.min_risk_multiplier:
-        multiplier = strategy.min_risk_multiplier
-    if multiplier > strategy.max_risk_multiplier:
-        multiplier = strategy.max_risk_multiplier
-    return multiplier
+_effective_risk_multiplier = _live_effective_risk_multiplier
 
 
 def _estimated_stop_distance(strategy_config: SystemConfig, latest_feature, reference_price: float) -> float:
-    if latest_feature is None:
-        return 0.0
-    atr_proxy = float(latest_feature.values.get("atr_proxy", 0.0) or 0.0)
-    stop_multiple = float(strategy_config.execution.stop_loss_atr_multiple or 0.0)
-    if atr_proxy <= 0.0 or stop_multiple <= 0.0 or reference_price <= 0.0:
-        return 0.0
-    return reference_price * atr_proxy * stop_multiple
+    return _live_estimated_stop_distance(strategy_config, latest_feature, reference_price)
 
 
 def _protective_order_prices(
@@ -167,74 +107,16 @@ def _protective_order_prices(
     reference_price: float,
     side: Side,
 ) -> tuple[float, float]:
-    if latest_feature is None or reference_price <= 0.0:
-        return 0.0, 0.0
-    atr_proxy = float(latest_feature.values.get("atr_proxy", 0.0) or 0.0)
-    if atr_proxy <= 0.0:
-        return 0.0, 0.0
-    stop_distance = reference_price * atr_proxy * float(strategy_config.execution.stop_loss_atr_multiple or 0.0)
-    target_distance = reference_price * atr_proxy * float(strategy_config.execution.take_profit_atr_multiple or 0.0)
-    if side == Side.BUY:
-        stop_price = reference_price - stop_distance if stop_distance > 0.0 else 0.0
-        target_price = reference_price + target_distance if target_distance > 0.0 else 0.0
-    else:
-        stop_price = reference_price + stop_distance if stop_distance > 0.0 else 0.0
-        target_price = reference_price - target_distance if target_distance > 0.0 else 0.0
-    return stop_price, target_price
+    return _live_protective_order_prices(strategy_config, latest_feature, reference_price, side)
 
 
-def _is_strategy_regime_blocked(
-    deployment: SymbolDeployment,
-    strategy: DeploymentStrategy,
-    snapshot: RegimeSnapshot,
-    *,
-    relax_for_mini_trades: bool = False,
-) -> bool:
-    if relax_for_mini_trades:
-        return bool(int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0))
-    return (
-        bool(int(strategy.execution_overrides.get("tca_block_new_entries", 0) or 0))
-        or
-        (deployment.block_new_entries_in_event_risk and snapshot.regime_label == "event_risk")
-        or snapshot.block_new_entries
-        or snapshot.vol_percentile > deployment.max_symbol_vol_percentile
-        or not regime_allows_strategy(
-            snapshot,
-            allowed_regimes=strategy.allowed_regimes,
-            blocked_regimes=strategy.blocked_regimes,
-            min_vol_percentile=strategy.min_vol_percentile,
-            max_vol_percentile=strategy.max_vol_percentile,
-        )
-    )
+_is_strategy_regime_blocked = _live_is_strategy_regime_blocked
 
 
-def _interpreter_block_reason(strategy: DeploymentStrategy, interpreter_state, *, relax_for_mini_trades: bool = False) -> str:
-    if relax_for_mini_trades:
-        return ""
-    if interpreter_state is None:
-        return ""
-    archetype = _candidate_archetype(strategy)
-    blocked = set(interpreter_state.blocked_archetypes or [])
-    allowed = set(interpreter_state.allowed_archetypes or [])
-    if interpreter_state.risk_posture == "defensive" and not allowed:
-        return f"interpreter_defensive::{interpreter_state.no_trade_reason or interpreter_state.session_regime}"
-    if archetype != "unknown" and archetype in blocked:
-        return f"interpreter_blocked::{archetype}"
-    if allowed and archetype != "unknown" and archetype not in allowed:
-        return f"interpreter_not_allowed::{archetype}"
-    return ""
+_interpreter_block_reason = _live_interpreter_block_reason
 
 
-def _allocator_score(strategy: DeploymentStrategy, signal_side: Side, confidence: float, snapshot: RegimeSnapshot) -> float:
-    if signal_side == Side.FLAT:
-        return 0.0
-    unified_regime = map_regime_label_to_unified(snapshot.regime_label, snapshot.volatility_label, snapshot.structure_label)
-    raw = confidence * max(_effective_risk_multiplier(snapshot, strategy), 0.0) * max(strategy.base_allocation_weight, 0.0)
-    if strategy.allowed_regimes and (snapshot.regime_label in strategy.allowed_regimes or unified_regime in strategy.allowed_regimes):
-        raw *= 1.15
-    if strategy.regime_filter_label and strategy.regime_filter_label in {snapshot.regime_label, unified_regime}:
-        raw *= 1.10
-    return max(raw, 0.0)
+_allocator_score = _live_allocator_score
 
 
 @dataclass(slots=True)
@@ -306,86 +188,19 @@ class MT5LiveExecutor:
         return self.strategy_portfolio_weights.get(strategy.candidate_name, self.portfolio_weight)
 
     def _build_strategy_config(self, strategy: DeploymentStrategy) -> SystemConfig:
-        from quant_system.live_support import configure_symbol_execution
-        from quant_system.execution_tuning import apply_execution_mode_overrides
-
-        strategy_config = copy.deepcopy(self.config)
-        strategy_config.mt5.symbol = self.deployment.broker_symbol
-        strategy_config.mt5.timeframe = _mt5_timeframe_from_variant(strategy.variant_label, strategy_config.mt5.timeframe)
-        configure_symbol_execution(strategy_config, self.deployment.symbol)
-        for key, value in strategy.execution_overrides.items():
-            setattr(strategy_config.execution, key, value)
-        apply_execution_mode_overrides(strategy_config)
-        return strategy_config
+        return _live_build_strategy_config(self.config, self.deployment, strategy, _mt5_timeframe_from_variant)
 
     def _evaluate_strategy(
         self, client: MT5Client, strategy: DeploymentStrategy
     ) -> tuple[Side, float, datetime | None, RegimeSnapshot, str, object | None]:
-        from quant_system.live_support import build_features_with_events
-
-        strategy_config = self._build_strategy_config(strategy)
-        bars = client.fetch_bars(bar_count=strategy_config.mt5.history_bars)
-        features = build_features_with_events(strategy_config, self.deployment.symbol, bars)
-        latest_feature = features[-1] if features else None
-        snapshot = classify_regime(self.deployment.symbol, bars, latest_feature)
-        session_name = _session_name_from_variant(strategy.variant_label)
-        agents = build_agents_from_catalog_paths([strategy.code_path], strategy_config)
-        coordinator = AgentCoordinator(agents, consensus_min_confidence=strategy_config.agents.consensus_min_confidence)
-        last_side = Side.FLAT
-        last_confidence = 0.0
-        last_timestamp: datetime | None = None
-        last_veto_reason = ""
-        for feature in features:
-            if not _matches_session(feature, session_name):
-                continue
-            if not _matches_regime(feature, strategy.regime_filter_label):
-                continue
-            context = coordinator.evaluate(feature)
-            if context is None:
-                if coordinator.last_veto_reason:
-                    last_veto_reason = coordinator.last_veto_reason
-                continue
-            last_side = context.side
-            last_confidence = context.confidence
-            last_timestamp = feature.timestamp
-            last_veto_reason = ""
-        return last_side, last_confidence, last_timestamp, snapshot, last_veto_reason, latest_feature
+        return _live_evaluate_strategy(client, strategy, self._build_strategy_config(strategy), self.deployment.symbol)
 
     def _allocate_symbol_exposure(self, evaluated: list[EvaluatedStrategy]) -> None:
-        buy_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.BUY)
-        sell_total = sum(item.allocator_score for item in evaluated if item.signal_side == Side.SELL)
-        dominant_side = Side.FLAT
-        dominant_total = 0.0
-        opposing_total = 0.0
-        if buy_total > 0.0 or sell_total > 0.0:
-            if buy_total >= sell_total:
-                dominant_side = Side.BUY
-                dominant_total = buy_total
-                opposing_total = sell_total
-            else:
-                dominant_side = Side.SELL
-                dominant_total = sell_total
-                opposing_total = buy_total
-
-        for item in evaluated:
-            item.allocation_fraction = 0.0
-            if item.signal_side == Side.FLAT or item.allocator_score <= 0.0:
-                continue
-            if dominant_side == Side.FLAT or dominant_total <= 0.0:
-                continue
-            if item.signal_side != dominant_side:
-                continue
-            # If both sides are active, require the dominant side to clearly win.
-            if opposing_total > 0.0 and dominant_total < opposing_total * 1.10:
-                continue
-            item.allocation_fraction = item.allocator_score / dominant_total
+        _live_allocate_symbol_exposure(evaluated)
 
     @staticmethod
     def _net_quantity(positions: list[MT5PositionInfo]) -> float:
-        quantity = 0.0
-        for position in positions:
-            quantity += position.quantity if position.side == Side.BUY else -position.quantity
-        return quantity
+        return _live_net_quantity(positions)
 
     def _reconcile_strategy(
         self,
@@ -401,346 +216,59 @@ class MT5LiveExecutor:
         latest_feature,
         should_skip_duplicate: Callable[[StrategyAction], bool] | None = None,
     ) -> StrategyAction:
-        magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
-        positions = client.list_positions(magic_number=magic_number)
-        current_quantity = self._net_quantity(positions)
-        comment = strategy.candidate_name[:31]
-        now_utc = datetime.now(UTC)
-        weekend_entry_block = _is_weekend_entry_block(self.config, now_utc)
-        force_weekend_flatten = _should_force_weekend_flatten(self.config, now_utc)
-
-        candidate_action = StrategyAction(
-            strategy.candidate_name,
-            signal_side,
-            signal_timestamp,
-            confidence,
-            current_quantity,
-            "hold",
-            magic_number,
-            regime_label=snapshot.regime_label,
-            vol_percentile=snapshot.vol_percentile,
-            risk_multiplier=_effective_risk_multiplier(snapshot, strategy),
+        return _live_reconcile_strategy(
+            client=client,
+            strategy=strategy,
+            deployment=self.deployment,
+            config=self.config,
+            interpreter_state=self.interpreter_state,
+            relax_gates_for_mini_trades=self.relax_gates_for_mini_trades,
+            signal_side=signal_side,
+            signal_timestamp=signal_timestamp,
+            confidence=confidence,
+            snapshot=snapshot,
             allocation_fraction=allocation_fraction,
             allocator_score=allocator_score,
-            portfolio_weight=self._strategy_portfolio_weight(strategy),
-            promotion_tier=strategy.promotion_tier,
-            base_allocation_weight=strategy.base_allocation_weight,
-            risk_budget_cash=0.0,
-            veto_reason="",
-            interpreter_reason="",
-            interpreter_bias=self.interpreter_state.directional_bias,
-            interpreter_confidence=self.interpreter_state.confidence,
+            account_equity=account_equity,
+            latest_feature=latest_feature,
+            strategy_portfolio_weight=self._strategy_portfolio_weight(strategy),
+            strategy_magic_fn=_strategy_magic,
+            strategy_action_cls=StrategyAction,
+            effective_risk_multiplier_fn=_effective_risk_multiplier,
+            is_weekend_entry_block_fn=_is_weekend_entry_block,
+            should_force_weekend_flatten_fn=_should_force_weekend_flatten,
+            interpreter_block_reason_fn=_interpreter_block_reason,
+            is_strategy_regime_blocked_fn=_is_strategy_regime_blocked,
+            build_strategy_config_fn=self._build_strategy_config,
+            compute_order_size_fn=_live_compute_order_size,
+            protective_order_prices_fn=_protective_order_prices,
+            bars_timestamp_now_fn=bars_timestamp_now,
+            should_skip_duplicate=should_skip_duplicate,
         )
-        if current_quantity != 0.0 and force_weekend_flatten:
-            close_side = Side.SELL if current_quantity > 0 else Side.BUY
-            candidate_action.intended_action = "force_flatten_weekend"
-            if self.config.execution.live_trading_enabled:
-                for position in positions:
-                    client.send_market_order(
-                        OrderRequest(
-                            timestamp=bars_timestamp_now(),
-                            symbol=self.deployment.broker_symbol,
-                            side=Side.SELL if position.side == Side.BUY else Side.BUY,
-                            quantity=position.quantity,
-                            reason=f"weekend_flatten_{strategy.candidate_name}",
-                            confidence=confidence,
-                            metadata={"strategy": strategy.candidate_name, "forced_exit": "weekend_flatten"},
-                        ),
-                        magic_number=magic_number,
-                        comment=comment,
-                        position_ticket=position.ticket,
-                    )
-            else:
-                candidate_action.intended_action = "dry_run_force_flatten_weekend"
-            candidate_action.signal_side = close_side
-            return candidate_action
-
-        if signal_side == Side.FLAT:
-            if current_quantity != 0.0 and weekend_entry_block:
-                candidate_action.intended_action = "weekend_hold_detected"
-            return candidate_action
-
-        if current_quantity == 0.0 and weekend_entry_block:
-            candidate_action.intended_action = "weekend_entry_blocked"
-            return candidate_action
-
-        interpreter_reason = _interpreter_block_reason(
-            strategy,
-            self.interpreter_state,
-            relax_for_mini_trades=self.relax_gates_for_mini_trades,
-        )
-        if current_quantity == 0.0 and interpreter_reason:
-            candidate_action.intended_action = f"policy_blocked::{interpreter_reason}"
-            candidate_action.interpreter_reason = interpreter_reason
-            return candidate_action
-
-        if current_quantity == 0.0 and _is_strategy_regime_blocked(
-            self.deployment,
-            strategy,
-            snapshot,
-            relax_for_mini_trades=self.relax_gates_for_mini_trades,
-        ):
-            candidate_action.intended_action = f"regime_blocked::{snapshot.regime_label}"
-            return candidate_action
-
-        candidate_action.effective_size_factor = (
-            candidate_action.portfolio_weight
-            * allocation_fraction
-            * candidate_action.risk_multiplier
-        )
-        desired_side = signal_side
-        strategy_config = self._build_strategy_config(strategy)
-        
-        # Mini-trades risk enforcement: FORCE the lower risk percent
-        risk_pct = strategy_config.execution.risk_per_trade_pct
-        if self.relax_gates_for_mini_trades:
-            risk_pct = min(risk_pct, strategy_config.execution.mini_trades_risk_per_trade_pct)
-        
-        candidate_action.risk_budget_cash = (
-            account_equity
-            * max(risk_pct, 0.0)
-            * candidate_action.effective_size_factor
-        )
-        market_snapshot = client.market_snapshot()
-        reference_price = market_snapshot.ask if desired_side == Side.BUY else market_snapshot.bid
-        stop_distance = _estimated_stop_distance(strategy_config, latest_feature, reference_price)
-        stop_loss_price, take_profit_price = _protective_order_prices(
-            strategy_config,
-            latest_feature,
-            reference_price,
-            desired_side,
-        )
-        order_size = 0.0
-        if candidate_action.risk_budget_cash > 0.0 and stop_distance > 0.0 and strategy_config.execution.contract_size > 0.0:
-            order_size = candidate_action.risk_budget_cash / (stop_distance * strategy_config.execution.contract_size)
-            
-            # Additional safety for mini trades: force the mini trades order size if calculation is still too high
-            if self.relax_gates_for_mini_trades:
-                 order_size = min(order_size, strategy_config.execution.mini_trades_order_size)
-        else:
-            order_size = (
-                strategy_config.execution.order_size
-                * candidate_action.effective_size_factor
-            )
-
-        if order_size <= 0.0:
-            candidate_action.intended_action = "skip_zero_size"
-            return candidate_action
-
-        if current_quantity > 0 and desired_side == Side.BUY:
-            candidate_action.intended_action = "hold_long"
-            return candidate_action
-        if current_quantity < 0 and desired_side == Side.SELL:
-            candidate_action.intended_action = "hold_short"
-            return candidate_action
-
-        action_label = "open_long" if desired_side == Side.BUY else "open_short"
-        candidate_action.intended_action = action_label
-        if should_skip_duplicate is not None and should_skip_duplicate(candidate_action):
-            candidate_action.intended_action = f"duplicate_skipped::{action_label}"
-            return candidate_action
-
-        for position in positions:
-            if (position.side == Side.BUY and desired_side == Side.SELL) or (position.side == Side.SELL and desired_side == Side.BUY):
-                if self.config.execution.live_trading_enabled:
-                    client.send_market_order(
-                        OrderRequest(
-                            timestamp=bars_timestamp_now(),
-                            symbol=self.deployment.broker_symbol,
-                            side=Side.SELL if position.side == Side.BUY else Side.BUY,
-                            quantity=position.quantity,
-                            reason=f"close_{strategy.candidate_name}",
-                            confidence=confidence,
-                        ),
-                        magic_number=magic_number,
-                        comment=comment,
-                        position_ticket=position.ticket,
-                    )
-
-        if self.config.execution.live_trading_enabled:
-            client.send_market_order(
-                OrderRequest(
-                    timestamp=bars_timestamp_now(),
-                    symbol=self.deployment.broker_symbol,
-                    side=desired_side,
-                    quantity=order_size,
-                    reason=strategy.candidate_name,
-                    confidence=confidence,
-                    stop_loss_price=stop_loss_price,
-                    take_profit_price=take_profit_price,
-                    metadata={"strategy": strategy.candidate_name},
-                ),
-                magic_number=magic_number,
-                comment=comment,
-            )
-        else:
-            candidate_action.intended_action = f"dry_run_{action_label}"
-        return candidate_action
 
     def run_once(self, should_skip_duplicate: Callable[[StrategyAction], bool] | None = None) -> LiveRunResult:
-        actions: list[StrategyAction] = []
-        account_mode_info: MT5AccountModeInfo | None = None
-        regime_snapshot: RegimeSnapshot | None = None
-        evaluated: list[EvaluatedStrategy] = []
-        client_cache: dict[str, MT5Client] = {}
-
-        def _client_for_strategy(strategy: DeploymentStrategy) -> MT5Client:
-            strategy_config = self._build_strategy_config(strategy)
-            cache_key = f"{strategy_config.mt5.symbol}|{strategy_config.mt5.timeframe}"
-            client = client_cache.get(cache_key)
-            if client is None:
-                client = MT5Client(strategy_config.mt5)
-                client.initialize()
-                client_cache[cache_key] = client
-            return client
-
-        try:
-            bootstrap_client = _client_for_strategy(self.deployment.strategies[0])
-            account_mode_info = bootstrap_client.account_mode_info()
-            account_snapshot = bootstrap_client.account_snapshot()
-            if (
-                account_mode_info is not None
-                and not account_mode_info.strategy_isolation_supported
-                and len(self.deployment.strategies) > 1
-                and not self.config.mt5.allow_netting_multi_strategy
-            ):
-                for strategy in self.deployment.strategies:
-                    magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, strategy.candidate_name)
-                    actions.append(
-                        StrategyAction(
-                            candidate_name=strategy.candidate_name,
-                            signal_side=Side.FLAT,
-                            signal_timestamp=None,
-                            confidence=0.0,
-                            current_quantity=0.0,
-                            intended_action="netting_blocked_multi_strategy",
-                            magic_number=magic_number,
-                            regime_label="",
-                            vol_percentile=0.0,
-                            risk_multiplier=0.0,
-                            allocation_fraction=0.0,
-                            allocator_score=0.0,
-                            portfolio_weight=self._strategy_portfolio_weight(item.strategy),
-                        )
-                    )
-                return LiveRunResult(
-                    symbol=self.deployment.symbol,
-                    broker_symbol=self.deployment.broker_symbol,
-                    account_mode_label=account_mode_info.margin_mode_label,
-                    strategy_isolation_supported=account_mode_info.strategy_isolation_supported,
-                    actions=actions,
-                    regime_snapshot=regime_snapshot,
-                    portfolio_weight=self.portfolio_weight,
-                )
-
-            for strategy in self.deployment.strategies:
-                client = _client_for_strategy(strategy)
-                signal_side, confidence, signal_timestamp, snapshot, veto_reason, latest_feature = self._evaluate_strategy(client, strategy)
-                if self.interpreter_state.regime_snapshot is not None:
-                    snapshot = self.interpreter_state.regime_snapshot
-                if regime_snapshot is None:
-                    regime_snapshot = snapshot
-                interpreter_reason = _interpreter_block_reason(
-                    strategy,
-                    self.interpreter_state,
-                    relax_for_mini_trades=self.relax_gates_for_mini_trades,
-                )
-                score = 0.0 if (
-                    _is_strategy_regime_blocked(
-                        self.deployment,
-                        strategy,
-                        snapshot,
-                        relax_for_mini_trades=self.relax_gates_for_mini_trades,
-                    )
-                    or interpreter_reason
-                ) else _allocator_score(
-                    strategy, signal_side, confidence, snapshot
-                )
-                evaluated.append(
-                    EvaluatedStrategy(
-                        strategy=strategy,
-                        signal_side=signal_side,
-                        signal_timestamp=signal_timestamp,
-                        confidence=confidence,
-                        snapshot=snapshot,
-                        allocator_score=score,
-                        veto_reason=interpreter_reason or veto_reason,
-                        latest_feature=latest_feature,
-                    )
-                )
-
-            self._allocate_symbol_exposure(evaluated)
-
-            for item in evaluated:
-                client = _client_for_strategy(item.strategy)
-                if item.signal_side != Side.FLAT and item.allocator_score > 0.0 and item.allocation_fraction <= 0.0:
-                    magic_number = _strategy_magic(self.config.mt5.magic_number, self.deployment.symbol, item.strategy.candidate_name)
-                    current_quantity = self._net_quantity(client.list_positions(magic_number=magic_number))
-                    actions.append(
-                        StrategyAction(
-                            candidate_name=item.strategy.candidate_name,
-                            signal_side=item.signal_side,
-                            signal_timestamp=item.signal_timestamp,
-                            confidence=item.confidence,
-                            current_quantity=current_quantity,
-                            intended_action="allocator_blocked_opposing_side",
-                            magic_number=magic_number,
-                            regime_label=item.snapshot.regime_label,
-                            vol_percentile=item.snapshot.vol_percentile,
-                            risk_multiplier=_effective_risk_multiplier(item.snapshot, item.strategy),
-                            allocation_fraction=0.0,
-                            allocator_score=item.allocator_score,
-                            portfolio_weight=self.portfolio_weight,
-                            promotion_tier=item.strategy.promotion_tier,
-                            base_allocation_weight=item.strategy.base_allocation_weight,
-                            effective_size_factor=0.0,
-                            risk_budget_cash=0.0,
-                            veto_reason=item.veto_reason,
-                            interpreter_reason=_interpreter_block_reason(item.strategy, self.interpreter_state),
-                            interpreter_bias=self.interpreter_state.directional_bias,
-                            interpreter_confidence=self.interpreter_state.confidence,
-                        )
-                    )
-                    continue
-                action = self._reconcile_strategy(
-                    client,
-                    item.strategy,
-                    item.signal_side,
-                    item.signal_timestamp,
-                    item.confidence,
-                    item.snapshot,
-                    item.allocation_fraction if item.allocation_fraction > 0.0 else item.strategy.allocation_weight,
-                    item.allocator_score,
-                    account_snapshot.equity,
-                    item.latest_feature,
-                    should_skip_duplicate,
-                )
-                action.veto_reason = item.veto_reason
-                if not action.interpreter_reason:
-                    action.interpreter_reason = _interpreter_block_reason(
-                        item.strategy,
-                        self.interpreter_state,
-                        relax_for_mini_trades=self.relax_gates_for_mini_trades,
-                    )
-                action.interpreter_bias = self.interpreter_state.directional_bias
-                action.interpreter_confidence = self.interpreter_state.confidence
-                actions.append(action)
-            return LiveRunResult(
-                symbol=self.deployment.symbol,
-                broker_symbol=self.deployment.broker_symbol,
-                account_mode_label=account_mode_info.margin_mode_label if account_mode_info is not None else "unknown",
-                strategy_isolation_supported=account_mode_info.strategy_isolation_supported if account_mode_info is not None else False,
-                actions=actions,
-                regime_snapshot=regime_snapshot,
-                portfolio_weight=self.portfolio_weight,
-                interpreter_state=self.interpreter_state,
-            )
-        finally:
-            for client in client_cache.values():
-                try:
-                    client.shutdown()
-                except Exception:
-                    pass
+        return _live_run_live_cycle(
+            deployment=self.deployment,
+            config=self.config,
+            portfolio_weight=self.portfolio_weight,
+            interpreter_state=self.interpreter_state,
+            relax_gates_for_mini_trades=self.relax_gates_for_mini_trades,
+            strategy_portfolio_weight_fn=self._strategy_portfolio_weight,
+            build_strategy_config_fn=self._build_strategy_config,
+            evaluate_strategy_fn=self._evaluate_strategy,
+            allocate_symbol_exposure_fn=self._allocate_symbol_exposure,
+            reconcile_strategy_fn=self._reconcile_strategy,
+            net_quantity_fn=self._net_quantity,
+            strategy_magic_fn=_strategy_magic,
+            strategy_action_cls=StrategyAction,
+            allocator_score_fn=_allocator_score,
+            effective_risk_multiplier_fn=_effective_risk_multiplier,
+            is_strategy_regime_blocked_fn=_is_strategy_regime_blocked,
+            interpreter_block_reason_fn=_interpreter_block_reason,
+            evaluated_strategy_cls=EvaluatedStrategy,
+            live_run_result_cls=LiveRunResult,
+            should_skip_duplicate=should_skip_duplicate,
+        )
 
 
 def bars_timestamp_now():

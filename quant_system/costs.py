@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Client, MT5Error
+from quant_system.venues import get_venue_profile, normalize_venue_key
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,18 +37,15 @@ def _is_forex_symbol(symbol: str) -> bool:
 def _prop_broker_family(config: SystemConfig | None) -> str:
     if config is None:
         return "generic"
-    broker = str(getattr(config.mt5, "prop_broker", "") or "").strip().lower()
-    return broker or "generic"
+    broker = str(getattr(config.mt5, "prop_broker", "") or "")
+    return normalize_venue_key(broker)
 
 
 def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> CostProfile:
     upper = symbol.upper()
-    broker = broker_family.strip().lower()
-    broker_label = {
-        "ftmo": "FTMO",
-        "fundednext": "FundedNext",
-        "blue_guardian": "Blue Guardian",
-    }.get(broker, "Generic prop")
+    venue = get_venue_profile(broker_family)
+    broker = venue.key
+    broker_label = venue.display_name
     if any(code in upper for code in ("XAU", "XAG", "XPD", "XPT", "XCU")):
         spread_points = 0.25
         contract_size = 100.0
@@ -62,10 +60,10 @@ def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> Co
         return CostProfile(
             contract_size=contract_size,
             spread_points=spread_points,
-            slippage_bps=0.8 if broker != "fundednext" else 1.0,
+            slippage_bps=venue.costs.metals_slippage_bps,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
-            commission_notional_pct=0.0007 if broker != "blue_guardian" else 0.0008,
+            commission_notional_pct=venue.costs.metals_commission_notional_pct,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,
             notes=f"{broker_label} metals model with metal-specific contract sizing and conservative spread assumptions.",
@@ -74,7 +72,7 @@ def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> Co
         return CostProfile(
             contract_size=1.0,
             spread_points=20.0,
-            slippage_bps=1.5 if broker != "fundednext" else 2.0,
+            slippage_bps=venue.costs.btc_slippage_bps,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
             commission_notional_pct=0.0325,
@@ -86,7 +84,7 @@ def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> Co
         return CostProfile(
             contract_size=10.0,
             spread_points=3.0,
-            slippage_bps=4.0 if broker != "fundednext" else 4.5,
+            slippage_bps=venue.costs.eth_slippage_bps,
             commission_mode="notional_pct",
             commission_per_lot=0.0,
             commission_notional_pct=0.0325,
@@ -103,7 +101,7 @@ def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> Co
         return CostProfile(
             contract_size=1.0,
             spread_points=spread_points,
-            slippage_bps=0.5 if broker != "blue_guardian" else 0.75,
+            slippage_bps=venue.costs.index_slippage_bps,
             commission_mode="none",
             commission_per_lot=0.0,
             commission_notional_pct=0.0,
@@ -122,9 +120,9 @@ def resolve_prop_cost_profile(symbol: str, broker_family: str = "generic") -> Co
         return CostProfile(
             contract_size=100_000.0,
             spread_points=spread_points,
-            slippage_bps=0.25 if broker != "fundednext" else 0.35,
+            slippage_bps=venue.costs.forex_slippage_bps,
             commission_mode="per_lot",
-            commission_per_lot=2.5 if broker != "blue_guardian" else 3.0,
+            commission_per_lot=venue.costs.forex_commission_per_lot,
             commission_notional_pct=0.0,
             fee_bps=0.0,
             overnight_cost_per_lot_day=0.0,

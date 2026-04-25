@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import os
 
 from quant_system.env import load_dotenv
+from quant_system.venues import normalize_venue_key
 
 
 load_dotenv()
@@ -113,7 +114,7 @@ class OptimizationConfig:
 
 @dataclass(slots=True)
 class MT5Config:
-    prop_broker: str = field(default_factory=lambda: os.getenv("PROP_BROKER", "generic").strip().lower())
+    prop_broker: str = field(default_factory=lambda: normalize_venue_key(os.getenv("PROP_BROKER", "generic")))
     symbol: str = field(default_factory=lambda: os.getenv("MT5_BROKER_SYMBOL", "SPY"))
     timeframe: str = field(default_factory=lambda: os.getenv("MT5_TIMEFRAME", "M5"))
     history_bars: int = field(default_factory=lambda: int(os.getenv("MT5_HISTORY_BARS", "500")))

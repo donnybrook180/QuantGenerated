@@ -30,6 +30,26 @@ De repo is nu functioneel opgesplitst in drie lagen binnen dezelfde codebase:
 
 De bestaande `main_*.py` entrypoints blijven werken, maar lopen nu via deze research/live lagen.
 
+### Navigation Map
+
+Voor de huidige repo-indeling:
+
+- [docs/architecture_map.md](docs/architecture_map.md)
+
+De belangrijkste boundary-veranderingen uit Step 1 zijn nu:
+
+- `quant_system/research/` bevat de meeste symbol-research logica
+- `quant_system/live/` bevat de live runtime, loop en deployment helpers
+- `quant_system/venues/` is de plek voor prop-firm/venue-profielen
+- `quant_system/profile_*` bevat de profile-run app-flow
+- `quant_system/agents/*.py` voor `crypto`, `forex`, `us500` en `xauusd` zijn nu compatibiliteitsfacades over smallere interne setup-pakketten
+
+Belangrijk:
+
+- `main_live_loop.py` is nu een thin wrapper over `quant_system.live.loop_app`
+- `main_symbol_research.py` loopt via `quant_system.research.cli`
+- `quant_system/app.py` en `quant_system/symbol_research.py` bestaan nog, maar vooral als compatibiliteitslagen
+
 ### The Three-Body System
 
 1. Research environment (`quant_system/research`)
@@ -85,6 +105,12 @@ Bovenaan in de repo staan nu alleen de scripts die je normaal zelf direct aanroe
 - `main_live_loop.py`
 
 Minder vaak gebruikte utility scripts staan in `tools/`, zodat de repo-root schoon blijft.
+
+Deze root-scripts horen dun te blijven. Als je echte runtime- of research-logica zoekt, begin dan in:
+
+- `quant_system/profile_app.py`
+- `quant_system/research/`
+- `quant_system/live/`
 
 ```powershell
 .\.venv\Scripts\python.exe main.py

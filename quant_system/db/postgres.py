@@ -3,7 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 import time
 
-import psycopg
+try:
+    import psycopg
+except ModuleNotFoundError:  # pragma: no cover - exercised in reduced local envs
+    psycopg = None
 
 from quant_system.config import PostgresConfig, SystemConfig
 
@@ -257,6 +260,10 @@ def _postgres_config(config: SystemConfig | PostgresConfig | None) -> PostgresCo
     return config.postgres
 
 
+def postgres_driver_available() -> bool:
+    return psycopg is not None
+
+
 def connect_postgres(
     config: SystemConfig | PostgresConfig | None = None,
     *,
@@ -264,6 +271,8 @@ def connect_postgres(
     database_override: str | None = None,
     autocommit: bool = False,
 ):
+    if psycopg is None:
+        raise RuntimeError("PostgreSQL support requires the optional 'psycopg' dependency.")
     postgres = _postgres_config(config)
     dsn = postgres.dsn(include_database=include_database)
     if database_override:

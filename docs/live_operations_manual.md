@@ -4,6 +4,7 @@ Dit is het centrale handboek voor live operatie van het project.
 
 Gebruik dit document als startpunt. De detaildocumenten blijven daarnaast bestaan:
 - `docs/report_map.md`
+- `docs/architecture_map.md`
 - `docs/operator_cheat_sheet.md`
 - `docs/server_runbook.md`
 - `docs/prop_firm_launch_checklist.md`
@@ -41,6 +42,12 @@ Gebruik voor:
 - volledig overzicht van alle reports, plots en artifacts
 - betekenis per report
 - beslissingen per report
+
+### `docs/architecture_map.md`
+Gebruik voor:
+- actuele modulegrenzen na Step 1
+- vinden van research/live/venue/app code
+- zien welke root-entrypoint naar welke subsystemmodule doorstuurt
 
 ### `docs/operator_cheat_sheet.md`
 Gebruik voor:
@@ -238,7 +245,8 @@ Gebruik dit als hoofdindex:
 
 Aanbevolen volgorde:
 1. `docs/live_operations_manual.md`
-2. `docs/operator_cheat_sheet.md`
-3. `docs/server_runbook.md`
-4. `docs/report_map.md`
-5. `docs/prop_firm_launch_checklist.md`
+2. `docs/architecture_map.md`
+3. `docs/operator_cheat_sheet.md`
+4. `docs/server_runbook.md`
+5. `docs/report_map.md`
+6. `docs/prop_firm_launch_checklist.md`

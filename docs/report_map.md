@@ -2,6 +2,10 @@
 
 Dit document beschrijft welke reports en artifacts je hebt, waar ze staan, wanneer je ze gebruikt en welke beslissingen je erop baseert.
 
+Voor de actuele module-indeling achter deze artifacts:
+
+- [docs/architecture_map.md](C:/Users/liset/PycharmProjects/QuantGenerated/docs/architecture_map.md)
+
 ## Dagelijkse kernreports
 
 ### `artifacts/system/reports/live_health_report.txt`
@@ -191,6 +195,14 @@ Beslissingen:
 
 Per symbool in `artifacts/research/<symbol>/reports/`.
 
+De meeste code die deze reports maakt staat nu in:
+
+- `quant_system/research/runner.py`
+- `quant_system/research/selection.py`
+- `quant_system/research/viability.py`
+- `quant_system/research/exports.py`
+- `quant_system/research/reporting.py`
+
 ### `symbol_research.txt`
 Doel:
 - Hoofdrapport van de symbol research.
@@ -307,6 +319,15 @@ Beslissingen:
 ## Live symbol artifacts
 
 Per symbool in `artifacts/live/<symbol>/`.
+
+De meeste code die deze live artifacts schrijft of voedt staat nu in:
+
+- `quant_system/live/app.py`
+- `quant_system/live/loop_app.py`
+- `quant_system/live/runtime.py`
+- `quant_system/live/journal.py`
+- `quant_system/live/adaptation.py`
+- `quant_system/live/autopsy.py`
 
 ### `execution_adaptation.json`
 Doel:

@@ -1,0 +1,39 @@
+{
+  "profile_name": "symbol::eurusd",
+  "symbol": "EURUSD",
+  "data_symbol": "C:EURUSD",
+  "broker_symbol": "EURUSD",
+  "research_run_id": 402,
+  "execution_set_id": 203,
+  "execution_validation_summary": "selection=combo_1 variant=forex_breakout_momentum__30m_overlap@30m_overlap data_source=duckdb_cache pnl=134.36 pf=12.12 closed=7 quality=0.84 underwater=14.3% max_regime_overlap=0.00 -> accepted",
+  "symbol_status": "live_ready",
+  "strategies": [
+    {
+      "candidate_name": "forex_breakout_momentum__30m_overlap",
+      "code_path": "quant_system.agents.forex.ForexBreakoutMomentumAgent",
+      "strategy_family": "forex_breakout_momentum__30m_overlap",
+      "direction_mode": "long_only",
+      "direction_role": "long_leg",
+      "promotion_tier": "core",
+      "policy_summary": "tier=core; activate in unified_regimes=orderly_trend; avoid unified_regimes=compressed_range; vol_pct in [0.20, 0.80]; base_weight=1.10; risk_cap=0.97; stability=0.92; loss_ratio=0.21",
+      "variant_label": "30m_overlap",
+      "regime_filter_label": "",
+      "execution_overrides": {},
+      "allocation_weight": 1.0,
+      "allowed_regimes": [
+        "orderly_trend"
+      ],
+      "blocked_regimes": [
+        "compressed_range"
+      ],
+      "min_vol_percentile": 0.2,
+      "max_vol_percentile": 0.8,
+      "base_allocation_weight": 1.0966635211408111,
+      "max_risk_multiplier": 0.9657122635905215,
+      "min_risk_multiplier": 0.0
+    }
+  ],
+  "target_volatility": 0.0,
+  "max_symbol_vol_percentile": 0.98,
+  "block_new_entries_in_event_risk": true
+}

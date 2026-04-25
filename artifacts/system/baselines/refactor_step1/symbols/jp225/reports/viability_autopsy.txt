@@ -1,0 +1,31 @@
+Viability autopsy: JP225
+Execution validation summary: selection=family_both_volatility_breakout variant=volatility_breakout__1h_all@1h_all, jp225_volatility_short_breakdown_asia_hours__4h_all@4h_all data_source=duckdb_cache pnl=613.03 pf=47.20 closed=7 quality=0.84 underwater=14.3% max_regime_overlap=0.00 overlaps=volatility_breakout__1h_all vs jp225_volatility_short_breakdown_asia_hours__4h_all=0.00 -> accepted
+Tier counts: core=11 specialist=0 reject=458
+
+Top blockers
+- walk-forward pass rate too low (0.00% < 50%): 377
+- test PF < 1.0 (0.00): 329
+- validation PF < 1.0 (0.00): 310
+- regime stability too low (0.00 < 0.50): 305
+- test trades too low (0 < 2): 295
+- test pnl <= 0 (0.00): 295
+- equity quality too low (0.25 < 0.45): 281
+- walk-forward avg test pnl <= 0 (0.00): 280
+
+Top near-misses
+- trend__4h_all__exit_trend [reject]: pnl=700.81 pf=2.67 val=-112.82/0.24/6 test=96.59/2.52/5 wf=0.00%
+  reasons: validation pnl <= 0 (-112.82), validation PF < 1.0 (0.24), walk-forward pass rate too low (0.00% < 50%)
+- trend__4h_all__exit_trend__near_miss_patient [reject]: pnl=517.52 pf=2.49 val=-45.26/0.44/6 test=141.14/3.69/5 wf=0.00%
+  reasons: validation pnl <= 0 (-45.26), validation PF < 1.0 (0.44), walk-forward pass rate too low (0.00% < 50%)
+- volatility_breakout__4h_all__exit_fastfail__near_miss_dense [reject]: pnl=479.09 pf=2.64 val=-108.95/0.10/3 test=263.05/6.44/3 wf=50.00%
+  reasons: monte carlo p05 pnl <= 0 (-35.56), walk-forward avg validation pnl <= 0 (-36.86)
+- volatility_breakout__4h_all__exit_fastfail__near_miss_dense__trend_up [reject]: pnl=460.28 pf=3.04 val=-29.96/0.29/2 test=263.05/6.44/3 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-43.32)
+- volatility_short_breakdown__30m_all__exit_trend [reject]: pnl=441.40 pf=4.07 val=-127.75/0.00/2 test=56.51/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-8.26), combined validation/test pnl <= 0 (-71.25), walk-forward avg validation pnl <= 0 (-63.08)
+- volatility_short_breakdown__30m_all__exit_trend__near_miss_dense [reject]: pnl=441.40 pf=4.07 val=-127.75/0.00/2 test=56.51/999.00/1 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-8.26), combined validation/test pnl <= 0 (-71.25), walk-forward avg validation pnl <= 0 (-63.08)
+- volatility_breakout__4h_all__exit_fastfail__near_miss_dense__trend_up_vol_high [reject]: pnl=424.41 pf=2.73 val=-29.96/0.29/2 test=263.05/6.44/3 wf=0.00%
+  reasons: monte carlo p05 pnl <= 0 (-58.76)
+- volatility_breakout__4h_all__exit_fastfail [reject]: pnl=413.83 pf=2.42 val=-108.95/0.10/3 test=263.05/6.44/3 wf=50.00%
+  reasons: monte carlo p05 pnl <= 0 (-68.00), walk-forward avg validation pnl <= 0 (-42.71)

@@ -14,6 +14,7 @@ TEST_MODULES = [
     "quant_system.test_mt5_fill_validation",
     "quant_system.test_live_deploy_runtime",
     "quant_system.test_live_tca_impact",
+    "quant_system.test_live_deployment_contracts",
     "quant_system.test_interpreter_engines",
     "quant_system.test_interpreter_app",
     "quant_system.test_interpreter_reporting",

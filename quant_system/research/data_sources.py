@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+from datetime import timedelta
 
 import duckdb
 
@@ -8,6 +9,7 @@ from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.integrations.binance_data import BinanceError, BinanceKlineClient
 from quant_system.integrations.kraken_data import KrakenError, KrakenOHLCClient
+from quant_system.integrations.macro_events import apply_macro_event_context
 from quant_system.integrations.mt5 import MT5Client, MT5Error
 from quant_system.models import FeatureVector, MarketBar
 from quant_system.research.cross_asset import apply_cross_asset_context, supports_cross_asset_context
@@ -24,6 +26,84 @@ from quant_system.symbols import (
 
 class ExternalMarketDataUnavailableError(RuntimeError):
     pass
+
+
+def _session_alignment_note(profile_symbol: str, data_source: str) -> str:
+    symbol_upper = profile_symbol.upper()
+    if symbol_is_stock(symbol_upper):
+        base = "session-bounded equity-style stream"
+    elif symbol_is_crypto(symbol_upper):
+        base = "continuous crypto-style stream"
+    else:
+        base = "continuous MT5-style stream"
+    if "mt5" in data_source:
+        return f"{base}; broker-backed research path"
+    return f"{base}; fallback/non-broker data source"
+
+
+def build_broker_data_sanity_summary(
+    config: SystemConfig,
+    profile_symbol: str,
+    data_symbol: str,
+    broker_symbol: str,
+    data_source: str,
+    features: list[FeatureVector],
+    *,
+    mt5_client_cls=MT5Client,
+) -> dict[str, object]:
+    history_bars_loaded = len(features)
+    history_window_start = features[0].timestamp.isoformat() if features else ""
+    history_window_end = features[-1].timestamp.isoformat() if features else ""
+    missing_bar_warnings: list[str] = []
+    if len(features) >= 3:
+        deltas = [
+            features[index].timestamp - features[index - 1].timestamp
+            for index in range(1, len(features))
+            if features[index].timestamp > features[index - 1].timestamp
+        ]
+        if deltas:
+            expected_delta = min(deltas)
+            gap_count = sum(1 for delta in deltas if delta > (expected_delta * 2))
+            if gap_count:
+                missing_bar_warnings.append(
+                    f"detected_{gap_count}_timestamp_gaps_gt_{int(expected_delta.total_seconds() // 60)}m"
+                )
+    contract_spec_notes = "not_available"
+    broker_data_source = data_source
+    resolved_broker_symbol = broker_symbol
+    if "mt5" in data_source and broker_symbol:
+        mt5_config = copy.deepcopy(config.mt5)
+        mt5_config.symbol = broker_symbol
+        client = mt5_client_cls(mt5_config)
+        try:
+            client.initialize()
+            resolved_broker_symbol = str(client.resolved_symbol or broker_symbol)
+            funding = client.funding_info()
+            snapshot = client.market_snapshot()
+            contract_spec_notes = (
+                f"resolved_symbol={resolved_broker_symbol} point={funding.point:.8f} "
+                f"contract_size={funding.contract_size:.2f} spread_points={snapshot.spread_points:.8f} "
+                f"swap_long={funding.swap_long:.4f} swap_short={funding.swap_short:.4f}"
+            )
+            broker_data_source = "blue_guardian_mt5" if str(config.mt5.prop_broker) == "blue_guardian" else "mt5"
+        except Exception as exc:
+            missing_bar_warnings.append(f"contract_spec_lookup_failed:{exc}")
+        finally:
+            try:
+                client.shutdown()
+            except Exception:
+                pass
+    return {
+        "broker_data_source": broker_data_source,
+        "broker_symbol": resolved_broker_symbol,
+        "data_symbol": data_symbol,
+        "history_bars_loaded": history_bars_loaded,
+        "history_window_start": history_window_start,
+        "history_window_end": history_window_end,
+        "missing_bar_warnings": tuple(missing_bar_warnings),
+        "session_alignment_notes": _session_alignment_note(profile_symbol, data_source),
+        "contract_spec_notes": contract_spec_notes,
+    }
 
 
 def aggregate_minute_bars(bars: list[MarketBar], target_multiplier: int, source_multiplier: int) -> list[MarketBar]:
@@ -143,6 +223,14 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
     if not symbol_is_stock(data_symbol):
         features = build_feature_library(bars)
         features = apply_broker_funding_context(features, funding_context)
+        if config.macro_calendar.enabled:
+            features = apply_macro_event_context(
+                features,
+                data_symbol,
+                config.macro_calendar.calendar_path,
+                pre_event_minutes=config.macro_calendar.pre_event_minutes,
+                post_event_minutes=config.macro_calendar.post_event_minutes,
+            )
         if supports_cross_asset_context(data_symbol):
             multiplier, timespan = infer_bars_timeframe(bars)
             features = apply_cross_asset_context(
@@ -166,6 +254,14 @@ def build_features_with_events(config: SystemConfig, data_symbol: str, bars: lis
     else:
         features = build_feature_library(bars, event_flags)
     features = apply_broker_funding_context(features, funding_context)
+    if config.macro_calendar.enabled:
+        features = apply_macro_event_context(
+            features,
+            data_symbol,
+            config.macro_calendar.calendar_path,
+            pre_event_minutes=config.macro_calendar.pre_event_minutes,
+            post_event_minutes=config.macro_calendar.post_event_minutes,
+        )
     if supports_cross_asset_context(data_symbol):
         multiplier, timespan = infer_bars_timeframe(bars)
         features = apply_cross_asset_context(

@@ -141,6 +141,9 @@ def make_candidate_result(
     strategy_family: str = "opening_range_breakout",
     direction_mode: str = "long_only",
     direction_role: str = "long_leg",
+    interpreter_fit_score: float = 0.82,
+    common_live_regime_fit: float = 0.66,
+    blocked_by_interpreter_risk: float = 0.18,
 ) -> CandidateResult:
     return CandidateResult(
         name=name,
@@ -175,6 +178,11 @@ def make_candidate_result(
         strategy_family=strategy_family,
         direction_mode=direction_mode,
         direction_role=direction_role,
+        prop_fit_score=0.85,
+        prop_fit_label="pass",
+        interpreter_fit_score=interpreter_fit_score,
+        common_live_regime_fit=common_live_regime_fit,
+        blocked_by_interpreter_risk=blocked_by_interpreter_risk,
     )
 
 
@@ -222,6 +230,22 @@ def make_candidate_row(**overrides: object) -> dict[str, object]:
         "variant_label": "",
         "regime_filter_label": "",
         "execution_overrides": {},
+        "signal_quality_score": 0.82,
+        "prop_viability_score": 0.79,
+        "prop_viability_label": "pass",
+        "prop_viability_pass": True,
+        "prop_viability_reasons": (),
+        "prop_fit_score": 0.85,
+        "prop_fit_label": "pass",
+        "prop_fit_reasons": (),
+        "news_window_trade_share": 0.0,
+        "sub_short_hold_share": 0.0,
+        "micro_target_risk_flag": False,
+        "execution_dependency_flag": False,
+        "interpreter_fit_score": 0.82,
+        "common_live_regime_fit": 0.66,
+        "blocked_by_interpreter_risk": 0.18,
+        "interpreter_fit_reasons": (),
     }
     base.update(overrides)
     return base

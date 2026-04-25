@@ -79,16 +79,25 @@ from quant_system.agents.strategies import (
     VolatilityShortBreakdownAgent,
 )
 from quant_system.agents.us500 import (
+    US500FailedBreakdownReclaimAgent,
+    US500FailedUpsideRejectShortAgent,
     US500FlatHighReversalAgent,
     US500FlatTapeMeanReversionAgent,
     US500OvernightGapFadeAgent,
     US500MomentumImpulseAgent,
+    US500OpeningDriveReclaimAgent,
     US500OpeningDriveShortReclaimAgent,
     US500ShortTrendRejectionAgent,
     US500ShortVWAPRejectAgent,
 )
 from quant_system.agents.trend import MeanReversionAgent, MomentumConfirmationAgent, RiskSentinelAgent, TrendAgent
-from quant_system.agents.xauusd import XAUUSDShortBreakdownAgent, XAUUSDVWAPReclaimAgent, XAUUSDVolatilityBreakoutAgent
+from quant_system.agents.xauusd import (
+    XAUUSDOpeningDriveReclaimAgent,
+    XAUUSDShortBreakdownAgent,
+    XAUUSDUSOpenRangeReclaimAgent,
+    XAUUSDVWAPReclaimAgent,
+    XAUUSDVolatilityBreakoutAgent,
+)
 from quant_system.catalog_runtime import build_agents_from_catalog_paths
 from quant_system.config import SystemConfig
 from quant_system.costs import apply_prop_cost_profile
@@ -100,7 +109,7 @@ from quant_system.integrations.binance_data import BinanceKlineClient
 from quant_system.integrations.kraken_data import KrakenOHLCClient
 from quant_system.integrations.mt5 import MT5Client, MT5Error
 from quant_system.live.deploy import build_symbol_deployment, export_symbol_deployment
-from quant_system.models import FeatureVector, MarketBar
+from quant_system.models import ClosedTradeRecord, FeatureVector, MarketBar
 from quant_system.monitoring.heartbeat import HeartbeatMonitor
 from quant_system.plotting import plot_symbol_research
 from quant_system.regime import map_regime_label_to_unified
@@ -108,6 +117,7 @@ from quant_system.research.cross_asset import apply_cross_asset_context, support
 from quant_system.research.data_sources import (
     ExternalMarketDataUnavailableError,
     aggregate_minute_bars as _research_aggregate_minute_bars,
+    build_broker_data_sanity_summary as _research_build_broker_data_sanity_summary,
     build_features_with_events as _research_build_features_with_events,
     cache_bar_limit as _research_cache_bar_limit,
     cache_has_variant_bars as _research_cache_has_variant_bars,
@@ -125,6 +135,11 @@ from quant_system.research.data_sources import (
 from quant_system.research.exports import export_results as _research_export_results
 from quant_system.research.features import build_feature_library
 from quant_system.research.funding import apply_broker_funding_context, load_broker_funding_context
+from quant_system.research.funding import estimate_swap_drag as _research_estimate_swap_drag
+from quant_system.research.funding import infer_feature_bar_hours as _research_infer_feature_bar_hours
+from quant_system.research.interpreter_fit import estimate_interpreter_fit as _research_estimate_interpreter_fit
+from quant_system.research.rule_fit import estimate_prop_rule_fit as _research_estimate_prop_rule_fit
+from quant_system.research.stress import estimate_execution_stress as _research_estimate_execution_stress
 from quant_system.research.reporting import (
     candidate_failure_reasons as _research_candidate_failure_reasons,
     export_viability_autopsy as _research_export_viability_autopsy,
@@ -278,6 +293,29 @@ class CandidateResult:
     broker_swap_short: float = 0.0
     broker_preferred_carry_side: str = ""
     broker_carry_spread: float = 0.0
+    avg_hold_hours: float = 0.0
+    estimated_swap_drag_total: float = 0.0
+    estimated_swap_drag_per_trade: float = 0.0
+    swap_adjusted_expectancy: float = 0.0
+    carry_preferred_side: str = ""
+    stress_expectancy_mild: float = 0.0
+    stress_expectancy_medium: float = 0.0
+    stress_expectancy_harsh: float = 0.0
+    stress_pf_mild: float = 0.0
+    stress_pf_medium: float = 0.0
+    stress_pf_harsh: float = 0.0
+    stress_survival_score: float = 0.0
+    prop_fit_score: float = 0.0
+    prop_fit_label: str = "fail"
+    prop_fit_reasons: tuple[str, ...] = ()
+    news_window_trade_share: float = 0.0
+    sub_short_hold_share: float = 0.0
+    micro_target_risk_flag: bool = False
+    execution_dependency_flag: bool = False
+    interpreter_fit_score: float = 0.0
+    common_live_regime_fit: float = 0.0
+    blocked_by_interpreter_risk: float = 0.0
+    interpreter_fit_reasons: tuple[str, ...] = ()
     mc_simulations: int = 0
     mc_pnl_median: float = 0.0
     mc_pnl_p05: float = 0.0
@@ -2371,6 +2409,48 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 description="XAUUSD VWAP reclaim after oversold washout",
                 agents=[XAUUSDVWAPReclaimAgent(), risk],
                 code_path="quant_system.agents.xauusd.XAUUSDVWAPReclaimAgent",
+                allowed_variants=("5m_us", "15m_us"),
+                execution_overrides={
+                    "structure_exit_bars": 1,
+                    "stale_breakout_bars": 4,
+                    "max_holding_bars": 14,
+                    "take_profit_atr_multiple": 1.35,
+                    "trailing_stop_atr_multiple": 0.5,
+                },
+            )
+        )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_opening_drive_reclaim",
+                description="XAUUSD US-open reclaim after failed downside opening drive",
+                agents=[XAUUSDOpeningDriveReclaimAgent(), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDOpeningDriveReclaimAgent",
+                allowed_variants=("5m_us", "15m_us"),
+                regime_filter_label="trend_flat_vol_mid",
+                execution_overrides={
+                    "structure_exit_bars": 1,
+                    "stale_breakout_bars": 4,
+                    "max_holding_bars": 12,
+                    "take_profit_atr_multiple": 1.2,
+                    "trailing_stop_atr_multiple": 0.45,
+                },
+            )
+        )
+        specs.append(
+            CandidateSpec(
+                name="xauusd_us_open_range_reclaim",
+                description="XAUUSD reclaim back into the US open range after failed breakdown",
+                agents=[XAUUSDUSOpenRangeReclaimAgent(), risk],
+                code_path="quant_system.agents.xauusd.XAUUSDUSOpenRangeReclaimAgent",
+                allowed_variants=("5m_us", "15m_us"),
+                regime_filter_label="range_rotation",
+                execution_overrides={
+                    "structure_exit_bars": 1,
+                    "stale_breakout_bars": 5,
+                    "max_holding_bars": 14,
+                    "take_profit_atr_multiple": 1.25,
+                    "trailing_stop_atr_multiple": 0.45,
+                },
             )
         )
         return specs
@@ -2433,6 +2513,28 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     },
                 ),
                 CandidateSpec(
+                    name="eurusd_london_range_reclaim_selective",
+                    description="EURUSD London range reclaim selective for flatter tape",
+                    agents=[
+                        EURUSDLondonRangeReclaimAgent(
+                            max_abs_trend_strength=0.00058,
+                            min_distance_to_vwap=0.00020,
+                            min_relative_volume=0.68,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.EURUSDLondonRangeReclaimAgent",
+                    allowed_variants=("15m_europe",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.15,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
                     name="eurusd_london_false_break_reversal",
                     description="EURUSD London false-break reversal around prior-day and overnight levels",
                     agents=[
@@ -2451,6 +2553,50 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "max_holding_bars": 12,
                         "take_profit_atr_multiple": 1.45,
                         "trailing_stop_atr_multiple": 0.5,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_range_reversion_europe",
+                    description="EURUSD Europe-session range rotation mean reversion",
+                    agents=[
+                        ForexRangeReversionAgent(
+                            lookback=18,
+                            min_z_score=-1.45,
+                            max_trend_strength=0.00042,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexRangeReversionAgent",
+                    allowed_variants=("15m_europe",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.05,
+                        "trailing_stop_atr_multiple": 0.40,
+                    },
+                ),
+                CandidateSpec(
+                    name="eurusd_range_reversion_overlap",
+                    description="EURUSD overlap-session range rotation mean reversion",
+                    agents=[
+                        ForexRangeReversionAgent(
+                            lookback=20,
+                            min_z_score=-1.60,
+                            max_trend_strength=0.00040,
+                        ),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.forex.ForexRangeReversionAgent",
+                    allowed_variants=("15m_overlap",),
+                    regime_filter_label="trend_flat_vol_mid",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.10,
+                        "trailing_stop_atr_multiple": 0.45,
                     },
                 ),
                 CandidateSpec(
@@ -2832,6 +2978,36 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         "trailing_stop_atr_multiple": 0.45,
                     },
                 ),
+                CandidateSpec(
+                    name="eu50_europe_mean_reversion_long",
+                    description="EU50 Europe-session mean reversion long after downside extension in flatter tape",
+                    agents=[GER40EuropeMeanReversionLongAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40EuropeMeanReversionLongAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.05,
+                        "trailing_stop_atr_multiple": 0.35,
+                    },
+                ),
+                CandidateSpec(
+                    name="eu50_europe_mean_reversion_short",
+                    description="EU50 Europe-session mean reversion short after upside extension in flatter tape",
+                    agents=[GER40EuropeMeanReversionShortAgent(), risk],
+                    code_path="quant_system.agents.ger40.GER40EuropeMeanReversionShortAgent",
+                    allowed_variants=("15m_europe", "30m_europe"),
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.05,
+                        "trailing_stop_atr_multiple": 0.35,
+                    },
+                ),
             ]
         )
     if upper == "JP225":
@@ -2842,6 +3018,29 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                     description="JP225 open-drive mean reversion long after failed downside extension",
                     agents=[JP225OpenDriveMeanReversionLongAgent(), risk],
                     code_path="quant_system.agents.strategies.JP225OpenDriveMeanReversionLongAgent",
+                    allowed_variants=("5m_open", "15m_open"),
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.2,
+                        "trailing_stop_atr_multiple": 0.45,
+                    },
+                ),
+                CandidateSpec(
+                    name="jp225_open_drive_mean_reversion_selective",
+                    description="JP225 selective open-drive mean reversion focused on the cleanest open-window reversals",
+                    agents=[JP225OpenDriveMeanReversionLongAgent(), SessionEntryFilterAgent({0, 1, 8}), risk],
+                    code_path="quant_system.agents.strategies.JP225OpenDriveMeanReversionLongAgent",
+                    allowed_variants=("5m_open", "15m_open"),
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 3,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.1,
+                        "trailing_stop_atr_multiple": 0.4,
+                    },
                 ),
                 CandidateSpec(
                     name="jp225_asia_continuation_long",
@@ -2858,6 +3057,29 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                         risk,
                     ],
                     code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
+                ),
+                CandidateSpec(
+                    name="jp225_failed_breakdown_reclaim_open_selective",
+                    description="JP225 failed breakdown reclaim long restricted to the strongest opening reversal windows",
+                    agents=[
+                        FailedBreakdownReclaimLongAgent(
+                            min_relative_volume=0.85,
+                            min_negative_extension=0.00035,
+                            max_negative_trend=0.0012,
+                        ),
+                        SessionEntryFilterAgent({0, 1, 8}),
+                        risk,
+                    ],
+                    code_path="quant_system.agents.strategies.FailedBreakdownReclaimLongAgent",
+                    allowed_variants=("5m_open", "15m_open"),
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 10,
+                        "take_profit_atr_multiple": 1.15,
+                        "trailing_stop_atr_multiple": 0.4,
+                    },
                 ),
                 CandidateSpec(
                     name="jp225_failed_breakdown_reclaim_asia_hours",
@@ -2988,6 +3210,66 @@ def _candidate_specs(config: SystemConfig, data_symbol: str) -> list[CandidateSp
                 code_path="quant_system.agents.strategies.VolatilityBreakoutAgent",
             ),
         ]
+    if upper == "US500":
+        specs.extend(
+            [
+                CandidateSpec(
+                    name="us500_opening_drive_reclaim",
+                    description="US500 long reclaim after opening pullback in supportive tape",
+                    agents=[US500OpeningDriveReclaimAgent(config.agents.min_trend_strength), risk],
+                    code_path="quant_system.agents.us500.US500OpeningDriveReclaimAgent",
+                    execution_overrides={
+                        "structure_exit_bars": 0,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 16,
+                        "take_profit_atr_multiple": 1.9,
+                        "trailing_stop_atr_multiple": 0.7,
+                    },
+                ),
+                CandidateSpec(
+                    name="us500_opening_drive_reclaim_flat_high",
+                    description="US500 opening-drive reclaim tuned for flat/high-volatility sessions",
+                    agents=[US500OpeningDriveReclaimAgent(config.agents.min_trend_strength * 0.9), risk],
+                    code_path="quant_system.agents.us500.US500OpeningDriveReclaimAgent",
+                    regime_filter_label="trend_flat_vol_high",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 14,
+                        "take_profit_atr_multiple": 1.65,
+                        "trailing_stop_atr_multiple": 0.6,
+                    },
+                ),
+                CandidateSpec(
+                    name="us500_failed_breakdown_reclaim",
+                    description="US500 failed-breakdown reclaim after prior-day or overnight washout",
+                    agents=[US500FailedBreakdownReclaimAgent(), risk],
+                    code_path="quant_system.agents.us500.US500FailedBreakdownReclaimAgent",
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.55,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+                CandidateSpec(
+                    name="us500_failed_upside_reject_short",
+                    description="US500 short rejection after failed upside extension into prior-day or overnight highs",
+                    agents=[US500FailedUpsideRejectShortAgent(), risk],
+                    code_path="quant_system.agents.us500.US500FailedUpsideRejectShortAgent",
+                    regime_filter_label="range_rotation",
+                    execution_overrides={
+                        "structure_exit_bars": 1,
+                        "stale_breakout_bars": 4,
+                        "max_holding_bars": 12,
+                        "take_profit_atr_multiple": 1.6,
+                        "trailing_stop_atr_multiple": 0.55,
+                    },
+                ),
+            ]
+        )
     specs.extend(
         [
             CandidateSpec(
@@ -3127,7 +3409,7 @@ def _run_candidate(
     scored.cross_filter_label = spec.cross_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     _annotate_regime_metrics(scored, features, result.closed_trades)
-    _annotate_funding_context(scored, features)
+    _annotate_funding_context(scored, features, result.closed_trades)
     return scored
 
 
@@ -4253,10 +4535,10 @@ def _auto_improvement_specs(config: SystemConfig, symbol: str, results: list[Can
                             "max_holding_bars": 14,
                             "take_profit_atr_multiple": 1.4,
                             "trailing_stop_atr_multiple": 0.5,
-                        },
-                    ),
-                ]
-            )
+                      },
+                  ),
+            ]
+        )
     elif upper == "GER40":
         specs.extend(
             [
@@ -5204,7 +5486,7 @@ def _annotate_regime_metrics(result: CandidateResult, features: list[FeatureVect
     )
 
 
-def _annotate_funding_context(result: CandidateResult, features: list[FeatureVector]) -> None:
+def _annotate_funding_context(result: CandidateResult, features: list[FeatureVector], closed_trades: list[ClosedTradeRecord]) -> None:
     if not features:
         return
     latest = features[-1].values
@@ -5219,6 +5501,63 @@ def _annotate_funding_context(result: CandidateResult, features: list[FeatureVec
         result.broker_preferred_carry_side = "short"
     else:
         result.broker_preferred_carry_side = "none"
+    swap_drag = _research_estimate_swap_drag(
+        avg_hold_bars=result.avg_hold_bars,
+        closed_trades=result.closed_trades,
+        expectancy=result.expectancy,
+        direction_mode=result.direction_mode,
+        broker_swap_long=result.broker_swap_long,
+        broker_swap_short=result.broker_swap_short,
+        broker_preferred_carry_side=result.broker_preferred_carry_side,
+        bar_hours=_research_infer_feature_bar_hours(features),
+    )
+    result.avg_hold_hours = float(swap_drag["avg_hold_hours"])
+    result.estimated_swap_drag_total = float(swap_drag["estimated_swap_drag_total"])
+    result.estimated_swap_drag_per_trade = float(swap_drag["estimated_swap_drag_per_trade"])
+    result.swap_adjusted_expectancy = float(swap_drag["swap_adjusted_expectancy"])
+    result.carry_preferred_side = str(swap_drag["carry_preferred_side"] or "")
+    stress_metrics = _research_estimate_execution_stress(
+        symbol=features[-1].symbol if features else "",
+        expectancy=result.expectancy,
+        profit_factor=result.profit_factor,
+        total_costs=result.total_costs,
+        closed_trades=result.closed_trades,
+        avg_loss=result.avg_loss,
+    )
+    result.stress_expectancy_mild = float(stress_metrics["stress_expectancy_mild"])
+    result.stress_expectancy_medium = float(stress_metrics["stress_expectancy_medium"])
+    result.stress_expectancy_harsh = float(stress_metrics["stress_expectancy_harsh"])
+    result.stress_pf_mild = float(stress_metrics["stress_pf_mild"])
+    result.stress_pf_medium = float(stress_metrics["stress_pf_medium"])
+    result.stress_pf_harsh = float(stress_metrics["stress_pf_harsh"])
+    result.stress_survival_score = float(stress_metrics["stress_survival_score"])
+    prop_rule_fit = _research_estimate_prop_rule_fit(
+        symbol=features[-1].symbol if features else "",
+        features=features,
+        closed_trades=closed_trades,
+        avg_win=result.avg_win,
+        payoff_ratio=result.payoff_ratio,
+        total_costs=result.total_costs,
+        stress_expectancy_medium=result.stress_expectancy_medium,
+        stress_pf_medium=result.stress_pf_medium,
+    )
+    result.prop_fit_score = float(prop_rule_fit["prop_fit_score"])
+    result.prop_fit_label = str(prop_rule_fit["prop_fit_label"] or "fail")
+    result.prop_fit_reasons = tuple(str(item) for item in prop_rule_fit["prop_fit_reasons"])
+    result.news_window_trade_share = float(prop_rule_fit["news_window_trade_share"])
+    result.sub_short_hold_share = float(prop_rule_fit["sub_short_hold_share"])
+    result.micro_target_risk_flag = bool(prop_rule_fit["micro_target_risk_flag"])
+    result.execution_dependency_flag = bool(prop_rule_fit["execution_dependency_flag"])
+    interpreter_fit = _research_estimate_interpreter_fit(
+        candidate_name=result.name,
+        strategy_family=result.strategy_family,
+        code_path=result.code_path,
+        features=features,
+    )
+    result.interpreter_fit_score = float(interpreter_fit["interpreter_fit_score"])
+    result.common_live_regime_fit = float(interpreter_fit["common_live_regime_fit"])
+    result.blocked_by_interpreter_risk = float(interpreter_fit["blocked_by_interpreter_risk"])
+    result.interpreter_fit_reasons = tuple(str(item) for item in interpreter_fit["interpreter_fit_reasons"])
 
 
 def _annotate_combo_results(results: list[CandidateResult]) -> None:
@@ -6474,7 +6813,14 @@ def select_sparse_execution_candidates(rows: list[dict[str, object]], symbol: st
     return selected
 
 
-def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: list[CandidateResult]) -> tuple[Path, Path]:
+def _export_results(
+    symbol: str,
+    broker_symbol: str,
+    data_source: str,
+    rows: list[CandidateResult],
+    *,
+    broker_data_summary: dict[str, object] | None = None,
+) -> tuple[Path, Path]:
     return _research_export_results(
         symbol,
         broker_symbol,
@@ -6489,6 +6835,7 @@ def _export_results(symbol: str, broker_symbol: str, data_source: str, rows: lis
         summarize_unified_regime_fn=_summarize_unified_regime,
         meets_viability_fn=_meets_viability,
         promotion_tier_for_row_fn=_promotion_tier_for_row,
+        broker_data_summary=broker_data_summary,
     )
 
 
@@ -6699,6 +7046,7 @@ def run_symbol_research(
         load_execution_features_for_variant_fn=load_execution_features_for_variant,
         annotate_combo_results_fn=_annotate_combo_results,
         export_results_fn=_export_results,
+        build_broker_data_sanity_summary_fn=_research_build_broker_data_sanity_summary,
         meets_viability_fn=_meets_viability,
         execution_candidate_row_from_result_fn=_execution_candidate_row_from_result,
         build_execution_policy_from_candidate_row_fn=build_execution_policy_from_candidate_row,

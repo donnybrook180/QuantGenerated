@@ -9,6 +9,7 @@ from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.models import MarketBar
 from quant_system.symbol_research import (
     _build_execution_candidate_sets,
+    _candidate_specs,
     _detect_research_mode,
     _execution_candidate_row,
     _research_variant_plan,
@@ -38,6 +39,67 @@ def _make_bar_series(symbol: str, count: int, minutes: int = 5) -> list[MarketBa
 
 
 class SymbolResearchRegressionTests(unittest.TestCase):
+    def test_candidate_specs_adds_eurusd_range_rotation_coverage(self) -> None:
+        specs = _candidate_specs(SystemConfig(), "EURUSD")
+        names = {spec.name for spec in specs}
+
+        self.assertIn("eurusd_range_reversion_europe", names)
+        self.assertIn("eurusd_range_reversion_overlap", names)
+        self.assertIn("eurusd_london_range_reclaim_selective", names)
+
+        overlap_spec = next(spec for spec in specs if spec.name == "eurusd_range_reversion_overlap")
+        self.assertEqual(overlap_spec.allowed_variants, ("15m_overlap",))
+
+    def test_candidate_specs_adds_xauusd_us_reclaim_coverage(self) -> None:
+        specs = _candidate_specs(SystemConfig(), "XAUUSD")
+        names = {spec.name for spec in specs}
+
+        self.assertIn("xauusd_opening_drive_reclaim", names)
+        self.assertIn("xauusd_us_open_range_reclaim", names)
+        self.assertIn("xauusd_vwap_reclaim", names)
+
+        us_open_spec = next(spec for spec in specs if spec.name == "xauusd_us_open_range_reclaim")
+        self.assertEqual(us_open_spec.allowed_variants, ("5m_us", "15m_us"))
+        self.assertEqual(us_open_spec.regime_filter_label, "range_rotation")
+
+    def test_candidate_specs_adds_jp225_open_reversal_coverage(self) -> None:
+        specs = _candidate_specs(SystemConfig(), "JP225")
+        names = {spec.name for spec in specs}
+
+        self.assertIn("jp225_open_drive_mean_reversion_selective", names)
+        self.assertIn("jp225_failed_breakdown_reclaim_open_selective", names)
+
+        open_spec = next(spec for spec in specs if spec.name == "jp225_open_drive_mean_reversion_selective")
+        self.assertEqual(open_spec.allowed_variants, ("5m_open", "15m_open"))
+        self.assertEqual(open_spec.regime_filter_label, "range_rotation")
+
+    def test_candidate_specs_adds_eu50_mean_reversion_coverage(self) -> None:
+        specs = _candidate_specs(SystemConfig(), "EU50")
+        names = {spec.name for spec in specs}
+
+        self.assertIn("eu50_europe_mean_reversion_long", names)
+        self.assertIn("eu50_europe_mean_reversion_short", names)
+
+        long_spec = next(spec for spec in specs if spec.name == "eu50_europe_mean_reversion_long")
+        short_spec = next(spec for spec in specs if spec.name == "eu50_europe_mean_reversion_short")
+        self.assertEqual(long_spec.allowed_variants, ("15m_europe", "30m_europe"))
+        self.assertEqual(short_spec.allowed_variants, ("15m_europe", "30m_europe"))
+        self.assertEqual(long_spec.regime_filter_label, "range_rotation")
+        self.assertEqual(short_spec.regime_filter_label, "range_rotation")
+
+    def test_candidate_specs_adds_us500_reclaim_balance_coverage(self) -> None:
+        specs = _candidate_specs(SystemConfig(), "US500")
+        names = {spec.name for spec in specs}
+
+        self.assertIn("us500_opening_drive_reclaim", names)
+        self.assertIn("us500_failed_breakdown_reclaim", names)
+        self.assertIn("us500_failed_upside_reject_short", names)
+
+        reclaim_spec = next(spec for spec in specs if spec.name == "us500_failed_breakdown_reclaim")
+        reject_spec = next(spec for spec in specs if spec.name == "us500_failed_upside_reject_short")
+        self.assertEqual(reclaim_spec.regime_filter_label, "range_rotation")
+        self.assertEqual(reject_spec.regime_filter_label, "range_rotation")
+
     def test_detect_research_mode_accepts_btc_full_from_5m_cache(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             database_path = f"{temp_dir}\\test.duckdb"

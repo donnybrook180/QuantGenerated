@@ -8,6 +8,20 @@ from quant_system.artifacts import DEPLOY_DIR, deploy_symbol_dir
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 
 
+def _top_reason_list(rows: list[dict[str, object]], labels: set[str], *, limit: int = 5) -> tuple[str, ...]:
+    counts: dict[str, int] = {}
+    for row in rows:
+        if str(row.get("prop_viability_label", "fail") or "fail") not in labels:
+            continue
+        for reason in row.get("prop_viability_reasons", ()) or ():
+            normalized = str(reason).strip()
+            if not normalized:
+                continue
+            counts[normalized] = counts.get(normalized, 0) + 1
+    ranked = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    return tuple(reason for reason, _count in ranked[:limit])
+
+
 def build_symbol_deployment(
     *,
     profile_name: str,
@@ -19,7 +33,46 @@ def build_symbol_deployment(
     execution_validation_summary: str,
     symbol_status: str,
     selected_candidates: list[dict[str, object]],
+    venue_key: str = "generic",
 ) -> SymbolDeployment:
+    strategy_labels = [str(row.get("prop_viability_label", "fail") or "fail") for row in selected_candidates]
+    strategy_reasons = [
+        str(reason)
+        for row in selected_candidates
+        for reason in (row.get("prop_viability_reasons", ()) or ())
+        if str(reason)
+    ]
+    strategy_prop_fit_labels = [str(row.get("prop_fit_label", "fail") or "fail") for row in selected_candidates]
+    strategy_prop_fit_reasons = [
+        str(reason)
+        for row in selected_candidates
+        for reason in (row.get("prop_fit_reasons", ()) or ())
+        if str(reason)
+    ]
+    strategy_stress_scores = [float(row.get("stress_survival_score", 0.0) or 0.0) for row in selected_candidates]
+    strategy_interpreter_reasons = [
+        str(reason)
+        for row in selected_candidates
+        for reason in (row.get("interpreter_fit_reasons", ()) or ())
+        if str(reason)
+    ]
+    strategy_interpreter_scores = [float(row.get("interpreter_fit_score", 0.0) or 0.0) for row in selected_candidates]
+    if any(label == "pass" for label in strategy_labels):
+        prop_viability_label = "pass"
+    elif any(label == "caution" for label in strategy_labels):
+        prop_viability_label = "caution"
+    else:
+        prop_viability_label = "fail"
+    if any(label == "pass" for label in strategy_prop_fit_labels):
+        prop_fit_label = "pass"
+    elif any(label == "caution" for label in strategy_prop_fit_labels):
+        prop_fit_label = "caution"
+    else:
+        prop_fit_label = "fail"
+    if not strategy_reasons and not selected_candidates:
+        strategy_reasons = ["no_selected_candidates"]
+    if not strategy_prop_fit_reasons and not selected_candidates:
+        strategy_prop_fit_reasons = ["no_selected_candidates"]
     strategies = [
         DeploymentStrategy(
             candidate_name=str(row["candidate_name"]),
@@ -42,6 +95,29 @@ def build_symbol_deployment(
             base_allocation_weight=float(row.get("base_allocation_weight", 1.0) or 1.0),
             max_risk_multiplier=float(row.get("max_risk_multiplier", 1.0) or 1.0),
             min_risk_multiplier=float(row.get("min_risk_multiplier", 0.0) or 0.0),
+            signal_quality_score=float(row.get("signal_quality_score", 0.0) or 0.0),
+            prop_viability_score=float(row.get("prop_viability_score", 0.0) or 0.0),
+            prop_viability_label=str(row.get("prop_viability_label", "fail") or "fail"),
+            prop_viability_pass=bool(row.get("prop_viability_pass", False)),
+            prop_viability_reasons=tuple(str(item) for item in row.get("prop_viability_reasons", ()) or ()),
+            stress_expectancy_mild=float(row.get("stress_expectancy_mild", 0.0) or 0.0),
+            stress_expectancy_medium=float(row.get("stress_expectancy_medium", 0.0) or 0.0),
+            stress_expectancy_harsh=float(row.get("stress_expectancy_harsh", 0.0) or 0.0),
+            stress_pf_mild=float(row.get("stress_pf_mild", 0.0) or 0.0),
+            stress_pf_medium=float(row.get("stress_pf_medium", 0.0) or 0.0),
+            stress_pf_harsh=float(row.get("stress_pf_harsh", 0.0) or 0.0),
+            stress_survival_score=float(row.get("stress_survival_score", 0.0) or 0.0),
+            prop_fit_score=float(row.get("prop_fit_score", 0.0) or 0.0),
+            prop_fit_label=str(row.get("prop_fit_label", "fail") or "fail"),
+            prop_fit_reasons=tuple(str(item) for item in row.get("prop_fit_reasons", ()) or ()),
+            news_window_trade_share=float(row.get("news_window_trade_share", 0.0) or 0.0),
+            sub_short_hold_share=float(row.get("sub_short_hold_share", 0.0) or 0.0),
+            micro_target_risk_flag=bool(row.get("micro_target_risk_flag", False)),
+            execution_dependency_flag=bool(row.get("execution_dependency_flag", False)),
+            interpreter_fit_score=float(row.get("interpreter_fit_score", 0.0) or 0.0),
+            common_live_regime_fit=float(row.get("common_live_regime_fit", 0.0) or 0.0),
+            blocked_by_interpreter_risk=float(row.get("blocked_by_interpreter_risk", 0.0) or 0.0),
+            interpreter_fit_reasons=tuple(str(item) for item in row.get("interpreter_fit_reasons", ()) or ()),
         )
         for row in selected_candidates
     ]
@@ -55,6 +131,17 @@ def build_symbol_deployment(
         execution_validation_summary=execution_validation_summary,
         symbol_status=symbol_status,
         strategies=strategies,
+        venue_key=venue_key,
+        venue_basis=f"{venue_key}_mt5",
+        prop_viability_label=prop_viability_label,
+        prop_viability_reasons=tuple(strategy_reasons),
+        top_caution_reasons=_top_reason_list(selected_candidates, {"caution"}),
+        top_rejection_reasons=_top_reason_list(selected_candidates, {"fail"}),
+        stress_survival_score=max(strategy_stress_scores) if strategy_stress_scores else 0.0,
+        prop_fit_label=prop_fit_label,
+        prop_fit_reasons=tuple(strategy_prop_fit_reasons),
+        interpreter_fit_score=max(strategy_interpreter_scores) if strategy_interpreter_scores else 0.0,
+        interpreter_fit_reasons=tuple(strategy_interpreter_reasons),
         target_volatility=0.0,
         max_symbol_vol_percentile=0.98,
         block_new_entries_in_event_risk=True,

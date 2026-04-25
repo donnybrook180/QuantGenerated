@@ -2,6 +2,10 @@
 
 This document is the shortest path to the current Step 1 repo layout.
 
+For faster repo-wide searching:
+
+- [docs/repo_search_map.md](C:/Users/liset/PycharmProjects/QuantGenerated/docs/repo_search_map.md)
+
 ## Root Entry Points
 
 The repo-root scripts are thin wrappers:

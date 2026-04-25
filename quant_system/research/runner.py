@@ -142,7 +142,7 @@ def run_candidate(
     scored.cross_filter_label = spec.cross_filter_label
     scored.execution_overrides = copy.deepcopy(spec.execution_overrides)
     annotate_regime_metrics_fn(scored, features, result.closed_trades)
-    annotate_funding_context_fn(scored, features)
+    annotate_funding_context_fn(scored, features, result.closed_trades)
     return scored
 
 

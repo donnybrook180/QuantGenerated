@@ -25,6 +25,12 @@ class LiveDeployRuntimeTests(unittest.TestCase):
             direction_role="combined",
             variant_label="4h_overlap",
             regime_filter_label="trend_up_vol_high",
+            stress_survival_score=0.75,
+            prop_fit_label="caution",
+            prop_fit_reasons=("execution_dependency_flag",),
+            interpreter_fit_score=0.58,
+            common_live_regime_fit=0.40,
+            blocked_by_interpreter_risk=0.32,
         )
 
         deployment = build_symbol_deployment(
@@ -44,6 +50,56 @@ class LiveDeployRuntimeTests(unittest.TestCase):
         self.assertEqual(strategy.strategy_family, "trend")
         self.assertEqual(strategy.direction_mode, "both")
         self.assertEqual(strategy.direction_role, "combined")
+        self.assertEqual(strategy.prop_fit_label, "caution")
+        self.assertGreater(strategy.stress_survival_score, 0.0)
+        self.assertGreater(strategy.interpreter_fit_score, 0.0)
+
+    def test_build_symbol_deployment_preserves_step2_viability_context(self) -> None:
+        row = make_candidate_row(
+            candidate_name="forex_breakout_momentum__30m_overlap",
+            stress_expectancy_mild=0.41,
+            stress_expectancy_medium=0.22,
+            stress_expectancy_harsh=0.03,
+            stress_pf_mild=1.10,
+            stress_pf_medium=1.03,
+            stress_pf_harsh=0.98,
+            stress_survival_score=0.75,
+            prop_fit_score=0.64,
+            prop_fit_label="caution",
+            prop_fit_reasons=("news_window_trade_share_elevated", "execution_dependency_flag"),
+            news_window_trade_share=0.28,
+            sub_short_hold_share=0.12,
+            micro_target_risk_flag=False,
+            execution_dependency_flag=True,
+            interpreter_fit_score=0.44,
+            common_live_regime_fit=0.36,
+            blocked_by_interpreter_risk=0.51,
+            interpreter_fit_reasons=("blocked_by_interpreter_risk_elevated",),
+        )
+
+        deployment = build_symbol_deployment(
+            profile_name="symbol::eurusd",
+            symbol="EURUSD",
+            data_symbol="C:EURUSD",
+            broker_symbol="EURUSD",
+            research_run_id=10,
+            execution_set_id=20,
+            execution_validation_summary="accepted",
+            symbol_status="live_ready",
+            selected_candidates=[row],
+            venue_key="blue_guardian",
+        )
+
+        strategy = deployment.strategies[0]
+        self.assertEqual(deployment.venue_basis, "blue_guardian_mt5")
+        self.assertEqual(deployment.prop_fit_label, "caution")
+        self.assertIn("execution_dependency_flag", deployment.prop_fit_reasons)
+        self.assertGreater(deployment.interpreter_fit_score, 0.0)
+        self.assertIn("blocked_by_interpreter_risk_elevated", deployment.interpreter_fit_reasons)
+        self.assertEqual(strategy.prop_fit_label, "caution")
+        self.assertIn("news_window_trade_share_elevated", strategy.prop_fit_reasons)
+        self.assertAlmostEqual(strategy.stress_survival_score, 0.75, places=6)
+        self.assertIn("blocked_by_interpreter_risk_elevated", strategy.interpreter_fit_reasons)
 
     def test_load_symbol_deployment_infers_live_ready_when_status_missing_and_core_strategy_exists(self) -> None:
         payload = {

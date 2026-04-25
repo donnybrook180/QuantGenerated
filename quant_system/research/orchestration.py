@@ -31,6 +31,7 @@ def run_symbol_research_orchestration(
     load_execution_features_for_variant_fn,
     annotate_combo_results_fn,
     export_results_fn,
+    build_broker_data_sanity_summary_fn,
     meets_viability_fn,
     execution_candidate_row_from_result_fn,
     build_execution_policy_from_candidate_row_fn,
@@ -259,7 +260,21 @@ def run_symbol_research_orchestration(
         )
     }
     annotate_combo_results_fn(results)
-    csv_path, txt_path = export_results_fn(resolved.profile_symbol, resolved.broker_symbol, data_source, results)
+    broker_data_summary = build_broker_data_sanity_summary_fn(
+        config,
+        resolved.profile_symbol,
+        resolved.data_symbol,
+        resolved.broker_symbol,
+        data_source,
+        default_features,
+    )
+    csv_path, txt_path = export_results_fn(
+        resolved.profile_symbol,
+        resolved.broker_symbol,
+        data_source,
+        results,
+        broker_data_summary=broker_data_summary,
+    )
     ranked = sorted(
         results,
         key=lambda item: (
@@ -452,6 +467,7 @@ def run_symbol_research_orchestration(
         execution_validation_summary=execution_validation_summary,
         symbol_status=symbol_status,
         selected_candidates=selected_execution_candidates,
+        venue_key=str(config.mt5.prop_broker),
     )
     deployment_path = export_symbol_deployment_fn(deployment)
     selected_execution_results = [row for row in results if row.name in {str(item["candidate_name"]) for item in selected_execution_candidates}]
@@ -468,6 +484,7 @@ def run_symbol_research_orchestration(
         f"Broker symbol: {resolved.broker_symbol}",
         f"Catalog profile: {profile_name}",
         f"Data source: {data_source}",
+        f"Broker data source: {broker_data_summary.get('broker_data_source', data_source)}",
         f"Candidates tested: {len(results)}",
         f"Research CSV: {csv_path}",
         f"Research report: {txt_path}",

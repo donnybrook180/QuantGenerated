@@ -9,6 +9,7 @@ from quant_system.research.common import (
     direction_mode,
     direction_role,
     family_unused_for_single_selection,
+    meets_monte_carlo_viability,
     metric_map_from_row,
     research_thresholds,
     row_value,
@@ -27,8 +28,153 @@ from quant_system.symbols import (
 )
 
 
+def _clamp01(value: float) -> float:
+    return max(0.0, min(1.0, value))
+
+
+def _blue_guardian_signal_quality_score(row: object | dict[str, object], symbol: str) -> float:
+    thresholds = research_thresholds(symbol)
+    profit_factor = float(row_value(row, "profit_factor", 0.0) or 0.0)
+    validation_pnl = float(row_value(row, "validation_pnl", 0.0) or 0.0)
+    test_pnl = float(row_value(row, "test_pnl", 0.0) or 0.0)
+    walk_forward_pass_rate_pct = max(
+        float(row_value(row, "walk_forward_pass_rate_pct", 0.0) or 0.0),
+        float(row_value(row, "walk_forward_soft_pass_rate_pct", 0.0) or 0.0),
+    )
+    equity_quality_score = float(row_value(row, "equity_quality_score", 0.0) or 0.0)
+    regime_stability_score = float(row_value(row, "regime_stability_score", 0.0) or 0.0)
+    best_trade_share_pct = float(row_value(row, "best_trade_share_pct", 100.0) or 100.0)
+    score = (
+        (_clamp01((profit_factor - 1.0) / 1.0) * 0.24)
+        + ((1.0 if validation_pnl > 0.0 else 0.0) * 0.14)
+        + ((1.0 if test_pnl > 0.0 else 0.0) * 0.14)
+        + (_clamp01(walk_forward_pass_rate_pct / max(float(thresholds["walk_forward_min_pass_rate_pct"]), 1.0)) * 0.16)
+        + (_clamp01(equity_quality_score) * 0.18)
+        + (_clamp01(regime_stability_score) * 0.09)
+        + (_clamp01((80.0 - best_trade_share_pct) / 80.0) * 0.05)
+    )
+    if meets_monte_carlo_viability(row):
+        score += 0.05
+    return round(_clamp01(score), 4)
+
+
+def _blue_guardian_prop_viability_profile(
+    row: object | dict[str, object],
+    symbol: str,
+    *,
+    specialist_live_approved: bool,
+    specialist_live_rejection_reasons: list[str],
+) -> tuple[float, str, bool, tuple[str, ...]]:
+    reasons: list[str] = []
+    signal_quality_score = _blue_guardian_signal_quality_score(row, symbol)
+    validation_pnl = float(row_value(row, "validation_pnl", 0.0) or 0.0)
+    test_pnl = float(row_value(row, "test_pnl", 0.0) or 0.0)
+    profit_factor = float(row_value(row, "profit_factor", 0.0) or 0.0)
+    walk_forward_pass_rate_pct = max(
+        float(row_value(row, "walk_forward_pass_rate_pct", 0.0) or 0.0),
+        float(row_value(row, "walk_forward_soft_pass_rate_pct", 0.0) or 0.0),
+    )
+    equity_quality_score = float(row_value(row, "equity_quality_score", 0.0) or 0.0)
+    best_trade_share_pct = float(row_value(row, "best_trade_share_pct", 100.0) or 100.0)
+    estimated_swap_drag_per_trade = float(row_value(row, "estimated_swap_drag_per_trade", 0.0) or 0.0)
+    swap_adjusted_expectancy = float(row_value(row, "swap_adjusted_expectancy", 0.0) or 0.0)
+    expectancy = float(row_value(row, "expectancy", 0.0) or 0.0)
+    broker_swap_available = bool(row_value(row, "broker_swap_available", False))
+    stress_expectancy_mild = float(row_value(row, "stress_expectancy_mild", 0.0) or 0.0)
+    stress_expectancy_medium = float(row_value(row, "stress_expectancy_medium", 0.0) or 0.0)
+    stress_expectancy_harsh = float(row_value(row, "stress_expectancy_harsh", 0.0) or 0.0)
+    stress_pf_mild = float(row_value(row, "stress_pf_mild", 0.0) or 0.0)
+    stress_pf_medium = float(row_value(row, "stress_pf_medium", 0.0) or 0.0)
+    stress_pf_harsh = float(row_value(row, "stress_pf_harsh", 0.0) or 0.0)
+    stress_survival_score = float(row_value(row, "stress_survival_score", 0.0) or 0.0)
+    stress_metrics_present = any(
+        abs(value) > 1e-12
+        for value in (
+            stress_expectancy_mild,
+            stress_expectancy_medium,
+            stress_expectancy_harsh,
+            stress_pf_mild,
+            stress_pf_medium,
+            stress_pf_harsh,
+            stress_survival_score,
+        )
+    )
+    prop_fit_score = float(row_value(row, "prop_fit_score", 0.0) or 0.0)
+    prop_fit_label = str(row_value(row, "prop_fit_label", "fail") or "fail")
+    prop_fit_reasons = tuple(str(item) for item in row_value(row, "prop_fit_reasons", ()) or ())
+    interpreter_fit_score = float(row_value(row, "interpreter_fit_score", 0.0) or 0.0)
+    common_live_regime_fit = float(row_value(row, "common_live_regime_fit", 0.0) or 0.0)
+    blocked_by_interpreter_risk = float(row_value(row, "blocked_by_interpreter_risk", 0.0) or 0.0)
+    interpreter_fit_reasons = tuple(str(item) for item in row_value(row, "interpreter_fit_reasons", ()) or ())
+
+    if broker_swap_available and estimated_swap_drag_per_trade > 0.0:
+        if swap_adjusted_expectancy <= 0.0:
+            reasons.append("swap_adjusted_expectancy_non_positive")
+        elif expectancy > 0.0 and estimated_swap_drag_per_trade >= (expectancy * 0.5):
+            reasons.append("swap_drag_material_to_expectancy")
+    if stress_metrics_present:
+        if stress_expectancy_mild <= 0.0 or stress_pf_mild < 1.0:
+            reasons.append("stress_mild_breaks_viability")
+        elif stress_expectancy_medium <= 0.0 or stress_pf_medium < 1.0:
+            reasons.append("stress_medium_breaks_viability")
+        elif stress_expectancy_harsh <= 0.0 or stress_pf_harsh < 1.0 or stress_survival_score < 0.67:
+            reasons.append("stress_harsh_breaks_viability")
+    for reason in prop_fit_reasons:
+        if reason not in reasons:
+            reasons.append(reason)
+    for reason in interpreter_fit_reasons:
+        if reason not in reasons:
+            reasons.append(reason)
+
+    if meets_viability(row, symbol):
+        if "swap_adjusted_expectancy_non_positive" in reasons:
+            return min(0.49, signal_quality_score), "fail", False, tuple(reasons)
+        if "stress_mild_breaks_viability" in reasons or "stress_medium_breaks_viability" in reasons:
+            return min(0.49, signal_quality_score), "fail", False, tuple(reasons)
+        if prop_fit_label == "fail":
+            return min(0.49, min(signal_quality_score, prop_fit_score or signal_quality_score)), "fail", False, tuple(reasons)
+        if blocked_by_interpreter_risk >= 0.70 or common_live_regime_fit <= 0.20:
+            return min(0.49, min(signal_quality_score, interpreter_fit_score or signal_quality_score)), "fail", False, tuple(reasons)
+        if "swap_drag_material_to_expectancy" in reasons:
+            return max(0.55, min(0.74, signal_quality_score)), "caution", True, tuple(reasons)
+        if "stress_harsh_breaks_viability" in reasons or prop_fit_label == "caution" or blocked_by_interpreter_risk >= 0.45:
+            return max(0.55, min(0.74, signal_quality_score)), "caution", True, tuple(reasons)
+        return max(0.75, signal_quality_score), "pass", True, ()
+
+    if validation_pnl <= 0.0 or test_pnl <= 0.0:
+        reasons.append("out_of_sample_confirmation_weak")
+    if profit_factor < 1.0:
+        reasons.append("profit_factor_below_live_floor")
+    if walk_forward_pass_rate_pct <= 0.0:
+        reasons.append("walk_forward_confirmation_missing")
+    if equity_quality_score < 0.45:
+        reasons.append("equity_quality_too_low")
+    if best_trade_share_pct > 70.0:
+        reasons.append("regime_concentration_too_high")
+    if not meets_monte_carlo_viability(row):
+        reasons.append("monte_carlo_tail_risk")
+
+    if meets_regime_specialist_viability(row, symbol) and specialist_live_approved:
+        reasons.insert(0, "specialist_only_candidate")
+        return max(0.55, min(0.74, signal_quality_score)), "caution", True, tuple(reasons)
+
+    for reason in specialist_live_rejection_reasons:
+        if reason not in reasons:
+            reasons.append(reason)
+    if not reasons:
+        reasons.append("core_viability_not_met")
+    return min(0.49, signal_quality_score), "fail", False, tuple(reasons)
+
+
 def execution_candidate_row(symbol: str, row: object | dict[str, object]) -> dict[str, object]:
     specialist_live_approved, specialist_live_rejection_reasons = specialist_live_gate(row, symbol)
+    signal_quality_score = _blue_guardian_signal_quality_score(row, symbol)
+    prop_viability_score, prop_viability_label, prop_viability_pass, prop_viability_reasons = _blue_guardian_prop_viability_profile(
+        row,
+        symbol,
+        specialist_live_approved=specialist_live_approved,
+        specialist_live_rejection_reasons=specialist_live_rejection_reasons,
+    )
     return {
         "candidate_name": str(row_value(row, "name", row_value(row, "candidate_name", "")) or ""),
         "symbol": symbol,
@@ -54,6 +200,7 @@ def execution_candidate_row(symbol: str, row: object | dict[str, object]) -> dic
         "walk_forward_avg_validation_pnl": float(row_value(row, "walk_forward_avg_validation_pnl", 0.0) or 0.0),
         "walk_forward_avg_test_pnl": float(row_value(row, "walk_forward_avg_test_pnl", 0.0) or 0.0),
         "best_trade_share_pct": float(row_value(row, "best_trade_share_pct", 0.0) or 0.0),
+        "expectancy": float(row_value(row, "expectancy", 0.0) or 0.0),
         "equity_new_high_share_pct": float(row_value(row, "equity_new_high_share_pct", 0.0) or 0.0),
         "max_consecutive_losses": int(row_value(row, "max_consecutive_losses", 0) or 0),
         "equity_quality_score": float(row_value(row, "equity_quality_score", 0.0) or 0.0),
@@ -68,6 +215,11 @@ def execution_candidate_row(symbol: str, row: object | dict[str, object]) -> dic
         "component_count": int(row_value(row, "component_count", 1) or 1),
         "combo_outperformance_score": float(row_value(row, "combo_outperformance_score", 0.0) or 0.0),
         "combo_trade_overlap_pct": float(row_value(row, "combo_trade_overlap_pct", 0.0) or 0.0),
+        "signal_quality_score": signal_quality_score,
+        "prop_viability_score": prop_viability_score,
+        "prop_viability_label": prop_viability_label,
+        "prop_viability_pass": prop_viability_pass,
+        "prop_viability_reasons": prop_viability_reasons,
         "recommended": False,
         "promotion_tier": promotion_tier_for_row(row, symbol),
         "strategy_family": strategy_family(row),
@@ -94,6 +246,34 @@ def execution_candidate_row(symbol: str, row: object | dict[str, object]) -> dic
         ),
         "regime_trade_count_by_label": row_value(row, "regime_trade_count_by_label", "{}"),
         "regime_pf_by_label": row_value(row, "regime_pf_by_label", "{}"),
+        "broker_swap_available": bool(row_value(row, "broker_swap_available", False)),
+        "broker_swap_long": float(row_value(row, "broker_swap_long", 0.0) or 0.0),
+        "broker_swap_short": float(row_value(row, "broker_swap_short", 0.0) or 0.0),
+        "broker_carry_spread": float(row_value(row, "broker_carry_spread", 0.0) or 0.0),
+        "broker_preferred_carry_side": str(row_value(row, "broker_preferred_carry_side", "") or ""),
+        "avg_hold_hours": float(row_value(row, "avg_hold_hours", 0.0) or 0.0),
+        "estimated_swap_drag_total": float(row_value(row, "estimated_swap_drag_total", 0.0) or 0.0),
+        "estimated_swap_drag_per_trade": float(row_value(row, "estimated_swap_drag_per_trade", 0.0) or 0.0),
+        "swap_adjusted_expectancy": float(row_value(row, "swap_adjusted_expectancy", 0.0) or 0.0),
+        "carry_preferred_side": str(row_value(row, "carry_preferred_side", "") or ""),
+        "stress_expectancy_mild": float(row_value(row, "stress_expectancy_mild", 0.0) or 0.0),
+        "stress_expectancy_medium": float(row_value(row, "stress_expectancy_medium", 0.0) or 0.0),
+        "stress_expectancy_harsh": float(row_value(row, "stress_expectancy_harsh", 0.0) or 0.0),
+        "stress_pf_mild": float(row_value(row, "stress_pf_mild", 0.0) or 0.0),
+        "stress_pf_medium": float(row_value(row, "stress_pf_medium", 0.0) or 0.0),
+        "stress_pf_harsh": float(row_value(row, "stress_pf_harsh", 0.0) or 0.0),
+        "stress_survival_score": float(row_value(row, "stress_survival_score", 0.0) or 0.0),
+        "prop_fit_score": float(row_value(row, "prop_fit_score", 0.0) or 0.0),
+        "prop_fit_label": str(row_value(row, "prop_fit_label", "fail") or "fail"),
+        "prop_fit_reasons": tuple(str(item) for item in row_value(row, "prop_fit_reasons", ()) or ()),
+        "news_window_trade_share": float(row_value(row, "news_window_trade_share", 0.0) or 0.0),
+        "sub_short_hold_share": float(row_value(row, "sub_short_hold_share", 0.0) or 0.0),
+        "micro_target_risk_flag": bool(row_value(row, "micro_target_risk_flag", False)),
+        "execution_dependency_flag": bool(row_value(row, "execution_dependency_flag", False)),
+        "interpreter_fit_score": float(row_value(row, "interpreter_fit_score", 0.0) or 0.0),
+        "common_live_regime_fit": float(row_value(row, "common_live_regime_fit", 0.0) or 0.0),
+        "blocked_by_interpreter_risk": float(row_value(row, "blocked_by_interpreter_risk", 0.0) or 0.0),
+        "interpreter_fit_reasons": tuple(str(item) for item in row_value(row, "interpreter_fit_reasons", ()) or ()),
         "regime_specialist_viable": meets_regime_specialist_viability(row, symbol),
         "specialist_live_approved": specialist_live_approved,
         "specialist_live_rejection_reason": "; ".join(specialist_live_rejection_reasons),

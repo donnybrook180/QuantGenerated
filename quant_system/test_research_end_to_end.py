@@ -346,6 +346,97 @@ class ResearchEndToEndTests(unittest.TestCase):
         self.assertEqual(deployment.symbol_status, "research_only")
         self.assertEqual(len(deployment.strategies), 0)
 
+    def test_research_end_to_end_writes_blue_guardian_report_and_deployment_reasons(self) -> None:
+        specs = [
+            CandidateSpec(
+                name="forex_breakout_momentum",
+                description="forex breakout",
+                agents=[],
+                code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+                allowed_variants=("15m_overlap",),
+            ),
+            CandidateSpec(
+                name="forex_short_breakdown_momentum",
+                description="forex short breakdown",
+                agents=[],
+                code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+                allowed_variants=("15m_overlap",),
+            ),
+        ]
+        caution_result = make_candidate_result(
+            name="forex_breakout_momentum__15m_overlap",
+            code_path="quant_system.agents.forex.ForexBreakoutMomentumAgent",
+            realized_pnl=95.0,
+            profit_factor=1.9,
+            closed_trades=7,
+            validation_pnl=28.0,
+            validation_profit_factor=1.4,
+            validation_closed_trades=2,
+            test_pnl=24.0,
+            test_profit_factor=1.3,
+            test_closed_trades=2,
+            walk_forward_windows=2,
+            walk_forward_pass_rate_pct=100.0,
+            walk_forward_avg_validation_pnl=14.0,
+            walk_forward_avg_test_pnl=12.0,
+            strategy_family="forex_breakout_momentum",
+            direction_mode="long_only",
+            direction_role="long_leg",
+        )
+        caution_result.prop_fit_label = "caution"
+        caution_result.prop_fit_reasons = ("news_window_trade_share_elevated",)
+        caution_result.news_window_trade_share = 0.32
+        rejected_result = make_candidate_result(
+            name="forex_short_breakdown_momentum__15m_overlap",
+            code_path="quant_system.agents.forex.ForexShortBreakdownMomentumAgent",
+            realized_pnl=15.0,
+            profit_factor=0.8,
+            closed_trades=4,
+            validation_pnl=-4.0,
+            validation_profit_factor=0.7,
+            validation_closed_trades=1,
+            test_pnl=-2.0,
+            test_profit_factor=0.8,
+            test_closed_trades=1,
+            walk_forward_windows=0,
+            walk_forward_pass_rate_pct=0.0,
+            strategy_family="forex_short_breakdown_momentum",
+            direction_mode="short_only",
+            direction_role="short_leg",
+        )
+        rejected_result.interpreter_fit_reasons = ("blocked_by_interpreter_risk_high",)
+        rejected_result.blocked_by_interpreter_risk = 0.82
+        rejected_result.common_live_regime_fit = 0.12
+        results_by_name = {
+            caution_result.name: caution_result,
+            rejected_result.name: rejected_result,
+        }
+
+        lines, reports_dir, deploy_dir = self._execute_fake_research(
+            symbol="EURUSD",
+            feature_variants={"15m_overlap": [make_feature(index=0, symbol="EURUSD")]},
+            specs=specs,
+            results_by_name=results_by_name,
+            evaluator=lambda candidate_set: (
+                make_execution_result(realized_pnl=95.0, profit_factor=1.8, trades=7, closed_trade_pnls=[30.0, -8.0, 25.0, 20.0, 28.0]),
+                "test",
+                "forex_breakout_momentum__15m_overlap@15m_overlap",
+            ),
+        )
+
+        self.assertIn("Recommended active agents: forex_breakout_momentum__15m_overlap", lines)
+        report_text = (reports_dir / "eurusd" / "reports" / "symbol_research.txt").read_text(encoding="utf-8")
+        self.assertIn("broker_data_summary", report_text)
+        self.assertIn("why_promoted_for_blue_guardian", report_text)
+        self.assertIn("forex_breakout_momentum__15m_overlap", report_text)
+        self.assertIn("why_rejected_for_blue_guardian", report_text)
+        self.assertIn("forex_short_breakdown_momentum__15m_overlap", report_text)
+        deployment = load_symbol_deployment(deploy_dir / "eurusd" / "live.json")
+        self.assertEqual(deployment.venue_basis, "blue_guardian_mt5")
+        self.assertEqual(deployment.prop_viability_label, "caution")
+        self.assertEqual(tuple(deployment.top_caution_reasons), ("news_window_trade_share_elevated",))
+        self.assertEqual(tuple(deployment.top_rejection_reasons), ())
+
     def _execute_fake_research(
         self,
         *,
@@ -387,7 +478,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         reports_root.mkdir(parents=True, exist_ok=True)
         deploy_root.mkdir(parents=True, exist_ok=True)
 
-        with patch(
+        with patch.dict("os.environ", {"PROP_BROKER": "blue_guardian"}), patch(
             "quant_system.symbol_research._build_symbol_feature_variants",
             return_value=(feature_variants, "test", "full"),
         ), patch(

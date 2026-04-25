@@ -2,6 +2,16 @@ Symbol research: EURUSD
 Broker symbol: EURUSD
 Data source: test
 
+Broker data summary
+  broker_data_source: test
+  broker_symbol: EURUSD
+  history_bars_loaded: 1
+  history_window_start: 2026-01-01T00:00:00+00:00
+  history_window_end: 2026-01-01T00:00:00+00:00
+  missing_bar_warnings: none
+  session_alignment_notes: continuous MT5-style stream; fallback/non-broker data source
+  contract_spec_notes: not_available
+
 Ranked candidates
 forex_trend_continuation_looser [auto_improved|reject]: pnl=0.00 closed=0 pf=0.00 win_rate=0.00% dd=0.00%
   tier: reject
@@ -9,10 +19,18 @@ forex_trend_continuation_looser [auto_improved|reject]: pnl=0.00 closed=0 pf=0.0
   exits: dominant=none share=0.00%
   regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
   strategy_scope: family=forex_trend_continuation_looser direction=long_only role=long_leg
+  blue_guardian: signal_quality=0.04 prop_viability=0.04 label=fail pass=no
+  blue_guardian_reasons: no_closed_trades_for_prop_fit; blocked_by_interpreter_risk_high; common_live_regime_fit_low; out_of_sample_confirmation_weak; profit_factor_below_live_floor; walk_forward_confirmation_missing; equity_quality_too_low; regime_concentration_too_high; monte_carlo_tail_risk; not_regime_specialist_viable
   unified_regimes: best=none worst=none
   regime_trade_counts: {}
   regime_pnls: {}
   funding: available=no swap_long=0.00000 swap_short=0.00000 preferred_side=none carry_spread=0.00000
+  swap_drag: avg_hold_hours=0.00 drag_per_trade=0.0000 drag_total=0.0000 swap_adjusted_expectancy=0.0000 carry_side=none
+  execution_stress: mild_expectancy=0.0000 medium_expectancy=0.0000 harsh_expectancy=0.0000 mild_pf=0.000 medium_pf=0.000 harsh_pf=0.000 survival_score=0.00
+  prop_fit: score=0.00 label=fail news_window_trade_share=0.00% sub_short_hold_share=0.00% micro_target_risk=no execution_dependency=yes
+  prop_fit_reasons: no_closed_trades_for_prop_fit
+  interpreter_fit: score=0.00 common_live_regime_fit=0.00% blocked_risk=100.00%
+  interpreter_fit_reasons: blocked_by_interpreter_risk_high; common_live_regime_fit_low
   monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
   live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
   walk_forward: windows=0 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00
@@ -25,10 +43,18 @@ forex_breakout_momentum_patient [auto_improved|reject]: pnl=0.00 closed=0 pf=0.0
   exits: dominant=none share=0.00%
   regimes: best=none pnl=0.00 worst=none pnl=0.00 dominant_share=0.00% stability=0.00 loss_ratio=0.00
   strategy_scope: family=forex_breakout_momentum_patient direction=long_only role=long_leg
+  blue_guardian: signal_quality=0.04 prop_viability=0.04 label=fail pass=no
+  blue_guardian_reasons: no_closed_trades_for_prop_fit; blocked_by_interpreter_risk_high; common_live_regime_fit_low; out_of_sample_confirmation_weak; profit_factor_below_live_floor; walk_forward_confirmation_missing; equity_quality_too_low; regime_concentration_too_high; monte_carlo_tail_risk; not_regime_specialist_viable
   unified_regimes: best=none worst=none
   regime_trade_counts: {}
   regime_pnls: {}
   funding: available=no swap_long=0.00000 swap_short=0.00000 preferred_side=none carry_spread=0.00000
+  swap_drag: avg_hold_hours=0.00 drag_per_trade=0.0000 drag_total=0.0000 swap_adjusted_expectancy=0.0000 carry_side=none
+  execution_stress: mild_expectancy=0.0000 medium_expectancy=0.0000 harsh_expectancy=0.0000 mild_pf=0.000 medium_pf=0.000 harsh_pf=0.000 survival_score=0.00
+  prop_fit: score=0.00 label=fail news_window_trade_share=0.00% sub_short_hold_share=0.00% micro_target_risk=no execution_dependency=yes
+  prop_fit_reasons: no_closed_trades_for_prop_fit
+  interpreter_fit: score=0.00 common_live_regime_fit=0.00% blocked_risk=100.00%
+  interpreter_fit_reasons: blocked_by_interpreter_risk_high; common_live_regime_fit_low
   monte_carlo: sims=0 pnl_median=0.00 p05=0.00 p95=0.00 dd_median=0.00% dd_p95=0.00% loss_prob=0.00%
   live_policy: tier=reject; activate in unified_regimes=no preferred regime; avoid unified_regimes=no explicit blocked regime; vol_pct in [0.00, 1.00]; base_weight=0.20; risk_cap=0.20; stability=0.00; loss_ratio=0.00
   walk_forward: windows=0 pass_rate=0.00% avg_val_pnl=0.00 avg_test_pnl=0.00 avg_val_pf=0.00 avg_test_pf=0.00

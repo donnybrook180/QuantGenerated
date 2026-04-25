@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import logging
+from statistics import median
 
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Client, MT5Error
@@ -82,3 +83,58 @@ def apply_broker_funding_context(features: list[FeatureVector], funding_context:
         values.update(context)
         enriched.append(FeatureVector(timestamp=feature.timestamp, symbol=feature.symbol, values=values))
     return enriched
+
+
+def infer_feature_bar_hours(features: list[FeatureVector]) -> float:
+    if len(features) < 2:
+        return 0.0
+    deltas = [
+        (features[index].timestamp - features[index - 1].timestamp).total_seconds() / 3600.0
+        for index in range(1, len(features))
+        if features[index].timestamp > features[index - 1].timestamp
+    ]
+    if not deltas:
+        return 0.0
+    return max(0.0, float(median(deltas)))
+
+
+def estimate_swap_drag(
+    *,
+    avg_hold_bars: float,
+    closed_trades: int,
+    expectancy: float,
+    direction_mode: str,
+    broker_swap_long: float,
+    broker_swap_short: float,
+    broker_preferred_carry_side: str,
+    bar_hours: float,
+) -> dict[str, float | str]:
+    avg_hold_hours = max(0.0, avg_hold_bars) * max(0.0, bar_hours)
+    hold_days = avg_hold_hours / 24.0 if avg_hold_hours > 0.0 else 0.0
+    carry_preferred_side = broker_preferred_carry_side or "none"
+    if direction_mode == "long_only":
+        selected_swap = broker_swap_long
+        applied_side = "long"
+    elif direction_mode == "short_only":
+        selected_swap = broker_swap_short
+        applied_side = "short"
+    elif carry_preferred_side == "long":
+        selected_swap = broker_swap_long
+        applied_side = "long"
+    elif carry_preferred_side == "short":
+        selected_swap = broker_swap_short
+        applied_side = "short"
+    else:
+        selected_swap = min(broker_swap_long, broker_swap_short)
+        applied_side = "worst_case"
+    estimated_swap_drag_per_trade = abs(selected_swap) * hold_days if selected_swap < 0.0 else 0.0
+    estimated_swap_drag_total = estimated_swap_drag_per_trade * max(closed_trades, 0)
+    swap_adjusted_expectancy = expectancy - estimated_swap_drag_per_trade
+    return {
+        "avg_hold_hours": avg_hold_hours,
+        "estimated_swap_drag_per_trade": estimated_swap_drag_per_trade,
+        "estimated_swap_drag_total": estimated_swap_drag_total,
+        "swap_adjusted_expectancy": swap_adjusted_expectancy,
+        "carry_preferred_side": carry_preferred_side,
+        "swap_applied_side": applied_side,
+    }

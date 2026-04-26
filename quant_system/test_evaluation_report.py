@@ -34,13 +34,14 @@ class EvaluationReportTests(unittest.TestCase):
         self.assertTrue(report.passed)
         self.assertEqual(report.reasons, [])
 
-    def test_build_ftmo_report_fails_on_profit_target(self) -> None:
+    def test_build_ftmo_report_does_not_fail_only_on_profit_target(self) -> None:
         result = make_execution_result(initial_cash=self.initial_cash, realized_pnl=5_000.0, closed_trade_pnls=[250.0] * 10)
 
         report = build_ftmo_report(result, self.initial_cash, self.risk, self.ftmo, self.instrument)
 
-        self.assertFalse(report.passed)
-        self.assertTrue(any("profit target not met" in reason for reason in report.reasons))
+        self.assertTrue(report.passed)
+        self.assertFalse(report.profit_target_reached)
+        self.assertEqual(report.reasons, [])
 
     def test_build_ftmo_report_fails_on_drawdown_breach(self) -> None:
         result = make_execution_result(initial_cash=self.initial_cash, max_drawdown=0.12, closed_trade_pnls=[500.0] * 10)
@@ -98,6 +99,51 @@ class EvaluationReportTests(unittest.TestCase):
         self.assertTrue(report.passed)
         self.assertAlmostEqual(report.net_return_pct, 10.0, places=6)
         self.assertAlmostEqual(report.max_drawdown_pct, 10.0, places=6)
+        self.assertTrue(report.profit_target_reached)
+
+    def test_build_ftmo_report_uses_active_venue_drawdown_limit_when_requested(self) -> None:
+        result = make_execution_result(
+            initial_cash=self.initial_cash,
+            realized_pnl=12_000.0,
+            max_drawdown=0.09,
+            win_rate_pct=45.0,
+            profit_factor=1.5,
+            closed_trade_pnls=[500.0] * 10,
+        )
+
+        report = build_ftmo_report(
+            result,
+            self.initial_cash,
+            self.risk,
+            self.ftmo,
+            self.instrument,
+            venue_key="blue_guardian",
+        )
+
+        self.assertFalse(report.passed)
+        self.assertTrue(any("max drawdown breached" in reason for reason in report.reasons))
+
+    def test_build_ftmo_report_uses_active_venue_profit_target_for_display(self) -> None:
+        result = make_execution_result(
+            initial_cash=self.initial_cash,
+            realized_pnl=9_000.0,
+            max_drawdown=0.05,
+            win_rate_pct=45.0,
+            profit_factor=1.5,
+            closed_trade_pnls=[500.0] * 10,
+        )
+
+        report = build_ftmo_report(
+            result,
+            self.initial_cash,
+            self.risk,
+            self.ftmo,
+            self.instrument,
+            venue_key="blue_guardian",
+        )
+
+        self.assertAlmostEqual(report.target_return_pct, 8.0, places=6)
+        self.assertTrue(report.profit_target_reached)
 
 
 if __name__ == "__main__":

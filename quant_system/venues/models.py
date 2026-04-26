@@ -6,6 +6,18 @@ from dataclasses import dataclass
 @dataclass(frozen=True, slots=True)
 class VenueRules:
     fill_resolution_routes: tuple[str, ...]
+    daily_drawdown_limit_pct: float | None = None
+    total_drawdown_limit_pct: float | None = None
+    daily_drawdown_limit_mode: str = "relative_to_reference"
+    total_drawdown_limit_mode: str = "relative_to_reference"
+    daily_drawdown_reference: str = "day_start_equity"
+    total_drawdown_reference: str = "starting_equity"
+    daily_reset_timezone: str = "UTC"
+    daily_reset_hour: int = 0
+    lockout_mode: str = "cooldown"
+    profit_target_pct: float | None = None
+    min_trading_days: int = 0
+    allows_weekend_holds: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -25,4 +37,3 @@ class VenueProfile:
     display_name: str
     rules: VenueRules
     costs: VenueCostSpec
-

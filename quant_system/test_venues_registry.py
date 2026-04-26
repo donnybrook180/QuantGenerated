@@ -20,10 +20,15 @@ class VenueRegistryTests(unittest.TestCase):
 
     def test_get_venue_profile_returns_expected_fill_routes(self) -> None:
         generic = get_venue_profile("generic")
+        ftmo = get_venue_profile("ftmo")
         blue_guardian = get_venue_profile("blue_guardian")
 
         self.assertEqual(generic.rules.fill_resolution_routes, ("history_deals", "history_orders", "open_position"))
+        self.assertEqual(ftmo.rules.daily_drawdown_reference, "day_start_balance")
+        self.assertEqual(ftmo.rules.daily_drawdown_limit_mode, "fixed_from_starting_balance")
         self.assertEqual(blue_guardian.rules.fill_resolution_routes, ("history_deals", "open_position", "history_orders"))
+        self.assertEqual(blue_guardian.rules.daily_drawdown_reference, "day_start_highest_balance_or_equity")
+        self.assertEqual(blue_guardian.rules.daily_reset_timezone, "America/New_York")
         self.assertEqual(blue_guardian.display_name, "Blue Guardian")
 
 

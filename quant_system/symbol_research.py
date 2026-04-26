@@ -896,7 +896,11 @@ def _build_engine(config: SystemConfig, agents: list[Agent]) -> EventDrivenEngin
     engine = EventDrivenEngine(
         coordinator=AgentCoordinator(agents, consensus_min_confidence=config.agents.consensus_min_confidence),
         broker=broker,
-        risk_manager=RiskManager(config=config.risk, starting_equity=config.execution.initial_cash),
+        risk_manager=RiskManager(
+            config=config.risk,
+            starting_equity=config.execution.initial_cash,
+            venue_key=str(config.mt5.prop_broker),
+        ),
         heartbeat=HeartbeatMonitor(config.heartbeat),
         quantity=config.execution.order_size,
     )

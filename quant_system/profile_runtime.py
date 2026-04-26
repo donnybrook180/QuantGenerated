@@ -41,6 +41,7 @@ def build_system_with_agents(
         risk_manager=RiskManager(
             config=config.risk,
             starting_equity=config.execution.initial_cash,
+            venue_key=str(config.mt5.prop_broker),
         ),
         heartbeat=HeartbeatMonitor(config.heartbeat),
         quantity=config.execution.order_size,

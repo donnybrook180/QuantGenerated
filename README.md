@@ -6,6 +6,14 @@ Personal multi-agent quant research trading system scaffold built around three i
 - `optimization`: walk-forward validation and parameter search
 - `execution`: lightweight event-driven runtime with risk controls
 
+## Operator Docs
+
+Voor praktisch repo-gebruik en de multi-prop workflow:
+
+- [docs/repo_usage_guide.md](docs/repo_usage_guide.md)
+- [docs/multi_prop_env_and_live_plan.md](docs/multi_prop_env_and_live_plan.md)
+- [docs/live_operations_manual.md](docs/live_operations_manual.md)
+
 ## Architecture
 
 ### Monorepo Layers
@@ -322,13 +330,13 @@ De output komt ook in:
 
 Als een symbol research-run een `accepted` execution set vindt, exporteert hij nu ook automatisch een live deployment artifact:
 
-- `artifacts/deploy/<symbol>/live.json`
+- `artifacts/deploy/<venue>/<symbol>/live.json`
 
 Bijvoorbeeld:
 
-- `artifacts/deploy/us500/live.json`
-- `artifacts/deploy/xauusd/live.json`
-- `artifacts/deploy/btc/live.json`
+- `artifacts/deploy/ftmo/us500/live.json`
+- `artifacts/deploy/blue_guardian/xauusd/live.json`
+- `artifacts/deploy/fundednext/btc/live.json`
 
 Die deployment artifacts zijn de brug tussen research en live. De live runner doet zelf geen research; hij leest alleen deze bestanden.
 
@@ -337,25 +345,31 @@ Die deployment artifacts zijn de brug tussen research en live. De live runner do
 Voor een eenmalige live/dry-run evaluatie:
 
 ```powershell
-.\.venv\Scripts\python.exe main_live_mt5.py
+.\.venv\Scripts\python.exe main_live_mt5.py --broker blue_guardian
 ```
 
 Of voor één symbool:
 
 ```powershell
-.\.venv\Scripts\python.exe main_live_mt5.py US500
+.\.venv\Scripts\python.exe main_live_mt5.py --broker blue_guardian US500
 ```
 
 Voor een doorlopende poll-loop:
 
 ```powershell
-.\.venv\Scripts\python.exe main_live_loop.py
+.\.venv\Scripts\python.exe main_live_loop.py --broker blue_guardian
 ```
 
 Of per symbool:
 
 ```powershell
-.\.venv\Scripts\python.exe main_live_loop.py US500
+.\.venv\Scripts\python.exe main_live_loop.py --broker blue_guardian US500
+```
+
+Voor meerdere brokers tegelijk, maar nog steeds 1 proces per broker:
+
+```powershell
+.\.venv\Scripts\python.exe main_live_supervisor.py
 ```
 
 Aanbevolen eerste stap:
@@ -369,9 +383,15 @@ Dus eerst dry-run laten meelopen.
 
 De live laag schrijft nu ook naar:
 
-- `artifacts/live/<symbol>/journals/<timestamp>_journal.json`
-- `artifacts/live/<symbol>/incidents/<timestamp>_incident.txt`
-- `artifacts/live/state/loop_state.json`
+- `artifacts/live/<venue>/<symbol>/journals/<timestamp>_journal.json`
+- `artifacts/live/<venue>/<symbol>/incidents/<timestamp>_incident.txt`
+- `artifacts/live/<venue>/state/loop_state.json`
+
+Belangrijk:
+
+- `PROP_BROKER` blijft de enkele broker-keuze voor research
+- `LIVE_PROP_BROKERS` is de brokerlijst voor live supervisor usage
+- live execution hoort broker-per-proces te draaien, niet alle brokers in 1 gedeelde MT5 loop
 
 ### Hedging vs Netting
 
@@ -505,7 +525,38 @@ MARKET_DATA_HISTORY_DAYS=30
 
 ## Broker setup
 
-Set these environment variables if MT5 is not already logged in locally:
+Voor research kies je 1 broker:
+
+```powershell
+PROP_BROKER=blue_guardian
+```
+
+Voor live kun je een lijst brokers klaarzetten:
+
+```powershell
+LIVE_PROP_BROKERS=ftmo,fundednext,blue_guardian
+```
+
+Bewaar daarna broker-specifieke MT5 credentials tegelijk in `.env`:
+
+```powershell
+MT5_FTMO_LOGIN=12345678
+MT5_FTMO_PASSWORD=your-ftmo-password
+MT5_FTMO_SERVER=FTMO-Server
+MT5_FTMO_TERMINAL_PATH=C:\Path\To\FTMO\terminal64.exe
+
+MT5_FUNDEDNEXT_LOGIN=23456789
+MT5_FUNDEDNEXT_PASSWORD=your-fundednext-password
+MT5_FUNDEDNEXT_SERVER=FundedNext-Server
+MT5_FUNDEDNEXT_TERMINAL_PATH=C:\Path\To\FundedNext\terminal64.exe
+
+MT5_BLUE_GUARDIAN_LOGIN=34567890
+MT5_BLUE_GUARDIAN_PASSWORD=your-blue-guardian-password
+MT5_BLUE_GUARDIAN_SERVER=BlueGuardian-Server
+MT5_BLUE_GUARDIAN_TERMINAL_PATH=C:\Path\To\BlueGuardian\terminal64.exe
+```
+
+De generieke fallback blijft ondersteund:
 
 ```powershell
 MT5_LOGIN=12345678

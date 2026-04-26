@@ -134,6 +134,7 @@ class SimpleParameterOptimizer:
         risk_manager = RiskManager(
             config=self.risk_config,
             starting_equity=self.execution_config.initial_cash,
+            venue_key="generic",
         )
         trades = 0
         last_trade_index: int | None = None

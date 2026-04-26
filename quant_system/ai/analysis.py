@@ -104,8 +104,9 @@ def build_profile_analysis(
         f"Win rate: {report.win_rate_pct:.2f}%",
         f"Profit factor: {report.profit_factor:.2f}",
         f"Max drawdown: {report.max_drawdown_pct:.2f}%",
-        f"FTMO pass: {report.passed}",
-        f"FTMO reasons: {', '.join(report.reasons) if report.reasons else 'none'}",
+        f"Profit target reached: {report.profit_target_reached} ({report.net_return_pct:.2f}% vs {report.target_return_pct:.2f}%)",
+        f"Risk/evaluation pass: {report.passed}",
+        f"Risk/evaluation reasons: {', '.join(report.reasons) if report.reasons else 'none'}",
     ]
     if strongest_setup is not None:
         local_summary_lines.append(f"Strongest realized setup: {strongest_setup[0]} ({strongest_setup[1]:.2f} pnl)")

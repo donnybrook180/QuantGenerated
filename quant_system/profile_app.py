@@ -53,7 +53,14 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
         shadow_csv_path, shadow_analysis_path = export_shadow_execution_artifacts(config, profile, features, optimized_agents)
         signals_path, signals_analysis_path = export_signal_artifacts(config, profile, features, optimized_agents)
         maybe_place_live_order(config, features, optimized_agents)
-        report = build_ftmo_report(result, config.execution.initial_cash, config.risk, config.ftmo, config.instrument)
+        report = build_ftmo_report(
+            result,
+            config.execution.initial_cash,
+            config.risk,
+            config.ftmo,
+            config.instrument,
+            venue_key=str(config.mt5.prop_broker),
+        )
         artifacts = ProfileArtifacts(
             trade_log=trades_path,
             trade_analysis=analysis_path,
@@ -127,6 +134,7 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Win rate: {report.win_rate_pct:.2f}%",
             f"Profit factor: {report.profit_factor:.2f}",
             f"Max drawdown: {report.max_drawdown_pct:.2f}%",
+            f"Profit target reached: {report.profit_target_reached} ({report.net_return_pct:.2f}% vs {report.target_return_pct:.2f}%)",
             f"Total costs: {report.total_costs:.2f}",
             f"Trade log: {trades_path}",
             f"Trade analysis: {analysis_path}",
@@ -140,8 +148,8 @@ def run_profile(config: SystemConfig, profile: StrategyProfile) -> list[str]:
             f"Agent catalog: {catalog_path}",
             f"Experiment history: {history_path}",
             f"Run comparison: {comparison_path}",
-            f"FTMO pass: {report.passed}",
-            f"FTMO reasons: {', '.join(report.reasons) if report.reasons else 'none'}",
+            f"Risk/evaluation pass: {report.passed}",
+            f"Risk/evaluation reasons: {', '.join(report.reasons) if report.reasons else 'none'}",
             f"Kill-switch triggered: {result.locked}",
         ]
     except Exception as exc:

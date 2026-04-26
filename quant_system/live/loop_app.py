@@ -6,14 +6,14 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
-from quant_system.artifacts import ensure_dir
+from quant_system.artifacts import ensure_dir, live_venue_dir
 from quant_system.config import SystemConfig
 from quant_system.integrations.mt5 import MT5Error
 from quant_system.interpreter.reporting import generate_market_interpreter_report
 from quant_system.interpreter.research import generate_interpreter_research_report
 from quant_system.live.activity import generate_improvement_activity_report
 from quant_system.live.adaptation import adapt_deployment_for_execution, generate_execution_adaptation_report, summarize_execution_adaptation
-from quant_system.live.app import resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
+from quant_system.live.app import configure_live_runtime, resolve_live_deployment_paths, resolve_live_portfolio_weights, resolve_live_strategy_weights
 from quant_system.live.autopsy import generate_live_research_queue, maybe_run_auto_research
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.live.health import generate_live_health_report
@@ -24,10 +24,11 @@ from quant_system.live.tca_impact import generate_tca_impact_report
 from quant_system.tca import generate_tca_report, summarize_tca_overview
 
 
-STATE_PATH = LIVE_ARTIFACTS_DIR / "state" / "loop_state.json"
+def _state_path(venue_key: str) -> Path:
+    return live_venue_dir(venue_key) / "state" / "loop_state.json"
 
 
-def _load_state(state_path: Path = STATE_PATH) -> dict[str, dict[str, object]]:
+def _load_state(state_path: Path) -> dict[str, dict[str, object]]:
     if not state_path.exists():
         return {}
     try:
@@ -36,13 +37,13 @@ def _load_state(state_path: Path = STATE_PATH) -> dict[str, dict[str, object]]:
         return {}
 
 
-def _save_state(state: dict[str, dict[str, object]], state_path: Path = STATE_PATH) -> None:
+def _save_state(state: dict[str, dict[str, object]], state_path: Path) -> None:
     ensure_dir(state_path.parent)
     state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def _action_key(symbol: str, candidate_name: str) -> str:
-    return f"{symbol}::{candidate_name}"
+def _action_key(venue_key: str, symbol: str, candidate_name: str) -> str:
+    return f"{venue_key}::{symbol}::{candidate_name}"
 
 
 def _normalize_action_label(value: str) -> str:
@@ -55,12 +56,13 @@ def _normalize_action_label(value: str) -> str:
 
 def should_skip_duplicate(
     state: dict[str, dict[str, object]],
+    venue_key: str,
     symbol: str,
     action,
 ) -> bool:
     if action.signal_timestamp is None:
         return False
-    key = _action_key(symbol, action.candidate_name)
+    key = _action_key(venue_key, symbol, action.candidate_name)
     previous = state.get(key)
     if previous is None:
         return False
@@ -73,10 +75,11 @@ def should_skip_duplicate(
 
 def record_action_state(
     state: dict[str, dict[str, object]],
+    venue_key: str,
     symbol: str,
     action,
 ) -> None:
-    key = _action_key(symbol, action.candidate_name)
+    key = _action_key(venue_key, symbol, action.candidate_name)
     state[key] = {
         "signal_timestamp": action.signal_timestamp.isoformat() if action.signal_timestamp else "",
         "signal_side": action.signal_side.value,
@@ -132,21 +135,26 @@ def _run_symbol_cycle(
         )
         try:
             result = executor.run_once(
-                should_skip_duplicate=lambda action, symbol=deployment.symbol: should_skip_duplicate(state, symbol, action)
+                should_skip_duplicate=lambda action, symbol=deployment.symbol, venue=deployment.venue_key: should_skip_duplicate(
+                    state,
+                    venue,
+                    symbol,
+                    action,
+                )
             )
         except MT5Error as exc:
-            incident_path = write_live_incident(deployment.symbol, str(path), str(exc))
+            incident_path = write_live_incident(deployment.symbol, str(path), str(exc), deployment.venue_key)
             print(f"{deployment.symbol}: MT5 live run failed: {exc}")
             print(f"Incident log: {incident_path}")
             continue
 
         filtered_actions = []
         for action in result.actions:
-            record_action_state(state, result.symbol, action)
+            record_action_state(state, deployment.venue_key, result.symbol, action)
             filtered_actions.append(asdict(action))
-        _save_state(state)
+        _save_state(state, _state_path(deployment.venue_key))
 
-        journal_path = write_live_run_journal(result, str(path))
+        journal_path = write_live_run_journal(result, str(path), deployment.venue_key)
         print(f"Symbol: {result.symbol}")
         print(f"Broker symbol: {result.broker_symbol}")
         print(f"Symbol status: {deployment.symbol_status}")
@@ -273,12 +281,12 @@ def _run_cycle_reports(config: SystemConfig) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     args = argv or []
-    config = SystemConfig()
-    paths = resolve_live_deployment_paths(args)
+    config, _symbols = configure_live_runtime(args)
+    paths = resolve_live_deployment_paths(args, config)
     if not paths:
         print(
             "No live deployment artifacts found. Run main_symbol_research.py first so it exports "
-            "artifacts/deploy/<symbol>/live.json and stores research outputs under artifacts/research/<symbol>/."
+            "artifacts/deploy/<venue>/<symbol>/live.json and stores research outputs under artifacts/research/<symbol>/."
         )
         return 1
 
@@ -293,7 +301,7 @@ def main(argv: list[str] | None = None) -> int:
         f"terminal_path={config.mt5.terminal_path}"
     )
     _print_loaded_deployments(paths)
-    state = _load_state()
+    state = _load_state(_state_path(str(config.mt5.prop_broker)))
 
     while True:
         cycle_started = datetime.now(UTC).isoformat()
@@ -301,4 +309,3 @@ def main(argv: list[str] | None = None) -> int:
         _run_symbol_cycle(paths, config, state)
         _run_cycle_reports(config)
         time.sleep(max(config.mt5.poll_seconds, 5))
-

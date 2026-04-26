@@ -16,16 +16,16 @@ def _env_int(name: str, default: int) -> int:
     return int(os.getenv(name, str(default)))
 
 
-def _activity_log_path(symbol: str) -> Path:
-    return live_symbol_dir(symbol) / "improvement_activity.jsonl"
+def _activity_log_path(symbol: str, venue_key: str) -> Path:
+    return live_symbol_dir(symbol, venue_key) / "improvement_activity.jsonl"
 
 
-def _activity_state_path(symbol: str) -> Path:
-    return live_symbol_dir(symbol) / "improvement_activity_state.json"
+def _activity_state_path(symbol: str, venue_key: str) -> Path:
+    return live_symbol_dir(symbol, venue_key) / "improvement_activity_state.json"
 
 
-def _load_state(symbol: str) -> dict[str, Any]:
-    path = _activity_state_path(symbol)
+def _load_state(symbol: str, venue_key: str) -> dict[str, Any]:
+    path = _activity_state_path(symbol, venue_key)
     if not path.exists():
         return {"dedupe": {}}
     try:
@@ -38,8 +38,8 @@ def _load_state(symbol: str) -> dict[str, Any]:
     return payload
 
 
-def _save_state(symbol: str, state: dict[str, Any]) -> None:
-    _activity_state_path(symbol).write_text(json.dumps(state, indent=2), encoding="utf-8")
+def _save_state(symbol: str, venue_key: str, state: dict[str, Any]) -> None:
+    _activity_state_path(symbol, venue_key).write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
 def _event_digest(payload: dict[str, Any]) -> str:
@@ -47,8 +47,8 @@ def _event_digest(payload: dict[str, Any]) -> str:
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
-def _append_event(symbol: str, payload: dict[str, Any]) -> bool:
-    state = _load_state(symbol)
+def _append_event(symbol: str, venue_key: str, payload: dict[str, Any]) -> bool:
+    state = _load_state(symbol, venue_key)
     dedupe: dict[str, str] = dict(state.get("dedupe", {}))
     cooldown_seconds = _env_int("LIVE_ACTIVITY_EVENT_COOLDOWN_SECONDS", 15)
     event_core = {
@@ -71,12 +71,13 @@ def _append_event(symbol: str, payload: dict[str, Any]) -> bool:
         except ValueError:
             pass
     payload = dict(payload)
+    payload["venue_key"] = venue_key
     payload["recorded_at"] = now.isoformat()
-    with _activity_log_path(symbol).open("a", encoding="utf-8") as handle:
+    with _activity_log_path(symbol, venue_key).open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(payload, default=str) + "\n")
     dedupe[digest] = payload["recorded_at"]
     state["dedupe"] = dedupe
-    _save_state(symbol, state)
+    _save_state(symbol, venue_key, state)
     return True
 
 
@@ -99,7 +100,7 @@ def record_adaptation_result(result) -> int:
             "local_rank_label": item.local_rank_label,
             "guardrail_reason": result.guardrail_reason,
         }
-        recorded += 1 if _append_event(result.symbol, payload) else 0
+        recorded += 1 if _append_event(result.symbol, result.venue_key, payload) else 0
     if result.guardrail_reason != "none":
         payload = {
             "category": "guardrail",
@@ -111,7 +112,7 @@ def record_adaptation_result(result) -> int:
             "location": str(result.report_path),
             "fill_count": result.fill_count,
         }
-        recorded += 1 if _append_event(result.symbol, payload) else 0
+        recorded += 1 if _append_event(result.symbol, result.venue_key, payload) else 0
     return recorded
 
 
@@ -131,13 +132,14 @@ def record_research_directives(directives: list[Any]) -> int:
             "live_fill_count": item.live_fill_count,
             "structured_experiments": [experiment.experiment_type for experiment in item.structured_experiments],
         }
-        recorded += 1 if _append_event(item.symbol, payload) else 0
+        recorded += 1 if _append_event(item.symbol, item.venue_key, payload) else 0
     return recorded
 
 
 def record_research_run(
     *,
     symbol: str,
+    venue_key: str,
     broker_symbol: str,
     candidate_name: str,
     experiment_type: str,
@@ -154,12 +156,12 @@ def record_research_run(
         "location": " ".join(command),
         "return_code": return_code,
     }
-    return _append_event(symbol, payload)
+    return _append_event(symbol, venue_key, payload)
 
 
 def _load_activity_events() -> list[dict[str, Any]]:
     events: list[dict[str, Any]] = []
-    for path in sorted(LIVE_DIR.glob("*/improvement_activity.jsonl")) if LIVE_DIR.exists() else []:
+    for path in sorted(LIVE_DIR.rglob("improvement_activity.jsonl")) if LIVE_DIR.exists() else []:
         try:
             for line in path.read_text(encoding="utf-8").splitlines():
                 if not line.strip():
@@ -209,7 +211,10 @@ def generate_improvement_activity_report() -> Path:
         last_research_trigger = next((item for item in symbol_events if item.get("category") == "research_trigger"), None)
         last_research_run = next((item for item in symbol_events if item.get("category") == "research_run"), None)
         broker_symbol = next((str(item.get("broker_symbol", "")) for item in symbol_events if item.get("broker_symbol")), "")
-        lines.append(f"{symbol}: events={len(symbol_events)} broker_symbol={broker_symbol or 'n/a'}")
+        venue_key = next((str(item.get("venue_key", "")) for item in symbol_events if item.get("venue_key")), "")
+        lines.append(
+            f"{symbol}: events={len(symbol_events)} broker_symbol={broker_symbol or 'n/a'} venue={venue_key or 'n/a'}"
+        )
         lines.append("  actions: " + ", ".join(f"{key}={value}" for key, value in symbol_action_counts.most_common(8)))
         if last_adaptation is not None:
             lines.append(

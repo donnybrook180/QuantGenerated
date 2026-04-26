@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import copy
 
+from quant_system.artifacts import symbol_profile_name
+
 
 def run_symbol_research_orchestration(
     data_symbol: str,
@@ -295,7 +297,7 @@ def run_symbol_research_orchestration(
     viable_ranked = [row for row in ranked if meets_viability_fn(row, resolved.profile_symbol)]
     best = viable_ranked[0] if viable_ranked else None
     recommended = [row.name for row in viable_ranked[:3]]
-    profile_name = f"symbol::{symbol_slug_fn(resolved.profile_symbol)}"
+    profile_name = symbol_profile_name(resolved.profile_symbol, str(config.mt5.prop_broker))
 
     execution_candidate_rows = []
     for row in results:

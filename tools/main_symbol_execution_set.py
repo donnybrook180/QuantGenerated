@@ -4,13 +4,14 @@ import sys
 
 import _bootstrap  # noqa: F401
 
+from quant_system.artifacts import parse_symbol_profile_name, symbol_profile_name
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
-from quant_system.symbol_research import _symbol_slug
 
 
 def _resolve_requested_profiles(store: ExperimentStore, args: list[str]) -> list[str]:
     available = store.list_symbol_execution_set_profiles()
+    config = SystemConfig()
     if not args:
         return available
 
@@ -22,13 +23,20 @@ def _resolve_requested_profiles(store: ExperimentStore, args: list[str]) -> list
         if candidate in available:
             resolved.append(candidate)
             continue
-        slug_profile = f"symbol::{_symbol_slug(candidate)}"
-        if slug_profile in available:
-            resolved.append(slug_profile)
+        venue_profile = symbol_profile_name(candidate, str(config.mt5.prop_broker))
+        if venue_profile in available:
+            resolved.append(venue_profile)
             continue
-        compact_symbol_profile = f"symbol::{candidate}"
-        if compact_symbol_profile in available:
-            resolved.append(compact_symbol_profile)
+        matched_profile = next(
+            (
+                profile_name
+                for profile_name in available
+                if (parsed := parse_symbol_profile_name(profile_name)) is not None and parsed[1] == candidate.lower()
+            ),
+            None,
+        )
+        if matched_profile is not None:
+            resolved.append(matched_profile)
             continue
         resolved.append(candidate)
     return resolved

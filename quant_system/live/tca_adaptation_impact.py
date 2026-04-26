@@ -5,7 +5,7 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
+from quant_system.artifacts import list_deployment_paths, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.live.adaptation import adapt_deployment_for_execution
 from quant_system.live.deploy import load_symbol_deployment
@@ -40,7 +40,7 @@ def build_tca_adaptation_impact_rows(config: SystemConfig | None = None) -> list
         for row in build_tca_impact_rows(config)
     }
     rows: list[TCAAdaptationImpactRow] = []
-    for path in sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []:
+    for path in list_deployment_paths():
         baseline = load_symbol_deployment(path)
         adapted, adaptation = adapt_deployment_for_execution(baseline, config)
         adapted_actions = {item.candidate_name: item for item in adaptation.strategy_actions}

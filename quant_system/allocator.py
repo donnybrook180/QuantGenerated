@@ -5,7 +5,7 @@ from datetime import datetime
 import math
 
 from quant_system.ai.storage import ExperimentStore
-from quant_system.artifacts import system_reports_dir
+from quant_system.artifacts import list_deployment_paths, parse_symbol_profile_name, symbol_profile_name, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.data.market_data import DuckDBMarketDataStore
 from quant_system.live.deploy import DEPLOY_DIR, load_symbol_deployment
@@ -341,12 +341,13 @@ def _row_to_allocation(
 
 def _resolve_profile_symbol(symbol_or_profile: str) -> tuple[str, str]:
     raw = symbol_or_profile.strip()
-    if raw.startswith("symbol::"):
-        profile_name = raw
-        symbol = raw.split("::", 1)[1].upper()
-        return profile_name, symbol
+    parsed = parse_symbol_profile_name(raw)
+    if parsed is not None:
+        _venue_key, symbol_slug = parsed
+        return raw, symbol_slug.upper()
     resolved = resolve_symbol_request(raw)
-    return f"symbol::{_symbol_slug(resolved.profile_symbol)}", resolved.profile_symbol
+    config = SystemConfig()
+    return symbol_profile_name(resolved.profile_symbol, str(config.mt5.prop_broker)), resolved.profile_symbol
 
 
 def _prepare_scored_rows(inputs: list[AllocationInput]) -> list[tuple[str, str, dict[str, object], float]]:
@@ -402,13 +403,15 @@ def build_portfolio_allocation(symbols_or_profiles: list[str] | None = None) -> 
     else:
         requested_profiles = []
         if DEPLOY_DIR.exists():
-            for path in sorted(DEPLOY_DIR.glob("*/live.json")):
+            for path in list_deployment_paths():
                 deployment = load_symbol_deployment(path)
                 requested_profiles.append((deployment.profile_name, deployment.symbol.upper()))
         else:
             for profile_name in store.list_symbol_research_profiles():
-                if profile_name.startswith("symbol::"):
-                    requested_profiles.append((profile_name, profile_name.split("::", 1)[1].upper()))
+                parsed = parse_symbol_profile_name(profile_name)
+                if parsed is not None:
+                    _venue_key, symbol_slug = parsed
+                    requested_profiles.append((profile_name, symbol_slug.upper()))
 
     inputs: list[AllocationInput] = []
     for profile_name, symbol in requested_profiles:

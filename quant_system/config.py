@@ -15,6 +15,40 @@ def _env_tuple(name: str, default: str = "") -> tuple[str, ...]:
     return tuple(part.strip() for part in raw.split(",") if part.strip())
 
 
+def _normalize_broker_list(raw_values: tuple[str, ...]) -> tuple[str, ...]:
+    normalized = [normalize_venue_key(value) for value in raw_values if value.strip()]
+    return tuple(dict.fromkeys(normalized))
+
+
+def _current_prop_broker() -> str:
+    return normalize_venue_key(os.getenv("PROP_BROKER", "generic"))
+
+
+def _broker_env_prefix(venue_key: str) -> str:
+    return f"MT5_{normalize_venue_key(venue_key).upper()}"
+
+
+def resolve_mt5_credentials_for_venue(venue_key: str) -> dict[str, str | int | None]:
+    normalized_venue = normalize_venue_key(venue_key)
+    env_prefix = _broker_env_prefix(normalized_venue)
+    login_raw = os.getenv(f"{env_prefix}_LOGIN") or os.getenv("MT5_LOGIN")
+    return {
+        "prop_broker": normalized_venue,
+        "terminal_path": os.getenv(f"{env_prefix}_TERMINAL_PATH") or os.getenv("MT5_TERMINAL_PATH"),
+        "login": int(login_raw) if login_raw else None,
+        "password": os.getenv(f"{env_prefix}_PASSWORD") or os.getenv("MT5_PASSWORD"),
+        "server": os.getenv(f"{env_prefix}_SERVER") or os.getenv("MT5_SERVER"),
+    }
+
+
+def resolve_live_prop_brokers() -> tuple[str, ...]:
+    brokers = _normalize_broker_list(_env_tuple("LIVE_PROP_BROKERS"))
+    if brokers:
+        return brokers
+    broker = _current_prop_broker()
+    return () if broker == "generic" else (broker,)
+
+
 @dataclass(frozen=True, slots=True)
 class AIEndpointConfig:
     slot_name: str
@@ -112,6 +146,15 @@ class OptimizationConfig:
     )
 
 
+@dataclass(frozen=True, slots=True)
+class BrokerCredentialConfig:
+    prop_broker: str
+    terminal_path: str | None
+    login: int | None
+    password: str | None
+    server: str | None
+
+
 @dataclass(slots=True)
 class MT5Config:
     prop_broker: str = field(default_factory=lambda: normalize_venue_key(os.getenv("PROP_BROKER", "generic")))
@@ -122,13 +165,18 @@ class MT5Config:
     allow_netting_multi_strategy: bool = field(
         default_factory=lambda: os.getenv("MT5_ALLOW_NETTING_MULTI_STRATEGY", "false").lower() == "true"
     )
-    terminal_path: str | None = field(default_factory=lambda: os.getenv("MT5_TERMINAL_PATH"))
-    login: int | None = field(default_factory=lambda: int(value) if (value := os.getenv("MT5_LOGIN")) else None)
-    password: str | None = field(default_factory=lambda: os.getenv("MT5_PASSWORD"))
-    server: str | None = field(default_factory=lambda: os.getenv("MT5_SERVER"))
+    terminal_path: str | None = field(default_factory=lambda: resolve_mt5_credentials_for_venue(_current_prop_broker())["terminal_path"])
+    login: int | None = field(default_factory=lambda: resolve_mt5_credentials_for_venue(_current_prop_broker())["login"])
+    password: str | None = field(default_factory=lambda: resolve_mt5_credentials_for_venue(_current_prop_broker())["password"])
+    server: str | None = field(default_factory=lambda: resolve_mt5_credentials_for_venue(_current_prop_broker())["server"])
     magic_number: int = 260405
     deviation: int = 10
     database_path: str = "quant_data.duckdb"
+
+
+@dataclass(slots=True)
+class LiveConfig:
+    prop_brokers: tuple[str, ...] = field(default_factory=resolve_live_prop_brokers)
 
 
 @dataclass(slots=True)
@@ -291,6 +339,7 @@ class SystemConfig:
     agents: AgentConfig = field(default_factory=AgentConfig)
     optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
     mt5: MT5Config = field(default_factory=MT5Config)
+    live: LiveConfig = field(default_factory=LiveConfig)
     market_data: MarketDataConfig = field(default_factory=MarketDataConfig)
     macro_calendar: MacroCalendarConfig = field(default_factory=MacroCalendarConfig)
     instrument: InstrumentConfig = field(default_factory=InstrumentConfig)
@@ -298,3 +347,17 @@ class SystemConfig:
     ftmo: FTMOEvaluationConfig = field(default_factory=FTMOEvaluationConfig)
     ai: AIConfig = field(default_factory=AIConfig)
     postgres: PostgresConfig = field(default_factory=PostgresConfig)
+
+
+def credential_config_for_venue(venue_key: str) -> BrokerCredentialConfig:
+    return BrokerCredentialConfig(**resolve_mt5_credentials_for_venue(venue_key))
+
+
+def apply_mt5_broker(config: SystemConfig, venue_key: str) -> SystemConfig:
+    credentials = credential_config_for_venue(venue_key)
+    config.mt5.prop_broker = credentials.prop_broker
+    config.mt5.terminal_path = credentials.terminal_path
+    config.mt5.login = credentials.login
+    config.mt5.password = credentials.password
+    config.mt5.server = credentials.server
+    return config

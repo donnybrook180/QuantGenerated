@@ -15,6 +15,7 @@ def _state(symbol: str, *, no_trade_reason: str = "") -> InterpreterState:
     return InterpreterState(
         symbol=symbol,
         broker_symbol=symbol,
+        venue_key="blue_guardian",
         generated_at=datetime(2026, 1, 1, tzinfo=UTC),
         legacy_regime_label="calm_range",
         unified_regime_label="orderly_range",
@@ -59,8 +60,8 @@ class InterpreterReportingTests(unittest.TestCase):
             reports_dir = base / "reports"
             live_dir = base / "live"
             reports_dir.mkdir(parents=True, exist_ok=True)
-            def _live_symbol_dir(symbol: str) -> Path:
-                path = live_dir / symbol.lower()
+            def _live_symbol_dir(symbol: str, venue_key: str = "generic") -> Path:
+                path = live_dir / venue_key / symbol.lower()
                 path.mkdir(parents=True, exist_ok=True)
                 return path
             with patch("quant_system.interpreter.reporting.system_reports_dir", return_value=reports_dir), patch(
@@ -74,7 +75,7 @@ class InterpreterReportingTests(unittest.TestCase):
 
             report_text = report_path.read_text(encoding="utf-8")
             report_json = json.loads(report_path.with_suffix(".json").read_text(encoding="utf-8"))
-            artifacts = sorted(live_dir.glob("*/market_interpreter.json"))
+            artifacts = sorted(live_dir.glob("*/*/market_interpreter.json"))
 
         self.assertIn("EURUSD: bias=neutral", report_text)
         self.assertIn("no_trade_reason: pre_event_window", report_text)

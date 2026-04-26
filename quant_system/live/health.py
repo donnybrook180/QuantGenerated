@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from quant_system.ai.storage import ExperimentStore
-from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
+from quant_system.artifacts import list_deployment_paths, resolve_live_symbol_dir, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.interpreter.app import build_all_market_interpreter_states
 from quant_system.interpreter.research import generate_interpreter_research_report
@@ -18,6 +18,7 @@ from quant_system.live.deploy import load_symbol_deployment
 from quant_system.live.tca_adaptation_impact import generate_tca_adaptation_impact_report
 from quant_system.live.tca_impact import build_tca_impact_rows, generate_tca_impact_report
 from quant_system.tca import generate_tca_report, summarize_tca_overview
+from quant_system.venues import normalize_venue_key
 
 
 def generate_live_health_report(config: SystemConfig | None = None) -> Path:
@@ -35,7 +36,11 @@ def build_live_health_report_text(config: SystemConfig) -> str:
 
 def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
     store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
-    deployment_paths = sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []
+    deployment_paths = [
+        path
+        for path in list_deployment_paths()
+        if normalize_venue_key(load_symbol_deployment(path).venue_key) == normalize_venue_key(str(config.mt5.prop_broker))
+    ]
     tca_report = generate_tca_report(config)
     impact_rows = build_tca_impact_rows(config)
     impact_report = generate_tca_impact_report(config)
@@ -60,9 +65,9 @@ def build_live_health_snapshot(config: SystemConfig) -> dict[str, object]:
         deployment = load_symbol_deployment(path)
         adapted_deployment, adaptation = adapt_deployment_for_execution(deployment, config)
         symbol = deployment.symbol
-        live_symbol_dir = Path("artifacts") / "live" / path.parent.name
-        latest_journal = _latest_file(live_symbol_dir / "journals", ".json")
-        latest_incident = _latest_file(live_symbol_dir / "incidents", ".txt")
+        symbol_live_dir = resolve_live_symbol_dir(symbol, deployment.venue_key)
+        latest_journal = _latest_file(symbol_live_dir / "journals", ".json")
+        latest_incident = _latest_file(symbol_live_dir / "incidents", ".txt")
         fill_summary = store.load_mt5_fill_summary(deployment.broker_symbol)
         symbol_tca = generate_tca_report(config, broker_symbol=deployment.broker_symbol)
         latest_journal_summary = _latest_journal_summary(latest_journal)

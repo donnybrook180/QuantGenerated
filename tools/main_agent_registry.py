@@ -4,15 +4,16 @@ import sys
 
 import _bootstrap  # noqa: F401
 
+from quant_system.artifacts import parse_symbol_profile_name, symbol_profile_name
 from quant_system.ai.models import AgentRegistryRecord
 from quant_system.ai.registry import render_agent_catalog, render_agent_registry
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
-from quant_system.symbol_research import _symbol_slug
 
 
 def _resolve_requested_profiles(store: ExperimentStore, args: list[str], active_profiles: list[str]) -> list[str]:
     available = store.list_agent_catalog_profiles()
+    config = SystemConfig()
     if not args:
         return available or active_profiles
 
@@ -24,13 +25,20 @@ def _resolve_requested_profiles(store: ExperimentStore, args: list[str], active_
         if candidate in available:
             resolved.append(candidate)
             continue
-        slug_profile = f"symbol::{_symbol_slug(candidate)}"
-        if slug_profile in available:
-            resolved.append(slug_profile)
+        venue_profile = symbol_profile_name(candidate, str(config.mt5.prop_broker))
+        if venue_profile in available:
+            resolved.append(venue_profile)
             continue
-        compact_symbol_profile = f"symbol::{candidate}"
-        if compact_symbol_profile in available:
-            resolved.append(compact_symbol_profile)
+        legacy_match = next(
+            (
+                profile_name
+                for profile_name in available
+                if (parsed := parse_symbol_profile_name(profile_name)) is not None and parsed[1] == candidate.lower()
+            ),
+            None,
+        )
+        if legacy_match is not None:
+            resolved.append(legacy_match)
             continue
         resolved.append(candidate)
     return resolved

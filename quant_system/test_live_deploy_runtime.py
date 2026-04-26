@@ -8,7 +8,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from quant_system.config import SystemConfig
-from quant_system.live.deploy import build_symbol_deployment, load_symbol_deployment
+from quant_system.live.deploy import build_symbol_deployment, deployment_path_for_symbol, export_symbol_deployment, load_symbol_deployment
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.live.runtime import MT5LiveExecutor, _mt5_timeframe_from_variant
 from quant_system.models import Side
@@ -100,6 +100,45 @@ class LiveDeployRuntimeTests(unittest.TestCase):
         self.assertIn("news_window_trade_share_elevated", strategy.prop_fit_reasons)
         self.assertAlmostEqual(strategy.stress_survival_score, 0.75, places=6)
         self.assertIn("blocked_by_interpreter_risk_elevated", strategy.interpreter_fit_reasons)
+
+    def test_export_symbol_deployment_writes_venue_aware_path(self) -> None:
+        deployment = build_symbol_deployment(
+            profile_name="symbol::blue_guardian::eurusd",
+            symbol="EURUSD",
+            data_symbol="C:EURUSD",
+            broker_symbol="EURUSD",
+            research_run_id=10,
+            execution_set_id=20,
+            execution_validation_summary="accepted",
+            symbol_status="live_ready",
+            selected_candidates=[make_candidate_row()],
+            venue_key="blue_guardian",
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            with patch(
+                "quant_system.live.deploy.deployment_path",
+                side_effect=lambda symbol, venue_key="generic": (base / venue_key / symbol.lower()).mkdir(parents=True, exist_ok=True) or (base / venue_key / symbol.lower() / "live.json"),
+            ):
+                path = export_symbol_deployment(deployment)
+
+        self.assertEqual(path, base / "blue_guardian" / "eurusd" / "live.json")
+
+    def test_deployment_path_for_symbol_falls_back_to_legacy_layout(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            current = base / "blue_guardian" / "eurusd" / "live.json"
+            legacy = base / "eurusd" / "live.json"
+            legacy.parent.mkdir(parents=True, exist_ok=True)
+            legacy.write_text("{}", encoding="utf-8")
+            with patch("quant_system.live.deploy.deployment_path", return_value=current), patch(
+                "quant_system.live.deploy.resolve_deployment_path",
+                side_effect=lambda symbol, venue_key="generic": legacy if venue_key == "blue_guardian" else current,
+            ):
+                path = deployment_path_for_symbol("EURUSD", "blue_guardian")
+
+        self.assertEqual(path, legacy)
 
     def test_load_symbol_deployment_infers_live_ready_when_status_missing_and_core_strategy_exists(self) -> None:
         payload = {

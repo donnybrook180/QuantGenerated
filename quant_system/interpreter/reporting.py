@@ -12,7 +12,7 @@ from quant_system.interpreter.models import InterpreterState
 
 
 def _write_symbol_artifact(state: InterpreterState) -> Path:
-    path = live_symbol_dir(state.symbol) / "market_interpreter.json"
+    path = live_symbol_dir(state.symbol, state.venue_key) / "market_interpreter.json"
     path.write_text(json.dumps(asdict(state), indent=2, default=str), encoding="utf-8")
     return path
 

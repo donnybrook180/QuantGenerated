@@ -68,7 +68,7 @@ def _build_directive(state: InterpreterState) -> InterpreterResearchDirective | 
     if not labels:
         return None
     objective = "Improve archetype selection using market interpreter state and execution context."
-    report_path = live_symbol_dir(state.symbol) / "interpreter_research_trigger.json"
+    report_path = live_symbol_dir(state.symbol, state.venue_key) / "interpreter_research_trigger.json"
     return InterpreterResearchDirective(
         symbol=state.symbol,
         broker_symbol=state.broker_symbol,

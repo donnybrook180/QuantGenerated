@@ -11,6 +11,10 @@ from quant_system.symbol_research import CandidateSpec, run_symbol_research
 from quant_system.test_fixtures import make_candidate_result, make_execution_result, make_feature
 
 
+def _deployment_artifact_path(deploy_root: Path, symbol: str, venue_key: str = "blue_guardian") -> Path:
+    return deploy_root / venue_key / symbol.lower() / "live.json"
+
+
 class _FakeExperimentStore:
     def __init__(self, database_path: str) -> None:
         self.database_path = database_path
@@ -93,7 +97,8 @@ class ResearchEndToEndTests(unittest.TestCase):
 
         self.assertIn("Best candidate: forex_breakout_momentum__15m_overlap", lines)
         self.assertIn("Recommended active agents: forex_breakout_momentum__15m_overlap", lines)
-        deployment = load_symbol_deployment(deploy_dir / "eurusd" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "EURUSD"))
+        self.assertEqual(deployment.profile_name, "symbol::blue_guardian::eurusd")
         self.assertEqual(len(deployment.strategies), 1)
         self.assertEqual(deployment.strategies[0].candidate_name, "forex_breakout_momentum__15m_overlap")
         self.assertEqual(deployment.strategies[0].variant_label, "15m_overlap")
@@ -164,7 +169,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         )
 
         self.assertIn("Best candidate: trend__4h_overlap", lines)
-        deployment = load_symbol_deployment(deploy_dir / "xauusd" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "XAUUSD"))
         self.assertEqual(deployment.strategies[0].variant_label, "4h_overlap")
         csv_text = (reports_dir / "xauusd" / "reports" / "symbol_research.csv").read_text(encoding="utf-8")
         self.assertIn("trend__4h_overlap", csv_text)
@@ -246,7 +251,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         )
 
         self.assertTrue(any("Execution set: opening_range_breakout__15m_overlap, opening_range_short_breakdown__15m_overlap" in line for line in lines))
-        deployment = load_symbol_deployment(deploy_dir / "eurusd" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "EURUSD"))
         self.assertEqual(len(deployment.strategies), 2)
 
     def test_research_end_to_end_returns_research_only_when_no_candidate_is_viable(self) -> None:
@@ -288,7 +293,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         self.assertIn("Best candidate: none", lines)
         self.assertIn("Recommended active agents: none", lines)
         self.assertIn("Symbol status: research_only", lines)
-        deployment = load_symbol_deployment(deploy_dir / "us100" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "US100"))
         self.assertEqual(deployment.symbol_status, "research_only")
         self.assertEqual(len(deployment.strategies), 0)
 
@@ -342,7 +347,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         )
 
         self.assertIn("Symbol status: research_only", lines)
-        deployment = load_symbol_deployment(deploy_dir / "btc" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "BTC"))
         self.assertEqual(deployment.symbol_status, "research_only")
         self.assertEqual(len(deployment.strategies), 0)
 
@@ -431,7 +436,7 @@ class ResearchEndToEndTests(unittest.TestCase):
         self.assertIn("forex_breakout_momentum__15m_overlap", report_text)
         self.assertIn("why_rejected_for_blue_guardian", report_text)
         self.assertIn("forex_short_breakdown_momentum__15m_overlap", report_text)
-        deployment = load_symbol_deployment(deploy_dir / "eurusd" / "live.json")
+        deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "EURUSD"))
         self.assertEqual(deployment.venue_basis, "blue_guardian_mt5")
         self.assertEqual(deployment.prop_viability_label, "caution")
         self.assertEqual(tuple(deployment.top_caution_reasons), ("news_window_trade_share_elevated",))
@@ -527,8 +532,8 @@ class ResearchEndToEndTests(unittest.TestCase):
             "quant_system.symbol_research.research_reports_dir",
             side_effect=lambda s: (reports_root / s.lower() / "reports").mkdir(parents=True, exist_ok=True) or (reports_root / s.lower() / "reports"),
         ), patch(
-            "quant_system.live.deploy.deploy_symbol_dir",
-            side_effect=lambda s: (deploy_root / s.lower()).mkdir(parents=True, exist_ok=True) or (deploy_root / s.lower()),
+            "quant_system.live.deploy.deployment_path",
+            side_effect=lambda symbol, venue_key="generic": (deploy_root / venue_key / symbol.lower()).mkdir(parents=True, exist_ok=True) or (deploy_root / venue_key / symbol.lower() / "live.json"),
         ):
             lines = run_symbol_research(symbol)
             return lines, reports_root, deploy_root

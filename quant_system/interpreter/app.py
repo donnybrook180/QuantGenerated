@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from quant_system.artifacts import DEPLOY_DIR
+from quant_system.artifacts import list_deployment_paths
 from quant_system.config import SystemConfig
 from quant_system.interpreter.engines import (
     build_explanation,
@@ -23,6 +23,7 @@ from quant_system.interpreter.models import InterpreterState
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.live.models import SymbolDeployment
 from quant_system.regime import classify_regime, map_regime_label_to_unified
+from quant_system.venues import normalize_venue_key
 
 
 def build_market_interpreter_state(deployment: SymbolDeployment, config: SystemConfig | None = None) -> InterpreterState:
@@ -33,6 +34,7 @@ def build_market_interpreter_state(deployment: SymbolDeployment, config: SystemC
         return InterpreterState(
             symbol=deployment.symbol,
             broker_symbol=deployment.broker_symbol,
+            venue_key=deployment.venue_key,
             generated_at=generated_at,
             legacy_regime_label="unknown",
             unified_regime_label="unknown",
@@ -79,6 +81,7 @@ def build_market_interpreter_state(deployment: SymbolDeployment, config: SystemC
     state = InterpreterState(
         symbol=deployment.symbol,
         broker_symbol=deployment.broker_symbol,
+        venue_key=deployment.venue_key,
         generated_at=generated_at,
         legacy_regime_label=legacy_regime_label,
         unified_regime_label=unified_regime_label,
@@ -106,7 +109,10 @@ def build_market_interpreter_state(deployment: SymbolDeployment, config: SystemC
 def build_all_market_interpreter_states(config: SystemConfig | None = None) -> list[InterpreterState]:
     config = config or SystemConfig()
     states: list[InterpreterState] = []
-    for path in sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []:
-        states.append(build_market_interpreter_state(load_symbol_deployment(path), config))
+    for path in list_deployment_paths():
+        deployment = load_symbol_deployment(path)
+        if normalize_venue_key(deployment.venue_key) != normalize_venue_key(str(config.mt5.prop_broker)):
+            continue
+        states.append(build_market_interpreter_state(deployment, config))
     states.sort(key=lambda item: (item.risk_posture, item.execution_regime, item.symbol))
     return states

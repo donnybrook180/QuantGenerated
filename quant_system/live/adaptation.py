@@ -12,6 +12,7 @@ from quant_system.config import SystemConfig
 from quant_system.live.activity import record_adaptation_result
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 from quant_system.tca import TCAAggregate, generate_tca_report
+from quant_system.venues import normalize_venue_key
 
 
 def _env_float(name: str, default: float) -> float:
@@ -40,6 +41,7 @@ class StrategyAdaptation:
 class ExecutionAdaptationResult:
     symbol: str
     broker_symbol: str
+    venue_key: str
     action: str
     adapted: bool
     reason: str
@@ -331,6 +333,7 @@ def adapt_deployment_for_execution(deployment: SymbolDeployment, config: SystemC
     result = ExecutionAdaptationResult(
         symbol=adapted.symbol,
         broker_symbol=adapted.broker_symbol,
+        venue_key=adapted.venue_key,
         action=action,
         adapted=action not in {"healthy", "insufficient_data"},
         reason=reason,
@@ -361,11 +364,12 @@ def _write_adaptation_artifact(
     overview: TCAAggregate | None,
     strategy_actions: list[StrategyAdaptation],
 ) -> Path:
-    path = live_symbol_dir(deployment.symbol) / "execution_adaptation.json"
+    path = live_symbol_dir(deployment.symbol, deployment.venue_key) / "execution_adaptation.json"
     payload = {
         "generated_at": datetime.now(UTC).isoformat(),
         "symbol": deployment.symbol,
         "broker_symbol": deployment.broker_symbol,
+        "venue_key": deployment.venue_key,
         "action": action,
         "reason": reason,
         "overview": asdict(overview) if overview is not None else None,
@@ -377,7 +381,7 @@ def _write_adaptation_artifact(
 
 
 def generate_execution_adaptation_report(config: SystemConfig | None = None) -> Path:
-    from quant_system.artifacts import DEPLOY_DIR
+    from quant_system.artifacts import list_deployment_paths
     from quant_system.live.deploy import load_symbol_deployment
 
     config = config or SystemConfig()
@@ -386,8 +390,10 @@ def generate_execution_adaptation_report(config: SystemConfig | None = None) -> 
         f"generated_at: {datetime.now(UTC).isoformat()}",
         "",
     ]
-    for path in sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []:
+    for path in list_deployment_paths():
         deployment = load_symbol_deployment(path)
+        if normalize_venue_key(deployment.venue_key) != normalize_venue_key(str(config.mt5.prop_broker)):
+            continue
         adapted, result = adapt_deployment_for_execution(deployment, config)
         del adapted
         record_adaptation_result(result)

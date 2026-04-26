@@ -39,6 +39,7 @@ class InterpreterFeatureSnapshot:
 class InterpreterState:
     symbol: str
     broker_symbol: str
+    venue_key: str
     generated_at: datetime
     legacy_regime_label: str
     unified_regime_label: str

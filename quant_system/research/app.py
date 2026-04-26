@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from quant_system.artifacts import symbol_profile_name
 from quant_system.ai.storage import ExperimentStore
 from quant_system.config import SystemConfig
 from quant_system.symbol_research import (
     _configure_symbol_execution,
     _execution_candidate_row,
     _run_candidate_bundle,
-    _symbol_slug,
     build_execution_policy_from_candidate_row,
     run_symbol_research,
     select_execution_candidates,
@@ -25,7 +25,7 @@ def run_symbol_research_app(
 def run_symbol_execute_app(requested_symbol: str) -> list[str]:
     config = SystemConfig()
     resolved = resolve_symbol_request(requested_symbol)
-    profile_name = f"symbol::{_symbol_slug(resolved.profile_symbol)}"
+    profile_name = symbol_profile_name(resolved.profile_symbol, str(config.mt5.prop_broker))
     store = ExperimentStore(config.ai.experiment_database_path)
     research_run = store.get_latest_symbol_research_run(profile_name)
     if research_run is None:

@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from quant_system.artifacts import DEPLOY_DIR, RESEARCH_DIR, SYSTEM_DIR, artifact_slug, ensure_dir
+from quant_system.artifacts import RESEARCH_DIR, SYSTEM_DIR, artifact_slug, ensure_dir, resolve_deployment_path
 
 
 DEFAULT_SYMBOLS = ("EURUSD", "XAUUSD", "JP225")
@@ -45,7 +45,7 @@ def _capture_symbol_artifacts(symbol: str, baseline_dir: Path, copied_files: lis
     slug = artifact_slug(symbol)
     baseline_symbol_dir = baseline_dir / "symbols" / slug
     reports_dir = RESEARCH_DIR / slug / "reports"
-    deploy_path = DEPLOY_DIR / slug / "live.json"
+    deploy_path = resolve_deployment_path(symbol)
 
     for filename in RESEARCH_REPORT_FILENAMES:
         _copy_file_if_present(reports_dir / filename, baseline_symbol_dir / "reports" / filename, copied_files)

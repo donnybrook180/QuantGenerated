@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from quant_system.artifacts import DEPLOY_DIR, live_symbol_dir, system_reports_dir
+from quant_system.artifacts import list_deployment_paths, live_symbol_dir, resolve_deployment_path, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.live.adaptation import adapt_deployment_for_execution
 from quant_system.live.activity import record_research_directives, record_research_run
@@ -44,6 +44,7 @@ class ResearchEscalationPlan:
 @dataclass(slots=True)
 class ResearchDirective:
     symbol: str
+    venue_key: str
     broker_symbol: str
     candidate_name: str
     priority: int
@@ -59,16 +60,16 @@ class ResearchDirective:
     report_path: Path
 
 
-def _research_reports_path(symbol: str) -> Path:
-    return live_symbol_dir(symbol) / "research_trigger.json"
+def _research_reports_path(symbol: str, venue_key: str) -> Path:
+    return live_symbol_dir(symbol, venue_key) / "research_trigger.json"
 
 
-def _autopsy_state_path(symbol: str) -> Path:
-    return live_symbol_dir(symbol) / "autopsy_state.json"
+def _autopsy_state_path(symbol: str, venue_key: str) -> Path:
+    return live_symbol_dir(symbol, venue_key) / "autopsy_state.json"
 
 
-def _load_autopsy_state(symbol: str) -> dict[str, object]:
-    path = _autopsy_state_path(symbol)
+def _load_autopsy_state(symbol: str, venue_key: str) -> dict[str, object]:
+    path = _autopsy_state_path(symbol, venue_key)
     if not path.exists():
         return {}
     try:
@@ -77,8 +78,8 @@ def _load_autopsy_state(symbol: str) -> dict[str, object]:
         return {}
 
 
-def _save_autopsy_state(symbol: str, state: dict[str, object]) -> None:
-    _autopsy_state_path(symbol).write_text(json.dumps(state, indent=2), encoding="utf-8")
+def _save_autopsy_state(symbol: str, venue_key: str, state: dict[str, object]) -> None:
+    _autopsy_state_path(symbol, venue_key).write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
 def _build_structured_experiments(
@@ -343,14 +344,14 @@ def build_live_research_directives(config: SystemConfig | None = None) -> list[R
     directives: list[ResearchDirective] = []
     state_by_symbol: dict[str, dict[str, object]] = {}
     for impact_row in impact_rows:
-        deployment_path = DEPLOY_DIR / impact_row.symbol.lower() / "live.json"
+        deployment_path = resolve_deployment_path(impact_row.symbol, str(config.mt5.prop_broker))
         if not deployment_path.exists():
             # Fallback to scanning deployments to preserve current artifact layout behavior.
             deployment = next(
                 (
                     item
-                    for item in (load_symbol_deployment(path) for path in sorted(DEPLOY_DIR.glob("*/live.json")))
-                    if item.symbol == impact_row.symbol
+                    for item in (load_symbol_deployment(path) for path in list_deployment_paths())
+                    if item.symbol == impact_row.symbol and item.venue_key == str(config.mt5.prop_broker)
                 ),
                 None,
             )
@@ -365,7 +366,7 @@ def build_live_research_directives(config: SystemConfig | None = None) -> list[R
 
         symbol_state = state_by_symbol.get(impact_row.symbol)
         if symbol_state is None:
-            symbol_state = _load_autopsy_state(impact_row.symbol)
+            symbol_state = _load_autopsy_state(impact_row.symbol, deployment.venue_key)
             state_by_symbol[impact_row.symbol] = symbol_state
         previous_state = dict(symbol_state.get(impact_row.candidate_name, {}))
         previous_demotions = int(previous_state.get("consecutive_demotions", 0) or 0)
@@ -393,11 +394,12 @@ def build_live_research_directives(config: SystemConfig | None = None) -> list[R
         }
         if not failure_labels:
             continue
-        report_path = _research_reports_path(impact_row.symbol)
+        report_path = _research_reports_path(impact_row.symbol, deployment.venue_key)
         directives.append(
             # The first structured experiment acts as the default auto-research plan.
             ResearchDirective(
                 symbol=impact_row.symbol,
+                venue_key=deployment.venue_key,
                 broker_symbol=impact_row.broker_symbol,
                 candidate_name=impact_row.candidate_name,
                 priority=priority,
@@ -422,7 +424,7 @@ def build_live_research_directives(config: SystemConfig | None = None) -> list[R
             )
         )
     for symbol, state in state_by_symbol.items():
-        _save_autopsy_state(symbol, state)
+        _save_autopsy_state(symbol, str(config.mt5.prop_broker), state)
     directives.sort(key=lambda item: (-item.priority, item.edge_retention_pct, -item.live_fill_count, item.symbol, item.candidate_name))
     return directives
 
@@ -510,6 +512,7 @@ def maybe_run_auto_research(config: SystemConfig | None = None) -> list[str]:
             )
             record_research_run(
                 symbol=directive.symbol,
+                venue_key=directive.venue_key,
                 broker_symbol=directive.broker_symbol,
                 candidate_name=directive.candidate_name,
                 experiment_type=selected_experiment.experiment_type if selected_experiment is not None else "full_symbol_rerun",

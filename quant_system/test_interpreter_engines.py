@@ -75,6 +75,7 @@ class InterpreterEnginesTests(unittest.TestCase):
         state = InterpreterState(
             symbol="EURUSD",
             broker_symbol="EURUSD",
+            venue_key="blue_guardian",
             generated_at=__import__("datetime").datetime.now(__import__("datetime").UTC),
             legacy_regime_label="calm_range",
             unified_regime_label="orderly_range",

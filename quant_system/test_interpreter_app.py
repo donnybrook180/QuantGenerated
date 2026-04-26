@@ -31,6 +31,7 @@ def _deployment(symbol: str = "EURUSD") -> SymbolDeployment:
         research_run_id=1,
         execution_set_id=1,
         execution_validation_summary="accepted",
+        venue_key="generic",
     )
 
 
@@ -167,14 +168,16 @@ class InterpreterAppTests(unittest.TestCase):
                 type("State", (), {"risk_posture": "reduced", "execution_regime": "clean", "symbol": "B"})(),
                 type("State", (), {"risk_posture": "defensive", "execution_regime": "fragile", "symbol": "A"})(),
             ]
-            with patch("quant_system.interpreter.app.DEPLOY_DIR", base), patch(
+            with patch("quant_system.interpreter.app.list_deployment_paths", return_value=paths), patch(
                 "quant_system.interpreter.app.load_symbol_deployment",
                 side_effect=[_deployment("B"), _deployment("A")],
             ), patch(
                 "quant_system.interpreter.app.build_market_interpreter_state",
                 side_effect=states,
             ):
-                result = build_all_market_interpreter_states(SystemConfig())
+                config = SystemConfig()
+                config.mt5.prop_broker = "generic"
+                result = build_all_market_interpreter_states(config)
 
         self.assertEqual([state.symbol for state in result], ["A", "B"])
 

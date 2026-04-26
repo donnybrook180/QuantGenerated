@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from quant_system.ai.storage import ExperimentStore
-from quant_system.artifacts import DEPLOY_DIR, system_reports_dir
+from quant_system.artifacts import list_deployment_paths, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.live.deploy import load_symbol_deployment
 from quant_system.tca import TCAAggregate, generate_tca_report
@@ -83,7 +83,7 @@ def build_tca_impact_rows(config: SystemConfig | None = None) -> list[StrategyIm
     config = config or SystemConfig()
     store = ExperimentStore(config.ai.experiment_database_path, read_only=True)
     rows: list[StrategyImpactRow] = []
-    for path in sorted(DEPLOY_DIR.glob("*/live.json")) if DEPLOY_DIR.exists() else []:
+    for path in list_deployment_paths():
         deployment = load_symbol_deployment(path)
         tca_report = generate_tca_report(config, broker_symbol=deployment.broker_symbol)
         for strategy in deployment.strategies:

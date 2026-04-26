@@ -25,12 +25,13 @@ def _json_safe(value):
     return value
 
 
-def write_live_run_journal(result: LiveRunResult, deployment_path: str) -> Path:
+def write_live_run_journal(result: LiveRunResult, deployment_path: str, venue_key: str = "generic") -> Path:
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = live_journals_dir(result.symbol) / f"{timestamp}_journal.json"
+    path = live_journals_dir(result.symbol, venue_key) / f"{timestamp}_journal.json"
     payload = {
         "symbol": result.symbol,
         "broker_symbol": result.broker_symbol,
+        "venue_key": venue_key,
         "deployment_path": deployment_path,
         "account_mode_label": result.account_mode_label,
         "strategy_isolation_supported": result.strategy_isolation_supported,
@@ -43,13 +44,14 @@ def write_live_run_journal(result: LiveRunResult, deployment_path: str) -> Path:
     return path
 
 
-def write_live_incident(symbol: str, deployment_path: str, message: str) -> Path:
+def write_live_incident(symbol: str, deployment_path: str, message: str, venue_key: str = "generic") -> Path:
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = live_incidents_dir(symbol) / f"{timestamp}_incident.txt"
+    path = live_incidents_dir(symbol, venue_key) / f"{timestamp}_incident.txt"
     path.write_text(
         "\n".join(
             [
                 f"symbol: {symbol}",
+                f"venue_key: {venue_key}",
                 f"deployment_path: {deployment_path}",
                 f"timestamp_utc: {timestamp}",
                 f"message: {message}",

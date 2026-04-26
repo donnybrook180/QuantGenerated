@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from quant_system.artifacts import DEPLOY_DIR, RESEARCH_DIR, SYSTEM_DIR, artifact_slug, ensure_dir, system_reports_dir
+from quant_system.artifacts import RESEARCH_DIR, SYSTEM_DIR, artifact_slug, ensure_dir, resolve_deployment_path, system_reports_dir
 
 
 DEFAULT_SYMBOLS = ("EURUSD", "XAUUSD", "JP225")
@@ -90,7 +90,7 @@ def _compare_deployment(symbol: str, baseline_dir: Path) -> list[RegressionFailu
     failures: list[RegressionFailure] = []
     slug = artifact_slug(symbol)
     baseline_path = baseline_dir / "symbols" / slug / "deploy" / "live.json"
-    current_path = DEPLOY_DIR / slug / "live.json"
+    current_path = resolve_deployment_path(symbol)
     if not baseline_path.exists():
         return [RegressionFailure(f"{symbol} deployment", f"Missing baseline file: {baseline_path}")]
     if not current_path.exists():
@@ -162,7 +162,7 @@ def _compare_deployment(symbol: str, baseline_dir: Path) -> list[RegressionFailu
 
 def _deployment_summary(symbol: str) -> tuple[str, list[str]]:
     slug = artifact_slug(symbol)
-    path = DEPLOY_DIR / slug / "live.json"
+    path = resolve_deployment_path(symbol)
     if not path.exists():
         return "missing", []
     payload = _load_json(path)

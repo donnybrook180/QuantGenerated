@@ -5,7 +5,7 @@ import sys
 import _bootstrap  # noqa: F401
 
 from quant_system.ai.storage import ExperimentStore
-from quant_system.artifacts import system_reports_dir
+from quant_system.artifacts import symbol_profile_name, system_reports_dir
 from quant_system.config import SystemConfig
 from quant_system.research.app import run_symbol_research_app
 from quant_system.research.stock_playbooks import allow_candidate_for_playbook, classify_stock_playbook
@@ -46,7 +46,7 @@ def main() -> int:
         report_lines.append(f"Playbook: {row.playbook}")
         report_lines.append(f"Reasons: {', '.join(row.reasons)}")
         report_lines.extend(result_lines)
-        profile_name = f"symbol::{row.symbol.lower()}"
+        profile_name = symbol_profile_name(row.symbol, str(config.mt5.prop_broker))
         candidates = store.list_latest_symbol_research_candidates(profile_name)
         allowed = [str(candidate["candidate_name"]) for candidate in candidates if allow_candidate_for_playbook(str(candidate["candidate_name"]), row)]
         report_lines.append("Playbook-allowed candidates: " + (", ".join(allowed[:15]) if allowed else "none"))

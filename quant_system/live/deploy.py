@@ -4,7 +4,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from quant_system.artifacts import DEPLOY_DIR, deploy_symbol_dir
+from quant_system.artifacts import DEPLOY_DIR, deployment_path, resolve_deployment_path
 from quant_system.live.models import DeploymentStrategy, SymbolDeployment
 
 
@@ -149,7 +149,7 @@ def build_symbol_deployment(
 
 
 def export_symbol_deployment(deployment: SymbolDeployment) -> Path:
-    path = deploy_symbol_dir(deployment.symbol) / "live.json"
+    path = deployment_path(deployment.symbol, deployment.venue_key)
     path.write_text(json.dumps(asdict(deployment), indent=2), encoding="utf-8")
     return path
 
@@ -175,5 +175,5 @@ def load_symbol_deployment(path: Path) -> SymbolDeployment:
     return SymbolDeployment(strategies=strategies, **payload)
 
 
-def deployment_path_for_symbol(symbol: str) -> Path:
-    return deploy_symbol_dir(symbol) / "live.json"
+def deployment_path_for_symbol(symbol: str, venue_key: str = "generic") -> Path:
+    return resolve_deployment_path(symbol, venue_key)

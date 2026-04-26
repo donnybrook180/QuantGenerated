@@ -48,21 +48,83 @@ def profile_logs_dir(profile_name: str) -> Path:
     return ensure_dir(profile_dir(profile_name) / "logs")
 
 
-def deploy_symbol_dir(symbol: str) -> Path:
+def symbol_profile_name(symbol: str, venue_key: str = "generic") -> str:
+    return f"symbol::{artifact_slug(venue_key)}::{artifact_slug(symbol)}"
+
+
+def parse_symbol_profile_name(profile_name: str) -> tuple[str, str] | None:
+    raw = profile_name.strip()
+    if not raw.startswith("symbol::"):
+        return None
+    parts = [part.strip() for part in raw.split("::") if part.strip()]
+    if len(parts) >= 3:
+        return parts[1], parts[2]
+    if len(parts) == 2:
+        return "generic", parts[1]
+    return None
+
+
+def deploy_symbol_dir(symbol: str, venue_key: str = "generic") -> Path:
+    return ensure_dir(DEPLOY_DIR / artifact_slug(venue_key) / artifact_slug(symbol))
+
+
+def legacy_deploy_symbol_dir(symbol: str) -> Path:
     return ensure_dir(DEPLOY_DIR / artifact_slug(symbol))
+
+
+def deployment_path(symbol: str, venue_key: str = "generic") -> Path:
+    return deploy_symbol_dir(symbol, venue_key) / "live.json"
+
+
+def legacy_deployment_path(symbol: str) -> Path:
+    return legacy_deploy_symbol_dir(symbol) / "live.json"
+
+
+def resolve_deployment_path(symbol: str, venue_key: str = "generic") -> Path:
+    current = deployment_path(symbol, venue_key)
+    if current.exists():
+        return current
+    legacy = legacy_deployment_path(symbol)
+    if legacy.exists():
+        return legacy
+    return current
+
+
+def list_deployment_paths() -> list[Path]:
+    if not DEPLOY_DIR.exists():
+        return []
+    return sorted(DEPLOY_DIR.rglob("live.json"))
 
 
 def system_reports_dir() -> Path:
     return ensure_dir(SYSTEM_DIR / "reports")
 
 
-def live_symbol_dir(symbol: str) -> Path:
+def live_venue_dir(venue_key: str = "generic") -> Path:
+    return ensure_dir(LIVE_DIR / artifact_slug(venue_key))
+
+
+def live_symbol_dir(symbol: str, venue_key: str = "generic") -> Path:
+    return ensure_dir(live_venue_dir(venue_key) / artifact_slug(symbol))
+
+
+def legacy_live_symbol_dir(symbol: str) -> Path:
     return ensure_dir(LIVE_DIR / artifact_slug(symbol))
 
 
-def live_journals_dir(symbol: str) -> Path:
-    return ensure_dir(live_symbol_dir(symbol) / "journals")
+def resolve_live_symbol_dir(symbol: str, venue_key: str = "generic") -> Path:
+    current = LIVE_DIR / artifact_slug(venue_key) / artifact_slug(symbol)
+    legacy = LIVE_DIR / artifact_slug(symbol)
+    if current.exists():
+        return current
+    if legacy.exists():
+        return legacy
+    return ensure_dir(current)
 
 
-def live_incidents_dir(symbol: str) -> Path:
-    return ensure_dir(live_symbol_dir(symbol) / "incidents")
+def live_journals_dir(symbol: str, venue_key: str = "generic") -> Path:
+    return ensure_dir(live_symbol_dir(symbol, venue_key) / "journals")
+
+
+def live_incidents_dir(symbol: str, venue_key: str = "generic") -> Path:
+    return ensure_dir(live_symbol_dir(symbol, venue_key) / "incidents")

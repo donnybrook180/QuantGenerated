@@ -8,6 +8,8 @@ Gebruik dit document als startpunt. De detaildocumenten blijven daarnaast bestaa
 - `docs/operator_cheat_sheet.md`
 - `docs/server_runbook.md`
 - `docs/prop_firm_launch_checklist.md`
+- `docs/repo_usage_guide.md`
+- `docs/multi_prop_env_and_live_plan.md`
 
 ## Doel
 
@@ -64,6 +66,19 @@ Gebruik voor:
 ### `docs/prop_firm_launch_checklist.md`
 Gebruik voor:
 - pre-live checklist voordat een nieuwe prop-firm server aan gaat
+
+### `docs/repo_usage_guide.md`
+Gebruik voor:
+- dagelijkse repo-usage
+- research draaien
+- venue-aware deployments begrijpen
+- multi-prop operator flow
+
+### `docs/multi_prop_env_and_live_plan.md`
+Gebruik voor:
+- implementatieplan voor broker-specifieke env vars
+- keuze voor aparte live loops per prop firm
+- migratievolgorde voor multi-prop live
 
 ## Kernreports
 

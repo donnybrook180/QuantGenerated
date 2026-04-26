@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-HK50,2026-03-16T16:00:00+00:00,2026-03-16T18:00:00+00:00,16,18,volatility_breakout,signal_exit,25943.34885,25846.32107,0.01000,-0.97028,0.00000,2,1.00000,{'breakout_high': 25883.08}
-HK50,2026-03-18T09:00:00+00:00,2026-03-18T15:00:00+00:00,9,15,volatility_breakout,stop_loss,26065.73321,25683.34021,0.01000,-3.82393,0.00000,4,1.00000,{'breakout_high': 25991.98}
-HK50,2026-03-25T05:00:00+00:00,2026-03-26T05:00:00+00:00,5,5,volatility_breakout,trailing_stop,25161.85710,24940.02750,0.01000,-2.21830,0.00000,13,1.00000,{'breakout_high': 25024.88}
-HK50,2026-03-31T16:00:00+00:00,2026-03-31T17:00:00+00:00,16,17,volatility_breakout,signal_exit,24952.43251,24877.63482,0.01000,-0.74798,0.00000,1,1.00000,{'breakout_high': 24896.48}

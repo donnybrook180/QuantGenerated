@@ -1,9 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-XAGUSD,2025-08-11T09:15:00+00:00,2025-08-11T10:30:00+00:00,9,10,forex_short_trend_continuation,take_profit,38.03880,37.84108,0.01000,197.66554,0.05000,5,1.00000,"{'rebound_high': 38.188, 'position_intent': 'short_entry'}"
-XAGUSD,2025-08-19T09:30:00+00:00,2025-08-19T09:45:00+00:00,9,9,forex_short_trend_continuation,stop_loss,37.84488,37.96213,0.01000,-117.30547,0.05000,1,1.00000,"{'rebound_high': 37.944, 'position_intent': 'short_entry'}"
-XAGUSD,2025-09-11T11:45:00+00:00,2025-09-11T13:00:00+00:00,11,13,forex_short_trend_continuation,stale_breakout,40.99463,41.08937,0.01000,-94.79827,0.05000,5,0.85278,"{'rebound_high': 41.096, 'position_intent': 'short_entry'}"
-XAGUSD,2025-11-20T07:30:00+00:00,2025-11-20T09:00:00+00:00,7,9,forex_short_trend_continuation,stale_breakout,51.22256,51.34444,0.01000,-121.93275,0.05000,6,1.00000,"{'rebound_high': 51.338, 'position_intent': 'short_entry'}"
-XAGUSD,2026-01-07T11:00:00+00:00,2026-01-07T11:30:00+00:00,11,11,forex_short_trend_continuation,trailing_stop,79.31740,79.41959,0.01000,-102.23971,0.05000,2,1.00000,"{'rebound_high': 80.002, 'position_intent': 'short_entry'}"
-XAGUSD,2026-01-07T12:30:00+00:00,2026-01-07T12:45:00+00:00,12,12,forex_short_trend_continuation,structure_exit,79.56565,79.40337,0.01000,-162.33185,0.05000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
-XAGUSD,2026-02-10T07:30:00+00:00,2026-02-10T07:45:00+00:00,7,7,forex_short_trend_continuation,structure_exit,81.40957,81.61846,0.01000,-208.94381,0.05000,1,1.00000,"{'rebound_high': 81.475, 'position_intent': 'short_entry'}"
-XAGUSD,2026-02-17T11:00:00+00:00,2026-04-02T23:45:00+00:00,11,23,forex_short_trend_continuation,end_of_run,74.51231,73.03606,0.01000,1476.20341,0.05000,2995,1.00000,"{'rebound_high': 75.232, 'position_intent': 'short_entry'}"

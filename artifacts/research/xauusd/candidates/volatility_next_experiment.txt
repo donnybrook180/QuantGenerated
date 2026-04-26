@@ -1,6 +1,0 @@
-Profile: xauusd_volatility
-Recommended next experiments
-
-- Reduce the 'signal_exit' loss bucket in xauusd_volatility; it is the weakest realized exit.
-- Review or isolate hour 13 for xauusd_volatility; realized PnL there is negative.
-- Increase evaluation sample size for xauusd_volatility; current closed-trade count is still small.

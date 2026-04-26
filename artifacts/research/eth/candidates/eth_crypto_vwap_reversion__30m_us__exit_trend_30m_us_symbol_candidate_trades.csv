@@ -1,4 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:ETHUSD,2022-04-08T19:30:00+00:00,2022-04-08T23:00:00+00:00,19,23,crypto_vwap_reversion,stop_loss,3241.34542,3174.87894,0.10000,-68.55175,2.08527,7,0.72008,"{'z_score_20': -1.2297645161457673, 'vwap_distance': -0.007488402671321448}"
-X:ETHUSD,2024-09-16T17:00:00+00:00,2024-09-16T19:30:00+00:00,17,19,crypto_vwap_reversion,trailing_stop,2282.60208,2272.80991,0.10000,-11.27267,1.48051,5,0.69194,"{'z_score_20': -1.5636409587324067, 'vwap_distance': -0.004948385963555957}"
-X:ETHUSD,2025-07-25T17:00:00+00:00,2025-07-28T00:00:00+00:00,17,0,crypto_vwap_reversion,take_profit,3637.26372,3882.81565,0.10000,243.10790,2.44403,14,0.68652,"{'z_score_20': -1.212919267739464, 'vwap_distance': -0.006741865110542755}"

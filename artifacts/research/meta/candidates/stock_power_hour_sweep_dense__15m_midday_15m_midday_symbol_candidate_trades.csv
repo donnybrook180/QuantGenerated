@@ -1,6 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-META,2026-02-20T17:00:00+00:00,2026-02-23T16:45:00+00:00,17,16,stock_power_hour_continuation,stale_breakout,653.11060,648.92019,0.10000,-0.93206,0.51302,4,1.00000,{'hour_of_day': 17.0}
-META,2026-02-25T17:00:00+00:00,2026-02-26T16:45:00+00:00,17,16,stock_power_hour_continuation,take_profit,650.41006,658.32831,0.10000,0.27874,0.51309,4,1.00000,{'hour_of_day': 17.0}
-META,2026-03-02T17:30:00+00:00,2026-03-03T16:45:00+00:00,17,16,stock_power_hour_continuation,stop_loss,653.43066,645.29092,0.10000,-1.32696,0.51299,2,1.00000,{'hour_of_day': 17.0}
-META,2026-03-10T17:30:00+00:00,2026-03-11T17:15:00+00:00,17,17,stock_power_hour_continuation,stale_breakout,658.02158,652.52947,0.10000,-1.06232,0.51311,4,1.00000,{'hour_of_day': 17.0}
-META,2026-03-23T17:45:00+00:00,2026-03-24T16:45:00+00:00,17,16,stock_power_hour_continuation,stop_loss,605.56109,595.01097,0.10000,-1.56702,0.51201,1,1.00000,{'hour_of_day': 17.0}

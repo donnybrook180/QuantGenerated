@@ -1,8 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-07-25T10:30:00+00:00,2025-07-28T09:00:00+00:00,10,9,forex_breakout_momentum,take_profit,147.39875,148.10920,0.01000,710.39843,0.05000,4,1.00000,{'breakout_high': 147.201}
-C:USDJPY,2025-07-31T11:00:00+00:00,2025-08-01T14:30:00+00:00,11,14,forex_breakout_momentum,take_profit,149.54089,150.49305,0.01000,952.11429,0.05000,3,1.00000,{'breakout_high': 148.914}
-C:USDJPY,2025-09-03T10:30:00+00:00,2025-09-04T10:00:00+00:00,10,10,forex_breakout_momentum,stop_loss,148.75384,148.24819,0.01000,-505.69536,0.05000,5,1.00000,{'breakout_high': 148.555}
-C:USDJPY,2025-10-09T09:00:00+00:00,2025-10-09T12:30:00+00:00,9,12,forex_breakout_momentum,stop_loss,153.00810,152.53392,0.01000,-474.23149,0.05000,6,1.00000,{'breakout_high': 152.763}
-C:USDJPY,2025-10-31T09:30:00+00:00,2025-10-31T17:30:00+00:00,9,17,forex_breakout_momentum,stop_loss,154.24418,153.92384,0.01000,-320.39635,0.05000,4,1.00000,{'breakout_high': 154.117}
-C:USDJPY,2025-12-09T10:00:00+00:00,2025-12-11T14:00:00+00:00,10,14,forex_breakout_momentum,stop_loss,156.38032,155.62973,0.01000,-750.63754,0.05000,1,1.00000,{'breakout_high': 156.194}
-C:USDJPY,2026-01-23T08:30:00+00:00,2026-04-07T11:00:00+00:00,8,11,forex_breakout_momentum,end_of_run,158.89047,159.60348,0.01000,712.95540,0.05000,320,1.00000,{'breakout_high': 158.826}

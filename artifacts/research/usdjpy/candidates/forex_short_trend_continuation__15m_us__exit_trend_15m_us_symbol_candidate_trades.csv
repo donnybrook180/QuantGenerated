@@ -1,7 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:USDJPY,2025-11-07T15:00:00+00:00,2025-11-07T17:00:00+00:00,15,17,forex_short_trend_continuation,signal_exit,153.19917,153.13683,0.01000,62.29160,0.05000,8,1.00000,"{'rebound_high': 153.42, 'position_intent': 'short_entry'}"
-C:USDJPY,2025-11-21T13:00:00+00:00,2025-11-21T15:00:00+00:00,13,15,forex_short_trend_continuation,stale_breakout,156.78992,156.37709,0.01000,-412.87917,0.05000,8,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
-C:USDJPY,2026-01-22T20:30:00+00:00,2026-01-22T20:45:00+00:00,20,20,forex_short_trend_continuation,stop_loss,158.33704,158.44796,0.01000,-110.96962,0.05000,1,0.58003,"{'rebound_high': 158.434, 'position_intent': 'short_entry'}"
-C:USDJPY,2026-01-23T13:45:00+00:00,2026-01-23T15:45:00+00:00,13,15,forex_short_trend_continuation,stale_breakout,158.26996,158.10305,0.01000,-166.95933,0.05000,8,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"
-C:USDJPY,2026-02-05T17:45:00+00:00,2026-02-05T20:00:00+00:00,17,20,forex_short_trend_continuation,stale_breakout,156.79108,156.96392,0.01000,-172.89387,0.05000,9,0.94238,"{'rebound_high': 156.907, 'position_intent': 'short_entry'}"
-C:USDJPY,2026-02-10T19:45:00+00:00,2026-02-10T22:15:00+00:00,19,22,forex_short_trend_continuation,stale_breakout,154.30914,154.37486,0.01000,-65.76710,0.05000,10,0.66546,"{'rebound_high': 154.525, 'position_intent': 'short_entry'}"

@@ -1,3 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-SX5E,2026-03-12T16:00:00+00:00,2026-03-16T16:00:00+00:00,16,16,volatility_short_breakdown,signal_exit,5721.60780,5765.93593,0.10000,-4.43281,0.00000,6,1.00000,"{'breakout_low': 5740.67, 'rebound_high': 5826.07, 'position_intent': 'short_entry'}"
-SX5E,2026-03-19T15:00:00+00:00,2026-03-23T15:00:00+00:00,15,15,volatility_short_breakdown,trailing_stop,5594.31905,5632.22411,0.10000,-3.79051,0.00000,6,1.00000,"{'breakout_low': 5710.87, 'rebound_high': 5809.37, 'position_intent': 'short_entry'}"

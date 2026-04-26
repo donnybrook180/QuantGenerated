@@ -1,9 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-USOIL,2025-04-17T15:00:00+00:00,2025-04-17T16:15:00+00:00,15,16,stock_gap_and_go,trailing_stop,63.17176,63.01525,0.01000,-0.05169,0.05013,5,1.00000,{'minutes_from_open': 90.0}
-USOIL,2025-06-11T15:00:00+00:00,2025-06-11T16:15:00+00:00,15,16,stock_gap_and_go,trailing_stop,66.15607,66.19185,0.01000,-0.04977,0.05013,5,1.00000,{'minutes_from_open': 90.0}
-USOIL,2025-07-18T15:00:00+00:00,2025-07-18T16:00:00+00:00,15,16,stock_gap_and_go,stop_loss,68.54412,67.98806,0.01000,-0.05570,0.05014,4,1.00000,{'minutes_from_open': 90.0}
-USOIL,2025-10-08T15:00:00+00:00,2025-10-08T16:00:00+00:00,15,16,stock_gap_and_go,stop_loss,62.96967,62.37453,0.01000,-0.05608,0.05013,4,1.00000,{'minutes_from_open': 90.0}
-USOIL,2026-01-28T15:00:00+00:00,2026-01-28T15:45:00+00:00,15,15,stock_gap_and_go,take_profit,63.05971,63.33810,0.01000,-0.04734,0.05013,3,1.00000,{'minutes_from_open': 90.0}
-USOIL,2026-01-29T15:00:00+00:00,2026-01-29T16:00:00+00:00,15,16,stock_gap_and_go,take_profit,65.16163,66.08790,0.01000,-0.04087,0.05013,4,1.00000,{'minutes_from_open': 90.0}
-USOIL,2026-02-18T15:00:00+00:00,2026-02-18T17:15:00+00:00,15,17,stock_gap_and_go,trailing_stop,64.15919,64.21172,0.01000,-0.04960,0.05013,9,1.00000,{'minutes_from_open': 90.0}
-USOIL,2026-04-02T15:00:00+00:00,2026-04-02T15:30:00+00:00,15,15,stock_gap_and_go,take_profit,110.61258,111.64388,0.01000,-0.03991,0.05022,2,1.00000,{'minutes_from_open': 90.0}

@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-09T12:35:00+00:00,2026-03-09T12:40:00+00:00,12,12,crypto_breakout_reclaim,signal_exit,68290.62056,68098.33222,0.10000,-23.66147,4.43264,1,1.00000,{'breakout_high': 68168.0}
-X:BTCUSD,2026-03-09T14:35:00+00:00,2026-03-09T14:45:00+00:00,14,14,crypto_breakout_reclaim,signal_exit,69389.54537,69254.64874,0.10000,-17.99560,4.50594,2,1.00000,{'breakout_high': 69324.94}
-X:BTCUSD,2026-03-10T14:55:00+00:00,2026-03-10T16:25:00+00:00,14,16,crypto_breakout_reclaim,time_stop,71501.96219,71383.76933,0.10000,-16.46307,4.64379,18,1.00000,{'breakout_high': 71347.0}
-X:BTCUSD,2026-03-13T12:45:00+00:00,2026-03-13T14:20:00+00:00,12,14,crypto_breakout_reclaim,take_profit,72759.91085,73856.78832,0.10000,104.92270,4.76504,19,1.00000,{'breakout_high': 72550.32}

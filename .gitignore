@@ -7,9 +7,14 @@ __pycache__/
 .mypy_cache/
 
 # Generated live/runtime artifacts
-artifacts/deploy/*/live.json
+artifacts/deploy/**/live.json
+!artifacts/deploy/
 artifacts/live/**
 !artifacts/live/
+
+# Generated research artifacts
+artifacts/research/**
+!artifacts/research/
 
 # Generated system reports and logs
 artifacts/system/logs/**
@@ -17,4 +22,7 @@ artifacts/system/logs/**
 artifacts/system/reports/**
 !artifacts/system/reports/
 
-quant_data.duckdb
+# Local DuckDB state
+quant_data*.duckdb
+quant_data*.duckdb.wal
+quant_data*.duckdb-shm

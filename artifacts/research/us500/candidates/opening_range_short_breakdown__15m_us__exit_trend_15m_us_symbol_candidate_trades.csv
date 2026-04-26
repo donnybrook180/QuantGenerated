@@ -1,3 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-SPY,2026-03-18T14:00:00+00:00,2026-03-19T13:00:00+00:00,14,13,opening_range_short_breakdown,take_profit,666.83789,656.54156,0.10000,1.02963,0.00000,28,0.58742,"{'breakout_low': 667.88, 'rebound_high': 669.72, 'position_intent': 'short_entry'}"
-SPY,2026-03-20T14:00:00+00:00,2026-03-20T16:00:00+00:00,14,16,opening_range_short_breakdown,stale_breakout,651.44866,653.67142,0.10000,-0.22228,0.00000,8,0.76518,"{'breakout_low': 653.0, 'rebound_high': 656.69, 'position_intent': 'short_entry'}"

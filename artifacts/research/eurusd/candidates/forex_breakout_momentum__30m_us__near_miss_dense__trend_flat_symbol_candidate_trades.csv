@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:EURUSD,2026-02-27T18:30:00+00:00,2026-02-27T20:00:00+00:00,18,20,forex_breakout_momentum,structure_exit,1.18228,1.18135,0.01000,-0.97909,0.05000,3,1.00000,{'breakout_high': 1.18216}
-C:EURUSD,2026-03-19T16:30:00+00:00,2026-03-20T12:30:00+00:00,16,12,forex_breakout_momentum,trailing_stop,1.15184,1.15479,0.01000,2.90233,0.05000,13,1.00000,{'breakout_high': 1.15045}
-C:EURUSD,2026-03-23T15:30:00+00:00,2026-03-23T16:00:00+00:00,15,16,forex_breakout_momentum,structure_exit,1.16131,1.15865,0.01000,-2.70800,0.05000,1,1.00000,{'breakout_high': 1.15647}
-C:EURUSD,2026-03-31T14:30:00+00:00,2026-03-31T16:00:00+00:00,14,16,forex_breakout_momentum,take_profit,1.14918,1.15138,0.01000,2.15249,0.05000,3,1.00000,{'breakout_high': 1.14851}

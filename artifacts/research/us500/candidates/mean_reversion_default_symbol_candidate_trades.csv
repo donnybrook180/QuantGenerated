@@ -1,4 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-SPY,2026-03-10T18:10:00+00:00,2026-03-10T18:15:00+00:00,18,18,mean_reversion,structure_exit,678.93268,677.72735,0.01000,-0.01205,0.00000,1,1.00000,"{'mean': 681.408125, 'z_score_20': -3.4816758822090885}"
-SPY,2026-03-23T15:55:00+00:00,2026-03-23T16:15:00+00:00,15,16,mean_reversion,structure_exit,656.33155,655.71845,0.01000,-0.00613,0.00000,4,1.00000,"{'mean': 659.2575, 'z_score_20': -2.7898679668846023}"
-SPY,2026-03-25T15:15:00+00:00,2026-03-25T15:35:00+00:00,15,15,mean_reversion,trailing_stop,655.46151,656.43341,0.01000,0.00972,0.00000,4,1.00000,"{'mean': 657.810625, 'z_score_20': -2.6167898593583487}"

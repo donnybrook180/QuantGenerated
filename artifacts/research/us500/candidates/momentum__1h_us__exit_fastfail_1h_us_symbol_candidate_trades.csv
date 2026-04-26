@@ -1,4 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-SPY,2026-03-10T16:00:00+00:00,2026-03-10T18:00:00+00:00,16,18,momentum_confirmation,stop_loss,681.77282,678.17732,0.10000,-0.35955,0.00000,2,1.00000,"{'momentum_5': 0.00635014398582312, 'momentum_20': 0.02427476326469269}"
-SPY,2026-03-16T14:00:00+00:00,2026-03-16T16:00:00+00:00,14,16,momentum_confirmation,structure_exit,670.15224,668.10283,0.10000,-0.20494,0.00000,2,1.00000,"{'momentum_5': 0.00829419556840083, 'momentum_20': 0.0026494626231179375}"
-SPY,2026-03-31T15:00:00+00:00,2026-03-31T16:00:00+00:00,15,16,momentum_confirmation,take_profit,640.11074,646.31892,0.10000,0.62082,0.00000,1,1.00000,"{'momentum_5': 0.004553376564241818, 'momentum_20': 0.002428553522185961}"

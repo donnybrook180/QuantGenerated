@@ -1,6 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-HK50,2026-03-16T04:35:00+00:00,2026-03-16T06:30:00+00:00,4,6,mean_reversion,take_profit,25347.27887,25657.21328,0.01000,3.09934,0.00000,23,1.00000,"{'mean': 25448.435, 'z_score_20': -2.553192017900632}"
-HK50,2026-03-23T04:30:00+00:00,2026-03-23T04:50:00+00:00,4,4,mean_reversion+mean_reversion,structure_exit,24586.18952,24557.97236,0.01000,-0.28217,0.00000,4,2.00000,"{'mean': 24681.43, 'z_score_20': -3.166342759245922}"
-HK50,2026-03-24T04:20:00+00:00,2026-03-24T04:35:00+00:00,4,4,mean_reversion+mean_reversion,structure_exit,24814.51632,24672.25894,0.01000,-1.42257,0.00000,3,2.00000,"{'mean': 24965.405000000002, 'z_score_20': -3.212790889071693}"
-HK50,2026-03-30T04:20:00+00:00,2026-03-30T04:50:00+00:00,4,4,mean_reversion+mean_reversion,trailing_stop,24447.77327,24517.17715,0.01000,0.69404,0.00000,6,2.00000,"{'mean': 24597.73, 'z_score_20': -4.270529291499289}"
-HK50,2026-04-02T04:20:00+00:00,2026-04-02T04:35:00+00:00,4,4,mean_reversion,structure_exit,25184.54976,25162.19141,0.01000,-0.22358,0.00000,3,1.00000,"{'mean': 25287.16625, 'z_score_20': -2.4473974494931814}"

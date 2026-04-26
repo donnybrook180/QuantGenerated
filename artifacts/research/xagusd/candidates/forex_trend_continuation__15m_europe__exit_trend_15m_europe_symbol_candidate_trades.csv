@@ -1,9 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-XAGUSD,2025-09-24T12:45:00+00:00,2025-09-24T13:00:00+00:00,12,13,forex_trend_continuation,stop_loss,44.20661,44.03242,0.01000,-174.24263,0.05000,1,0.83385,{'pullback_floor': 44.084}
-XAGUSD,2026-01-05T09:00:00+00:00,2026-01-05T09:30:00+00:00,9,9,forex_trend_continuation,stale_breakout,75.51504,75.45094,0.01000,-64.15359,0.05000,2,1.00000,{'pullback_floor': 75.349}
-XAGUSD,2026-01-12T11:45:00+00:00,2026-01-12T12:30:00+00:00,11,12,forex_trend_continuation,stale_breakout,84.27752,84.07151,0.01000,-206.05696,0.05000,3,1.00000,{'pullback_floor': 84.162}
-XAGUSD,2026-02-09T11:00:00+00:00,2026-02-09T11:30:00+00:00,11,11,forex_trend_continuation,stale_breakout,81.77452,81.35759,0.01000,-416.98511,0.05000,2,1.00000,{'pullback_floor': 81.538}
-XAGUSD,2026-02-26T07:45:00+00:00,2026-02-26T08:00:00+00:00,7,8,forex_trend_continuation,signal_exit,89.48559,89.54634,0.01000,60.70047,0.05000,1,1.00000,{'pullback_floor': 89.271}
-XAGUSD,2026-03-04T08:30:00+00:00,2026-03-04T09:00:00+00:00,8,9,forex_trend_continuation,signal_exit,84.65767,85.02813,0.01000,370.41208,0.05000,2,1.00000,{'pullback_floor': 83.844}
-XAGUSD,2026-03-06T09:30:00+00:00,2026-03-06T09:45:00+00:00,9,9,forex_trend_continuation,take_profit,84.21149,84.54332,0.01000,331.78181,0.05000,1,1.00000,{'pullback_floor': 84.116}
-XAGUSD,2026-03-10T09:15:00+00:00,2026-03-10T09:30:00+00:00,9,9,forex_trend_continuation,signal_exit,88.83233,88.79563,0.01000,-36.74195,0.05000,1,1.00000,{'pullback_floor': 88.584}

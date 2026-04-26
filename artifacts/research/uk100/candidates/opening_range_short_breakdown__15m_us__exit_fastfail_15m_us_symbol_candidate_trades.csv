@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-UK100,2025-04-04T14:15:00+00:00,2025-04-04T14:45:00+00:00,14,14,opening_range_short_breakdown,signal_exit,8107.78429,8158.12497,0.10000,-5.69673,0.66266,2,0.89255,"{'breakout_low': 8129.8, 'rebound_high': 8193.8, 'position_intent': 'short_entry'}"
-UK100,2025-08-07T14:00:00+00:00,2025-08-07T18:30:00+00:00,14,18,opening_range_short_breakdown,time_stop,9083.98901,9096.11253,0.10000,-1.89415,0.68180,18,1.00000,"{'breakout_low': 9113.8, 'rebound_high': 9126.8, 'position_intent': 'short_entry'}"
-UK100,2025-09-25T14:00:00+00:00,2025-09-25T15:00:00+00:00,14,15,opening_range_short_breakdown,stale_breakout,9205.66467,9215.33637,0.10000,-1.65138,0.68421,4,0.61282,"{'breakout_low': 9218.9, 'rebound_high': 9227.1, 'position_intent': 'short_entry'}"
-UK100,2025-11-18T14:00:00+00:00,2025-11-18T15:00:00+00:00,14,15,opening_range_short_breakdown,stale_breakout,9534.99879,9550.60341,0.10000,-2.25132,0.69086,4,0.64526,"{'breakout_low': 9550.1, 'rebound_high': 9561.6, 'position_intent': 'short_entry'}"

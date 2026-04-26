@@ -1,6 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-QQQ,2025-10-16T14:40:00+00:00,2025-10-16T14:55:00+00:00,14,14,opening_range_breakout,stop_loss,608.62040,606.05867,0.10000,-0.25617,0.00000,3,0.90857,"{'range_high': 606.55, 'breakout_high': 606.55}"
-QQQ,2025-11-26T14:40:00+00:00,2025-11-26T15:00:00+00:00,14,15,opening_range_breakout,stop_loss,613.29064,610.89943,0.10000,-0.23912,0.00000,2,0.60161,"{'range_high': 612.06, 'breakout_high': 612.06}"
-QQQ,2026-01-21T14:15:00+00:00,2026-01-21T23:00:00+00:00,14,23,opening_range_breakout,take_profit,610.57590,617.71909,0.10000,0.71432,0.00000,6,1.00000,"{'range_high': 607.79, 'breakout_high': 607.79}"
-QQQ,2026-03-02T14:40:00+00:00,2026-03-02T18:45:00+00:00,14,18,opening_range_breakout,take_profit,604.13018,606.97962,0.10000,0.28494,0.00000,1,1.00000,"{'range_high': 600.46, 'breakout_high': 600.46}"
-QQQ,2026-03-10T14:40:00+00:00,2026-03-10T17:35:00+00:00,14,17,opening_range_breakout,trailing_stop,611.02052,610.77943,0.10000,-0.02411,0.00000,7,0.75435,"{'range_high': 609.37, 'breakout_high': 609.37}"

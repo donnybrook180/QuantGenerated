@@ -1,6 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-QQQ,2025-10-24T14:00:00+00:00,2025-10-27T14:00:00+00:00,14,14,volatility_breakout,take_profit,617.02080,624.56372,0.10000,0.75429,0.00000,1,1.00000,{'breakout_high': 612.03}
-QQQ,2025-11-28T14:00:00+00:00,2025-12-03T14:00:00+00:00,14,14,volatility_breakout,trailing_stop,617.28582,618.69402,0.10000,0.14082,0.00000,3,1.00000,{'breakout_high': 613.9}
-QQQ,2025-12-24T14:00:00+00:00,2025-12-29T14:00:00+00:00,14,14,volatility_breakout,stop_loss,623.31612,619.50398,0.10000,-0.38121,0.00000,2,0.93027,{'breakout_high': 621.65}
-QQQ,2026-01-27T14:00:00+00:00,2026-01-29T14:00:00+00:00,14,14,volatility_breakout,stop_loss,631.53653,625.21369,0.10000,-0.63228,0.00000,2,1.00000,{'breakout_high': 627.27}
-QQQ,2026-02-25T14:00:00+00:00,2026-02-27T14:00:00+00:00,14,14,volatility_breakout,stop_loss,616.45577,603.57477,0.10000,-1.28810,0.00000,2,1.00000,{'breakout_high': 608.01}

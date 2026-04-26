@@ -1,8 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-DXY,2025-07-17T14:45:00+00:00,2025-07-17T15:00:00+00:00,14,15,stock_gap_open_reclaim,stop_loss,98.86317,98.78384,0.01000,-0.05099,0.05020,3,1.00000,{'minutes_from_open': 75.0}
-DXY,2025-07-17T15:30:00+00:00,2025-07-17T15:45:00+00:00,15,15,stock_gap_open_reclaim,stale_breakout,98.87417,98.68586,0.01000,-0.05208,0.05020,3,1.00000,{'minutes_from_open': 120.0}
-DXY,2025-07-28T14:15:00+00:00,2025-07-28T14:55:00+00:00,14,14,stock_gap_open_reclaim,time_stop,98.27005,98.16696,0.01000,-0.05123,0.05020,8,1.00000,{'minutes_from_open': 45.0}
-DXY,2025-08-27T13:55:00+00:00,2025-08-27T14:05:00+00:00,13,14,stock_gap_open_reclaim,stop_loss,98.71514,98.64087,0.01000,-0.05094,0.05020,2,1.00000,{'minutes_from_open': 25.0}
-DXY,2025-10-30T14:10:00+00:00,2025-10-30T14:45:00+00:00,14,14,stock_gap_open_reclaim,take_profit,99.27325,99.28574,0.01000,-0.05007,0.05020,7,1.00000,{'minutes_from_open': 40.0}
-DXY,2026-03-23T13:55:00+00:00,2026-03-23T14:00:00+00:00,13,14,stock_gap_open_reclaim,stop_loss,100.17343,100.10157,0.01000,-0.05092,0.05020,1,1.00000,{'minutes_from_open': 25.0}
-DXY,2026-04-02T13:45:00+00:00,2026-04-02T14:25:00+00:00,13,14,stock_gap_open_reclaim,time_stop,100.27645,100.23655,0.01000,-0.05060,0.05020,8,1.00000,{'minutes_from_open': 15.0}

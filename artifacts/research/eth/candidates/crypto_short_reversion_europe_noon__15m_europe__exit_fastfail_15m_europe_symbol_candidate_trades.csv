@@ -1,4 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:ETHUSD,2022-08-22T12:45:00+00:00,2022-08-22T13:15:00+00:00,12,13,crypto_short_reversion,structure_exit,1563.48454,1554.56732,0.10000,-9.93059,1.01337,2,0.68000,"{'position_intent': 'short_exit', 'short_reversion_exit': 1.0}"
-X:ETHUSD,2024-04-09T12:45:00+00:00,2024-04-09T13:45:00+00:00,12,13,crypto_short_reversion,take_profit,3627.25792,3595.72712,0.10000,29.18333,2.34747,4,1.00000,"{'position_intent': 'short_entry', 'rebound_high': 3634.71, 'short_reversion_anchor': 3634.71}"
-X:ETHUSD,2024-05-29T12:45:00+00:00,2024-05-29T14:15:00+00:00,12,14,crypto_short_reversion,take_profit,3812.37384,3775.03881,0.10000,34.86912,2.46591,6,0.87305,"{'position_intent': 'short_entry', 'rebound_high': 3822.1, 'short_reversion_anchor': 3822.1}"

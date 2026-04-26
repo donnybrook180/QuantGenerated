@@ -1,3 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-X:BTCUSD,2026-03-16T11:00:00+00:00,2026-03-16T14:00:00+00:00,11,14,crypto_trend_pullback,trailing_stop,73550.02935,73603.58631,0.10000,0.57320,4.78249,6,1.00000,{'pullback_floor': 73263.95}
-X:BTCUSD,2026-04-01T14:30:00+00:00,2026-04-01T18:30:00+00:00,14,18,crypto_trend_pullback,stale_breakout,68593.89604,68041.88069,0.10000,-59.64220,4.44066,8,1.00000,{'pullback_floor': 68095.2}

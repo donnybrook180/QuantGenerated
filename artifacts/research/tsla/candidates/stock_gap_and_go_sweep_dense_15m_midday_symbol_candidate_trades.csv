@@ -1,7 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-TSLA,2025-04-16T15:15:00+00:00,2025-04-16T16:30:00+00:00,15,16,stock_gap_and_go,stop_loss,250.85006,246.25074,0.10000,-0.96490,0.50497,5,1.00000,{'minutes_from_open': 105.0}
-TSLA,2025-05-13T15:00:00+00:00,2025-05-14T15:00:00+00:00,15,15,stock_gap_and_go,take_profit,322.42447,341.06177,0.10000,1.35710,0.50663,12,1.00000,{'minutes_from_open': 90.0}
-TSLA,2025-05-22T15:15:00+00:00,2025-05-23T15:00:00+00:00,15,15,stock_gap_and_go,stale_breakout,343.02039,335.95740,0.10000,-1.21309,0.50679,11,1.00000,{'minutes_from_open': 105.0}
-TSLA,2025-06-12T15:00:00+00:00,2025-06-12T16:45:00+00:00,15,16,stock_gap_and_go,stop_loss,327.98488,324.07597,0.10000,-0.89741,0.50652,7,1.00000,{'minutes_from_open': 90.0}
-TSLA,2025-06-18T15:00:00+00:00,2025-06-18T16:15:00+00:00,15,16,stock_gap_and_go,trailing_stop,325.11501,324.73504,0.10000,-0.54450,0.50650,5,1.00000,{'minutes_from_open': 90.0}
-TSLA,2025-12-09T15:00:00+00:00,2025-12-09T17:45:00+00:00,15,17,stock_gap_and_go,take_profit,443.96878,451.63965,0.10000,0.25813,0.50896,11,1.00000,{'minutes_from_open': 90.0}

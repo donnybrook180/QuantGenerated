@@ -1,8 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-DIA,2025-10-21T15:00:00+00:00,2025-10-22T15:00:00+00:00,15,15,volatility_breakout,stop_loss,471.11900,466.77642,0.01000,-0.09436,0.05094,3,1.00000,{'breakout_high': 467.24}
-DIA,2025-11-12T15:00:00+00:00,2025-11-13T15:00:00+00:00,15,15,volatility_breakout,stop_loss,484.32664,478.39409,0.01000,-0.11029,0.05096,3,1.00000,{'breakout_high': 478.37}
-DIA,2025-11-25T15:00:00+00:00,2025-12-02T17:00:00+00:00,15,17,volatility_breakout,signal_exit,468.78353,473.03017,0.01000,-0.00848,0.05094,14,1.00000,{'breakout_high': 465.865}
-DIA,2025-12-11T15:00:00+00:00,2025-12-16T15:00:00+00:00,15,15,volatility_breakout,signal_exit,487.37725,482.51327,0.01000,-0.09961,0.05097,9,1.00000,{'breakout_high': 480.04}
-DIA,2026-01-05T15:00:00+00:00,2026-01-09T15:00:00+00:00,15,15,volatility_breakout,signal_exit,491.37805,492.54126,0.01000,-0.03935,0.05098,12,1.00000,{'breakout_high': 483.96}
-DIA,2026-02-03T15:00:00+00:00,2026-02-03T16:00:00+00:00,15,16,volatility_breakout,stop_loss,495.62890,491.83140,0.01000,-0.08896,0.05099,1,1.00000,{'breakout_high': 494.13}
-DIA,2026-02-26T15:00:00+00:00,2026-02-26T16:00:00+00:00,15,16,volatility_breakout,signal_exit,496.62900,492.16634,0.01000,-0.09562,0.05099,1,1.00000,{'breakout_high': 494.817}

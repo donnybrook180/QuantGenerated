@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-DXY,2025-04-07T14:00:00+00:00,2025-04-07T14:45:00+00:00,14,14,volatility_breakout,signal_exit,103.05100,102.90501,0.01000,-0.05167,0.05021,3,0.63704,{'breakout_high': 102.987}
-DXY,2025-07-02T14:30:00+00:00,2025-07-03T13:30:00+00:00,14,13,volatility_breakout,stale_breakout,97.02880,96.73125,0.01000,-0.05317,0.05019,2,0.55560,{'breakout_high': 96.96}
-DXY,2025-08-01T13:30:00+00:00,2025-08-04T13:30:00+00:00,13,13,volatility_breakout,stop_loss,100.14242,98.83983,0.01000,-0.06322,0.05020,6,0.93927,{'breakout_high': 99.949}
-DXY,2026-03-03T13:30:00+00:00,2026-03-03T14:30:00+00:00,13,14,volatility_breakout,stop_loss,99.28025,99.09378,0.01000,-0.05206,0.05020,4,1.00000,{'breakout_high': 98.478}

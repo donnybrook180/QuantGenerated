@@ -1,6 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-C:EURUSD,2025-08-05T15:30:00+00:00,2025-08-05T16:00:00+00:00,15,16,forex_short_trend_continuation,signal_exit,1.15387,1.15438,0.10000,-5.57706,0.50000,2,1.00000,"{'rebound_high': 1.15402, 'position_intent': 'short_entry'}"
-C:EURUSD,2025-10-14T14:15:00+00:00,2025-10-14T15:00:00+00:00,14,15,forex_short_trend_continuation,signal_exit,1.15555,1.15599,0.10000,-4.87788,0.50000,3,1.00000,"{'rebound_high': 1.15562, 'position_intent': 'short_entry'}"
-C:EURUSD,2026-01-02T15:45:00+00:00,2026-01-02T16:15:00+00:00,15,16,forex_short_trend_continuation,signal_exit,1.17208,1.17274,0.10000,-7.08621,0.50000,2,0.76313,"{'rebound_high': 1.1724700000000001, 'position_intent': 'short_entry'}"
-C:EURUSD,2026-03-02T13:15:00+00:00,2026-03-02T14:45:00+00:00,13,14,forex_short_trend_continuation,take_profit,1.17268,1.17044,0.10000,21.91422,0.50000,6,1.00000,"{'rebound_high': 1.17455, 'position_intent': 'short_entry'}"
-C:EURUSD,2026-03-02T15:15:00+00:00,2026-03-02T15:30:00+00:00,15,15,forex_short_trend_continuation,stop_loss,1.17166,1.17016,0.10000,-15.48545,0.50000,1,0.68000,"{'trend_flip': 1.0, 'position_intent': 'short_exit'}"

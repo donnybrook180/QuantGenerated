@@ -1,5 +1,0 @@
-symbol,entry_timestamp,exit_timestamp,entry_hour,exit_hour,entry_reason,exit_reason,entry_price,exit_price,quantity,pnl,costs,hold_bars,entry_confidence,entry_metadata
-JP225,2026-03-25T03:00:00+00:00,2026-03-25T08:15:00+00:00,3,8,jp225_asia_continuation_long,time_stop,53800.51368,53743.71946,0.10000,-5.67942,0.00000,21,1.00000,"{'breakout_high': 53510.73, 'asia_continuation': 1.0}"
-JP225,2026-04-01T02:45:00+00:00,2026-04-01T03:00:00+00:00,2,3,jp225_asia_continuation_long,signal_exit,53246.73701,52884.02192,0.10000,-36.27151,0.00000,1,1.00000,"{'breakout_high': 53099.0, 'asia_continuation': 1.0}"
-JP225,2026-04-03T03:00:00+00:00,2026-04-03T03:30:00+00:00,3,3,jp225_asia_continuation_long,signal_exit,53409.48072,53189.99613,0.10000,-21.94846,0.00000,2,1.00000,"{'breakout_high': 53269.5, 'asia_continuation': 1.0}"
-JP225,2026-04-06T03:45:00+00:00,2026-04-06T05:30:00+00:00,3,5,jp225_asia_continuation_long,trailing_stop,53685.27397,53788.21571,0.10000,10.29417,0.00000,7,1.00000,"{'breakout_high': 53589.73, 'asia_continuation': 1.0}"

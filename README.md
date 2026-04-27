@@ -136,6 +136,40 @@ You can also control how research data is loaded:
 
 For multi-symbol research, `cache_first` is usually the right mode after you have seeded each symbol once.
 
+### Broker Swap In Research
+
+Research kan nu echte broker swap gebruiken wanneer MT5 funding context beschikbaar is.
+
+Dat betekent:
+
+- `broker_swap_long`
+- `broker_swap_short`
+- `broker_swap_rollover3days`
+
+worden uit MT5 gehaald en in de research-simulatie verwerkt als echte netto kosten of credits op overnight trades.
+
+Belangrijk:
+
+- negatieve swap verlaagt netto PnL
+- positieve swap verhoogt netto PnL
+- triple rollover day wordt meegenomen
+- als broker funding context niet beschikbaar is, valt research terug op de generieke overnight-cost fallback
+
+De research artifacts laten dit nu ook expliciet zien:
+
+- `artifacts/research/<symbol>/reports/symbol_research.txt`
+  - `pnl_netting`
+  - `swap_drag_summary`
+- `artifacts/research/<symbol>/candidates/<candidate>_trades.csv`
+  - `gross_pnl`
+  - `pnl`
+  - `costs`
+  - `fee_cost`
+  - `commission_cost`
+  - `swap_value`
+
+Dus symbol research selecteert niet via een aparte swap-penalty, maar via realistischer netto resultaten.
+
 After each run, the app now also:
 
 - writes a local AI-style summary to `artifacts/profiles/<profile>/reports/ai_summary.txt`
@@ -209,6 +243,17 @@ Candidate-level trade logs en analyses komen in:
 
 - `artifacts/research/<symbol>/candidates/<candidate>_trades.csv`
 - `artifacts/research/<symbol>/candidates/<candidate>_analysis.txt`
+
+De trade CSV bevat nu ook exacte nettingcomponenten per closed trade:
+
+- `gross_pnl`
+- `pnl`
+- `costs`
+- `fee_cost`
+- `commission_cost`
+- `swap_value`
+
+Daardoor kun je per trade direct zien hoeveel swap werkelijk in de netto uitkomst is terechtgekomen.
 
 Plots komen in:
 

@@ -93,6 +93,20 @@ PROP_BROKER=blue_guardian
 - `artifacts/research/eurusd/reports/viability_autopsy.txt`
 - venue-aware deployment artifact
 
+### Swap in research
+
+Als broker funding context beschikbaar is, gebruikt research nu echte broker swapwaarden uit MT5.
+
+Concreet:
+
+- long trades gebruiken `broker_swap_long`
+- short trades gebruiken `broker_swap_short`
+- triple rollover gebruikt `broker_swap_rollover3days`
+
+Dat gebeurt direct in de netto trade-PnL van de simulatie. Dus selectie verandert vanzelf doordat de netto metrics realistischer zijn geworden.
+
+Er is bewust geen aparte swap-penalty toegevoegd in de selectie.
+
 ### Wat je mag verwachten
 
 Research schrijft:
@@ -211,6 +225,29 @@ Gebruik als hoofdvolgorde:
 - `artifacts/research/<symbol>/reports/symbol_research.txt`
 - `artifacts/research/<symbol>/reports/symbol_research.csv`
 - `artifacts/research/<symbol>/reports/viability_autopsy.txt`
+- `artifacts/research/<symbol>/candidates/<candidate>_trades.csv`
+- `artifacts/research/<symbol>/candidates/<candidate>_analysis.txt`
+
+Belangrijke swap/netting velden in `symbol_research.txt`:
+
+- `pnl_netting`
+- `swap_drag_summary`
+- `applied_total_swap`
+
+Belangrijke velden in candidate trade CSV's:
+
+- `gross_pnl`
+- `pnl`
+- `costs`
+- `fee_cost`
+- `commission_cost`
+- `swap_value`
+
+Interpretatie:
+
+- `gross_pnl` = prijsbeweging zonder execution costs en zonder swap
+- `swap_value` = exact toegepaste broker swap op die trade
+- `pnl` = uiteindelijke netto trade-PnL
 
 ### Deployment artifacts
 

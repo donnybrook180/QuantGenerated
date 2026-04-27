@@ -18,7 +18,10 @@ def _top_reason_counts(candidate_rows: list[dict[str, object]], key: str, *, lim
     return "; ".join(f"{reason}({count})" for reason, count in ranked[:limit])
 
 
-def _estimated_gross_pnl_before_swap(row: object) -> float:
+def _gross_pnl_before_swap(row: object) -> float:
+    explicit = getattr(row, "gross_realized_pnl_before_swap", None)
+    if explicit is not None:
+        return float(explicit or 0.0)
     realized_pnl = float(getattr(row, "realized_pnl", 0.0) or 0.0)
     estimated_swap_drag_total = float(getattr(row, "estimated_swap_drag_total", 0.0) or 0.0)
     return realized_pnl + estimated_swap_drag_total
@@ -52,7 +55,7 @@ def _summarize_blue_guardian_sections(
 
     swap_available_count = sum(1 for row in rows if bool(getattr(row, "broker_swap_available", False)))
     swap_negative_count = sum(1 for row in rows if float(getattr(row, "swap_adjusted_expectancy", 0.0) or 0.0) <= 0.0)
-    estimated_swap_drag_total = sum(float(getattr(row, "estimated_swap_drag_total", 0.0) or 0.0) for row in rows)
+    applied_swap_total = sum(float(getattr(row, "applied_swap_total", 0.0) or 0.0) for row in rows)
     stress_break_count = sum(
         1
         for row in rows
@@ -106,7 +109,7 @@ def _summarize_blue_guardian_sections(
         "swap_drag_summary",
         f"  broker_swap_available_candidates: {swap_available_count}/{len(rows)}",
         f"  swap_adjusted_expectancy_non_positive_candidates: {swap_negative_count}",
-        f"  estimated_total_swap_drag: {estimated_swap_drag_total:.4f}",
+        f"  applied_total_swap: {applied_swap_total:.4f}",
         f"  top_swap_drag_reasons: {_top_reason_counts(candidate_rows, 'prop_viability_reasons')}",
         "",
         "execution_stress_summary",
@@ -156,8 +159,8 @@ def export_results(
         writer = csv.writer(handle)
         writer.writerow([
             "name", "description", "archetype", "variant_label", "timeframe_label", "session_label",
-            "strategy_family", "direction_mode", "direction_role", "realized_pnl", "estimated_gross_pnl_before_swap",
-            "estimated_net_pnl_delta_from_swap", "closed_trades", "win_rate_pct",
+            "strategy_family", "direction_mode", "direction_role", "realized_pnl", "gross_realized_pnl_before_swap",
+            "applied_swap_total", "closed_trades", "win_rate_pct",
             "profit_factor", "max_drawdown_pct", "total_costs", "expectancy", "sharpe_ratio", "sortino_ratio",
             "calmar_ratio", "avg_win", "avg_loss", "payoff_ratio", "avg_hold_bars", "dominant_exit",
             "dominant_exit_share_pct", "component_count", "combo_outperformance_score", "combo_trade_overlap_pct",
@@ -181,12 +184,12 @@ def export_results(
             "prop_viability_label", "prop_viability_pass", "prop_viability_reasons", "trade_log_path", "trade_analysis_path",
         ])
         for row, candidate_row in zip(rows, candidate_rows):
-            estimated_swap_drag_total = float(row.estimated_swap_drag_total or 0.0)
-            estimated_gross_pnl_before_swap = row.realized_pnl + estimated_swap_drag_total
+            applied_swap_total = float(getattr(row, "applied_swap_total", 0.0) or 0.0)
+            gross_realized_pnl_before_swap = _gross_pnl_before_swap(row)
             writer.writerow([
                 row.name, row.description, row.archetype, row.variant_label, row.timeframe_label, row.session_label,
                 strategy_family_fn(row), direction_mode_fn(row), direction_role_fn(row),
-                f"{row.realized_pnl:.5f}", f"{estimated_gross_pnl_before_swap:.5f}", f"{estimated_swap_drag_total:.5f}",
+                f"{row.realized_pnl:.5f}", f"{gross_realized_pnl_before_swap:.5f}", f"{applied_swap_total:.5f}",
                 row.closed_trades, f"{row.win_rate_pct:.5f}", f"{row.profit_factor:.5f}",
                 f"{row.max_drawdown_pct:.5f}", f"{row.total_costs:.5f}", f"{row.expectancy:.5f}",
                 f"{row.sharpe_ratio:.5f}", f"{row.sortino_ratio:.5f}", f"{row.calmar_ratio:.5f}",
@@ -286,8 +289,8 @@ def export_results(
         )
         lines.append(
             f"  pnl_netting: net_realized_pnl={row.realized_pnl:.4f} "
-            f"estimated_gross_before_swap={_estimated_gross_pnl_before_swap(row):.4f} "
-            f"estimated_swap_delta={row.estimated_swap_drag_total:.4f}"
+            f"gross_before_swap={_gross_pnl_before_swap(row):.4f} "
+            f"applied_swap_total={float(getattr(row, 'applied_swap_total', 0.0) or 0.0):.4f}"
         )
         lines.append(
             f"  swap_drag: avg_hold_hours={row.avg_hold_hours:.2f} drag_per_trade={row.estimated_swap_drag_per_trade:.4f} "

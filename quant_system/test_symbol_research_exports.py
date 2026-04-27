@@ -39,8 +39,8 @@ class SymbolResearchExportsTests(unittest.TestCase):
         self.assertIn("avg_hold_hours", header)
         self.assertIn("estimated_swap_drag_per_trade", header)
         self.assertIn("swap_adjusted_expectancy", header)
-        self.assertIn("estimated_gross_pnl_before_swap", header)
-        self.assertIn("estimated_net_pnl_delta_from_swap", header)
+        self.assertIn("gross_realized_pnl_before_swap", header)
+        self.assertIn("applied_swap_total", header)
         self.assertIn("stress_expectancy_mild", header)
         self.assertIn("stress_pf_medium", header)
         self.assertIn("stress_survival_score", header)
@@ -82,7 +82,7 @@ class SymbolResearchExportsTests(unittest.TestCase):
         self.assertIn("interpreter_fit_summary", report_text)
         self.assertIn("why_promoted_for_blue_guardian", report_text)
         self.assertIn("why_rejected_for_blue_guardian", report_text)
-        self.assertIn("estimated_total_swap_drag", report_text)
+        self.assertIn("applied_total_swap", report_text)
 
     def test_export_results_writes_broker_data_summary_when_provided(self) -> None:
         row = make_candidate_result()

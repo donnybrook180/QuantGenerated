@@ -39,6 +39,8 @@ class SimulatedBrokerSwapTests(unittest.TestCase):
         closed_trade = broker.get_closed_trades()[0]
         self.assertEqual(closed_trade.pnl, 0.0)
         self.assertEqual(closed_trade.costs, 5.0)
+        self.assertEqual(closed_trade.gross_pnl, 5.0)
+        self.assertEqual(closed_trade.swap_value, -5.0)
         self.assertEqual(broker.realized_pnl, 0.0)
 
     def test_short_trade_books_positive_swap_credit_into_net_pnl(self) -> None:
@@ -72,6 +74,8 @@ class SimulatedBrokerSwapTests(unittest.TestCase):
         closed_trade = broker.get_closed_trades()[0]
         self.assertEqual(closed_trade.pnl, 1.5)
         self.assertEqual(closed_trade.costs, -1.5)
+        self.assertEqual(closed_trade.gross_pnl, 0.0)
+        self.assertEqual(closed_trade.swap_value, 1.5)
         self.assertEqual(broker.realized_pnl, 1.5)
 
     def test_triple_rollover_day_applies_three_days_of_swap(self) -> None:
@@ -106,6 +110,7 @@ class SimulatedBrokerSwapTests(unittest.TestCase):
         closed_trade = broker.get_closed_trades()[0]
         self.assertEqual(closed_trade.pnl, -5.0)
         self.assertEqual(closed_trade.costs, 5.0)
+        self.assertEqual(closed_trade.swap_value, -5.0)
 
 
 if __name__ == "__main__":

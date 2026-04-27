@@ -33,6 +33,8 @@ def score_result(
     avg_loss = mean(losses) if losses else 0.0
     payoff_ratio = (avg_win / abs(avg_loss)) if avg_loss < 0 else (999.0 if avg_win > 0 else 0.0)
     avg_hold_bars = mean([trade.hold_bars for trade in result.closed_trades]) if result.closed_trades else 0.0
+    applied_swap_total = sum(float(getattr(trade, "swap_value", 0.0) or 0.0) for trade in result.closed_trades)
+    gross_realized_pnl_before_swap = sum(float(getattr(trade, "gross_pnl", trade.pnl + trade.costs) or 0.0) for trade in result.closed_trades)
     gross_profit = sum(wins)
     best_trade_share_pct = (max(wins) / gross_profit * 100.0) if wins and gross_profit > 0.0 else 0.0
     equity = 0.0
@@ -77,6 +79,8 @@ def score_result(
         profit_factor=result.profit_factor,
         max_drawdown_pct=result.max_drawdown * 100.0,
         total_costs=result.total_costs,
+        gross_realized_pnl_before_swap=gross_realized_pnl_before_swap,
+        applied_swap_total=applied_swap_total,
         expectancy=expectancy,
         sharpe_ratio=sharpe_ratio,
         sortino_ratio=sortino_ratio,

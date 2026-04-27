@@ -89,6 +89,10 @@ class ClosedTradeRecord:
     hold_bars: int
     entry_confidence: float
     entry_metadata: dict[str, float | str] = field(default_factory=dict)
+    gross_pnl: float = 0.0
+    fee_cost: float = 0.0
+    commission_cost: float = 0.0
+    swap_value: float = 0.0
 
 
 @dataclass(slots=True)

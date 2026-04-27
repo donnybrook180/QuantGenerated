@@ -237,6 +237,8 @@ class CandidateResult:
     profit_factor: float
     max_drawdown_pct: float
     total_costs: float
+    gross_realized_pnl_before_swap: float = 0.0
+    applied_swap_total: float = 0.0
     trade_log_path: str = ""
     trade_analysis_path: str = ""
     variant_label: str = ""

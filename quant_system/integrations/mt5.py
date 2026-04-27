@@ -178,13 +178,53 @@ class MT5Client:
                 return symbol.name
         raise MT5Error(f"Unable to resolve symbol {requested_symbol} in MT5 terminal")
 
+    def _timeframe_code(self) -> int:
+        try:
+            return TIMEFRAME_MAP[self.config.timeframe]
+        except KeyError as exc:
+            raise MT5Error(f"Unsupported MT5 timeframe {self.config.timeframe}.") from exc
+
+    def terminal_max_bars(self) -> int:
+        info = mt5.terminal_info()
+        if info is None:
+            raise MT5Error(f"MT5 terminal_info failed: {mt5.last_error()}")
+        maxbars = int(getattr(info, "maxbars", 0) or 0)
+        return maxbars if maxbars > 0 else 100_000
+
+    def _safe_bar_request_count(self, requested_count: int) -> int:
+        maxbars = self.terminal_max_bars()
+        safety_margin = 512
+        safe_limit = max(1, maxbars - safety_margin)
+        return max(1, min(int(requested_count), safe_limit))
+
     def fetch_bars(self, bar_count: int | None = None) -> list[MarketBar]:
-        timeframe_code = TIMEFRAME_MAP[self.config.timeframe]
-        count = bar_count or self.config.history_bars
+        timeframe_code = self._timeframe_code()
+        requested_count = int(bar_count or self.config.history_bars)
+        count = self._safe_bar_request_count(requested_count)
         symbol = self.resolved_symbol or self.config.symbol
+        if count < requested_count:
+            LOGGER.info(
+                "mt5 fetch_bars capped request for %s timeframe=%s requested=%s capped=%s terminal_maxbars=%s",
+                symbol,
+                self.config.timeframe,
+                requested_count,
+                count,
+                self.terminal_max_bars(),
+            )
         rates = mt5.copy_rates_from_pos(symbol, timeframe_code, 0, count)
         if rates is None:
             raise MT5Error(f"MT5 copy_rates_from_pos failed: {mt5.last_error()}")
+        return self._map_rates(symbol, rates)
+
+    def fetch_bars_range(self, start: datetime, end: datetime) -> list[MarketBar]:
+        timeframe_code = self._timeframe_code()
+        symbol = self.resolved_symbol or self.config.symbol
+        rates = mt5.copy_rates_range(symbol, timeframe_code, start, end)
+        if rates is None:
+            raise MT5Error(f"MT5 copy_rates_range failed: {mt5.last_error()}")
+        return self._map_rates(symbol, rates)
+
+    def _map_rates(self, symbol: str, rates) -> list[MarketBar]:
         bars = [
             MarketBar(
                 timestamp=datetime.fromtimestamp(int(rate["time"]), UTC),

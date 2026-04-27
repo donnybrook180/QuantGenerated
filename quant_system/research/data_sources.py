@@ -55,6 +55,14 @@ def build_broker_data_sanity_summary(
     history_window_start = features[0].timestamp.isoformat() if features else ""
     history_window_end = features[-1].timestamp.isoformat() if features else ""
     missing_bar_warnings: list[str] = []
+    source_context: dict[str, object] = {
+        "requested_bars": history_bars_loaded,
+        "safe_single_request_bars": history_bars_loaded,
+        "terminal_maxbars": 0,
+        "batch_bars": history_bars_loaded,
+        "batch_count": 0,
+        "history_complete": bool(history_bars_loaded),
+    }
     if len(features) >= 3:
         deltas = [
             features[index].timestamp - features[index - 1].timestamp
@@ -85,6 +93,17 @@ def build_broker_data_sanity_summary(
                 f"contract_size={funding.contract_size:.2f} spread_points={snapshot.spread_points:.8f} "
                 f"swap_long={funding.swap_long:.4f} swap_short={funding.swap_short:.4f}"
             )
+            terminal_maxbars = client.terminal_max_bars()
+            safe_single_request_bars = client._safe_bar_request_count(max(history_bars_loaded, 1))
+            batch_bars = max(1, min(max(terminal_maxbars // 4, 2500), safe_single_request_bars))
+            source_context = {
+                "requested_bars": max(history_bars_loaded, safe_single_request_bars if "chunked" not in data_source else history_bars_loaded),
+                "safe_single_request_bars": safe_single_request_bars,
+                "terminal_maxbars": terminal_maxbars,
+                "batch_bars": batch_bars,
+                "batch_count": (max(1, (history_bars_loaded + batch_bars - 1) // batch_bars) if "chunked" in data_source and history_bars_loaded else (1 if history_bars_loaded else 0)),
+                "history_complete": bool(history_bars_loaded),
+            }
             broker_data_source = "blue_guardian_mt5" if str(config.mt5.prop_broker) == "blue_guardian" else "mt5"
         except Exception as exc:
             missing_bar_warnings.append(f"contract_spec_lookup_failed:{exc}")
@@ -98,6 +117,12 @@ def build_broker_data_sanity_summary(
         "broker_symbol": resolved_broker_symbol,
         "data_symbol": data_symbol,
         "history_bars_loaded": history_bars_loaded,
+        "requested_bars": int(source_context.get("requested_bars", 0) or 0),
+        "safe_single_request_bars": int(source_context.get("safe_single_request_bars", 0) or 0),
+        "terminal_maxbars": int(source_context.get("terminal_maxbars", 0) or 0),
+        "batch_bars": int(source_context.get("batch_bars", 0) or 0),
+        "batch_count": int(source_context.get("batch_count", 0) or 0),
+        "history_complete": bool(source_context.get("history_complete", False)),
         "history_window_start": history_window_start,
         "history_window_end": history_window_end,
         "missing_bar_warnings": tuple(missing_bar_warnings),

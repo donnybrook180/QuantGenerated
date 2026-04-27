@@ -2,16 +2,63 @@ from __future__ import annotations
 
 import tempfile
 import unittest
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from quant_system.config import MT5Config
 from quant_system.integrations.mt5 import MT5Client, MT5DealCost
 from quant_system.models import OrderRequest, Side
+from quant_system.symbol_research import _fetch_mt5_history_chunks
 
 
 class MT5IntegrationTests(unittest.TestCase):
+    def test_fetch_mt5_history_chunks_backfills_when_request_exceeds_safe_limit(self) -> None:
+        start = datetime(2026, 1, 1, tzinfo=UTC)
+        all_bars = [
+            SimpleNamespace(
+                timestamp=start + timedelta(minutes=5 * index),
+                symbol="ETHUSD",
+                open=1000.0 + index,
+                high=1001.0 + index,
+                low=999.0 + index,
+                close=1000.5 + index,
+                volume=10.0,
+            )
+            for index in range(12)
+        ]
+
+        class FakeClient:
+            def __init__(self, bars):
+                self._bars = bars
+                self.range_calls: list[tuple[datetime, datetime]] = []
+
+            def _safe_bar_request_count(self, requested_count: int) -> int:
+                return 4
+
+            def terminal_max_bars(self) -> int:
+                return 4096
+
+            def fetch_bars(self, requested_count: int):
+                raise AssertionError("single fetch should not be used for oversized requests")
+
+            def fetch_bars_range(self, start: datetime, end: datetime):
+                self.range_calls.append((start, end))
+                return [bar for bar in self._bars if start <= bar.timestamp <= end]
+
+        client = FakeClient(all_bars)
+        with patch("quant_system.symbol_research.datetime") as datetime_mock:
+            datetime_mock.now.return_value = all_bars[-1].timestamp
+            bars, source = _fetch_mt5_history_chunks(client, requested_bars=10, multiplier=5)
+
+        self.assertEqual(source["source"], "mt5_chunked")
+        self.assertEqual(source["requested_bars"], 10)
+        self.assertEqual(source["batch_count"], len(client.range_calls))
+        self.assertEqual(len(bars), 10)
+        self.assertEqual(bars[0].timestamp, all_bars[-10].timestamp)
+        self.assertEqual(bars[-1].timestamp, all_bars[-1].timestamp)
+        self.assertGreaterEqual(len(client.range_calls), 2)
+
     def test_lookup_deal_cost_polls_history_deals_until_fill_details_available(self) -> None:
         client = MT5Client(MT5Config(symbol="EURUSD"))
         result = SimpleNamespace(deal=321, order=654)

@@ -8,6 +8,7 @@ import json
 import random
 import duckdb
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from math import isfinite, sqrt
 from pathlib import Path
 from statistics import mean
@@ -1331,6 +1332,81 @@ def _normalize_bars_symbol(bars: list[MarketBar], target_symbol: str) -> list[Ma
     ]
 
 
+def _fetch_mt5_history_chunks(
+    client,
+    *,
+    requested_bars: int,
+    multiplier: int,
+) -> tuple[list[MarketBar], dict[str, object]]:
+    if requested_bars <= 0:
+        return [], {
+            "source": "mt5",
+            "requested_bars": requested_bars,
+            "safe_single_request_bars": 0,
+            "terminal_maxbars": 0,
+            "batch_bars": 0,
+            "batch_count": 0,
+            "history_complete": True,
+            "oldest_timestamp": "",
+            "newest_timestamp": "",
+            "bars_returned": 0,
+        }
+    safe_single_request = client._safe_bar_request_count(requested_bars)
+    terminal_maxbars = client.terminal_max_bars()
+    if safe_single_request >= requested_bars:
+        bars = client.fetch_bars(requested_bars)
+        return bars, {
+            "source": "mt5",
+            "requested_bars": requested_bars,
+            "safe_single_request_bars": safe_single_request,
+            "terminal_maxbars": terminal_maxbars,
+            "batch_bars": requested_bars,
+            "batch_count": 1,
+            "history_complete": len(bars) >= requested_bars,
+            "oldest_timestamp": bars[0].timestamp.isoformat() if bars else "",
+            "newest_timestamp": bars[-1].timestamp.isoformat() if bars else "",
+            "bars_returned": len(bars),
+        }
+
+    batch_bars = max(1, min(max(terminal_maxbars // 4, 2_500), safe_single_request))
+    batch_span = timedelta(minutes=batch_bars * max(multiplier, 1))
+    target_end = datetime.now(UTC)
+    target_start = target_end - timedelta(minutes=requested_bars * max(multiplier, 1))
+    cursor_end = target_end
+    collected: dict[datetime, MarketBar] = {}
+    batch_count = 0
+
+    while cursor_end > target_start and len(collected) < requested_bars:
+        window_start = max(target_start, cursor_end - batch_span)
+        batch = client.fetch_bars_range(window_start, cursor_end)
+        if not batch:
+            break
+        batch_count += 1
+        oldest_timestamp = batch[0].timestamp
+        for bar in batch:
+            collected[bar.timestamp] = bar
+        next_end = oldest_timestamp - timedelta(seconds=1)
+        if next_end >= cursor_end:
+            break
+        cursor_end = next_end
+
+    ordered = [collected[timestamp] for timestamp in sorted(collected)]
+    if len(ordered) > requested_bars:
+        ordered = ordered[-requested_bars:]
+    return ordered, {
+        "source": "mt5_chunked",
+        "requested_bars": requested_bars,
+        "safe_single_request_bars": safe_single_request,
+        "terminal_maxbars": terminal_maxbars,
+        "batch_bars": batch_bars,
+        "batch_count": batch_count,
+        "history_complete": len(ordered) >= requested_bars,
+        "oldest_timestamp": ordered[0].timestamp.isoformat() if ordered else "",
+        "newest_timestamp": ordered[-1].timestamp.isoformat() if ordered else "",
+        "bars_returned": len(ordered),
+    }
+
+
 def _load_mt5_network_bars(
     config: SystemConfig,
     profile_symbol: str,
@@ -1361,11 +1437,17 @@ def _load_mt5_network_bars(
     mt5_config = copy.deepcopy(config.mt5)
     mt5_config.symbol = broker_symbol
     mt5_config.timeframe = timeframe
-    mt5_config.history_bars = _mt5_bar_limit(config, profile_symbol, multiplier, timespan)
+    requested_bars = _mt5_bar_limit(config, profile_symbol, multiplier, timespan)
+    mt5_config.history_bars = requested_bars
     client = MT5Client(mt5_config)
     try:
         client.initialize()
-        bars = client.fetch_bars(mt5_config.history_bars)
+        bars, fetch_metadata = _fetch_mt5_history_chunks(
+            client,
+            requested_bars=requested_bars,
+            multiplier=multiplier,
+        )
+        source = str(fetch_metadata.get("source", "mt5") or "mt5")
     finally:
         try:
             client.shutdown()
@@ -1374,7 +1456,7 @@ def _load_mt5_network_bars(
     normalized = _normalize_bars_symbol(bars, data_symbol)
     if not normalized:
         raise MT5Error(f"No MT5 bars returned for {broker_symbol}/{timeframe}.")
-    return normalized, "mt5"
+    return normalized, source
 
 
 def _detect_research_mode(config: SystemConfig, profile_symbol: str, data_symbol: str) -> str:

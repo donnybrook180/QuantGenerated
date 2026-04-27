@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
+
+from quant_system.venues import normalize_venue_key
 
 
 @dataclass(frozen=True, slots=True)
@@ -9,6 +12,40 @@ class ResolvedSymbol:
     profile_symbol: str
     data_symbol: str
     broker_symbol: str
+
+
+_VENUE_BROKER_SYMBOL_OVERRIDES: dict[str, dict[str, str]] = {
+    "blue_guardian": {
+        "BTC": "BTCUSD",
+        "ETH": "ETHUSD",
+        "JP225": "JPN225",
+        "US100": "NAS100",
+        "US500": "SPX500",
+        "BRENT": "BRENT",
+        "WTI": "WTI",
+    },
+    "fundednext": {
+        "JP225": "JP225",
+        "US100": "NDX100",
+        "US500": "SPX500",
+        "BRENT": "UKOUSD",
+        "WTI": "USOUSD",
+        "XAGUSD": "XAGUSD",
+        "XPTUSD": "XPTUSD",
+    },
+    "ftmo": {
+        "JP225": "JP225.cash",
+        "US100": "US100.cash",
+        "US500": "US500.cash",
+        "BRENT": "UKOIL.cash",
+    },
+}
+
+
+def _default_broker_symbol(profile_symbol: str, default_broker: str, venue_key: str | None) -> str:
+    normalized_venue = normalize_venue_key(venue_key or os.getenv("PROP_BROKER", "generic"))
+    venue_overrides = _VENUE_BROKER_SYMBOL_OVERRIDES.get(normalized_venue, {})
+    return venue_overrides.get(profile_symbol.upper(), default_broker)
 
 
 _SYMBOL_ALIASES: dict[str, tuple[str, str, str]] = {
@@ -46,6 +83,11 @@ _SYMBOL_ALIASES: dict[str, tuple[str, str, str]] = {
     "HK50.CASH": ("HK50", "HK50", "HK50.cash"),
     "HSI50": ("HK50", "HK50", "HK50"),
     "HANGSENG": ("HK50", "HK50", "HK50"),
+    "BRENT": ("BRENT", "BRENT", "BRENT"),
+    "UKOUSD": ("BRENT", "BRENT", "BRENT"),
+    "UKOIL.CASH": ("BRENT", "BRENT", "BRENT"),
+    "WTI": ("WTI", "WTI", "WTI"),
+    "USOUSD": ("WTI", "WTI", "WTI"),
     "XAUUSD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
     "C:XAUUSD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
     "GOLD": ("XAUUSD", "C:XAUUSD", "XAUUSD"),
@@ -145,7 +187,7 @@ def is_stock_symbol(symbol: str) -> bool:
     return ":" not in upper and upper.replace(".", "").replace("-", "").isalnum()
 
 
-def resolve_symbol_request(symbol: str, broker_symbol: str | None = None) -> ResolvedSymbol:
+def resolve_symbol_request(symbol: str, broker_symbol: str | None = None, venue_key: str | None = None) -> ResolvedSymbol:
     requested = symbol.strip()
     upper = requested.upper()
     alias = _SYMBOL_ALIASES.get(upper)
@@ -156,7 +198,12 @@ def resolve_symbol_request(symbol: str, broker_symbol: str | None = None) -> Res
         profile_symbol = normalized
     else:
         profile_symbol, data_symbol, default_broker = alias
-        resolved_broker = broker_symbol.strip() if broker_symbol and broker_symbol.strip() else default_broker
+        if broker_symbol and broker_symbol.strip():
+            resolved_broker = broker_symbol.strip()
+        elif upper == profile_symbol.upper():
+            resolved_broker = _default_broker_symbol(profile_symbol, default_broker, venue_key)
+        else:
+            resolved_broker = requested
 
     return ResolvedSymbol(
         requested_symbol=requested,

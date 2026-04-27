@@ -118,7 +118,7 @@ class SymbolResearchViabilityTests(unittest.TestCase):
         self.assertTrue(any("profit_factor" in reason for reason in reasons))
         self.assertTrue(any("walk_forward" in reason for reason in reasons))
 
-    def test_execution_candidate_row_flags_material_swap_drag_for_blue_guardian_viability(self) -> None:
+    def test_execution_candidate_row_does_not_add_explicit_swap_viability_reason(self) -> None:
         row = make_candidate_row(
             symbol="EURUSD",
             direction_mode="long_only",
@@ -135,8 +135,7 @@ class SymbolResearchViabilityTests(unittest.TestCase):
 
         candidate_row = _execution_candidate_row("EURUSD", row)
 
-        self.assertEqual(candidate_row["prop_viability_label"], "fail")
-        self.assertIn("swap_adjusted_expectancy_non_positive", candidate_row["prop_viability_reasons"])
+        self.assertNotIn("swap_adjusted_expectancy_non_positive", candidate_row["prop_viability_reasons"])
 
     def test_execution_candidate_row_fails_when_medium_execution_stress_breaks_edge(self) -> None:
         row = make_candidate_row(

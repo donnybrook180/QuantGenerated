@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import timedelta
+from datetime import date, timedelta
 from typing import Protocol
 
 from quant_system.models import ClosedTradeRecord, FillEvent, OrderRequest, PortfolioSnapshot, Position, Side
@@ -39,6 +39,9 @@ class SimulatedBroker:
     commission_per_lot: float = 0.0
     commission_notional_pct: float = 0.0
     overnight_cost_per_lot_day: float = 0.0
+    swap_long_per_lot_day: float = 0.0
+    swap_short_per_lot_day: float = 0.0
+    swap_rollover3days: int = 0
     cash: float = field(init=False)
     realized_pnl: float = 0.0
     total_costs: float = 0.0
@@ -60,12 +63,42 @@ class SimulatedBroker:
             return 0.0
         return abs(order.quantity) * self.commission_per_unit
 
-    def _overnight_cost(self, order: OrderRequest) -> float:
-        if self._open_trade is None or self.overnight_cost_per_lot_day == 0.0:
+    def _swap_rollover_weekday(self) -> int | None:
+        rollover = int(self.swap_rollover3days)
+        if rollover < 0:
+            return None
+        if rollover == 0:
+            return 6
+        if 1 <= rollover <= 6:
+            return rollover - 1
+        return None
+
+    def _charged_rollover_days(self, entry_date: date, exit_date: date) -> float:
+        if exit_date <= entry_date:
+            return 0.0
+        rollover_weekday = self._swap_rollover_weekday()
+        charged_days = 0.0
+        current = entry_date
+        while current < exit_date:
+            charged_days += 3.0 if rollover_weekday is not None and current.weekday() == rollover_weekday else 1.0
+            current += timedelta(days=1)
+        return charged_days
+
+    def _signed_swap_value(self, exit_timestamp, quantity: float) -> float:
+        if self._open_trade is None or quantity <= 0.0:
             return 0.0
         entry_timestamp = self._open_trade["entry_timestamp"]
-        days_held = max(0, (order.timestamp.date() - entry_timestamp.date()).days)
-        return days_held * abs(order.quantity) * self.overnight_cost_per_lot_day
+        charged_days = self._charged_rollover_days(entry_timestamp.date(), exit_timestamp.date())
+        if charged_days <= 0.0:
+            return 0.0
+        entry_side = str(self._open_trade.get("entry_side", ""))
+        if entry_side == Side.BUY.value and self.swap_long_per_lot_day != 0.0:
+            return charged_days * quantity * self.swap_long_per_lot_day
+        if entry_side == Side.SELL.value and self.swap_short_per_lot_day != 0.0:
+            return charged_days * quantity * self.swap_short_per_lot_day
+        if self.overnight_cost_per_lot_day != 0.0:
+            return -(charged_days * quantity * self.overnight_cost_per_lot_day)
+        return 0.0
 
     def submit_order(self, order: OrderRequest, market_price: float) -> FillEvent:
         if not self.position.symbol:
@@ -77,14 +110,16 @@ class SimulatedBroker:
         gross_notional = fill_price * order.quantity * self.contract_size
         fee = abs(gross_notional) * (self.fee_bps / 10_000)
         commission = self._commission_cost(order, fill_price)
-        overnight_cost = self._overnight_cost(order) if order.side == Side.SELL else 0.0
-        total_cost = fee + commission + overnight_cost
+        total_cost = fee + commission
         self.total_costs += total_cost
 
         if order.side == Side.BUY and self.position.quantity < 0:
             closed_quantity = min(order.quantity, abs(self.position.quantity))
             gross_trade_pnl = (self.position.average_price - fill_price) * closed_quantity * self.contract_size
             entry_costs = float(self._open_trade.get("entry_costs", 0.0)) if self._open_trade is not None else 0.0
+            signed_swap_value = self._signed_swap_value(order.timestamp, closed_quantity)
+            total_cost = fee + commission - signed_swap_value
+            self.total_costs += -signed_swap_value
             trade_pnl = gross_trade_pnl - entry_costs - total_cost
             self.cash += gross_trade_pnl - total_cost
             self.realized_pnl += trade_pnl
@@ -134,11 +169,15 @@ class SimulatedBroker:
                 "entry_metadata": getattr(order, "metadata", {}),
                 "entry_bar_index": getattr(order, "bar_index", -1),
                 "entry_costs": total_cost,
+                "entry_side": order.side.value,
             }
         elif order.side == Side.SELL and self.position.quantity > 0:
             closed_quantity = min(order.quantity, self.position.quantity)
             gross_trade_pnl = (fill_price - self.position.average_price) * closed_quantity * self.contract_size
             entry_costs = float(self._open_trade.get("entry_costs", 0.0)) if self._open_trade is not None else 0.0
+            signed_swap_value = self._signed_swap_value(order.timestamp, closed_quantity)
+            total_cost = fee + commission - signed_swap_value
+            self.total_costs += -signed_swap_value
             trade_pnl = gross_trade_pnl - entry_costs - total_cost
             self.cash += gross_trade_pnl - total_cost
             self.realized_pnl += trade_pnl
@@ -188,6 +227,7 @@ class SimulatedBroker:
                 "entry_metadata": getattr(order, "metadata", {}),
                 "entry_bar_index": getattr(order, "bar_index", -1),
                 "entry_costs": total_cost,
+                "entry_side": order.side.value,
             }
 
         return FillEvent(

@@ -122,7 +122,7 @@ def run_candidate(
     candidate_config = with_execution_overrides_fn(config, spec.execution_overrides)
     symbol = features[0].symbol if features else ""
     agents = with_session_gate_fn(copy.deepcopy(spec.agents), spec.session_label, symbol)
-    engine = build_engine_fn(candidate_config, agents)
+    engine = build_engine_fn(candidate_config, agents, features)
     result = asyncio.run(engine.run(features, sleep_seconds=0.0))
     trades_path, analysis_path = export_closed_trade_artifacts_fn(
         result.closed_trades,
@@ -173,7 +173,7 @@ def run_candidate_with_splits(
         candidate_config = with_execution_overrides_fn(config, spec.execution_overrides)
         local_symbol = slice_features[0].symbol if slice_features else ""
         agents = with_session_gate_fn(copy.deepcopy(spec.agents), spec.session_label, local_symbol)
-        engine = build_engine_fn(candidate_config, agents)
+        engine = build_engine_fn(candidate_config, agents, slice_features)
         return asyncio.run(engine.run(slice_features, sleep_seconds=0.0))
 
     windows = walk_forward_slices_fn(features, symbol)

@@ -76,10 +76,6 @@ def _blue_guardian_prop_viability_profile(
     )
     equity_quality_score = float(row_value(row, "equity_quality_score", 0.0) or 0.0)
     best_trade_share_pct = float(row_value(row, "best_trade_share_pct", 100.0) or 100.0)
-    estimated_swap_drag_per_trade = float(row_value(row, "estimated_swap_drag_per_trade", 0.0) or 0.0)
-    swap_adjusted_expectancy = float(row_value(row, "swap_adjusted_expectancy", 0.0) or 0.0)
-    expectancy = float(row_value(row, "expectancy", 0.0) or 0.0)
-    broker_swap_available = bool(row_value(row, "broker_swap_available", False))
     stress_expectancy_mild = float(row_value(row, "stress_expectancy_mild", 0.0) or 0.0)
     stress_expectancy_medium = float(row_value(row, "stress_expectancy_medium", 0.0) or 0.0)
     stress_expectancy_harsh = float(row_value(row, "stress_expectancy_harsh", 0.0) or 0.0)
@@ -107,11 +103,6 @@ def _blue_guardian_prop_viability_profile(
     blocked_by_interpreter_risk = float(row_value(row, "blocked_by_interpreter_risk", 0.0) or 0.0)
     interpreter_fit_reasons = tuple(str(item) for item in row_value(row, "interpreter_fit_reasons", ()) or ())
 
-    if broker_swap_available and estimated_swap_drag_per_trade > 0.0:
-        if swap_adjusted_expectancy <= 0.0:
-            reasons.append("swap_adjusted_expectancy_non_positive")
-        elif expectancy > 0.0 and estimated_swap_drag_per_trade >= (expectancy * 0.5):
-            reasons.append("swap_drag_material_to_expectancy")
     if stress_metrics_present:
         if stress_expectancy_mild <= 0.0 or stress_pf_mild < 1.0:
             reasons.append("stress_mild_breaks_viability")
@@ -127,16 +118,12 @@ def _blue_guardian_prop_viability_profile(
             reasons.append(reason)
 
     if meets_viability(row, symbol):
-        if "swap_adjusted_expectancy_non_positive" in reasons:
-            return min(0.49, signal_quality_score), "fail", False, tuple(reasons)
         if "stress_mild_breaks_viability" in reasons or "stress_medium_breaks_viability" in reasons:
             return min(0.49, signal_quality_score), "fail", False, tuple(reasons)
         if prop_fit_label == "fail":
             return min(0.49, min(signal_quality_score, prop_fit_score or signal_quality_score)), "fail", False, tuple(reasons)
         if blocked_by_interpreter_risk >= 0.70 or common_live_regime_fit <= 0.20:
             return min(0.49, min(signal_quality_score, interpreter_fit_score or signal_quality_score)), "fail", False, tuple(reasons)
-        if "swap_drag_material_to_expectancy" in reasons:
-            return max(0.55, min(0.74, signal_quality_score)), "caution", True, tuple(reasons)
         if "stress_harsh_breaks_viability" in reasons or prop_fit_label == "caution" or blocked_by_interpreter_risk >= 0.45:
             return max(0.55, min(0.74, signal_quality_score)), "caution", True, tuple(reasons)
         return max(0.75, signal_quality_score), "pass", True, ()

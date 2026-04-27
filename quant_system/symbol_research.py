@@ -881,7 +881,8 @@ def _meets_viability(row: CandidateResult | dict[str, object], symbol: str) -> b
     )
 
 
-def _build_engine(config: SystemConfig, agents: list[Agent]) -> EventDrivenEngine:
+def _build_engine(config: SystemConfig, agents: list[Agent], features: list[FeatureVector] | None = None) -> EventDrivenEngine:
+    latest_values = features[-1].values if features else {}
     broker = SimulatedBroker(
         initial_cash=config.execution.initial_cash,
         fee_bps=config.execution.fee_bps,
@@ -893,6 +894,9 @@ def _build_engine(config: SystemConfig, agents: list[Agent]) -> EventDrivenEngin
         commission_per_lot=config.execution.commission_per_lot,
         commission_notional_pct=config.execution.commission_notional_pct,
         overnight_cost_per_lot_day=config.execution.overnight_cost_per_lot_day,
+        swap_long_per_lot_day=float(latest_values.get("broker_swap_long", 0.0) or 0.0),
+        swap_short_per_lot_day=float(latest_values.get("broker_swap_short", 0.0) or 0.0),
+        swap_rollover3days=int(latest_values.get("broker_swap_rollover3days", 0.0) or 0),
     )
     engine = EventDrivenEngine(
         coordinator=AgentCoordinator(agents, consensus_min_confidence=config.agents.consensus_min_confidence),

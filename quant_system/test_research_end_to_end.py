@@ -97,6 +97,9 @@ class ResearchEndToEndTests(unittest.TestCase):
 
         self.assertIn("Best candidate: forex_breakout_momentum__15m_overlap", lines)
         self.assertIn("Recommended active agents: forex_breakout_momentum__15m_overlap", lines)
+        self.assertIn("Prop broker: blue_guardian", lines)
+        self.assertIn("Market data fetch policy: network_first", lines)
+        self.assertIn("Market data DB: quant_data_blue_guardian.duckdb", lines)
         deployment = load_symbol_deployment(_deployment_artifact_path(deploy_dir, "EURUSD"))
         self.assertEqual(deployment.profile_name, "symbol::blue_guardian::eurusd")
         self.assertEqual(len(deployment.strategies), 1)

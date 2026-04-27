@@ -41,6 +41,20 @@ def resolve_mt5_credentials_for_venue(venue_key: str) -> dict[str, str | int | N
     }
 
 
+def resolve_mt5_database_path_for_venue(venue_key: str) -> str:
+    normalized_venue = normalize_venue_key(venue_key)
+    env_prefix = _broker_env_prefix(normalized_venue)
+    explicit_path = os.getenv(f"{env_prefix}_DATABASE_PATH")
+    if explicit_path:
+        return explicit_path
+    fallback_path = os.getenv("MT5_DATABASE_PATH")
+    if fallback_path:
+        return fallback_path
+    if normalized_venue == "generic":
+        return "quant_data.duckdb"
+    return f"quant_data_{normalized_venue}.duckdb"
+
+
 def resolve_live_prop_brokers() -> tuple[str, ...]:
     brokers = _normalize_broker_list(_env_tuple("LIVE_PROP_BROKERS"))
     if brokers:
@@ -171,7 +185,7 @@ class MT5Config:
     server: str | None = field(default_factory=lambda: resolve_mt5_credentials_for_venue(_current_prop_broker())["server"])
     magic_number: int = 260405
     deviation: int = 10
-    database_path: str = "quant_data.duckdb"
+    database_path: str = field(default_factory=lambda: resolve_mt5_database_path_for_venue(_current_prop_broker()))
 
 
 @dataclass(slots=True)
@@ -360,4 +374,5 @@ def apply_mt5_broker(config: SystemConfig, venue_key: str) -> SystemConfig:
     config.mt5.login = credentials.login
     config.mt5.password = credentials.password
     config.mt5.server = credentials.server
+    config.mt5.database_path = resolve_mt5_database_path_for_venue(credentials.prop_broker)
     return config

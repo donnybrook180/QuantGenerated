@@ -31,6 +31,18 @@ class MultiPropConfigTests(unittest.TestCase):
         self.assertEqual(config.mt5.password, "bg-pass")
         self.assertEqual(config.mt5.server, "BG-Server")
         self.assertEqual(config.mt5.terminal_path, r"C:\BG\terminal64.exe")
+        self.assertEqual(config.mt5.database_path, "quant_data_blue_guardian.duckdb")
+
+    def test_system_config_prefers_prop_broker_specific_database_path(self) -> None:
+        env = {
+            "PROP_BROKER": "blue_guardian",
+            "MT5_DATABASE_PATH": "quant_data_shared.duckdb",
+            "MT5_BLUE_GUARDIAN_DATABASE_PATH": "quant_data_blue_guardian_custom.duckdb",
+        }
+        with patch.dict("os.environ", env, clear=False):
+            config = SystemConfig()
+
+        self.assertEqual(config.mt5.database_path, "quant_data_blue_guardian_custom.duckdb")
 
     def test_resolve_live_prop_brokers_prefers_explicit_list(self) -> None:
         with patch.dict(
@@ -52,10 +64,12 @@ class MultiPropConfigTests(unittest.TestCase):
             "MT5_FTMO_PASSWORD": "ftmo-pass",
             "MT5_FTMO_SERVER": "FTMO-Server",
             "MT5_FTMO_TERMINAL_PATH": r"C:\FTMO\terminal64.exe",
+            "MT5_FTMO_DATABASE_PATH": "quant_data_ftmo.duckdb",
             "MT5_BLUE_GUARDIAN_LOGIN": "202",
             "MT5_BLUE_GUARDIAN_PASSWORD": "bg-pass",
             "MT5_BLUE_GUARDIAN_SERVER": "BG-Server",
             "MT5_BLUE_GUARDIAN_TERMINAL_PATH": r"C:\BG\terminal64.exe",
+            "MT5_BLUE_GUARDIAN_DATABASE_PATH": "quant_data_blue_guardian.duckdb",
         }
         with patch.dict("os.environ", env, clear=False):
             config = SystemConfig()
@@ -66,6 +80,7 @@ class MultiPropConfigTests(unittest.TestCase):
         self.assertEqual(config.mt5.login, 202)
         self.assertEqual(config.mt5.password, "bg-pass")
         self.assertEqual(credentials.terminal_path, r"C:\BG\terminal64.exe")
+        self.assertEqual(config.mt5.database_path, "quant_data_blue_guardian.duckdb")
 
     def test_resolve_live_deployment_paths_filters_to_selected_broker(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
